@@ -14,11 +14,14 @@ const Profile = () => {
             <Text style={styles.userName}>Hello, Anuj</Text>
             <Text style={styles.welcomeText}>anuj.gupta@moglix.com</Text>
             <Text style={styles.welcomeText}>+91-9599822242</Text>
-            <ProgressBarAndroid
-          styleAttr="Horizontal"
-          indeterminate={false}
-          progress={0.5}
-        />
+            <View style={styles.statusBar}>
+              <Text>60 %</Text>
+              <ProgressBarAndroid
+                styleAttr="Horizontal"
+                indeterminate={false}
+                progress={0.6}
+              />
+            </View>
         </View>
     </View>
   );

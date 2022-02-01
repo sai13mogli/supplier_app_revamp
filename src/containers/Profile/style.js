@@ -16,6 +16,9 @@ const styles = StyleSheet.create({
         lineHeight:16,
         fontFamily:Dimension.CustomRegularFont,
     },
+    statusBar: {
+        marginVertical: 24,
+      },
 });
 
 export default styles;
