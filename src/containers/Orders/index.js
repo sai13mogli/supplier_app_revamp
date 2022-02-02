@@ -1,12 +1,12 @@
 import React from 'react';
 import {Text} from 'react-native';
 
-const ProfileScreen = () => {
+const OrdersScreen = () => {
   return (
     <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
-      ProfileScreen
+      OrdersScreen
     </Text>
   );
 };
 
-export default ProfileScreen;
+export default OrdersScreen;

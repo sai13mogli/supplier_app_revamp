@@ -1,12 +1,12 @@
 import React from 'react';
 import {Text} from 'react-native';
 
-const ProfileScreen = () => {
+const SupportScreen = () => {
   return (
     <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
-      ProfileScreen
+      SupportScreen
     </Text>
   );
 };
 
-export default ProfileScreen;
+export default SupportScreen;

@@ -1,12 +1,12 @@
 import React from 'react';
 import {Text} from 'react-native';
 
-const ProfileScreen = () => {
+const DashboardScreen = () => {
   return (
     <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
-      ProfileScreen
+      DashboardScreen
     </Text>
   );
 };
 
-export default ProfileScreen;
+export default DashboardScreen;
