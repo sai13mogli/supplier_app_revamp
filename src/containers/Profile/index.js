@@ -3,7 +3,7 @@ import {Text, View,ProgressBarAndroid} from 'react-native';
 import Header from '../../component/common/Header';
 import styles from './style';
 
-const Profile = () => {
+const ProfileScreen = () => {
   return (
     <View>
       <Header
@@ -27,4 +27,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfileScreen;

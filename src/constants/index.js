@@ -1,13 +1,49 @@
-import Home from '../containers/Home';
-import Profile from '../containers/Profile';
+import HomeScreen from '../containers/Home';
+import ProfileScreen from '../containers/Profile';
+import OrdersScreen from '../containers/Orders';
+import DashboardScreen from '../containers/Dashboard';
+import SupportScreen from '../containers/Support';
+
+export const BOTTOM_TAB_SCREENS = [
+  {
+    name: 'Home',
+    component: HomeScreen,
+    // activeIcon: 'home',
+    // inactiveIcon: 'home',
+  },
+  {
+    name: 'Orders',
+    component: OrdersScreen,
+    // activeIcon: 'categories',
+    // inactiveIcon: 'categories',
+  },
+  {
+    name: 'Dashboard',
+    component: DashboardScreen,
+    // activeIcon: 'brand_store',
+    // inactiveIcon: 'brand_store',
+  },
+  {
+    name: 'Support',
+    component: SupportScreen,
+    // activeIcon: 'orders',
+    // inactiveIcon: 'orders',
+  },
+  {
+    name: 'Profile',
+    component: ProfileScreen,
+    // activeIcon: 'profile',
+    // inactiveIcon: 'profile',
+  },
+];
 
 export const APP_STACK_SCREENS = [
   {
     name: 'Home',
-    component: Home,
+    component: HomeScreen,
   },
   {
     name: 'Profile',
-    component: Profile,
+    component: ProfileScreen,
   },
 ];

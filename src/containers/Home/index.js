@@ -4,7 +4,7 @@ import styles from './style';
 import {useSelector, useDispatch} from 'react-redux';
 import {fetchedHomepage, fetchHomepage} from '../../redux/actions/homepage';
 
-const Home = props => {
+const HomeScreen = props => {
   const usersData = useSelector(
     state => (state.homepageReducer || {}).data || [],
   );
@@ -29,4 +29,4 @@ const Home = props => {
   );
 };
 
-export default Home;
+export default HomeScreen;
