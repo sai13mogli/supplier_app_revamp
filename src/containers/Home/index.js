@@ -5,7 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {fetchedHomepage, fetchHomepage} from '../../redux/actions/homepage';
 import CustomButton from '../../component/common/Button';
 
-const Home = props => {
+const HomeScreen = props => {
   const usersData = useSelector(
     state => (state.homepageReducer || {}).data || [],
   );
@@ -20,6 +20,7 @@ const Home = props => {
   }, [usersData]);
   return (
     <View style={styles.home}>
+      {/* Exampe for CustomButton Component */}
       <CustomButton
         title={'Hello'}
         buttonColor={'dodgerblue'}
@@ -29,6 +30,8 @@ const Home = props => {
         iconType={'font-awesome'}
         onPress={() => alert('running')}
       />
+      {/* End */}
+
       <Text style={styles.text}>HomeScreen</Text>
       <TouchableOpacity
         style={styles.button}
@@ -39,4 +42,4 @@ const Home = props => {
   );
 };
 
-export default Home;
+export default HomeScreen;

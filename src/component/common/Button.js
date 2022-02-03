@@ -35,19 +35,18 @@ const CustomButton = props => {
       }
       disabled={disabled || loading}
       iconRight={showIcon}
-      iconContainerStyle={{marginLeft: 10}}
-      titleStyle={{fontWeight: '700'}}
-      buttonStyle={{
-        backgroundColor: buttonColor,
-        borderColor: 'transparent',
-        borderWidth: 0,
-        borderRadius: 30,
-      }}
-      containerStyle={{
-        width: 200,
-        marginHorizontal: 50,
-        marginVertical: 10,
-      }}
+      // iconContainerStyle={{marginLeft: 10}}
+      // buttonStyle={{
+      //   backgroundColor: buttonColor,
+      //   borderColor: 'transparent',
+      //   borderWidth: 0,
+      //   borderRadius: 30,
+      // }}
+      // containerStyle={{
+      //   width: 200,
+      //   marginHorizontal: 50,
+      //   marginVertical: 10,
+      // }}
     />
   );
 };
