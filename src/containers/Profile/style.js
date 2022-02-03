@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     userName:{
         fontSize:Dimension.font14,
         color:Colors.textColor,
-        fontFamily:Dimension.CustomBoldFont,
+        fontFamily:Dimension.CustomRegularFont,
         marginTop:5,
     },
     welcomeText:{
