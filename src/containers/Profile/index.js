@@ -2,9 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Header from '../../component/common/Header';
 import styles from './style';
-<<<<<<< HEAD
-import CustomeIcon from '../../component/common/CustomeIcon'
-=======
 import {OrderedMap} from 'immutable';
 import {PROFILE_TABS} from '../../constants';
 import FloatingLabelInputField from '../../component/common/FloatingInput';
@@ -66,30 +63,9 @@ const ProfileScreen = props => {
       </View>
     );
   };
->>>>>>> 8d68cd3c9de4ab091ece6412a6af319a10ab7354
 
   return (
     <View>
-<<<<<<< HEAD
-      <Header
-        showBack
-        showText={'My Profile'}
-      />
-      <View>
-            <CustomeIcon name={"add-box"} size={22} ></CustomeIcon>
-            <Text style={styles.userName}>Hello, Anuj</Text>
-            <Text style={styles.welcomeText}>anuj.gupta@moglix.com</Text>
-            <Text style={styles.welcomeText}>+91-9599822242</Text>
-            <View style={styles.statusBar}>
-              <Text>60 %</Text>
-              <ProgressBarAndroid
-                styleAttr="Horizontal"
-                indeterminate={false}
-                progress={0.6}
-              />
-            </View>
-        </View>
-=======
       <Header showBack showText={'My Profile'} />
       {/* {PROFILE_TABS.map((tab, tabIndex) => (
         <TouchableOpacity
@@ -104,7 +80,6 @@ const ProfileScreen = props => {
       )).toList()} */}
       {inputDetails.map((_, k) => renderInputText(_))}
       {/* <Input placeholder="MobileNumber" onChangeText={text => setPhone(text)} /> */}
->>>>>>> 8d68cd3c9de4ab091ece6412a6af319a10ab7354
     </View>
   );
 };
