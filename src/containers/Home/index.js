@@ -3,6 +3,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import styles from './style';
 import {useSelector, useDispatch} from 'react-redux';
 import {fetchedHomepage, fetchHomepage} from '../../redux/actions/homepage';
+import CustomButton from '../../component/common/Button';
 
 const Home = props => {
   const usersData = useSelector(
@@ -19,6 +20,15 @@ const Home = props => {
   }, [usersData]);
   return (
     <View style={styles.home}>
+      <CustomButton
+        title={'Hello'}
+        buttonColor={'dodgerblue'}
+        iconName={'user'}
+        showIcon
+        iconColor={'#fff'}
+        iconType={'font-awesome'}
+        onPress={() => alert('running')}
+      />
       <Text style={styles.text}>HomeScreen</Text>
       <TouchableOpacity
         style={styles.button}
