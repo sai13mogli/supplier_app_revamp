@@ -8,6 +8,8 @@ import {PROFILE_TABS} from '../../constants';
 import FloatingLabelInputField from '../../component/common/FloatingInput';
 import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Input, Icon} from 'react-native-elements';
+import Dimension from "../../Theme/Dimension";
+import colors from "../../Theme/Colors"
 
 const ProfileScreen = props => {
   const [phone, setPhone] = useState('');
@@ -55,8 +57,8 @@ const ProfileScreen = props => {
           disabled={disabled}
           keyboardType={keyboardType}
           extraView={() => (
-            <TouchableOpacity style={{width: 100, height: 100}}>
-              <MatIcon name={'eye'} size={22} />
+            <TouchableOpacity style={{}}>
+              <CustomeIcon name={'arrow-drop-down-line'} size={30}></CustomeIcon>
             </TouchableOpacity>
           )}
           //   blur={onBlur}
