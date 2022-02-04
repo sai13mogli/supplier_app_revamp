@@ -2,22 +2,27 @@ import React, {useEffect, useState, createRef} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Header from '../../component/common/Header';
 import styles from './style';
+import CustomeIcon from '../../component/common/CustomeIcon';
 import {OrderedMap} from 'immutable';
 import {PROFILE_TABS} from '../../constants';
 import FloatingLabelInputField from '../../component/common/FloatingInput';
 import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Input, Icon} from 'react-native-elements';
+import {Input, Icon, BottomSheet} from 'react-native-elements';
 import DotCheckbox from '../../component/common/Checkbox';
 import FileUpload from '../../component/common/FileUpload';
-// import ActionSheet from 'react-native-actions-sheet';
+import ActionSheet from 'react-native-actions-sheet';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
+import DocumentPicker from 'react-native-document-picker';
 
 const ProfileScreen = props => {
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [check, setCheck] = useState(false);
   const [images, setImages] = useState([]);
+  const [value, setValue] = useState('Address*');
+  const [singleFile, setSingleFile] = useState('');
+
   const actionSheetRef = createRef();
 
   const inputDetails = [
@@ -72,33 +77,11 @@ const ProfileScreen = props => {
     );
   };
 
-  const uploadImage = cheque => {
-    const options = {
-      mediaType: 'photo',
-      noData: true,
-    };
-    launchImageLibrary(options, response => {
-      console.log('Response = ', response);
-      if (response.didCancel) {
-        console.log('User cancelled photo picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        addItemImage(response, cheque);
-        return;
-      }
-    });
-  };
-
   const uploadFromCamera = cheque => {
     const options = {
       mediaType: 'photo',
       noData: true,
       includeBase64: false,
-      // maxHeight: 200,
-      // maxWidth: 200,
       cameraType: 'back',
     };
     launchCamera(options, response => {
@@ -109,15 +92,14 @@ const ProfileScreen = props => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        // console.log('launchCamera ka error hai bhai', response);
         addItemImage(response, cheque);
-
         return;
       }
     });
   };
 
   const addItemImage = (photos, cheque) => {
+    console.log(photos, 'photos hai bhai');
     photos.assets.map((photo, i) => {
       const fData = new FormData();
       if (photo.type == null) {
@@ -156,16 +138,14 @@ const ProfileScreen = props => {
         requestArr,
       )
         .then(res => {
-          let imagesArr = images;
+          let imagesArr = [];
           let obj = {};
           console.log(photo.type);
 
           let parsedString = JSON.parse(res['data']);
           imagesArr.push({file: photo, url: parsedString.data});
           obj.images = imagesArr;
-
           setImages([...obj.images]);
-          console.log('imagesArr', imagesArr);
         })
         .catch(error => {
           console.log('inCatch!', error);
@@ -173,22 +153,55 @@ const ProfileScreen = props => {
     });
   };
 
+  const uploadFromFileExp = async () => {
+    //Opening Document Picker for selection of one file
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf],
+        //There can me more options as well
+        // DocumentPicker.types.allFiles
+        // DocumentPicker.types.images
+        // DocumentPicker.types.plainText
+        // DocumentPicker.types.audio
+        // DocumentPicker.types.pdf
+      });
+      console.log('res : ' + JSON.stringify(res));
+      console.log('URI : ' + res[0].fileCopyUri);
+      console.log('Type : ' + res[0].type);
+      console.log('File Name : ' + res[0].name);
+      console.log('File Size : ' + res[0].size);
+
+      setSingleFile(res[0]);
+    } catch (err) {
+      //Handling any exception (If any)
+      if (DocumentPicker.isCancel(err)) {
+        console.log('Canceled from single doc picker');
+      } else {
+        throw err;
+      }
+    }
+  };
+
   const openSelection = selection => {
     switch (selection) {
-      case 'Gallery':
-        actionSheetRef.current?.setModalVisible(false);
-        uploadImage(false);
-        break;
-
       case 'Camera':
         actionSheetRef.current?.setModalVisible(false);
         uploadFromCamera(false);
+        break;
+
+      case 'File Explorer':
+        actionSheetRef.current?.setModalVisible(false);
+        uploadFromFileExp();
         break;
 
       default:
         actionSheetRef.current?.setModalVisible(false);
         break;
     }
+  };
+
+  const onCheck = term => {
+    setValue(term);
   };
 
   return (
@@ -207,17 +220,13 @@ const ProfileScreen = props => {
       )).toList()} */}
       {inputDetails.map((_, k) => renderInputText(_))}
       <DotCheckbox
-        checkedIcon="dot-circle-o"
-        uncheckedIcon="circle-o"
-        checked={check}
-        onPress={() => setCheck(!check)}
+        inputDetails={inputDetails}
+        value={value}
+        onCheck={onCheck}
       />
       <TouchableOpacity
         style={{backgroundColor: 'red', width: 100, height: 100}}
-        onPress={
-          () => actionSheetRef.current?.setModalVisible(true)
-          // uploadImage(false);
-        }>
+        onPress={() => actionSheetRef.current?.setModalVisible(true)}>
         <FileUpload />
       </TouchableOpacity>
       <ActionSheet ref={actionSheetRef}>
@@ -229,8 +238,6 @@ const ProfileScreen = props => {
           ))}
         </View>
       </ActionSheet>
-
-      {/* <Input placeholder="MobileNumber" onChangeText={text => setPhone(text)} /> */}
     </View>
   );
 };

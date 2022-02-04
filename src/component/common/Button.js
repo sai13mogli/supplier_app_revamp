@@ -10,6 +10,7 @@ const CustomButton = props => {
     iconName,
     iconType,
     iconColor,
+    icon,
     title,
     onPress,
     buttonColor,
@@ -23,16 +24,7 @@ const CustomButton = props => {
         size: 'small',
         color: loadingColor,
       }}
-      icon={
-        showIcon
-          ? {
-              name: iconName,
-              type: iconType,
-              size: 15,
-              color: iconColor,
-            }
-          : {}
-      }
+      icon={icon}
       disabled={disabled || loading}
       iconRight={showIcon}
       // iconContainerStyle={{marginLeft: 10}}

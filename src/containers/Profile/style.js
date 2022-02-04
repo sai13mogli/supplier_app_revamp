@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: Dimension.font14,
     color: Colors.textColor,
-    fontFamily: Dimension.CustomBoldFont,
+    fontFamily: Dimension.CustomRegularFont,
     marginTop: 5,
   },
   welcomeText: {
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
   },
   modalText: {
     paddingVertical: 10,
+    fontFamily: Dimension.CustomRegularFont,
     borderBottomWidth: 0.5,
     color: '#000',
   },
