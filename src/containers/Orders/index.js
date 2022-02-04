@@ -7,6 +7,17 @@ import CustomeDatePicker from '../../component/common/Datepicker/index';
 const OrdersScreen = () => {
   
   const [isSelected, setSelection] = useState(false);
+
+  const options = [
+    { label: 'Thing 1', value: 1},
+    { label: 'Thing 2', value: 2},
+  ];
+  
+ const onchangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
   
   const onChange = value => {
     setSelection(value);
@@ -17,7 +28,13 @@ const OrdersScreen = () => {
     <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
       OrdersScreen
     </Text>
-   {/* <CustomeDatePicker/> */}
+    
+   <CustomeDatePicker
+    onChange={onchangeDate}
+   />
+
+   
+  
     <Checkbox
      value={isSelected}
      onValueChange={onChange}

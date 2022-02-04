@@ -15,4 +15,5 @@ export const STATE_STATUS = {
 
 // apiqa.moglilabs.com
 // https://api.moglix.com/
-// 'https://api.moglix.com/'; //'https://apiqa.moglilabs.com/'
+// 'https://api.moglix.com/'; 
+//'https://apiqa.moglilabs.com/'
