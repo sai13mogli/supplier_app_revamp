@@ -25,4 +25,4 @@ const Checkbox = props => {
 
 export default Checkbox;
 
-/* Created By Aakash  */
+/* Created By Aakash  -------*/
