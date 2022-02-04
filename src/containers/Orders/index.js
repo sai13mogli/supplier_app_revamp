@@ -3,14 +3,42 @@ import {Text} from 'react-native';
 import CustomButton from '../../component/common/Button';
 import DropDown from '../../component/common/DropDown';
 import CustomeIcon from '../../component/common/CustomeIcon';
+import Checkbox from '../../component/common/Checkbox/index';
+import CustomeDatePicker from '../../component/common/Datepicker/index';
 import Dimension from "../../Theme/Dimension";
 import colors from "../../Theme/Colors"
 const OrdersScreen = () => {
   const [gender, setGender] = useState('');
+  const [isSelected, setSelection] = useState(false);
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
 
   const onChange = value => {
     setGender(value);
   };
+
+  const onchangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+  
+  const onCheckAction = value => {
+    setSelection(value);
+  };
+
+   const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+
+ 
 
   return (
     <>
@@ -45,6 +73,20 @@ const OrdersScreen = () => {
         onValueChange={onChange}
       />
       {/* End */}
+      
+       {/* Example for DatePicker Component */}
+       
+      <CustomeDatePicker
+        onChange={onchangeDate}
+        onPress={showDatepicker}
+        display={'default'}
+        mode={mode}
+      />
+      {/* Example for CheckBox Component */}
+       <Checkbox
+        value={isSelected}
+        onValueChange={onCheckAction}
+       />
     </>
   );
 };
