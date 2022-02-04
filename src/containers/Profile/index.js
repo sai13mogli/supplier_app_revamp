@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Header from '../../component/common/Header';
 import styles from './style';
+import CustomeIcon from '../../component/common/CustomeIcon';
 import {OrderedMap} from 'immutable';
 import {PROFILE_TABS} from '../../constants';
 import FloatingLabelInputField from '../../component/common/FloatingInput';
