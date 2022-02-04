@@ -62,6 +62,7 @@ const FloatingLabelInputField = props => {
             labelStyle={styles.labelStyle}
             rightIconContainerStyle={styles.iconStyle}
             errorStyle={styles.errorText}
+            disabledInputStyle={styles.disabledInputStyle}
 
           />
         )}
@@ -84,16 +85,14 @@ const styles = StyleSheet.create({
     paddingHorizontal:Dimension.padding12,
     height:Dimension.height40,
     paddingBottom:0,
-    
-
-
-  },
+    },
   labelStyle:{
     fontSize:Dimension.font10,
     color:colors.FontColor,
     fontFamily:Dimension.CustomMediumFont,
     marginLeft:Dimension.margin12,
-    marginBottom:Dimension.margin5
+    marginBottom:Dimension.margin5,
+    fontWeight:"normal"
   },
   inputStyle:{
     fontSize:Dimension.font14,
@@ -114,7 +113,14 @@ const styles = StyleSheet.create({
     fontFamily:Dimension.CustomMediumFont,
 
    },
-
+   disabledInputStyle:{
+    fontSize:Dimension.font14,
+    color:colors.FontColor,
+    fontFamily:Dimension.CustomRegularFont,
+    
+    paddingLeft:0,
+    backgroundColor:colors.DisableStateColor
+   }
 });
 
 export default FloatingLabelInputField;
