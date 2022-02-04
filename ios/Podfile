@@ -12,8 +12,11 @@ target 'supplier_app' do
     :hermes_enabled => false
   )
 
+<<<<<<< HEAD
   pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
 
+=======
+>>>>>>> 9f79d24d4c2c4ddd4cecda6738fd4e75bcffdfc0
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'supplier_appTests' do

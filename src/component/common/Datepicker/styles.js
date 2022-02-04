@@ -18,12 +18,26 @@ const styles = StyleSheet.create({
       width: 200,
       marginTop: 20,
     },
+    date:{
+     justifyContent:'flex-end',
+     left:200,
+     top:8
+    },
+    wrap:{
+      flexDirection:'row'
+    },
+    dateText:{
+     fontSize:18,
+     top:10,
+     right:10
+    },
     dateView:{
       height: Scale(45),
-      paddingHorizontal: Scale(120),
+      left:10,
+      paddingHorizontal: Scale(25),
       borderWidth: Scale(1),
       borderColor: Colors.BORDERCOLOR,
-      width: '100%',
+      width: '94%',
       borderRadius:Scale(5),
       top:90,
       borderWidth:0.8,

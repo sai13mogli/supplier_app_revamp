@@ -23,42 +23,13 @@ const size = {
 }
 
 const style = {
-  h1: {
-    fontSize: size.h1,
-  },
-  h2: {
-    fontSize: size.h2,
-  },
-  h3: {
-    fontSize: size.h3,
-  },
-  normal: {
-    fontSize: size.regular,
-  },
-  medium: {
-    fontSize: size.medium,
-  },
-  small: {
-    fontSize: size.small,
-  },  
-  large: {
-    fontSize: size.large,
-  },
-  input:{
-    fontSize:size.input
-  },
-  extrasmall:{
-    fontSize:size.extrasmall
-
-  } ,   
+  
   font8 : normalize(8),
   font10 : normalize(10),
   font12 : normalize(12),
   font14 : normalize(14),
   font16 : normalize(16),
-  font18 : normalize(18),
-  font20 : normalize(20),
-  font22 : normalize(22),
+  
 
     margin5: normalize(5),
     margin8: normalize(8),

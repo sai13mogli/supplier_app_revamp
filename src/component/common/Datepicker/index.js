@@ -1,54 +1,42 @@
 import React, {useState} from 'react';
-import {View, Button, Platform} from 'react-native';
+import {View, Button, Platform,Text, TouchableHighlight} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles';
 
 const CustomeDatePicker = props => {
 
-  // const [date, setDate] = useState(new Date(1598051730000));
-  // const [mode, setMode] = useState('date');
-  // const [show, setShow] = useState(false);
-
-  // const onChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate || date;
-  //   setShow(Platform.OS === 'ios');
-  //   setDate(currentDate);
-  // };
-
-  // const showMode = (currentMode) => {
-  //   setShow(true);
-  //   setMode(currentMode);
-  // };
-
-  // const showDatepicker = () => {
-  //   showMode('date');
-  // };
-
-  // const showTimepicker = () => {
-  //   showMode('time');
-  // };
-
-  const {
+ const {
     onChange,
     value,
     onPress,
     show,
+    mode,
+    display
   } = props;
 
   return (
     <View>
-      <View style={styles.dateView}> 
-      <Button 
-      onPress={onPress} 
-      title="date" />
-      </View>
+      <TouchableHighlight 
+        style={styles.dateView}
+        onPress={onPress} 
+      > 
+     <View style={styles.wrap}>
+     <Text style={styles.dateText}>4/02/22</Text>
+     <Icon name="calendar-check-o" size={25}
+      style={styles.date} />
+     </View>
+     
+     
+      </TouchableHighlight>
+      
       {show && (
         <DateTimePicker
           testID="dateTimePicker"
           value={value}
           mode={mode}
           is24Hour={true}
-          display="default"
+          display={display}
           onChange={onChange}
         />
       )}
