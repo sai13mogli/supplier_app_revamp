@@ -6,7 +6,10 @@ import CustomeIcon from '../../component/common/CustomeIcon';
 import {OrderedMap} from 'immutable';
 import {PROFILE_TABS} from '../../constants';
 import FloatingLabelInputField from '../../component/common/FloatingInput';
-import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+
+import Dimension from "../../Theme/Dimension";
+import colors from "../../Theme/Colors"
 import {Input, Icon, BottomSheet} from 'react-native-elements';
 import DotCheckbox from '../../component/common/Checkbox';
 import FileUpload from '../../component/common/FileUpload';
@@ -67,8 +70,8 @@ const ProfileScreen = props => {
           disabled={disabled}
           keyboardType={keyboardType}
           extraView={() => (
-            <TouchableOpacity style={{width: 100, height: 100}}>
-              <MatIcon name={'eye'} size={22} />
+            <TouchableOpacity style={{}}>
+              <CustomeIcon name={'calendar'} size={24}></CustomeIcon>
             </TouchableOpacity>
           )}
           //   blur={onBlur}
@@ -225,7 +228,6 @@ const ProfileScreen = props => {
         onCheck={onCheck}
       />
       <TouchableOpacity
-        style={{backgroundColor: 'red', width: 100, height: 100}}
         onPress={() => actionSheetRef.current?.setModalVisible(true)}>
         <FileUpload />
       </TouchableOpacity>
