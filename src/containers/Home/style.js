@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import { Scale } from '../../CommonConfig';
 
 const styles = StyleSheet.create({
   home: {
@@ -16,6 +17,11 @@ const styles = StyleSheet.create({
     color: '#0000FF',
     width: 100,
     height: 100,
+  },
+  wrapperView:{
+   width:80,
+   top:80,
+   marginRight:Scale(80),
   },
 });
 
