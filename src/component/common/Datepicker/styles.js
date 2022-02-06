@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     },
     wrap:{
       flexDirection:'row'
+      
     },
     dateText:{
      fontSize:18,
