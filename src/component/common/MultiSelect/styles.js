@@ -7,16 +7,23 @@ const styles = StyleSheet.create({
       justifyContent: "center",
     },
     inputField: {
-        height: 60,
+        flexDirection:'row',
+        height: 50,
+        top:40,
+        // paddingHorizontal:100,
+        borderWidth:1,
+        borderRadius:5,
         backgroundColor: '#fff',
-        fontSize: 14,
+        borderColor:'grey',
+        width:'70%'
         // fontFamily: Dimension.CustomMediumFont,
-        borderBottomWidth: 1,
-        borderBottomColor: 'grey',
         // color: colors.PrimaryTextColor,
-        paddingLeft: 10,
-        paddingRight: 30,
-      },
+    },
+    magnifyIcon:{
+        color:'black',
+        
+    }
+   
   
 });
 
