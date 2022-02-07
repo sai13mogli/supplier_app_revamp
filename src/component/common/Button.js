@@ -1,5 +1,8 @@
 import React from 'react';
 import {Button} from 'react-native-elements';
+import {StyleSheet} from 'react-native';
+import Dimension from "../../Theme/Dimension";
+import colors from "../../Theme/Colors"
 
 const CustomButton = props => {
   const {
@@ -14,6 +17,8 @@ const CustomButton = props => {
     title,
     onPress,
     buttonColor,
+    TextColor,
+    borderColor,
   } = props;
   return (
     <Button
@@ -27,20 +32,27 @@ const CustomButton = props => {
       icon={icon}
       disabled={disabled || loading}
       iconRight={showIcon}
-      // iconContainerStyle={{marginLeft: 10}}
-      // buttonStyle={{
-      //   backgroundColor: buttonColor,
-      //   borderColor: 'transparent',
-      //   borderWidth: 0,
-      //   borderRadius: 30,
-      // }}
-      // containerStyle={{
-      //   width: 200,
-      //   marginHorizontal: 50,
-      //   marginVertical: 10,
-      // }}
+      iconContainerStyle={styles.iconWrapper}
+      buttonStyle={[styles.btnStyle,{backgroundColor:buttonColor,borderColor:borderColor}]}
+      containerStyle={styles.btnWrapper}
+      titleStyle={[styles.btnTextStyle,{color:TextColor}]}
     />
   );
 };
+const styles = StyleSheet.create({
+  btnStyle:{
+      backgroundColor: colors.BrandColor,
+      borderWidth: 1,
+      borderRadius: 4,
+  },
+  btnTextStyle:{
+    fontSize:Dimension.font16,
+    color:colors.WhiteColor,
+    fontFamily:Dimension.CustomMediumFont
+  },
+  btnWrapper:{
 
+  },
+  iconWrapper:{marginLeft:Dimension.margin15},
+});
 export default CustomButton;

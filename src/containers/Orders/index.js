@@ -3,12 +3,31 @@ import {Text} from 'react-native';
 import CustomButton from '../../component/common/Button';
 import DropDown from '../../component/common/DropDown';
 import CustomeIcon from '../../component/common/CustomeIcon';
+import Checkbox from '../../component/common/Checkbox/index';
+import CustomeDatePicker from '../../component/common/Datepicker/index';
+import Dimension from "../../Theme/Dimension";
+import colors from "../../Theme/Colors"
 const OrdersScreen = () => {
   const [gender, setGender] = useState('');
+  const [isSelected, setSelection] = useState(false);
+
 
   const onChange = value => {
     setGender(value);
   };
+
+ 
+  
+  const onCheckAction = value => {
+    setSelection(value);
+  };
+
+ 
+ 
+
+
+
+ 
 
   return (
     <>
@@ -21,11 +40,13 @@ const OrdersScreen = () => {
         title={'Hello'}
         buttonColor={'dodgerblue'}
         iconName={'user'}
-        icon={() => <CustomeIcon name={'add-box'} size={22} />}
+        icon={() => <CustomeIcon name={'add-box'} size={Dimension.font22} color={colors.BrandColor} />}
         showIcon
         iconColor={'#fff'}
         iconType={'font-awesome'}
         onPress={() => alert('running')}
+        TextColor={colors.WhiteColor}
+        borderColor={colors.WhiteColor}
       />
       {/* End */}
 
@@ -41,6 +62,17 @@ const OrdersScreen = () => {
         onValueChange={onChange}
       />
       {/* End */}
+      
+       {/* Example for DatePicker Component */}
+       
+      <CustomeDatePicker
+        display={'default'}
+      />
+      {/* Example for CheckBox Component */}
+       <Checkbox
+        value={isSelected}
+        onValueChange={onCheckAction}
+       />
     </>
   );
 };
