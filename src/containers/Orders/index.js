@@ -11,25 +11,15 @@ const OrdersScreen = () => {
   const [gender, setGender] = useState('');
   const [isSelected, setSelection] = useState(false);
 
-
-  const onChange = value => {
+ const onChange = value => {
     setGender(value);
   };
 
- 
-  
-  const onCheckAction = value => {
+ const onCheckAction = value => {
     setSelection(value);
   };
 
- 
- 
-
-
-
- 
-
-  return (
+ return (
     <>
       <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
         OrdersScreen
@@ -70,8 +60,8 @@ const OrdersScreen = () => {
       />
       {/* Example for CheckBox Component */}
        <Checkbox
-        value={isSelected}
-        onValueChange={onCheckAction}
+        checked={isSelected}
+        onPress={()=>setSelection(!isSelected)}
        />
     </>
   );
