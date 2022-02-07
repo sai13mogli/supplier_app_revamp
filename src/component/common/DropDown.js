@@ -1,5 +1,5 @@
 import React from 'react';
-import {Picker} from '@react-native-picker/picker';
+  import {Picker} from '@react-native-picker/picker';
 import Dimension from "../../Theme/Dimension";
 import colors from "../../Theme/Colors"
 import {StyleSheet,View} from 'react-native';
