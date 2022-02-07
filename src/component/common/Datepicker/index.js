@@ -48,9 +48,7 @@ const CustomeDatePicker = props => {
      <Icon name="calendar-check-o" size={25}
       style={styles.date} />
      </View>
-     
-     
-      </TouchableHighlight>
+     </TouchableHighlight>
       
       {show && (
         <DateTimePicker
