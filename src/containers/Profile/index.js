@@ -6,8 +6,8 @@ import CustomeIcon from '../../component/common/CustomeIcon';
 import {OrderedMap} from 'immutable';
 import {PROFILE_TABS} from '../../constants';
 import FloatingLabelInputField from '../../component/common/FloatingInput';
-
-
+import { useNavigation} from '@react-navigation/native';
+import CustomButton from '../../component/common/Button';
 import Dimension from "../../Theme/Dimension";
 import colors from "../../Theme/Colors"
 import {Input, Icon, BottomSheet} from 'react-native-elements';
@@ -19,6 +19,8 @@ import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
 
 const ProfileScreen = props => {
+  const {navigate} = useNavigation()
+  const navigation = useNavigation()
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [check, setCheck] = useState(false);
@@ -207,6 +209,10 @@ const ProfileScreen = props => {
     setValue(term);
   };
 
+  const navigateToAddresses = () => {
+      navigate('Addresses');
+  };
+
   return (
     <View>
       <Header showBack showText={'My Profile'} />
@@ -240,6 +246,19 @@ const ProfileScreen = props => {
           ))}
         </View>
       </ActionSheet>
+
+      <CustomButton
+        buttonColor={'dodgerblue'}
+        iconName={'user'}
+        icon={() => <CustomeIcon name={'add-box'} size={Dimension.font22} color={colors.BrandColor} />}
+        title={'Addresses'}
+        showIcon
+        iconColor={'#fff'}
+        iconType={'font-awesome'}
+        onPress={navigateToAddresses}
+        TextColor={colors.WhiteColor}
+        borderColor={colors.WhiteColor}
+      />
     </View>
   );
 };

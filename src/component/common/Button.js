@@ -19,6 +19,7 @@ const CustomButton = props => {
     buttonColor,
     TextColor,
     borderColor,
+    buttonStyle
   } = props;
   return (
     <Button
@@ -33,7 +34,7 @@ const CustomButton = props => {
       disabled={disabled || loading}
       iconRight={showIcon}
       iconContainerStyle={styles.iconWrapper}
-      buttonStyle={[styles.btnStyle,{backgroundColor:buttonColor,borderColor:borderColor}]}
+      buttonStyle={[styles.btnStyle,{backgroundColor:buttonColor,borderColor:borderColor}],buttonStyle}
       containerStyle={styles.btnWrapper}
       titleStyle={[styles.btnTextStyle,{color:TextColor}]}
     />

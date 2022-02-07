@@ -1,26 +1,27 @@
 import {STATE_STATUS} from '../constants/index';
-import {HOMEPAGE_ACTIONS} from '../constants/homepage';
+import {ADDRESSES_ACTIONS} from '../constants/addresses';
 
 const initialState = {
   status: STATE_STATUS.UNFETCHED,
-  data: [],
+  addresses: [],
 };
 
-export const homepageReducer = (state = initialState, action) => {
+export const addressesReducer = (state = initialState, action) => {
   const {type, payload, error} = action;
   switch (type) {
-    case HOMEPAGE_ACTIONS.FETCH_PRODUCTS:
+    case ADDRESSES_ACTIONS.FETCH_ADDRESSES:
       return {
         ...state,
         status: STATE_STATUS.FETCHING,
       };
-    case HOMEPAGE_ACTIONS.FETCHED_PRODUCTS:
+    case ADDRESSES_ACTIONS.FETCHED_FETCH_ADDRESSES:
       return {
         ...state,
         status: STATE_STATUS.FETCHED,
-        data: payload.data,
+        addresses: payload.data,
       };
-    case HOMEPAGE_ACTIONS.FAILED_FETCH_ADDRESSES:
+     
+    case ADDRESSES_ACTIONS.FAILED_FETCH_PRODUCTS:
       return {
         ...state,
         status: STATE_STATUS.FAILED_FETCH,
