@@ -27,9 +27,9 @@ const DashboardScreen = () => {
     setSelection(value);
   };
 
-  // useEffect(() => {
-  //   onSearchData()
-  // },[])
+//   useEffect(() => {
+//     onSearchData()
+//   },[])
 
 // useEffect(() => {
 //   onSearchData()
