@@ -31,21 +31,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     color: Colors.FontColor
   },
-  labelStyle: {
-    fontSize: Dimension.font10,
-    color: Colors.FontColor,
-    fontFamily: Dimension.CustomMediumFont,
-    marginLeft: Dimension.margin12,
-    marginBottom: Dimension.margin5,
   
-  },
-  starIcon:{
-    color:Colors.BrandColor,
-    fontSize: Dimension.font10,
-    
-    fontFamily: Dimension.CustomMediumFont,
-
-  },
 });
 
 export default styles;

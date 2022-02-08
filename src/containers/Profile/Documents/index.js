@@ -685,7 +685,7 @@ const DocumentsScreen = props => {
     </>
   );
   return (
-    <ScrollView>
+    <ScrollView style={styles.ContainerCss}>
       {Documents.map(_ => renderInputText(_))
         .toList()
         .toArray()}

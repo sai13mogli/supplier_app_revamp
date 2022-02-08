@@ -14,6 +14,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     color: '#000',
   },
+  ContainerCss:{
+    paddingHorizontal:Dimension.padding15,
+  },
+
 });
 
 export default styles;

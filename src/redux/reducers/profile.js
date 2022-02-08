@@ -19,6 +19,25 @@ const initialState = {
 export const profileReducer = (state = initialState, action) => {
   const {type, payload, error} = action;
   switch (type) {
+    case PROFILE_ACTIONS.FETCH_PROFILE:
+      return {
+        ...state,
+        status: STATE_STATUS.FETCHING,
+        data: {},
+      };
+    case PROFILE_ACTIONS.FETCHED_PROFILE:
+      return {
+        ...state,
+        status: STATE_STATUS.FETCHED,
+        data: payload.data,
+      };
+    case PROFILE_ACTIONS.FAILED_FETCH_PROFILE:
+      return {
+        ...state,
+        status: STATE_STATUS.FAILED_FETCH,
+        data: {},
+      };
+
     case PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS:
       return {
         ...state,

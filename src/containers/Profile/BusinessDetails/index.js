@@ -11,13 +11,15 @@ import {STATE_STATUS} from '../../../redux/constants';
 
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
+const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
 const BusinessDetailsScreen = props => {
   const businessDetails = useSelector(
-    state => state.profileReducer.businessDetails.data,
+    state => state.profileReducer.businessDetails.data || {},
   );
   const businessDetailsStatus = useSelector(
-    state => state.profileReducer.businessDetails.status,
+    state =>
+      state.profileReducer.businessDetails.status || STATE_STATUS.FETCHING,
   );
 
   const dispatch = useDispatch();
@@ -58,27 +60,38 @@ const BusinessDetailsScreen = props => {
     legalEntityName: {
       title: 'Legal Entity Name',
       placeholder: '',
+      errorMessage: 'Enter valid legal entity name',
+      showError: legalEntityNameError,
       value: legalEntityName,
+      onBlur: () => onLegalNameBllur(),
       onChangeText: text => setlegalEntityName(text),
       component: FloatingLabelInputField,
     },
     tradeName: {
       title: 'Trade Name',
       placeholder: '',
+      errorMessage: 'Enter valid trade name',
+      showError: tradeNameError,
       value: tradeName,
+      onBlur: () => onTradeNameBlur(),
       onChangeText: text => settradeName(text),
       component: FloatingLabelInputField,
     },
     contactName: {
       title: 'Contact Name',
       placeholder: '',
+      errorMessage: 'Enter valid contact name',
+      showError: contactNameError,
       value: contactName,
+      onBlur: () => onContactNameBlur(),
       onChangeText: text => setcontactName(text),
       component: FloatingLabelInputField,
     },
     gstin: {
       title: 'GSTIN',
       placeholder: '',
+      errorMessage: 'Enter valid Gstin',
+      showError: gstinError,
       value: gstin,
       onChangeText: text => setgstin(text),
       component: FloatingLabelInputField,
@@ -87,6 +100,8 @@ const BusinessDetailsScreen = props => {
     country: {
       title: 'Country',
       placeholder: 'Country',
+      errorMessage: 'Select a country',
+      showError: countryError,
       selectedValue: country,
       onValueChange: text => setcountry(text),
       component: DropDown,
@@ -101,6 +116,8 @@ const BusinessDetailsScreen = props => {
     pincode: {
       title: 'Pincode',
       placeholder: '',
+      errorMessage: 'Enter valid pincode',
+      showError: pincodeError,
       value: pincode,
       maxLength: 6,
       keyboardType: 'number-pad',
@@ -111,6 +128,8 @@ const BusinessDetailsScreen = props => {
     state: {
       title: 'State',
       placeholder: 'State',
+      errorMessage: 'Select a state',
+      showError: stateError,
       selectedValue: state,
       onValueChange: text => setstate(text),
       component: DropDown,
@@ -120,6 +139,8 @@ const BusinessDetailsScreen = props => {
     city: {
       title: 'City',
       placeholder: 'City',
+      errorMessage: 'Select a city',
+      showError: cityError,
       selectedValue: city,
       onValueChange: text => setcity(text),
       component: DropDown,
@@ -129,8 +150,11 @@ const BusinessDetailsScreen = props => {
     phone: {
       title: 'Phone',
       placeholder: '',
+      errorMessage: 'Enter valid pincode',
+      showError: phoneError,
       value: phone,
       maxLength: 10,
+      onBlur: () => onPhoneBlur(),
       keyboardType: 'number-pad',
       onChangeText: text => setphone(text),
       component: FloatingLabelInputField,
@@ -138,18 +162,72 @@ const BusinessDetailsScreen = props => {
     email: {
       title: 'Email',
       placeholder: '',
+      errorMessage: 'Enter valid email',
+      showError: emailError,
       value: email,
+      onBlur: () => onEmailBlur(),
       onChangeText: text => setemail(text),
       component: FloatingLabelInputField,
     },
     tan: {
       title: 'TAN',
       placeholder: '',
+      errorMessage: 'Enter valid tan',
+      showError: tanError,
       value: tan,
+      onBlur: () => onTanBlur(),
       onChangeText: text => settan(text),
       component: FloatingLabelInputField,
     },
   });
+
+  const onTanBlur = () => {
+    if (tan && tan.length) {
+      settanError(false);
+    } else {
+      settanError(true);
+    }
+  };
+
+  const onEmailBlur = () => {
+    if (email && email.length && email.match(emailRegex)) {
+      setemailError(false);
+    } else {
+      setemailError(true);
+    }
+  };
+
+  const onPhoneBlur = () => {
+    if (phone && phone.length && phone.length == 10) {
+      setphoneError(false);
+    } else {
+      setphoneError(true);
+    }
+  };
+
+  const onContactNameBlur = () => {
+    if (contactName && contactName.length) {
+      setcontactNameError(false);
+    } else {
+      setcontactNameError(true);
+    }
+  };
+
+  const onTradeNameBlur = () => {
+    if (tradeName && tradeName.length) {
+      settradeNameError(false);
+    } else {
+      settradeNameError(true);
+    }
+  };
+
+  const onLegalNameBllur = () => {
+    if (legalEntityName && legalEntityName.length) {
+      setlegalEntityNameError(false);
+    } else {
+      setlegalEntityNameError(true);
+    }
+  };
 
   useEffect(() => {
     if (loading && businessDetailsStatus == STATE_STATUS.UPDATED) {

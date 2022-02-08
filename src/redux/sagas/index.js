@@ -3,5 +3,5 @@ import homepageSaga from './homepage';
 import profileSaga from './profile';
 
 export default function* () {
-  yield all([homepageSaga,profileSaga]);
+  yield all([homepageSaga, profileSaga]);
 }
