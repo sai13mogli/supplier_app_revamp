@@ -15,7 +15,7 @@ import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
-import styles from '../style';
+import styles from './style';
 import {BASE_URL} from '../../../redux/constants/index';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
@@ -23,6 +23,8 @@ import CustomButton from '../../../component/common/Button';
 import Modal from 'react-native-modal';
 import PDFView from 'react-native-view-pdf';
 import Checkbox from '../../../component/common/Checkbox/index';
+import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace';
+
 const deviceWidth = Dimensions.get('window').width;
 
 const DocumentsScreen = props => {
@@ -768,10 +770,10 @@ const DocumentsScreen = props => {
 
   const noteText = () => (
     <>
-      <Text style={{color: 'red'}}>Note</Text>
+      <Text style={styles.Notetxt}>Note</Text>
       {noteArr.map((_, i) => (
         <View key={i}>
-          <Text style={{color: '#000'}}>{_.note}</Text>
+          <Text style={styles.NoteData}>{_.note}</Text>
         </View>
       ))}
     </>
@@ -799,27 +801,37 @@ const DocumentsScreen = props => {
   };
 
   return (
+    <View style={{flex:1}}>
+
+    
     <ScrollView style={styles.ContainerCss}>
       {Documents.map(_ => renderInputText(_))
         .toList()
         .toArray()}
       {noteText()}
-      <Text style={{color: '#000'}}>By registering you agree to our</Text>
+      {/* <Text style={{color: '#000'}}></Text> */}
       <Checkbox
         checked={isSelected}
         onPress={() => setSelection(!isSelected)}
+        title={'By registering you agree to our'}
       />
+      </ScrollView>
+      <View style={styles.bottombtnWrap}>
       <CustomButton
         title="SUBMIT"
-        buttonColor="gray"
+        buttonColor={!checkCommonValidation() ? colors.grayShade1 : colors.BrandColor}
         disabled={!checkCommonValidation()}
         // onPress={() => onBusinessDetailsUpdate()}
-        buttonStyle={[
-          {
-            backgroundColor: !checkCommonValidation() ? '#C4C4C4' : '#D9232D',
-          },
-        ]}
+        // buttonStyle={[
+        //   {
+        //     backgroundColor: !checkCommonValidation() ? '#C4C4C4' : '#D9232D',
+        //   },
+        //]}
+        borderColor={!checkCommonValidation() ? colors.grayShade1 : colors.BrandColor}
+        TextColor={!checkCommonValidation() ? colors.FontColor : colors.WhiteColor}
+        TextFontSize={Dimension.font16}
       />
+      </View>
 
       <ActionSheet
         id="action_sheet"
@@ -874,7 +886,7 @@ const DocumentsScreen = props => {
           />
         )}
       </Modal>
-    </ScrollView>
+    </View>
   );
 };
 

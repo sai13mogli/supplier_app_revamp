@@ -38,6 +38,8 @@ const CustomButton = props => {
       buttonStyle={[styles.btnStyle,{backgroundColor:buttonColor,borderColor:borderColor}]}
       containerStyle={styles.btnWrapper}
       titleStyle={[styles.btnTextStyle,{color:TextColor,fontSize:TextFontSize}]}
+      disabledStyle={[styles.btnStyle,{backgroundColor:buttonColor,borderColor:borderColor}]}
+      disabledTitleStyle={[styles.btnTextStyle,{color:TextColor,fontSize:TextFontSize}]}
     />
   );
 };
