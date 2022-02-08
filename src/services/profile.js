@@ -28,6 +28,15 @@ export const getProfile = () =>
     },
   });
 
+export const getUserInfo = () =>
+  axios.get(`${BASE_URL}profile/info`, {
+    headers: {
+      userId: '123662',
+      Authorization:
+        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MTAiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM1OTgsImV4cCI6MTY0NDM4OTk5OH0.YeOc23V_V5wSRrQuTqETCygVS1RSG9j2eNSRDGrbHdeMUyn0tkRey4f8zXy-srqhkuc_67BQiTGXECnJvSC6JA',
+    },
+  });
+
 export const getPincodeDetails = pin =>
   axios.get(`https://supplierapiqa.moglilabs.com/util/getStateCity?pin=${pin}`);
 

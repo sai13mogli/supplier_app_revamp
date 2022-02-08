@@ -7,6 +7,7 @@ import {
   getBusinessDetails,
   setBusinessDetails,
   getProfile,
+  getUserInfo,
 } from '../../services/profile';
 // actions
 import {
@@ -47,7 +48,9 @@ function* fetchUpdateBusinessDetails({payload: {formData}}) {
 
 function* fetchProfile({}) {
   try {
-    const {data, error} = yield call(getProfile);
+    let {data, error} = yield call(getProfile);
+    const profileData = yield call(getUserInfo);
+    data.data.userInfo = profileData.data.data;
     if (error) {
       yield put(failedFetchProfile(error));
     } else {
