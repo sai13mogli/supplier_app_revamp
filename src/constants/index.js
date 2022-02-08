@@ -5,6 +5,7 @@ import DashboardScreen from '../containers/Dashboard';
 import SupportScreen from '../containers/Support';
 import DocumentsScreen from '../containers/Profile/Documents';
 import BusinessDetails from '../containers/Profile/BusinessDetails';
+import Addresses from '../containers/Profile/Addresses';
 import {OrderedMap} from 'immutable';
 
 export const BOTTOM_TAB_SCREENS = [
@@ -38,6 +39,7 @@ export const BOTTOM_TAB_SCREENS = [
     // activeIcon: 'profile',
     // inactiveIcon: 'profile',
   },
+  
 ];
 
 export const APP_STACK_SCREENS = [
@@ -56,6 +58,10 @@ export const APP_STACK_SCREENS = [
   {
     name: 'BusinessDetails',
     component: BusinessDetails,
+  },
+  {
+    name: 'Addresses',
+    component: Addresses,
   },
 ];
 
