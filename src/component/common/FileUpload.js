@@ -23,35 +23,11 @@ const FileUpload = props => {
     id,
     fId,
     closeDoc,
+    openDoc,
   } = props;
-  console.log('id', id, fId);
+
   return (
     <View>
-      {/* {props.disabled ? (
-        <Text style={styles.labelStyle}>{props.value}</Text>
-      ) : (
-        
-        <Input
-          {...props}
-          rightIcon={props.extraView ? props.extraView() : null}
-          // rightIcon={
-          //   <CustomeIcon
-          //     name={'upload'}
-          //     size={Dimension.font20}
-          //     color={colors.BrandColor}
-          //   />
-          // }
-          underlineColorAndroid={'transparent'}
-          selectionColor={'#3c3c3c'}
-          containerStyle={styles.WrapperStyle}
-          inputContainerStyle={styles.inputContainerStyle}
-          inputStyle={styles.inputStyle}
-          labelStyle={styles.labelStyle}
-          rightIconContainerStyle={styles.iconStyle}
-          errorStyle={styles.errorText}
-          disabledInputStyle={styles.disabledInputStyle}
-        />
-      )} */}
       <>
         <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
           {label}
@@ -82,7 +58,7 @@ const FileUpload = props => {
             style={{marginRight: 4}}
           />
         ) : showDoc ? (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => openDoc(id)}>
             <CustomeIcon
               name={'eye-open'}
               size={Dimension.font20}
