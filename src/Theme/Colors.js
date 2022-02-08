@@ -23,7 +23,8 @@ ApproveStateColor:"#0079FF",
 eyeIcon:"#A2A2A2",
 placeholderColor:"#C9C3C3",
 grayShade1:"#F4F4F4",
-grayShade2:"#EFEFEF"
+grayShade2:"#EFEFEF",
+headerTxtColor:"#3C3C3C"
 
 
 

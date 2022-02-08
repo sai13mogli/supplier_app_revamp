@@ -7,6 +7,7 @@ import {fetchBusinessDetails, fetchProfile} from '../../redux/actions/profile';
 // import Progress from 'react-native-progress/Bar';
 import {OrderedMap} from 'immutable';
 import {PROFILE_TABS} from '../../constants';
+import styles from './style';
 
 const ProfileScreen = props => {
   const {navigate} = useNavigation();
@@ -39,16 +40,16 @@ const ProfileScreen = props => {
 
   return (
     <View>
-      <Header showBack showText={'My Profile'} />
-     <ScrollView>
-      <View>
-        <Text style={{color: '#000'}}>
+      <Header showBack showText={'My Profile'}/>
+     <ScrollView style={styles.ContainerCss}>
+      <View style={styles.UserDetailWrap}>
+        <Text style={styles.UserName}>
           {(profileData.userInfo || {}).contactName}
         </Text>
-        <Text style={{color: '#000'}}>
+        <Text style={styles.UserEmail}>
           {(profileData.userInfo || {}).email}
         </Text>
-        <Text style={{color: '#000'}}>
+        <Text style={styles.UserContact}>
           {(profileData.userInfo || {}).phone}
         </Text>
       </View>
