@@ -39,26 +39,37 @@ const ProfileScreen = props => {
 
   const inputDetails = [
     {
-      title: 'Mobile Number*',
+      title: () => renderTitle('Mobile Number'),
       state: phone,
       disabled: false,
       onChange: text => setPhone(text),
       errorText: 'Kindly enter your phone number',
       placeholder: 'Tap to Upload',
       keyboardType: 'number-pad',
+      errorState: true,
       //   onBlur: onBlurPhone,
     },
     {
-      title: 'Address*',
+      title: () => renderTitle('Address'),
       state: address,
       disabled: false,
       onChange: text => setAddress(text),
       errorText: 'Kindly enter your phone number',
       placeholder: 'Tap to Upload',
+      errorState: false,
 
       //   onBlur: onBlurAddress,
     },
   ];
+
+  const renderTitle = title => {
+    return (
+      <>
+        <Text style={{color: '#000'}}>{title}</Text>
+        <Text style={{color: 'red'}}>*</Text>
+      </>
+    );
+  };
 
   const renderInputText = ({
     title,
@@ -68,16 +79,18 @@ const ProfileScreen = props => {
     placeholder,
     errorText,
     keyboardType,
+    errorState,
   }) => {
     return (
-      <View key={title}>
+      <View>
         <FloatingLabelInputField
-          label={title}
+          label={() => title()}
           onChangeText={text => onChange(text)}
           value={state}
           placeholder={placeholder}
           disabled={disabled}
           keyboardType={keyboardType}
+          errorMessage={errorState ? errorText : ''}
           extraView={() => (
             <TouchableOpacity style={{}}>
               <CustomeIcon name={'calendar'} size={24}></CustomeIcon>
@@ -223,17 +236,19 @@ const ProfileScreen = props => {
   return (
     <View>
       <Header showBack showText={'My Profile'} />
-      {/* {PROFILE_TABS.map((tab, tabIndex) => (
+      {PROFILE_TABS.map((tab, tabIndex) => (
         <TouchableOpacity
           key={tabIndex}
-          onPress={() => props.navigation.navigate('Documents')}>
+          onPress={() => props.navigation.navigate(tab.route)}>
           <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
             {tab.title}
             {'\n'}
             {tab.completed ? 'Completed' : 'Not Completed'}
           </Text>
         </TouchableOpacity>
-      )).toList()} */}
+      ))
+        .toList()
+        .toArray()}
       {inputDetails.map((_, k) => renderInputText(_))}
       <DotCheckbox
         inputDetails={inputDetails}

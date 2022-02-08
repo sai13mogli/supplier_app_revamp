@@ -11,7 +11,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {APP_STACK_SCREENS, BOTTOM_TAB_SCREENS} from '../constants/index';
-import Addresses from '../screens/Addresses';
+
 
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -105,16 +105,6 @@ const Routes = props => {
           component={TabNavigator}
           options={navOptionHandler}
         />
-        <AppStack.Screen
-          // screenOptions={{
-          //   headerShown: true,
-          // }}
-          options={{title :"Addresses"}}
-          name="Addresses"
-          component={Addresses}
-          options={navOptionHandler}
-        />
-        
         {APP_STACK_SCREENS.map((screen, key) => (
           <AppStack.Screen
             key={key}
