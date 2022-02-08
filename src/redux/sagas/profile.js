@@ -3,15 +3,19 @@ import {put, call, fork, takeEvery} from 'redux-saga/effects';
 // constants
 import {PROFILE_ACTIONS} from '../constants/profile';
 // api call
-import {getBusinessDetails,getBankDetails, setBusinessDetails,getAddressesDetails,
+import {
+  getBusinessDetails,
+  setBusinessDetails,
+  getProfile,
+  getUserInfo,
+  getAddressesDetails,
+  getBankDetails,
 } from '../../services/profile';
 // actions
 import {
-  fetchedBusinessDetails,
-  failedFetchBusinessDetails,
-  fetchedUpdateBusinessDetails,
-  failedFetchUpdateBusinessDetails,
-  failedFetchAddressDetails,fetchedAddressDetails, failedFetchBankDetails, fetchedBankDetails,
+  fetchedBusinessDetails,failedFetchBusinessDetails,fetchedUpdateBusinessDetails,
+  failedFetchUpdateBusinessDetails,failedFetchAddressDetails,fetchedAddressDetails, 
+  failedFetchBankDetails, fetchedBankDetails,fetchedProfile,failedFetchProfile,
 } from '../actions/profile';
 
 function* fetchBusinessDetails() {
@@ -40,18 +44,33 @@ function* fetchUpdateBusinessDetails({payload: {formData}}) {
   }
 }
 
-function* fetchAddressDetails(){
+function* fetchProfile({}) {
   try {
-     const {data, error} = yield call(getAddressesDetails);
-     if (error) {
-       yield put(failedFetchAddressDetails(error));
-     } else {
-       yield put(fetchedAddressDetails(data.data));
-     }
-   } catch (error) {
-     yield put(failedFetchAddressDetails(error));
-   }
- }
+    let {data, error} = yield call(getProfile);
+    const profileData = yield call(getUserInfo);
+    data.data.userInfo = profileData.data.data;
+    if (error) {
+      yield put(failedFetchProfile(error));
+    } else {
+      yield put(fetchedProfile(data.data));
+    }
+  } catch (error) {
+    yield put(failedFetchProfile(error));
+  }
+}
+
+function* fetchAddressDetails() {
+  try {
+    const {data, error} = yield call(getAddressesDetails);
+    if (error) {
+      yield put(failedFetchAddressDetails(error));
+    } else {
+      yield put(fetchedAddressDetails(data.data));
+    }
+  } catch (error) {
+    yield put(failedFetchAddressDetails(error));
+  }
+}
 
  function* fetchBankDetails(){
   try {
@@ -67,8 +86,13 @@ function* fetchAddressDetails(){
  }
 
 export default fork(function* () {
+  yield takeEvery(PROFILE_ACTIONS.FETCH_PROFILE, fetchProfile);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS, fetchBusinessDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_ADDRESSES, fetchAddressDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BANK_DETAILS, fetchBankDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,fetchUpdateBusinessDetails);
+  yield takeEvery(
+    PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,
+    fetchUpdateBusinessDetails,
+  );
 });
