@@ -232,6 +232,10 @@ const ProfileScreen = props => {
     navigate('Addresses');
   };
 
+  const navigateToBankDetails=()=>{
+    navigate('BankDetails');
+  }
+
   return (
     <View>
       <Header showBack showText={'My Profile'} />
@@ -253,6 +257,13 @@ const ProfileScreen = props => {
         inputDetails={inputDetails}
         value={value}
         onCheck={onCheck}
+      />
+      <CustomButton
+        buttonColor={'red'}
+        title={'Bank Details'}
+        onPress={navigateToBankDetails}
+        TextColor={colors.WhiteColor}
+        borderColor={colors.WhiteColor}
       />
       <TouchableOpacity
         onPress={() => actionSheetRef.current?.setModalVisible(true)}>
@@ -290,6 +301,8 @@ const ProfileScreen = props => {
         TextColor={colors.WhiteColor}
         borderColor={colors.WhiteColor}
       />
+     
+      
     </View>
   );
 };

@@ -6,6 +6,7 @@ import SupportScreen from '../containers/Support';
 import DocumentsScreen from '../containers/Profile/Documents';
 import BusinessDetails from '../containers/Profile/BusinessDetails';
 import Addresses from '../containers/Profile/Addresses';
+import BankDetails from '../containers/Profile/BankDetails';
 import {OrderedMap} from 'immutable';
 
 export const BOTTOM_TAB_SCREENS = [
@@ -62,6 +63,10 @@ export const APP_STACK_SCREENS = [
   {
     name: 'Addresses',
     component: Addresses,
+  },
+  {
+    name: 'BankDetails',
+    component: BankDetails,
   },
 ];
 
