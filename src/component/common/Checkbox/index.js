@@ -3,8 +3,7 @@ import {View } from "react-native";
 import CheckBox from '@react-native-community/checkbox';
 import styles from './styles';
 
-const Checkbox = props => {
-  
+const Checkbox = props => { 
   const {
     onValueChange,
     value,

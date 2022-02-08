@@ -1,5 +1,4 @@
-export const BASE_URL = 'https://api.moglix.com/';
-export const CMS_BASE_URL = 'https://cmsapi.moglix.com//';
+export const BASE_URL = 'http://apigatewayqa.moglix.com/';
 
 export const STATE_STATUS = {
   FETCHING: 'FETCHING',
@@ -15,5 +14,5 @@ export const STATE_STATUS = {
 
 // apiqa.moglilabs.com
 // https://api.moglix.com/
-// 'https://api.moglix.com/'; 
+// 'https://api.moglix.com/';
 //'https://apiqa.moglilabs.com/'
