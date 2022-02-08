@@ -1,25 +1,30 @@
 import React from "react";
-import {View } from "react-native";
-import CheckBox from '@react-native-community/checkbox';
+import {View,StyleSheet} from "react-native";
+import { CheckBox, Icon } from 'react-native-elements';
+import Dimension from "../../../Theme/Dimension";
+import colors from "../../../Theme/Colors"
+import CustomeIcon from '../CustomeIcon';
 import styles from './styles';
 
-const Checkbox = props => {
-  
+const Checkbox = props => { 
   const {
-    onValueChange,
-    value,
+    onPress,
+    checked,
   } = props;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.checkboxContainer}>
+  
         <CheckBox
-          value={value}
-          onValueChange={onValueChange}
-          style={styles.checkbox}
-        />
-      </View>
-    </View>
+          checked={checked}
+          onPress={onPress}
+          checkedIcon={<CustomeIcon name={'checkbox-tick'} size={Dimension.font20} color={colors.BrandColor} />}
+          uncheckedIcon={<CustomeIcon name={'checkbox-blank'} size={Dimension.font20} color={colors.FontColor} />}
+          textStyle={styles.checkboxTitle}
+          fontFamily={Dimension.CustomMediumFont}
+          wrapperStyle={styles.checkboxwrapper}
+          containerStyle={styles.checkboxContainer}
+         />
+      
   );
 };
 

@@ -12,6 +12,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {APP_STACK_SCREENS, BOTTOM_TAB_SCREENS} from '../constants/index';
 
+
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -114,6 +115,7 @@ const Routes = props => {
             component={screen.component}
             // options={navOptionHandler}
           />
+
         ))}
       </AppStack.Navigator>
     </NavigationContainer>

@@ -20,7 +20,7 @@ export const homepageReducer = (state = initialState, action) => {
         status: STATE_STATUS.FETCHED,
         data: payload.data,
       };
-    case HOMEPAGE_ACTIONS.FAILED_FETCH_PRODUCTS:
+    case HOMEPAGE_ACTIONS.FAILED_FETCH_ADDRESSES:
       return {
         ...state,
         status: STATE_STATUS.FAILED_FETCH,

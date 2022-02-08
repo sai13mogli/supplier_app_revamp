@@ -1,25 +1,25 @@
 import {StyleSheet} from 'react-native';
+import Dimension from "../../../Theme/Dimension";
+import colors from "../../../Theme/Colors"
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    checkboxContainer: {
-      flexDirection: "row",
-      marginBottom: 20,
-    },
-    checkbox: {
-      alignSelf: "center",
-    },
-    checkBox: {
-      flexDirection: 'row',
-      alignItems: 'center'
-    },
-    label: {
-      margin: 8,
-    },
+  checkboxTitle:{
+    fontSize:Dimension.font12,
+    color:colors.FontColor,
+    fontWeight:"normal",
+    marginLeft:Dimension.margin5,
+  },
+  checkboxwrapper:{
+    backgroundColor:colors.transparent,
+  },
+  checkboxContainer:{
+    backgroundColor:colors.transparent,
+    paddingVertical:0,
+    paddingHorizontal:0,
+    borderWidth:0,
+    borderColor:colors.WhiteColor,
+    width:"auto"
+  },
 });
 
 export default styles;
