@@ -94,7 +94,7 @@ const DocumentsScreen = props => {
   const Documents = new OrderedMap({
     pan_card: {
       id: 'pancard',
-      title: () => renderTitle('ID Proof(PAN Card)', true),
+      title: 'ID Proof(PAN Card)',
       state: pancard,
       errorState: pancardError,
       disabled: false,
@@ -102,6 +102,7 @@ const DocumentsScreen = props => {
         title: pancard && pancard.title,
         doc: pancard && pancard.value,
       },
+      isImp: true,
       showDoc: pancard && pancard.showDoc,
       loading: pancard && pancard.loading,
       closeDoc: pancard && pancard.closeDoc,
@@ -110,7 +111,7 @@ const DocumentsScreen = props => {
     },
     gst_doc: {
       id: 'gst',
-      title: () => renderTitle('GSTIN Document', true),
+      title: 'GSTIN Document',
       state: gstin,
       errorState: gstinError,
       disabled: false,
@@ -118,6 +119,7 @@ const DocumentsScreen = props => {
         title: gstin && gstin.title,
         doc: gstin && gstin.value,
       },
+      isImp: true,
       showDoc: gstin && gstin.showDoc,
       loading: gstin && gstin.loading,
       closeDoc: gstin && gstin.closeDoc,
@@ -126,7 +128,7 @@ const DocumentsScreen = props => {
     },
     cancelled_cheque: {
       id: 'cheque',
-      title: () => renderTitle('Cancelled Cheque', true),
+      title: 'Cancelled Cheque*',
       state: cheque,
       errorState: chequeError,
       disabled: false,
@@ -134,6 +136,7 @@ const DocumentsScreen = props => {
         title: cheque && cheque.title,
         doc: cheque && cheque.value,
       },
+      isImp: true,
       showDoc: cheque && cheque.showDoc,
       loading: cheque && cheque.loading,
       closeDoc: cheque && cheque.closeDoc,
@@ -142,7 +145,7 @@ const DocumentsScreen = props => {
     },
     bank_statement: {
       id: 'statement',
-      title: () => renderTitle('Bank Statement Copy', false),
+      title: 'Bank Statement Copy',
       state: bankStatement,
       errorState: bankStatementError,
       disabled: false,
@@ -150,6 +153,7 @@ const DocumentsScreen = props => {
         title: bankStatement && bankStatement.title,
         doc: bankStatement && bankStatement.value,
       },
+      isImp: false,
       showDoc: bankStatement && bankStatement.showDoc,
       loading: bankStatement && bankStatement.loading,
       closeDoc: bankStatement && bankStatement.closeDoc,
@@ -158,7 +162,7 @@ const DocumentsScreen = props => {
     },
     coroporate_certificate: {
       id: 'cc',
-      title: () => renderTitle('Certificate of Corporation', true),
+      title: 'Certificate of Corporation*',
       state: corporateCertificate,
       errorState: corpCertificateError,
       disabled: false,
@@ -166,6 +170,7 @@ const DocumentsScreen = props => {
         title: corporateCertificate && corporateCertificate.title,
         doc: corporateCertificate && corporateCertificate.value,
       },
+      isImp: true,
       showDoc: corporateCertificate && corporateCertificate.showDoc,
       loading: corporateCertificate && corporateCertificate.loading,
       closeDoc: corporateCertificate && corporateCertificate.closeDoc,
@@ -174,7 +179,7 @@ const DocumentsScreen = props => {
     },
     business_address: {
       id: 'bAdd',
-      title: () => renderTitle('Business Address Proof', false),
+      title: 'Business Address Proof*',
       state: addressProof,
       errorState: addressProofError,
       disabled: false,
@@ -182,6 +187,7 @@ const DocumentsScreen = props => {
         title: addressProof && addressProof.title,
         doc: addressProof && addressProof.value,
       },
+      isImp: false,
       showDoc: addressProof && addressProof.showDoc,
       loading: addressProof && addressProof.loading,
       closeDoc: addressProof && addressProof.closeDoc,
@@ -190,7 +196,7 @@ const DocumentsScreen = props => {
     },
     pickup_address: {
       id: 'pAdd',
-      title: () => renderTitle('Pickup Address Proof', false),
+      title: 'Pickup Address Proof*',
       state: pickupAddressProof,
       errorState: pickupAddressProofError,
       disabled: false,
@@ -198,6 +204,7 @@ const DocumentsScreen = props => {
         title: pickupAddressProof && pickupAddressProof.title,
         doc: pickupAddressProof && pickupAddressProof.value,
       },
+      isImp: false,
       showDoc: pickupAddressProof && pickupAddressProof.showDoc,
       loading: pickupAddressProof && pickupAddressProof.loading,
       closeDoc: pickupAddressProof && pickupAddressProof.closeDoc,
@@ -206,7 +213,7 @@ const DocumentsScreen = props => {
     },
     sign: {
       id: 'sign',
-      title: () => renderTitle('Signature', true),
+      title: 'Signature*',
       state: signature,
       errorState: signatureError,
       disabled: false,
@@ -214,6 +221,7 @@ const DocumentsScreen = props => {
         title: signature && signature.title,
         doc: signature && signature.value,
       },
+      isImp: true,
       showDoc: signature && signature.showDoc,
       loading: signature && signature.loading,
       closeDoc: signature && signature.closeDoc,
@@ -393,7 +401,7 @@ const DocumentsScreen = props => {
       {
         'Content-Type': 'multipart/form-data',
         Authorization:
-          'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MDEiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQyMTAwMzIsImV4cCI6MTY0NDI5NjQzMn0.5M1hc6CIbFD9XE2Uta4Fm3eWeBJGXiFGEDBgooR7fFDzclIFUNpBdTFj4j6_Uk7BiK7eegvQa3Lou8K7W9O1Mg',
+          'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MDkiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM0NzksImV4cCI6MTY0NDM4OTg3OX0.sizpT3AbsSvaUaj_0sNSbDAbI08kwBnEU85CCZSgRzK9zeaqyz6fBUyxLqWw4gFqPYRTkSk7QTZsQ496HKD_sQ',
       },
       [
         {
@@ -463,7 +471,13 @@ const DocumentsScreen = props => {
   const setFormState = data => {
     switch (fId) {
       case 'pancard':
-        setPancard({...pancard, ...data, loading: true, key: 'panCard'});
+        setPancard({
+          ...pancard,
+          ...data,
+          loading: true,
+          key: 'panCard',
+          closeDoc: true,
+        });
         break;
       case 'gst':
         setGstIn({...gstin, ...data, loading: true, key: 'gstin'});
@@ -511,33 +525,123 @@ const DocumentsScreen = props => {
     }
   };
 
-  const getExtraView = () => {
-    return (
-      <CustomeIcon
-        name={'upload'}
-        size={Dimension.font20}
-        color={colors.BrandColor}
-      />
-    );
-    // }
+  const onRemove = id => {
+    console.log(id, 'id hai bc');
+    switch (id) {
+      case 'pancard':
+        setPancard({
+          ...pancard,
+          title: '',
+          value: '',
+          name: '',
+          type: '',
+          uri: '',
+          size: 0,
+          showDoc: false,
+          closeDoc: false,
+        });
+        break;
+      case 'gst':
+        setGstIn({
+          ...gstin,
+          title: '',
+          value: '',
+          name: '',
+          type: '',
+          uri: '',
+          size: 0,
+          showDoc: false,
+          closeDoc: false,
+        });
+        break;
+      case 'cheque':
+        setCheque({
+          ...cheque,
+          title: '',
+          value: '',
+          name: '',
+          type: '',
+          uri: '',
+          size: 0,
+          showDoc: false,
+          closeDoc: false,
+        });
+        break;
+      case 'statement':
+        setBankStatement({
+          ...bankStatement,
+          title: '',
+          value: '',
+          name: '',
+          type: '',
+          uri: '',
+          size: 0,
+          showDoc: false,
+          closeDoc: false,
+        });
+        break;
+      case 'cc':
+        setCorporateCertificate({
+          ...corporateCertificate,
+          title: '',
+          value: '',
+          name: '',
+          type: '',
+          uri: '',
+          size: 0,
+          showDoc: false,
+          closeDoc: false,
+        });
+        break;
+      case 'bAdd':
+        setAddressProof({
+          ...addressProof,
+          title: '',
+          value: '',
+          name: '',
+          type: '',
+          uri: '',
+          size: 0,
+          showDoc: false,
+          closeDoc: false,
+        });
+        break;
+      case 'pAdd':
+        setPickupAddressProof({
+          ...pickupAddressProof,
+          title: '',
+          value: '',
+          name: '',
+          type: '',
+          uri: '',
+          size: 0,
+          showDoc: false,
+          closeDoc: false,
+        });
+        break;
+      case 'sign':
+        setSignature({
+          ...signature,
+          title: '',
+          value: '',
+          name: '',
+          type: '',
+          uri: '',
+          size: 0,
+          showDoc: false,
+          closeDoc: false,
+        });
+        break;
+      default:
+        break;
+    }
   };
 
-  const getActivityIndicator = () => (
-    <ActivityIndicator size={'small'} color={'red'} style={{marginRight: 4}} />
-  );
-
-  const renderTitle = (title, isImp) => {
-    return (
-      <>
-        <Text style={{color: '#000'}}>{title}</Text>
-        {isImp ? <Text style={{color: 'red'}}>*</Text> : null}
-      </>
-    );
-  };
   //render each doc
   const renderInputText = ({
     id,
     title,
+    isImp,
     showDoc,
     state,
     errorState,
@@ -552,14 +656,19 @@ const DocumentsScreen = props => {
       <TouchableOpacity
         onPress={() => {
           SheetManager.show('action_sheet', id);
-        }}>
+        }}
+        disabled={loading}>
         <FileUpload
           label={title}
+          isImp={isImp}
           value={documents && documents.title}
-          placeholder={placeholder}
-          disabled={disabled}
           documents={documents}
-          extraView={loading ? getActivityIndicator : getExtraView}
+          loading={loading}
+          showDoc={showDoc}
+          onRemove={onRemove}
+          id={id}
+          fId={fId}
+          closeDoc={closeDoc}
         />
       </TouchableOpacity>
     );

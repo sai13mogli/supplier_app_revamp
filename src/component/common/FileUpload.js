@@ -1,11 +1,30 @@
 import React from 'react';
-import {View, Text, StyleSheet,TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import {Input, Icon} from 'react-native-elements';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 import CustomeIcon from './CustomeIcon';
 
 const FileUpload = props => {
+  const {
+    label,
+    onPress,
+    isImp,
+    value,
+    loading,
+    showDoc,
+    onRemove,
+    id,
+    fId,
+    closeDoc,
+  } = props;
+  console.log('id', id, fId);
   return (
     <View>
       {/* {props.disabled ? (
@@ -33,29 +52,51 @@ const FileUpload = props => {
           disabledInputStyle={styles.disabledInputStyle}
         />
       )} */}
-      <TouchableOpacity style={styles.inputContainerStyle}>
-        <Text  style={styles.placeholderCss}>Tap to upload</Text>
-        <View style={{flexDirection:"row"}}>
-        <Text  style={styles.inputStyle}>FIle Name</Text>
-        <CustomeIcon
-          name={'close'}
-          size={Dimension.font20}
-          color={colors.FontColor}
-         />
-
-
-        </View>
-        <CustomeIcon
-          name={'upload'}
-          size={Dimension.font20}
-          color={colors.BrandColor}
-         />
-         {/* <CustomeIcon
-          name={'eye-open'}
-          size={Dimension.font20}
-          color={colors.eyeIcon}
-         /> */}
-      </TouchableOpacity>
+      <>
+        <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+          {label}
+        </Text>
+        {isImp ? <Text style={{color: 'red'}}>*</Text> : null}
+      </>
+      <View style={styles.inputContainerStyle}>
+        {!value ? (
+          <Text style={styles.placeholderCss}>Tap to upload</Text>
+        ) : (
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.inputStyle}>{value}</Text>
+            {closeDoc ? (
+              <TouchableOpacity onPress={() => onRemove(id)}>
+                <CustomeIcon
+                  name={'close'}
+                  size={Dimension.font20}
+                  color={colors.FontColor}
+                />
+              </TouchableOpacity>
+            ) : null}
+          </View>
+        )}
+        {loading ? (
+          <ActivityIndicator
+            size={'small'}
+            color={'red'}
+            style={{marginRight: 4}}
+          />
+        ) : showDoc ? (
+          <TouchableOpacity>
+            <CustomeIcon
+              name={'eye-open'}
+              size={Dimension.font20}
+              color={colors.eyeIcon}
+            />
+          </TouchableOpacity>
+        ) : (
+          <CustomeIcon
+            name={'upload'}
+            size={Dimension.font20}
+            color={colors.BrandColor}
+          />
+        )}
+      </View>
     </View>
   );
 };
@@ -72,20 +113,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding12,
     height: Dimension.height40,
     paddingBottom: 0,
-    flexDirection:"row",
-    justifyContent:"space-between",
-    marginBottom:Dimension.margin10,
-    backgroundColor:colors.WhiteColor,
-    textAlignVertical:'center',
-    paddingVertical:Dimension.padding12
-    
-
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: Dimension.margin10,
+    backgroundColor: colors.WhiteColor,
+    textAlignVertical: 'center',
+    paddingVertical: Dimension.padding12,
   },
-  placeholderCss:{
+  placeholderCss: {
     fontSize: Dimension.font14,
     color: colors.placeholderColor,
     fontFamily: Dimension.CustomMediumFont,
-    
   },
   labelStyle: {
     fontSize: Dimension.font10,
