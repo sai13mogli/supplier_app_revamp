@@ -21,7 +21,9 @@ NudgeColor:"#FFDAC3",
 PendineStateColor:"#FF7F00",
 ApproveStateColor:"#0079FF",
 eyeIcon:"#A2A2A2",
-placeholderColor:"#C9C3C3"
+placeholderColor:"#C9C3C3",
+grayShade1:"#F4F4F4",
+grayShade2:"#EFEFEF"
 
 
 

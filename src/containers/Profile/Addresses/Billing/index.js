@@ -1,5 +1,5 @@
 import React, { useEffect,useState,} from 'react';
-import {Text,View,FlatList,ScrollView} from 'react-native';
+import {Text,View,FlatList,ScrollView, StyleSheet} from 'react-native';
 import colors from "../../../../Theme/Colors"
 import {useSelector, useDispatch} from 'react-redux';
 import {fetchAddressDetails} from '../../../../redux/actions/profile';
@@ -27,21 +27,42 @@ const SupportScreen = () => {
   },[]);
 
    const renderItems = ({item}) => (
-    <View style={{flex:1,top:60}}>
+    <View style={{flex:1,}}>
       <View style={styles.wrap}>
         <View style={styles.nameWrap}>
-        <Text style={[styles.name,{fontSize:15,}]}>Nitin Bansal</Text>
-        <Text style={styles.type}>default</Text>
+        <Text style={styles.UserNameCss}>Nitin Bansal</Text>
+        <Text style={styles.AddressType}>default</Text>
         </View>
-        <Text style={styles.addresses}>D-188,Block D ,Sector 10,Noida</Text>
-        <Text style={[styles.addresses,{top:20,fontSize:12}]}>Uttar Pardesh</Text>
+        <Text style={styles.AddressTxt}>D-188,Block D ,Sector 10,Noida</Text>
+        <Text style={styles.AddressTxt}>Uttar Pardesh</Text>
         <View style={styles.buttonWrap}>
-        <View style={styles.remove}>
-          <Text style={[styles.name,{fontSize:15,top:2}]}>Remove</Text>
-        </View> 
-        <View style={styles.remove}>
-        <Text style={[styles.name,{fontSize:15,top:2}]}>Edit</Text>
-          </View> 
+          <View style={{marginRight:15,flex:1}}>
+            <CustomButton
+            title={"REMOVE"}
+            buttonColor={colors.WhiteColor}
+           
+              // onPress={navigateToAddresses}
+              TextColor={colors.FontColor}
+              borderColor={colors.grayShade1}
+              TextFontSize={Dimension.font14}
+            >
+
+            </CustomButton>
+          </View>
+          <View style={{flex:1}}>
+            <CustomButton
+            title={"EDIT"}
+            buttonColor={colors.WhiteColor}
+           
+              // onPress={navigateToAddresses}
+              TextColor={colors.BrandColor}
+              borderColor={colors.BrandColor}
+              TextFontSize={Dimension.font14}
+            >
+
+            </CustomButton>
+          </View>
+       
         </View>
         
       </View>
@@ -50,16 +71,18 @@ const SupportScreen = () => {
 
   return (
     <View style={{flex:1}}>
-      <ScrollView indicatorStyle="white">
-       <View style={{flexDirection:'row',top:30,justifyContent:'space-between'}}>
-        <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000',left:20}}>
+      <ScrollView style={styles.ContainerCss}>
+       <View style={styles.TopWrap}>
+        <Text style={styles.Pageheading}>
           03 Billing Address
         </Text>
-        <CustomeIcon name={'add-box'} size={Dimension.font22} color={colors.BrandColor}
-        style={{left:50}} />
-        <Text style={{fontSize: 16, fontWeight: 'bold', color: colors.BrandColor,right:20}}>
+        <View style={{flexDirection:"row"}}>
+        <CustomeIcon name={'add-circle'} size={Dimension.font18} color={colors.BrandColor} />
+        <Text style={styles.addnewtxt}>
           Add new
         </Text>
+        </View>
+        
         </View>  
           
           <FlatList
@@ -68,14 +91,19 @@ const SupportScreen = () => {
           keyExtractor={(item, index) => index.toString()}
             />
           </ScrollView> 
+          <View style={styles.bottombtnWrap}>
+            
+          
             <CustomButton
               title={'Submit'}
-              buttonStyle={styles.submit}
+              buttonColor={colors.BrandColor}
+           
               // onPress={navigateToAddresses}
               TextColor={colors.WhiteColor}
               borderColor={colors.WhiteColor}
+              TextFontSize={Dimension.font16}
             /> 
-         
+         </View>
     </View>
     
   );

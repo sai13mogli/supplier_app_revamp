@@ -65,8 +65,10 @@ const ProfileScreen = props => {
   const renderTitle = title => {
     return (
       <>
-        <Text style={{color: '#000'}}>{title}</Text>
-        <Text style={{color: 'red'}}>*</Text>
+      <View style={{flexDirection:"row"}}>
+        <Text style={styles.labelStyle}>{title}</Text>
+        <Text style={styles.starIcon}>*</Text>
+        </View>
       </>
     );
   };
