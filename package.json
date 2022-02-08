@@ -10,7 +10,6 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-community/checkbox": "^0.5.9",
     "@react-native-community/datetimepicker": "^5.1.0",
     "@react-native-picker/picker": "^2.2.1",
     "@react-navigation/bottom-tabs": "^6.1.0",

@@ -1,7 +1,7 @@
 import {all} from 'redux-saga/effects';
 import homepageSaga from './homepage';
-import profileSaga from './profile';
+import addressesSaga from './addresses';
 
 export default function* () {
-  yield all([homepageSaga, profileSaga]);
+  yield all([homepageSaga, addressesSaga, profileSaga]);
 }
