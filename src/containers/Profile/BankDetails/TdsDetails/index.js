@@ -8,22 +8,14 @@ import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
 
-const PickedUp = () => {
-  const [data,setData]= useState( [
-    { id: '1', lable: 'First item', checked : false},
-    { id: '2', lable: 'Second item',checked : false },
-    { id: '3', lable: 'Third item' ,checked : false},
-    { id: '4', lable: 'Fourth item' ,checked : false},
-    { id: '5', lable: 'Fifth item' ,checked : false},
-    { id: '6', lable: 'Sixth item' ,checked : false},
-    { id: '7', lable: 'Seventh item',checked : false }
-  ]);
+const TdsDetails = () => {
+ 
   const addressesData = useSelector(state => (state.profileReducer.addressesDetails.data));
 
   const dispatch = useDispatch();
   useEffect(() => {
    
-    dispatch(fetchAddressDetails());
+    // dispatch(fetchAddressDetails());
     
    }, []);
 
@@ -62,14 +54,10 @@ const PickedUp = () => {
                 Add new
               </Text>
               </View>  
-                <FlatList
-                data={data}
-                renderItem={renderItems}
-                keyExtractor={(item, index) => index.toString()}
-                />
+               
       </ScrollView> 
             <CustomButton
-              title={'SUBMIT'}
+              title={'NEXT'}
               buttonStyle={styles.submit}
               // onPress={navigateToAddresses}
               TextColor={colors.WhiteColor}
@@ -79,4 +67,4 @@ const PickedUp = () => {
     
   );
 };
-export default PickedUp;
+export default TdsDetails;

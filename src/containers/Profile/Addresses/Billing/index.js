@@ -1,5 +1,5 @@
 import React, { useEffect,useState,} from 'react';
-import {Text,View,FlatList,ScrollView} from 'react-native';
+import {Text,View,FlatList,ScrollView, TouchableOpacity} from 'react-native';
 import colors from "../../../../Theme/Colors"
 import {useSelector, useDispatch} from 'react-redux';
 import {fetchAddressDetails} from '../../../../redux/actions/profile';
@@ -7,6 +7,7 @@ import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
+import AddressesModal from '../../../../component/common/AddressesModal';
 
 const SupportScreen = () => {
   const [data,setData]= useState( [
@@ -18,8 +19,9 @@ const SupportScreen = () => {
     { id: '6', lable: 'Sixth item' ,checked : false},
     { id: '7', lable: 'Seventh item',checked : false }
   ]);
+  const [modalVisible, setModalVisible] = useState(false);
   const addressesData = useSelector(state => (state.profileReducer.addressesDetails.data));
-  console.log("Daakka====>",addressesData);
+  // console.log("Daakka====>",addressesData);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -57,9 +59,12 @@ const SupportScreen = () => {
         </Text>
         <CustomeIcon name={'add-box'} size={Dimension.font22} color={colors.BrandColor}
         style={{left:50}} />
-        <Text style={{fontSize: 16, fontWeight: 'bold', color: colors.BrandColor,right:20}}>
+        <TouchableOpacity >
+           <Text style={{fontSize: 16, fontWeight: 'bold', color: colors.BrandColor,right:20}}>
           Add new
         </Text>
+        </TouchableOpacity>
+       
         </View>  
           
           <FlatList
@@ -69,12 +74,18 @@ const SupportScreen = () => {
             />
           </ScrollView> 
             <CustomButton
-              title={'Submit'}
+              title={'SUBMIT'}
               buttonStyle={styles.submit}
               // onPress={navigateToAddresses}
               TextColor={colors.WhiteColor}
               borderColor={colors.WhiteColor}
             /> 
+          <AddressesModal
+           visible={modalVisible}
+           transparent={true}
+           onPress={() => setModalVisible(true)}
+           onPress={() => setModalVisible(!modalVisible)}
+          />  
          
     </View>
     

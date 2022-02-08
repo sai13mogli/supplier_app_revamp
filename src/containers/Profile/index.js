@@ -4,7 +4,7 @@ import Header from '../../component/common/Header';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchBusinessDetails, fetchProfile} from '../../redux/actions/profile';
-import Progress from 'react-native-progress/Bar';
+// import Progress from 'react-native-progress/Bar';
 import {OrderedMap} from 'immutable';
 import {PROFILE_TABS} from '../../constants';
 
@@ -33,6 +33,10 @@ const ProfileScreen = props => {
     return profileData.verificationStatus >= progress;
   };
 
+  const navigateToBankDetails=()=>{
+    navigate('BankDetails');
+  }
+
   return (
     <View>
       <Header showBack showText={'My Profile'} />
@@ -48,12 +52,13 @@ const ProfileScreen = props => {
         </Text>
       </View>
       <Text>{PROGRESS[profileData.verificationStatus] * 100}%</Text>
-      <Progress
+      {/* <Progress
         width={200}
         animated={false}
         progress={PROGRESS[profileData.verificationStatus]}
         color={'red'}
-      />
+      /> */}
+
       {PROFILE_TABS.map((tab, tabIndex) => (
         <TouchableOpacity
           key={tabIndex}

@@ -1,31 +1,23 @@
 import React, { useEffect,useState,} from 'react';
-import {Text,View,FlatList,ScrollView} from 'react-native';
+import {Text,View,FlatList,ScrollView, TouchableOpacity} from 'react-native';
 import colors from "../../../../Theme/Colors"
 import {useSelector, useDispatch} from 'react-redux';
-import {fetchAddressDetails} from '../../../../redux/actions/profile';
+import {fetchBankDetails} from '../../../../redux/actions/profile';
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
+import AddressesModal from '../../../../component/common/AddressesModal';
 
-const PickedUp = () => {
-  const [data,setData]= useState( [
-    { id: '1', lable: 'First item', checked : false},
-    { id: '2', lable: 'Second item',checked : false },
-    { id: '3', lable: 'Third item' ,checked : false},
-    { id: '4', lable: 'Fourth item' ,checked : false},
-    { id: '5', lable: 'Fifth item' ,checked : false},
-    { id: '6', lable: 'Sixth item' ,checked : false},
-    { id: '7', lable: 'Seventh item',checked : false }
-  ]);
-  const addressesData = useSelector(state => (state.profileReducer.addressesDetails.data));
-
+const Accounts = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const bankData = useSelector(state => (state.profileReducer.bankDetails.data));
+  console.log("BankData====>",bankData);
   const dispatch = useDispatch();
+  
   useEffect(() => {
-   
-    dispatch(fetchAddressDetails());
-    
-   }, []);
+      dispatch(fetchBankDetails());
+  },[]);
 
    const renderItems = ({item}) => (
     <View style={{flex:1,top:60}}>
@@ -52,31 +44,39 @@ const PickedUp = () => {
   return (
     <View style={{flex:1}}>
       <ScrollView indicatorStyle="white">
-            <View style={{flexDirection:'row',top:30,justifyContent:'space-between'}}>
-              <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000',left:20}}>
-                02 Pickup Address
-              </Text>
-              <CustomeIcon name={'add-box'} size={Dimension.font22} color={colors.BrandColor}
-              style={{left:50}} />
-              <Text style={{fontSize: 16, fontWeight: 'bold', color: colors.BrandColor,right:20}}>
-                Add new
-              </Text>
-              </View>  
-                <FlatList
-                data={data}
-                renderItem={renderItems}
-                keyExtractor={(item, index) => index.toString()}
-                />
-      </ScrollView> 
+       <View style={{flexDirection:'row',top:30,justifyContent:'space-between'}}>
+        <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000',left:20}}>
+          03 Billing Address
+        </Text>
+        <CustomeIcon name={'add-box'} size={Dimension.font22} color={colors.BrandColor}
+        style={{left:50}} />
+        <TouchableOpacity >
+           <Text style={{fontSize: 16, fontWeight: 'bold', color: colors.BrandColor,right:20}}>
+          Add new
+        </Text>
+        </TouchableOpacity>
+       
+        </View>  
+          
+          
+          </ScrollView> 
             <CustomButton
-              title={'SUBMIT'}
+              title={'NEXT'}
               buttonStyle={styles.submit}
               // onPress={navigateToAddresses}
               TextColor={colors.WhiteColor}
               borderColor={colors.WhiteColor}
             /> 
+          {/* <AddressesModal
+           visible={modalVisible}
+           transparent={true}
+           onPress={() => setModalVisible(true)}
+           onPress={() => setModalVisible(!modalVisible)}
+          />   */}
+         
     </View>
     
   );
 };
-export default PickedUp;
+
+export default Accounts;
