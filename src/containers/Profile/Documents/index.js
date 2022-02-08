@@ -5,6 +5,8 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
+  Dimensions,
 } from 'react-native';
 import {OrderedMap, setIn} from 'immutable';
 import CustomeIcon from '../../../component/common/CustomeIcon';
@@ -17,8 +19,11 @@ import styles from '../style';
 import {BASE_URL} from '../../../redux/constants/index';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
-import Checkbox from '../../../component/common/Checkbox/index';
 import CustomButton from '../../../component/common/Button';
+import Modal from 'react-native-modal';
+import PDFView from 'react-native-view-pdf';
+import Checkbox from '../../../component/common/Checkbox/index';
+const deviceWidth = Dimensions.get('window').width;
 
 const DocumentsScreen = props => {
   const [pancard, setPancard] = useState({
@@ -86,7 +91,12 @@ const DocumentsScreen = props => {
   });
   const [signatureError, setSignatureError] = useState(false);
   const [fId, setFId] = useState(null);
-  // const [loader, setLoader] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+  const [isPDF, setIsPDF] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [isSelected, setSelection] = useState(false);
+  // const source = {uri: imageUrl, cache: true};
   // const [init, setInit] = useState(false);
   // const [eye, setEye] = useState(false);
   // const actionSheetRef = createRef();
@@ -239,7 +249,6 @@ const DocumentsScreen = props => {
   ];
 
   useEffect(() => {
-    console.log('panCard', pancard);
     if (pancard && pancard.key == 'panCard' && pancard.loading) {
       uploadDocument(pancard);
     }
@@ -297,9 +306,8 @@ const DocumentsScreen = props => {
   }, [signature]);
 
   const uploadDocument = async data => {
-    console.log(data, 'data');
     let res = await uploadDocumentService(data);
-    console.log(res);
+
     setDocument(res);
   };
 
@@ -454,7 +462,6 @@ const DocumentsScreen = props => {
       const res = await DocumentPicker.pick({
         // type: [DocumentPicker],
       });
-      console.log(res[0].uri);
 
       setFormState(res[0]);
     } catch (err) {
@@ -526,7 +533,6 @@ const DocumentsScreen = props => {
   };
 
   const onRemove = id => {
-    console.log(id, 'id hai bc');
     switch (id) {
       case 'pancard':
         setPancard({
@@ -637,6 +643,91 @@ const DocumentsScreen = props => {
     }
   };
 
+  const openDoc = id => {
+    switch (id) {
+      case 'pancard':
+        openDocView(pancard && pancard.value);
+        break;
+      case 'gst':
+        openDocView(gstin && gstin.value);
+        break;
+      case 'cheque':
+        openDocView(cheque && cheque.value);
+        break;
+      case 'statement':
+        openDocView(bankStatement && bankStatement.value);
+        break;
+      case 'cc':
+        openDocView(cheque && cheque.value);
+        break;
+      case 'bAdd':
+        openDocView(addressProof && addressProof.value);
+        break;
+      case 'pAdd':
+        openDocView(pickupAddressProof && pickupAddressProof.value);
+        break;
+      case 'sign':
+        openDocView(signature && signature.value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const openDocView = fileKey => {
+    setLoader(true);
+    setModalVisible(true);
+    var myrequest = new XMLHttpRequest();
+    myrequest.onreadystatechange = e => {
+      if (myrequest.readyState !== 4) {
+        return;
+      }
+
+      if (myrequest.status === 200) {
+      } else {
+        console.warn('error');
+      }
+    };
+    myrequest.open(
+      'GET',
+      `http://apigatewayqa.moglix.com/profile/file?download=0&key=${fileKey}`,
+    );
+    myrequest.setRequestHeader(
+      'Authorization',
+      `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MDkiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM0NzksImV4cCI6MTY0NDM4OTg3OX0.sizpT3AbsSvaUaj_0sNSbDAbI08kwBnEU85CCZSgRzK9zeaqyz6fBUyxLqWw4gFqPYRTkSk7QTZsQ496HKD_sQ `,
+    );
+    myrequest.responseType = 'blob';
+    myrequest.send();
+    myrequest.onload = e => {
+      var response = myrequest.response;
+      var mimetype = myrequest.getResponseHeader('Content-Type');
+      var fields = mimetype.split(';');
+      var name = fields[0];
+      var isPdf = false;
+      if (name == 'application/pdf') {
+        isPdf = true;
+      }
+      if (response) {
+        setLoader(false);
+        const fileReaderInstance = new FileReader();
+        fileReaderInstance.readAsDataURL(response);
+        fileReaderInstance.onload = () => {
+          var fileUrl = fileReaderInstance.result;
+
+          setImageUrl(fileUrl);
+          setIsPDF(false);
+
+          // this.setState(imageUrl);
+          var fields = fileUrl.slice(37);
+          if (isPdf) {
+            setIsPDF(true);
+            setImageUrl(fields);
+          }
+        };
+      }
+    };
+  };
+
   //render each doc
   const renderInputText = ({
     id,
@@ -669,6 +760,7 @@ const DocumentsScreen = props => {
           id={id}
           fId={fId}
           closeDoc={closeDoc}
+          openDoc={openDoc}
         />
       </TouchableOpacity>
     );
@@ -684,13 +776,50 @@ const DocumentsScreen = props => {
       ))}
     </>
   );
+
+  const checkCommonValidation = () => {
+    return (
+      pancard &&
+      pancard.title &&
+      pancard.value &&
+      gstin &&
+      gstin.title &&
+      gstin.value &&
+      cheque &&
+      cheque.title &&
+      cheque.value &&
+      corporateCertificate &&
+      corporateCertificate.title &&
+      corporateCertificate.value &&
+      signature &&
+      signature.title &&
+      signature.value &&
+      isSelected
+    );
+  };
+
   return (
     <ScrollView style={styles.ContainerCss}>
       {Documents.map(_ => renderInputText(_))
         .toList()
         .toArray()}
       {noteText()}
-      <CustomButton title="SUBMIT" buttonColor="gray" disabled={true} />
+      <Text style={{color: '#000'}}>By registering you agree to our</Text>
+      <Checkbox
+        checked={isSelected}
+        onPress={() => setSelection(!isSelected)}
+      />
+      <CustomButton
+        title="SUBMIT"
+        buttonColor="gray"
+        disabled={!checkCommonValidation()}
+        // onPress={() => onBusinessDetailsUpdate()}
+        buttonStyle={[
+          {
+            backgroundColor: !checkCommonValidation() ? '#C4C4C4' : '#D9232D',
+          },
+        ]}
+      />
 
       <ActionSheet
         id="action_sheet"
@@ -705,6 +834,46 @@ const DocumentsScreen = props => {
           ))}
         </View>
       </ActionSheet>
+
+      <Modal
+        overlayPointerEvents={'auto'}
+        isVisible={modalVisible}
+        onTouchOutside={() => {
+          setModalVisible(false);
+        }}
+        onDismiss={() => {
+          setModalVisible(false);
+        }}
+        coverScreen={true}
+        // style={styles.modalbg}
+        deviceWidth={deviceWidth}
+        onBackButtonPress={() => {
+          setModalVisible(false);
+        }}
+        onBackdropPress={() => {
+          setModalVisible(false);
+        }}>
+        {loader ? (
+          <ActivityIndicator
+            size={'small'}
+            color={'white'}
+            style={{marginRight: 4}}
+          />
+        ) : isPDF ? (
+          <PDFView
+            style={{flex: 1}}
+            onError={error => console.log('onError', error)}
+            onLoad={() => console.log('PDF rendered from base 64 data')}
+            resource={`${imageUrl}`}
+            resourceType="base64"
+          />
+        ) : (
+          <Image
+            source={{uri: imageUrl}}
+            style={{height: 200, width: 200, flex: 1}}
+          />
+        )}
+      </Modal>
     </ScrollView>
   );
 };

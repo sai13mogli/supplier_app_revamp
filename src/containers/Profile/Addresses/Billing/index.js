@@ -1,5 +1,6 @@
 import React, { useEffect,useState,} from 'react';
-import {Text,View,FlatList,ScrollView, StyleSheet} from 'react-native';
+import {Text,View,FlatList,ScrollView, StyleSheet,TouchableOpacity} from 'react-native';
+
 import colors from "../../../../Theme/Colors"
 import {useSelector, useDispatch} from 'react-redux';
 import {fetchAddressDetails} from '../../../../redux/actions/profile';
@@ -7,7 +8,8 @@ import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
-
+import AddressesModal from '../../../../component/common/AddressesModal';
+////////jlj
 const SupportScreen = () => {
   const [data,setData]= useState( [
     { id: '1', lable: 'First item', checked : false},
@@ -18,6 +20,7 @@ const SupportScreen = () => {
     { id: '6', lable: 'Sixth item' ,checked : false},
     { id: '7', lable: 'Seventh item',checked : false }
   ]);
+  const [modalVisible, setModalVisible] = useState(false);
   const addressesData = useSelector(state => (state.profileReducer.addressesDetails.data));
   console.log("Daakka====>",addressesData);
   const dispatch = useDispatch();
@@ -31,10 +34,16 @@ const SupportScreen = () => {
       <View style={styles.wrap}>
         <View style={styles.nameWrap}>
         <Text style={styles.UserNameCss}>Nitin Bansal</Text>
-        <Text style={styles.AddressType}>default</Text>
+        {
+          item.isDefault?
+          <Text style={styles.AddressType}>default</Text>:null
+        }
         </View>
-        <Text style={styles.AddressTxt}>D-188,Block D ,Sector 10,Noida</Text>
-        <Text style={styles.AddressTxt}>Uttar Pardesh</Text>
+      
+        
+        
+        <Text style={styles.AddressTxt}>{item.address1} ,{item.address2},{item.city}</Text>
+        <Text style={styles.AddressTxt}>{item.state},{item.pincode}</Text>
         <View style={styles.buttonWrap}>
           <View style={{marginRight:15,flex:1}}>
             <CustomButton
@@ -86,7 +95,7 @@ const SupportScreen = () => {
         </View>  
           
           <FlatList
-          data={data}
+          data={addressesData}
           renderItem={renderItems}
           keyExtractor={(item, index) => index.toString()}
             />
@@ -103,7 +112,14 @@ const SupportScreen = () => {
               borderColor={colors.WhiteColor}
               TextFontSize={Dimension.font16}
             /> 
-         </View>
+          {/* <AddressesModal
+           visible={modalVisible}
+           transparent={true}
+           onPress={() => setModalVisible(true)}
+           onPress={() => setModalVisible(!modalVisible)}
+          />   */}
+         
+    </View>
     </View>
     
   );
