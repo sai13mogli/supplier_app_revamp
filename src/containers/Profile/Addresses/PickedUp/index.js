@@ -52,24 +52,29 @@ const PickedUp = () => {
   return (
     <View style={{flex:1}}>
       <ScrollView indicatorStyle="white">
-       <View style={{flexDirection:'row',top:30,justifyContent:'space-between'}}>
-        <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000',left:20}}>
-          02 Pickup Address
-        </Text>
-        <CustomeIcon name={'add-box'} size={Dimension.font22} color={colors.BrandColor}
-        style={{left:50}} />
-        <Text style={{fontSize: 16, fontWeight: 'bold', color: colors.BrandColor,right:20}}>
-          Add new
-        </Text>
-        </View>  
-          
-          <FlatList
-          data={data}
-          renderItem={renderItems}
-          keyExtractor={(item, index) => index.toString()}
-            />
-          </ScrollView> 
-         
+            <View style={{flexDirection:'row',top:30,justifyContent:'space-between'}}>
+              <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000',left:20}}>
+                02 Pickup Address
+              </Text>
+              <CustomeIcon name={'add-box'} size={Dimension.font22} color={colors.BrandColor}
+              style={{left:50}} />
+              <Text style={{fontSize: 16, fontWeight: 'bold', color: colors.BrandColor,right:20}}>
+                Add new
+              </Text>
+              </View>  
+                <FlatList
+                data={data}
+                renderItem={renderItems}
+                keyExtractor={(item, index) => index.toString()}
+                />
+      </ScrollView> 
+            <CustomButton
+              title={'Submit'}
+              buttonStyle={styles.submit}
+              // onPress={navigateToAddresses}
+              TextColor={colors.WhiteColor}
+              borderColor={colors.WhiteColor}
+            /> 
     </View>
     
   );
