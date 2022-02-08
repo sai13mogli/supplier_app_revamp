@@ -8,8 +8,10 @@ const DropDown = props => {
   const {items, title, selectedValue, placeholder, onValueChange, enabled} =
     props;
   return (
+    <>
+    <Text style={styles.labelStyle}>{title}</Text>
     <View style={styles.pickerWrapper}>
-      <Text>{title}</Text>
+      
       <Picker
         mode="dropdown"
         note
@@ -44,6 +46,7 @@ const DropDown = props => {
         />
       </View>
     </View>
+    </>
   );
 };
 const styles = StyleSheet.create({
@@ -75,5 +78,14 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontFamily: Dimension.CustomRegularFont,
   },
+  labelStyle: {
+    fontSize: Dimension.font10,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+    marginLeft: Dimension.margin12,
+    marginBottom: Dimension.margin5,
+    fontWeight: 'normal',
+  },
+
 });
 export default DropDown;

@@ -49,6 +49,10 @@ const styles = StyleSheet.create({
     borderColor:Colors.BoxBorderColor,
     marginVertical:Dimension.margin8
  },
+ submit:{
+  backgroundColor:Colors.BrandColor,
+  marginHorizontal:Dimension.margin10,
+ },
 });
 
 export default styles;

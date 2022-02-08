@@ -50,6 +50,7 @@ const OrdersScreen = () => {
         ]}
         selectedValue={gender}
         onValueChange={onChange}
+        title={"select Something"}
       />
       {/* End */}
       
