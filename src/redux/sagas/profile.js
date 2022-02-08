@@ -8,6 +8,7 @@ import {
   setBusinessDetails,
   getProfile,
   getUserInfo,
+  getAddressesDetails,
 } from '../../services/profile';
 // actions
 import {
@@ -17,6 +18,8 @@ import {
   failedFetchUpdateBusinessDetails,
   fetchedProfile,
   failedFetchProfile,
+  failedFetchAddressDetails,
+  fetchedAddressDetails,
 } from '../actions/profile';
 
 function* fetchBusinessDetails() {
@@ -34,7 +37,6 @@ function* fetchBusinessDetails() {
 
 function* fetchUpdateBusinessDetails({payload: {formData}}) {
   try {
-    console.log(formData);
     const {data, error} = yield call(setBusinessDetails, formData);
     if (error) {
       yield put(failedFetchUpdateBusinessDetails(error));
@@ -61,11 +63,25 @@ function* fetchProfile({}) {
   }
 }
 
+function* fetchAddressDetails() {
+  try {
+    const {data, error} = yield call(getAddressesDetails);
+    if (error) {
+      yield put(failedFetchAddressDetails(error));
+    } else {
+      yield put(fetchedAddressDetails(data.data));
+    }
+  } catch (error) {
+    yield put(failedFetchAddressDetails(error));
+  }
+}
+
 export default fork(function* () {
+  yield takeEvery(PROFILE_ACTIONS.FETCH_PROFILE, fetchProfile);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS, fetchBusinessDetails);
+  yield takeEvery(PROFILE_ACTIONS.FETCH_ADDRESSES, fetchAddressDetails);
   yield takeEvery(
     PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,
     fetchUpdateBusinessDetails,
   );
-  yield takeEvery(PROFILE_ACTIONS.FETCH_PROFILE, fetchProfile);
 });
