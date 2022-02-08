@@ -3,8 +3,7 @@ import {View } from "react-native";
 import { CheckBox, Icon } from 'react-native-elements';
 import styles from './styles';
 
-const Checkbox = props => {
-  
+const Checkbox = props => { 
   const {
     onPress,
     checked,

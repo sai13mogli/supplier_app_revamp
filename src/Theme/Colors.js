@@ -20,6 +20,8 @@ const Colors = {
 NudgeColor:"#FFDAC3",
 PendineStateColor:"#FF7F00",
 ApproveStateColor:"#0079FF",
+eyeIcon:"#A2A2A2",
+placeholderColor:"#C9C3C3"
 
 
 
