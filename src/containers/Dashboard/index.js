@@ -3,6 +3,7 @@ import {Text,View,FlatList, ScrollView} from 'react-native';
 import Checkbox from '../../component/common/Checkbox/index';
 import MultiSelect from '../../component/common/MultiSelect/index';
 import styles from './style';
+import colors from "../../Theme/Colors";
 
 const DashboardScreen = () => {
   const [searchText, setSearchText] = useState('');
@@ -54,7 +55,7 @@ const DashboardScreen = () => {
         value={searchText}
         onChangeText={(searchText)=>onSearchData(searchText)}
         placeholder={'Search'}
-        placeholderTextColor={'grey'}
+        placeholderTextColor={colors.eyeIcon}
         blurOnSubmit={true}
         data={data}
         onChangeDataChoosed={data=>
