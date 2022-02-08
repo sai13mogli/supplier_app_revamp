@@ -68,6 +68,13 @@ const SupportScreen = () => {
           keyExtractor={(item, index) => index.toString()}
             />
           </ScrollView> 
+            <CustomButton
+              title={'Submit'}
+              buttonStyle={styles.submit}
+              // onPress={navigateToAddresses}
+              TextColor={colors.WhiteColor}
+              borderColor={colors.WhiteColor}
+            /> 
          
     </View>
     

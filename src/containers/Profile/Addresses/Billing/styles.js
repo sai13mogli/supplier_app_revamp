@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import Colors from '../../../../Theme/Colors';
 import Dimension from '../../../../Theme/Dimension';
 
@@ -12,6 +12,10 @@ const styles = StyleSheet.create({
    borderRadius:3,
    borderColor:Colors.FontColor,
    marginVertical:Dimension.margin8
+ },
+ submit:{
+  backgroundColor:Colors.BrandColor,
+  marginHorizontal:Dimensions.margin10,
  },
  nameWrap:{
   flexDirection:'row',

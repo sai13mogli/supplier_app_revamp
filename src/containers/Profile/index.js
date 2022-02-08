@@ -96,7 +96,6 @@ const ProfileScreen = props => {
               <CustomeIcon name={'calendar'} size={24}></CustomeIcon>
             </TouchableOpacity>
           )}
-          //   blur={onBlur}
         />
       </View>
     );
