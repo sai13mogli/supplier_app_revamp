@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View,TextInput,ScrollView,FlatList,Text, TouchableOpacity } from "react-native";
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useNavigation} from '@react-navigation/native'
 import styles from './styles';
 
 const MultiSelect = props => {
@@ -9,6 +10,10 @@ const MultiSelect = props => {
   const [choosedList, setChoosedList] = useState([]);
   const [dataList, setDataList] = useState(props.data);
   const [customeList, setCustomeList] = useState([]);
+  const {navigate} = useNavigation()
+  const navigation = useNavigation()
+  const [search, setSearch] = useState([]);
+  
   const {
     blurOnSubmit,
     onChangeText,
@@ -50,9 +55,25 @@ const MultiSelect = props => {
   setCustomeList(customeListNow);
 };
 
+
+// const onSearch = async () => {
+//   var dataListNow = search
+//   if ((customeList = search)) {
+//     setChoosedList([dataListNow])
+//   } 
+// }
+
 useEffect(()=>{
   props.onChangeDataChoosed(choosedList)
 },[choosedList])
+
+// useEffect(()=>{
+//   props.onSearchData(choosedList)
+// },[choosedList])
+
+
+
+
 
  const renderItem = (item,id)=>{
    return(
