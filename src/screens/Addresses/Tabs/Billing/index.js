@@ -2,7 +2,7 @@ import React, { useEffect,useState,} from 'react';
 import {Text,View,FlatList,ScrollView} from 'react-native';
 import colors from "../../../../Theme/Colors"
 import {useSelector, useDispatch} from 'react-redux';
-import {fetchAddressDetails} from '../../../../redux/actions/Addresses';
+import {fetchAddressDetails} from '../../../../redux/actions/profile';
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
@@ -18,16 +18,13 @@ const SupportScreen = () => {
     { id: '6', lable: 'Sixth item' ,checked : false},
     { id: '7', lable: 'Seventh item',checked : false }
   ]);
-  const addressesData = useSelector(state => (state.addressesReducer || {}).addresses);
+  const addressesData = useSelector(state => (state.profileReducer.addressesDetails.data));
+  console.log("Daakka====>",addressesData);
   const dispatch = useDispatch();
+
   useEffect(() => {
-    const data = {
-      userId: '123676',
-      token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MDUiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQyMjkxMDcsImV4cCI6MTY0NDMxNTUwN30.VrAgBof0aJGg5N98xA-llF402zk-etjIxj-KCHqXawpEg1v6-p47qh_WQfODhFqtQ7_338j8fcW7UC7alndDZw"
-    }
-    dispatch(fetchAddressDetails(data));
-    
-   }, []);
+      dispatch(fetchAddressDetails());
+  },[]);
 
    const renderItems = ({item}) => (
     <View style={{flex:1,top:60}}>

@@ -1,4 +1,5 @@
 import {PROFILE_ACTIONS} from '../constants/profile';
+import {ADDRESSES_ACTIONS} from '../constants/addresses';
 
 export const fetchBusinessDetails = () => {
   return {
@@ -42,6 +43,29 @@ export const fetchedUpdateBusinessDetails = (formData, data) => {
 export const failedFetchUpdateBusinessDetails = error => {
   return {
     type: PROFILE_ACTIONS.FAILED_FETCH_UPDATE_BUSINESS_DETAILS,
+    error,
+  };
+};
+
+export const fetchAddressDetails = () => {
+  return {
+    type: PROFILE_ACTIONS.FETCH_ADDRESSES,
+  };
+ 
+};
+
+export const fetchedAddressDetails = data => {
+  return {
+    type: PROFILE_ACTIONS.FETCHED_FETCH_ADDRESSES,
+    payload: {
+      data,
+    },
+  };
+};
+
+export const failedFetchAddressDetails = error => {
+  return {
+    type: PROFILE_ACTIONS.FAILED_FETCH_ADDRESSES,
     error,
   };
 };

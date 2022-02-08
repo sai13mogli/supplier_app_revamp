@@ -9,6 +9,11 @@ const initialState = {
     data: {},
     error: null,
   },
+  addressesDetails: {
+    status: STATE_STATUS.UNFETCHED,
+    data: {},
+    error: null,
+  },
 };
 
 export const profileReducer = (state = initialState, action) => {
@@ -71,6 +76,37 @@ export const profileReducer = (state = initialState, action) => {
           error: error,
         },
       };
+    case PROFILE_ACTIONS.FETCH_ADDRESSES:
+        return {
+          ...state,
+          addressesDetails: {
+            ...state.addressesDetails,
+            status: STATE_STATUS.FETCHING,
+            data: {},
+            error: null,
+          },
+        };
+    case PROFILE_ACTIONS.FETCHED_FETCH_ADDRESSES:
+          return {
+            ...state,
+            addressesDetails: {
+              ...state.addressesDetails,
+              status: STATE_STATUS.FETCHED,
+              data: payload.data,
+              error: null,
+            },
+            
+          };
+    case PROFILE_ACTIONS.FAILED_FETCH_ADDRESSES:
+          return {
+            ...state,
+            addressesDetails: {
+              ...state.addressesDetails,
+              status: STATE_STATUS.FAILED_FETCH,
+              data: {},
+              error: error,
+            },
+          };     
     default:
       return state;
   }
