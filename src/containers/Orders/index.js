@@ -10,37 +10,16 @@ import colors from "../../Theme/Colors"
 const OrdersScreen = () => {
   const [gender, setGender] = useState('');
   const [isSelected, setSelection] = useState(false);
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
 
-  const onChange = value => {
+ const onChange = value => {
     setGender(value);
   };
 
-  const onchangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-  };
-  
-  const onCheckAction = value => {
+ const onCheckAction = value => {
     setSelection(value);
   };
 
-   const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-
- 
-
-  return (
+ return (
     <>
       <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
         OrdersScreen
@@ -77,15 +56,12 @@ const OrdersScreen = () => {
        {/* Example for DatePicker Component */}
        
       <CustomeDatePicker
-        onChange={onchangeDate}
-        onPress={showDatepicker}
         display={'default'}
-        mode={mode}
       />
       {/* Example for CheckBox Component */}
        <Checkbox
-        value={isSelected}
-        onValueChange={onCheckAction}
+        checked={isSelected}
+        onPress={()=>setSelection(!isSelected)}
        />
     </>
   );

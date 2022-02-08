@@ -1,20 +1,20 @@
 import React from "react";
 import {View } from "react-native";
-import CheckBox from '@react-native-community/checkbox';
+import { CheckBox, Icon } from 'react-native-elements';
 import styles from './styles';
 
 const Checkbox = props => { 
   const {
-    onValueChange,
-    value,
+    onPress,
+    checked,
   } = props;
 
   return (
     <View style={styles.container}>
       <View style={styles.checkboxContainer}>
         <CheckBox
-          value={value}
-          onValueChange={onValueChange}
+          checked={checked}
+          onPress={onPress}
           style={styles.checkbox}
         />
       </View>
