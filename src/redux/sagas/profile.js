@@ -3,13 +3,19 @@ import {put, call, fork, takeEvery} from 'redux-saga/effects';
 // constants
 import {PROFILE_ACTIONS} from '../constants/profile';
 // api call
-import {getBusinessDetails, setBusinessDetails} from '../../services/profile';
+import {
+  getBusinessDetails,
+  setBusinessDetails,
+  getProfile,
+} from '../../services/profile';
 // actions
 import {
   fetchedBusinessDetails,
   failedFetchBusinessDetails,
   fetchedUpdateBusinessDetails,
   failedFetchUpdateBusinessDetails,
+  fetchedProfile,
+  failedFetchProfile,
 } from '../actions/profile';
 
 function* fetchBusinessDetails() {
@@ -39,10 +45,24 @@ function* fetchUpdateBusinessDetails({payload: {formData}}) {
   }
 }
 
+function* fetchProfile({}) {
+  try {
+    const {data, error} = yield call(getProfile);
+    if (error) {
+      yield put(failedFetchProfile(error));
+    } else {
+      yield put(fetchedProfile(data.data));
+    }
+  } catch (error) {
+    yield put(failedFetchProfile(error));
+  }
+}
+
 export default fork(function* () {
   yield takeEvery(PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS, fetchBusinessDetails);
   yield takeEvery(
     PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,
     fetchUpdateBusinessDetails,
   );
+  yield takeEvery(PROFILE_ACTIONS.FETCH_PROFILE, fetchProfile);
 });
