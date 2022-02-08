@@ -63,6 +63,7 @@ const FloatingLabelInputField = props => {
             rightIconContainerStyle={styles.iconStyle}
             errorStyle={styles.errorText}
             disabledInputStyle={styles.disabledInputStyle}
+            // errorStyle={}
           />
         )}
       </View>

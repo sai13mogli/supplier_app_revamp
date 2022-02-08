@@ -46,6 +46,7 @@ const ProfileScreen = props => {
       errorText: 'Kindly enter your phone number',
       placeholder: 'Tap to Upload',
       keyboardType: 'number-pad',
+      errorState: true,
       //   onBlur: onBlurPhone,
     },
     {
@@ -55,6 +56,7 @@ const ProfileScreen = props => {
       onChange: text => setAddress(text),
       errorText: 'Kindly enter your phone number',
       placeholder: 'Tap to Upload',
+      errorState: false,
 
       //   onBlur: onBlurAddress,
     },
@@ -77,6 +79,7 @@ const ProfileScreen = props => {
     placeholder,
     errorText,
     keyboardType,
+    errorState,
   }) => {
     return (
       <View>
@@ -87,6 +90,7 @@ const ProfileScreen = props => {
           placeholder={placeholder}
           disabled={disabled}
           keyboardType={keyboardType}
+          errorMessage={errorState ? errorText : ''}
           extraView={() => (
             <TouchableOpacity style={{}}>
               <CustomeIcon name={'calendar'} size={24}></CustomeIcon>
