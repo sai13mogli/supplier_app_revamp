@@ -21,7 +21,7 @@ const SupportScreen = () => {
   ]);
   const [modalVisible, setModalVisible] = useState(false);
   const addressesData = useSelector(state => (state.profileReducer.addressesDetails.data));
-  // console.log("Daakka====>",addressesData);
+  console.log("Daakka====>",addressesData);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,10 +33,13 @@ const SupportScreen = () => {
       <View style={styles.wrap}>
         <View style={styles.nameWrap}>
         <Text style={[styles.name,{fontSize:15,}]}>Nitin Bansal</Text>
-        <Text style={styles.type}>default</Text>
+        {
+          item.isDefault?
+          <Text style={styles.type}>default</Text>:null
+        }
         </View>
-        <Text style={styles.addresses}>D-188,Block D ,Sector 10,Noida</Text>
-        <Text style={[styles.addresses,{top:20,fontSize:12}]}>Uttar Pardesh</Text>
+        <Text style={styles.addresses}>{item.address1} ,{item.address2},{item.city}</Text>
+        <Text style={[styles.addresses,{top:20,fontSize:12}]}>{item.state},{item.pincode}</Text>
         <View style={styles.buttonWrap}>
         <View style={styles.remove}>
           <Text style={[styles.name,{fontSize:15,top:2}]}>Remove</Text>
@@ -68,7 +71,7 @@ const SupportScreen = () => {
         </View>  
           
           <FlatList
-          data={data}
+          data={addressesData}
           renderItem={renderItems}
           keyExtractor={(item, index) => index.toString()}
             />
@@ -80,12 +83,12 @@ const SupportScreen = () => {
               TextColor={colors.WhiteColor}
               borderColor={colors.WhiteColor}
             /> 
-          <AddressesModal
+          {/* <AddressesModal
            visible={modalVisible}
            transparent={true}
            onPress={() => setModalVisible(true)}
            onPress={() => setModalVisible(!modalVisible)}
-          />  
+          />   */}
          
     </View>
     
