@@ -9,47 +9,62 @@ const DropDown = props => {
     props;
   return (
     <>
-    <Text style={styles.labelStyle}>{title}</Text>
-    <View style={styles.pickerWrapper}>
-      
-      <Picker
-        mode="dropdown"
-        note
-        selectedValue={selectedValue}
-        placeholder={placeholder}
-        onValueChange={onValueChange}
-        style={styles.pickerStyle}
-        itemStyle={styles.PickerItemStyle}
-        enabled={enabled}>
-        <Picker.Item
-          key={'noKey'}
-          label={placeholder}
-          style={styles.PickerItemStyle}
-          value={''}
-          fontFamily={Dimension.CustomRegularFont}
-        />
-        {items.map((item, itemKey) => (
+      <View style={{flexDirection: 'row'}}>
+        <Text style={styles.labelStyle}>{props.label}</Text>
+        {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
+      </View>
+      <View style={styles.pickerWrapper}>
+        <Picker
+          mode="dropdown"
+          note
+          selectedValue={selectedValue}
+          placeholder={placeholder}
+          onValueChange={onValueChange}
+          style={styles.pickerStyle}
+          itemStyle={styles.PickerItemStyle}
+          enabled={enabled}>
           <Picker.Item
-            key={itemKey}
-            label={item.label}
-            style={styles.PickerItemStyle} //to be added
-            value={item.value}
+            key={'noKey'}
+            label={placeholder}
+            style={styles.PickerItemStyle}
+            value={''}
             fontFamily={Dimension.CustomRegularFont}
           />
-        ))}
-      </Picker>
-      <View style={styles.iconWrapper}>
-        <CustomeIcon
-          name={'arrow-drop-down-line'}
-          size={Dimension.font26}
-          color={colors.FontColor}
-        />
+          {items.map((item, itemKey) => (
+            <Picker.Item
+              key={itemKey}
+              label={item.label}
+              style={styles.PickerItemStyle} //to be added
+              value={item.value}
+              fontFamily={Dimension.CustomRegularFont}
+            />
+          ))}
+        </Picker>
+        <View style={styles.iconWrapper}>
+          <CustomeIcon
+            name={'arrow-drop-down-line'}
+            size={Dimension.font26}
+            color={colors.FontColor}
+          />
+        </View>
       </View>
-    </View>
     </>
   );
 };
 const styles = StyleSheet.create({
+  labelStyle: {
+    fontSize: Dimension.font10,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+    marginLeft: Dimension.margin12,
+    marginBottom: Dimension.margin5,
+  },
+  starIcon: {
+    color: colors.BrandColor,
+    fontSize: Dimension.font10,
+
+    fontFamily: Dimension.CustomMediumFont,
+  },
   pickerWrapper: {
     borderWidth: 1,
     borderRadius: 4,
@@ -86,6 +101,5 @@ const styles = StyleSheet.create({
     marginBottom: Dimension.margin5,
     fontWeight: 'normal',
   },
-
 });
 export default DropDown;
