@@ -6,6 +6,7 @@ import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import Colors from '../../../Theme/Colors';
 import {loginWithPass} from '../../../services/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoginOtpModal from '../../../component/LoginOtpModal';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -16,11 +17,12 @@ const LoginScreen = props => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [error, setError] = useState('');
+  const [otpModal, setOtpModal] = useState(false);
 
   const FORM_FIELDS = new OrderedMap({
     email: {
-      label: 'Email',
-      title: 'Email',
+      label: 'Email/Phone',
+      title: 'Email/Phone',
       value: email,
       isImp: true,
       onChangeText: text => setEmail(text),
@@ -45,8 +47,19 @@ const LoginScreen = props => {
     },
   });
 
+  const onLogin = async data => {
+    setOtpModal(false);
+    await AsyncStorage.setItem('token', data.data.token);
+    await AsyncStorage.setItem('userId', JSON.stringify(data.data.userId));
+    props.route.params.setIsLoggedIn(true);
+  };
+
   const onEmailBlur = () => {
-    if (email && email.length && email.match(emailRegex)) {
+    if (
+      email &&
+      email.length &&
+      (email.match(emailRegex) || email.length == 10)
+    ) {
       setEmailError(false);
     } else {
       setEmailError(true);
@@ -65,7 +78,7 @@ const LoginScreen = props => {
     if (
       email &&
       email.length &&
-      email.match(emailRegex) &&
+      (email.match(emailRegex) || email.length == 10) &&
       password &&
       password.length &&
       password.length > 4
@@ -83,12 +96,7 @@ const LoginScreen = props => {
         });
         if (data.success) {
           setLoading(false);
-          await AsyncStorage.setItem('token', data.data.token);
-          await AsyncStorage.setItem(
-            'userId',
-            JSON.stringify(data.data.userId),
-          );
-          props.route.params.setIsLoggedIn(true);
+          onLogin(data);
         } else {
           setLoading(false);
           setError(data.message);
@@ -102,7 +110,17 @@ const LoginScreen = props => {
     }
   };
 
-  const onSendOtp = () => {};
+  const onSendOtp = () => {
+    if (
+      email &&
+      email.length &&
+      (email.match(emailRegex) || email.length == 10)
+    ) {
+      setOtpModal(true);
+    } else {
+      onEmailBlur();
+    }
+  };
 
   return (
     <View>
@@ -110,7 +128,7 @@ const LoginScreen = props => {
       {FORM_FIELDS.map((field, fieldKey) => (
         <field.component {...field} />
       )).toList()}
-
+      {error ? <Text>{error}</Text> : null}
       <CustomButton
         title={'LOGIN VIA OTP'}
         buttonColor={'dodgerblue'}
@@ -128,6 +146,14 @@ const LoginScreen = props => {
         TextColor={Colors.WhiteColor}
         borderColor={Colors.WhiteColor}
       />
+      {otpModal && (
+        <LoginOtpModal
+          visible={otpModal}
+          onLogin={onLogin}
+          onClose={() => setOtpModal(false)}
+          email={email}
+        />
+      )}
     </View>
   );
 };
