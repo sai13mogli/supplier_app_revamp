@@ -1,12 +1,13 @@
 import React, {useEffect} from 'react';
-import {TouchableOpacity, View, Text, ProgressBarAndroid} from 'react-native';
+import {TouchableOpacity, View, Text, ProgressBarAndroid,ScrollView} from 'react-native';
 import Header from '../../component/common/Header';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchBusinessDetails, fetchProfile} from '../../redux/actions/profile';
-import Progress from 'react-native-progress/Bar';
+// import Progress from 'react-native-progress/Bar';
 import {OrderedMap} from 'immutable';
 import {PROFILE_TABS} from '../../constants';
+import styles from './style';
 
 const ProfileScreen = props => {
   const {navigate} = useNavigation();
@@ -33,27 +34,33 @@ const ProfileScreen = props => {
     return profileData.verificationStatus >= progress;
   };
 
+  const navigateToBankDetails=()=>{
+    navigate('BankDetails');
+  }
+
   return (
     <View>
-      <Header showBack showText={'My Profile'} />
-      <View>
-        <Text style={{color: '#000'}}>
+      <Header showBack showText={'My Profile'}/>
+     <ScrollView style={styles.ContainerCss}>
+      <View style={styles.UserDetailWrap}>
+        <Text style={styles.UserName}>
           {(profileData.userInfo || {}).contactName}
         </Text>
-        <Text style={{color: '#000'}}>
+        <Text style={styles.UserEmail}>
           {(profileData.userInfo || {}).email}
         </Text>
-        <Text style={{color: '#000'}}>
+        <Text style={styles.UserContact}>
           {(profileData.userInfo || {}).phone}
         </Text>
       </View>
       <Text>{PROGRESS[profileData.verificationStatus] * 100}%</Text>
-      <Progress
+      {/* <Progress
         width={200}
         animated={false}
         progress={PROGRESS[profileData.verificationStatus]}
         color={'red'}
-      />
+      /> */}
+
       {PROFILE_TABS.map((tab, tabIndex) => (
         <TouchableOpacity
           key={tabIndex}
@@ -73,6 +80,8 @@ const ProfileScreen = props => {
           </Text>
         </TouchableOpacity>
       )).toList()}
+    
+    </ScrollView>
     </View>
   );
 };

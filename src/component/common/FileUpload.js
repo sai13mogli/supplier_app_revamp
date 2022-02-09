@@ -28,12 +28,12 @@ const FileUpload = props => {
 
   return (
     <View>
-      <>
-        <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+      <View style={{flexDirection:"row"}}>
+        <Text style={styles.labelStyle}>
           {label}
         </Text>
-        {isImp ? <Text style={{color: 'red'}}>*</Text> : null}
-      </>
+        {isImp ? <Text style={styles.starIcon}>*</Text> : null}
+      </View>
       <View style={styles.inputContainerStyle}>
         {!value ? (
           <Text style={styles.placeholderCss}>Tap to upload</Text>
@@ -133,6 +133,21 @@ const styles = StyleSheet.create({
 
     paddingLeft: 0,
     backgroundColor: colors.DisableStateColor,
+  },
+  labelStyle: {
+    fontSize: Dimension.font10,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+    marginLeft: Dimension.margin12,
+    marginBottom: Dimension.margin5,
+  
+  },
+  starIcon:{
+    color:colors.BrandColor,
+    fontSize: Dimension.font10,
+    
+    fontFamily: Dimension.CustomMediumFont,
+
   },
 });
 export default FileUpload;

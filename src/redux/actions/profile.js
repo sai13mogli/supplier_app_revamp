@@ -1,5 +1,4 @@
 import {PROFILE_ACTIONS} from '../constants/profile';
-import {ADDRESSES_ACTIONS} from '../constants/addresses';
 
 export const fetchProfile = () => {
   return {
@@ -88,6 +87,29 @@ export const fetchedAddressDetails = data => {
 export const failedFetchAddressDetails = error => {
   return {
     type: PROFILE_ACTIONS.FAILED_FETCH_ADDRESSES,
+    error,
+  };
+};
+
+export const fetchBankDetails = () => {
+  return {
+    type: PROFILE_ACTIONS.FETCH_BANK_DETAILS,
+  };
+ 
+};
+
+export const fetchedBankDetails = data => {
+  return {
+    type: PROFILE_ACTIONS.FETCHED_BANK_DETAILS,
+    payload: {
+      data,
+    },
+  };
+};
+
+export const failedFetchBankDetails = error => {
+  return {
+    type: PROFILE_ACTIONS.FAILED_FETCH_BANK_DETAILS,
     error,
   };
 };

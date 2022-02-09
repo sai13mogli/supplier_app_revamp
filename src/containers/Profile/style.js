@@ -4,11 +4,33 @@ import Dimension from '../../Theme/Dimension';
 
 
 const styles = StyleSheet.create({
-  userName: {
+  UserDetailWrap:{
+    backgroundColor:Colors.BrandColor,
+    padding:Dimension.padding15,
+    borderRadius:8,
+  },
+  ContainerCss:{
+    backgroundColor:Colors.WhiteColor,
+    paddingHorizontal:Dimension.padding15
+  },
+  UserName: {
     fontSize: Dimension.font14,
-    color: Colors.textColor,
+    color: Colors.WhiteColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+  
+  },
+  UserEmail: {
+    fontSize: Dimension.font12,
+    color: Colors.WhiteColor,
     fontFamily: Dimension.CustomRegularFont,
-    marginTop: 5,
+
+    
+  },
+  UserContact: {
+    fontSize: Dimension.font12,
+    color: Colors.WhiteColor,
+    fontFamily: Dimension.CustomRegularFont,
+    //marginTop: 5,
   },
   welcomeText: {
     fontSize: Dimension.font10,
@@ -31,6 +53,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     color: Colors.FontColor
   },
+  
 });
 
 export default styles;
