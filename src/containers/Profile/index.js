@@ -1,11 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  ProgressBarAndroid,
-  ScrollView,
-} from 'react-native';
+import {TouchableOpacity, View, Text, ScrollView} from 'react-native';
 import Header from '../../component/common/Header';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -87,7 +81,7 @@ const ProfileScreen = props => {
               <Text style={{color: '#000'}}>{tab.title}</Text>
               <Text
                 style={{color: isCompleted(tab.progress) ? 'green' : 'red'}}>
-                {isCompleted(tab.progress) ? 'Completed' : 'Not Completed'}
+                {tab.icon}
               </Text>
             </View>
             <Text style={{color: isCompleted(tab.progress) ? 'green' : 'red'}}>

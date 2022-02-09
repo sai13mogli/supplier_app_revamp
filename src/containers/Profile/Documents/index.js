@@ -770,12 +770,20 @@ const DocumentsScreen = props => {
 
   const noteText = () => (
     <>
-      <Text style={styles.Notetxt}>Note</Text>
-      {noteArr.map((_, i) => (
-        <View key={i}>
-          <Text style={styles.NoteData}>{_.note}</Text>
-        </View>
-      ))}
+      <Text style={{color: 'red'}}>Note</Text>
+      {signature && signature.title && signature.value ? (
+        <Text style={{color: '#000'}}>
+          Please ensure that the im age of the signature is of the signature is
+          of an authorised signatory (as endorsed by the tax authorities).Sign
+          on a white background,scan the signature and upload.
+        </Text>
+      ) : (
+        noteArr.map((_, i) => (
+          <View key={i}>
+            <Text style={{color: '#000'}}>{_.note}</Text>
+          </View>
+        ))
+      )}
     </>
   );
 
@@ -801,36 +809,40 @@ const DocumentsScreen = props => {
   };
 
   return (
-    <View style={{flex:1}}>
-
-    
-    <ScrollView style={styles.ContainerCss}>
-      {Documents.map(_ => renderInputText(_))
-        .toList()
-        .toArray()}
-      {noteText()}
-      {/* <Text style={{color: '#000'}}></Text> */}
-      <Checkbox
-        checked={isSelected}
-        onPress={() => setSelection(!isSelected)}
-        title={'By registering you agree to our'}
-      />
+    <View style={{flex: 1}}>
+      <ScrollView style={styles.ContainerCss}>
+        {Documents.map(_ => renderInputText(_))
+          .toList()
+          .toArray()}
+        {noteText()}
+        {/* <Text style={{color: '#000'}}></Text> */}
+        <Checkbox
+          checked={isSelected}
+          onPress={() => setSelection(!isSelected)}
+          title={'By registering you agree to our'}
+        />
       </ScrollView>
       <View style={styles.bottombtnWrap}>
-      <CustomButton
-        title="SUBMIT"
-        buttonColor={!checkCommonValidation() ? colors.grayShade1 : colors.BrandColor}
-        disabled={!checkCommonValidation()}
-        // onPress={() => onBusinessDetailsUpdate()}
-        // buttonStyle={[
-        //   {
-        //     backgroundColor: !checkCommonValidation() ? '#C4C4C4' : '#D9232D',
-        //   },
-        //]}
-        borderColor={!checkCommonValidation() ? colors.grayShade1 : colors.BrandColor}
-        TextColor={!checkCommonValidation() ? colors.FontColor : colors.WhiteColor}
-        TextFontSize={Dimension.font16}
-      />
+        <CustomButton
+          title="SUBMIT"
+          buttonColor={
+            !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
+          }
+          disabled={!checkCommonValidation()}
+          // onPress={() => onBusinessDetailsUpdate()}
+          // buttonStyle={[
+          //   {
+          //     backgroundColor: !checkCommonValidation() ? '#C4C4C4' : '#D9232D',
+          //   },
+          //]}
+          borderColor={
+            !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
+          }
+          TextColor={
+            !checkCommonValidation() ? colors.FontColor : colors.WhiteColor
+          }
+          TextFontSize={Dimension.font16}
+        />
       </View>
 
       <ActionSheet
