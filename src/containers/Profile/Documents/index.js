@@ -769,11 +769,19 @@ const DocumentsScreen = props => {
   const noteText = () => (
     <>
       <Text style={{color: 'red'}}>Note</Text>
-      {noteArr.map((_, i) => (
-        <View key={i}>
-          <Text style={{color: '#000'}}>{_.note}</Text>
-        </View>
-      ))}
+      {signature && signature.title && signature.value ? (
+        <Text style={{color: '#000'}}>
+          Please ensure that the im age of the signature is of the signature is
+          of an authorised signatory (as endorsed by the tax authorities).Sign
+          on a white background,scan the signature and upload.
+        </Text>
+      ) : (
+        noteArr.map((_, i) => (
+          <View key={i}>
+            <Text style={{color: '#000'}}>{_.note}</Text>
+          </View>
+        ))
+      )}
     </>
   );
 
