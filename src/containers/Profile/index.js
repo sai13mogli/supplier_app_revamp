@@ -8,6 +8,9 @@ import {fetchBusinessDetails, fetchProfile} from '../../redux/actions/profile';
 import {OrderedMap} from 'immutable';
 import {PROFILE_TABS} from '../../constants';
 import styles from './style';
+import CustomButton from '../../component/common/Button';
+import Colors from '../../Theme/Colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = props => {
   const {navigate} = useNavigation();
@@ -45,6 +48,12 @@ const ProfileScreen = props => {
     if (NEXT_ACTIVE_TAB[profileData.verificationStatus] == tab) {
       props.navigation.navigate(route);
     }
+  };
+
+  const onLogout = async () => {
+    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('userId');
+    props.setIsLoggedIn(false);
   };
 
   return (
@@ -90,6 +99,13 @@ const ProfileScreen = props => {
             </Text>
           </TouchableOpacity>
         )).toList()}
+        <CustomButton
+          title={'LOGOUT'}
+          buttonColor={'dodgerblue'}
+          onPress={onLogout}
+          TextColor={Colors.WhiteColor}
+          borderColor={Colors.WhiteColor}
+        />
       </ScrollView>
     </View>
   );
