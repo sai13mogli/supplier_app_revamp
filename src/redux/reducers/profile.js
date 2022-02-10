@@ -69,7 +69,6 @@ export const profileReducer = (state = initialState, action) => {
         businessDetails: {
           ...state.businessDetails,
           status: STATE_STATUS.FAILED_FETCH,
-          data: {},
           error: error,
         },
       };
@@ -101,66 +100,65 @@ export const profileReducer = (state = initialState, action) => {
         },
       };
     case PROFILE_ACTIONS.FETCH_ADDRESSES:
-        return {
-          ...state,
-          addressesDetails: {
-            ...state.addressesDetails,
-            status: STATE_STATUS.FETCHING,
-            data: {},
-            error: null,
-          },
-        };
+      return {
+        ...state,
+        addressesDetails: {
+          ...state.addressesDetails,
+          status: STATE_STATUS.FETCHING,
+          data: {},
+          error: null,
+        },
+      };
     case PROFILE_ACTIONS.FETCHED_FETCH_ADDRESSES:
-          return {
-            ...state,
-            addressesDetails: {
-              ...state.addressesDetails,
-              status: STATE_STATUS.FETCHED,
-              data: payload.data,
-              error: null,
-            },
-            
-          };
+      return {
+        ...state,
+        addressesDetails: {
+          ...state.addressesDetails,
+          status: STATE_STATUS.FETCHED,
+          data: payload.data,
+          error: null,
+        },
+      };
     case PROFILE_ACTIONS.FAILED_FETCH_ADDRESSES:
-          return {
-            ...state,
-            addressesDetails: {
-              ...state.addressesDetails,
-              status: STATE_STATUS.FAILED_FETCH,
-              data: {},
-              error: error,
-            },
-          }; 
+      return {
+        ...state,
+        addressesDetails: {
+          ...state.addressesDetails,
+          status: STATE_STATUS.FAILED_FETCH,
+          data: {},
+          error: error,
+        },
+      };
     case PROFILE_ACTIONS.FETCH_BANK_DETAILS:
-            return {
-              ...state,
-              bankDetails: {
-                ...state.bankDetails,
-                status: STATE_STATUS.FETCHING,
-                data: {},
-                error: null,
-              },
-           };
+      return {
+        ...state,
+        bankDetails: {
+          ...state.bankDetails,
+          status: STATE_STATUS.FETCHING,
+          data: {},
+          error: null,
+        },
+      };
     case PROFILE_ACTIONS.FETCHED_BANK_DETAILS:
-              return {
-                ...state,
-                bankDetails: {
-                  ...state.bankDetails,
-                  status: STATE_STATUS.FETCHED,
-                  data: payload.data,
-                  error: null,
-                },
-            };
+      return {
+        ...state,
+        bankDetails: {
+          ...state.bankDetails,
+          status: STATE_STATUS.FETCHED,
+          data: payload.data,
+          error: null,
+        },
+      };
     case PROFILE_ACTIONS.FAILED_FETCH_BANK_DETAILS:
-              return {
-                ...state,
-                bankDetails: {
-                  ...state.bankDetails,
-                  status: STATE_STATUS.FAILED_FETCH,
-                  data: {},
-                  error: error,
-                },
-             };          
+      return {
+        ...state,
+        bankDetails: {
+          ...state.bankDetails,
+          status: STATE_STATUS.FAILED_FETCH,
+          data: {},
+          error: error,
+        },
+      };
     default:
       return state;
   }

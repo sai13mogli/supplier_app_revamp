@@ -550,7 +550,6 @@ const DocumentsScreen = props => {
     );
 
     const res = await response.json();
-
     // setLoader(false);
     return {
       resp: res,
@@ -1057,17 +1056,6 @@ const DocumentsScreen = props => {
           <TouchableOpacity onPress={() => setConfirmModal(false)}>
             <Text style={{color: '#000'}}>CANCEL</Text>
           </TouchableOpacity>
-          <CustomButton
-            title="SUBMIT"
-            buttonColor={colors.BrandColor}
-            disabled={submitLoader}
-            borderColor={colors.BrandColor}
-            TextColor={colors.WhiteColor}
-            TextFontSize={Dimension.font16}
-            loading={submitLoader}
-            loadingColor={colors.WhiteColor}
-            onPress={onSubmit}
-          />
         </View>
       </Modal>
     </View>
