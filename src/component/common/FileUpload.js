@@ -24,14 +24,13 @@ const FileUpload = props => {
     fId,
     closeDoc,
     openDoc,
+    uploadFromCamera,
   } = props;
 
   return (
     <View>
-      <View style={{flexDirection:"row"}}>
-        <Text style={styles.labelStyle}>
-          {label}
-        </Text>
+      <View style={{flexDirection: 'row'}}>
+        <Text style={styles.labelStyle}>{label}</Text>
         {isImp ? <Text style={styles.starIcon}>*</Text> : null}
       </View>
       <View style={styles.inputContainerStyle}>
@@ -140,14 +139,12 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
     marginLeft: Dimension.margin12,
     marginBottom: Dimension.margin5,
-  
   },
-  starIcon:{
-    color:colors.BrandColor,
+  starIcon: {
+    color: colors.BrandColor,
     fontSize: Dimension.font10,
-    
-    fontFamily: Dimension.CustomMediumFont,
 
+    fontFamily: Dimension.CustomMediumFont,
   },
 });
 export default FileUpload;
