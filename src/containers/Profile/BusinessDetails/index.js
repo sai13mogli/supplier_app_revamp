@@ -1,6 +1,6 @@
 import {OrderedMap} from 'immutable';
 import React, {useEffect, useState} from 'react';
-import {Text, ScrollView} from 'react-native';
+import {Text, ScrollView,View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import DropDown from '../../../component/common/DropDown';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
@@ -8,6 +8,8 @@ import {getPincodeDetails, getGstDetails} from '../../../services/profile';
 import {fetchUpdateBusinessDetails} from '../../../redux/actions/profile';
 import CustomButton from '../../../component/common/Button';
 import {STATE_STATUS} from '../../../redux/constants';
+import styles from './style'
+import Header from '../../../component/common/Header'
 
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
@@ -308,12 +310,17 @@ const BusinessDetailsScreen = props => {
   };
 
   return (
-    <ScrollView>
-      <Text>BusinessDetails Screen</Text>
+    <View>
+
+    <Header howBack showText={'Business Details'} rightIconName={'business-details'}></Header>
+    <ScrollView style={styles.ContainerCss}>
+     
       {FORM_FIELDS.map((field, fieldKey) => (
         <field.component {...field} key={fieldKey} />
       )).toList()}
-      <CustomButton
+      
+    </ScrollView>
+    <CustomButton
         title={'Submit'}
         buttonColor={'dodgerblue'}
         loading={loading}
@@ -332,7 +339,7 @@ const BusinessDetailsScreen = props => {
         // TextColor={colors.WhiteColor}
         // borderColor={colors.WhiteColor}
       />
-    </ScrollView>
+    </View>
   );
 };
 
