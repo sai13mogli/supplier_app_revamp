@@ -10,7 +10,10 @@ import {PROFILE_TABS} from '../../constants';
 import styles from './style';
 import CustomButton from '../../component/common/Button';
 import Colors from '../../Theme/Colors';
+import Dimension from '../../Theme/Dimension';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomeIcon from '../../component/common/CustomeIcon';
+
 
 const ProfileScreen = props => {
   const {navigate} = useNavigation();
@@ -79,15 +82,36 @@ const ProfileScreen = props => {
         color={'red'}
       /> */}
 
+        {/* navigate to activeTab isActive(tabIndex, tab.route) */}
+
         {PROFILE_TABS.map((tab, tabIndex) => (
           <TouchableOpacity
             key={tabIndex}
-            onPress={() => isActive(tabIndex, tab.route)}>
-            <Text style={{color: isCompleted(tab.progress) ? 'green' : 'red'}}>
-              {tab.icon}
-            </Text>
-            <View>
-              <Text style={{color: '#000'}}>{tab.title}</Text>
+            onPress={() => props.navigation.navigate('Documents')}
+            style={styles.profileTabWrap}
+            >
+            <View style={{flexDirection:"row"}}> 
+              <View style={[styles.IconWrap,{backgroundColor:isCompleted(tab.progress) ? Colors.grayShade3 : Colors.BrandColor}]}>
+                <CustomeIcon name={tab.icon} color={isCompleted(tab.progress) ? Colors.FontColor : Colors.WhiteColor} size={Dimension.font14}></CustomeIcon>
+              </View>
+              <View>
+                <Text style={styles.tabTitle}>{tab.title}</Text>
+                <Text style={styles.tabStatusNC}>Not Completed</Text>
+                <View style={{flexDirection:"row"}}>
+                  <CustomeIcon name={'right-tick-line'} color={Colors.SuccessStateColor} size={Dimension.font12}></CustomeIcon>
+                  <Text style={styles.tabStatusC}>Completed</Text>
+                </View>
+              </View>
+              
+            </View>
+           
+              <CustomeIcon name={'arrow-forward'} color={isCompleted(tab.progress) ? Colors.FontColor : Colors.BrandColor} size={Dimension.font18}></CustomeIcon>
+              
+            
+            
+           
+            {/* <View>
+              
               <Text
                 style={{color: isCompleted(tab.progress) ? 'green' : 'red'}}>
                 {tab.icon}
@@ -96,7 +120,7 @@ const ProfileScreen = props => {
             <Text style={{color: isCompleted(tab.progress) ? 'green' : 'red'}}>
               {' '}
               {'>'}{' '}
-            </Text>
+            </Text> */}
           </TouchableOpacity>
         )).toList()}
         <CustomButton

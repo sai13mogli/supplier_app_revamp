@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     color: Colors.FontColor,
   },
+  
   ContainerCss:{
     paddingHorizontal:Dimension.padding15,
     backgroundColor:Colors.WhiteColor

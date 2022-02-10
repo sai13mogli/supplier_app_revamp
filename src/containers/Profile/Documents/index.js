@@ -16,18 +16,25 @@ import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
 import styles from './style';
-import {BASE_URL} from '../../../redux/constants/index';
+import {authToken, BASE_URL} from '../../../redux/constants/index';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import CustomButton from '../../../component/common/Button';
 import Modal from 'react-native-modal';
 import PDFView from 'react-native-view-pdf';
 import Checkbox from '../../../component/common/Checkbox/index';
-import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace';
-
+import {submitProfile, getDocuments} from '../../../services/documents';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchProfile} from '../../../redux/actions/profile';
+import Header from '../../../component/common/Header'
 const deviceWidth = Dimensions.get('window').width;
 
 const DocumentsScreen = props => {
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
+  const dispatch = useDispatch();
+
   const [pancard, setPancard] = useState({
     title: '',
     value: '',
@@ -98,6 +105,9 @@ const DocumentsScreen = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loader, setLoader] = useState(false);
   const [isSelected, setSelection] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [submitLoader, setSubmitLoader] = useState(false);
+  const [uploadDisabled, setUploadDisabled] = useState(false);
   // const source = {uri: imageUrl, cache: true};
   // const [init, setInit] = useState(false);
   // const [eye, setEye] = useState(false);
@@ -251,6 +261,10 @@ const DocumentsScreen = props => {
   ];
 
   useEffect(() => {
+    fetchDocuments();
+  }, []);
+
+  useEffect(() => {
     if (pancard && pancard.key == 'panCard' && pancard.loading) {
       uploadDocument(pancard);
     }
@@ -309,8 +323,113 @@ const DocumentsScreen = props => {
 
   const uploadDocument = async data => {
     let res = await uploadDocumentService(data);
-
+    console.log('uploadDocument ka res hai bhaiii!', res);
     setDocument(res);
+  };
+
+  const fetchDocuments = async () => {
+    const {data} = await getDocuments(authToken);
+    if (
+      data &&
+      data.data &&
+      data.data.panCard &&
+      data.data.gstin &&
+      data.data.cancelledCheque &&
+      data.data.corporationCertificate &&
+      data.data.signature
+    ) {
+      console.log('bhk bc..');
+      setUploadDisabled(true);
+    }
+    setDocumentsData(data);
+  };
+
+  const setDocumentsData = data => {
+    console.log('data', data);
+    if (data && data.data && data.data.panCard) {
+      setPancard({
+        ...pancard,
+        title: 'pan',
+        value: data.data && data.data.panCard,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+    if (data && data.data && data.data.gstin) {
+      setGstIn({
+        ...gstin,
+        title: 'gst',
+        value: data.data && data.data.gstin,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+    if (data && data.data && data.data.cancelledCheque) {
+      setCheque({
+        ...cheque,
+        title: 'Cancelled Cheque',
+        value: data.data && data.data.cancelledCheque,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+
+    if (data && data.data && data.data.bankStatement) {
+      setBankStatement({
+        ...bankStatement,
+        title: 'Bank Statement Copy',
+        value: data.data && data.data.bankStatement,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+    if (data && data.data && data.data.corporationCertificate) {
+      setCorporateCertificate({
+        ...corporateCertificate,
+        title: 'Certificate of Corporation',
+        value: data.data && data.data.corporationCertificate,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+
+    if (data && data.data && data.data.businessAddress) {
+      setAddressProof({
+        ...addressProof,
+        title: 'Business Address Proof',
+        value: data.data && data.data.businessAddress,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+
+    if (data && data.data && data.data.pickupAddress) {
+      setPickupAddressProof({
+        ...pickupAddressProof,
+        title: 'Pickup Address Proof',
+        value: data.data && data.data.pickupAddress,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+
+    if (data && data.data && data.data.signature) {
+      setSignature({
+        ...signature,
+        title: 'Signature',
+        value: data.data && data.data.signature,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
   };
 
   const setDocument = ({fileData, resp}) => {
@@ -410,8 +529,7 @@ const DocumentsScreen = props => {
       url,
       {
         'Content-Type': 'multipart/form-data',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MDkiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM0NzksImV4cCI6MTY0NDM4OTg3OX0.sizpT3AbsSvaUaj_0sNSbDAbI08kwBnEU85CCZSgRzK9zeaqyz6fBUyxLqWw4gFqPYRTkSk7QTZsQ496HKD_sQ',
+        Authorization: authToken,
       },
       [
         {
@@ -430,6 +548,7 @@ const DocumentsScreen = props => {
         },
       ],
     );
+
     const res = await response.json();
     // setLoader(false);
     return {
@@ -441,11 +560,6 @@ const DocumentsScreen = props => {
   //openSelection
   const openSelection = async selection => {
     switch (selection) {
-      case 'Camera':
-        await SheetManager.hide('action_sheet');
-        uploadFromCamera(false);
-        break;
-
       case 'File Explorer':
         await SheetManager.hide('action_sheet');
         uploadFromFileExp();
@@ -464,7 +578,7 @@ const DocumentsScreen = props => {
       const res = await DocumentPicker.pick({
         // type: [DocumentPicker],
       });
-
+      console.log('doc', res[0]);
       setFormState(res[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -694,10 +808,7 @@ const DocumentsScreen = props => {
       'GET',
       `http://apigatewayqa.moglix.com/profile/file?download=0&key=${fileKey}`,
     );
-    myrequest.setRequestHeader(
-      'Authorization',
-      `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MDkiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM0NzksImV4cCI6MTY0NDM4OTg3OX0.sizpT3AbsSvaUaj_0sNSbDAbI08kwBnEU85CCZSgRzK9zeaqyz6fBUyxLqWw4gFqPYRTkSk7QTZsQ496HKD_sQ `,
-    );
+    myrequest.setRequestHeader('Authorization', authToken);
     myrequest.responseType = 'blob';
     myrequest.send();
     myrequest.onload = e => {
@@ -750,7 +861,7 @@ const DocumentsScreen = props => {
         onPress={() => {
           SheetManager.show('action_sheet', id);
         }}
-        disabled={loading}>
+        disabled={loading || uploadDisabled}>
         <FileUpload
           label={title}
           isImp={isImp}
@@ -770,9 +881,9 @@ const DocumentsScreen = props => {
 
   const noteText = () => (
     <>
-      <Text style={{color: 'red'}}>Note</Text>
+      <Text style={styles.Notetxt}>Note</Text>
       {signature && signature.title && signature.value ? (
-        <Text style={{color: '#000'}}>
+        <Text style={styles.NoteData}>
           Please ensure that the im age of the signature is of the signature is
           of an authorised signatory (as endorsed by the tax authorities).Sign
           on a white background,scan the signature and upload.
@@ -780,7 +891,7 @@ const DocumentsScreen = props => {
       ) : (
         noteArr.map((_, i) => (
           <View key={i}>
-            <Text style={{color: '#000'}}>{_.note}</Text>
+            <Text style={styles.NoteData}>{_.note}</Text>
           </View>
         ))
       )}
@@ -808,42 +919,63 @@ const DocumentsScreen = props => {
     );
   };
 
+  // useEffect(() => {
+  //   if (profileData && profileData.documents) {
+  //   }
+  // }, [profileData]);
+
+  const onSubmit = async () => {
+    setSubmitLoader(true);
+    const {data} = await submitProfile(
+      'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MTUiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzOTE3NjUsImV4cCI6MTY0NDQ3ODE2NX0.taxunFIzboSpwNOxg_OufD00qmUisKG6iTl7ubXz9x8BPJ_VlAoQKpKeGRjKpW8zXy62XDMG1mOVnA8xX7HMyg',
+    );
+    if (data && data.success) {
+      setSubmitLoader(false);
+      setConfirmModal(false);
+      dispatch(fetchProfile());
+      props.navigation.navigate('Profile');
+    } else {
+      setConfirmModal(false);
+      dispatch(fetchProfile());
+      props.navigation.navigate('Profile');
+    }
+  };
+
   return (
     <View style={{flex: 1}}>
+      <Header showBack showText={'Documents'} rightIconName={'single-product-upload'}/>
       <ScrollView style={styles.ContainerCss}>
         {Documents.map(_ => renderInputText(_))
           .toList()
           .toArray()}
-        {noteText()}
-        {/* <Text style={{color: '#000'}}></Text> */}
-        <Checkbox
-          checked={isSelected}
-          onPress={() => setSelection(!isSelected)}
-          title={'By registering you agree to our'}
-        />
+        {!uploadDisabled ? noteText() : null}
+        {!uploadDisabled ? (
+          <Checkbox
+            checked={isSelected}
+            onPress={() => setSelection(!isSelected)}
+            title={'By registering you agree to our'}
+          />
+        ) : null}
       </ScrollView>
-      <View style={styles.bottombtnWrap}>
-        <CustomButton
-          title="SUBMIT"
-          buttonColor={
-            !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
-          }
-          disabled={!checkCommonValidation()}
-          // onPress={() => onBusinessDetailsUpdate()}
-          // buttonStyle={[
-          //   {
-          //     backgroundColor: !checkCommonValidation() ? '#C4C4C4' : '#D9232D',
-          //   },
-          //]}
-          borderColor={
-            !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
-          }
-          TextColor={
-            !checkCommonValidation() ? colors.FontColor : colors.WhiteColor
-          }
-          TextFontSize={Dimension.font16}
-        />
-      </View>
+      {!uploadDisabled ? (
+        <View style={styles.bottombtnWrap}>
+          <CustomButton
+            title="SUBMIT"
+            buttonColor={
+              !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
+            }
+            disabled={!checkCommonValidation()}
+            borderColor={
+              !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
+            }
+            TextColor={
+              !checkCommonValidation() ? colors.FontColor : colors.WhiteColor
+            }
+            TextFontSize={Dimension.font16}
+            onPress={() => setConfirmModal(true)}
+          />
+        </View>
+      ) : null}
 
       <ActionSheet
         id="action_sheet"
@@ -851,7 +983,7 @@ const DocumentsScreen = props => {
           setFId(data);
         }}>
         <View style={styles.actionSheet}>
-          {['Camera', 'File Explorer', 'Cancel'].map(_ => (
+          {['File Explorer', 'Cancel'].map(_ => (
             <TouchableOpacity onPress={() => openSelection(_)}>
               <Text style={styles.modalText}>{_}</Text>
             </TouchableOpacity>
@@ -897,6 +1029,35 @@ const DocumentsScreen = props => {
             style={{height: 200, width: 200, flex: 1}}
           />
         )}
+      </Modal>
+      <Modal
+        overlayPointerEvents={'auto'}
+        isVisible={confirmModal}
+        onTouchOutside={() => {
+          setConfirmModal(false);
+        }}
+        onDismiss={() => {
+          setConfirmModal(false);
+        }}
+        coverScreen={true}
+        deviceWidth={deviceWidth}
+        onBackButtonPress={() => {
+          setConfirmModal(false);
+        }}
+        onBackdropPress={() => {
+          setConfirmModal(false);
+        }}>
+        <View>
+          <Text style={styles.NoteData}>
+            By confirming the submission of all the details you agree that all
+            the details are true and no false details are provided.Once
+            validated you'll receive an email regarding the status of your
+            profile
+          </Text>
+          <TouchableOpacity onPress={() => setConfirmModal(false)}>
+            <Text style={{color: '#000'}}>CANCEL</Text>
+          </TouchableOpacity>
+        </View>
       </Modal>
     </View>
   );

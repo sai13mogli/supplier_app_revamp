@@ -24,6 +24,7 @@ const FileUpload = props => {
     fId,
     closeDoc,
     openDoc,
+    uploadFromCamera,
   } = props;
 
   return (
@@ -36,8 +37,8 @@ const FileUpload = props => {
         {!value ? (
           <Text style={styles.placeholderCss}>Tap to upload</Text>
         ) : (
-          <View style={{flexDirection: 'row'}}>
-            <Text style={styles.inputStyle}>{value}</Text>
+          <View style={{flexDirection: 'row',width:'85%'}}>
+            <Text style={styles.inputStyle} numberOfLines={1}>{value}</Text>
             {closeDoc ? (
               <TouchableOpacity onPress={() => onRemove(id)}>
                 <CustomeIcon
@@ -113,6 +114,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomRegularFont,
 
     paddingLeft: 0,
+    
   },
   iconStyle: {
     width: Dimension.width24,

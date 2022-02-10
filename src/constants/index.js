@@ -86,31 +86,31 @@ export const PROFILE_TABS = new OrderedMap({
   business_details: {
     route: 'BusinessDetails',
     title: 'Business Details',
-    icon: 'contact',
+    icon: 'business-details',
     progress: 2,
   },
   category_brands: {
     route: 'CategoryBrands',
     title: 'Category & Brand',
-    icon: 'bulb',
+    icon: 'category--brand',
     progress: 3,
   },
   addresses: {
     route: 'Addresses',
     title: 'Addresses',
-    icon: 'location',
+    icon: 'address',
     progress: 4,
   },
   bank_details: {
     route: 'BankDetails',
     title: 'Bank Details',
-    icon: 'bank',
+    icon: 'bank-details',
     progress: 5,
   },
   documents: {
     route: 'Documents',
     title: 'Documents',
-    icon: 'file',
+    icon: 'single-product-upload',
     progress: 7,
   },
 });
