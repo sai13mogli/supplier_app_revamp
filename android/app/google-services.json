@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "741494485171-evq76ltt5947einab4acavq88e05j8se.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moglix.supplier",
+            "certificate_hash": "a2ca9cd265d3723d6a39a71c36f459e0f3bf34ff"
+          }
+        },
+        {
+          "client_id": "741494485171-magn2epo0tk6eepsgu3g7rduad3fpg5g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moglix.supplier",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "741494485171-ovig8c7r35mqp881g0k7qrte2k66eqcm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

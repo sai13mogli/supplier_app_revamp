@@ -147,9 +147,10 @@ const LoginScreen = props => {
       source: Platform.OS === 'ios' ? 2 : 1,
       deviceToken: '',
     };
-
     const {data} = await loginWithGoogle(request);
-    console.log(data);
+    if (data.success) {
+      onLogin(data);
+    }
   };
 
   const googleSignIn = async () => {
