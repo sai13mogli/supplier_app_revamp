@@ -1,4 +1,4 @@
-package com.supplier_app;
+package com.moglix.supplier;
 
 import com.facebook.react.ReactActivity;
 
