@@ -6,6 +6,8 @@ import SupportScreen from '../containers/Support';
 import DocumentsScreen from '../containers/Profile/Documents';
 import BusinessDetails from '../containers/Profile/BusinessDetails';
 import Addresses from '../containers/Profile/Addresses';
+import LoginScreen from '../containers/Auth/Login';
+import SplashScreen from '../containers/Auth/Splash';
 import BankDetails from '../containers/Profile/BankDetails';
 import {OrderedMap} from 'immutable';
 
@@ -40,7 +42,17 @@ export const BOTTOM_TAB_SCREENS = [
     // activeIcon: 'profile',
     // inactiveIcon: 'profile',
   },
-  
+];
+
+export const AUTH_STACK_SCREENS = [
+  {
+    name: 'Splash',
+    component: SplashScreen,
+  },
+  {
+    name: 'Login',
+    component: LoginScreen,
+  },
 ];
 
 export const APP_STACK_SCREENS = [

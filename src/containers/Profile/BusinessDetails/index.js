@@ -28,19 +28,23 @@ const BusinessDetailsScreen = props => {
 
   const [loading, setLoading] = useState(false);
   const [legalEntityName, setlegalEntityName] = useState(
-    businessDetails.profile.entityName,
+    (businessDetails.profile || {}).entityName,
   );
   const [tradeName, settradeName] = useState(businessDetails.tradeName);
   const [contactName, setcontactName] = useState(
-    businessDetails.profile.contactName,
+    (businessDetails.profile || {}).contactName,
   );
   const [gstin, setgstin] = useState(businessDetails.gstNo);
-  const [country, setcountry] = useState(businessDetails.address.country);
-  const [pincode, setpincode] = useState(businessDetails.address.pincode);
-  const [state, setstate] = useState(businessDetails.address.state);
-  const [city, setcity] = useState(businessDetails.address.city);
-  const [phone, setphone] = useState(businessDetails.profile.phone);
-  const [email, setemail] = useState(businessDetails.profile.email);
+  const [country, setcountry] = useState(
+    (businessDetails.address || {}).country,
+  );
+  const [pincode, setpincode] = useState(
+    (businessDetails.address || {}).pincode,
+  );
+  const [state, setstate] = useState((businessDetails.address || {}).state);
+  const [city, setcity] = useState((businessDetails.address || {}).city);
+  const [phone, setphone] = useState((businessDetails.profile || {}).phone);
+  const [email, setemail] = useState((businessDetails.profile || {}).email);
   const [tan, settan] = useState(businessDetails.tanNo);
 
   const [states, setStates] = useState([]);
@@ -61,6 +65,8 @@ const BusinessDetailsScreen = props => {
   const FORM_FIELDS = new OrderedMap({
     legalEntityName: {
       title: 'Legal Entity Name',
+      isImp: true,
+      label: 'Legal Entity Name',
       placeholder: '',
       errorMessage: 'Enter valid legal entity name',
       showError: legalEntityNameError,
@@ -71,6 +77,8 @@ const BusinessDetailsScreen = props => {
     },
     tradeName: {
       title: 'Trade Name',
+      isImp: true,
+      label: 'Trade Name',
       placeholder: '',
       errorMessage: 'Enter valid trade name',
       showError: tradeNameError,
@@ -81,6 +89,8 @@ const BusinessDetailsScreen = props => {
     },
     contactName: {
       title: 'Contact Name',
+      isImp: true,
+      label: 'Contact Name',
       placeholder: '',
       errorMessage: 'Enter valid contact name',
       showError: contactNameError,
@@ -91,6 +101,8 @@ const BusinessDetailsScreen = props => {
     },
     gstin: {
       title: 'GSTIN',
+      isImp: true,
+      label: 'GSTIN',
       placeholder: '',
       errorMessage: 'Enter valid Gstin',
       showError: gstinError,
@@ -101,6 +113,8 @@ const BusinessDetailsScreen = props => {
     },
     country: {
       title: 'Country',
+      isImp: true,
+      label: 'Country',
       placeholder: 'Country',
       errorMessage: 'Select a country',
       showError: countryError,
@@ -117,6 +131,8 @@ const BusinessDetailsScreen = props => {
     },
     pincode: {
       title: 'Pincode',
+      isImp: true,
+      label: 'Pincode',
       placeholder: '',
       errorMessage: 'Enter valid pincode',
       showError: pincodeError,
@@ -129,6 +145,8 @@ const BusinessDetailsScreen = props => {
     },
     state: {
       title: 'State',
+      isImp: true,
+      label: 'State',
       placeholder: 'State',
       errorMessage: 'Select a state',
       showError: stateError,
@@ -140,6 +158,8 @@ const BusinessDetailsScreen = props => {
     },
     city: {
       title: 'City',
+      isImp: true,
+      label: 'City',
       placeholder: 'City',
       errorMessage: 'Select a city',
       showError: cityError,
@@ -151,6 +171,8 @@ const BusinessDetailsScreen = props => {
     },
     phone: {
       title: 'Phone',
+      isImp: true,
+      label: 'Phone',
       placeholder: '',
       errorMessage: 'Enter valid pincode',
       showError: phoneError,
@@ -163,6 +185,8 @@ const BusinessDetailsScreen = props => {
     },
     email: {
       title: 'Email',
+      isImp: true,
+      label: 'Email',
       placeholder: '',
       errorMessage: 'Enter valid email',
       showError: emailError,
@@ -173,6 +197,8 @@ const BusinessDetailsScreen = props => {
     },
     tan: {
       title: 'TAN',
+      isImp: true,
+      label: 'TAN',
       placeholder: '',
       errorMessage: 'Enter valid tan',
       showError: tanError,
@@ -248,6 +274,7 @@ const BusinessDetailsScreen = props => {
     if (pincode && pincode.length == 6) {
       const {data} = await getPincodeDetails(pincode);
       if (data.data && data.data.length) {
+        setpincodeError(false);
         setStates([{value: data.data[0].stateId, label: data.data[0].state}]);
         setCities(data.data.map(_ => ({label: _.city, value: _.city})));
         setstate(data.data[0].stateId);
@@ -274,39 +301,84 @@ const BusinessDetailsScreen = props => {
   };
 
   const onSubmit = () => {
-    setLoading(true);
-    const data = {
-      tradeName: tradeName,
-      gstNo: gstin,
-      city: city,
-      commercialLicenseNo: '121129012912',
-      alternateEmail: '',
-      tanNo: tan,
-      isMsme: '0',
-      msmeType: '',
-      msmeStartDate: '',
-      msmeEndDate: '',
-      msmeDocNo: '',
-      emailUpdate: '',
-      emailOtp: '',
-      isCategory: '',
-      isBrand: '',
-      source: 1,
-      businessType: [],
-      profile: {
-        entityName: legalEntityName,
-        contactName: contactName,
-        phone: phone,
-        email: email,
-      },
-      address: {
-        country: country,
-        pincode: pincode,
-        state: state,
+    console.log(
+      legalEntityName,
+      tradeName,
+      contactName,
+      gstin,
+      country,
+      pincode,
+      state,
+      city,
+      phone,
+      email,
+      tan,
+    );
+    if (
+      legalEntityName &&
+      legalEntityName.length &&
+      tradeName &&
+      tradeName.length &&
+      contactName &&
+      contactName.length &&
+      gstin &&
+      gstin.length &&
+      country &&
+      pincode &&
+      pincode.length &&
+      state &&
+      city &&
+      city.length &&
+      phone &&
+      phone.length &&
+      email &&
+      email.length &&
+      tan &&
+      tan.length
+    ) {
+      setLoading(true);
+      const data = {
+        tradeName: tradeName,
+        gstNo: gstin,
         city: city,
-      },
-    };
-    dispatch(fetchUpdateBusinessDetails(data));
+        commercialLicenseNo: '121129012912',
+        alternateEmail: '',
+        tanNo: tan,
+        isMsme: '0',
+        msmeType: '',
+        msmeStartDate: '',
+        msmeEndDate: '',
+        msmeDocNo: '',
+        emailUpdate: '',
+        emailOtp: '',
+        isCategory: '',
+        isBrand: '',
+        source: 1,
+        businessType: [],
+        profile: {
+          entityName: legalEntityName,
+          contactName: contactName,
+          phone: phone,
+          email: email,
+        },
+        address: {
+          country: country,
+          pincode: pincode,
+          state: state,
+          city: city,
+        },
+      };
+      dispatch(fetchUpdateBusinessDetails(data));
+    } else {
+      onTanBlur();
+      onEmailBlur();
+      onPhoneBlur();
+      onContactNameBlur();
+      onTradeNameBlur();
+      onLegalNameBllur();
+      onPincodeBlur();
+      onGstinBlur();
+    }
   };
 
   return (

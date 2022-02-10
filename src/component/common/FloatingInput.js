@@ -51,6 +51,12 @@ const FloatingLabelInputField = props => {
         ) : (
           <Input
             {...props}
+            label={() => (
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.labelStyle}>{props.label}</Text>
+                {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
+              </View>
+            )}
             rightIcon={props.extraView ? props.extraView() : null}
             underlineColorAndroid={'transparent'}
             selectionColor={'#3c3c3c'}
@@ -76,6 +82,19 @@ const styles = StyleSheet.create({
   WrapperStyle: {
     marginBottom: Dimension.margin10,
     paddingHorizontal: 0,
+  },
+  labelStyle: {
+    fontSize: Dimension.font10,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+    marginLeft: Dimension.margin12,
+    marginBottom: Dimension.margin5,
+  },
+  starIcon: {
+    color: colors.BrandColor,
+    fontSize: Dimension.font10,
+
+    fontFamily: Dimension.CustomMediumFont,
   },
 
   inputContainerStyle: {
