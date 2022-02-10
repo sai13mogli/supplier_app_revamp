@@ -210,6 +210,13 @@ const LoginScreen = props => {
         onPress={googleSignIn}
         disabled={loading}
       />
+      <CustomButton
+        title={'or SIGNUP'}
+        buttonColor={'dodgerblue'}
+        onPress={() => props.navigation.navigate('SignUpStart')}
+        TextColor={Colors.WhiteColor}
+        borderColor={Colors.WhiteColor}
+      />
     </View>
   );
 };
