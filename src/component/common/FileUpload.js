@@ -24,6 +24,7 @@ const FileUpload = props => {
     fId,
     closeDoc,
     openDoc,
+    uploadFromCamera,
   } = props;
 
   return (
