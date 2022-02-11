@@ -39,19 +39,11 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     fontFamily: Dimension.CustomRegularFont,
   },
-  statusBar: {
-    marginVertical: 24,
-  },
-  actionSheet: {
-    width: '100%',
-    backgroundColor: '#fff',
-    padding: 20,
-  },
-  modalText: {
-    paddingVertical: Dimension.padding10,
-    fontFamily: Dimension.CustomRegularFont,
-    borderBottomWidth: 0.5,
-    color: Colors.FontColor
+  bottombtnWrap:{
+    padding:Dimension.padding15,
+    borderTopColor:Colors.grayShade2,
+    borderTopWidth:1,
+    backgroundColor:Colors.WhiteColor
   },
   
 });

@@ -10,6 +10,8 @@ import CustomButton from '../../../component/common/Button';
 import {STATE_STATUS} from '../../../redux/constants';
 import styles from './style'
 import Header from '../../../component/common/Header'
+import colors from '../../../Theme/Colors';
+import Dimension from '../../../Theme/Dimension';
 
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
@@ -382,7 +384,7 @@ const BusinessDetailsScreen = props => {
   };
 
   return (
-    <View>
+    <View style={{flex:1}}>
 
     <Header howBack showText={'Business Details'} rightIconName={'business-details'}></Header>
     <ScrollView style={styles.ContainerCss}>
@@ -392,25 +394,23 @@ const BusinessDetailsScreen = props => {
       )).toList()}
       
     </ScrollView>
+    <View style={styles.bottombtnWrap}>
     <CustomButton
+    
+    buttonColor={colors.BrandColor}
+   
+    borderColor={colors.BrandColor }
+    TextColor={colors.WhiteColor }
+    TextFontSize={Dimension.font16}
         title={'Submit'}
-        buttonColor={'dodgerblue'}
+       
         loading={loading}
-        // iconName={'user'}
-        // icon={() => (
-        //   <CustomeIcon
-        //     name={'add-box'}
-        //     size={Dimension.font22}
-        //     color={colors.BrandColor}
-        //   />
-        // )}
-        // showIcon
-        iconColor={'#fff'}
-        iconType={'font-awesome'}
+  
         onPress={onSubmit}
         // TextColor={colors.WhiteColor}
         // borderColor={colors.WhiteColor}
       />
+      </View>
     </View>
   );
 };

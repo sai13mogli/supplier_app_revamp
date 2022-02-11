@@ -131,10 +131,10 @@ const ProfileScreen = props => {
         )).toList()}
         <CustomButton
           title={'LOGOUT'}
-          buttonColor={'dodgerblue'}
+          buttonColor={Colors.grayShade1}
           onPress={onLogout}
-          TextColor={Colors.WhiteColor}
-          borderColor={Colors.WhiteColor}
+          TextColor={Colors.FontColor}
+          borderColor={Colors.eyeIcon}
         />
       </ScrollView>
     </View>
