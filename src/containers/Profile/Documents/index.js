@@ -1047,7 +1047,7 @@ const DocumentsScreen = props => {
         onBackdropPress={() => {
           setConfirmModal(false);
         }}>
-        <View>
+        <View style={styles.modalContainer}>
           <Text style={styles.NoteData}>
             By confirming the submission of all the details you agree that all
             the details are true and no false details are provided.Once

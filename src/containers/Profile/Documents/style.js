@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     color: Colors.FontColor,
   },
-  
+
   ContainerCss:{
     paddingHorizontal:Dimension.padding15,
     backgroundColor:Colors.WhiteColor
@@ -37,7 +37,19 @@ const styles = StyleSheet.create({
     borderTopColor:Colors.grayShade2,
     borderTopWidth:1,
     backgroundColor:Colors.WhiteColor
-  }
+  },
+  modalContainer:{
+    backgroundColor:Colors.WhiteColor,
+    borderTopLeftRadius:20,
+    borderTopRightRadius:20,
+   
+    width:"100%",
+    position:"absolute",
+    bottom:0,
+    paddingTop:Dimension.padding30,
+    paddingHorizontal:Dimension.padding8
+
+  },
 });
 
 export default styles;
