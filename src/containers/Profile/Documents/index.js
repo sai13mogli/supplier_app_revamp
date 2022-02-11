@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Image,
   Dimensions,
+  StyleSheet,
 } from 'react-native';
 import {OrderedMap, setIn} from 'immutable';
 import CustomeIcon from '../../../component/common/CustomeIcon';
@@ -26,7 +27,7 @@ import Checkbox from '../../../component/common/Checkbox/index';
 import {submitProfile, getDocuments} from '../../../services/documents';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchProfile} from '../../../redux/actions/profile';
-
+import Header from '../../../component/common/Header'
 const deviceWidth = Dimensions.get('window').width;
 
 const DocumentsScreen = props => {
@@ -881,9 +882,9 @@ const DocumentsScreen = props => {
 
   const noteText = () => (
     <>
-      <Text style={{color: 'red'}}>Note</Text>
+      <Text style={styles.Notetxt}>Note</Text>
       {signature && signature.title && signature.value ? (
-        <Text style={{color: '#000'}}>
+        <Text style={styles.NoteData}>
           Please ensure that the im age of the signature is of the signature is
           of an authorised signatory (as endorsed by the tax authorities).Sign
           on a white background,scan the signature and upload.
@@ -891,7 +892,7 @@ const DocumentsScreen = props => {
       ) : (
         noteArr.map((_, i) => (
           <View key={i}>
-            <Text style={{color: '#000'}}>{_.note}</Text>
+            <Text style={styles.NoteData}>{_.note}</Text>
           </View>
         ))
       )}
@@ -943,6 +944,7 @@ const DocumentsScreen = props => {
 
   return (
     <View style={{flex: 1}}>
+      <Header showBack showText={'Documents'} rightIconName={'single-product-upload'}/>
       <ScrollView style={styles.ContainerCss}>
         {Documents.map(_ => renderInputText(_))
           .toList()
@@ -993,6 +995,7 @@ const DocumentsScreen = props => {
       <Modal
         overlayPointerEvents={'auto'}
         isVisible={modalVisible}
+      // isVisible={true}
         onTouchOutside={() => {
           setModalVisible(false);
         }}
@@ -1007,7 +1010,9 @@ const DocumentsScreen = props => {
         }}
         onBackdropPress={() => {
           setModalVisible(false);
-        }}>
+        }}
+        style={styles.ModalCss}
+        >
         {loader ? (
           <ActivityIndicator
             size={'small'}
@@ -1025,13 +1030,14 @@ const DocumentsScreen = props => {
         ) : (
           <Image
             source={{uri: imageUrl}}
-            style={{height: 200, width: 200, flex: 1}}
+            style={{height: "100%", width: "100%", flex: 1}}
           />
         )}
       </Modal>
       <Modal
         overlayPointerEvents={'auto'}
         isVisible={confirmModal}
+        //isVisible={true}
         onTouchOutside={() => {
           setConfirmModal(false);
         }}
@@ -1045,17 +1051,51 @@ const DocumentsScreen = props => {
         }}
         onBackdropPress={() => {
           setConfirmModal(false);
-        }}>
-        <View>
-          <Text style={{color: '#000'}}>
+        }}
+        style={styles.ModalCss}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.ModalHeading}>
+          Confirm Submission
+          </Text>
+          <Text style={styles.Modaltext}>
             By confirming the submission of all the details you agree that all
             the details are true and no false details are provided.Once
             validated you'll receive an email regarding the status of your
             profile
           </Text>
-          <TouchableOpacity onPress={() => setConfirmModal(false)}>
+          <View style={styles.ModalBtnWrap}>
+            <View style={{flex:1}}>
+              <CustomButton
+              title="CANCEL"
+              buttonColor={colors.WhiteColor }
+             
+              borderColor={colors.WhiteColor }
+              TextColor={colors.FontColor }
+              TextFontSize={Dimension.font16}
+              onPress={() => setConfirmModal(false)}
+              >
+
+                
+              </CustomButton>
+            </View>
+            <View style={{flex:1}}>
+              <CustomButton
+              title="CONFIRM"
+              buttonColor={colors.BrandColor }
+             
+              borderColor={colors.BrandColor }
+              TextColor={colors.WhiteColor }
+              TextFontSize={Dimension.font16}
+              //onPress={() => setConfirmModal(true)}
+              >
+
+                
+              </CustomButton>
+              </View>
+          </View>
+          {/* <TouchableOpacity onPress={() => setConfirmModal(false)}>
             <Text style={{color: '#000'}}>CANCEL</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </Modal>
     </View>

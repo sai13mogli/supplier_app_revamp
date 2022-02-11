@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     color: Colors.FontColor,
   },
+
   ContainerCss:{
     paddingHorizontal:Dimension.padding15,
     backgroundColor:Colors.WhiteColor
@@ -36,7 +37,36 @@ const styles = StyleSheet.create({
     borderTopColor:Colors.grayShade2,
     borderTopWidth:1,
     backgroundColor:Colors.WhiteColor
-  }
+  },
+
+  //Modal Css
+
+  modalContainer:{
+    backgroundColor:Colors.WhiteColor,
+    borderTopLeftRadius:20,
+    borderTopRightRadius:20,
+    width:"100%",
+    position:"absolute",
+    bottom:0,
+    padding:Dimension.padding20
+
+  },
+  ModalHeading:{
+    fontSize:Dimension.font16,
+    color:Colors.FontColor,
+    fontFamily:Dimension.CustomSemiBoldFont,
+    marginBottom:Dimension.margin5
+
+  },
+  Modaltext:{
+    fontSize:Dimension.font14,
+    color:Colors.FontColor,
+    fontFamily:Dimension.CustomRegularFont,
+    marginVertical:Dimension.margin15
+
+  },
+  ModalBtnWrap:{flexDirection:"row"},
+  ModalCss:{padding:0,margin:0}
 });
 
 export default styles;

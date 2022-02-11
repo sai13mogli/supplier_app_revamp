@@ -55,9 +55,9 @@ const FloatingLabelInputField = props => {
 
   return (
     <TouchableOpacity activeOpacity={1}>
-      <View>
+      
         {props.disabled ? (
-          <Text>{props.value}</Text>
+          <Text style={styles.inputStyle}>{props.value}</Text>
         ) : (
           <Input
             {...props}
@@ -69,7 +69,7 @@ const FloatingLabelInputField = props => {
             )}
             value={typeof props.value == 'function' ? getValue : props.value}
             rightIcon={props.extraView ? props.extraView() : null}
-            underlineColorAndroid={'transparent'}
+            //underlineColorAndroid={'transparent'}
             selectionColor={'#3c3c3c'}
             onFocus={handleFocus}
             onBlur={() => handleBlur(true)}
@@ -84,15 +84,16 @@ const FloatingLabelInputField = props => {
             // errorStyle={}
           />
         )}
-      </View>
+     
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   WrapperStyle: {
-    marginBottom: Dimension.margin10,
+    //marginBottom: Dimension.margin10,
     paddingHorizontal: 0,
+    
   },
   labelStyle: {
     fontSize: Dimension.font10,

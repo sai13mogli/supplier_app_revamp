@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     borderColor: colors.FontColor,
     padding: 1,
     position: 'relative',
+    marginBottom:Dimension.margin20
   },
   pickerStyle: {
     backgroundColor: colors.WhiteColor,
