@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Image,
   Dimensions,
+  StyleSheet,
 } from 'react-native';
 import {OrderedMap, setIn} from 'immutable';
 import CustomeIcon from '../../../component/common/CustomeIcon';
@@ -994,6 +995,7 @@ const DocumentsScreen = props => {
       <Modal
         overlayPointerEvents={'auto'}
         isVisible={modalVisible}
+      // isVisible={true}
         onTouchOutside={() => {
           setModalVisible(false);
         }}
@@ -1008,7 +1010,9 @@ const DocumentsScreen = props => {
         }}
         onBackdropPress={() => {
           setModalVisible(false);
-        }}>
+        }}
+        style={styles.ModalCss}
+        >
         {loader ? (
           <ActivityIndicator
             size={'small'}
@@ -1026,13 +1030,14 @@ const DocumentsScreen = props => {
         ) : (
           <Image
             source={{uri: imageUrl}}
-            style={{height: 200, width: 200, flex: 1}}
+            style={{height: "100%", width: "100%", flex: 1}}
           />
         )}
       </Modal>
       <Modal
         overlayPointerEvents={'auto'}
         isVisible={confirmModal}
+        //isVisible={true}
         onTouchOutside={() => {
           setConfirmModal(false);
         }}
@@ -1046,17 +1051,51 @@ const DocumentsScreen = props => {
         }}
         onBackdropPress={() => {
           setConfirmModal(false);
-        }}>
+        }}
+        style={styles.ModalCss}>
         <View style={styles.modalContainer}>
-          <Text style={styles.NoteData}>
+          <Text style={styles.ModalHeading}>
+          Confirm Submission
+          </Text>
+          <Text style={styles.Modaltext}>
             By confirming the submission of all the details you agree that all
             the details are true and no false details are provided.Once
             validated you'll receive an email regarding the status of your
             profile
           </Text>
-          <TouchableOpacity onPress={() => setConfirmModal(false)}>
+          <View style={styles.ModalBtnWrap}>
+            <View style={{flex:1}}>
+              <CustomButton
+              title="CANCEL"
+              buttonColor={colors.WhiteColor }
+             
+              borderColor={colors.WhiteColor }
+              TextColor={colors.FontColor }
+              TextFontSize={Dimension.font16}
+              onPress={() => setConfirmModal(false)}
+              >
+
+                
+              </CustomButton>
+            </View>
+            <View style={{flex:1}}>
+              <CustomButton
+              title="CONFIRM"
+              buttonColor={colors.BrandColor }
+             
+              borderColor={colors.BrandColor }
+              TextColor={colors.WhiteColor }
+              TextFontSize={Dimension.font16}
+              //onPress={() => setConfirmModal(true)}
+              >
+
+                
+              </CustomButton>
+              </View>
+          </View>
+          {/* <TouchableOpacity onPress={() => setConfirmModal(false)}>
             <Text style={{color: '#000'}}>CANCEL</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </Modal>
     </View>

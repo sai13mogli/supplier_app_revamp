@@ -38,18 +38,35 @@ const styles = StyleSheet.create({
     borderTopWidth:1,
     backgroundColor:Colors.WhiteColor
   },
+
+  //Modal Css
+
   modalContainer:{
     backgroundColor:Colors.WhiteColor,
     borderTopLeftRadius:20,
     borderTopRightRadius:20,
-   
     width:"100%",
     position:"absolute",
     bottom:0,
-    paddingTop:Dimension.padding30,
-    paddingHorizontal:Dimension.padding8
+    padding:Dimension.padding20
 
   },
+  ModalHeading:{
+    fontSize:Dimension.font16,
+    color:Colors.FontColor,
+    fontFamily:Dimension.CustomSemiBoldFont,
+    marginBottom:Dimension.margin5
+
+  },
+  Modaltext:{
+    fontSize:Dimension.font14,
+    color:Colors.FontColor,
+    fontFamily:Dimension.CustomRegularFont,
+    marginVertical:Dimension.margin15
+
+  },
+  ModalBtnWrap:{flexDirection:"row"},
+  ModalCss:{padding:0,margin:0}
 });
 
 export default styles;

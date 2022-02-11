@@ -8,6 +8,8 @@ import BusinessDetails from '../containers/Profile/BusinessDetails';
 import Addresses from '../containers/Profile/Addresses';
 import LoginScreen from '../containers/Auth/Login';
 import SplashScreen from '../containers/Auth/Splash';
+import SignUpStartScreen from '../containers/Auth/SignUpStart';
+import SignUpEndScreen from '../containers/Auth/SignUpEnd';
 import BankDetails from '../containers/Profile/BankDetails';
 import {OrderedMap} from 'immutable';
 
@@ -52,6 +54,14 @@ export const AUTH_STACK_SCREENS = [
   {
     name: 'Login',
     component: LoginScreen,
+  },
+  {
+    name: 'SignUpStart',
+    component: SignUpStartScreen,
+  },
+  {
+    name: 'SignUpEnd',
+    component: SignUpEndScreen,
   },
 ];
 

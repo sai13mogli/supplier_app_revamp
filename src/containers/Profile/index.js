@@ -87,7 +87,7 @@ const ProfileScreen = props => {
         {PROFILE_TABS.map((tab, tabIndex) => (
           <TouchableOpacity
             key={tabIndex}
-            onPress={() => props.navigation.navigate('Documents')}
+            onPress={() => props.navigation.navigate(tab.route)}
             style={styles.profileTabWrap}
             >
             <View style={{flexDirection:"row"}}> 
