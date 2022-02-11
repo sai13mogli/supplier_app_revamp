@@ -2,9 +2,14 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import {OrderedMap} from 'immutable';
+import MultiSelectInput from '../../../component/common/MultiSelectInput';
 
 const CategoryBrandScreen = props => {
-  const categoriesArr = ['Electrical', 'Power Tools', 'Automotive'];
+  const [categoryCode, setcategoryCode] = useState([
+    {label: 'Electricals', value: '121434'},
+    {label: 'Drills', value: '121434'},
+    {label: 'Cellphones', value: '121434'},
+  ]);
 
   const BRAND_CATEGORY = new OrderedMap({
     category: {
@@ -35,7 +40,17 @@ const CategoryBrandScreen = props => {
     onChangeText,
     fromAddCategory,
   }) => {
-    return (
+    return title == 'Category' ? (
+      <MultiSelectInput
+        label={label}
+        title={title}
+        value={categoryCode}
+        placeHolder={placeholder}
+        rightComponentText={'ADD'}
+        onPress={() => null}
+        isImp={true}
+      />
+    ) : (
       <TouchableOpacity>
         <FloatingLabelInputField
           label={label}
