@@ -1,12 +1,17 @@
 import {OrderedMap} from 'immutable';
-import React, {useState} from 'react';
-import {View, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, Platform} from 'react-native';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import Colors from '../../../Theme/Colors';
-import {loginWithPass} from '../../../services/auth';
+import {loginWithPass, loginWithGoogle} from '../../../services/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginOtpModal from '../../../component/LoginOtpModal';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -46,6 +51,19 @@ const LoginScreen = props => {
       onBlur: () => onPasswordBlur(),
     },
   });
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      androidClientId:
+        '741494485171-kajgg1v4u6dom6nvgpphnblfn262v3fl.apps.googleusercontent.com',
+      webClientId:
+        '741494485171-rpjbl1igfkbarlunlm8sqrssq6nq77rc.apps.googleusercontent.com',
+      offlineAccess: true,
+      hostedDomain: '',
+      prompt: 'select_account',
+      //forceConsentPrompt: false,
+    });
+  }, []);
 
   const onLogin = async data => {
     setOtpModal(false);
@@ -122,6 +140,37 @@ const LoginScreen = props => {
     }
   };
 
+  const logInWithGoogleToServer = async token => {
+    // this.setState({loading:true})
+    const request = {
+      token: token,
+      source: Platform.OS === 'ios' ? 2 : 1,
+      deviceToken: '',
+    };
+    const {data} = await loginWithGoogle(request);
+    if (data.success) {
+      onLogin(data);
+    }
+  };
+
+  const googleSignIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+      const userInfo = await GoogleSignin.signIn();
+      logInWithGoogleToServer(userInfo.idToken);
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (f.e. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        alert(error);
+      }
+    }
+  };
+
   return (
     <View>
       <Text>Login Screen</Text>
@@ -154,6 +203,20 @@ const LoginScreen = props => {
           email={email}
         />
       )}
+      <GoogleSigninButton
+        style={{width: 192, height: 48}}
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Dark}
+        onPress={googleSignIn}
+        disabled={loading}
+      />
+      <CustomButton
+        title={'or SIGNUP'}
+        buttonColor={'dodgerblue'}
+        onPress={() => props.navigation.navigate('SignUpStart')}
+        TextColor={Colors.WhiteColor}
+        borderColor={Colors.WhiteColor}
+      />
     </View>
   );
 };
