@@ -112,6 +112,12 @@ const ProfileScreen = props => {
            
             {/* <View>
               
+            onPress={() => props.navigation.navigate('CategoryBrand')}>
+            <Text style={{color: isCompleted(tab.progress) ? 'green' : 'red'}}>
+              {tab.icon}
+            </Text>
+            <View>
+              <Text style={{color: '#000'}}>{tab.title}</Text>
               <Text
                 style={{color: isCompleted(tab.progress) ? 'green' : 'red'}}>
                 {tab.icon}

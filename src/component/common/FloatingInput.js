@@ -12,6 +12,7 @@ import colors from '../../Theme/Colors';
 
 const FloatingLabelInputField = props => {
   const [isFocused, setIsFocused] = useState(false);
+  console.log(props);
 
   let inputRef = useRef();
   const handleFocus = () => {
@@ -42,6 +43,15 @@ const FloatingLabelInputField = props => {
       props.onBlur();
     }
   };
+  const categoriesArr = ['Electrical', 'Power Tools', 'Automotive'];
+  const getCategories = () => {
+    return (
+      <>
+        <Text style={{color: '#000'}}>{categoriesArr[0]}</Text>
+        <Text style={{color: '#000'}}>+{categoriesArr.length - 1}MORE</Text>
+      </>
+    );
+  };
 
   return (
     <TouchableOpacity activeOpacity={1}>
@@ -57,6 +67,7 @@ const FloatingLabelInputField = props => {
                 {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
               </View>
             )}
+            value={typeof props.value == 'function' ? getValue : props.value}
             rightIcon={props.extraView ? props.extraView() : null}
             underlineColorAndroid={'transparent'}
             selectionColor={'#3c3c3c'}
