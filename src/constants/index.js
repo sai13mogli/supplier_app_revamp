@@ -9,6 +9,8 @@ import Addresses from '../containers/Profile/Addresses';
 import LoginScreen from '../containers/Auth/Login';
 import SplashScreen from '../containers/Auth/Splash';
 import BankDetails from '../containers/Profile/BankDetails';
+import CategoryBrand from '../containers/Profile/CategoryBrand';
+import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
 import {OrderedMap} from 'immutable';
 
 export const BOTTOM_TAB_SCREENS = [
@@ -79,6 +81,14 @@ export const APP_STACK_SCREENS = [
   {
     name: 'BankDetails',
     component: BankDetails,
+  },
+  {
+    name: 'CategoryBrand',
+    component: CategoryBrand,
+  },
+  {
+    name: 'Brands',
+    component: BrandScreen,
   },
 ];
 

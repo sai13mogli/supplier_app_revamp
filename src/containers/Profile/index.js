@@ -84,7 +84,7 @@ const ProfileScreen = props => {
         {PROFILE_TABS.map((tab, tabIndex) => (
           <TouchableOpacity
             key={tabIndex}
-            onPress={() => props.navigation.navigate('Documents')}>
+            onPress={() => props.navigation.navigate('CategoryBrand')}>
             <Text style={{color: isCompleted(tab.progress) ? 'green' : 'red'}}>
               {tab.icon}
             </Text>
