@@ -16,11 +16,17 @@ import {STATE_STATUS} from '../../../../../redux/constants';
 import styles from './style';
 
 const PopularBrandsScreen = props => {
-  const brands =
-    useSelector(state => state.categorybrandReducer || {}).data || {};
-  const brandsStatus =
-    useSelector(state => state.categorybrandReducer || {}).status ||
-    STATE_STATUS.UNFETCHED;
+  const brands = useSelector(
+    state =>
+      ((state.categorybrandReducer || {}).popularBrands || {}).data || {},
+  );
+
+  const brandsStatus = useSelector(
+    state =>
+      ((state.categorybrandReducer || {}).popularBrands || {}).status ||
+      STATE_STATUS.UNFETCHED,
+  );
+
   const [activeId, setActiveId] = useState('122000000');
   const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch();

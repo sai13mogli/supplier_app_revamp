@@ -2,8 +2,20 @@ import {STATE_STATUS} from '../constants/index';
 import {CATEGORY_BRAND_ACTIONS} from '../constants/categorybrand';
 
 const initialState = {
-  status: STATE_STATUS.UNFETCHED,
-  data: {},
+  popularBrands: {
+    status: STATE_STATUS.UNFETCHED,
+    data: {},
+  },
+  allBrands: {
+    status: STATE_STATUS.UNFETCHED,
+    data: [],
+    alphabetNo: [],
+    maxPage: 91,
+  },
+
+  // brandsStatus: STATE_STATUS.UNFETCHED,
+
+  // brands: {},
 };
 
 export const categorybrandReducer = (state = initialState, action) => {
@@ -12,20 +24,88 @@ export const categorybrandReducer = (state = initialState, action) => {
     case CATEGORY_BRAND_ACTIONS.FETCH_BRANDS_BY_CATEGORY:
       return {
         ...state,
-        status: STATE_STATUS.FETCHING,
+        popularBrands: {
+          status: STATE_STATUS.FETCHING,
+        },
       };
     case CATEGORY_BRAND_ACTIONS.FETCHED_BRANDS_BY_CATEGORY:
       return {
         ...state,
-        status: STATE_STATUS.FETCHED,
-        data: payload.data,
+        popularBrands: {
+          status: STATE_STATUS.FETCHED,
+          data: payload.data,
+        },
       };
     case CATEGORY_BRAND_ACTIONS.FAILED_FETCH_BRANDS_BY_CATEGORY:
       return {
         ...state,
-        status: STATE_STATUS.FAILED_FETCH,
-        error: error,
+        popularBrands: {
+          status: STATE_STATUS.FAILED_FETCH,
+          error: error,
+        },
       };
+    case CATEGORY_BRAND_ACTIONS.FETCH_BRANDS:
+      if (payload.obj.pageNo == 64 || payload.obj.searchString) {
+        return {
+          ...state,
+          allBrands: {
+            status: STATE_STATUS.FETCHING,
+            data: [],
+            alphabetNo: [],
+          },
+        };
+      }
+      return {
+        ...state,
+        allBrands: {
+          ...state.allBrands,
+          status: STATE_STATUS.FETCHING,
+          alphabetNo: [
+            ...state.allBrands.alphabetNo,
+            ...payload.obj.categoryCodes,
+          ],
+        },
+      };
+
+    case CATEGORY_BRAND_ACTIONS.FETCHED_BRANDS:
+      console.log(
+        state.allBrands.data,
+        'reducerData',
+        payload.data,
+        state.allBrands,
+        state.allBrands.alphabetNo,
+      );
+      if (payload.obj.pageNo === 64 || payload.obj.searchString) {
+        return {
+          ...state,
+          allBrands: {
+            ...state.allBrands,
+            status: STATE_STATUS.FETCHED,
+            data: payload.data,
+            pageIndex: payload.obj.pageNo,
+          },
+        };
+      }
+      return {
+        ...state,
+        allBrands: {
+          ...state.allBrands,
+          status: STATE_STATUS.FETCHED,
+          data: [...state.allBrands.data, ...payload.data],
+          pageIndex: payload.obj.pageNo,
+        },
+      };
+
+    case CATEGORY_BRAND_ACTIONS.FAILED_FETCH_BRANDS:
+      return {
+        ...state,
+        allBrands: {
+          ...state.allBrands,
+          status: STATE_STATUS.FAILED_FETCH,
+          error: error,
+        },
+      };
+
     default:
       return state;
   }
