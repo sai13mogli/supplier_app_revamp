@@ -14,6 +14,8 @@ import {
   failedFetchBrandSearchResult,
   fetchBrandSearchResult,
   fetchedBrandSearchResult,
+  failedFetchBrandSearchResultByAlphabet,
+  fetchedBrandSearchResultByAlphabet,
 } from '../actions/categorybrand';
 //
 
@@ -58,10 +60,38 @@ function* fetchBrands({payload: {obj}}) {
   }
 }
 
+function* fetchBrandsAlphabets({payload: {obj}}) {
+  try {
+    const {data, error} = yield call(getBrands, obj);
+    console.log('fetechBrandsData', data);
+    if (error) {
+      yield put(failedFetchBrandSearchResultByAlphabet(error));
+    } else {
+      console.log('obj hai dost', obj, data.data[obj.categoryCodes]);
+
+      yield put(
+        fetchedBrandSearchResultByAlphabet(
+          {
+            ...obj,
+          },
+          [...data.data[obj.categoryCodes]],
+        ),
+      );
+    }
+  } catch (error) {
+    console.log('catchError', error);
+    yield put(failedFetchBrandSearchResultByAlphabet(error));
+  }
+}
+
 export default fork(function* () {
   yield takeEvery(
     CATEGORY_BRAND_ACTIONS.FETCH_BRANDS_BY_CATEGORY,
     fetchBrandsByCategoryCodes,
   );
   yield takeEvery(CATEGORY_BRAND_ACTIONS.FETCH_BRANDS, fetchBrands);
+  yield takeEvery(
+    CATEGORY_BRAND_ACTIONS.FETCH_BRANDS_ALPHABETS,
+    fetchBrandsAlphabets,
+  );
 });

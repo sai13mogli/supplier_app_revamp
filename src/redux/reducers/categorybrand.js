@@ -93,10 +93,51 @@ export const categorybrandReducer = (state = initialState, action) => {
           status: STATE_STATUS.FETCHED,
           data: [...state.allBrands.data, ...payload.data],
           pageIndex: payload.obj.pageNo,
+          alphabetEnd: false,
         },
       };
 
     case CATEGORY_BRAND_ACTIONS.FAILED_FETCH_BRANDS:
+      return {
+        ...state,
+        allBrands: {
+          ...state.allBrands,
+          status: STATE_STATUS.FAILED_FETCH,
+          error: error,
+        },
+      };
+
+    case CATEGORY_BRAND_ACTIONS.FETCH_BRANDS_ALPHABETS:
+      return {
+        ...state,
+        allBrands: {
+          status: STATE_STATUS.FETCHING,
+          data: [],
+          alphabetNo: [],
+        },
+      };
+
+    case CATEGORY_BRAND_ACTIONS.FETCHED_BRANDS_ALPHABETS:
+      console.log(
+        state.allBrands.data,
+        'reducerData',
+        payload.data,
+        state.allBrands,
+        state.allBrands.alphabetNo,
+      );
+
+      return {
+        ...state,
+        allBrands: {
+          ...state.allBrands,
+          status: STATE_STATUS.FETCHED,
+          data: payload.data,
+          pageIndex: payload.obj.pageNo,
+          alphabetEnd: true,
+        },
+      };
+
+    case CATEGORY_BRAND_ACTIONS.FAILED_FETCH_BRANDS_ALPHABETS:
       return {
         ...state,
         allBrands: {

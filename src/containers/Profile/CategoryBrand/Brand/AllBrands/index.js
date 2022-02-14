@@ -8,9 +8,12 @@ import {
   ActivityIndicator,
   TextInput,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchBrandSearchResult} from '../../../../../redux/actions/categorybrand';
+import {
+  fetchBrandSearchResult,
+  fetchBrandSearchResultByAlphabet,
+} from '../../../../../redux/actions/categorybrand';
 import {STATE_STATUS} from '../../../../../redux/constants';
 import {ALPHABETS} from '../../../../../redux/constants/categorybrand';
 import debounce from 'lodash.debounce';
@@ -24,6 +27,11 @@ const AllBrandsScreen = props => {
     state =>
       ((state.categorybrandReducer || {}).allBrands || {}).status ||
       STATE_STATUS.UNFETCHED,
+  );
+
+  const alphabetEndReached = useSelector(
+    state =>
+      ((state.categorybrandReducer || {}).allBrands || {}).alphabetEnd || false,
   );
 
   const alphabetNo = useSelector(
@@ -46,29 +54,44 @@ const AllBrandsScreen = props => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchListingData(64, false);
+    fetchListingData(64);
   }, []);
 
   //action dispatch for saga and service
-  const fetchListingData = (pageNo, fromSearch) => {
+  const fetchListingData = (pageNo, search) => {
     let params = ['0-9'];
     let fetchListingObj = {
-      categoryCodes: fromSearch
-        ? []
-        : pageNo == 64
-        ? params
-        : [String.fromCharCode(pageNo)],
-      searchString: inputValue,
+      categoryCodes:
+        search && search.length
+          ? []
+          : pageNo == 64
+          ? params
+          : [String.fromCharCode(pageNo)],
+      searchString: search || inputValue,
       pageNo,
     };
     dispatch(fetchBrandSearchResult(fetchListingObj));
   };
 
-  useEffect(() => {
+  const fetchListingDataByAlphabet = term => {
+    let fetchListingObj = {
+      categoryCodes: [String.fromCharCode(term)],
+      searchString: '',
+      pageNo: 64,
+    };
+    dispatch(fetchBrandSearchResultByAlphabet(fetchListingObj));
+  };
+
+  const debouncedSave = useRef(
     debounce(text => {
-      fetchListingData(64, true);
-    }, 200);
-  }, [inputValue]);
+      fetchListingData(64, text);
+    }, 300),
+  ).current;
+
+  const onSearchText = text => {
+    setInputValue(text);
+    debouncedSave(text);
+  };
 
   const renderItem = ({item, index}) => {
     return (
@@ -82,7 +105,7 @@ const AllBrandsScreen = props => {
     return (
       <TouchableOpacity
         key={index}
-        onPress={() => fetchListingData(item, false)}>
+        onPress={() => fetchListingDataByAlphabet(item)}>
         <Text style={{color: '#000'}}>{String.fromCharCode(item)}</Text>
       </TouchableOpacity>
     );
@@ -92,9 +115,12 @@ const AllBrandsScreen = props => {
     if (
       allBrandsStatus === STATE_STATUS.FETCHED &&
       allBrandsStatus !== STATE_STATUS.FETCHING &&
-      pageIndex + 1 < maxPage
+      pageIndex + 1 < maxPage &&
+      !inputValue &&
+      !inputValue.length &&
+      !alphabetEndReached
     ) {
-      fetchListingData(pageIndex + 1, false);
+      fetchListingData(pageIndex + 1);
     }
   };
 
@@ -133,22 +159,20 @@ const AllBrandsScreen = props => {
   const brandListing = () => {
     return (
       <>
-        <TextInput
+        {/* <TextInput
           placeholder="Search"
           placeholderTextColor={'#000'}
           selectionColor={'#888'}
           returnKeyType={'search'}
           value={inputValue}
-          onChangeText={value => {
-            setInputValue(value);
-          }}
-        />
+          onChangeText={onSearchText}
+        /> */}
 
-        {/* <FlatList
+        <FlatList
           data={ALPHABETS}
           renderItem={renderAlphabet}
           keyExtractor={(item, index) => `${index}-item`}
-        /> */}
+        />
         <FlatList
           data={allbrands}
           renderItem={renderItem}
