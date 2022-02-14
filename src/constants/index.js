@@ -110,7 +110,7 @@ export const PROFILE_TABS = new OrderedMap({
     progress: 2,
   },
   category_brands: {
-    route: 'CategoryBrands',
+    route: 'CategoryBrand',
     title: 'Category & Brand',
     icon: 'category--brand',
     progress: 3,
