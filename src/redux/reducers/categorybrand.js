@@ -13,6 +13,8 @@ const initialState = {
     maxPage: 91,
   },
 
+  brandsAdded: [],
+
   // brandsStatus: STATE_STATUS.UNFETCHED,
 
   // brands: {},
@@ -145,6 +147,19 @@ export const categorybrandReducer = (state = initialState, action) => {
           status: STATE_STATUS.FAILED_FETCH,
           error: error,
         },
+      };
+
+    case CATEGORY_BRAND_ACTIONS.ADD_BRAND:
+      console.log(state && state.brandsAdded, payload.obj);
+      if (state && state.brandsAdded) {
+        return {
+          ...state,
+          brandsAdded: [...state.brandsAdded, payload.obj],
+        };
+      }
+      return {
+        ...state,
+        brandsAdded: [payload.obj],
       };
 
     default:

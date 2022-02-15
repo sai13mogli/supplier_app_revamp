@@ -78,3 +78,13 @@ export const failedFetchBrandSearchResultByAlphabet = error => {
     error,
   };
 };
+
+export const addBrand = obj => {
+  console.log('obj hai bhai', obj);
+  return {
+    type: CATEGORY_BRAND_ACTIONS.ADD_BRAND,
+    payload: {
+      obj,
+    },
+  };
+};

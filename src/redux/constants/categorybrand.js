@@ -10,6 +10,7 @@ export const CATEGORY_BRAND_ACTIONS = {
   FETCH_BRANDS_ALPHABETS: 'FETCH_BRANDS_ALPHABETS',
   FETCHED_BRANDS_ALPHABETS: 'FETCHED_BRANDS_ALPHABETS',
   FAILED_FETCH_BRANDS_ALPHABETS: 'FAILED_FETCH_BRANDS_ALPHABETS',
+  ADD_BRAND: 'ADD_BRAND',
 };
 
 export const CATEGORIES = new OrderedMap({
@@ -23,4 +24,7 @@ export const CATEGORIES = new OrderedMap({
   },
 });
 
-export const ALPHABETS = [65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76];
+export const ALPHABETS = [
+  65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
+  84, 85, 86, 87, 88, 89, 90,
+];

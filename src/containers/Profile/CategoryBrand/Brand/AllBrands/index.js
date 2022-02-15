@@ -13,6 +13,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchBrandSearchResult,
   fetchBrandSearchResultByAlphabet,
+  addBrand,
 } from '../../../../../redux/actions/categorybrand';
 import {STATE_STATUS} from '../../../../../redux/constants';
 import {ALPHABETS} from '../../../../../redux/constants/categorybrand';
@@ -48,6 +49,10 @@ const AllBrandsScreen = props => {
     state => ((state.categorybrandReducer || {}).allBrands || {}).maxPage || 91,
   );
 
+  const addedBrand = useSelector(
+    state => (state.categorybrandReducer || {}).brandsAdded || [],
+  );
+
   // const [alphabet, setAlphabet] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
@@ -56,6 +61,8 @@ const AllBrandsScreen = props => {
   useEffect(() => {
     fetchListingData(64);
   }, []);
+
+  console.log('addedBrand', addedBrand);
 
   //action dispatch for saga and service
   const fetchListingData = (pageNo, search) => {
@@ -85,7 +92,7 @@ const AllBrandsScreen = props => {
   const debouncedSave = useRef(
     debounce(text => {
       fetchListingData(64, text);
-    }, 300),
+    }, 500),
   ).current;
 
   const onSearchText = text => {
@@ -156,23 +163,32 @@ const AllBrandsScreen = props => {
     return null;
   };
 
+  const listEmptyComponent = () => (
+    <View>
+      <Text style={{color: '#000'}}>No Brand Found</Text>
+      <TouchableOpacity onPress={() => dispatch(addBrand(inputValue))}>
+        <Text style={{color: 'red'}}>Add Brand</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   const brandListing = () => {
     return (
       <>
-        {/* <TextInput
+        <TextInput
           placeholder="Search"
           placeholderTextColor={'#000'}
           selectionColor={'#888'}
           returnKeyType={'search'}
           value={inputValue}
           onChangeText={onSearchText}
-        /> */}
+        />
 
-        <FlatList
+        {/* <FlatList
           data={ALPHABETS}
           renderItem={renderAlphabet}
           keyExtractor={(item, index) => `${index}-item`}
-        />
+        /> */}
         <FlatList
           data={allbrands}
           renderItem={renderItem}
@@ -182,8 +198,12 @@ const AllBrandsScreen = props => {
           onEndReachedThreshold={0.9}
           ListFooterComponent={renderFooter}
           onEndReached={endReachedfetchListing}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={20}
+          ListEmptyComponent={listEmptyComponent}
+
           // ItemSeparatorComponent={renderInLineFilters}
-          // ListEmptyComponent={listEmptyComponent}
+          //
         />
       </>
     );
