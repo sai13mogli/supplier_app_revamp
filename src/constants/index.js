@@ -12,6 +12,7 @@ import SignUpStartScreen from '../containers/Auth/SignUpStart';
 import SignUpEndScreen from '../containers/Auth/SignUpEnd';
 import BankDetails from '../containers/Profile/BankDetails';
 import CategoryBrand from '../containers/Profile/CategoryBrand';
+import SelectCategoryScreen from '../containers/Auth/SelectCategory';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
 import {OrderedMap} from 'immutable';
 
@@ -64,6 +65,10 @@ export const AUTH_STACK_SCREENS = [
   {
     name: 'SignUpEnd',
     component: SignUpEndScreen,
+  },
+  {
+    name: 'SelectCategory',
+    component: SelectCategoryScreen,
   },
 ];
 

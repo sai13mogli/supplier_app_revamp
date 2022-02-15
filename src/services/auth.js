@@ -10,5 +10,9 @@ export const sendOtpForLogin = phone =>
 
 export const loginWithOtp = data => axios.post(`${AUTH}auth/otpLogin`, data);
 
+export const verifyOtp = data => axios.post(`${AUTH}util/verifyOtp`, data);
+
 export const loginWithGoogle = data =>
   axios.post(`${AUTH}auth/googleLogin`, data);
+
+export const getAllCategories = () => axios.get(`${AUTH}util/categoryList`);
