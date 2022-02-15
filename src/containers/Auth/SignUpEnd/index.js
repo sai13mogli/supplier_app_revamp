@@ -13,11 +13,7 @@ const gstinRegex =
 
 const SignUpEndScreen = props => {
   const [natureOfBusiness, setnatureOfBusiness] = useState('');
-  const [categoryCode, setcategoryCode] = useState([
-    {label: 'Electricals', value: '121434'},
-    {label: 'Drills', value: '121434'},
-    {label: 'Cellphones', value: '121434'},
-  ]);
+  const [categoryCode, setcategoryCode] = useState([]);
   const [gstin, setgstin] = useState('');
   const [natureOfBusinessError, setnatureOfBusinessError] = useState(false);
   const [categoryCodeError, setcategoryCodeError] = useState(false);
@@ -47,7 +43,12 @@ const SignUpEndScreen = props => {
       value: categoryCode,
       placeHolder: 'Select Categories',
       rightComponentText: 'ADD',
-      onPress: () => null,
+      onPress: () =>
+        props.navigation.navigate('SelectCategory', {
+          fetchCategoryfromApi: true,
+          setcategoryCode: setcategoryCode,
+          categoryCode: categoryCode,
+        }),
       component: MultiSelectInput,
       isImp: true,
       errorMessage: 'Invalid ',
@@ -80,17 +81,29 @@ const SignUpEndScreen = props => {
     }
   };
 
+  const onSignUp = async () => {
+    if (
+      natureOfBusiness &&
+      categoryCode &&
+      categoryCode.length &&
+      gstin &&
+      gstin.length >= 15 &&
+      gstin.match(gstinRegex)
+    ) {
+    } else {
+    }
+  };
+
   return (
     <View>
       <Text>SignUpEnd</Text>
-
       {FORM_FIELDS.map((field, fieldKey) => (
         <field.component {...field} key={fieldKey} />
       )).toList()}
       <CustomButton
         title={'SUBMIT'}
         buttonColor={'dodgerblue'}
-        onPress={() => props.navigation.navigate('Login')}
+        onPress={onSignUp}
         TextColor={Colors.WhiteColor}
         borderColor={Colors.WhiteColor}
       />
