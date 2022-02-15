@@ -42,40 +42,67 @@ const FloatingLabelInputField = props => {
       props.onBlur();
     }
   };
+  const categoriesArr = ['Electrical', 'Power Tools', 'Automotive'];
+  const getCategories = () => {
+    return (
+      <>
+        <Text style={{color: '#000'}}>{categoriesArr[0]}</Text>
+        <Text style={{color: '#000'}}>+{categoriesArr.length - 1}MORE</Text>
+      </>
+    );
+  };
 
   return (
     <TouchableOpacity activeOpacity={1}>
-      <View>
-        {props.disabled ? (
-          <Text>{props.value}</Text>
-        ) : (
-          <Input
-            {...props}
-            rightIcon={props.extraView ? props.extraView() : null}
-            underlineColorAndroid={'transparent'}
-            selectionColor={'#3c3c3c'}
-            onFocus={handleFocus}
-            onBlur={() => handleBlur(true)}
-            containerStyle={styles.WrapperStyle}
-            inputContainerStyle={styles.inputContainerStyle}
-            inputStyle={styles.inputStyle}
-            labelStyle={styles.labelStyle}
-            rightIconContainerStyle={styles.iconStyle}
-            errorStyle={styles.errorText}
-            disabledInputStyle={styles.disabledInputStyle}
-            errorMessage={props.showError ? props.errorMessage : null}
-            // errorStyle={}
-          />
-        )}
-      </View>
+      {props.disabled ? (
+        <Text style={styles.inputStyle}>{props.value}</Text>
+      ) : (
+        <Input
+          {...props}
+          label={() => (
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.labelStyle}>{props.label}</Text>
+              {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
+            </View>
+          )}
+          value={typeof props.value == 'function' ? getValue : props.value}
+          rightIcon={props.extraView ? props.extraView() : null}
+          //underlineColorAndroid={'transparent'}
+          selectionColor={'#3c3c3c'}
+          onFocus={handleFocus}
+          onBlur={() => handleBlur(true)}
+          containerStyle={styles.WrapperStyle}
+          inputContainerStyle={styles.inputContainerStyle}
+          inputStyle={styles.inputStyle}
+          labelStyle={styles.labelStyle}
+          rightIconContainerStyle={styles.iconStyle}
+          errorStyle={styles.errorText}
+          disabledInputStyle={styles.disabledInputStyle}
+          errorMessage={props.showError ? props.errorMessage : null}
+          // errorStyle={}
+        />
+      )}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   WrapperStyle: {
-    marginBottom: Dimension.margin10,
+    //marginBottom: Dimension.margin10,
     paddingHorizontal: 0,
+  },
+  labelStyle: {
+    fontSize: Dimension.font10,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+    marginLeft: Dimension.margin12,
+    marginBottom: Dimension.margin5,
+  },
+  starIcon: {
+    color: colors.BrandColor,
+    fontSize: Dimension.font10,
+
+    fontFamily: Dimension.CustomMediumFont,
   },
 
   inputContainerStyle: {

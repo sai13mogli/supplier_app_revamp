@@ -1,12 +1,51 @@
 import React, {useState} from 'react';
-import {View,Text,} from 'react-native';
+import {View,Text,StyleSheet} from 'react-native';
+import colors from "../../Theme/Colors"
+import CustomeIcon from './CustomeIcon';
+import { Header, HeaderProps, Icon } from 'react-native-elements';
 
-const Header = props => {
+import Dimension from "../../Theme/Dimension"
+const AppHeader = props => {
 return (
-    <View>
-        <Text>{props.showText}</Text>
-    </View>
+    <Header
+  backgroundColor="#fff"
+  barStyle="dark-content"
+  containerStyle={{paddingVertical:Dimension.padding25,}}
+  leftContainerStyle={{flex:1}}
+  leftComponent={
+    <View style={styles.leftSection}>
+    <CustomeIcon name={'arrow-back'} size={Dimension.font20} color={colors.FontColor}></CustomeIcon>
+     <Text style={styles.headerTxt}>{props.showText}</Text>
+ </View>
+ 
+    
+    }
+    rightContainerStyle={{flex:1}}
+    
+  rightComponent={
+
+    <CustomeIcon name={props.rightIconName} size={Dimension.font20} color={colors.FontColor}></CustomeIcon>
+    
+  } 
+/>
+
+
 )
 }
+const styles = StyleSheet.create({
+    headerWrap:{
 
-export default Header;
+    },
+    headerTxt:{
+      fontSize:Dimension.font12,
+      color:colors.headerTxtColor,
+      fontFamily:Dimension.CustomSemiBoldFont,
+      marginTop:Dimension.margin5,
+      marginLeft:Dimension.margin10
+      
+    },
+    leftSection:{flexDirection:'row'}
+
+  });
+
+export default AppHeader;

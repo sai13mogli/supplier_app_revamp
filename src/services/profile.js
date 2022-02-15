@@ -1,65 +1,59 @@
 import axios from 'axios';
 import {BASE_URL} from '../redux/constants/index';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const getBusinessDetails = () =>
+export const getBusinessDetails = async () =>
   axios.get(`${BASE_URL}profile/businessInfo`, {
     headers: {
-      userId: '123662',
-      Authorization:
-        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MTAiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM1OTgsImV4cCI6MTY0NDM4OTk5OH0.YeOc23V_V5wSRrQuTqETCygVS1RSG9j2eNSRDGrbHdeMUyn0tkRey4f8zXy-srqhkuc_67BQiTGXECnJvSC6JA',
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
   });
 
-export const setBusinessDetails = data =>
+export const setBusinessDetails = async data =>
   axios.post(`${BASE_URL}profile/updateBusinessInfo`, data, {
     headers: {
-      userId: '123662',
-      Authorization:
-        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MTAiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM1OTgsImV4cCI6MTY0NDM4OTk5OH0.YeOc23V_V5wSRrQuTqETCygVS1RSG9j2eNSRDGrbHdeMUyn0tkRey4f8zXy-srqhkuc_67BQiTGXECnJvSC6JA',
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
   });
 
-export const getProfile = () =>
+export const getProfile = async () =>
   axios.get(`${BASE_URL}profile/profileInfo`, {
     headers: {
-      userId: '123662',
-      Authorization:
-        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MTAiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM1OTgsImV4cCI6MTY0NDM4OTk5OH0.YeOc23V_V5wSRrQuTqETCygVS1RSG9j2eNSRDGrbHdeMUyn0tkRey4f8zXy-srqhkuc_67BQiTGXECnJvSC6JA',
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
   });
 
-export const getUserInfo = () =>
+export const getUserInfo = async () =>
   axios.get(`${BASE_URL}profile/info`, {
     headers: {
-      userId: '123662',
-      Authorization:
-        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MTAiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM1OTgsImV4cCI6MTY0NDM4OTk5OH0.YeOc23V_V5wSRrQuTqETCygVS1RSG9j2eNSRDGrbHdeMUyn0tkRey4f8zXy-srqhkuc_67BQiTGXECnJvSC6JA',
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
   });
 
-export const getAddressesDetails = () =>
-  axios.get(`${BASE_URL}profile/addressList`,{
+export const getAddressesDetails = async () =>
+  axios.get(`${BASE_URL}profile/addressList`, {
     headers: {
-      userId: '123662',
-      Authorization:
-        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MTAiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM1OTgsImV4cCI6MTY0NDM4OTk5OH0.YeOc23V_V5wSRrQuTqETCygVS1RSG9j2eNSRDGrbHdeMUyn0tkRey4f8zXy-srqhkuc_67BQiTGXECnJvSC6JA',
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
-  });  
+  });
 
-export const getBankDetails = () =>
-  axios.get(`${BASE_URL}profile/bankAccount`,{
+export const getBankDetails = async () =>
+  axios.get(`${BASE_URL}profile/bankAccount`, {
     headers: {
-      userId: '123662',
-      Authorization:
-        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MTQiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMjM1MjksImV4cCI6MTY0NDQwOTkyOX0.Ln7mBrhrblthEl6vBAGpE_XTQsrXaXFfrAeNQwBiiMH53c9FzqXKaA_gELkJcMlWWETD_Hoo9kOLbxGJTbf8yA',
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
-  }); 
-  
+  });
 
-export const getPincodeDetails = pin =>
+export const getPincodeDetails = async pin =>
   axios.get(`https://supplierapiqa.moglilabs.com/util/getStateCity?pin=${pin}`);
 
-export const getGstDetails = gstin =>
+export const getGstDetails = async gstin =>
   axios.get(
     `https://supplierapiqa.moglilabs.com/util/validateGstin?gstin=${gstin}`,
   );

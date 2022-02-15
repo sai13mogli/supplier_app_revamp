@@ -10,6 +10,7 @@ const Checkbox = props => {
   const {
     onPress,
     checked,
+    title,
   } = props;
 
   return (
@@ -23,6 +24,7 @@ const Checkbox = props => {
           fontFamily={Dimension.CustomMediumFont}
           wrapperStyle={styles.checkboxwrapper}
           containerStyle={styles.checkboxContainer}
+          title={title}
          />
       
   );

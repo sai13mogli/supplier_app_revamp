@@ -6,7 +6,14 @@ import SupportScreen from '../containers/Support';
 import DocumentsScreen from '../containers/Profile/Documents';
 import BusinessDetails from '../containers/Profile/BusinessDetails';
 import Addresses from '../containers/Profile/Addresses';
+import LoginScreen from '../containers/Auth/Login';
+import SplashScreen from '../containers/Auth/Splash';
+import SignUpStartScreen from '../containers/Auth/SignUpStart';
+import SignUpEndScreen from '../containers/Auth/SignUpEnd';
 import BankDetails from '../containers/Profile/BankDetails';
+import CategoryBrand from '../containers/Profile/CategoryBrand';
+import SelectCategoryScreen from '../containers/Auth/SelectCategory';
+import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
 import {OrderedMap} from 'immutable';
 
 export const BOTTOM_TAB_SCREENS = [
@@ -40,7 +47,29 @@ export const BOTTOM_TAB_SCREENS = [
     // activeIcon: 'profile',
     // inactiveIcon: 'profile',
   },
-  
+];
+
+export const AUTH_STACK_SCREENS = [
+  {
+    name: 'Splash',
+    component: SplashScreen,
+  },
+  {
+    name: 'Login',
+    component: LoginScreen,
+  },
+  {
+    name: 'SignUpStart',
+    component: SignUpStartScreen,
+  },
+  {
+    name: 'SignUpEnd',
+    component: SignUpEndScreen,
+  },
+  {
+    name: 'SelectCategory',
+    component: SelectCategoryScreen,
+  },
 ];
 
 export const APP_STACK_SCREENS = [
@@ -68,37 +97,45 @@ export const APP_STACK_SCREENS = [
     name: 'BankDetails',
     component: BankDetails,
   },
+  {
+    name: 'CategoryBrand',
+    component: CategoryBrand,
+  },
+  {
+    name: 'Brands',
+    component: BrandScreen,
+  },
 ];
 
 export const PROFILE_TABS = new OrderedMap({
   business_details: {
     route: 'BusinessDetails',
     title: 'Business Details',
-    icon: 'contact',
+    icon: 'business-details',
     progress: 2,
   },
   category_brands: {
-    route: 'CategoryBrands',
+    route: 'CategoryBrand',
     title: 'Category & Brand',
-    icon: 'bulb',
+    icon: 'category--brand',
     progress: 3,
   },
   addresses: {
     route: 'Addresses',
     title: 'Addresses',
-    icon: 'location',
+    icon: 'address',
     progress: 4,
   },
   bank_details: {
     route: 'BankDetails',
     title: 'Bank Details',
-    icon: 'bank',
+    icon: 'bank-details',
     progress: 5,
   },
   documents: {
     route: 'Documents',
     title: 'Documents',
-    icon: 'file',
+    icon: 'single-product-upload',
     progress: 7,
   },
 });

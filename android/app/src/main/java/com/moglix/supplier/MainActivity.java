@@ -1,4 +1,4 @@
-package com.supplier_app;
+package com.moglix.supplier;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "supplier_app";
+    return "supplier";
   }
 }

@@ -5,6 +5,9 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
+  Dimensions,
+  StyleSheet,
 } from 'react-native';
 import {OrderedMap, setIn} from 'immutable';
 import CustomeIcon from '../../../component/common/CustomeIcon';
@@ -13,14 +16,26 @@ import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
-import styles from '../style';
-import {BASE_URL} from '../../../redux/constants/index';
+import styles from './style';
+import {authToken, BASE_URL} from '../../../redux/constants/index';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
-import Checkbox from '../../../component/common/Checkbox/index';
 import CustomButton from '../../../component/common/Button';
+import Modal from 'react-native-modal';
+import PDFView from 'react-native-view-pdf';
+import Checkbox from '../../../component/common/Checkbox/index';
+import {submitProfile, getDocuments} from '../../../services/documents';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchProfile} from '../../../redux/actions/profile';
+import Header from '../../../component/common/Header'
+const deviceWidth = Dimensions.get('window').width;
 
 const DocumentsScreen = props => {
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
+  const dispatch = useDispatch();
+
   const [pancard, setPancard] = useState({
     title: '',
     value: '',
@@ -86,7 +101,15 @@ const DocumentsScreen = props => {
   });
   const [signatureError, setSignatureError] = useState(false);
   const [fId, setFId] = useState(null);
-  // const [loader, setLoader] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+  const [isPDF, setIsPDF] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [isSelected, setSelection] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [submitLoader, setSubmitLoader] = useState(false);
+  const [uploadDisabled, setUploadDisabled] = useState(false);
+  // const source = {uri: imageUrl, cache: true};
   // const [init, setInit] = useState(false);
   // const [eye, setEye] = useState(false);
   // const actionSheetRef = createRef();
@@ -239,7 +262,10 @@ const DocumentsScreen = props => {
   ];
 
   useEffect(() => {
-    console.log('panCard', pancard);
+    fetchDocuments();
+  }, []);
+
+  useEffect(() => {
     if (pancard && pancard.key == 'panCard' && pancard.loading) {
       uploadDocument(pancard);
     }
@@ -297,10 +323,114 @@ const DocumentsScreen = props => {
   }, [signature]);
 
   const uploadDocument = async data => {
-    console.log(data, 'data');
     let res = await uploadDocumentService(data);
-    console.log(res);
+    console.log('uploadDocument ka res hai bhaiii!', res);
     setDocument(res);
+  };
+
+  const fetchDocuments = async () => {
+    const {data} = await getDocuments(authToken);
+    if (
+      data &&
+      data.data &&
+      data.data.panCard &&
+      data.data.gstin &&
+      data.data.cancelledCheque &&
+      data.data.corporationCertificate &&
+      data.data.signature
+    ) {
+      console.log('bhk bc..');
+      setUploadDisabled(true);
+    }
+    setDocumentsData(data);
+  };
+
+  const setDocumentsData = data => {
+    console.log('data', data);
+    if (data && data.data && data.data.panCard) {
+      setPancard({
+        ...pancard,
+        title: 'pan',
+        value: data.data && data.data.panCard,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+    if (data && data.data && data.data.gstin) {
+      setGstIn({
+        ...gstin,
+        title: 'gst',
+        value: data.data && data.data.gstin,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+    if (data && data.data && data.data.cancelledCheque) {
+      setCheque({
+        ...cheque,
+        title: 'Cancelled Cheque',
+        value: data.data && data.data.cancelledCheque,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+
+    if (data && data.data && data.data.bankStatement) {
+      setBankStatement({
+        ...bankStatement,
+        title: 'Bank Statement Copy',
+        value: data.data && data.data.bankStatement,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+    if (data && data.data && data.data.corporationCertificate) {
+      setCorporateCertificate({
+        ...corporateCertificate,
+        title: 'Certificate of Corporation',
+        value: data.data && data.data.corporationCertificate,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+
+    if (data && data.data && data.data.businessAddress) {
+      setAddressProof({
+        ...addressProof,
+        title: 'Business Address Proof',
+        value: data.data && data.data.businessAddress,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+
+    if (data && data.data && data.data.pickupAddress) {
+      setPickupAddressProof({
+        ...pickupAddressProof,
+        title: 'Pickup Address Proof',
+        value: data.data && data.data.pickupAddress,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
+
+    if (data && data.data && data.data.signature) {
+      setSignature({
+        ...signature,
+        title: 'Signature',
+        value: data.data && data.data.signature,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+      });
+    }
   };
 
   const setDocument = ({fileData, resp}) => {
@@ -400,8 +530,7 @@ const DocumentsScreen = props => {
       url,
       {
         'Content-Type': 'multipart/form-data',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MDkiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM0NzksImV4cCI6MTY0NDM4OTg3OX0.sizpT3AbsSvaUaj_0sNSbDAbI08kwBnEU85CCZSgRzK9zeaqyz6fBUyxLqWw4gFqPYRTkSk7QTZsQ496HKD_sQ',
+        Authorization: authToken,
       },
       [
         {
@@ -420,6 +549,7 @@ const DocumentsScreen = props => {
         },
       ],
     );
+
     const res = await response.json();
     // setLoader(false);
     return {
@@ -431,11 +561,6 @@ const DocumentsScreen = props => {
   //openSelection
   const openSelection = async selection => {
     switch (selection) {
-      case 'Camera':
-        await SheetManager.hide('action_sheet');
-        uploadFromCamera(false);
-        break;
-
       case 'File Explorer':
         await SheetManager.hide('action_sheet');
         uploadFromFileExp();
@@ -454,8 +579,7 @@ const DocumentsScreen = props => {
       const res = await DocumentPicker.pick({
         // type: [DocumentPicker],
       });
-      console.log(res[0].uri);
-
+      console.log('doc', res[0]);
       setFormState(res[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -526,7 +650,6 @@ const DocumentsScreen = props => {
   };
 
   const onRemove = id => {
-    console.log(id, 'id hai bc');
     switch (id) {
       case 'pancard':
         setPancard({
@@ -637,6 +760,88 @@ const DocumentsScreen = props => {
     }
   };
 
+  const openDoc = id => {
+    switch (id) {
+      case 'pancard':
+        openDocView(pancard && pancard.value);
+        break;
+      case 'gst':
+        openDocView(gstin && gstin.value);
+        break;
+      case 'cheque':
+        openDocView(cheque && cheque.value);
+        break;
+      case 'statement':
+        openDocView(bankStatement && bankStatement.value);
+        break;
+      case 'cc':
+        openDocView(cheque && cheque.value);
+        break;
+      case 'bAdd':
+        openDocView(addressProof && addressProof.value);
+        break;
+      case 'pAdd':
+        openDocView(pickupAddressProof && pickupAddressProof.value);
+        break;
+      case 'sign':
+        openDocView(signature && signature.value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const openDocView = fileKey => {
+    setLoader(true);
+    setModalVisible(true);
+    var myrequest = new XMLHttpRequest();
+    myrequest.onreadystatechange = e => {
+      if (myrequest.readyState !== 4) {
+        return;
+      }
+
+      if (myrequest.status === 200) {
+      } else {
+        console.warn('error');
+      }
+    };
+    myrequest.open(
+      'GET',
+      `http://apigatewayqa.moglix.com/profile/file?download=0&key=${fileKey}`,
+    );
+    myrequest.setRequestHeader('Authorization', authToken);
+    myrequest.responseType = 'blob';
+    myrequest.send();
+    myrequest.onload = e => {
+      var response = myrequest.response;
+      var mimetype = myrequest.getResponseHeader('Content-Type');
+      var fields = mimetype.split(';');
+      var name = fields[0];
+      var isPdf = false;
+      if (name == 'application/pdf') {
+        isPdf = true;
+      }
+      if (response) {
+        setLoader(false);
+        const fileReaderInstance = new FileReader();
+        fileReaderInstance.readAsDataURL(response);
+        fileReaderInstance.onload = () => {
+          var fileUrl = fileReaderInstance.result;
+
+          setImageUrl(fileUrl);
+          setIsPDF(false);
+
+          // this.setState(imageUrl);
+          var fields = fileUrl.slice(37);
+          if (isPdf) {
+            setIsPDF(true);
+            setImageUrl(fields);
+          }
+        };
+      }
+    };
+  };
+
   //render each doc
   const renderInputText = ({
     id,
@@ -657,7 +862,7 @@ const DocumentsScreen = props => {
         onPress={() => {
           SheetManager.show('action_sheet', id);
         }}
-        disabled={loading}>
+        disabled={loading || uploadDisabled}>
         <FileUpload
           label={title}
           isImp={isImp}
@@ -669,6 +874,7 @@ const DocumentsScreen = props => {
           id={id}
           fId={fId}
           closeDoc={closeDoc}
+          openDoc={openDoc}
         />
       </TouchableOpacity>
     );
@@ -676,21 +882,101 @@ const DocumentsScreen = props => {
 
   const noteText = () => (
     <>
-      <Text style={{color: 'red'}}>Note</Text>
-      {noteArr.map((_, i) => (
-        <View key={i}>
-          <Text style={{color: '#000'}}>{_.note}</Text>
-        </View>
-      ))}
+      <Text style={styles.Notetxt}>Note</Text>
+      {signature && signature.title && signature.value ? (
+        <Text style={styles.NoteData}>
+          Please ensure that the im age of the signature is of the signature is
+          of an authorised signatory (as endorsed by the tax authorities).Sign
+          on a white background,scan the signature and upload.
+        </Text>
+      ) : (
+        noteArr.map((_, i) => (
+          <View key={i}>
+            <Text style={styles.NoteData}>{_.note}</Text>
+          </View>
+        ))
+      )}
     </>
   );
+
+  const checkCommonValidation = () => {
+    return (
+      pancard &&
+      pancard.title &&
+      pancard.value &&
+      gstin &&
+      gstin.title &&
+      gstin.value &&
+      cheque &&
+      cheque.title &&
+      cheque.value &&
+      corporateCertificate &&
+      corporateCertificate.title &&
+      corporateCertificate.value &&
+      signature &&
+      signature.title &&
+      signature.value &&
+      isSelected
+    );
+  };
+
+  // useEffect(() => {
+  //   if (profileData && profileData.documents) {
+  //   }
+  // }, [profileData]);
+
+  const onSubmit = async () => {
+    setSubmitLoader(true);
+    const {data} = await submitProfile(
+      'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MTUiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzOTE3NjUsImV4cCI6MTY0NDQ3ODE2NX0.taxunFIzboSpwNOxg_OufD00qmUisKG6iTl7ubXz9x8BPJ_VlAoQKpKeGRjKpW8zXy62XDMG1mOVnA8xX7HMyg',
+    );
+    if (data && data.success) {
+      setSubmitLoader(false);
+      setConfirmModal(false);
+      dispatch(fetchProfile());
+      props.navigation.navigate('Profile');
+    } else {
+      setConfirmModal(false);
+      dispatch(fetchProfile());
+      props.navigation.navigate('Profile');
+    }
+  };
+
   return (
-    <ScrollView>
-      {Documents.map(_ => renderInputText(_))
-        .toList()
-        .toArray()}
-      {noteText()}
-      <CustomButton title="SUBMIT" buttonColor="gray" disabled={true} />
+    <View style={{flex: 1}}>
+      <Header showBack showText={'Documents'} rightIconName={'single-product-upload'}/>
+      <ScrollView style={styles.ContainerCss}>
+        {Documents.map(_ => renderInputText(_))
+          .toList()
+          .toArray()}
+        {!uploadDisabled ? noteText() : null}
+        {!uploadDisabled ? (
+          <Checkbox
+            checked={isSelected}
+            onPress={() => setSelection(!isSelected)}
+            title={'By registering you agree to our'}
+          />
+        ) : null}
+      </ScrollView>
+      {!uploadDisabled ? (
+        <View style={styles.bottombtnWrap}>
+          <CustomButton
+            title="SUBMIT"
+            buttonColor={
+              !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
+            }
+            disabled={!checkCommonValidation()}
+            borderColor={
+              !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
+            }
+            TextColor={
+              !checkCommonValidation() ? colors.FontColor : colors.WhiteColor
+            }
+            TextFontSize={Dimension.font16}
+            onPress={() => setConfirmModal(true)}
+          />
+        </View>
+      ) : null}
 
       <ActionSheet
         id="action_sheet"
@@ -698,14 +984,121 @@ const DocumentsScreen = props => {
           setFId(data);
         }}>
         <View style={styles.actionSheet}>
-          {['Camera', 'File Explorer', 'Cancel'].map(_ => (
+          {['File Explorer', 'Cancel'].map(_ => (
             <TouchableOpacity onPress={() => openSelection(_)}>
               <Text style={styles.modalText}>{_}</Text>
             </TouchableOpacity>
           ))}
         </View>
       </ActionSheet>
-    </ScrollView>
+
+      <Modal
+        overlayPointerEvents={'auto'}
+        isVisible={modalVisible}
+      // isVisible={true}
+        onTouchOutside={() => {
+          setModalVisible(false);
+        }}
+        onDismiss={() => {
+          setModalVisible(false);
+        }}
+        coverScreen={true}
+        // style={styles.modalbg}
+        deviceWidth={deviceWidth}
+        onBackButtonPress={() => {
+          setModalVisible(false);
+        }}
+        onBackdropPress={() => {
+          setModalVisible(false);
+        }}
+        style={styles.ModalCss}
+        >
+        {loader ? (
+          <ActivityIndicator
+            size={'small'}
+            color={'white'}
+            style={{marginRight: 4}}
+          />
+        ) : isPDF ? (
+          <PDFView
+            style={{flex: 1}}
+            onError={error => console.log('onError', error)}
+            onLoad={() => console.log('PDF rendered from base 64 data')}
+            resource={`${imageUrl}`}
+            resourceType="base64"
+          />
+        ) : (
+          <Image
+            source={{uri: imageUrl}}
+            style={{height: "100%", width: "100%", flex: 1}}
+          />
+        )}
+      </Modal>
+      <Modal
+        overlayPointerEvents={'auto'}
+        isVisible={confirmModal}
+        //isVisible={true}
+        onTouchOutside={() => {
+          setConfirmModal(false);
+        }}
+        onDismiss={() => {
+          setConfirmModal(false);
+        }}
+        coverScreen={true}
+        deviceWidth={deviceWidth}
+        onBackButtonPress={() => {
+          setConfirmModal(false);
+        }}
+        onBackdropPress={() => {
+          setConfirmModal(false);
+        }}
+        style={styles.ModalCss}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.ModalHeading}>
+          Confirm Submission
+          </Text>
+          <Text style={styles.Modaltext}>
+            By confirming the submission of all the details you agree that all
+            the details are true and no false details are provided.Once
+            validated you'll receive an email regarding the status of your
+            profile
+          </Text>
+          <View style={styles.ModalBtnWrap}>
+            <View style={{flex:1}}>
+              <CustomButton
+              title="CANCEL"
+              buttonColor={colors.WhiteColor }
+             
+              borderColor={colors.WhiteColor }
+              TextColor={colors.FontColor }
+              TextFontSize={Dimension.font16}
+              onPress={() => setConfirmModal(false)}
+              >
+
+                
+              </CustomButton>
+            </View>
+            <View style={{flex:1}}>
+              <CustomButton
+              title="CONFIRM"
+              buttonColor={colors.BrandColor }
+             
+              borderColor={colors.BrandColor }
+              TextColor={colors.WhiteColor }
+              TextFontSize={Dimension.font16}
+              //onPress={() => setConfirmModal(true)}
+              >
+
+                
+              </CustomButton>
+              </View>
+          </View>
+          {/* <TouchableOpacity onPress={() => setConfirmModal(false)}>
+            <Text style={{color: '#000'}}>CANCEL</Text>
+          </TouchableOpacity> */}
+        </View>
+      </Modal>
+    </View>
   );
 };
 

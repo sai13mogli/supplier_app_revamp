@@ -23,47 +23,22 @@ const FileUpload = props => {
     id,
     fId,
     closeDoc,
+    openDoc,
+    uploadFromCamera,
   } = props;
-  console.log('id', id, fId);
+
   return (
     <View>
-      {/* {props.disabled ? (
-        <Text style={styles.labelStyle}>{props.value}</Text>
-      ) : (
-        
-        <Input
-          {...props}
-          rightIcon={props.extraView ? props.extraView() : null}
-          // rightIcon={
-          //   <CustomeIcon
-          //     name={'upload'}
-          //     size={Dimension.font20}
-          //     color={colors.BrandColor}
-          //   />
-          // }
-          underlineColorAndroid={'transparent'}
-          selectionColor={'#3c3c3c'}
-          containerStyle={styles.WrapperStyle}
-          inputContainerStyle={styles.inputContainerStyle}
-          inputStyle={styles.inputStyle}
-          labelStyle={styles.labelStyle}
-          rightIconContainerStyle={styles.iconStyle}
-          errorStyle={styles.errorText}
-          disabledInputStyle={styles.disabledInputStyle}
-        />
-      )} */}
-      <>
-        <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
-          {label}
-        </Text>
-        {isImp ? <Text style={{color: 'red'}}>*</Text> : null}
-      </>
+      <View style={{flexDirection: 'row'}}>
+        <Text style={styles.labelStyle}>{label}</Text>
+        {isImp ? <Text style={styles.starIcon}>*</Text> : null}
+      </View>
       <View style={styles.inputContainerStyle}>
         {!value ? (
           <Text style={styles.placeholderCss}>Tap to upload</Text>
         ) : (
-          <View style={{flexDirection: 'row'}}>
-            <Text style={styles.inputStyle}>{value}</Text>
+          <View style={{flexDirection: 'row',width:'85%'}}>
+            <Text style={styles.inputStyle} numberOfLines={1}>{value}</Text>
             {closeDoc ? (
               <TouchableOpacity onPress={() => onRemove(id)}>
                 <CustomeIcon
@@ -82,7 +57,7 @@ const FileUpload = props => {
             style={{marginRight: 4}}
           />
         ) : showDoc ? (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => openDoc(id)}>
             <CustomeIcon
               name={'eye-open'}
               size={Dimension.font20}
@@ -139,6 +114,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomRegularFont,
 
     paddingLeft: 0,
+    
   },
   iconStyle: {
     width: Dimension.width24,
@@ -157,6 +133,19 @@ const styles = StyleSheet.create({
 
     paddingLeft: 0,
     backgroundColor: colors.DisableStateColor,
+  },
+  labelStyle: {
+    fontSize: Dimension.font10,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+    marginLeft: Dimension.margin12,
+    marginBottom: Dimension.margin5,
+  },
+  starIcon: {
+    color: colors.BrandColor,
+    fontSize: Dimension.font10,
+
+    fontFamily: Dimension.CustomMediumFont,
   },
 });
 export default FileUpload;
