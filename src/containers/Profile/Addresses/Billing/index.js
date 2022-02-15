@@ -8,7 +8,7 @@ import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
 import AddressesModal from '../../../../component/common/AddressesModal';
-////////jlj
+
 const SupportScreen = () => {
   const [data,setData]= useState( [
     { id: '1', lable: 'First item', checked : false},
