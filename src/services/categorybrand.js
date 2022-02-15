@@ -8,3 +8,10 @@ export const getBrandsByCategoryCodes = async data =>
       authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
   });
+
+export const getBrands = async data =>
+  axios.post(`${SEARCH_API_URL}utils/searchBrandsMap`, data, {
+    headers: {
+      authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });

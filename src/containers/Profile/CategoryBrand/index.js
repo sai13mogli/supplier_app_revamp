@@ -1,9 +1,13 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity,ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import {OrderedMap} from 'immutable';
 import MultiSelectInput from '../../../component/common/MultiSelectInput';
-
+import Header from '../../../component/common/Header'
+import colors from '../../../Theme/Colors';
+import Dimension from '../../../Theme/Dimension';
+import styles from './style'
+import CustomeIcon from '../../../component/common/CustomeIcon'
 const CategoryBrandScreen = props => {
   const [categoryCode, setcategoryCode] = useState([
     {label: 'Electricals', value: '121434'},
@@ -61,7 +65,7 @@ const CategoryBrandScreen = props => {
           extraView={() => (
             <TouchableOpacity
               onPress={() => props.navigation.navigate('Brands')}>
-              <Text style={{color: '#000'}}>OK</Text>
+              <CustomeIcon name={'arrow-right-line'} size={Dimension.font22} color={colors.FontColor}></CustomeIcon>
             </TouchableOpacity>
           )}
         />
@@ -70,11 +74,20 @@ const CategoryBrandScreen = props => {
   };
 
   return (
-    <View style={{marginTop: 100}}>
+    <View style={{flex:1}}>
+
+    <Header howBack showText={'Business Details'} rightIconName={'category--brand'}></Header>
+    <ScrollView style={styles.ContainerCss}>
+    <View>
       {BRAND_CATEGORY.map(_ => renderInputText(_))
         .toList()
         .toArray()}
-      <Text style={{color: '#000'}}>Brand Found on Moglix</Text>
+      <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
+      <View>
+
+      </View>
+    </View>
+    </ScrollView>
     </View>
   );
 };

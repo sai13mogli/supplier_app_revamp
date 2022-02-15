@@ -1,12 +1,14 @@
 import {OrderedMap} from 'immutable';
 import React, {useEffect, useState} from 'react';
-import {View, Text, Platform} from 'react-native';
+import {View, Text, Platform,ImageBackground,Image} from 'react-native';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import Colors from '../../../Theme/Colors';
+import Dimension from '../../../Theme/Dimension'
 import {loginWithPass, loginWithGoogle} from '../../../services/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginOtpModal from '../../../component/LoginOtpModal';
+import styles from "./style"
 import {
   GoogleSignin,
   GoogleSigninButton,
@@ -173,28 +175,55 @@ const LoginScreen = props => {
 
   return (
     <View>
-      <Text>Login Screen</Text>
+      <View style={{height:"50%"}}>
+
+    <ImageBackground source={require("../../../assets/images/loginBg.png")} resizeMode="cover" style={{flex:1}}>
+      
+      <Image source={require("../../../assets/images/logo.png")} style={{height:44,width:180}}/>
+      
+    
+      
+    </ImageBackground>
+  </View>
+  <View style={{backgroundColor:"#fff"}}>
+      {/* <Text>Login Screen</Text> */}
       {FORM_FIELDS.map((field, fieldKey) => (
         <field.component {...field} />
       )).toList()}
       {error ? <Text>{error}</Text> : null}
-      <CustomButton
+      <View style={{flexDirection:"row"}}>
+        <View style={{flex:1,marginRight:Dimension.margin15}}>
+        <CustomButton
         title={'LOGIN VIA OTP'}
-        buttonColor={'dodgerblue'}
+        buttonColor={Colors.FontColor}
         disabled={loading}
         onPress={onSendOtp}
         TextColor={Colors.WhiteColor}
-        borderColor={Colors.WhiteColor}
+        borderColor={Colors.FontColor}
+        TextFontSize={Dimension.font16}
       />
-      <CustomButton
+        </View>
+        <View style={{flex:1}}>
+        <CustomButton
         loading={loading}
         disabled={loading}
         title={'CONTINUE'}
-        buttonColor={'dodgerblue'}
+        buttonColor={Colors.grayShade1}
         onPress={onSubmit}
-        TextColor={Colors.WhiteColor}
-        borderColor={Colors.WhiteColor}
+        TextColor={Colors.FontColor}
+        borderColor={Colors.grayShade1}
+        TextFontSize={Dimension.font16}
       />
+        </View>
+      </View>
+     <View>
+       <View>
+
+       </View>
+       <Text>OR</Text>
+       <View></View>
+     </View>
+      
       {otpModal && (
         <LoginOtpModal
           visible={otpModal}
@@ -204,19 +233,22 @@ const LoginScreen = props => {
         />
       )}
       <GoogleSigninButton
-        style={{width: 192, height: 48}}
+        style={{width: '100%', height: Dimension.height40}}
         size={GoogleSigninButton.Size.Wide}
         color={GoogleSigninButton.Color.Dark}
         onPress={googleSignIn}
         disabled={loading}
       />
       <CustomButton
-        title={'or SIGNUP'}
-        buttonColor={'dodgerblue'}
+        title={'Not a Moglix Supplier? SignUp now'}
+        buttonColor={Colors.LightBrandColor}
         onPress={() => props.navigation.navigate('SignUpStart')}
-        TextColor={Colors.WhiteColor}
-        borderColor={Colors.WhiteColor}
+        TextColor={Colors.BrandColor}
+        borderColor={Colors.LightBrandColor}
+        TextFontSize={Dimension.font14}
       />
+      <Text>All rights reserved. Mogli labs Pvt Ltd.</Text>
+    </View>
     </View>
   );
 };

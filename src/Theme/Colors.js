@@ -14,6 +14,7 @@ const Colors = {
   DisableStateColor:"#F4F4F4",
   SuccessStateColor:"#54B110",
   BoxBorderColor:"#CFD2E2",
+  LightBrandColor:"#FFF2F2",
 
   //Secondary Color
 

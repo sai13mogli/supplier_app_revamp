@@ -14,13 +14,20 @@ import {fetchBrandsByCategory} from '../../../../../redux/actions/categorybrand'
 import {CATEGORIES} from '../../../../../redux/constants/categorybrand';
 import {STATE_STATUS} from '../../../../../redux/constants';
 import styles from './style';
+import Checkbox from '../../../../../component/common/Checkbox/index';
 
 const PopularBrandsScreen = props => {
-  const brands =
-    useSelector(state => state.categorybrandReducer || {}).data || {};
-  const brandsStatus =
-    useSelector(state => state.categorybrandReducer || {}).status ||
-    STATE_STATUS.UNFETCHED;
+  const brands = useSelector(
+    state =>
+      ((state.categorybrandReducer || {}).popularBrands || {}).data || {},
+  );
+
+  const brandsStatus = useSelector(
+    state =>
+      ((state.categorybrandReducer || {}).popularBrands || {}).status ||
+      STATE_STATUS.UNFETCHED,
+  );
+
   const [activeId, setActiveId] = useState('122000000');
   const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch();
@@ -43,7 +50,8 @@ const PopularBrandsScreen = props => {
               ? styles.activeBackground
               : styles.inactiveBackground,
           ]}>
-          <Text style={{color: '#000'}}>{_.category}</Text>
+          
+          <Text style={styles.categoryText}>{_.category}</Text>
         </View>
       </TouchableOpacity>
     ))
@@ -57,9 +65,14 @@ const PopularBrandsScreen = props => {
         {((brands && brands[activeId]) || [])
           .filter((_, i) => _.name.includes(inputValue))
           .map((item, i) => (
-            <TouchableOpacity>
-              <Text style={{color: '#000'}}>{item.name}</Text>
-            </TouchableOpacity>
+            <Checkbox
+            //checked={isSelected}
+           // onPress={() => setSelection(!isSelected)}
+            title={item.name}
+          />
+            // <TouchableOpacity>
+            //   <Text style={{color: '#000'}}>{item.name}</Text>
+            // </TouchableOpacity>
           ))}
       </ScrollView>
     );
@@ -85,7 +98,11 @@ const PopularBrandsScreen = props => {
     if (brandsStatus === STATE_STATUS.FETCHED) {
       return (
         <>
+        <View style={styles.Wrapper}>
+          <View style={styles.leftPart}>
           {renderLeft()}
+          </View>
+          <View style={styles.rightPart}>
           <TextInput
             placeholder="Search"
             placeholderTextColor={'#000'}
@@ -97,6 +114,10 @@ const PopularBrandsScreen = props => {
             }}
           />
           {renderRight()}
+          </View>
+        </View>
+          
+         
         </>
       );
     }
