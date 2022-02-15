@@ -14,6 +14,7 @@ const initialState = {
   },
 
   brandsAdded: [],
+  categories: [],
 
   // brandsStatus: STATE_STATUS.UNFETCHED,
 
@@ -161,6 +162,46 @@ export const categorybrandReducer = (state = initialState, action) => {
         ...state,
         brandsAdded: [payload.obj],
       };
+
+    case CATEGORY_BRAND_ACTIONS.REMOVE_BRAND:
+      console.log(state && state.brandsAdded, payload.obj);
+      if (state && state.brandsAdded) {
+        return {
+          ...state,
+          brandsAdded: [
+            ...state.brandsAdded.filter(_ => _.id !== payload.obj.id),
+          ],
+        };
+      }
+
+    case CATEGORY_BRAND_ACTIONS.ADD_CATEGORY:
+      if (state && state.categories) {
+        return {
+          ...state,
+          categories: [...state.categories, payload.obj],
+        };
+      }
+      return {
+        ...state,
+        categories: [payload.obj],
+      };
+
+    case CATEGORY_BRAND_ACTIONS.REMOVE_CATEGORY:
+      if (state && state.categories) {
+        return {
+          ...state,
+          categories: [
+            ...state.categories.filter(_ => _.id !== payload.obj.id),
+          ],
+        };
+      }
+
+    // case CATEGORY_BRAND_ACTIONS.SET_CATEGORIES:
+    //   console.log('dat', payload);
+    //   return {
+    //     ...state,
+    //     categories: [...payload.data],
+    //   };
 
     default:
       return state;

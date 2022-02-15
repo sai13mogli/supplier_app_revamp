@@ -80,9 +80,35 @@ export const failedFetchBrandSearchResultByAlphabet = error => {
 };
 
 export const addBrand = obj => {
-  console.log('obj hai bhai', obj);
   return {
     type: CATEGORY_BRAND_ACTIONS.ADD_BRAND,
+    payload: {
+      obj,
+    },
+  };
+};
+
+export const removeBrand = obj => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.REMOVE_BRAND,
+    payload: {
+      obj,
+    },
+  };
+};
+
+export const addCategory = obj => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.ADD_CATEGORY,
+    payload: {
+      obj,
+    },
+  };
+};
+
+export const removeCategory = obj => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.REMOVE_CATEGORY,
     payload: {
       obj,
     },

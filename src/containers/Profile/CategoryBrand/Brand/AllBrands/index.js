@@ -18,6 +18,8 @@ import {
 import {STATE_STATUS} from '../../../../../redux/constants';
 import {ALPHABETS} from '../../../../../redux/constants/categorybrand';
 import debounce from 'lodash.debounce';
+import Colors from '../../../../../Theme/Colors';
+import MultiSelect from '../../../../../component/common/MultiSelect/index';
 
 const AllBrandsScreen = props => {
   const allbrands = useSelector(
@@ -100,13 +102,13 @@ const AllBrandsScreen = props => {
     debouncedSave(text);
   };
 
-  const renderItem = ({item, index}) => {
-    return (
-      <TouchableOpacity key={item.id}>
-        <Text style={{color: '#000'}}>{item.name}</Text>
-      </TouchableOpacity>
-    );
-  };
+  // const renderItem = ({item, index}) => {
+  //   return (
+  //     <TouchableOpacity key={item.id}>
+  //       <Text style={{color: '#000'}}>{item.name}</Text>
+  //     </TouchableOpacity>
+  //   );
+  // };
 
   const renderAlphabet = ({item, index}) => {
     return (
@@ -175,7 +177,7 @@ const AllBrandsScreen = props => {
   const brandListing = () => {
     return (
       <>
-        <TextInput
+        {/* <TextInput
           placeholder="Search"
           placeholderTextColor={'#000'}
           selectionColor={'#888'}
@@ -184,11 +186,11 @@ const AllBrandsScreen = props => {
           onChangeText={onSearchText}
         />
 
-        {/* <FlatList
+         <FlatList
           data={ALPHABETS}
           renderItem={renderAlphabet}
           keyExtractor={(item, index) => `${index}-item`}
-        /> */}
+        /> 
         <FlatList
           data={allbrands}
           renderItem={renderItem}
@@ -200,10 +202,28 @@ const AllBrandsScreen = props => {
           onEndReached={endReachedfetchListing}
           removeClippedSubviews={true}
           maxToRenderPerBatch={20}
-          ListEmptyComponent={listEmptyComponent}
+          ListEmptyComponent={listEmptyComponent}     
+        /> */}
 
-          // ItemSeparatorComponent={renderInLineFilters}
-          //
+        <MultiSelect
+          value={inputValue}
+          onChangeText={onSearchText}
+          placeholder={'Search'}
+          placeholderTextColor={Colors.eyeIcon}
+          blurOnSubmit={true}
+          selectedValues={addedBrand}
+          data={allbrands}
+          onChangeDataChoosed={data => {
+            console.log('data', data);
+            // dispatch(addBrand(data));
+          }}
+          onEndReachedThreshold={0.9}
+          ListFooterComponent={renderFooter}
+          onEndReached={endReachedfetchListing}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={20}
+          ListEmptyComponent={listEmptyComponent}
+          fromAllBrands={true}
         />
       </>
     );
