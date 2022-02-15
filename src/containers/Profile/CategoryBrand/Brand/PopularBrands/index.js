@@ -15,7 +15,7 @@ import {CATEGORIES} from '../../../../../redux/constants/categorybrand';
 import {STATE_STATUS} from '../../../../../redux/constants';
 import styles from './style';
 import Checkbox from '../../../../../component/common/Checkbox/index';
-
+import CustomeIcon from '../../../../../component/common/CustomeIcon';
 const PopularBrandsScreen = props => {
   const brands = useSelector(
     state =>
@@ -103,7 +103,23 @@ const PopularBrandsScreen = props => {
           {renderLeft()}
           </View>
           <View style={styles.rightPart}>
+          <View style={styles.searchWrapper}>
           <TextInput
+            placeholder="Search Brand"
+            placeholderTextColor={"#A2A2A2"}
+            selectionColor={'#888'}
+            returnKeyType={'search'}
+            value={inputValue}
+            onChangeText={value => {
+              setInputValue(value);
+            }}
+            style={styles.SearchInputCss}
+          />
+          <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+          {/* <CustomeIcon name={'close'} style={styles.CloseIcon}></CustomeIcon>
+         */}
+         </View>
+          {/* <TextInput
             placeholder="Search"
             placeholderTextColor={'#000'}
             selectionColor={'#888'}
@@ -112,7 +128,7 @@ const PopularBrandsScreen = props => {
             onChangeText={value => {
               setInputValue(value);
             }}
-          />
+          /> */}
           {renderRight()}
           </View>
         </View>

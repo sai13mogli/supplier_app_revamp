@@ -17,7 +17,11 @@ import {
 import {STATE_STATUS} from '../../../../../redux/constants';
 import {ALPHABETS} from '../../../../../redux/constants/categorybrand';
 import debounce from 'lodash.debounce';
-
+import styles from './style';
+import Checkbox from '../../../../../component/common/Checkbox/index';
+import CustomeIcon from '../../../../../component/common/CustomeIcon';
+import Colors from '../../../../../Theme/Colors';
+import Dimension from '../../../../../Theme/Dimension';
 const AllBrandsScreen = props => {
   const allbrands = useSelector(
     state => ((state.categorybrandReducer || {}).allBrands || {}).data || [],
@@ -95,9 +99,14 @@ const AllBrandsScreen = props => {
 
   const renderItem = ({item, index}) => {
     return (
-      <TouchableOpacity key={item.id}>
-        <Text style={{color: '#000'}}>{item.name}</Text>
-      </TouchableOpacity>
+      // <TouchableOpacity key={item.id}>
+      //   <Text style={{color: '#000'}}>{item.name}</Text>
+      // </TouchableOpacity>
+       <Checkbox
+       //checked={isSelected}
+      // onPress={() => setSelection(!isSelected)}
+       title={item.name}
+     />
     );
   };
 
@@ -106,7 +115,7 @@ const AllBrandsScreen = props => {
       <TouchableOpacity
         key={index}
         onPress={() => fetchListingDataByAlphabet(item)}>
-        <Text style={{color: '#000'}}>{String.fromCharCode(item)}</Text>
+        <Text style={styles.alphbetText}>{String.fromCharCode(item)}</Text>
       </TouchableOpacity>
     );
   };
@@ -159,21 +168,23 @@ const AllBrandsScreen = props => {
   const brandListing = () => {
     return (
       <>
-        {/* <TextInput
-          placeholder="Search"
-          placeholderTextColor={'#000'}
-          selectionColor={'#888'}
-          returnKeyType={'search'}
-          value={inputValue}
-          onChangeText={onSearchText}
-        /> */}
-
-        <FlatList
-          data={ALPHABETS}
-          renderItem={renderAlphabet}
-          keyExtractor={(item, index) => `${index}-item`}
-        />
-        <FlatList
+      <View style={styles.searchWrapper}>
+          <TextInput
+            placeholder="Search"
+            placeholderTextColor={"#A2A2A2"}
+            selectionColor={'#888'}
+            returnKeyType={'search'}
+            value={inputValue}
+            onChangeText={onSearchText}
+            style={styles.SearchInputCss}
+          />
+          <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+          {/* <CustomeIcon name={'close'} style={styles.CloseIcon}></CustomeIcon>
+         */}
+         </View>
+       <View style={styles.Wrapper}>
+         <View style={styles.leftPart}>
+          <FlatList
           data={allbrands}
           renderItem={renderItem}
           style={{paddingBottom: 380}}
@@ -185,6 +196,19 @@ const AllBrandsScreen = props => {
           // ItemSeparatorComponent={renderInLineFilters}
           // ListEmptyComponent={listEmptyComponent}
         />
+          </View>
+          <View style={styles.rightPart}>
+          <FlatList
+          data={ALPHABETS}
+          renderItem={renderAlphabet}
+          keyExtractor={(item, index) => `${index}-item`}
+        />
+          </View>
+        </View>
+       
+
+       
+       
       </>
     );
   };
