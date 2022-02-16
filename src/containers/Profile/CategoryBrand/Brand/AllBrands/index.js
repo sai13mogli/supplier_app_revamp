@@ -214,8 +214,8 @@ const AllBrandsScreen = props => {
           maxToRenderPerBatch={20}
           ListEmptyComponent={listEmptyComponent}     
         /> */}
-<View>
-  <View>
+<View style={styles.Wrapper}>
+  
         <MultiSelect
           value={inputValue}
           onChangeText={onSearchText}
@@ -236,8 +236,8 @@ const AllBrandsScreen = props => {
           ListEmptyComponent={listEmptyComponent}
           fromAllBrands={true}
         />
-          </View>
-          <View style={styles.rightPart}>
+          
+          <View style={styles.AlphabetWrap}>
           <FlatList
           data={ALPHABETS}
           renderItem={renderAlphabet}

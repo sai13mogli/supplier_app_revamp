@@ -141,7 +141,7 @@ const MultiSelect = props => {
             color={!item.checked ? colors.FontColor : colors.BrandColor}
             size={Dimension.font22}
           />
-          <Text style={{color: 'red'}}>
+          <Text style={styles.CheckboxTitle}>
             {item.label || item.name || item.categoryName}
           </Text>
         </TouchableOpacity>
@@ -184,11 +184,11 @@ const MultiSelect = props => {
   );
 };
 const styles = StyleSheet.create({
-  checkboxTitle: {
-    fontSize: Dimension.font14,
+ 
+  CheckboxTitle: {
+    fontSize: Dimension.font16,
     color: colors.FontColor,
-
-    marginHorizontal: Dimension.margin10,
+    marginLeft: Dimension.margin10,
     fontFamily: Dimension.CustomRegularFont,
   },
   checkboxwrapper: {
@@ -223,5 +223,7 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding10,
     paddingHorizontal: Dimension.padding12,
   },
+
+ 
 });
 export default MultiSelect;

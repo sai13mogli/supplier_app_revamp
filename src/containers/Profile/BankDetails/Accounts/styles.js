@@ -13,6 +13,32 @@ const styles = StyleSheet.create({
    borderColor:Colors.FontColor,
    marginVertical:Dimension.margin8
  },
+ ContainerCss:{
+  backgroundColor:Colors.WhiteColor,
+  paddingHorizontal:Dimension.padding15
+ },
+ addnewtxt:{
+  fontSize:Dimension.font14,
+  color:Colors.BrandColor,
+  fontFamily:Dimension.CustomMediumFont, 
+  marginLeft:Dimension.margin5
+},
+ TopWrap:{
+  flexDirection:'row',
+  justifyContent:'space-between',
+  paddingVertical:Dimension.padding25,
+  },
+  Pageheading:{
+    fontSize:Dimension.font14,
+    color:Colors.FontColor,
+    fontFamily:Dimension.CustomMediumFont,
+  },
+  bottombtnWrap:{
+    padding:Dimension.padding15,
+    borderTopColor:Colors.grayShade2,
+    borderTopWidth:1,
+    backgroundColor:Colors.WhiteColor
+  },
  submit:{
   backgroundColor:Colors.BrandColor,
   marginHorizontal:Dimensions.margin10,

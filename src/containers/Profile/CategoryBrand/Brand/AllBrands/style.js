@@ -3,16 +3,20 @@ import Colors from '../../../../../Theme/Colors';
 import Dimension from '../../../../../Theme/Dimension';
 const styles = StyleSheet.create({
 Wrapper:{
- flexDirection:"row",
+ //flexDirection:"row",
+ paddingHorizontal:Dimension.padding10,
+ paddingVertical:Dimension.padding20,
+ position:"relative"
  },
 
   leftPart:{
     flex:.8,
     marginRight:Dimension.margin10
   },
-  rightPart:{
-    flex:1,
-    paddingRight:Dimension.padding10
+  AlphabetWrap:{
+    position:'absolute',
+    top:Dimension.padding60,
+    right:Dimension.padding10
   },
   categoryText:{
     fontSize:Dimension.font12,

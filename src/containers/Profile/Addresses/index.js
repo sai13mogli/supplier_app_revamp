@@ -1,45 +1,73 @@
 import React, {useState,} from 'react';
-import { Tab, TabView } from 'react-native-elements';
-import Billing from './Billing';
-import PickedUp from './PickedUp';
-import {StyleSheet} from 'react-native';
+import Header from '../../../component/common/Header'
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
-const Addresses = () => {
+import {
+  createMaterialTopTabNavigator
+} from '@react-navigation/material-top-tabs';
+import {
+
+  ADDRESSES_TAB_SCREENS,
+} from '../../../constants';
+
+const Tab = createMaterialTopTabNavigator();
+
+const Addresses = props => {
   
-  const [index, setIndex] = useState(0);
+  const tabBarIcon = (focused, color, route, rest) => {
+    let currentScreen = ADDRESSES_TAB_SCREENS.find(
+      screen => screen.name === route.name,
+    );
+    let tabName = currentScreen['name'];
+    //   let iconName = currentScreen[focused ? 'activeIcon' : 'inactiveIcon'];
+    return (
+      <TouchableOpacity
+        style={styles.iconAlignment}
+        onPress={() => rest.navigation.navigate(route.name)}>
+        {/* <CustomeIcon name={iconName} size={26} color={color}></CustomeIcon> */}
+        {/* {tabName == 'Profile' ? (
+                <ProfileTabIcon focused={focused} iconName={iconName} color={color} />
+              ) : currentScreen.iconType ? (
+                <BottomIcon name={iconName} size={26} color={color} />
+              ) : (
+                <Icon name={iconName} size={26} color={color} />
+              )} */}
+        <Text style={[styles.tabText, {color: focused ? color : '#3c3c3c'}]}>
+          {tabName}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
-    <>
-     <Tab
-        value={index}
-        onChange={(e) => setIndex(e)}
-        indicatorStyle={styles.indicatorStyle}
-        style={{backgroundColor:"#000"}}
-       
-        >
-            <Tab.Item
-              title="Billing"
-              titleStyle={styles.tabText}
-            //  icon={{ name: 'timer', type: 'ionicon', color: 'white' }}
-            
-            />
-          <Tab.Item
-              title="Pickup"
-              titleStyle={styles.tabText}
-            //  icon={{ name: 'cart', type: 'ionicon', color: 'white' }}
-            />
-      </Tab>
-
-      <TabView value={index} onChange={setIndex} animationType="spring">
-            <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-                <Billing/>
-            </TabView.Item>
-            <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-                <PickedUp/>
-            </TabView.Item>
-      </TabView>
   
+      <>
+   <Header howBack showText={'Addresses'} rightIconName={'business-details'}></Header>
+    <Tab.Navigator
+       screenOptions={({route, ...rest}) => ({
+          headerShown: false,
+          tabBarIcon: ({focused, color}) =>
+            tabBarIcon(focused, color, route, rest),
+          lazy: false,
+          safeAreaInsets: {bottom: 0},
+        })}
+        tabBarOptions={tabBarOptions}>
+        {ADDRESSES_TAB_SCREENS.map((screen, key) => (
+          <Tab.Screen
+            key={key}
+            lazy={false}
+            name={screen.name}
+            component={prop => (
+              <screen.component {...prop} />
+            )}
+          />
+        ))}
+      </Tab.Navigator>
     </>
   );
 };
@@ -47,58 +75,39 @@ const styles = StyleSheet.create({
 indicatorStyle:{
   height:2,
   backgroundColor:Colors.BrandColor
-
 },
 tabText:{
   fontSize: Dimension.font14,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
    fontWeight:"normal"
-},
-
-
-  userName: {
+ },
+ userName: {
     fontSize: Dimension.font14,
     color: Colors.textColor,
     fontFamily: Dimension.CustomRegularFont,
-    
-  },
-  welcomeText: {
-    fontSize: Dimension.font10,
-    fontWeight: '400',
-    color: Colors.textColor,
-    lineHeight: 16,
-    fontFamily: Dimension.CustomRegularFont,
-  },
-  statusBar: {
-    marginVertical: 24,
-  },
-  actionSheet: {
-    width: '100%',
-    backgroundColor: '#fff',
-    padding: 20,
-  },
-  modalText: {
-    paddingVertical: Dimension.padding10,
-    fontFamily: Dimension.CustomRegularFont,
-    borderBottomWidth: 0.5,
-    color: Colors.FontColor
-  },
-  labelStyle: {
-    fontSize: Dimension.font10,
-    color: Colors.FontColor,
-    fontFamily: Dimension.CustomMediumFont,
-    marginLeft: Dimension.margin12,
-    marginBottom: Dimension.margin5,
-  
-  },
-  starIcon:{
-    color:Colors.BrandColor,
-    fontSize: Dimension.font10,
-    
-    fontFamily: Dimension.CustomMediumFont,
-
-  },
+ },
+ tabBar: {
+  backgroundColor: '#fff',
+},
+//   IconDefaultColor: {color: colors.ExtralightGrayText},
+tabText: {
+  fontSize: 10,
+  // fontFamily: Dimension.CustomMediumFont,
+  marginTop: 4,
+},
+iconAlignment: {
+  alignItems: 'center', 
+  alignSelf: 'center'
+},
 });
 
+const tabBarOptions = {
+  activeTintColor: '#D9232D',
+  inactiveTintColor: '#C4C4C4',
+  showLabel: false,
+  lazy: false,
+  style: styles.tabBar,
+  safeAreaInsets: {bottom: 0},
+};
 export default Addresses;
