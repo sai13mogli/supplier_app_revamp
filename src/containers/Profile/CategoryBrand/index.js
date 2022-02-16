@@ -165,11 +165,11 @@ const CategoryBrandScreen = props => {
     },
     brand_url: {
       title: 'Brand URL (If Applicable)',
-      isImp: false,
+      isImp: brand && brand.code ? false : true,
       label: 'Brand URL (If Applicable)',
       placeholder: 'http://ABCD.com',
-      selectedValue: brandUrl,
-      onValueChange: text => setBrandUrl(text),
+      value: brandUrl,
+      onChangeText: text => setBrandUrl(text),
       component: FloatingLabelInputField,
     },
   });
@@ -363,6 +363,18 @@ const CategoryBrandScreen = props => {
     return brandName && brandName.length && natureOfBusiness;
   };
 
+  const checkCommonValidationReqBrand = () => {
+    return (
+      brandName &&
+      brandName.length &&
+      natureOfBusiness &&
+      expiryDate &&
+      expiryDate.length &&
+      brandUrl &&
+      brandUrl.length
+    );
+  };
+
   const getButtonColor = () => {
     if (natureOfBusiness == 3 && checkCommonValidation()) {
       console.log(expiryDate);
@@ -405,6 +417,15 @@ const CategoryBrandScreen = props => {
     console.log('data updated hi hai', data);
   };
 
+  console.log(
+    'natureofBusiness',
+    natureOfBusiness,
+    brandName,
+    brandName.length,
+    !checkCommonValidationReqBrand,
+    !checkValidation,
+  );
+
   return (
     <View style={{flex: 1}}>
       <Header
@@ -416,24 +437,49 @@ const CategoryBrandScreen = props => {
           {BRAND_CATEGORY.map(_ => renderInputText(_))
             .toList()
             .toArray()}
-          <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
+          {addedBrand.filter(i => i.status).length ? (
+            <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
+          ) : null}
           <View>
-            {addedBrand.map((_, i) => (
-              <TouchableOpacity>
-                <Text style={{color: '#000'}}>Brand Name</Text>
-                <Text style={{color: '#000'}}>{_.name}</Text>
-                {_.status && !_.isDocumentRequired ? (
-                  <Text style={{color: 'blue'}}>Approved</Text>
-                ) : (
+            {addedBrand
+              .filter(item => item.status)
+              .map((_, i) => (
+                <TouchableOpacity>
+                  <Text style={{color: '#000'}}>Brand Name</Text>
+                  <Text style={{color: '#000'}}>{_.name}</Text>
+                  {_.status && !_.isDocumentRequired ? (
+                    <Text style={{color: 'blue'}}>Approved</Text>
+                  ) : (
+                    <>
+                      <Text style={{color: '#000'}}>Pending</Text>
+                      <TouchableOpacity onPress={() => openModal(_)}>
+                        <Text style={{color: 'red'}}>FILL DETAILS</Text>
+                      </TouchableOpacity>
+                    </>
+                  )}
+                </TouchableOpacity>
+              ))}
+          </View>
+          {addedBrand.filter(i => !i.status).length ? (
+            <Text style={styles.brandHeadingTxt}>
+              Brand you requested to add
+            </Text>
+          ) : null}
+          <View>
+            {addedBrand
+              .filter(item => !item.status)
+              .map((_, i) => (
+                <TouchableOpacity>
+                  <Text style={{color: '#000'}}>Brand Name</Text>
+                  <Text style={{color: '#000'}}>{_.name}</Text>
                   <>
                     <Text style={{color: '#000'}}>Pending</Text>
                     <TouchableOpacity onPress={() => openModal(_)}>
                       <Text style={{color: 'red'}}>FILL DETAILS</Text>
                     </TouchableOpacity>
                   </>
-                )}
-              </TouchableOpacity>
-            ))}
+                </TouchableOpacity>
+              ))}
           </View>
         </View>
       </ScrollView>
@@ -465,20 +511,35 @@ const CategoryBrandScreen = props => {
           {/* natureOfBusiness == 3 && checkCommonValidation() ? colors.BrandColor :
           natureOfBusiness !== 3 && checkValidation() ? colors.BrandColor :
           'dodgerblue' */}
-          <CustomButton
-            buttonColor={getButtonColor() ? colors.BrandColor : 'dodgerblue'}
-            borderColor={colors.BrandColor}
-            TextColor={colors.WhiteColor}
-            TextFontSize={Dimension.font16}
-            title={'Submit'}
-            disabled={
-              natureOfBusiness == 3
-                ? !checkCommonValidation()
-                : !checkValidation()
-            }
-            // loading={loading}
-            onPress={onSubmit}
-          />
+          {brand && brand.code ? (
+            <CustomButton
+              buttonColor={getButtonColor() ? colors.BrandColor : 'dodgerblue'}
+              borderColor={colors.BrandColor}
+              TextColor={colors.WhiteColor}
+              TextFontSize={Dimension.font16}
+              title={'Submit'}
+              disabled={
+                natureOfBusiness == 3
+                  ? !checkCommonValidation()
+                  : !checkValidation()
+              }
+              onPress={onSubmit}
+            />
+          ) : (
+            <CustomButton
+              buttonColor={getButtonColor() ? colors.BrandColor : 'dodgerblue'}
+              borderColor={colors.BrandColor}
+              TextColor={colors.WhiteColor}
+              TextFontSize={Dimension.font16}
+              title={'Submit'}
+              disabled={
+                natureOfBusiness == 3
+                  ? !checkCommonValidationReqBrand()
+                  : !checkValidation()
+              }
+              onPress={onSubmit}
+            />
+          )}
         </View>
       </Modal>
       <CustomButton
