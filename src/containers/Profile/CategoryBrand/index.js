@@ -14,6 +14,10 @@ const CategoryBrandScreen = props => {
   const categories = useSelector(
     state => (state.categorybrandReducer || {}).categories || [],
   );
+  const addedBrand = useSelector(
+    state => (state.categorybrandReducer || {}).brandsAdded || [],
+  );
+
   const [categoryCode, setcategoryCode] = useState([]);
 
   const BRAND_CATEGORY = new OrderedMap({
@@ -85,6 +89,8 @@ const CategoryBrandScreen = props => {
     );
   };
 
+  console.log('addedBrands', addedBrand, categories);
+
   return (
     <View style={{flex: 1}}>
       <Header
@@ -97,7 +103,24 @@ const CategoryBrandScreen = props => {
             .toList()
             .toArray()}
           <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
-          <View></View>
+          <View>
+            {addedBrand.map((_, i) => (
+              <TouchableOpacity>
+                <Text style={{color: '#000'}}>Brand Name</Text>
+                <Text style={{color: '#000'}}>{_.name}</Text>
+                {_.status && !_.isDocumentRequired ? (
+                  <Text style={{color: 'blue'}}>Approved</Text>
+                ) : (
+                  <>
+                    <Text style={{color: '#000'}}>Pending</Text>
+                    <TouchableOpacity>
+                      <Text style={{color: 'red'}}>FILL DETAILS</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
       </ScrollView>
     </View>
