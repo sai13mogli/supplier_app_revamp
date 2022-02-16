@@ -151,20 +151,19 @@ const MultiSelect = props => {
   return (
     <>
       {!props.fromBrand ? (
-        <View style={styles.InputWrap}>
+        <View style={styles.searchWrapper}>
           <TextInput
             placeholderTextColor={placeholderTextColor}
             onChangeText={onChangeText}
             value={value}
             blurOnSubmit={blurOnSubmit}
             placeholder={placeholder}
-            style={styles.inputContainerStyle}></TextInput>
-          <View style={styles.IconWrap}>
-            <CustomeIcon
-              name={'search'}
-              size={Dimension.font20}
-              color={colors.FontColor}></CustomeIcon>
-          </View>
+            style={styles.SearchInputCss}>
+
+            </TextInput>
+           <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+          {/* <CustomeIcon name={'close'} style={styles.CloseIcon}></CustomeIcon>
+         */}
         </View>
       ) : null}
 
@@ -197,32 +196,38 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     width: 'auto',
     flexDirection: 'row',
+    marginBottom:Dimension.margin8
   },
-  inputContainerStyle: {
-    borderWidth: 1,
-    borderColor: colors.BoxBorderColor,
-    borderRadius: 4,
-    paddingHorizontal: Dimension.padding12,
-    //height: Dimension.height40,
-    paddingBottom: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: Dimension.margin10,
-    backgroundColor: colors.WhiteColor,
-    textAlignVertical: 'center',
-    paddingVertical: Dimension.padding12,
-  },
-  InputWrap: {
-    position: 'relative',
-  },
-  IconWrap: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    height: Dimension.height40,
-    paddingVertical: Dimension.padding10,
-    paddingHorizontal: Dimension.padding12,
-  },
+  searchWrapper:{
+   marginBottom:Dimension.margin20,
+    position:"relative"
+},
+
+SearchInputCss:{
+  fontSize:Dimension.font12,
+  color:colors.FontColor,
+  fontFamily:Dimension.CustomRegularFont,
+  borderRadius:4,
+  borderWidth:1,
+  borderColor:colors.BoxBorderColor,
+  paddingHorizontal:Dimension.padding10,
+  paddingVertical:Dimension.padding10
+ 
+},
+seacrhIcon:{
+    position:"absolute",
+    top:Dimension.padding12,
+    right:Dimension.padding10,
+    fontSize:Dimension.font18,
+    color:colors.FontColor
+},
+CloseIcon:{
+  position:"absolute",
+    top:Dimension.padding15,
+    right:Dimension.padding20,
+    fontSize:Dimension.font18,
+    color:colors.BrandColor  
+},
 
  
 });

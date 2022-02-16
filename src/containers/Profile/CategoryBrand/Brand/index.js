@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import CustomButton from '../../../../component/common/Button';
 import styles from './style';
 import Colors from '../../../../Theme/Colors';
+import Dimension from '../../../../Theme/Dimension';
 import Modal from 'react-native-modal';
 import MultiSelect from '../../../../component/common/MultiSelect';
 
@@ -48,21 +49,29 @@ const BrandScreen = props => {
           <AllBrandsScreen />
         </TabView.Item>
       </TabView>
-      <TouchableOpacity>
-        <Text style={{color: '#000'}}>Requested Brands</Text>
-        <Text style={{color: '#000'}}>{addedBrand.length}</Text>
-      </TouchableOpacity>
-      <CustomButton
-        title={'SUBMIT'}
-        onPress={() => {
-          setModalVisible(true);
-        }}
-        buttonStyle={styles.submit}
-        disabled={!addedBrand.length}
-        TextColor={Colors.WhiteColor}
-        borderColor={Colors.WhiteColor}
-        buttonColor={addedBrand.length ? Colors.BrandColor : 'dodgerblue'}
-      />
+      <View style={styles.bottombtnWrap}>
+        <TouchableOpacity style={styles.BrandNumWrap}>
+          <Text style={styles.BrandNumTitle}>Requested Brands</Text>
+          <Text style={ addedBrand.length==0? styles.BrandNumTxt: styles.BrandNumTxt1}>{addedBrand.length}</Text>
+        </TouchableOpacity>
+        <View style={{flex:1}}>
+
+       
+        <CustomButton
+          title={'SUBMIT'}
+          onPress={() => {
+            setModalVisible(true);
+          }}
+          
+          disabled={!addedBrand.length}
+          TextColor={addedBrand.length ? Colors.WhiteColor : Colors.FontColor}
+          borderColor={addedBrand.length ? Colors.BrandColor : Colors.grayShade1}
+          buttonColor={addedBrand.length ? Colors.BrandColor : Colors.grayShade1}
+          TextFontSize={Dimension.font16}
+        />
+        </View>
+      </View>
+      
       <Modal
         overlayPointerEvents={'auto'}
         isVisible={modalVisible}

@@ -3,18 +3,18 @@ import Colors from '../../../../../Theme/Colors';
 import Dimension from '../../../../../Theme/Dimension';
 const styles = StyleSheet.create({
 Wrapper:{
- //flexDirection:"row",
+ flexDirection:"row",
  paddingHorizontal:Dimension.padding10,
  paddingVertical:Dimension.padding20,
  position:"relative"
  },
 
   leftPart:{
-    flex:.8,
+    flex:1,
     marginRight:Dimension.margin10
   },
   AlphabetWrap:{
-    position:'absolute',
+   flex:.1,
     top:Dimension.padding60,
     right:Dimension.padding10
   },

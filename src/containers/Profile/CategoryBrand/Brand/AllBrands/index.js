@@ -215,7 +215,7 @@ const AllBrandsScreen = props => {
           ListEmptyComponent={listEmptyComponent}     
         /> */}
 <View style={styles.Wrapper}>
-  
+  <View  style={styles.leftPart}>
         <MultiSelect
           value={inputValue}
           onChangeText={onSearchText}
@@ -236,12 +236,13 @@ const AllBrandsScreen = props => {
           ListEmptyComponent={listEmptyComponent}
           fromAllBrands={true}
         />
-          
+      </View>    
           <View style={styles.AlphabetWrap}>
           <FlatList
           data={ALPHABETS}
           renderItem={renderAlphabet}
           keyExtractor={(item, index) => `${index}-item`}
+          contentContainerStyle={{paddingBottom:380}}
         />
           </View>
         </View>
