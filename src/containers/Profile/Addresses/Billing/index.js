@@ -10,7 +10,7 @@ import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
 import AddressesModal from '../../../../component/common/AddressesModal';
 
-const SupportScreen = () => {
+const Billing = () => {
   const [data,setData]= useState( [
     { id: '1', lable: 'First item', checked : false},
     { id: '2', lable: 'Second item',checked : false },
@@ -125,4 +125,4 @@ const SupportScreen = () => {
   );
 };
 
-export default SupportScreen;
+export default Billing;
