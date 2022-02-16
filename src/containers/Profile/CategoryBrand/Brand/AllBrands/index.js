@@ -112,11 +112,11 @@ const AllBrandsScreen = props => {
       // <TouchableOpacity key={item.id}>
       //   <Text style={{color: '#000'}}>{item.name}</Text>
       // </TouchableOpacity>
-       <Checkbox
-       //checked={isSelected}
-      // onPress={() => setSelection(!isSelected)}
-       title={item.name}
-     />
+      <Checkbox
+        //checked={isSelected}
+        // onPress={() => setSelection(!isSelected)}
+        title={item.name}
+      />
     );
   };
 
@@ -178,7 +178,7 @@ const AllBrandsScreen = props => {
   const listEmptyComponent = () => (
     <View>
       <Text style={{color: '#000'}}>No Brand Found</Text>
-      <TouchableOpacity onPress={() => dispatch(addBrand(inputValue))}>
+      <TouchableOpacity onPress={() => dispatch(addBrand({name: inputValue}))}>
         <Text style={{color: 'red'}}>Add Brand</Text>
       </TouchableOpacity>
     </View>
@@ -214,42 +214,38 @@ const AllBrandsScreen = props => {
           maxToRenderPerBatch={20}
           ListEmptyComponent={listEmptyComponent}     
         /> */}
-<View style={styles.Wrapper}>
-  <View  style={styles.leftPart}>
-        <MultiSelect
-          value={inputValue}
-          onChangeText={onSearchText}
-          placeholder={'Search'}
-          placeholderTextColor={Colors.eyeIcon}
-          blurOnSubmit={true}
-          selectedValues={addedBrand}
-          data={allbrands}
-          onChangeDataChoosed={data => {
-            console.log('data', data);
-            // dispatch(addBrand(data));
-          }}
-          onEndReachedThreshold={0.9}
-          ListFooterComponent={renderFooter}
-          onEndReached={endReachedfetchListing}
-          removeClippedSubviews={true}
-          maxToRenderPerBatch={20}
-          ListEmptyComponent={listEmptyComponent}
-          fromAllBrands={true}
-        />
-      </View>    
+        <View style={styles.Wrapper}>
+          <View style={styles.leftPart}>
+            <MultiSelect
+              value={inputValue}
+              onChangeText={onSearchText}
+              placeholder={'Search'}
+              placeholderTextColor={Colors.eyeIcon}
+              blurOnSubmit={true}
+              selectedValues={addedBrand}
+              data={allbrands}
+              onChangeDataChoosed={data => {
+                console.log('data', data);
+                // dispatch(addBrand(data));
+              }}
+              onEndReachedThreshold={0.9}
+              ListFooterComponent={renderFooter}
+              onEndReached={endReachedfetchListing}
+              removeClippedSubviews={true}
+              maxToRenderPerBatch={20}
+              ListEmptyComponent={listEmptyComponent}
+              fromAllBrands={true}
+            />
+          </View>
           <View style={styles.AlphabetWrap}>
-          <FlatList
-          data={ALPHABETS}
-          renderItem={renderAlphabet}
-          keyExtractor={(item, index) => `${index}-item`}
-          contentContainerStyle={{paddingBottom:380}}
-        />
+            <FlatList
+              data={ALPHABETS}
+              renderItem={renderAlphabet}
+              keyExtractor={(item, index) => `${index}-item`}
+              contentContainerStyle={{paddingBottom: 380}}
+            />
           </View>
         </View>
-       
-
-       
-       
       </>
     );
   };

@@ -165,11 +165,11 @@ const CategoryBrandScreen = props => {
     },
     brand_url: {
       title: 'Brand URL (If Applicable)',
-      isImp: false,
+      isImp: brand && brand.code ? false : true,
       label: 'Brand URL (If Applicable)',
       placeholder: 'http://ABCD.com',
-      selectedValue: brandUrl,
-      onValueChange: text => setBrandUrl(text),
+      value: brandUrl,
+      onChangeText: text => setBrandUrl(text),
       component: FloatingLabelInputField,
     },
   });
@@ -363,6 +363,18 @@ const CategoryBrandScreen = props => {
     return brandName && brandName.length && natureOfBusiness;
   };
 
+  const checkCommonValidationReqBrand = () => {
+    return (
+      brandName &&
+      brandName.length &&
+      natureOfBusiness &&
+      expiryDate &&
+      expiryDate.length &&
+      brandUrl &&
+      brandUrl.length
+    );
+  };
+
   const getButtonColor = () => {
     if (natureOfBusiness == 3 && checkCommonValidation()) {
       console.log(expiryDate);
@@ -405,6 +417,15 @@ const CategoryBrandScreen = props => {
     console.log('data updated hi hai', data);
   };
 
+  console.log(
+    'natureofBusiness',
+    natureOfBusiness,
+    brandName,
+    brandName.length,
+    !checkCommonValidationReqBrand,
+    !checkValidation,
+  );
+
   return (
     <View style={{flex: 1}}>
       <Header
@@ -412,41 +433,66 @@ const CategoryBrandScreen = props => {
         showText={'Business Details'}
         rightIconName={'category--brand'}></Header>
       <ScrollView style={styles.ContainerCss}>
-        <View>
+        <View >
           {BRAND_CATEGORY.map(_ => renderInputText(_))
             .toList()
             .toArray()}
-          <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
-          <View style={{marginTop:Dimension.margin20}}>
-            {addedBrand.map((_, i) => (
-              <View style={styles.BrandWrap}>
+          {addedBrand.filter(i => i.status).length ? (
+            <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
+          ) : null}
+          <View>
+            {addedBrand
+              .filter(item => item.status)
+              .map((_, i) => (
+                <View style={styles.BrandWrap}>
                 <View style={{flex:1}}>
-                <Text style={styles.brandTitleTxt}>Brand Name</Text>
-                <Text style={styles.brandNameTxt}>{_.name}</Text>
-                </View>
+                  <Text style={styles.brandTitleTxt}>Brand Name</Text>
+                  <Text style={styles.brandNameTxt}>{_.name}</Text>
+                  </View>
+
                   <View style={{flex:1}}>
-                  <Text style={styles.brandTitleTxt}>Status</Text>
+                    <Text style={styles.brandTitleTxt}>Status</Text>
+                    {_.status && !_.isDocumentRequired ? (
+                    <Text style={styles.ApprovedStatus}>Approved</Text>
+                  ) : (
+                    <Text style={styles.pendingStatus}>Pending</Text>
+                  )}
+                  </View>
+                  <View style={{flex:1}}>
                   {_.status && !_.isDocumentRequired ? (
-                  <Text style={styles.ApprovedStatus}>Approved</Text>
-                ) : (
-                  <Text style={styles.pendingStatus}>Pending</Text>
-                )}
+                     <TouchableOpacity style={styles.ArrowBtn} onPress={() => openModal(_)}>
+                     <CustomeIcon name={'arrow-right-line'} size={Dimension.font28}color={colors.FontColor}></CustomeIcon>
+                    </TouchableOpacity>
+                  ) : (
+                   
+                  <TouchableOpacity onPress={() => openModal(_)} style={styles.fillBtn}>
+                        <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
+                      </TouchableOpacity>
+                   
+                  )}
                 </View>
-                <View style={{flex:1}}>
-                {_.status && !_.isDocumentRequired ? (
-                  <TouchableOpacity style={styles.ArrowBtn}>
-                   <CustomeIcon name={'arrow-right-line'} size={Dimension.font28}color={colors.FontColor}></CustomeIcon>
-                  </TouchableOpacity>
-                ) : (
+                </View>
+              ))}
+          </View>
+          {addedBrand.filter(i => !i.status).length ? (
+            <Text style={styles.brandHeadingTxt}>
+              Brand you requested to add
+            </Text>
+          ) : null}
+          <View>
+            {addedBrand
+              .filter(item => !item.status)
+              .map((_, i) => (
+                <View style={styles.BrandWrap}>
+                  <Text style={styles.brandTitleTxt}>Brand Name</Text>
+                  <Text style={styles.brandNameTxt}>{_.name}</Text>
                   <>
-                    <TouchableOpacity onPress={() => openModal(_)}>
-                      <Text style={{color: 'red'}}>FILL DETAILS</Text>
+                    <TouchableOpacity onPress={() => openModal(_)} style={styles.fillBtn}>
+                      <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
                     </TouchableOpacity>
                   </>
-                )}
                 </View>
-              </View>
-            ))}
+              ))}
           </View>
         </View>
       </ScrollView>
@@ -490,20 +536,33 @@ const CategoryBrandScreen = props => {
           'dodgerblue' */}
           </View>
           <View  style={styles.ModalBottomBtnWrap}>
-           <CustomButton
-            buttonColor={getButtonColor() ? colors.BrandColor : colors.DisableStateColor}
-            borderColor={colors.BrandColor}
+          {brand && brand.code ? (
+            <CustomButton
+            buttonColor={getButtonColor() ? colors.BrandColor : colors.DisableStateColor} borderColor={colors.BrandColor}
             TextColor={getButtonColor() ? colors.WhiteColor : colors.FontColor}
             TextFontSize={Dimension.font16}
-            title={'SUBMIT'}
-            disabled={
-              natureOfBusiness == 3
-                ? !checkCommonValidation()
-                : !checkValidation()
-            }
-            // loading={loading}
-            onPress={onSubmit}
-          />
+              title={'SUBMIT'}
+              disabled={
+                natureOfBusiness == 3
+                  ? !checkCommonValidation()
+                  : !checkValidation()
+              }
+              onPress={onSubmit}
+            />
+          ) : (
+            <CustomButton
+            buttonColor={getButtonColor() ? colors.BrandColor : colors.DisableStateColor} borderColor={colors.BrandColor}
+            TextColor={getButtonColor() ? colors.WhiteColor : colors.FontColor}
+            TextFontSize={Dimension.font16}
+              title={'SUBMIt'}
+              disabled={
+                natureOfBusiness == 3
+                  ? !checkCommonValidationReqBrand()
+                  : !checkValidation()
+              }
+              onPress={onSubmit}
+            />
+          )}
           </View>
         </View>
         

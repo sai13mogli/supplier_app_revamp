@@ -153,20 +153,6 @@ export const categorybrandReducer = (state = initialState, action) => {
 
     case CATEGORY_BRAND_ACTIONS.ADD_BRAND:
       console.log(state && state.brandsAdded, payload.obj);
-      // let brandObj = {
-      //   supplierId: '',
-      //   brandCode: payload.obj.code,
-      //   fileKey: '',
-      //   businessNature: 1,
-      //   expiryDate: '',
-      //   isDeleted: '0',
-      //   isRaiseRequest: 'false',
-      //   brandListingUrl: '',
-      //   id: payload.obj.id,
-      //   status: payload.obj.status,
-      //   isDocumentRequired: payload.obj.isDocumentRequired,
-      //   name: payload.obj.name,
-      // };
       if (state && state.brandsAdded) {
         return {
           ...state,

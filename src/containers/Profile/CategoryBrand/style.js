@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
   brandHeadingTxt:{
       fontSize:Dimension.font14,
       fontFamily:Dimension.CustomSemiBoldFont,
-      color:Colors.FontColor
+      color:Colors.FontColor,
+      marginVertical:Dimension.margin20
   },
 
  
