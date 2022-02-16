@@ -21,6 +21,7 @@ const BusinessDetailsScreen = props => {
   const businessDetails = useSelector(
     state => state.profileReducer.businessDetails.data || {},
   );
+  console.log("bussiness====>",businessDetails);
   const businessDetailsStatus = useSelector(
     state =>
       state.profileReducer.businessDetails.status || STATE_STATUS.FETCHING,
@@ -43,6 +44,7 @@ const BusinessDetailsScreen = props => {
   const [pincode, setpincode] = useState(
     (businessDetails.address || {}).pincode,
   );
+
   const [state, setstate] = useState((businessDetails.address || {}).state);
   const [city, setcity] = useState((businessDetails.address || {}).city);
   const [phone, setphone] = useState((businessDetails.profile || {}).phone);

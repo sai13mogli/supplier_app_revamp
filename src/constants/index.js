@@ -15,6 +15,10 @@ import CategoryBrand from '../containers/Profile/CategoryBrand';
 import SelectCategoryScreen from '../containers/Auth/SelectCategory';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
 import {OrderedMap} from 'immutable';
+import Accounts from '../containers/Profile/BankDetails/Accounts';
+import TdsDetails from '../containers/Profile/BankDetails/TdsDetails';
+import PickedUp from '../containers/Profile/Addresses/PickedUp';
+import Billing from '../containers/Profile/Addresses/Billing';
 import CategoryScreen from '../containers/Profile/CategoryBrand/Category';
 
 export const BOTTOM_TAB_SCREENS = [
@@ -48,6 +52,31 @@ export const BOTTOM_TAB_SCREENS = [
     // activeIcon: 'profile',
     // inactiveIcon: 'profile',
   },
+];
+
+export const TOP_TAB_SCREENS = [
+ 
+  {
+    name: 'Account',
+    component: Accounts,
+  },
+  {
+    name: 'TDS Taxation Details',
+    component: TdsDetails,
+  },
+
+];
+
+export const ADDRESSES_TAB_SCREENS = [
+  {
+    name: 'Billing',
+    component: Billing,
+  },
+  {
+    name: 'PickedUp',
+    component: PickedUp,
+  },
+
 ];
 
 export const AUTH_STACK_SCREENS = [
