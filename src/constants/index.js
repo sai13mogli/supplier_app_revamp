@@ -19,6 +19,7 @@ import Accounts from '../containers/Profile/BankDetails/Accounts';
 import TdsDetails from '../containers/Profile/BankDetails/TdsDetails';
 import PickedUp from '../containers/Profile/Addresses/PickedUp';
 import Billing from '../containers/Profile/Addresses/Billing';
+import CategoryScreen from '../containers/Profile/CategoryBrand/Category';
 
 export const BOTTOM_TAB_SCREENS = [
   //   {
@@ -133,6 +134,10 @@ export const APP_STACK_SCREENS = [
   {
     name: 'Brands',
     component: BrandScreen,
+  },
+  {
+    name: 'Category',
+    component: CategoryScreen,
   },
 ];
 

@@ -15,6 +15,13 @@ import {useNavigation} from '@react-navigation/native';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
 import CustomeIcon from '../CustomeIcon';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  addBrand,
+  removeBrand,
+  addCategory,
+  removeCategory,
+} from '../../../redux/actions/categorybrand';
 
 const MultiSelect = props => {
   const [choosedList, setChoosedList] = useState([]);
@@ -23,6 +30,8 @@ const MultiSelect = props => {
   const {navigate} = useNavigation();
   const navigation = useNavigation();
   const [search, setSearch] = useState([]);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setData();
@@ -47,6 +56,11 @@ const MultiSelect = props => {
     placeholder,
     placeholderTextColor,
     selectedValues,
+    onEndReachedThreshold,
+    onEndReached,
+    removeClippedSubviews,
+    maxToRenderPerBatch,
+    ListEmptyComponent,
   } = props;
 
   useEffect(() => {
@@ -63,17 +77,31 @@ const MultiSelect = props => {
   //   }
   // }, [dataList]);
 
-  const onPressItem = id => {
+  const onPressItem = (id, allBrands) => {
     let customeListNow = [...customeList];
+    console.log(id, customeListNow);
     for (const item in customeListNow) {
       if (customeListNow[item].id === id) {
         if (customeListNow[item].checked === false) {
           customeListNow[item].checked = true;
           let itemChoosed = customeListNow[item];
+          if (allBrands) {
+            dispatch(addBrand(customeListNow[item]));
+          }
+          if (props.fromCategory) {
+            dispatch(addCategory(customeListNow[item]));
+          }
+
           setChoosedList([...choosedList, itemChoosed]);
         } else {
           customeListNow[item].checked = false;
           let choosedListNow = [...choosedList].filter(item => item.id !== id);
+          if (allBrands) {
+            dispatch(removeBrand(customeListNow[item]));
+          }
+          if (props.fromCategory) {
+            dispatch(removeCategory(customeListNow[item]));
+          }
           setChoosedList([...choosedListNow]);
         }
       }
@@ -100,35 +128,45 @@ const MultiSelect = props => {
     return (
       <View>
         <TouchableOpacity
-          onPress={() => onPressItem(item.value)}
+          onPress={() =>
+            onPressItem(
+              item.value || item.id,
+              props.fromAllBrands,
+              props.fromCategory,
+            )
+          }
           style={styles.checkboxContainer}>
           <CustomeIcon
             name={!item.checked ? 'checkbox-blank' : 'checkbox-tick'}
             color={!item.checked ? colors.FontColor : colors.BrandColor}
             size={Dimension.font22}
           />
-          <Text style={styles.checkboxTitle}>{item.label}</Text>
+          <Text style={{color: 'red'}}>
+            {item.label || item.name || item.categoryName}
+          </Text>
         </TouchableOpacity>
       </View>
     );
   };
   return (
     <>
-      <View style={styles.InputWrap}>
-        <TextInput
-          placeholderTextColor={placeholderTextColor}
-          onChangeText={onChangeText}
-          value={value}
-          blurOnSubmit={blurOnSubmit}
-          placeholder={placeholder}
-          style={styles.inputContainerStyle}></TextInput>
-        <View style={styles.IconWrap}>
-          <CustomeIcon
-            name={'search'}
-            size={Dimension.font20}
-            color={colors.FontColor}></CustomeIcon>
+      {!props.fromBrand ? (
+        <View style={styles.InputWrap}>
+          <TextInput
+            placeholderTextColor={placeholderTextColor}
+            onChangeText={onChangeText}
+            value={value}
+            blurOnSubmit={blurOnSubmit}
+            placeholder={placeholder}
+            style={styles.inputContainerStyle}></TextInput>
+          <View style={styles.IconWrap}>
+            <CustomeIcon
+              name={'search'}
+              size={Dimension.font20}
+              color={colors.FontColor}></CustomeIcon>
+          </View>
         </View>
-      </View>
+      ) : null}
 
       <FlatList
         // keyExtractor={(item, index) => item.toString()}
@@ -136,6 +174,11 @@ const MultiSelect = props => {
         extraData={props.extraData}
         data={customeList}
         renderItem={renderItem}
+        onEndReachedThreshold={onEndReachedThreshold}
+        onEndReached={onEndReached}
+        removeClippedSubviews={removeClippedSubviews}
+        maxToRenderPerBatch={maxToRenderPerBatch}
+        ListEmptyComponent={ListEmptyComponent}
       />
     </>
   );
