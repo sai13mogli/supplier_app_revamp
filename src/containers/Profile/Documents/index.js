@@ -27,7 +27,8 @@ import Checkbox from '../../../component/common/Checkbox/index';
 import {submitProfile, getDocuments} from '../../../services/documents';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchProfile} from '../../../redux/actions/profile';
-import Header from '../../../component/common/Header'
+import Header from '../../../component/common/Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const deviceWidth = Dimensions.get('window').width;
 
 const DocumentsScreen = props => {
@@ -339,7 +340,6 @@ const DocumentsScreen = props => {
       data.data.corporationCertificate &&
       data.data.signature
     ) {
-      console.log('bhk bc..');
       setUploadDisabled(true);
     }
     setDocumentsData(data);
@@ -791,7 +791,7 @@ const DocumentsScreen = props => {
     }
   };
 
-  const openDocView = fileKey => {
+  const openDocView = async fileKey => {
     setLoader(true);
     setModalVisible(true);
     var myrequest = new XMLHttpRequest();
@@ -809,7 +809,8 @@ const DocumentsScreen = props => {
       'GET',
       `http://apigatewayqa.moglix.com/profile/file?download=0&key=${fileKey}`,
     );
-    myrequest.setRequestHeader('Authorization', authToken);
+    let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+    myrequest.setRequestHeader('Authorization', token);
     myrequest.responseType = 'blob';
     myrequest.send();
     myrequest.onload = e => {
@@ -875,6 +876,7 @@ const DocumentsScreen = props => {
           fId={fId}
           closeDoc={closeDoc}
           openDoc={openDoc}
+          fileUpload={2}
         />
       </TouchableOpacity>
     );
@@ -944,7 +946,11 @@ const DocumentsScreen = props => {
 
   return (
     <View style={{flex: 1}}>
-      <Header showBack showText={'Documents'} rightIconName={'single-product-upload'}/>
+      <Header
+        showBack
+        showText={'Documents'}
+        rightIconName={'single-product-upload'}
+      />
       <ScrollView style={styles.ContainerCss}>
         {Documents.map(_ => renderInputText(_))
           .toList()
@@ -995,7 +1001,7 @@ const DocumentsScreen = props => {
       <Modal
         overlayPointerEvents={'auto'}
         isVisible={modalVisible}
-      // isVisible={true}
+        // isVisible={true}
         onTouchOutside={() => {
           setModalVisible(false);
         }}
@@ -1011,8 +1017,7 @@ const DocumentsScreen = props => {
         onBackdropPress={() => {
           setModalVisible(false);
         }}
-        style={styles.ModalCss}
-        >
+        style={styles.ModalCss}>
         {loader ? (
           <ActivityIndicator
             size={'small'}
@@ -1030,7 +1035,7 @@ const DocumentsScreen = props => {
         ) : (
           <Image
             source={{uri: imageUrl}}
-            style={{height: "100%", width: "100%", flex: 1}}
+            style={{height: '100%', width: '100%', flex: 1}}
           />
         )}
       </Modal>
@@ -1054,9 +1059,7 @@ const DocumentsScreen = props => {
         }}
         style={styles.ModalCss}>
         <View style={styles.modalContainer}>
-          <Text style={styles.ModalHeading}>
-          Confirm Submission
-          </Text>
+          <Text style={styles.ModalHeading}>Confirm Submission</Text>
           <Text style={styles.Modaltext}>
             By confirming the submission of all the details you agree that all
             the details are true and no false details are provided.Once
@@ -1064,34 +1067,25 @@ const DocumentsScreen = props => {
             profile
           </Text>
           <View style={styles.ModalBtnWrap}>
-            <View style={{flex:1}}>
+            <View style={{flex: 1}}>
               <CustomButton
-              title="CANCEL"
-              buttonColor={colors.WhiteColor }
-             
-              borderColor={colors.WhiteColor }
-              TextColor={colors.FontColor }
-              TextFontSize={Dimension.font16}
-              onPress={() => setConfirmModal(false)}
-              >
-
-                
-              </CustomButton>
+                title="CANCEL"
+                buttonColor={colors.WhiteColor}
+                borderColor={colors.WhiteColor}
+                TextColor={colors.FontColor}
+                TextFontSize={Dimension.font16}
+                onPress={() => setConfirmModal(false)}></CustomButton>
             </View>
-            <View style={{flex:1}}>
+            <View style={{flex: 1}}>
               <CustomButton
-              title="CONFIRM"
-              buttonColor={colors.BrandColor }
-             
-              borderColor={colors.BrandColor }
-              TextColor={colors.WhiteColor }
-              TextFontSize={Dimension.font16}
-              //onPress={() => setConfirmModal(true)}
-              >
-
-                
-              </CustomButton>
-              </View>
+                title="CONFIRM"
+                buttonColor={colors.BrandColor}
+                borderColor={colors.BrandColor}
+                TextColor={colors.WhiteColor}
+                TextFontSize={Dimension.font16}
+                //onPress={() => setConfirmModal(true)}
+              ></CustomButton>
+            </View>
           </View>
           {/* <TouchableOpacity onPress={() => setConfirmModal(false)}>
             <Text style={{color: '#000'}}>CANCEL</Text>

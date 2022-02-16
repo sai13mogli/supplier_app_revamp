@@ -114,3 +114,12 @@ export const removeCategory = obj => {
     },
   };
 };
+
+export const addBrandData = obj => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.ADD_BRAND_DATA,
+    payload: {
+      obj,
+    },
+  };
+};

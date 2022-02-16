@@ -15,3 +15,10 @@ export const getBrands = async data =>
       authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
   });
+
+export const addOrUpdateCategoryAndBrand = async data =>
+  axios.post(`${BASE_URL}profile/addOrUpdateCategoryAndBrand`, data, {
+    headers: {
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
