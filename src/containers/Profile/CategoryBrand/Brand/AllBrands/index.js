@@ -13,6 +13,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchBrandSearchResult,
   fetchBrandSearchResultByAlphabet,
+  addBrand,
 } from '../../../../../redux/actions/categorybrand';
 import {STATE_STATUS} from '../../../../../redux/constants';
 import {ALPHABETS} from '../../../../../redux/constants/categorybrand';
@@ -20,8 +21,11 @@ import debounce from 'lodash.debounce';
 import styles from './style';
 import Checkbox from '../../../../../component/common/Checkbox/index';
 import CustomeIcon from '../../../../../component/common/CustomeIcon';
-import Colors from '../../../../../Theme/Colors';
+
 import Dimension from '../../../../../Theme/Dimension';
+import Colors from '../../../../../Theme/Colors';
+import MultiSelect from '../../../../../component/common/MultiSelect/index';
+
 const AllBrandsScreen = props => {
   const allbrands = useSelector(
     state => ((state.categorybrandReducer || {}).allBrands || {}).data || [],
@@ -52,6 +56,10 @@ const AllBrandsScreen = props => {
     state => ((state.categorybrandReducer || {}).allBrands || {}).maxPage || 91,
   );
 
+  const addedBrand = useSelector(
+    state => (state.categorybrandReducer || {}).brandsAdded || [],
+  );
+
   // const [alphabet, setAlphabet] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
@@ -60,6 +68,8 @@ const AllBrandsScreen = props => {
   useEffect(() => {
     fetchListingData(64);
   }, []);
+
+  console.log('addedBrand', addedBrand);
 
   //action dispatch for saga and service
   const fetchListingData = (pageNo, search) => {
@@ -89,7 +99,7 @@ const AllBrandsScreen = props => {
   const debouncedSave = useRef(
     debounce(text => {
       fetchListingData(64, text);
-    }, 300),
+    }, 500),
   ).current;
 
   const onSearchText = text => {
@@ -165,26 +175,33 @@ const AllBrandsScreen = props => {
     return null;
   };
 
+  const listEmptyComponent = () => (
+    <View>
+      <Text style={{color: '#000'}}>No Brand Found</Text>
+      <TouchableOpacity onPress={() => dispatch(addBrand(inputValue))}>
+        <Text style={{color: 'red'}}>Add Brand</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   const brandListing = () => {
     return (
       <>
-      <View style={styles.searchWrapper}>
-          <TextInput
-            placeholder="Search"
-            placeholderTextColor={"#A2A2A2"}
-            selectionColor={'#888'}
-            returnKeyType={'search'}
-            value={inputValue}
-            onChangeText={onSearchText}
-            style={styles.SearchInputCss}
-          />
-          <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
-          {/* <CustomeIcon name={'close'} style={styles.CloseIcon}></CustomeIcon>
-         */}
-         </View>
-       <View style={styles.Wrapper}>
-         <View style={styles.leftPart}>
-          <FlatList
+        {/* <TextInput
+          placeholder="Search"
+          placeholderTextColor={'#000'}
+          selectionColor={'#888'}
+          returnKeyType={'search'}
+          value={inputValue}
+          onChangeText={onSearchText}
+        />
+
+         <FlatList
+          data={ALPHABETS}
+          renderItem={renderAlphabet}
+          keyExtractor={(item, index) => `${index}-item`}
+        /> 
+        <FlatList
           data={allbrands}
           renderItem={renderItem}
           style={{paddingBottom: 380}}
@@ -193,8 +210,31 @@ const AllBrandsScreen = props => {
           onEndReachedThreshold={0.9}
           ListFooterComponent={renderFooter}
           onEndReached={endReachedfetchListing}
-          // ItemSeparatorComponent={renderInLineFilters}
-          // ListEmptyComponent={listEmptyComponent}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={20}
+          ListEmptyComponent={listEmptyComponent}     
+        /> */}
+<View>
+  <View>
+        <MultiSelect
+          value={inputValue}
+          onChangeText={onSearchText}
+          placeholder={'Search'}
+          placeholderTextColor={Colors.eyeIcon}
+          blurOnSubmit={true}
+          selectedValues={addedBrand}
+          data={allbrands}
+          onChangeDataChoosed={data => {
+            console.log('data', data);
+            // dispatch(addBrand(data));
+          }}
+          onEndReachedThreshold={0.9}
+          ListFooterComponent={renderFooter}
+          onEndReached={endReachedfetchListing}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={20}
+          ListEmptyComponent={listEmptyComponent}
+          fromAllBrands={true}
         />
           </View>
           <View style={styles.rightPart}>

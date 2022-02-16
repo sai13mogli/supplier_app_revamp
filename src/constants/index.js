@@ -15,6 +15,7 @@ import CategoryBrand from '../containers/Profile/CategoryBrand';
 import SelectCategoryScreen from '../containers/Auth/SelectCategory';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
 import {OrderedMap} from 'immutable';
+import CategoryScreen from '../containers/Profile/CategoryBrand/Category';
 
 export const BOTTOM_TAB_SCREENS = [
   //   {
@@ -104,6 +105,10 @@ export const APP_STACK_SCREENS = [
   {
     name: 'Brands',
     component: BrandScreen,
+  },
+  {
+    name: 'Category',
+    component: CategoryScreen,
   },
 ];
 
