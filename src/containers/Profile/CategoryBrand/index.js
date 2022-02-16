@@ -334,7 +334,7 @@ const CategoryBrandScreen = props => {
       businessNature: natureOfBusiness,
       expiryDate: expiryDate,
       isDeleted: '0',
-      isRaiseRequest: 'false',
+      isRaiseRequest: 'true',
       brandListingUrl: brandUrl,
     };
     dispatch(addBrandData(brandObj));
@@ -487,9 +487,9 @@ const CategoryBrandScreen = props => {
         TextColor={colors.WhiteColor}
         TextFontSize={Dimension.font16}
         title={'Next'}
-        disabled={
-          natureOfBusiness == 3 ? !checkCommonValidation() : !checkValidation()
-        }
+        // disabled={
+        //   natureOfBusiness == 3 ? !checkCommonValidation() : !checkValidation()
+        // }
         loading={loading}
         onPress={onNext}
       />
