@@ -50,7 +50,7 @@ const CustomeDatePicker = props => {
 
   return (
     <>
-      <Text style={{color: '#000'}}>{label}</Text>
+      <Text style={styles.labelStyle}>{label}</Text>
       {isImp ? <Text style={{color: 'red'}}>*</Text> : null}
       <View>
         <TouchableOpacity
