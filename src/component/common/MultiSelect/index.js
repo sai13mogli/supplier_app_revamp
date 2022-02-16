@@ -86,6 +86,19 @@ const MultiSelect = props => {
           customeListNow[item].checked = true;
           let itemChoosed = customeListNow[item];
           if (allBrands) {
+            // customeListNow[item] = {
+            //   supplierId: '',
+            //   brandCode: (customeListNow[item]).code,
+            //   fileKey: '',
+            //   businessNature: '1',
+            //   expiryDate: '',
+            //   isDeleted: '0',
+            //   isRaiseRequest: 'false',
+            //   brandListingUrl: '',
+            //   status:(customeListNow[item]).status,
+            //   isDocumentRequired:(customeListNow[item]).isDocumentRequired,
+            //   id:(customeListNow[item]).id
+            // },
             dispatch(addBrand(customeListNow[item]));
           }
           if (props.fromCategory) {
