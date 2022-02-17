@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     marginVertical:Dimension.margin15
 
   },
-  ModalBtnWrap:{flexDirection:"row"},
+  ModalBtnWrap:{flexDirection:"row",marginTop:Dimension.margin20},
   ModalCss:{padding:0,margin:0}
 });
 

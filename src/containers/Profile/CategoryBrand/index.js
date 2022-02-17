@@ -291,25 +291,6 @@ const CategoryBrandScreen = props => {
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
-
-      // <TouchableOpacity>
-      //   <FloatingLabelInputField
-      //     label={label}
-      //     isImp={isImp}
-      //     value={value}
-      //     onChangeText={onChangeText}
-      //     fromAddCategory={fromAddCategory}
-      //     extraView={() => (
-      //       <TouchableOpacity
-      //         onPress={() => props.navigation.navigate('Brands')}>
-      //         <CustomeIcon
-      //           name={'arrow-right-line'}
-      //           size={Dimension.font22}
-      //           color={colors.FontColor}></CustomeIcon>
-      //       </TouchableOpacity>
-      //     )}
-      //   />
-      // </TouchableOpacity>
     );
   };
 

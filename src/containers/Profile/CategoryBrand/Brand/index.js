@@ -74,7 +74,8 @@ const BrandScreen = props => {
       
       <Modal
         overlayPointerEvents={'auto'}
-        isVisible={modalVisible}
+       isVisible={modalVisible}
+        ///isVisible={true}
         onTouchOutside={() => {
           setModalVisible(false);
         }}
@@ -88,17 +89,22 @@ const BrandScreen = props => {
         }}
         onBackdropPress={() => {
           setModalVisible(false);
-        }}>
-        <View>
-          <Text style={{color: '#000'}}>
-            Are you sure you want to create these
-            <Text style={{color: 'red'}}>
+        }}
+        style={{padding:0,margin:0}}
+        >
+        <View style={styles.modalContainer}>
+          <View style={styles.topbdr}></View>
+          <View style={styles.headingWrapper}>
+          <Text style={styles.ModalheadingTxt}>
+            Are you sure you want to create these 
+            <Text style={styles.redTxt}> {' '}
               {addedBrand.length < 10
                 ? `0${addedBrand.length}`
                 : addedBrand.length}
             </Text>{' '}
-            brands
+             brands
           </Text>
+          </View>
           <MultiSelect
             data={addedBrand}
             onChangeDataChoosed={data => {
@@ -108,28 +114,35 @@ const BrandScreen = props => {
             selectedValues={addedBrand}
             fromBrand={true}
           />
-          <CustomButton
-            title={'CANCEL'}
-            onPress={() => {
-              setModalVisible(false);
-            }}
-            buttonStyle={styles.submit}
-            TextColor={Colors.WhiteColor}
-            borderColor={Colors.WhiteColor}
-            buttonColor={'dodgerblue'}
-          />
-          <CustomButton
-            title={'SUBMIT'}
-            onPress={() => {
+          <View style={styles.ModalBtnWrap}>
+            <View style={{flex: 1}}>
+              <CustomButton
+                title="CANCEL"
+                buttonColor={Colors.WhiteColor}
+                borderColor={Colors.WhiteColor}
+                TextColor={Colors.FontColor}
+                TextFontSize={Dimension.font16}
+                onPress={() => {
+                  setModalVisible(false);
+                }}>
+
+                </CustomButton>
+            </View>
+            <View style={{flex: 1}}>
+              <CustomButton
+                title="CONFIRM"
+                buttonColor={Colors.BrandColor}
+                borderColor={Colors.BrandColor}
+                TextColor={Colors.WhiteColor}
+                TextFontSize={Dimension.font16}
+                onPress={() => {
               setModalVisible(false);
               props.navigation.navigate('CategoryBrand');
             }}
-            buttonStyle={styles.submit}
-            disabled={!addedBrand.length}
-            TextColor={Colors.WhiteColor}
-            borderColor={Colors.WhiteColor}
-            buttonColor={addedBrand.length ? Colors.BrandColor : 'dodgerblue'}
-          />
+              ></CustomButton>
+            </View>
+          </View>
+          
         </View>
       </Modal>
     </>

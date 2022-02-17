@@ -28,7 +28,8 @@ grayShade2:"#EFEFEF",
 grayShade3:"#F8F8F8",
 headerTxtColor:"#3C3C3C",
 blackColor:'#000',
-PendingStateColor:"#D97023"
+PendingStateColor:"#D97023",
+modalBorder:'#CECECE',
 
 
 
