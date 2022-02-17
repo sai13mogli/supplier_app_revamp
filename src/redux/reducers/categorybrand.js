@@ -16,6 +16,10 @@ const initialState = {
   brandsAdded: [],
   categories: [],
   brandsData: [],
+  popularcategories: {
+    data: [],
+    status: STATE_STATUS.UNFETCHED,
+  },
 
   // brandsStatus: STATE_STATUS.UNFETCHED,
 
@@ -209,12 +213,15 @@ export const categorybrandReducer = (state = initialState, action) => {
         categories: [payload.obj],
       };
 
-    // case CATEGORY_BRAND_ACTIONS.SET_CATEGORIES:
-    //   console.log('dat', payload);
-    //   return {
-    //     ...state,
-    //     categories: [...payload.data],
-    //   };
+    case CATEGORY_BRAND_ACTIONS.SET_POPULAR_CATEGORIES:
+      return {
+        ...state,
+        popularcategories: {
+          ...state.popularcategories,
+          data: [...payload.data],
+          status: STATE_STATUS.FETCHED,
+        },
+      };
 
     default:
       return state;

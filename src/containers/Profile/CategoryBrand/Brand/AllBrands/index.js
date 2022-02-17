@@ -62,12 +62,22 @@ const AllBrandsScreen = props => {
 
   // const [alphabet, setAlphabet] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const [activeTerm, setActiveTerm] = useState('0-9');
+  const [loader, setLoader] = useState(true);
+  const [initLoader, setInitLoader] = useState(true);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     fetchListingData(64);
+    setInitLoader(false);
   }, []);
+
+  useEffect(() => {
+    if (allBrandsStatus == STATE_STATUS.FETCHED && loader && !initLoader) {
+      setLoader(false);
+    }
+  }, [allBrandsStatus]);
 
   console.log('addedBrand', addedBrand);
 
@@ -88,8 +98,13 @@ const AllBrandsScreen = props => {
   };
 
   const fetchListingDataByAlphabet = term => {
+    if (term == '0-9') {
+      setActiveTerm('0-9');
+    } else {
+      setActiveTerm(String.fromCharCode(term));
+    }
     let fetchListingObj = {
-      categoryCodes: [String.fromCharCode(term)],
+      categoryCodes: term == '0-9' ? ['0-9'] : [String.fromCharCode(term)],
       searchString: '',
       pageNo: 64,
     };
@@ -107,25 +122,19 @@ const AllBrandsScreen = props => {
     debouncedSave(text);
   };
 
-  const renderItem = ({item, index}) => {
-    return (
-      // <TouchableOpacity key={item.id}>
-      //   <Text style={{color: '#000'}}>{item.name}</Text>
-      // </TouchableOpacity>
-      <Checkbox
-        //checked={isSelected}
-        // onPress={() => setSelection(!isSelected)}
-        title={item.name}
-      />
-    );
-  };
-
   const renderAlphabet = ({item, index}) => {
     return (
       <TouchableOpacity
         key={index}
         onPress={() => fetchListingDataByAlphabet(item)}>
-        <Text style={styles.alphbetText}>{String.fromCharCode(item)}</Text>
+        <Text
+          style={
+            activeTerm == String.fromCharCode(item)
+              ? styles.activealphbetText
+              : styles.alphbetText
+          }>
+          {String.fromCharCode(item)}
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -137,7 +146,8 @@ const AllBrandsScreen = props => {
       pageIndex + 1 < maxPage &&
       !inputValue &&
       !inputValue.length &&
-      !alphabetEndReached
+      !alphabetEndReached &&
+      !loader
     ) {
       fetchListingData(pageIndex + 1);
     }
@@ -232,12 +242,22 @@ const AllBrandsScreen = props => {
               ListFooterComponent={renderFooter}
               onEndReached={endReachedfetchListing}
               removeClippedSubviews={true}
-              maxToRenderPerBatch={20}
+              maxToRenderPerBatch={100}
               ListEmptyComponent={listEmptyComponent}
               fromAllBrands={true}
             />
           </View>
           <View style={styles.AlphabetWrap}>
+            <TouchableOpacity onPress={() => fetchListingDataByAlphabet('0-9')}>
+              <Text
+                style={
+                  activeTerm == '0-9'
+                    ? styles.activealphbetText
+                    : styles.alphbetText
+                }>
+                0-9
+              </Text>
+            </TouchableOpacity>
             <FlatList
               data={ALPHABETS}
               renderItem={renderAlphabet}
@@ -251,9 +271,14 @@ const AllBrandsScreen = props => {
   };
 
   const renderListing = () => {
-    if (
-      pageIndex == 64 &&
-      [STATE_STATUS.UNFETCHED, STATE_STATUS.FETCHING].includes(allBrandsStatus)
+    if (initLoader) {
+      return renderLoader();
+    } else if (
+      loader ||
+      (pageIndex == 64 &&
+        [STATE_STATUS.UNFETCHED, STATE_STATUS.FETCHING].includes(
+          allBrandsStatus,
+        ))
     ) {
       return renderLoader();
     }

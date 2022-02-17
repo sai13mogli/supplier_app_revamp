@@ -123,3 +123,12 @@ export const addBrandData = obj => {
     },
   };
 };
+
+export const setPopularCategories = data => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.SET_POPULAR_CATEGORIES,
+    payload: {
+      data,
+    },
+  };
+};

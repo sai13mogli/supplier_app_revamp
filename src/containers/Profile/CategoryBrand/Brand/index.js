@@ -11,9 +11,21 @@ import Modal from 'react-native-modal';
 import MultiSelect from '../../../../component/common/MultiSelect';
 import {TOP_BRANDS_SCREENS} from '../../../../constants';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import Tabs from '../../../../component/common/Tabs';
 const deviceWidth = Dimensions.get('window').width;
 
-const Tab = createMaterialTopTabNavigator();
+const TABS = [
+  {
+    name: 'PopularBrands',
+    key: 'popularbrands',
+    component: PopularBrandsScreen,
+  },
+  {
+    name: 'AllBrands',
+    key: 'allbrands',
+    component: AllBrandsScreen,
+  },
+];
 
 const BrandScreen = props => {
   const addedBrand = useSelector(
@@ -21,71 +33,9 @@ const BrandScreen = props => {
   );
   const [modalVisible, setModalVisible] = useState(false);
 
-  const tabBarIcon = (focused, color, route, rest) => {
-    let currentScreen = TOP_BRANDS_SCREENS.find(
-      screen => screen.name === route.name,
-    );
-    let tabName = currentScreen['name'];
-    return (
-      <TouchableOpacity
-        style={styles.iconAlignment}
-        onPress={() => rest.navigation.navigate(route.name)}>
-        <Text style={[styles.tabText, {color: focused ? color : '#3c3c3c'}]}>
-          {tabName}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
-
   return (
     <>
-      <Tab.Navigator
-        screenOptions={({route, ...rest}) => ({
-          headerShown: false,
-          tabBarIcon: ({focused, color}) =>
-            tabBarIcon(focused, color, route, rest),
-          lazy: false,
-          safeAreaInsets: {bottom: 0},
-        })}
-        tabBarOptions={tabBarOptions}>
-        {TOP_BRANDS_SCREENS.map((screen, key) => (
-          <Tab.Screen
-            key={key}
-            lazy={false}
-            name={screen.name}
-            component={prop => <screen.component {...prop} />}
-          />
-        ))}
-      </Tab.Navigator>
-
-      {/* <Tab
-        value={index}
-        onChange={e => setIndex(e)}
-        indicatorStyle={{
-          backgroundColor: 'red',
-          height: 3,
-        }}
-        variant="primary">
-        <Tab.Item
-          title="Popular Brands"
-          titleStyle={{fontSize: 12}}
-          icon={{name: 'timer', type: 'ionicon', color: 'white'}}
-        />
-        <Tab.Item
-          title="All Brands"
-          titleStyle={{fontSize: 12}}
-          icon={{name: 'cart', type: 'ionicon', color: 'white'}}
-        />
-      </Tab> */}
-
-      {/* <TabView value={index} onChange={setIndex} animationType="spring">
-        <TabView.Item style={{backgroundColor: 'white', width: '100%'}}>
-          <PopularBrandsScreen />
-        </TabView.Item>
-        <TabView.Item style={{backgroundColor: 'white', width: '100%'}}>
-          <AllBrandsScreen />
-        </TabView.Item>
-      </TabView> */}
+      <Tabs data={TABS.map(_ => ({..._}))} />
       <View style={styles.bottombtnWrap}>
         <TouchableOpacity style={styles.BrandNumWrap}>
           <Text style={styles.BrandNumTitle}>Requested Brands</Text>

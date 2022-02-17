@@ -398,7 +398,7 @@ const CategoryBrandScreen = props => {
     let mutatebrands = (addedBrand || []).map((_, i) => ({
       supplierId: '',
       brandCode: _.code,
-      fileKey: '',
+      fileKey: '9a73dc34dcd5cb1f81aedfd409769347',
       businessNature: '1',
       expiryDate: '',
       isDeleted: '0',
@@ -408,10 +408,48 @@ const CategoryBrandScreen = props => {
 
     // let categoryIds = (categories || []).map((_, i) => _.id);
     let brandsarr = [...mutatebrands, ...raisedBrand];
+    let categoryIds = ([...categoryCode] || []).map((_, i) => _.id);
+    // let payloadObj = {
+    //   categoryCode: [...categoryIds],
+    //   brandList: [...brandsarr],
+    // };
+
     let payloadObj = {
-      categoryCode: [...categoryCode],
-      brandList: [...brandsarr],
+      categoryCode: ['122000000', '260000000'],
+      brandList: [
+        {
+          supplierId: '',
+          brandCode: 'd3876965-ceba-4052-8526-42c3534a72bf',
+          fileKey: '9a73dc34dcd5cb1f81aedfd409769347',
+          businessNature: '2',
+          expiryDate: '',
+          isDeleted: '0',
+          isRaiseRequest: 'false',
+          brandListingUrl: '',
+        },
+        {
+          supplierId: '',
+          brandCode: 'bd5b7209-59d8-405e-b47a-72f2677ad497',
+          fileKey: 'd5825501532840e9db36308326a4ce9b',
+          businessNature: '3',
+          expiryDate: '24-02-2022',
+          isDeleted: '0',
+          isRaiseRequest: 'false',
+          brandListingUrl: '',
+        },
+        {
+          supplierId: '',
+          brandCode: 'dd20c1c6-7cc5-441d-8547-fc1f19c1cdff',
+          fileKey: '',
+          businessNature: '1',
+          expiryDate: '',
+          isDeleted: '0',
+          isRaiseRequest: 'false',
+          brandListingUrl: '',
+        },
+      ],
     };
+
     const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
     console.log('data updated hi hai', data);
   };
