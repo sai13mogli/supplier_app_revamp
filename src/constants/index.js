@@ -20,6 +20,8 @@ import TdsDetails from '../containers/Profile/BankDetails/TdsDetails';
 import PickedUp from '../containers/Profile/Addresses/PickedUp';
 import Billing from '../containers/Profile/Addresses/Billing';
 import CategoryScreen from '../containers/Profile/CategoryBrand/Category';
+import PopularBrandsScreen from '../containers/Profile/CategoryBrand/Brand/PopularBrands';
+import AllBrandsScreen from '../containers/Profile/CategoryBrand/Brand/AllBrands';
 
 export const BOTTOM_TAB_SCREENS = [
   //   {
@@ -55,7 +57,6 @@ export const BOTTOM_TAB_SCREENS = [
 ];
 
 export const TOP_TAB_SCREENS = [
- 
   {
     name: 'Account',
     component: Accounts,
@@ -64,7 +65,17 @@ export const TOP_TAB_SCREENS = [
     name: 'TDS Taxation Details',
     component: TdsDetails,
   },
+];
 
+export const TOP_BRANDS_SCREENS = [
+  {
+    name: 'PopularBrands',
+    component: PopularBrandsScreen,
+  },
+  {
+    name: 'AllBrands',
+    component: AllBrandsScreen,
+  },
 ];
 
 export const ADDRESSES_TAB_SCREENS = [
@@ -76,7 +87,6 @@ export const ADDRESSES_TAB_SCREENS = [
     name: 'PickedUp',
     component: PickedUp,
   },
-
 ];
 
 export const AUTH_STACK_SCREENS = [

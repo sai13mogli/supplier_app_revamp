@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {TouchableOpacity, Text, View, Dimensions} from 'react-native';
-import {Tab, TabView} from 'react-native-elements';
 import AllBrandsScreen from './AllBrands';
 import PopularBrandsScreen from './PopularBrands';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,18 +9,56 @@ import Colors from '../../../../Theme/Colors';
 import Dimension from '../../../../Theme/Dimension';
 import Modal from 'react-native-modal';
 import MultiSelect from '../../../../component/common/MultiSelect';
-
+import {TOP_BRANDS_SCREENS} from '../../../../constants';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 const deviceWidth = Dimensions.get('window').width;
+
+const Tab = createMaterialTopTabNavigator();
+
 const BrandScreen = props => {
   const addedBrand = useSelector(
     state => (state.categorybrandReducer || {}).brandsAdded || [],
   );
   const [modalVisible, setModalVisible] = useState(false);
-  const [index, setIndex] = useState(0);
+
+  const tabBarIcon = (focused, color, route, rest) => {
+    let currentScreen = TOP_BRANDS_SCREENS.find(
+      screen => screen.name === route.name,
+    );
+    let tabName = currentScreen['name'];
+    return (
+      <TouchableOpacity
+        style={styles.iconAlignment}
+        onPress={() => rest.navigation.navigate(route.name)}>
+        <Text style={[styles.tabText, {color: focused ? color : '#3c3c3c'}]}>
+          {tabName}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <>
-      <Tab
+      <Tab.Navigator
+        screenOptions={({route, ...rest}) => ({
+          headerShown: false,
+          tabBarIcon: ({focused, color}) =>
+            tabBarIcon(focused, color, route, rest),
+          lazy: false,
+          safeAreaInsets: {bottom: 0},
+        })}
+        tabBarOptions={tabBarOptions}>
+        {TOP_BRANDS_SCREENS.map((screen, key) => (
+          <Tab.Screen
+            key={key}
+            lazy={false}
+            name={screen.name}
+            component={prop => <screen.component {...prop} />}
+          />
+        ))}
+      </Tab.Navigator>
+
+      {/* <Tab
         value={index}
         onChange={e => setIndex(e)}
         indicatorStyle={{
@@ -39,42 +76,48 @@ const BrandScreen = props => {
           titleStyle={{fontSize: 12}}
           icon={{name: 'cart', type: 'ionicon', color: 'white'}}
         />
-      </Tab>
+      </Tab> */}
 
-      <TabView value={index} onChange={setIndex} animationType="spring">
+      {/* <TabView value={index} onChange={setIndex} animationType="spring">
         <TabView.Item style={{backgroundColor: 'white', width: '100%'}}>
           <PopularBrandsScreen />
         </TabView.Item>
         <TabView.Item style={{backgroundColor: 'white', width: '100%'}}>
           <AllBrandsScreen />
         </TabView.Item>
-      </TabView>
+      </TabView> */}
       <View style={styles.bottombtnWrap}>
         <TouchableOpacity style={styles.BrandNumWrap}>
           <Text style={styles.BrandNumTitle}>Requested Brands</Text>
-          <Text style={ addedBrand.length==0? styles.BrandNumTxt: styles.BrandNumTxt1}>{addedBrand.length}</Text>
+          <Text
+            style={
+              addedBrand.length == 0 ? styles.BrandNumTxt : styles.BrandNumTxt1
+            }>
+            {addedBrand.length}
+          </Text>
         </TouchableOpacity>
-        <View style={{flex:1}}>
-
-       
-        <CustomButton
-          title={'SUBMIT'}
-          onPress={() => {
-            setModalVisible(true);
-          }}
-          
-          disabled={!addedBrand.length}
-          TextColor={addedBrand.length ? Colors.WhiteColor : Colors.FontColor}
-          borderColor={addedBrand.length ? Colors.BrandColor : Colors.grayShade1}
-          buttonColor={addedBrand.length ? Colors.BrandColor : Colors.grayShade1}
-          TextFontSize={Dimension.font16}
-        />
+        <View style={{flex: 1}}>
+          <CustomButton
+            title={'SUBMIT'}
+            onPress={() => {
+              setModalVisible(true);
+            }}
+            disabled={!addedBrand.length}
+            TextColor={addedBrand.length ? Colors.WhiteColor : Colors.FontColor}
+            borderColor={
+              addedBrand.length ? Colors.BrandColor : Colors.grayShade1
+            }
+            buttonColor={
+              addedBrand.length ? Colors.BrandColor : Colors.grayShade1
+            }
+            TextFontSize={Dimension.font16}
+          />
         </View>
       </View>
-      
+
       <Modal
         overlayPointerEvents={'auto'}
-       isVisible={modalVisible}
+        isVisible={modalVisible}
         ///isVisible={true}
         onTouchOutside={() => {
           setModalVisible(false);
@@ -90,20 +133,20 @@ const BrandScreen = props => {
         onBackdropPress={() => {
           setModalVisible(false);
         }}
-        style={{padding:0,margin:0}}
-        >
+        style={{padding: 0, margin: 0}}>
         <View style={styles.modalContainer}>
           <View style={styles.topbdr}></View>
           <View style={styles.headingWrapper}>
-          <Text style={styles.ModalheadingTxt}>
-            Are you sure you want to create these 
-            <Text style={styles.redTxt}> {' '}
-              {addedBrand.length < 10
-                ? `0${addedBrand.length}`
-                : addedBrand.length}
-            </Text>{' '}
-             brands
-          </Text>
+            <Text style={styles.ModalheadingTxt}>
+              Are you sure you want to create these
+              <Text style={styles.redTxt}>
+                {' '}
+                {addedBrand.length < 10
+                  ? `0${addedBrand.length}`
+                  : addedBrand.length}
+              </Text>{' '}
+              brands
+            </Text>
           </View>
           <MultiSelect
             data={addedBrand}
@@ -124,9 +167,7 @@ const BrandScreen = props => {
                 TextFontSize={Dimension.font16}
                 onPress={() => {
                   setModalVisible(false);
-                }}>
-
-                </CustomButton>
+                }}></CustomButton>
             </View>
             <View style={{flex: 1}}>
               <CustomButton
@@ -136,17 +177,24 @@ const BrandScreen = props => {
                 TextColor={Colors.WhiteColor}
                 TextFontSize={Dimension.font16}
                 onPress={() => {
-              setModalVisible(false);
-              props.navigation.navigate('CategoryBrand');
-            }}
-              ></CustomButton>
+                  setModalVisible(false);
+                  props.navigation.navigate('CategoryBrand');
+                }}></CustomButton>
             </View>
           </View>
-          
         </View>
       </Modal>
     </>
   );
+};
+
+const tabBarOptions = {
+  activeTintColor: '#D9232D',
+  inactiveTintColor: '#C4C4C4',
+  showLabel: false,
+  lazy: false,
+  style: styles.tabBar,
+  safeAreaInsets: {bottom: 0},
 };
 
 export default BrandScreen;
