@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Colors from '../../../../Theme/Colors';
 import MultiSelect from '../../../../component/common/MultiSelect/index';
 import CustomButton from '../../../../component/common/Button';
+import Header from '../../../../component/common/Header';
 
 const CategoryScreen = props => {
   const [search, setSearch] = useState('');
@@ -13,6 +14,10 @@ const CategoryScreen = props => {
   );
   const [selectedValues, setSelectedValues] = useState(
     props.route.params.categoryCode || [],
+  );
+
+  const selectedCategories = useSelector(
+    state => (state.categorybrandReducer || {}).categories || [],
   );
 
   const dispatch = useDispatch();
@@ -39,28 +44,35 @@ const CategoryScreen = props => {
   };
 
   return (
-    <>
+    <View style={{flex: 1}}>
+      <Header
+        howBack
+        showText={'Category & Brand'}
+        rightIconName={'category--brand'}></Header>
       <MultiSelect
         selectedValues={selectedValues}
-        data={categories && categories.slice(1, 10)}
+        data={categories}
         onChangeDataChoosed={data => {
           setSelectedValues(data);
         }}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={20}
         fromBrand={true}
         fromCategory={true}
       />
 
       <CustomButton
         title={'SUBMIT'}
-        buttonColor={'dodgerblue'}
         onPress={() => {
           props.route.params.setcategoryCode(selectedValues);
           props.navigation.goBack();
         }}
+        buttonColor={selectedValues.length ? Colors.BrandColor : 'dodgerblue'}
+        disabled={selectedValues.length ? false : true}
         TextColor={Colors.WhiteColor}
         borderColor={Colors.WhiteColor}
       />
-    </>
+    </View>
   );
 };
 

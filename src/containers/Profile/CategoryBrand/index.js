@@ -69,7 +69,8 @@ const CategoryBrandScreen = props => {
       placeholder: 'Select Categories',
       fromAddCategory: true,
       extraView: true,
-      value: categoryCode || categories.label,
+      value: categoryCode,
+      // || categories.label
       onPress: () =>
         props.navigation.navigate('Category', {
           fetchCategoryfromApi: true,
@@ -274,24 +275,41 @@ const CategoryBrandScreen = props => {
         isImp={true}
       />
     ) : (
-      <TouchableOpacity>
-        <FloatingLabelInputField
-          label={label}
-          isImp={isImp}
-          value={value}
-          onChangeText={onChangeText}
-          fromAddCategory={fromAddCategory}
-          extraView={() => (
-            <TouchableOpacity
-              onPress={() => props.navigation.navigate('Brands')}>
-              <CustomeIcon
-                name={'arrow-right-line'}
-                size={Dimension.font22}
-                color={colors.FontColor}></CustomeIcon>
-            </TouchableOpacity>
-          )}
-        />
+      <TouchableOpacity onPress={() => props.navigation.navigate('Brands')}>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.labelStyle}>{label}</Text>
+          <Text style={styles.starIcon}>*</Text>
+        </View>
+        <View style={styles.inputContainerStyle}>
+          <Text style={styles.placeholderCss}>Select</Text>
+          <TouchableOpacity onPress={() => props.navigation.navigate('Brands')}>
+            <CustomeIcon
+              name={'eye-open'}
+              size={Dimension.font20}
+              color={colors.eyeIcon}
+            />
+          </TouchableOpacity>
+        </View>
       </TouchableOpacity>
+
+      // <TouchableOpacity>
+      //   <FloatingLabelInputField
+      //     label={label}
+      //     isImp={isImp}
+      //     value={value}
+      //     onChangeText={onChangeText}
+      //     fromAddCategory={fromAddCategory}
+      //     extraView={() => (
+      //       <TouchableOpacity
+      //         onPress={() => props.navigation.navigate('Brands')}>
+      //         <CustomeIcon
+      //           name={'arrow-right-line'}
+      //           size={Dimension.font22}
+      //           color={colors.FontColor}></CustomeIcon>
+      //       </TouchableOpacity>
+      //     )}
+      //   />
+      // </TouchableOpacity>
     );
   };
 
@@ -407,10 +425,10 @@ const CategoryBrandScreen = props => {
       brandListingUrl: '',
     }));
 
-    let categoryIds = (categories || []).map((_, i) => _.id);
+    // let categoryIds = (categories || []).map((_, i) => _.id);
     let brandsarr = [...mutatebrands, ...raisedBrand];
     let payloadObj = {
-      categoryCode: [...categoryIds],
+      categoryCode: [...categoryCode],
       brandList: [...brandsarr],
     };
     const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
@@ -430,7 +448,7 @@ const CategoryBrandScreen = props => {
     <View style={{flex: 1}}>
       <Header
         howBack
-        showText={'Business Details'}
+        showText={'Category & Brand'}
         rightIconName={'category--brand'}></Header>
       <ScrollView style={styles.ContainerCss}>
         <View>
