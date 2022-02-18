@@ -212,25 +212,13 @@ const CategoryBrandScreen = props => {
 
     let arr = [];
     (data.data || []).forEach(ele => {
-      //   if (selectedCategories && selectedCategories.length) {
-      //     selectedCategories.forEach(e => {
-      //       if (ele.categoryCode == e.id) {
-      //         arr.push(e);
-      //       }
-      //     });
-      //   } else {
       initialSelectedCategories.forEach(e => {
         if (ele.categoryCode == e.categoryCode) {
           arr.push({...e, categoryName: ele.categoryName});
         }
       });
-      //   }
     });
 
-    // if (selectedCategories && selectedCategories.length) {
-    //   console.log('selectedCteg');
-    //   setInitialCategories(arr);
-    // } else {
     let mutateArr = arr.map(_ => ({
       label: _.categoryName,
       checked: true,
@@ -240,21 +228,6 @@ const CategoryBrandScreen = props => {
 
     dispatch(setSelectCategories(mutateArr));
     dispatch(setCategories(mutateArr));
-
-    //   setInitialCategories(mutateArr);
-    // }
-
-    // let mergeArr = [...mutateArr, ...stateCategories];
-    // let resArr = [];
-    // (mergeArr || []).filter(item => {
-    //   let i = resArr.findIndex(x => x.id == (item.id || item.categoryCode));
-    //   if (i <= -1) {
-    //     resArr.push(item);
-    //   }
-    //   return null;
-    // });
-    // dispatch(setSelectCategories(resArr));
-    // props.navigation.goBack();
   };
 
   const uploadDocu = async data => {

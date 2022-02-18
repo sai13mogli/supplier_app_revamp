@@ -59,8 +59,6 @@ const CategoryScreen = props => {
     props.navigation.goBack();
   };
 
-  console.log('selectedValues', selectedValues);
-
   return (
     <View style={{flex: 1}}>
       <Header
