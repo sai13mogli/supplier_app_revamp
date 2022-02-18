@@ -13,9 +13,6 @@ const CategoryScreen = props => {
   const [categories, setCategories] = useState([]);
   const [selectedValues, setSelectedValues] = useState([]);
 
-  // const selectedCategories = useSelector(
-  //   state => (state.categorybrandReducer || {}).categories || [],
-  // );
   const selectedCategories = useSelector(
     state =>
       (((state.profileReducer || {}).categoryBrandDetails || {}).data || {})
@@ -41,7 +38,7 @@ const CategoryScreen = props => {
   const getCategories = async () => {
     const {data} = await getAllCategories();
     if (data.success) {
-      setSelectedValues([...selectcategories]);
+      setSelectedValues(selectcategories);
       setCategories(
         data.data.map(_ => ({
           label: _.categoryName,
@@ -59,6 +56,8 @@ const CategoryScreen = props => {
     props.navigation.goBack();
   };
 
+  console.log(selectedValues);
+
   return (
     <View style={{flex: 1}}>
       <Header
@@ -66,11 +65,10 @@ const CategoryScreen = props => {
         showText={'Category & Brand'}
         rightIconName={'category--brand'}></Header>
       <MultiSelect
-        selectedValues={stateCategories}
+        selectedValues={selectedValues}
         data={categories}
         onChangeDataChoosed={data => {
-          console.log(data);
-          // setSelectedValues(data);
+          setSelectedValues(data);
         }}
         removeClippedSubviews={true}
         maxToRenderPerBatch={20}
@@ -81,12 +79,8 @@ const CategoryScreen = props => {
       <CustomButton
         title={'SUBMIT'}
         onPress={onSubmit}
-        // onPress={() => {
-        //   props.route.params.setcategoryCode(selectedValues);
-        //   props.navigation.goBack();
-        // }}
-        buttonColor={stateCategories ? Colors.BrandColor : 'dodgerblue'}
-        disabled={stateCategories ? false : true}
+        buttonColor={selectedValues.length ? Colors.BrandColor : 'dodgerblue'}
+        disabled={selectedValues.length ? false : true}
         TextColor={Colors.WhiteColor}
         borderColor={Colors.WhiteColor}
       />

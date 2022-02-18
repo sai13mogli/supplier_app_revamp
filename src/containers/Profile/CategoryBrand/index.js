@@ -57,6 +57,10 @@ const CategoryBrandScreen = props => {
     state => (state.categorybrandReducer || {}).selectcategories || [],
   );
 
+  const stateCategories = useSelector(
+    state => (state.categorybrandReducer || {}).categories || [],
+  );
+
   const [categoryCode, setcategoryCode] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [brandName, setBrandName] = useState('');
@@ -206,6 +210,10 @@ const CategoryBrandScreen = props => {
       filterSelectedArr();
     }
   }, [initialSelectedCategories]);
+
+  useEffect(() => {
+    console.log('state data hai');
+  }, [stateCategories]);
 
   const filterSelectedArr = async () => {
     const {data} = await getAllCategories();
