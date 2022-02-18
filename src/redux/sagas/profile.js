@@ -13,9 +13,18 @@ import {
 } from '../../services/profile';
 // actions
 import {
-  fetchedBusinessDetails,failedFetchBusinessDetails,fetchedUpdateBusinessDetails,
-  failedFetchUpdateBusinessDetails,failedFetchAddressDetails,fetchedAddressDetails, 
-  failedFetchBankDetails, fetchedBankDetails,fetchedProfile,failedFetchProfile,
+  fetchedBusinessDetails,
+  failedFetchBusinessDetails,
+  fetchedUpdateBusinessDetails,
+  failedFetchUpdateBusinessDetails,
+  failedFetchAddressDetails,
+  fetchedAddressDetails,
+  failedFetchBankDetails,
+  fetchedBankDetails,
+  fetchedProfile,
+  failedFetchProfile,
+  fetchedCategoriesBrands,
+  failedFetchCategoriesBrands,
 } from '../actions/profile';
 
 function* fetchBusinessDetails() {
@@ -72,25 +81,29 @@ function* fetchAddressDetails() {
   }
 }
 
- function* fetchBankDetails(){
+function* fetchBankDetails() {
   try {
-     const {data, error} = yield call(getBankDetails);
-     if (error) {
-       yield put(failedFetchBankDetails(error));
-     } else {
-       yield put(fetchedBankDetails(data.data));
-     }
-   } catch (error) {
-     yield put(failedFetchBankDetails(error));
-   }
- }
+    const {data, error} = yield call(getBankDetails);
+    if (error) {
+      yield put(failedFetchBankDetails(error));
+    } else {
+      yield put(fetchedBankDetails(data.data));
+    }
+  } catch (error) {
+    yield put(failedFetchBankDetails(error));
+  }
+}
 
 export default fork(function* () {
   yield takeEvery(PROFILE_ACTIONS.FETCH_PROFILE, fetchProfile);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS, fetchBusinessDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_ADDRESSES, fetchAddressDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BANK_DETAILS, fetchBankDetails);
-  yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,fetchUpdateBusinessDetails);
+  yield takeEvery(
+    PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,
+    fetchUpdateBusinessDetails,
+  );
+
   yield takeEvery(
     PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,
     fetchUpdateBusinessDetails,

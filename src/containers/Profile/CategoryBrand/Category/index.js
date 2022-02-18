@@ -6,18 +6,28 @@ import Colors from '../../../../Theme/Colors';
 import MultiSelect from '../../../../component/common/MultiSelect/index';
 import CustomButton from '../../../../component/common/Button';
 import Header from '../../../../component/common/Header';
+import {setSelectCategories} from '../../../../redux/actions/categorybrand';
 
 const CategoryScreen = props => {
   const [search, setSearch] = useState('');
-  const [categories, setCategories] = useState(
-    props.route.params.categories || [],
-  );
-  const [selectedValues, setSelectedValues] = useState(
-    props.route.params.categoryCode || [],
+  const [categories, setCategories] = useState([]);
+  const [selectedValues, setSelectedValues] = useState([]);
+
+  // const selectedCategories = useSelector(
+  //   state => (state.categorybrandReducer || {}).categories || [],
+  // );
+  const selectedCategories = useSelector(
+    state =>
+      (((state.profileReducer || {}).categoryBrandDetails || {}).data || {})
+        .categories || [],
   );
 
-  const selectedCategories = useSelector(
+  const stateCategories = useSelector(
     state => (state.categorybrandReducer || {}).categories || [],
+  );
+
+  const selectcategories = useSelector(
+    state => (state.categorybrandReducer || {}).selectcategories || [],
   );
 
   const dispatch = useDispatch();
@@ -26,12 +36,12 @@ const CategoryScreen = props => {
     if (props.route.params.fetchCategoryfromApi) {
       getCategories();
     }
-    setSelectedValues(props.route.params.categoryCode);
   }, []);
 
   const getCategories = async () => {
     const {data} = await getAllCategories();
     if (data.success) {
+      setSelectedValues([...selectcategories]);
       setCategories(
         data.data.map(_ => ({
           label: _.categoryName,
@@ -43,6 +53,14 @@ const CategoryScreen = props => {
     }
   };
 
+  const onSubmit = () => {
+    let mergeArr = [...stateCategories];
+    dispatch(setSelectCategories(mergeArr));
+    props.navigation.goBack();
+  };
+
+  console.log('selectedValues', selectedValues);
+
   return (
     <View style={{flex: 1}}>
       <Header
@@ -50,10 +68,11 @@ const CategoryScreen = props => {
         showText={'Category & Brand'}
         rightIconName={'category--brand'}></Header>
       <MultiSelect
-        selectedValues={selectedValues}
+        selectedValues={stateCategories}
         data={categories}
         onChangeDataChoosed={data => {
-          setSelectedValues(data);
+          console.log(data);
+          // setSelectedValues(data);
         }}
         removeClippedSubviews={true}
         maxToRenderPerBatch={20}
@@ -63,12 +82,13 @@ const CategoryScreen = props => {
 
       <CustomButton
         title={'SUBMIT'}
-        onPress={() => {
-          props.route.params.setcategoryCode(selectedValues);
-          props.navigation.goBack();
-        }}
-        buttonColor={selectedValues.length ? Colors.BrandColor : 'dodgerblue'}
-        disabled={selectedValues.length ? false : true}
+        onPress={onSubmit}
+        // onPress={() => {
+        //   props.route.params.setcategoryCode(selectedValues);
+        //   props.navigation.goBack();
+        // }}
+        buttonColor={stateCategories ? Colors.BrandColor : 'dodgerblue'}
+        disabled={stateCategories ? false : true}
         TextColor={Colors.WhiteColor}
         borderColor={Colors.WhiteColor}
       />

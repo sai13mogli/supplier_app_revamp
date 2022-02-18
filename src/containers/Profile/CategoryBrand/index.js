@@ -25,8 +25,15 @@ import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../../../redux/constants/index';
-import {addBrandData, addBrand} from '../../../redux/actions/categorybrand';
+import {
+  addBrandData,
+  addBrand,
+  setSelectCategories,
+  emptyCategories,
+  setCategories,
+} from '../../../redux/actions/categorybrand';
 import {addOrUpdateCategoryAndBrand} from '../../../services/categorybrand';
+import {getAllCategories} from '../../../services/auth';
 
 // import {uploadDocumentService} from '../../../services/documents';
 const deviceWidth = Dimensions.get('window').width;
@@ -40,6 +47,14 @@ const CategoryBrandScreen = props => {
   );
   const raisedBrand = useSelector(
     state => (state.categorybrandReducer || {}).brandsData || [],
+  );
+
+  const initialSelectedCategories = useSelector(
+    state => (state.categorybrandReducer || {}).initialcategories || [],
+  );
+
+  const selectedCategories = useSelector(
+    state => (state.categorybrandReducer || {}).selectcategories || [],
   );
 
   const [categoryCode, setcategoryCode] = useState([]);
@@ -58,6 +73,7 @@ const CategoryBrandScreen = props => {
   const [loading, setLoading] = useState(false);
   const [brandNameError, setBrandNameError] = useState(false);
   const [brand, setBrand] = useState({});
+  const [initialCategories, setInitialCategories] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -69,13 +85,13 @@ const CategoryBrandScreen = props => {
       placeholder: 'Select Categories',
       fromAddCategory: true,
       extraView: true,
-      value: categoryCode,
+      value: selectedCategories,
       // || categories.label
       onPress: () =>
         props.navigation.navigate('Category', {
           fetchCategoryfromApi: true,
-          setcategoryCode: setcategoryCode,
-          categoryCode: categoryCode,
+          //   setcategoryCode: setcategoryCode,
+          initialCategories: selectedCategories,
         }),
     },
     brand: {
@@ -184,6 +200,62 @@ const CategoryBrandScreen = props => {
       uploadDocu(brandCertificate);
     }
   }, [brandCertificate]);
+
+  useEffect(() => {
+    if (initialSelectedCategories && initialSelectedCategories.length) {
+      filterSelectedArr();
+    }
+  }, [initialSelectedCategories]);
+
+  const filterSelectedArr = async () => {
+    const {data} = await getAllCategories();
+
+    let arr = [];
+    (data.data || []).forEach(ele => {
+      //   if (selectedCategories && selectedCategories.length) {
+      //     selectedCategories.forEach(e => {
+      //       if (ele.categoryCode == e.id) {
+      //         arr.push(e);
+      //       }
+      //     });
+      //   } else {
+      initialSelectedCategories.forEach(e => {
+        if (ele.categoryCode == e.categoryCode) {
+          arr.push({...e, categoryName: ele.categoryName});
+        }
+      });
+      //   }
+    });
+
+    // if (selectedCategories && selectedCategories.length) {
+    //   console.log('selectedCteg');
+    //   setInitialCategories(arr);
+    // } else {
+    let mutateArr = arr.map(_ => ({
+      label: _.categoryName,
+      checked: true,
+      id: _.categoryCode,
+      value: _.categoryCode,
+    }));
+
+    dispatch(setSelectCategories(mutateArr));
+    dispatch(setCategories(mutateArr));
+
+    //   setInitialCategories(mutateArr);
+    // }
+
+    // let mergeArr = [...mutateArr, ...stateCategories];
+    // let resArr = [];
+    // (mergeArr || []).filter(item => {
+    //   let i = resArr.findIndex(x => x.id == (item.id || item.categoryCode));
+    //   if (i <= -1) {
+    //     resArr.push(item);
+    //   }
+    //   return null;
+    // });
+    // dispatch(setSelectCategories(resArr));
+    // props.navigation.goBack();
+  };
 
   const uploadDocu = async data => {
     let res = await uploadDocumentService(data);
@@ -546,8 +618,8 @@ const CategoryBrandScreen = props => {
             />
           )).toList()}
           {/* natureOfBusiness == 3 && checkCommonValidation() ? colors.BrandColor :
-          natureOfBusiness !== 3 && checkValidation() ? colors.BrandColor :
-          'dodgerblue' */}
+            natureOfBusiness !== 3 && checkValidation() ? colors.BrandColor :
+            'dodgerblue' */}
           {brand && brand.code ? (
             <CustomButton
               buttonColor={getButtonColor() ? colors.BrandColor : 'dodgerblue'}

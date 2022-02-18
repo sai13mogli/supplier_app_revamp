@@ -1083,8 +1083,8 @@ const DocumentsScreen = props => {
                 borderColor={colors.BrandColor}
                 TextColor={colors.WhiteColor}
                 TextFontSize={Dimension.font16}
-                //onPress={() => setConfirmModal(true)}
-              ></CustomButton>
+                onPress={onSubmit}
+              />
             </View>
           </View>
           {/* <TouchableOpacity onPress={() => setConfirmModal(false)}>

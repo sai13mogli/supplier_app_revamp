@@ -132,3 +132,43 @@ export const setPopularCategories = data => {
     },
   };
 };
+
+export const setSelectCategories = data => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.SET_SELECT_CATEGORIES,
+    payload: {
+      data,
+    },
+  };
+};
+
+export const setCategories = data => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.SET_CATEGORIES,
+    payload: {
+      data,
+    },
+  };
+};
+
+export const fetchCategoriesBrands = () => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.FETCH_CATEGORIES_BRANDS,
+  };
+};
+
+export const fetchedCategoriesBrands = data => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.FETCHED_CATEGORIES_BRANDS,
+    payload: {
+      data,
+    },
+  };
+};
+
+export const failedFetchCategoriesBrands = error => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.FAILED_FETCH_CATEGORIES_BRANDS,
+    error,
+  };
+};

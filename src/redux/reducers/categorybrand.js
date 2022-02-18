@@ -20,6 +20,7 @@ const initialState = {
     data: [],
     status: STATE_STATUS.UNFETCHED,
   },
+  selectcategories: [],
 
   // brandsStatus: STATE_STATUS.UNFETCHED,
 
@@ -221,6 +222,24 @@ export const categorybrandReducer = (state = initialState, action) => {
           data: [...payload.data],
           status: STATE_STATUS.FETCHED,
         },
+      };
+
+    case CATEGORY_BRAND_ACTIONS.SET_SELECT_CATEGORIES:
+      return {
+        ...state,
+        selectcategories: [...payload.data],
+      };
+
+    case CATEGORY_BRAND_ACTIONS.FETCHED_CATEGORIES_BRANDS:
+      return {
+        ...state,
+        initialcategories: [...payload.data],
+      };
+
+    case CATEGORY_BRAND_ACTIONS.SET_CATEGORIES:
+      return {
+        ...state,
+        categories: [...payload.data],
       };
 
     default:
