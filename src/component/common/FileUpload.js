@@ -28,6 +28,8 @@ const FileUpload = props => {
     fileUpload,
     fromCategoryBrand,
     uploadDocument,
+    errorState,
+    errorText,
   } = props;
   if (fileUpload == 2 || fileUpload == 3) {
     return (
@@ -79,6 +81,9 @@ const FileUpload = props => {
             </TouchableOpacity>
           )}
         </View>
+        {errorState ? (
+          <Text style={{color: 'red', fontSize: 12}}>{errorText}</Text>
+        ) : null}
       </View>
     );
   } else {
