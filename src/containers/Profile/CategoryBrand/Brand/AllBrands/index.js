@@ -128,6 +128,16 @@ const AllBrandsScreen = props => {
       <TouchableOpacity
         key={index}
         onPress={() => fetchListingDataByAlphabet(item)}>
+        {item == '0-9' ? (
+          <Text
+            style={
+              activeTerm == '0-9'
+                ? styles.activealphbetText
+                : styles.alphbetText
+            }>
+            0-9
+          </Text>
+        ) : null}
         <Text
           style={
             activeTerm == String.fromCharCode(item)
@@ -186,45 +196,24 @@ const AllBrandsScreen = props => {
     return null;
   };
 
-  const listEmptyComponent = () => (
-    <View>
-      <Text style={{color: '#000'}}>No Brand Found</Text>
-      <TouchableOpacity onPress={() => dispatch(addBrand({name: inputValue}))}>
-        <Text style={{color: 'red'}}>Add Brand</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  const listEmptyComponent = () => {
+    if (inputValue && inputValue != '') {
+      return (
+        <View>
+          <Text style={{color: '#000'}}>No Brand Found</Text>
+          <TouchableOpacity
+            onPress={() => dispatch(addBrand({name: inputValue}))}>
+            <Text style={{color: 'red'}}>Add Brand</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    return <Text style={{color: '#000'}}>Something Went woring!!</Text>;
+  };
 
   const brandListing = () => {
     return (
       <>
-        {/* <TextInput
-          placeholder="Search"
-          placeholderTextColor={'#000'}
-          selectionColor={'#888'}
-          returnKeyType={'search'}
-          value={inputValue}
-          onChangeText={onSearchText}
-        />
-
-         <FlatList
-          data={ALPHABETS}
-          renderItem={renderAlphabet}
-          keyExtractor={(item, index) => `${index}-item`}
-        /> 
-        <FlatList
-          data={allbrands}
-          renderItem={renderItem}
-          style={{paddingBottom: 380}}
-          contentContainerStyle={{paddingBottom: 380}}
-          keyExtractor={(item, index) => `${index}-item`}
-          onEndReachedThreshold={0.9}
-          ListFooterComponent={renderFooter}
-          onEndReached={endReachedfetchListing}
-          removeClippedSubviews={true}
-          maxToRenderPerBatch={20}
-          ListEmptyComponent={listEmptyComponent}     
-        /> */}
         <View style={styles.Wrapper}>
           <View style={styles.leftPart}>
             <MultiSelect
@@ -249,16 +238,6 @@ const AllBrandsScreen = props => {
             />
           </View>
           <View style={styles.AlphabetWrap}>
-            <TouchableOpacity onPress={() => fetchListingDataByAlphabet('0-9')}>
-              <Text
-                style={
-                  activeTerm == '0-9'
-                    ? styles.activealphbetText
-                    : styles.alphbetText
-                }>
-                0-9
-              </Text>
-            </TouchableOpacity>
             <FlatList
               data={ALPHABETS}
               renderItem={renderAlphabet}

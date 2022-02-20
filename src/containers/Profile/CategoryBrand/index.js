@@ -71,6 +71,8 @@ const CategoryBrandScreen = props => {
     loading: false,
     showDoc: false,
     closeDoc: false,
+    errorState: false,
+    errorText: 'Certificate upload failed.Please try again.',
   });
   const [expiryDate, setExpiryDate] = useState('');
   const [brandUrl, setBrandUrl] = useState('');
@@ -78,6 +80,7 @@ const CategoryBrandScreen = props => {
   const [brandNameError, setBrandNameError] = useState(false);
   const [brand, setBrand] = useState({});
   const [initialCategories, setInitialCategories] = useState([]);
+  const [nextLoader, setNextLoader] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -168,10 +171,13 @@ const CategoryBrandScreen = props => {
       loading: brandCertificate && brandCertificate.loading,
       closeDoc: brandCertificate && brandCertificate.closeDoc,
       value: brandCertificate && brandCertificate.value,
+      errorState: brandCertificate && brandCertificate.errorState,
+      errorText: brandCertificate && brandCertificate.errorText,
       onRemove: () => onRemove(),
       closeDoc: brandCertificate && brandCertificate.closeDoc,
       fromCategoryBrand: true,
       uploadDocument: () => uploadFromFileExp(),
+      onPress: () => uploadFromFileExp(),
       component: FileUpload,
     },
     date: {
@@ -241,7 +247,12 @@ const CategoryBrandScreen = props => {
   const uploadDocu = async data => {
     let res = await uploadDocumentService(data);
     console.log('uploadDocument ka res hai bhaiii!', res);
-    setDocument(res);
+    let {resp} = res;
+    if (resp.error) {
+      setErrorData();
+    } else {
+      setDocument(res);
+    }
   };
 
   const uploadDocumentService = async data => {
@@ -289,6 +300,14 @@ const CategoryBrandScreen = props => {
       loading: false,
       showDoc: false,
       closeDoc: true,
+    });
+  };
+
+  const setErrorData = () => {
+    setBrandCertificate({
+      ...brandCertificate,
+      loading: false,
+      errorState: true,
     });
   };
 
@@ -373,6 +392,7 @@ const CategoryBrandScreen = props => {
       ...data,
       loading: true,
       key: 'brandCertificate',
+      errorState: false,
     });
   };
 
@@ -399,17 +419,23 @@ const CategoryBrandScreen = props => {
       code: brand.code,
     });
     setBrandName(brand.name);
+    setnatureOfBusiness(1);
+    setBrandCertificate({
+      title: '',
+      value: '',
+      loading: false,
+      showDoc: false,
+      closeDoc: false,
+      errorState: false,
+      errorText: 'Certificate upload failed.Please try again.',
+    });
+    setExpiryDate('');
+    setBrandUrl('');
     setModalVisible(true);
   };
 
   const checkCommonValidation = () => {
-    return (
-      brandName &&
-      brandName.length &&
-      natureOfBusiness &&
-      expiryDate &&
-      expiryDate.length
-    );
+    return brandName && brandName.length && natureOfBusiness && expiryDate;
   };
   const checkValidation = () => {
     return brandName && brandName.length && natureOfBusiness;
@@ -427,11 +453,30 @@ const CategoryBrandScreen = props => {
     );
   };
 
+  const checkValidationReqBrand = () => {
+    return (
+      brandName &&
+      brandName.length &&
+      natureOfBusiness &&
+      brandUrl &&
+      brandUrl.length
+    );
+  };
+
   const getButtonColor = () => {
     if (natureOfBusiness == 3 && checkCommonValidation()) {
-      console.log(expiryDate);
       return true;
     } else if (natureOfBusiness != 3 && checkValidation()) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const getButtonColorReqBrand = () => {
+    if (natureOfBusiness == 3 && checkCommonValidationReqBrand()) {
+      return true;
+    } else if (natureOfBusiness != 3 && checkValidationReqBrand()) {
       return true;
     } else {
       return false;
@@ -448,63 +493,60 @@ const CategoryBrandScreen = props => {
   // "brandListingUrl": ""
 
   const onNext = async () => {
-    let mutatebrands = (addedBrand || []).map((_, i) => ({
-      supplierId: '',
-      brandCode: _.code,
-      fileKey: '9a73dc34dcd5cb1f81aedfd409769347',
-      businessNature: '1',
-      expiryDate: '',
-      isDeleted: '0',
-      isRaiseRequest: 'false',
-      brandListingUrl: '',
-    }));
-
-    // let categoryIds = (categories || []).map((_, i) => _.id);
-    let brandsarr = [...mutatebrands, ...raisedBrand];
-    let categoryIds = ([...categoryCode] || []).map((_, i) => _.id);
+    setNextLoader(true);
+    // let mutatebrands = (addedBrand || []).map((_, i) => ({
+    //   supplierId: '',
+    //   brandCode: _.code,
+    //   fileKey: '9a73dc34dcd5cb1f81aedfd409769347',
+    //   businessNature: '1',
+    //   expiryDate: '',
+    //   isDeleted: '0',
+    //   isRaiseRequest: 'false',
+    //   brandListingUrl: '',
+    // }));
+    // let brandsarr = [...mutatebrands, ...raisedBrand];
+    // let categoryIds = ([...selectedCategories] || []).map((_, i) => _.id);
     // let payloadObj = {
     //   categoryCode: [...categoryIds],
     //   brandList: [...brandsarr],
     // };
-
-    let payloadObj = {
-      categoryCode: ['122000000', '260000000'],
-      brandList: [
-        {
-          supplierId: '',
-          brandCode: 'd3876965-ceba-4052-8526-42c3534a72bf',
-          fileKey: '9a73dc34dcd5cb1f81aedfd409769347',
-          businessNature: '2',
-          expiryDate: '',
-          isDeleted: '0',
-          isRaiseRequest: 'false',
-          brandListingUrl: '',
-        },
-        {
-          supplierId: '',
-          brandCode: 'bd5b7209-59d8-405e-b47a-72f2677ad497',
-          fileKey: 'd5825501532840e9db36308326a4ce9b',
-          businessNature: '3',
-          expiryDate: '24-02-2022',
-          isDeleted: '0',
-          isRaiseRequest: 'false',
-          brandListingUrl: '',
-        },
-        {
-          supplierId: '',
-          brandCode: 'dd20c1c6-7cc5-441d-8547-fc1f19c1cdff',
-          fileKey: '',
-          businessNature: '1',
-          expiryDate: '',
-          isDeleted: '0',
-          isRaiseRequest: 'false',
-          brandListingUrl: '',
-        },
-      ],
-    };
-
-    const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
-    console.log('data updated hi hai', data);
+    // let payloadObj = {
+    //   categoryCode: ['122000000', '260000000'],
+    //   brandList: [
+    //     {
+    //       supplierId: '',
+    //       brandCode: 'd3876965-ceba-4052-8526-42c3534a72bf',
+    //       fileKey: '9a73dc34dcd5cb1f81aedfd409769347',
+    //       businessNature: '2',
+    //       expiryDate: '',
+    //       isDeleted: '0',
+    //       isRaiseRequest: 'false',
+    //       brandListingUrl: '',
+    //     },
+    //     {
+    //       supplierId: '',
+    //       brandCode: 'bd5b7209-59d8-405e-b47a-72f2677ad497',
+    //       fileKey: 'd5825501532840e9db36308326a4ce9b',
+    //       businessNature: '3',
+    //       expiryDate: '24-02-2022',
+    //       isDeleted: '0',
+    //       isRaiseRequest: 'false',
+    //       brandListingUrl: '',
+    //     },
+    //     {
+    //       supplierId: '',
+    //       brandCode: 'dd20c1c6-7cc5-441d-8547-fc1f19c1cdff',
+    //       fileKey: '',
+    //       businessNature: '1',
+    //       expiryDate: '',
+    //       isDeleted: '0',
+    //       isRaiseRequest: 'false',
+    //       brandListingUrl: '',
+    //     },
+    //   ],
+    // };
+    // const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
+    // console.log('data updated hi hai', data);
   };
 
   console.log(
@@ -514,6 +556,8 @@ const CategoryBrandScreen = props => {
     brandName.length,
     !checkCommonValidationReqBrand,
     !checkValidation,
+    'hhee',
+    checkCommonValidation(),
   );
 
   return (
@@ -617,7 +661,9 @@ const CategoryBrandScreen = props => {
             />
           ) : (
             <CustomButton
-              buttonColor={getButtonColor() ? colors.BrandColor : 'dodgerblue'}
+              buttonColor={
+                getButtonColorReqBrand() ? colors.BrandColor : 'dodgerblue'
+              }
               borderColor={colors.BrandColor}
               TextColor={colors.WhiteColor}
               TextFontSize={Dimension.font16}
@@ -625,7 +671,7 @@ const CategoryBrandScreen = props => {
               disabled={
                 natureOfBusiness == 3
                   ? !checkCommonValidationReqBrand()
-                  : !checkValidation()
+                  : !checkValidationReqBrand()
               }
               onPress={onSubmit}
             />
@@ -638,10 +684,8 @@ const CategoryBrandScreen = props => {
         TextColor={colors.WhiteColor}
         TextFontSize={Dimension.font16}
         title={'Next'}
-        // disabled={
-        //   natureOfBusiness == 3 ? !checkCommonValidation() : !checkValidation()
-        // }
-        loading={loading}
+        loading={nextLoader}
+        loadingColor={'#fff'}
         onPress={onNext}
       />
     </View>

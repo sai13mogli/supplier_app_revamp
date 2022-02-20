@@ -291,6 +291,7 @@ const DocumentsScreen = props => {
   }, []);
 
   useEffect(() => {
+    console.log(pancard && pancard.loading);
     if (pancard && pancard.key == 'panCard' && pancard.loading) {
       uploadDocument(pancard);
     }
@@ -691,6 +692,7 @@ const DocumentsScreen = props => {
 
   // set Id of a particular doc
   const setFormState = data => {
+    console.log(fId);
     switch (fId) {
       case 'pancard':
         setPancard({
@@ -964,6 +966,10 @@ const DocumentsScreen = props => {
     };
   };
 
+  const onPress = id => {
+    SheetManager.show('action_sheet', id);
+  };
+
   //render each doc
   const renderInputText = ({
     id,
@@ -980,28 +986,25 @@ const DocumentsScreen = props => {
     errorText,
   }) => {
     return (
-      <TouchableOpacity
-        onPress={() => {
-          SheetManager.show('action_sheet', id);
-        }}
-        disabled={loading || uploadDisabled}>
-        <FileUpload
-          label={title}
-          isImp={isImp}
-          value={documents && documents.title}
-          documents={documents}
-          loading={loading}
-          showDoc={showDoc}
-          onRemove={onRemove}
-          id={id}
-          fId={fId}
-          closeDoc={closeDoc}
-          openDoc={openDoc}
-          fileUpload={2}
-          errorState={errorState}
-          errorText={errorText}
-        />
-      </TouchableOpacity>
+      <FileUpload
+        label={title}
+        isImp={isImp}
+        value={documents && documents.title}
+        documents={documents}
+        loading={loading}
+        showDoc={showDoc}
+        onRemove={onRemove}
+        id={id}
+        fId={fId}
+        closeDoc={closeDoc}
+        openDoc={openDoc}
+        fileUpload={2}
+        errorState={errorState}
+        errorText={errorText}
+        onPress={() => onPress(id)}
+        disabled={uploadDisabled}
+        uploadDocument={() => onPress(id)}
+      />
     );
   };
 

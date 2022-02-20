@@ -78,7 +78,7 @@ const PopularBrandsScreen = props => {
       popularCategories.length
     ) {
       let categoryIds = (popularCategories || []).map((_, i) => _.categoryCode);
-      console.log('mc categoryIds', categoryIds, popularCategories);
+      console.log('categoryIds', categoryIds, popularCategories);
       let payloadObj = {
         categoryCodes: [...categoryIds],
       };

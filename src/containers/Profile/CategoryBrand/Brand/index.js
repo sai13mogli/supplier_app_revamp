@@ -126,6 +126,7 @@ const BrandScreen = props => {
                 borderColor={Colors.BrandColor}
                 TextColor={Colors.WhiteColor}
                 TextFontSize={Dimension.font16}
+                loadingColor={'#fff'}
                 onPress={() => {
                   setModalVisible(false);
                   props.navigation.navigate('CategoryBrand');
