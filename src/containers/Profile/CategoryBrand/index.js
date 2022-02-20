@@ -31,6 +31,7 @@ import {
   setSelectCategories,
   emptyCategories,
   setCategories,
+  updateBrandData,
 } from '../../../redux/actions/categorybrand';
 import {addOrUpdateCategoryAndBrand} from '../../../services/categorybrand';
 import {getAllCategories} from '../../../services/auth';
@@ -248,6 +249,7 @@ const CategoryBrandScreen = props => {
     let res = await uploadDocumentService(data);
     console.log('uploadDocument ka res hai bhaiii!', res);
     let {resp} = res;
+
     if (resp.error) {
       setErrorData();
     } else {
@@ -398,18 +400,37 @@ const CategoryBrandScreen = props => {
 
   console.log('addedBrands', addedBrand, categories, expiryDate);
 
-  const onSubmit = () => {
-    let brandObj = {
-      supplierId: '',
-      brandCode: brand && brand.code,
-      fileKey: brandCertificate && brandCertificate.value,
-      businessNature: natureOfBusiness,
-      expiryDate: expiryDate,
-      isDeleted: '0',
-      isRaiseRequest: 'true',
-      brandListingUrl: brandUrl,
-    };
-    dispatch(addBrandData(brandObj));
+  const onSubmit = raiseRequest => {
+    let currBrand = (raisedBrand || []).find(_ => _.brandName == brand.name);
+    console.log(currBrand);
+    if (currBrand) {
+      let currBrandObj = {
+        supplierId: '',
+        brandCode: (brand && brand.code) || 'collectiontest',
+        fileKey: brandCertificate && brandCertificate.value,
+        businessNature: natureOfBusiness,
+        expiryDate: expiryDate,
+        isDeleted: '0',
+        isRaiseRequest: raiseRequest ? 'true' : 'false',
+        brandListingUrl: brandUrl,
+        brandName: brand && brand.name,
+      };
+      dispatch(updateBrandData(currBrandObj));
+    } else {
+      let brandObj = {
+        supplierId: '',
+        brandCode: (brand && brand.code) || 'collectiontest',
+        fileKey: brandCertificate && brandCertificate.value,
+        businessNature: natureOfBusiness,
+        expiryDate: expiryDate,
+        isDeleted: '0',
+        isRaiseRequest: raiseRequest ? 'true' : 'false',
+        brandListingUrl: brandUrl,
+        brandName: brand && brand.name,
+      };
+      dispatch(addBrandData(brandObj));
+    }
+
     setModalVisible(false);
   };
 
@@ -493,18 +514,37 @@ const CategoryBrandScreen = props => {
   // "brandListingUrl": ""
 
   const onNext = async () => {
-    setNextLoader(true);
-    // let mutatebrands = (addedBrand || []).map((_, i) => ({
-    //   supplierId: '',
-    //   brandCode: _.code,
-    //   fileKey: '9a73dc34dcd5cb1f81aedfd409769347',
-    //   businessNature: '1',
-    //   expiryDate: '',
-    //   isDeleted: '0',
-    //   isRaiseRequest: 'false',
-    //   brandListingUrl: '',
-    // }));
-    // let brandsarr = [...mutatebrands, ...raisedBrand];
+    // setNextLoader(true);
+
+    let mutatebrands = (addedBrand || [])
+      .filter(it => !it.isDocumentRequired && it.status)
+      .map((_, i) => ({
+        supplierId: '',
+        brandCode: _.code,
+        fileKey: '',
+        businessNature: '1',
+        expiryDate: '',
+        isDeleted: '0',
+        isRaiseRequest: 'false',
+        brandListingUrl: '',
+      }));
+
+    let mutateRaisedbrands = (raisedBrand || []).map((_, i) => ({
+      supplierId: '',
+      brandCode: _.brandCode,
+      fileKey: _.fileKey,
+      businessNature: _.businessNature,
+      expiryDate: _.expiryDate,
+      isDeleted: _.isDeleted,
+      isRaiseRequest: _.isRaiseRequest,
+      brandListingUrl: _.brandListingUrl,
+    }));
+
+    console.log('mutateBrands', mutatebrands);
+    console.log('raisedBrands', mutateRaisedbrands);
+
+    let brandsarr = [...mutatebrands, ...mutateRaisedbrands];
+    console.log('brandsArr', brandsarr);
     // let categoryIds = ([...selectedCategories] || []).map((_, i) => _.id);
     // let payloadObj = {
     //   categoryCode: [...categoryIds],
@@ -642,9 +682,6 @@ const CategoryBrandScreen = props => {
               key={fieldKey}
             />
           )).toList()}
-          {/* natureOfBusiness == 3 && checkCommonValidation() ? colors.BrandColor :
-            natureOfBusiness !== 3 && checkValidation() ? colors.BrandColor :
-            'dodgerblue' */}
           {brand && brand.code ? (
             <CustomButton
               buttonColor={getButtonColor() ? colors.BrandColor : 'dodgerblue'}
@@ -657,7 +694,7 @@ const CategoryBrandScreen = props => {
                   ? !checkCommonValidation()
                   : !checkValidation()
               }
-              onPress={onSubmit}
+              onPress={() => onSubmit(false)}
             />
           ) : (
             <CustomButton
@@ -673,7 +710,7 @@ const CategoryBrandScreen = props => {
                   ? !checkCommonValidationReqBrand()
                   : !checkValidationReqBrand()
               }
-              onPress={onSubmit}
+              onPress={() => onSubmit(true)}
             />
           )}
         </View>

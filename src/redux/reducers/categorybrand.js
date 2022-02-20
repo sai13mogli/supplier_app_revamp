@@ -214,6 +214,26 @@ export const categorybrandReducer = (state = initialState, action) => {
         categories: [payload.obj],
       };
 
+    case CATEGORY_BRAND_ACTIONS.UPDATE_BRAND_DATA:
+      if (state && state.brandsData) {
+        let currObj = ([...state.brandsData] || []).find(
+          _ => _.brandCode == payload.obj.brandCode,
+        );
+        let updateObj = {
+          ...currObj,
+          ...payload.obj,
+        };
+
+        let updateBrandsData = ([...state.brandsData] || []).filter(
+          _ => _.brandCode !== payload.obj.brandCode,
+        );
+
+        return {
+          ...state,
+          brandsData: [...updateBrandsData, updateObj],
+        };
+      }
+
     case CATEGORY_BRAND_ACTIONS.SET_POPULAR_CATEGORIES:
       return {
         ...state,
@@ -246,4 +266,3 @@ export const categorybrandReducer = (state = initialState, action) => {
       return state;
   }
 };
-

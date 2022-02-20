@@ -124,6 +124,15 @@ export const addBrandData = obj => {
   };
 };
 
+export const updateBrandData = obj => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.UPDATE_BRAND_DATA,
+    payload: {
+      obj,
+    },
+  };
+};
+
 export const setPopularCategories = data => {
   return {
     type: CATEGORY_BRAND_ACTIONS.SET_POPULAR_CATEGORIES,
