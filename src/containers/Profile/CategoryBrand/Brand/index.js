@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, Text, View, Dimensions} from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  View,
+  Dimensions,
+  FlatList,
+  ScrollView,
+} from 'react-native';
 import AllBrandsScreen from './AllBrands';
 import PopularBrandsScreen from './PopularBrands';
 import {useDispatch, useSelector} from 'react-redux';
@@ -32,6 +39,10 @@ const BrandScreen = props => {
     state => (state.categorybrandReducer || {}).brandsAdded || [],
   );
   const [modalVisible, setModalVisible] = useState(false);
+
+  const renderItem = ({item}) => (
+    <Text style={{color: '#000'}}>{item.name}</Text>
+  );
 
   return (
     <>
