@@ -92,6 +92,7 @@ export const categorybrandReducer = (state = initialState, action) => {
             status: STATE_STATUS.FETCHED,
             data: payload.data,
             pageIndex: payload.obj.pageNo,
+            params: ['A'],
           },
         };
       }

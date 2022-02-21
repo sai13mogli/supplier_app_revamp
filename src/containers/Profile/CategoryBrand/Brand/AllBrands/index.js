@@ -61,11 +61,17 @@ const AllBrandsScreen = props => {
     state => (state.categorybrandReducer || {}).brandsAdded || [],
   );
 
+  const payloadParams = useSelector(
+    state =>
+      ((state.categorybrandReducer || {}).allBrands || {}).params || ['0-9'],
+  );
+
   // const [alphabet, setAlphabet] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [activeTerm, setActiveTerm] = useState('0-9');
   const [loader, setLoader] = useState(true);
   const [initLoader, setInitLoader] = useState(true);
+  const onEndReachedCalledDuringMomentum = useRef(true);
 
   const dispatch = useDispatch();
 
@@ -79,8 +85,6 @@ const AllBrandsScreen = props => {
       setLoader(false);
     }
   }, [allBrandsStatus]);
-
-  console.log('addedBrand', addedBrand);
 
   //action dispatch for saga and service
   const fetchListingData = (pageNo, search) => {
@@ -97,6 +101,8 @@ const AllBrandsScreen = props => {
     };
     dispatch(fetchBrandSearchResult(fetchListingObj));
   };
+
+  console.log(payloadParams[0], 'payloadParams');
 
   const fetchListingDataByAlphabet = term => {
     if (term == '0-9') {
@@ -208,7 +214,10 @@ const AllBrandsScreen = props => {
         </View>
       );
     }
-    return <Text style={{color: '#000'}}>Something Went woring!!</Text>;
+    if (allBrandsStatus !== STATE_STATUS.FETCHED) {
+      return <Text style={{color: '#000'}}>Something Went woring!!</Text>;
+    }
+    return null;
   };
 
   const brandListing = () => {
@@ -225,16 +234,33 @@ const AllBrandsScreen = props => {
               selectedValues={addedBrand}
               data={allbrands}
               onChangeDataChoosed={data => {
-                console.log('data', data);
+                // console.log('data', data);
                 // dispatch(addBrand(data));
               }}
               onEndReachedThreshold={0.9}
               ListFooterComponent={renderFooter}
+              // onEndReached={({distanceFromEnd}) => {
+              //   console.log(
+              //     'onEndReached',
+              //     onEndReachedCalledDuringMomentum.current,
+              //   );
+              //   if (!onEndReachedCalledDuringMomentum.current) {
+              //     endReachedfetchListing();
+              //     onEndReachedCalledDuringMomentum.current = true;
+              //   }
+              // }}
+              // onMomentumScrollBegin={() => {
+              //   console.log('onMomentumScrollBegin!!!!!!!');
+              //   onEndReachedCalledDuringMomentum.current = false;
+              // }}
               onEndReached={endReachedfetchListing}
               removeClippedSubviews={true}
-              maxToRenderPerBatch={100}
+              // maxToRenderPerBatch={30}
               ListEmptyComponent={listEmptyComponent}
               fromAllBrands={true}
+              // windowSize={30}
+              initialNumToRender={10}
+              // updateCellsBatchingPeriod={2}
             />
           </View>
           <View style={styles.AlphabetWrap}>
@@ -251,11 +277,13 @@ const AllBrandsScreen = props => {
   };
 
   const renderListing = () => {
+    console.log('pageIndex', pageIndex, allBrandsStatus);
     if (initLoader) {
       return renderLoader();
     } else if (
       loader ||
       (pageIndex == 64 &&
+        payloadParams[0] == '0-9' &&
         [STATE_STATUS.UNFETCHED, STATE_STATUS.FETCHING].includes(
           allBrandsStatus,
         ))

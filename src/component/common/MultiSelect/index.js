@@ -61,6 +61,11 @@ const MultiSelect = props => {
     removeClippedSubviews,
     maxToRenderPerBatch,
     ListEmptyComponent,
+    ListFooterComponent,
+    onMomentumScrollBegin,
+    windowSize,
+    initialNumToRender,
+    updateCellsBatchingPeriod,
   } = props;
 
   useEffect(() => {
@@ -176,6 +181,11 @@ const MultiSelect = props => {
         removeClippedSubviews={removeClippedSubviews}
         maxToRenderPerBatch={maxToRenderPerBatch}
         ListEmptyComponent={ListEmptyComponent}
+        ListFooterComponent={ListFooterComponent}
+        onMomentumScrollBegin={onMomentumScrollBegin}
+        windowSize={windowSize}
+        initialNumToRender={initialNumToRender}
+        updateCellsBatchingPeriod={updateCellsBatchingPeriod}
       />
     </>
   );
