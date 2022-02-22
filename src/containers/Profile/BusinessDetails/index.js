@@ -1,6 +1,6 @@
 import {OrderedMap} from 'immutable';
 import React, {useEffect, useState} from 'react';
-import {Text, ScrollView,View} from 'react-native';
+import {Text, ScrollView, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import DropDown from '../../../component/common/DropDown';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
@@ -8,8 +8,8 @@ import {getPincodeDetails, getGstDetails} from '../../../services/profile';
 import {fetchUpdateBusinessDetails} from '../../../redux/actions/profile';
 import CustomButton from '../../../component/common/Button';
 import {STATE_STATUS} from '../../../redux/constants';
-import styles from './style'
-import Header from '../../../component/common/Header'
+import styles from './style';
+import Header from '../../../component/common/Header';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 
@@ -21,6 +21,7 @@ const BusinessDetailsScreen = props => {
   const businessDetails = useSelector(
     state => state.profileReducer.businessDetails.data || {},
   );
+  console.log('bussiness====>', businessDetails);
   const businessDetailsStatus = useSelector(
     state =>
       state.profileReducer.businessDetails.status || STATE_STATUS.FETCHING,
@@ -43,6 +44,7 @@ const BusinessDetailsScreen = props => {
   const [pincode, setpincode] = useState(
     (businessDetails.address || {}).pincode,
   );
+
   const [state, setstate] = useState((businessDetails.address || {}).state);
   const [city, setcity] = useState((businessDetails.address || {}).city);
   const [phone, setphone] = useState((businessDetails.profile || {}).phone);
@@ -267,7 +269,7 @@ const BusinessDetailsScreen = props => {
   }, [businessDetailsStatus]);
 
   useEffect(() => {
-    if (pincode.length && pincode.length == 6) {
+    if (pincode && pincode.length && pincode.length == 6) {
       onPincodeBlur();
     }
   }, [pincode]);
@@ -384,32 +386,26 @@ const BusinessDetailsScreen = props => {
   };
 
   return (
-    <View style={{flex:1}}>
-
-    <Header howBack showText={'Business Details'} rightIconName={'business-details'}></Header>
-    <ScrollView style={styles.ContainerCss}>
-     
-      {FORM_FIELDS.map((field, fieldKey) => (
-        <field.component {...field} key={fieldKey} />
-      )).toList()}
-      
-    </ScrollView>
-    <View style={styles.bottombtnWrap}>
-    <CustomButton
-    
-    buttonColor={colors.BrandColor}
-   
-    borderColor={colors.BrandColor }
-    TextColor={colors.WhiteColor }
-    TextFontSize={Dimension.font16}
-        title={'Submit'}
-       
-        loading={loading}
-  
-        onPress={onSubmit}
-        // TextColor={colors.WhiteColor}
-        // borderColor={colors.WhiteColor}
-      />
+    <View style={{flex: 1}}>
+      <Header
+        howBack
+        showText={'Business Details'}
+        rightIconName={'business-details'}></Header>
+      <ScrollView style={styles.ContainerCss}>
+        {FORM_FIELDS.map((field, fieldKey) => (
+          <field.component {...field} key={fieldKey} />
+        )).toList()}
+      </ScrollView>
+      <View style={styles.bottombtnWrap}>
+        <CustomButton
+          buttonColor={colors.BrandColor}
+          borderColor={colors.BrandColor}
+          TextColor={colors.WhiteColor}
+          TextFontSize={Dimension.font16}
+          title={'Submit'}
+          loading={loading}
+          onPress={onSubmit}
+        />
       </View>
     </View>
   );

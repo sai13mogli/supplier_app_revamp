@@ -7,6 +7,7 @@ import {
   getBrandsByCategoryCodes,
   getBrands,
 } from '../../services/categorybrand';
+import {getCategoriesBrands} from '../../services/profile';
 // actions
 import {
   failedFetchBrandsByCategory,
@@ -16,6 +17,8 @@ import {
   fetchedBrandSearchResult,
   failedFetchBrandSearchResultByAlphabet,
   fetchedBrandSearchResultByAlphabet,
+  fetchedCategoriesBrands,
+  failedFetchCategoriesBrands,
 } from '../actions/categorybrand';
 //
 
@@ -84,6 +87,19 @@ function* fetchBrandsAlphabets({payload: {obj}}) {
   }
 }
 
+function* fetchCategoriesBrands() {
+  try {
+    const {data, error} = yield call(getCategoriesBrands);
+    if (error) {
+      yield put(failedFetchCategoriesBrands(error));
+    } else {
+      yield put(fetchedCategoriesBrands(data.data.categories));
+    }
+  } catch (error) {
+    yield put(failedFetchCategoriesBrands(error));
+  }
+}
+
 export default fork(function* () {
   yield takeEvery(
     CATEGORY_BRAND_ACTIONS.FETCH_BRANDS_BY_CATEGORY,
@@ -93,5 +109,9 @@ export default fork(function* () {
   yield takeEvery(
     CATEGORY_BRAND_ACTIONS.FETCH_BRANDS_ALPHABETS,
     fetchBrandsAlphabets,
+  );
+  yield takeEvery(
+    CATEGORY_BRAND_ACTIONS.FETCH_CATEGORIES_BRANDS,
+    fetchCategoriesBrands,
   );
 });
