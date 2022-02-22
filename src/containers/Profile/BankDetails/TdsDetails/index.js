@@ -65,23 +65,23 @@ const TdsDetails = () => {
          {/* <View style={{height:'80%', width:'1%',
       borderColor:'grey',backgroundColor:'black',justifyContent:'flex-end'}}/> */}
         <View style={styles.wrap}>
-            <Text style={styles.text}>ITR filled for 2020-21</Text>
+            <Text style={styles.text}>TDS filed for AY {section.previousFinancialYear}</Text>
             <Text style={{fontSize: 16}}>{section.lastYearItr==1?'Yes':'No'}</Text>
             </View>
             <View style={[styles.wrap,{bottom:50}]}>
-            <Text style={styles.text}>ITR filled for 2020-21</Text>
+            <Text style={styles.text}>ITR filed for AV {section.previousFinancialYear}</Text>
             <Text style={{fontSize: 16}}>{section.lastToLastYearItr==1?'Yes':'No'}</Text>
             </View>
             <View style={[styles.wrap,{bottom:40}]}>
-            <Text style={styles.text}>ITR filled for 2020-21</Text>
+            <Text style={styles.text}>Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.previousFinancialYear}</Text>
             <Text style={{fontSize: 16}}>{section.lastYearTdsTcs==1?'Yes':'No'}</Text>
             </View>
             <View style={[styles.wrap,{bottom:30}]}>
-            <Text style={styles.text}>ITR filled for 2020-21</Text>
+            <Text style={styles.text}>Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.previousFinancialYear}</Text>
             <Text style={{fontSize: 16}}>{section.lastToLastYearTdsTcs==1?'Yes':'No'}</Text>
             </View>
             <View style={[styles.wrap,{bottom:20}]}>
-            <Text style={styles.text}>ITR filled for 2020-21</Text>
+            <Text style={styles.text}>Turnover in financial year {section.previousFinancialYear} was exceeding 10 crores</Text>
             <Text style={{fontSize: 16}}>{section.financialYearTurnover==1?'Yes':'No'}</Text>
             </View>
        </View>
