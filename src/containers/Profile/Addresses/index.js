@@ -78,9 +78,10 @@ indicatorStyle:{
 },
 tabText:{
   fontSize: Dimension.font14,
-    color: Colors.FontColor,
-    fontFamily: Dimension.CustomRegularFont,
-   fontWeight:"normal"
+  width:'100%',
+  color: Colors.FontColor,
+  fontFamily: Dimension.CustomRobotoBold,
+  fontWeight:"normal"
  },
  userName: {
     fontSize: Dimension.font14,
@@ -91,11 +92,6 @@ tabText:{
   backgroundColor: '#fff',
 },
 //   IconDefaultColor: {color: colors.ExtralightGrayText},
-tabText: {
-  fontSize: 10,
-  // fontFamily: Dimension.CustomMediumFont,
-  marginTop: 4,
-},
 iconAlignment: {
   alignItems: 'center', 
   alignSelf: 'center'

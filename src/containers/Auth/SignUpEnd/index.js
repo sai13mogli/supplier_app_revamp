@@ -1,10 +1,12 @@
 import {OrderedMap} from 'immutable';
 import React, {useState} from 'react';
 import {Text, View} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import DropDown from '../../../component/common/DropDown';
 import MultiSelectInput from '../../../component/common/MultiSelectInput';
 import {getGstDetails} from '../../../services/profile';
+import {signUp} from '../../../services/auth';
 import CustomButton from '../../../component/common/Button';
 import Colors from '../../../Theme/Colors';
 
@@ -33,7 +35,7 @@ const SignUpEndScreen = props => {
       items: [
         {label: 'B2B', value: 1},
         {label: 'B2C', value: 2},
-        {label: 'Both', value: 3},
+        {label: 'Both', value: 30},
       ],
       enabled: true,
     },
@@ -90,8 +92,36 @@ const SignUpEndScreen = props => {
       gstin.length >= 15 &&
       gstin.match(gstinRegex)
     ) {
+      let body = {
+        ...props.route.params,
+        natureOfBusiness,
+        categoryCode: categoryCode.map(_ => _.id),
+        gstIn: gstin,
+      };
+      const {data} = await signUp(body);
+      if (data.success) {
+        onLogin(data);
+      }
     } else {
+      onGstinBlur();
+      if (categoryCode && categoryCode.length) {
+        setcategoryCodeError(false);
+      } else {
+        setcategoryCodeError(true);
+      }
+      if (natureOfbusiness) {
+        setnatureOfBusinessError(false);
+      } else {
+        setnatureOfBusinessError(true);
+      }
     }
+  };
+
+  const onLogin = async data => {
+    setOtpModal(false);
+    await AsyncStorage.setItem('token', data.data.token);
+    await AsyncStorage.setItem('userId', JSON.stringify(data.data.userId));
+    props.route.params.setIsLoggedIn(true);
   };
 
   return (

@@ -10,6 +10,7 @@ import {
   getUserInfo,
   getAddressesDetails,
   getBankDetails,
+  getTdsInfoDetails,
   setBankDetails,
 } from '../../services/profile';
 // actions
@@ -19,6 +20,8 @@ import {
   failedFetchBankDetails, fetchedBankDetails,fetchedProfile,failedFetchProfile,
   failedFetchUpdateBankDetails,fetchedUpdateBankDetails,fetchedCategoriesBrands,
   failedFetchCategoriesBrands,
+  failedFetchTdsInfoDetails,
+  fetchedTdsInfoDetails,
 } from '../actions/profile';
 
 function* fetchBusinessDetails() {
@@ -101,11 +104,25 @@ function* fetchBankDetails() {
   }
 }
 
+function* fetchTdsInfoDetails() {
+  try {
+    const {data, error} = yield call(getTdsInfoDetails);
+    if (error) {
+      yield put(failedFetchTdsInfoDetails(error));
+    } else {
+      yield put(fetchedTdsInfoDetails(data.data));
+    }
+  } catch (error) {
+    yield put(failedFetchTdsInfoDetails(error));
+  }
+}
+
 export default fork(function* () {
   yield takeEvery(PROFILE_ACTIONS.FETCH_PROFILE, fetchProfile);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS, fetchBusinessDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_ADDRESSES, fetchAddressDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BANK_DETAILS, fetchBankDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,fetchUpdateBusinessDetails);
+  yield takeEvery(PROFILE_ACTIONS.FETCH_TDS_INFO_DETAILS, fetchTdsInfoDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS,fetchUpdateBankDetails);
 });

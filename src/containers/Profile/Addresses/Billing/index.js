@@ -3,7 +3,6 @@ import {Text,View,FlatList,ScrollView, StyleSheet,TouchableOpacity} from 'react-
 
 import colors from "../../../../Theme/Colors"
 import {useSelector, useDispatch} from 'react-redux';
-import {fetchAddressDetails} from '../../../../redux/actions/profile';
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
@@ -11,25 +10,13 @@ import styles from './styles';
 import AddressesModal from '../../../../component/common/AddressesModal';
 
 const Billing = () => {
-  const [data,setData]= useState( [
-    { id: '1', lable: 'First item', checked : false},
-    { id: '2', lable: 'Second item',checked : false },
-    { id: '3', lable: 'Third item' ,checked : false},
-    { id: '4', lable: 'Fourth item' ,checked : false},
-    { id: '5', lable: 'Fifth item' ,checked : false},
-    { id: '6', lable: 'Sixth item' ,checked : false},
-    { id: '7', lable: 'Seventh item',checked : false }
-  ]);
+  
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const addressesData = useSelector(state => (state.profileReducer.addressesDetails.data));
   console.log("Daakka====>",addressesData);
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-      dispatch(fetchAddressDetails());
-  },[]);
-
-   const renderItems = ({item}) => (
+  const renderItems = ({item}) => (
     <View style={{flex:1,}}>
       <View style={styles.wrap}>
         <View style={styles.nameWrap}>
@@ -39,9 +26,6 @@ const Billing = () => {
           <Text style={styles.AddressType}>default</Text>:null
         }
         </View>
-      
-        
-        
         <Text style={styles.AddressTxt}>{item.address1} ,{item.address2},{item.city}</Text>
         <Text style={styles.AddressTxt}>{item.state},{item.pincode}</Text>
         <View style={styles.buttonWrap}>
@@ -49,11 +33,10 @@ const Billing = () => {
             <CustomButton
             title={"REMOVE"}
             buttonColor={colors.WhiteColor}
-           
-              // onPress={navigateToAddresses}
-              TextColor={colors.FontColor}
-              borderColor={colors.grayShade1}
-              TextFontSize={Dimension.font14}
+           // onPress={navigateToAddresses}
+            TextColor={colors.FontColor}
+            borderColor={colors.grayShade1}
+            TextFontSize={Dimension.font14}
             >
 
             </CustomButton>
@@ -62,14 +45,12 @@ const Billing = () => {
             <CustomButton
             title={"EDIT"}
             buttonColor={colors.WhiteColor}
-           
-              // onPress={navigateToAddresses}
-              TextColor={colors.BrandColor}
-              borderColor={colors.BrandColor}
-              TextFontSize={Dimension.font14}
-            >
-
-            </CustomButton>
+            onPress={() => setModalVisible(true)}
+            onPress={() => setModalVisible(!modalVisible)}
+            TextColor={colors.BrandColor}
+            borderColor={colors.BrandColor}
+            TextFontSize={Dimension.font14}
+            />
           </View>
        
         </View>
@@ -101,16 +82,14 @@ const Billing = () => {
             />
           </ScrollView> 
           <View style={styles.bottombtnWrap}>
-            
-          
             <CustomButton
-              title={'Submit'}
-              buttonColor={colors.BrandColor}
-           
-              // onPress={navigateToAddresses}
-              TextColor={colors.WhiteColor}
-              borderColor={colors.WhiteColor}
-              TextFontSize={Dimension.font16}
+               buttonColor={colors.BrandColor}
+               borderColor={colors.BrandColor }
+               TextColor={colors.WhiteColor }
+               TextFontSize={Dimension.font16}
+               title={'NEXT'}
+               loading={loading}
+              //  onPress={onSubmit}
             /> 
           <AddressesModal
            visible={modalVisible}

@@ -3,8 +3,9 @@ import {TouchableOpacity, View, Text, ScrollView} from 'react-native';
 import Header from '../../component/common/Header';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchBusinessDetails, fetchProfile} from '../../redux/actions/profile';
+import {fetchBusinessDetails, fetchProfile,fetchBankDetails,fetchTdsInfoDetails,fetchAddressDetails} from '../../redux/actions/profile';
 import {fetchCategoriesBrands} from '../../redux/actions/categorybrand';
+
 // import Progress from 'react-native-progress/Bar';
 import {OrderedMap} from 'immutable';
 import {PROFILE_TABS} from '../../constants';
@@ -39,7 +40,10 @@ const ProfileScreen = props => {
   };
 
   useEffect(() => {
+    dispatch(fetchAddressDetails());
     dispatch(fetchBusinessDetails());
+    dispatch(fetchBankDetails());
+    dispatch(fetchTdsInfoDetails());
     dispatch(fetchProfile());
     dispatch(fetchCategoriesBrands());
   }, []);

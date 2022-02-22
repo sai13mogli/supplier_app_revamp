@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {TOP_TAB_SCREENS,} from '../../../constants';
+import Dimension from '../../../Theme/Dimension';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -30,7 +31,8 @@ const BankDetails = props => {
               ) : (
                 <Icon name={iconName} size={26} color={color} />
               )} */}
-        <Text style={[styles.tabText, {color: focused ? color : '#3c3c3c'}]}>
+        <Text numberOfLines={0}
+        style={[styles.tabText, {color: focused ? color : '#3c3c3c'}]}>
           {tabName}
         </Text>
       </TouchableOpacity>
@@ -48,7 +50,8 @@ const BankDetails = props => {
           lazy: false,
           safeAreaInsets: {bottom: 0},
         })}
-        tabBarOptions={tabBarOptions}>
+        tabBarOptions={tabBarOptions}
+        >
         {TOP_TAB_SCREENS.map((screen, key) => (
           <Tab.Screen
             key={key}
@@ -73,9 +76,11 @@ const styles = StyleSheet.create({
   },
   //   IconDefaultColor: {color: colors.ExtralightGrayText},
   tabText: {
-    fontSize: 10,
-    // fontFamily: Dimension.CustomMediumFont,
-    marginTop: 4,
+    fontSize: Dimension.font15,
+    height:60,
+    width:'100%',
+    fontFamily: Dimension.CustomRobotoBold,
+    marginTop: 0,
   },
   iconAlignment: {
     alignItems: 'center', 

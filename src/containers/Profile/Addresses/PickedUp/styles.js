@@ -4,6 +4,7 @@ import Dimension from '../../../../Theme/Dimension';
 
 const styles = StyleSheet.create({
   ContainerCss:{
+    backgroundColor:Colors.WhiteColor,
     paddingHorizontal:Dimension.padding15
   },
  wrap:{
@@ -13,10 +14,7 @@ const styles = StyleSheet.create({
    borderColor:Colors.eyeIcon,
    marginBottom:Dimension.margin10
   },
-//  submit:{
-//   backgroundColor:Colors.BrandColor,
-//   marginHorizontal:Dimensions.margin10,
-//  },
+
  nameWrap:{
   flexDirection:'row',
   marginBottom:Dimension.margin5
@@ -74,7 +72,8 @@ addnewtxt:{
 bottombtnWrap:{
   padding:Dimension.padding15,
   borderTopColor:Colors.grayShade2,
-  borderTopWidth:1
+  borderTopWidth:1,
+  backgroundColor:Colors.WhiteColor
 }
 });
 

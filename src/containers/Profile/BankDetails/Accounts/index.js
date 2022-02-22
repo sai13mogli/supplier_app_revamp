@@ -6,7 +6,6 @@ import DropDown from '../../../../component/common/DropDown';
 import colors from "../../../../Theme/Colors"
 import {useSelector, useDispatch} from 'react-redux';
 import {STATE_STATUS} from '../../../../redux/constants';
-import {fetchBankDetails} from '../../../../redux/actions/profile';
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
@@ -37,11 +36,6 @@ const Accounts = (props) => {
 
   console.log("BankData====>",bankDetails);
   const dispatch = useDispatch();
-  
-  useEffect(() => {
-      dispatch(fetchBankDetails());
-  },[]);
-
   const FORM_FIELDS = new OrderedMap({
     accountHolderName: {
       title: 'Account Holder Name',

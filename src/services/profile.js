@@ -50,6 +50,14 @@ export const getBankDetails = async () =>
     },
   });
 
+export const getTdsInfoDetails = async () =>
+  axios.get(`${BASE_URL}profile/tdsInfoList`, {
+    headers: {
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });  
+
 export const setBankDetails = async data =>
   axios.post(`${BASE_URL}profile/updateBankAccount`, data, {
     headers: {
