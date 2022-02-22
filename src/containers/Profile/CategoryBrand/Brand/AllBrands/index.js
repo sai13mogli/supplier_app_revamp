@@ -254,12 +254,12 @@ const AllBrandsScreen = props => {
               //   onEndReachedCalledDuringMomentum.current = false;
               // }}
               onEndReached={endReachedfetchListing}
-              removeClippedSubviews={true}
-              // maxToRenderPerBatch={30}
+              // removeClippedSubviews={true}
+              maxToRenderPerBatch={18}
               ListEmptyComponent={listEmptyComponent}
               fromAllBrands={true}
               // windowSize={30}
-              initialNumToRender={10}
+              initialNumToRender={18}
               // updateCellsBatchingPeriod={2}
             />
           </View>

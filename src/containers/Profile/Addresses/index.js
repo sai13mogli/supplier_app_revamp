@@ -29,14 +29,6 @@ const Addresses = props => {
       <TouchableOpacity
         style={styles.iconAlignment}
         onPress={() => rest.navigation.navigate(route.name)}>
-        {/* <CustomeIcon name={iconName} size={26} color={color}></CustomeIcon> */}
-        {/* {tabName == 'Profile' ? (
-                <ProfileTabIcon focused={focused} iconName={iconName} color={color} />
-              ) : currentScreen.iconType ? (
-                <BottomIcon name={iconName} size={26} color={color} />
-              ) : (
-                <Icon name={iconName} size={26} color={color} />
-              )} */}
         <Text style={[styles.tabText, {color: focused ? color : '#3c3c3c'}]}>
           {tabName}
         </Text>
@@ -53,10 +45,12 @@ const Addresses = props => {
           headerShown: false,
           tabBarIcon: ({focused, color}) =>
             tabBarIcon(focused, color, route, rest),
-          lazy: false,
+           lazy: false,
           safeAreaInsets: {bottom: 0},
-        })}
-        tabBarOptions={tabBarOptions}>
+            })}
+        tabBarOptions={tabBarOptions}
+        
+       >
         {ADDRESSES_TAB_SCREENS.map((screen, key) => (
           <Tab.Screen
             key={key}
@@ -72,10 +66,7 @@ const Addresses = props => {
   );
 };
 const styles = StyleSheet.create({
-indicatorStyle:{
-  height:2,
-  backgroundColor:Colors.BrandColor
-},
+
 tabText:{
   fontSize: Dimension.font14,
   width:'100%',
@@ -83,18 +74,17 @@ tabText:{
   fontFamily: Dimension.CustomRobotoBold,
   fontWeight:"normal"
  },
- userName: {
-    fontSize: Dimension.font14,
-    color: Colors.textColor,
-    fontFamily: Dimension.CustomRegularFont,
- },
+
  tabBar: {
   backgroundColor: '#fff',
 },
-//   IconDefaultColor: {color: colors.ExtralightGrayText},
 iconAlignment: {
-  alignItems: 'center', 
-  alignSelf: 'center'
+  backgroundColor:"#fff",
+  width:"100%",
+  flex:1,
+  //paddingHorizontal:50
+  
+  
 },
 });
 

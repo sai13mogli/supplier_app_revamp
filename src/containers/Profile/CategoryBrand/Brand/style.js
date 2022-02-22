@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import Colors from '../../../../Theme/Colors';
 import Dimension from '../../../../Theme/Dimension';
+import {Dimensions} from 'react-native';
 
 const styles = StyleSheet.create({
   submit: {
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-
+    height: Dimensions.get('window').height * 0.9,
     width: '100%',
     position: 'absolute',
     bottom: 0,
@@ -76,6 +77,26 @@ const styles = StyleSheet.create({
   iconAlignment: {
     alignItems: 'center',
     alignSelf: 'center',
+  },
+  activeTabTitle: {
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    color: Colors.BrandColor,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    alignItems: 'center',
+  },
+  inActiveTabTitle: {
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    color: Colors.FontColor,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    alignItems: 'center',
   },
 });
 
