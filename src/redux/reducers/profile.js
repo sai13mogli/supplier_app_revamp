@@ -19,6 +19,11 @@ const initialState = {
     data: {},
     error: null,
   },
+  tdsInfoDetails: {
+    status: STATE_STATUS.UNFETCHED,
+    data: {},
+    error: null,
+  },
   categoryBrandDetails: {
     status: STATE_STATUS.UNFETCHED,
     data: {},
@@ -164,7 +169,62 @@ export const profileReducer = (state = initialState, action) => {
           error: error,
         },
       };
-
+    case PROFILE_ACTIONS.FETCH_TDS_INFO_DETAILS:
+        return {
+          ...state,
+          tdsInfoDetails: {
+            ...state.tdsInfoDetails,
+            status: STATE_STATUS.FETCHING,
+            data: {},
+            error: null,
+          },
+        };
+    case PROFILE_ACTIONS.FETCHED_TDS_INFO_DETAILS:
+        return {
+          ...state,
+          tdsInfoDetails: {
+            ...state.tdsInfoDetails,
+            status: STATE_STATUS.FETCHED,
+            data: payload.data,
+            error: null,
+          },
+        };
+    case PROFILE_ACTIONS.FAILED_FETCH_TDS_INFO_DETAILS:
+        return {
+          ...state,
+          tdsInfoDetails: {
+            ...state.tdsInfoDetails,
+            status: STATE_STATUS.FAILED_FETCH,
+            data: {},
+            error: error,
+          },
+        };  
+    case PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS:
+      return {
+        ...state,
+        bankDetails: {
+          ...state.bankDetails,
+          status: STATE_STATUS.UPDATING,
+        },
+      };
+    case PROFILE_ACTIONS.FETCHED_UPDATE_BANK_DETAILS:
+      return {
+        ...state,
+        bankDetails: {
+          ...state.bankDetails,
+          status: STATE_STATUS.UPDATED,
+          data: payload.data,
+        },
+      };
+    case PROFILE_ACTIONS.FAILED_FETCH_UPDATE_BANK_DETAILS:
+      return {
+        ...state,
+        bankDetails: {
+          ...state.bankDetails,
+          status: STATE_STATUS.FAILED_UPDATE,
+          error: error,
+        },
+      };
     case PROFILE_ACTIONS.FETCH_CATEGORIES_BRANDS:
       return {
         ...state,

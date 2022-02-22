@@ -69,16 +69,17 @@ const styles = StyleSheet.create({
 
 tabText:{
   fontSize: Dimension.font14,
-    color: Colors.FontColor,
-    fontFamily: Dimension.CustomRegularFont,
-   fontWeight:"normal"
+  width:'100%',
+  color: Colors.FontColor,
+  fontFamily: Dimension.CustomRobotoBold,
+  fontWeight:"normal"
  },
 
  tabBar: {
   backgroundColor: '#fff',
 },
 iconAlignment: {
-   backgroundColor:"#fff",
+  backgroundColor:"#fff",
   width:"100%",
   flex:1,
   //paddingHorizontal:50
