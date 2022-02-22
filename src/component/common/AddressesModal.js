@@ -1,8 +1,8 @@
 import React, {useState}from "react";
-import {View,StyleSheet,Text,TouchableOpacity,Modal} from "react-native";
-import { CheckBox, Icon } from 'react-native-elements';
-// import Dimension from "../../../Theme/Dimension";
-// import colors from "../../../Theme/Colors"
+import {View,StyleSheet,Text,TouchableOpacity,Modal,ScrollView} from "react-native";
+import CustomeIcon from '../../component/common/CustomeIcon';
+import Dimension from "../../Theme/Dimension";
+import colors from "../../Theme/Colors"
 import {OrderedMap} from 'immutable';
 
 const AddressesModal = props => { 
@@ -124,18 +124,28 @@ const AddressesModal = props => {
   
           <Modal
             animationType="slide"
-            transparent={transparent}
+            transparent={false}
             visible={props.visible}
+            hasBackdrop={true}
+            backdropOpacity={0.4}
             onRequestClose={props.onClose}
             >
                 <View
                     style={{
-                    height: '80%',
-                    marginTop: 'auto',
-                    backgroundColor: 'rgba(52, 52, 52, 0.7)',
+                      height: '80%',
+                      marginTop: 'auto',
+                      borderRadius: 8,
+                      padding: Dimension.padding10,
+                      backgroundColor: 'red',
                     }}>
-            <View style={styles.footer}>
-            </View>
+              <View style={styles.crossView}>
+              <Text style={styles.AddressType}>default</Text>
+              <CustomeIcon name={'right-tick-line'} color={colors.SuccessStateColor} size={Dimension.font20}></CustomeIcon>
+              </View>  
+              <ScrollView style={styles.ContainerCss}>
+               
+               </ScrollView>      
+             
             <TouchableOpacity
               style={styles.addButton}
               onPress={onPress}
@@ -160,10 +170,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
       },
+      crossView:{
+      flexDirection:'row',
+      justifyContent:'space-between'
+      },
       headerText: {
         color: 'black',
         fontSize: 18,
         padding: 26,
+      },
+      ContainerCss:{
+        backgroundColor:colors.WhiteColor,
+        paddingHorizontal:Dimension.padding15
       },
       noteHeader: {
         backgroundColor: '#42f5aa',

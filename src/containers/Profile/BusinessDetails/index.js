@@ -269,7 +269,7 @@ const BusinessDetailsScreen = props => {
   }, [businessDetailsStatus]);
 
   useEffect(() => {
-    if (pincode.length && pincode.length == 6) {
+    if (pincode && pincode.length == 6) {
       onPincodeBlur();
     }
   }, [pincode]);

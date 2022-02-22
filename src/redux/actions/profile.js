@@ -113,3 +113,27 @@ export const failedFetchBankDetails = error => {
     error,
   };
 };
+
+export const fetchUpdateBankDetails = formData => {
+  return {
+    type: PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS,
+    payload: {formData},
+  };
+};
+
+export const fetchedUpdateBankDetails = (formData, data) => {
+  return {
+    type: PROFILE_ACTIONS.FETCHED_UPDATE_BANK_DETAILS,
+    payload: {
+      formData,
+      data,
+    },
+  };
+};
+
+export const failedFetchUpdateBankDetails = error => {
+  return {
+    type: PROFILE_ACTIONS.FAILED_FETCH_UPDATE_BANK_DETAILS,
+    error,
+  };
+};

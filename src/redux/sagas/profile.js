@@ -10,12 +10,14 @@ import {
   getUserInfo,
   getAddressesDetails,
   getBankDetails,
+  setBankDetails,
 } from '../../services/profile';
 // actions
 import {
   fetchedBusinessDetails,failedFetchBusinessDetails,fetchedUpdateBusinessDetails,
   failedFetchUpdateBusinessDetails,failedFetchAddressDetails,fetchedAddressDetails, 
   failedFetchBankDetails, fetchedBankDetails,fetchedProfile,failedFetchProfile,
+  failedFetchUpdateBankDetails,fetchedUpdateBankDetails
 } from '../actions/profile';
 
 function* fetchBusinessDetails() {
@@ -41,6 +43,19 @@ function* fetchUpdateBusinessDetails({payload: {formData}}) {
     }
   } catch (error) {
     yield put(failedFetchUpdateBusinessDetails(error));
+  }
+}
+
+function* fetchUpdateBankDetails({payload: {formData}}) {
+  try {
+    const {data, error} = yield call(setBankDetails, formData);
+    if (error) {
+      yield put(failedFetchUpdateBankDetails(error));
+    } else {
+      yield put(fetchedUpdateBankDetails(formData, data.data));
+    }
+  } catch (error) {
+    yield put(failedFetchUpdateBankDetails(error));
   }
 }
 
@@ -91,8 +106,5 @@ export default fork(function* () {
   yield takeEvery(PROFILE_ACTIONS.FETCH_ADDRESSES, fetchAddressDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BANK_DETAILS, fetchBankDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,fetchUpdateBusinessDetails);
-  yield takeEvery(
-    PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,
-    fetchUpdateBusinessDetails,
-  );
+  yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS,fetchUpdateBankDetails);
 });

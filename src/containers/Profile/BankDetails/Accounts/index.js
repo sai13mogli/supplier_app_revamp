@@ -5,14 +5,17 @@ import FloatingLabelInputField from '../../../../component/common/FloatingInput'
 import DropDown from '../../../../component/common/DropDown';
 import colors from "../../../../Theme/Colors"
 import {useSelector, useDispatch} from 'react-redux';
+import {STATE_STATUS} from '../../../../redux/constants';
 import {fetchBankDetails} from '../../../../redux/actions/profile';
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
+import {getIfscCodeDetails} from '../../../../services/profile';
+import {fetchUpdateBankDetails} from '../../../../redux/actions/profile';
 import styles from './styles';
 import AddressesModal from '../../../../component/common/AddressesModal';
-
-const Accounts = () => {
+const ifscCodeRegex = '^[A-Za-z]{4}[a-zA-Z0-9]{7}$'
+const Accounts = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const bankDetails = useSelector(state => (state.profileReducer.bankDetails.data||{}));
   const bankDetailsStatus = useSelector(state => (state.profileReducer.bankDetails.status|| STATE_STATUS.FETCHING));
@@ -22,8 +25,9 @@ const Accounts = () => {
   const [ifscCode, setIfscCode] = useState(bankDetails.ifscCode);
   const [branch, setBranch] = useState(bankDetails.branch);
   const [accountType, setAccountType] = useState(bankDetails.accountType);
+  const [accountTypes, setAccountTypes] = useState([]);
   const [bankName, setBankName] = useState(bankDetails.bankName);
-
+  const [bankNames, setBankNames] = useState([]);
   const [accountHolderNameError, setaccountHolderNameError] = useState(false);
   const [accountNumberError, setaccountNumberError] = useState(false);
   const [ifscCodeError, setifscCodeError] = useState(false);
@@ -47,7 +51,7 @@ const Accounts = () => {
       errorMessage: 'Enter valid account holder name',
       showError: accountHolderNameError,
       value: accountHolderName,
-      onBlur: () => onHolderNameBllur(),
+      onBlur: () => onHolderNameBlur(),
       onChangeText: text => setAccountHolderName(text),
       component: FloatingLabelInputField,
     },
@@ -91,7 +95,7 @@ const Accounts = () => {
       title: 'Account Type',
       isImp: true,
       label: 'Account Type',
-      placeholder: 'Select Account Type',
+      placeholder: 'Account Type',
       errorMessage: 'Select Account Type',
       showError: accountTypeError,
       selectedValue: accountType,
@@ -99,12 +103,16 @@ const Accounts = () => {
       component: DropDown,
       items: [
         {
-          label: 'Current Account',
+          label: 'Current',
           value: 1,
         },
         {
-          label: 'Savings Account',
-          value: 1,
+          label: 'Saving',
+          value: 2,
+        },
+        {
+          label: 'Joint',
+          value: 3,
         },
       ],
       enabled: true,
@@ -113,27 +121,24 @@ const Accounts = () => {
       title: 'Bank Name',
       isImp: true,
       label: 'Bank Name',
-      placeholder: 'Select Bank Name',
+      placeholder: 'Bank Name',
       errorMessage: 'Select Account Type',
       showError: bankNameError,
-      selectedValue: bankName,
-      onValueChange: text => setBankName(text),
-      component: DropDown,
-      items: [
-        {
-          label: 'SBI',
-          value: 1,
-        },
-        {
-          label: 'HDFC',
-          value: 2,
-        },
-      ],
-      enabled:true,
+      value: bankName,
+      onChangeText: text => setBranch(text),
+      component: FloatingLabelInputField,
+      onBlur: () => onBankNameBlur(),
     },
    });
 
-   const onHolderNameBllur = () => {
+   useEffect(() => {
+    if (loading && bankDetailsStatus == STATE_STATUS.UPDATED) {
+      setLoading(false);
+      props.navigation.goBack();
+    }
+  }, [bankDetailsStatus]);
+
+   const onHolderNameBlur = () => {
     if (accountHolderName && accountHolderName.length) {
       setaccountHolderNameError(false);
     } else {
@@ -149,9 +154,14 @@ const Accounts = () => {
     }
   };
 
-  const onIfscCodeBlur  = () => {
-    if (ifscCode && ifscCode.length) {
-      setifscCodeError(false);
+  const onIfscCodeBlur  = async() => {
+    if (ifscCode && ifscCode.length >= 11 && ifscCode.match(ifscCodeRegex)) {
+      const {data} = await getIfscCodeDetails(ifscCode);
+      if (!data.success) {
+        setifscCodeError(true);
+      } else {
+        setifscCodeError(false);
+      }
     } else {
       setifscCodeError(true);
     }
@@ -165,12 +175,62 @@ const Accounts = () => {
       setbranchError(true);
     }
   };
-
-  const onBankBlur  = () => {
+  const onBankNameBlur  = () => {
     if (bankName && bankName.length) {
-      setbankNameError(false);
+      setbranchError(false);
     } else {
-      setbankNameError(true);
+      setbranchError(true);
+    }
+  };
+
+
+  const onSubmit = () => {
+    console.log(
+      accountHolderName,
+      accountNumber,
+      ifscCode,
+      branch,
+      accountType,
+      bankName,
+    );
+    if (
+      accountHolderName &&
+      accountHolderName.length &&
+      accountNumber &&
+      accountNumber.length &&
+      ifscCode &&
+      ifscCode.length &&
+      branch &&
+      branch.length &&
+      branch &&
+      accountType &&
+      bankName &&
+      bankName.length
+      
+    ) {
+      setLoading(true);
+      const data = {
+        id:'',
+        accountHolderName: accountHolderName,
+        accountNumber: accountNumber,
+        accountType: '1',
+        ifscCode: ifscCode,
+        branch: branch,
+        bankName: bankName,
+        city: 'delhi',
+        currencyType: '2',
+        countryCode: '217',
+        businessType: 'businessType',
+        
+      };
+      dispatch(fetchUpdateBankDetails(data));
+    } else {
+      onHolderNameBlur();
+      onAccountNumberBlur();
+      onIfscCodeBlur();
+      onBranchBlur();
+      onBankNameBlur();
+     
     }
   };
 
@@ -203,7 +263,7 @@ const Accounts = () => {
                 TextFontSize={Dimension.font16}
                 title={'Next'}
                 loading={loading}
-                // onPress={onNext}
+                onPress={onSubmit}
               />
           </View>
      </View>

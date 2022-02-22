@@ -112,12 +112,12 @@ const Billing = () => {
               borderColor={colors.WhiteColor}
               TextFontSize={Dimension.font16}
             /> 
-          {/* <AddressesModal
+          <AddressesModal
            visible={modalVisible}
            transparent={true}
            onPress={() => setModalVisible(true)}
            onPress={() => setModalVisible(!modalVisible)}
-          />   */}
+          />  
          
     </View>
     </View>

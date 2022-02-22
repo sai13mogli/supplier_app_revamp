@@ -159,6 +159,32 @@ export const profileReducer = (state = initialState, action) => {
           error: error,
         },
       };
+    case PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS:
+      return {
+        ...state,
+        bankDetails: {
+          ...state.bankDetails,
+          status: STATE_STATUS.UPDATING,
+        },
+      };
+    case PROFILE_ACTIONS.FETCHED_UPDATE_BANK_DETAILS:
+      return {
+        ...state,
+        bankDetails: {
+          ...state.bankDetails,
+          status: STATE_STATUS.UPDATED,
+          data: payload.data,
+        },
+      };
+    case PROFILE_ACTIONS.FAILED_FETCH_UPDATE_BANK_DETAILS:
+      return {
+        ...state,
+        bankDetails: {
+          ...state.bankDetails,
+          status: STATE_STATUS.FAILED_UPDATE,
+          error: error,
+        },
+      };
     default:
       return state;
   }
