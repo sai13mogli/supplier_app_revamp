@@ -13,6 +13,7 @@ import SignUpEndScreen from '../containers/Auth/SignUpEnd';
 import BankDetails from '../containers/Profile/BankDetails';
 import CategoryBrand from '../containers/Profile/CategoryBrand';
 import SelectCategoryScreen from '../containers/Auth/SelectCategory';
+import NotificationScreen from '../containers/Notification';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
 import {OrderedMap} from 'immutable';
 
@@ -104,6 +105,10 @@ export const APP_STACK_SCREENS = [
   {
     name: 'Brands',
     component: BrandScreen,
+  },
+  {
+    name: 'Notification',
+    component: NotificationScreen,
   },
 ];
 
