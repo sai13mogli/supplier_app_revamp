@@ -78,6 +78,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
   },
+  activeTabTitle: {
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    color: Colors.BrandColor,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    alignItems: 'center',
+  },
+  inActiveTabTitle: {
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    color: Colors.FontColor,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    alignItems: 'center',
+  },
 });
 
 export default styles;
