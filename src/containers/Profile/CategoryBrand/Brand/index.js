@@ -19,6 +19,7 @@ import MultiSelect from '../../../../component/common/MultiSelect';
 import {TOP_BRANDS_SCREENS} from '../../../../constants';
 import Tabs from '../../../../component/common/Tabs';
 import Header from '../../../../component/common/Header';
+import {Tab, TabView} from 'react-native-elements';
 const deviceWidth = Dimensions.get('window').width;
 
 const TABS = [
@@ -39,6 +40,7 @@ const BrandScreen = props => {
     state => (state.categorybrandReducer || {}).brandsAdded || [],
   );
   const [modalVisible, setModalVisible] = useState(false);
+  const [index, setIndex] = useState(0);
 
   const renderItem = ({item}) => (
     <Text style={{color: '#000'}}>{item.name}</Text>
@@ -51,6 +53,35 @@ const BrandScreen = props => {
         showText={'Brand Selection'}
         rightIconName={'category--brand'}></Header>
       <Tabs data={TABS.map(_ => ({..._}))} />
+      {/* <Tab
+        value={index}
+        onChange={e => setIndex(e)}
+        indicatorStyle={{
+          backgroundColor: 'red',
+          height: 3,
+        }}
+        variant="primary">
+        <Tab.Item
+          title="Popular Brands"
+          titleStyle={{fontSize: 12}}
+          icon={{name: 'timer', type: 'ionicon', color: 'white'}}
+        />
+        <Tab.Item
+          title="All Brands"
+          titleStyle={{fontSize: 12}}
+          icon={{name: 'timer', type: 'ionicon', color: 'white'}}
+        />
+      </Tab>
+
+      <TabView value={index} onChange={setIndex} animationType="spring">
+        <TabView.Item style={{width: '100%'}}>
+          <PopularBrandsScreen />
+        </TabView.Item>
+        <TabView.Item style={{width: '100%'}}>
+          <AllBrandsScreen />
+        </TabView.Item>
+      </TabView> */}
+
       <View style={styles.bottombtnWrap}>
         <TouchableOpacity style={styles.BrandNumWrap}>
           <Text style={styles.BrandNumTitle}>Requested Brands</Text>
@@ -98,7 +129,11 @@ const BrandScreen = props => {
         onBackdropPress={() => {
           setModalVisible(false);
         }}
-        style={{padding: 0, margin: 0}}>
+        deviceHeight={Dimensions.get('window').height * 0.9}
+        style={{
+          padding: 0,
+          margin: 0,
+        }}>
         <View style={styles.modalContainer}>
           <View style={styles.topbdr}></View>
           <View style={styles.headingWrapper}>

@@ -4,24 +4,27 @@ import Dimension from '../../../../Theme/Dimension';
 
 const styles = StyleSheet.create({
  wrap:{
-   borderWidth:0.9,
-   padding:Dimension.padding2,
-   paddingHorizontal:Dimension.padding10,
-   marginHorizontal:Dimension.margin10,
-   height:Dimension.height130,
-   borderRadius:3,
-   borderColor:Colors.FontColor,
-   marginVertical:Dimension.margin8
+ flexDirection:'row',
+ justifyContent:'space-between',
+ marginHorizontal:20,
+ bottom:60,
+ paddingVertical:10
  },
- nameWrap:{
-  flexDirection:'row',
-  top:10,
-  left:10
+ sectionView:{
+  paddingVertical:80,
+  borderColor:'grey',
+  borderRadius:12,
+  borderWidth:0.9
+},
+ text:{
+  fontSize: 16
  },
- name:{
-  alignSelf:'center' ,
-  fontSize:Dimension.font13
- },
+ bottombtnWrap:{
+  padding:Dimension.padding15,
+  borderTopColor:Colors.grayShade2,
+  borderTopWidth:1,
+  backgroundColor:Colors.WhiteColor
+},
  type:{
   alignSelf:'center' ,
   left:10,
@@ -29,6 +32,20 @@ const styles = StyleSheet.create({
   backgroundColor:'#eeeeee',
   borderColor:'#eeeeee',
   fontSize:Dimension.font13
+ },
+ iconStyle:{
+   flexDirection:'row',
+   alignSelf:'flex-end',
+   justifyContent:'center',
+  //  alignItems:'flex-end',
+   right:20,
+ },
+ edit:{
+  fontSize:Dimension.font16,
+  color:Colors.BrandColor,
+  bottom:2,
+  left:5,
+  alignSelf:'center'
  },
  addresses:{
   top:15,
@@ -38,6 +55,10 @@ const styles = StyleSheet.create({
  buttonWrap:{
  flexDirection:'row',
  justifyContent:'space-around',
+ },
+ ContainerCss:{
+  backgroundColor:Colors.WhiteColor,
+  paddingHorizontal:Dimension.padding15
  },
  remove:{
     borderWidth:0.9,

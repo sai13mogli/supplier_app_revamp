@@ -141,6 +141,20 @@ const styles = StyleSheet.create({
     padding: Dimension.padding15,
     backgroundColor: Colors.WhiteColor,
   },
+  NoBrandWrap:{
+    backgroundColor:Colors.DisableStateColor,
+    borderRadius:4,
+    width:"100%",
+    height:200,
+    justifyContent:"center",
+    alignItems:"center"
+  },
+  NoBrandTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+   // marginBottom: Dimension.margin5,
+  },
 });
 
 export default styles;

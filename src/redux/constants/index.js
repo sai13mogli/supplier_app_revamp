@@ -2,7 +2,7 @@ export const BASE_URL = 'http://apigatewayqa.moglix.com/';
 export const CMS_BASE_URL = 'https://cmsapi.moglix.com//';
 export const SEARCH_API_URL = 'https://suppliersearchapiqa.moglilabs.com/';
 export const authToken =
-  'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2NDAiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDUyNDU1ODcsImV4cCI6MTY0NTMzMTk4N30.FPPd8_SK7cSA51GuDN2A2VSNoUzlB6Xf-jn4ObBCpGQN1DQg-94-2-1eORh4l6dsOdYUWfSOg-I4k84jhRg6dA';
+  'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2NDQiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDU1MTE4OTYsImV4cCI6MTY0NTU5ODI5Nn0.qJop_tN02mWxGvgRmf_ypy6qlY2_a6IkeTjXZBmKhxTZ1gNsCIc0Taocx5R0EzG4pI6Faub2yD9hxnQlgj-b5g';
 
 export const STATE_STATUS = {
   FETCHING: 'FETCHING',

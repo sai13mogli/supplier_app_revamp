@@ -28,7 +28,7 @@ const MultiSelectInput = props => {
   } = props;
 
   return (
-    <>
+    <TouchableOpacity onPress={onPress}>
       <View style={{flexDirection: 'row'}}>
         <Text style={styles.labelStyle}>{label}</Text>
         {isImp ? <Text style={styles.starIcon}>*</Text> : null}
@@ -45,7 +45,7 @@ const MultiSelectInput = props => {
           </TouchableOpacity>
         )}
       </View>
-    </>
+    </TouchableOpacity>
   );
 };
 

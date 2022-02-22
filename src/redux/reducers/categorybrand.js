@@ -158,12 +158,19 @@ export const categorybrandReducer = (state = initialState, action) => {
       };
 
     case CATEGORY_BRAND_ACTIONS.ADD_BRAND:
-      console.log(state && state.brandsAdded, payload.obj);
       if (state && state.brandsAdded) {
-        return {
-          ...state,
-          brandsAdded: [...state.brandsAdded, payload.obj],
-        };
+        console.log('currbrand', state && state.brandsAdded);
+        let currbrand = (state && state.brandsAdded).find(
+          _ => _.name == payload.obj.name,
+        );
+        if (currbrand && currbrand.name) {
+          console.log('curr brand is already added', currbrand);
+        } else {
+          return {
+            ...state,
+            brandsAdded: [...state.brandsAdded, payload.obj],
+          };
+        }
       }
       return {
         ...state,

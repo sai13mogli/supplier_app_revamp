@@ -19,7 +19,7 @@ const CustomButton = props => {
     buttonColor,
     TextColor,
     borderColor,
-    buttonStyle,
+    CustomeButtonStyle,
     TextFontSize,
   } = props;
 
@@ -40,6 +40,7 @@ const CustomButton = props => {
         styles.btnStyle,
         {backgroundColor: buttonColor, borderColor: borderColor},
       ]}
+      customeButtonStyle={CustomeButtonStyle}
       containerStyle={styles.btnWrapper}
       titleStyle={[
         styles.btnTextStyle,

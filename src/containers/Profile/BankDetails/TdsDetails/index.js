@@ -1,8 +1,8 @@
 import React, { useEffect,useState,} from 'react';
-import {Text,View,FlatList,ScrollView} from 'react-native';
+import {Text,View,FlatList,ScrollView,TouchableOpacity} from 'react-native';
 import colors from "../../../../Theme/Colors"
 import {useSelector, useDispatch} from 'react-redux';
-import {fetchAddressDetails} from '../../../../redux/actions/profile';
+import Accordion from 'react-native-collapsible/Accordion';
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
@@ -10,59 +10,116 @@ import styles from './styles';
 
 const TdsDetails = () => {
  
-  const addressesData = useSelector(state => (state.profileReducer.addressesDetails.data));
+  const tdsInfoDetails = useSelector(state => (state.profileReducer.tdsInfoDetails.data||{}));
+  const [tdsInfoList, setTdsInfoList] = React.useState([]);
+  const [loading, setLoading] = useState(false);
+  console.log("Aakash====>",tdsInfoDetails);
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-   
-    // dispatch(fetchAddressDetails());
-    
-   }, []);
+  const _updateSections = (activeSections) => {
+    setTdsInfoList(activeSections);
+  };
+  
+  const _renderHeader = (section) => {
+    const index = tdsInfoDetails.findIndex((i) => i.tdsInfoDetails_id === section.tdsInfoDetails_id);
+    const iconName = index === tdsInfoList[0] ? 'angle-up' : 'angle-down';
 
-   const renderItems = ({item}) => (
-    <View style={{flex:1,top:60}}>
-      <View style={styles.wrap}>
-        <View style={styles.nameWrap}>
-        <Text style={[styles.name,{fontSize:15,}]}>Nitin Bansal</Text>
-        <Text style={styles.type}>default</Text>
-        </View>
-        <Text style={styles.addresses}>D-188,Block D ,Sector 10,Noida</Text>
-        <Text style={[styles.addresses,{top:20,fontSize:12}]}>Uttar Pardesh</Text>
-        <View style={styles.buttonWrap}>
-        <View style={styles.remove}>
-          <Text style={[styles.name,{fontSize:15,top:2}]}>Remove</Text>
-        </View> 
-        <View style={styles.remove}>
-        <Text style={[styles.name,{fontSize:15,top:2}]}>Edit</Text>
-          </View> 
-        </View>
-        
+    return (
+      <View
+        style={{
+          margin: 10,
+          paddingVertical: 10,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <Text style={{fontSize: 16, fontWeight: '600'}}>
+          {section.financialyear}
+        </Text>
+            <CustomeIcon 
+            type="FontAwesome"
+            name={iconName} 
+            size={Dimension.font18} 
+            color={colors.BrandColor} />
       </View>
-     </View>
-  )
+    );
+  };
+ 
+  const _renderContent = (section) => {
+    return (
+      <View>
+        
+        <TouchableOpacity style={styles.iconStyle}
+        >
+        <CustomeIcon 
+            type="FontAwesome"
+            name={'add-circle'} 
+            size={Dimension.font18} 
+            color={colors.BrandColor} />
+        <Text style={styles.edit}>
+            Edit
+         </Text>
+        </TouchableOpacity>
+      
+      
+      <View style={styles.sectionView}>
+        
+         {/* <View style={{height:'80%', width:'1%',
+      borderColor:'grey',backgroundColor:'black',justifyContent:'flex-end'}}/> */}
+        <View style={styles.wrap}>
+            <Text style={styles.text}>TDS filed for AY {section.previousFinancialYear}</Text>
+            <Text style={{fontSize: 16}}>{section.lastYearItr==1?'Yes':'No'}</Text>
+            </View>
+            <View style={[styles.wrap,{bottom:50}]}>
+            <Text style={styles.text}>ITR filed for AV {section.previousFinancialYear}</Text>
+            <Text style={{fontSize: 16}}>{section.lastToLastYearItr==1?'Yes':'No'}</Text>
+            </View>
+            <View style={[styles.wrap,{bottom:40}]}>
+            <Text style={styles.text}>Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.previousFinancialYear}</Text>
+            <Text style={{fontSize: 16}}>{section.lastYearTdsTcs==1?'Yes':'No'}</Text>
+            </View>
+            <View style={[styles.wrap,{bottom:30}]}>
+            <Text style={styles.text}>Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.previousFinancialYear}</Text>
+            <Text style={{fontSize: 16}}>{section.lastToLastYearTdsTcs==1?'Yes':'No'}</Text>
+            </View>
+            <View style={[styles.wrap,{bottom:20}]}>
+            <Text style={styles.text}>Turnover in financial year {section.previousFinancialYear} was exceeding 10 crores</Text>
+            <Text style={{fontSize: 16}}>{section.financialYearTurnover==1?'Yes':'No'}</Text>
+            </View>
+       </View>
+       </View>
+    );
+  };
+ 
 
   return (
     <View style={{flex:1}}>
-      <ScrollView indicatorStyle="white">
-            <View style={{flexDirection:'row',top:30,justifyContent:'space-between'}}>
-              <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000',left:20}}>
-                02 Pickup Address
-              </Text>
-              <CustomeIcon name={'add-box'} size={Dimension.font22} color={colors.BrandColor}
-              style={{left:50}} />
-              <Text style={{fontSize: 16, fontWeight: 'bold', color: colors.BrandColor,right:20}}>
-                Add new
-              </Text>
-              </View>  
+      <ScrollView indicatorStyle="white" style={styles.ContainerCss}>
+      
+      <Accordion
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: 80}}
+        sections={tdsInfoDetails || []}
+        activeSections={tdsInfoList}
+        renderHeader={_renderHeader}
+        renderContent={_renderContent}
+        onChange={_updateSections}
+        touchableComponent={TouchableOpacity}
+        renderFooter={() => (
+          <View style={{height: 10, backgroundColor: '#E0E0E0'}}></View>
+        )}
+      />
                
       </ScrollView> 
-            <CustomButton
-              title={'NEXT'}
-              buttonStyle={styles.submit}
-              // onPress={navigateToAddresses}
-              TextColor={colors.WhiteColor}
-              borderColor={colors.WhiteColor}
-            /> 
+      <View style={styles.bottombtnWrap}>
+          <CustomButton
+          buttonColor={colors.BrandColor}
+          borderColor={colors.BrandColor }
+          TextColor={colors.WhiteColor }
+          TextFontSize={Dimension.font16}
+          title={'Next'}
+          loading={loading}
+          // onPress={onSubmit}
+        />
+          </View>
     </View>
     
   );
