@@ -18,7 +18,6 @@ import {
   removeCategory,
   setSelectCategories,
 } from '../../../../redux/actions/categorybrand';
-import debounce from 'lodash.debounce';
 import styles from './style';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import Checkbox from '../../../../component/common/Checkbox/index';

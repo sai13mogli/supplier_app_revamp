@@ -17,7 +17,6 @@ import Dimension from '../../../../Theme/Dimension';
 import Modal from 'react-native-modal';
 import MultiSelect from '../../../../component/common/MultiSelect';
 import {TOP_BRANDS_SCREENS} from '../../../../constants';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Tabs from '../../../../component/common/Tabs';
 const deviceWidth = Dimensions.get('window').width;
 
