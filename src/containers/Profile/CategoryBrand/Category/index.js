@@ -116,7 +116,7 @@ const CategoryScreen = props => {
             .map((item, i) => (
               <Checkbox
                 checked={
-                  (stateCategories || []).find(_ => _.id == item.id)
+                  (selectedValues || []).find(_ => _.id == item.id)
                     ? true
                     : false
                 }
@@ -145,7 +145,7 @@ const CategoryScreen = props => {
             rightIconName={'category--brand'}></Header>
           <View style={styles.searchWrapper}>
             <TextInput
-              placeholder="Search Brand"
+              placeholder="Search Category"
               placeholderTextColor={'#A2A2A2'}
               selectionColor={'#888'}
               returnKeyType={'search'}

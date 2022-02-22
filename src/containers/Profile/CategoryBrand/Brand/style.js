@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import Colors from '../../../../Theme/Colors';
 import Dimension from '../../../../Theme/Dimension';
+import {Dimensions} from 'react-native';
 
 const styles = StyleSheet.create({
   submit: {
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-
+    height: Dimensions.get('window').height * 0.9,
     width: '100%',
     position: 'absolute',
     bottom: 0,

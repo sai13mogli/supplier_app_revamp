@@ -93,7 +93,11 @@ const BrandScreen = props => {
         onBackdropPress={() => {
           setModalVisible(false);
         }}
-        style={{padding: 0, margin: 0}}>
+        deviceHeight={Dimensions.get('window').height * 0.9}
+        style={{
+          padding: 0,
+          margin: 0,
+        }}>
         <View style={styles.modalContainer}>
           <View style={styles.topbdr}></View>
           <View style={styles.headingWrapper}>

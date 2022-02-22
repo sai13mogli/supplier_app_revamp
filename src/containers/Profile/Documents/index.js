@@ -287,7 +287,7 @@ const DocumentsScreen = props => {
   ];
 
   useEffect(() => {
-    // fetchDocuments();
+    fetchDocuments();
   }, []);
 
   useEffect(() => {
@@ -930,7 +930,7 @@ const DocumentsScreen = props => {
     };
     myrequest.open(
       'GET',
-      `http://apigatewayqa.moglix.com/profile/file?download=0&key=${fileKey}`,
+      `http://apigatewayqa.moglix.com/profile/file?downloa=0&key=${fileKey}`,
     );
     let token = `Bearer ${await AsyncStorage.getItem('token')}`;
     myrequest.setRequestHeader('Authorization', authToken);
@@ -962,6 +962,7 @@ const DocumentsScreen = props => {
             setImageUrl(fields);
           }
         };
+      } else {
       }
     };
   };
@@ -1056,20 +1057,19 @@ const DocumentsScreen = props => {
   const onSubmit = async () => {
     try {
       setSubmitLoader(true);
-      // const {data} = await submitProfile(
-      //   'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MTUiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzOTE3NjUsImV4cCI6MTY0NDQ3ODE2NX0.taxunFIzboSpwNOxg_OufD00qmUisKG6iTl7ubXz9x8BPJ_VlAoQKpKeGRjKpW8zXy62XDMG1mOVnA8xX7HMyg',
-      // );
-      // if (data && data.success) {
-      //   setSubmitLoader(false);
-      //   setConfirmModal(false);
-      //   dispatch(fetchProfile());
-      //   props.navigation.navigate('Profile');
-      // } else {
-      //   setSubmitLoader(false);
-      //   setConfirmModal(false);
-      //   dispatch(fetchProfile());
-      //   props.navigation.navigate('Profile');
-      // }
+      let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+      const {data} = await submitProfile(token);
+      if (data && data.success) {
+        setSubmitLoader(false);
+        setConfirmModal(false);
+        dispatch(fetchProfile());
+        props.navigation.navigate('Profile');
+      } else {
+        setSubmitLoader(false);
+        setConfirmModal(false);
+        dispatch(fetchProfile());
+        props.navigation.navigate('Profile');
+      }
     } catch (error) {
       console.log('err', error);
     }
@@ -1164,10 +1164,13 @@ const DocumentsScreen = props => {
             resourceType="base64"
           />
         ) : (
-          <Image
-            source={{uri: imageUrl}}
-            style={{height: '100%', width: '100%', flex: 1}}
-          />
+          <Text style={{color: 'red', fontSize: 16, fontWeight: 'bold'}}>
+            No Image Found!!
+          </Text>
+          // <Image
+          //   source={{uri: imageUrl}}
+          //   style={{height: '100%', width: '100%', flex: 1}}
+          // />
         )}
       </Modal>
       <Modal
