@@ -13,6 +13,7 @@ import SignUpEndScreen from '../containers/Auth/SignUpEnd';
 import BankDetails from '../containers/Profile/BankDetails';
 import CategoryBrand from '../containers/Profile/CategoryBrand';
 import SelectCategoryScreen from '../containers/Auth/SelectCategory';
+import NotificationScreen from '../containers/Notification';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
 import {OrderedMap} from 'immutable';
 import Accounts from '../containers/Profile/BankDetails/Accounts';
@@ -20,6 +21,8 @@ import TdsDetails from '../containers/Profile/BankDetails/TdsDetails';
 import PickedUp from '../containers/Profile/Addresses/PickedUp';
 import Billing from '../containers/Profile/Addresses/Billing';
 import CategoryScreen from '../containers/Profile/CategoryBrand/Category';
+import PopularBrandsScreen from '../containers/Profile/CategoryBrand/Brand/PopularBrands';
+import AllBrandsScreen from '../containers/Profile/CategoryBrand/Brand/AllBrands';
 
 export const BOTTOM_TAB_SCREENS = [
   //   {
@@ -55,7 +58,6 @@ export const BOTTOM_TAB_SCREENS = [
 ];
 
 export const TOP_TAB_SCREENS = [
- 
   {
     name: 'Account',
     component: Accounts,
@@ -64,7 +66,17 @@ export const TOP_TAB_SCREENS = [
     name: 'TDS Taxation Details',
     component: TdsDetails,
   },
+];
 
+export const TOP_BRANDS_SCREENS = [
+  {
+    name: 'PopularBrands',
+    component: PopularBrandsScreen,
+  },
+  {
+    name: 'AllBrands',
+    component: AllBrandsScreen,
+  },
 ];
 
 export const ADDRESSES_TAB_SCREENS = [
@@ -76,8 +88,6 @@ export const ADDRESSES_TAB_SCREENS = [
     name: 'PickedUp',
     component: PickedUp,
   },
-  
-
 ];
 
 export const AUTH_STACK_SCREENS = [
@@ -135,6 +145,10 @@ export const APP_STACK_SCREENS = [
   {
     name: 'Brands',
     component: BrandScreen,
+  },
+  {
+    name: 'Notification',
+    component: NotificationScreen,
   },
   {
     name: 'Category',

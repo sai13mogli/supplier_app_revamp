@@ -16,6 +16,11 @@ const initialState = {
   brandsAdded: [],
   categories: [],
   brandsData: [],
+  popularcategories: {
+    data: [],
+    status: STATE_STATUS.UNFETCHED,
+  },
+  selectcategories: [],
 
   // brandsStatus: STATE_STATUS.UNFETCHED,
 
@@ -87,6 +92,7 @@ export const categorybrandReducer = (state = initialState, action) => {
             status: STATE_STATUS.FETCHED,
             data: payload.data,
             pageIndex: payload.obj.pageNo,
+            params: ['A'],
           },
         };
       }
@@ -209,12 +215,53 @@ export const categorybrandReducer = (state = initialState, action) => {
         categories: [payload.obj],
       };
 
-    // case CATEGORY_BRAND_ACTIONS.SET_CATEGORIES:
-    //   console.log('dat', payload);
-    //   return {
-    //     ...state,
-    //     categories: [...payload.data],
-    //   };
+    case CATEGORY_BRAND_ACTIONS.UPDATE_BRAND_DATA:
+      if (state && state.brandsData) {
+        let currObj = ([...state.brandsData] || []).find(
+          _ => _.brandCode == payload.obj.brandCode,
+        );
+        let updateObj = {
+          ...currObj,
+          ...payload.obj,
+        };
+
+        let updateBrandsData = ([...state.brandsData] || []).filter(
+          _ => _.brandCode !== payload.obj.brandCode,
+        );
+
+        return {
+          ...state,
+          brandsData: [...updateBrandsData, updateObj],
+        };
+      }
+
+    case CATEGORY_BRAND_ACTIONS.SET_POPULAR_CATEGORIES:
+      return {
+        ...state,
+        popularcategories: {
+          ...state.popularcategories,
+          data: [...payload.data],
+          status: STATE_STATUS.FETCHED,
+        },
+      };
+
+    case CATEGORY_BRAND_ACTIONS.SET_SELECT_CATEGORIES:
+      return {
+        ...state,
+        selectcategories: [...payload.data],
+      };
+
+    case CATEGORY_BRAND_ACTIONS.FETCHED_CATEGORIES_BRANDS:
+      return {
+        ...state,
+        initialcategories: [...payload.data],
+      };
+
+    case CATEGORY_BRAND_ACTIONS.SET_CATEGORIES:
+      return {
+        ...state,
+        categories: [...payload.data],
+      };
 
     default:
       return state;

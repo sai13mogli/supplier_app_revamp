@@ -4,7 +4,11 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import CustomButton from '../../../component/common/Button';
 import Checkbox from '../../../component/common/Checkbox/index';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
-import {sendOtpForLogin, verifyOtp} from '../../../services/auth';
+import {
+  sendOtpForLogin,
+  sendOtpForSignUp,
+  verifyOtp,
+} from '../../../services/auth';
 import Colors from '../../../Theme/Colors';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -42,7 +46,7 @@ const SignUpStartScreen = props => {
   const onSendOtp = async () => {
     if (phone && phone.length && phone.length == 10) {
       initializeCounter();
-      const {data} = await sendOtpForLogin(phone);
+      const {data} = await sendOtpForSignUp({phone, prefix: '+91'});
     } else {
       setphoneError(true);
     }
@@ -173,7 +177,7 @@ const SignUpStartScreen = props => {
       contactName,
       phonePrefix: '+91',
       rememberMe: true,
-      country: '217',
+      country: '110',
     });
     // if (
     //   phone &&

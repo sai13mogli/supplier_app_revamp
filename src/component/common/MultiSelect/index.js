@@ -61,6 +61,11 @@ const MultiSelect = props => {
     removeClippedSubviews,
     maxToRenderPerBatch,
     ListEmptyComponent,
+    ListFooterComponent,
+    onMomentumScrollBegin,
+    windowSize,
+    initialNumToRender,
+    updateCellsBatchingPeriod,
   } = props;
 
   useEffect(() => {
@@ -86,19 +91,6 @@ const MultiSelect = props => {
           customeListNow[item].checked = true;
           let itemChoosed = customeListNow[item];
           if (allBrands) {
-            // customeListNow[item] = {
-            //   supplierId: '',
-            //   brandCode: (customeListNow[item]).code,
-            //   fileKey: '',
-            //   businessNature: '1',
-            //   expiryDate: '',
-            //   isDeleted: '0',
-            //   isRaiseRequest: 'false',
-            //   brandListingUrl: '',
-            //   status:(customeListNow[item]).status,
-            //   isDocumentRequired:(customeListNow[item]).isDocumentRequired,
-            //   id:(customeListNow[item]).id
-            // },
             dispatch(addBrand(customeListNow[item]));
           }
           if (props.fromCategory) {
@@ -171,12 +163,10 @@ const MultiSelect = props => {
             value={value}
             blurOnSubmit={blurOnSubmit}
             placeholder={placeholder}
-            style={styles.SearchInputCss}>
-
-            </TextInput>
-           <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+            style={styles.SearchInputCss}></TextInput>
+          <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
           {/* <CustomeIcon name={'close'} style={styles.CloseIcon}></CustomeIcon>
-         */}
+           */}
         </View>
       ) : null}
 
@@ -191,12 +181,16 @@ const MultiSelect = props => {
         removeClippedSubviews={removeClippedSubviews}
         maxToRenderPerBatch={maxToRenderPerBatch}
         ListEmptyComponent={ListEmptyComponent}
+        ListFooterComponent={ListFooterComponent}
+        onMomentumScrollBegin={onMomentumScrollBegin}
+        windowSize={windowSize}
+        initialNumToRender={initialNumToRender}
+        updateCellsBatchingPeriod={updateCellsBatchingPeriod}
       />
     </>
   );
 };
 const styles = StyleSheet.create({
- 
   CheckboxTitle: {
     fontSize: Dimension.font16,
     color: colors.FontColor,
@@ -209,39 +203,36 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     width: 'auto',
     flexDirection: 'row',
-    marginBottom:Dimension.margin8
+    marginBottom: Dimension.margin8,
   },
-  searchWrapper:{
-   marginBottom:Dimension.margin20,
-    position:"relative"
-},
+  searchWrapper: {
+    marginBottom: Dimension.margin20,
+    position: 'relative',
+  },
 
-SearchInputCss:{
-  fontSize:Dimension.font12,
-  color:colors.FontColor,
-  fontFamily:Dimension.CustomRegularFont,
-  borderRadius:4,
-  borderWidth:1,
-  borderColor:colors.BoxBorderColor,
-  paddingHorizontal:Dimension.padding10,
-  paddingVertical:Dimension.padding10
- 
-},
-seacrhIcon:{
-    position:"absolute",
-    top:Dimension.padding12,
-    right:Dimension.padding10,
-    fontSize:Dimension.font18,
-    color:colors.FontColor
-},
-CloseIcon:{
-  position:"absolute",
-    top:Dimension.padding15,
-    right:Dimension.padding20,
-    fontSize:Dimension.font18,
-    color:colors.BrandColor  
-},
-
- 
+  SearchInputCss: {
+    fontSize: Dimension.font12,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: colors.BoxBorderColor,
+    paddingHorizontal: Dimension.padding10,
+    paddingVertical: Dimension.padding10,
+  },
+  seacrhIcon: {
+    position: 'absolute',
+    top: Dimension.padding12,
+    right: Dimension.padding10,
+    fontSize: Dimension.font18,
+    color: colors.FontColor,
+  },
+  CloseIcon: {
+    position: 'absolute',
+    top: Dimension.padding15,
+    right: Dimension.padding20,
+    fontSize: Dimension.font18,
+    color: colors.BrandColor,
+  },
 });
 export default MultiSelect;

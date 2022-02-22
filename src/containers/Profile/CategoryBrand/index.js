@@ -25,8 +25,16 @@ import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../../../redux/constants/index';
-import {addBrandData, addBrand} from '../../../redux/actions/categorybrand';
+import {
+  addBrandData,
+  addBrand,
+  setSelectCategories,
+  emptyCategories,
+  setCategories,
+  updateBrandData,
+} from '../../../redux/actions/categorybrand';
 import {addOrUpdateCategoryAndBrand} from '../../../services/categorybrand';
+import {getAllCategories} from '../../../services/auth';
 
 // import {uploadDocumentService} from '../../../services/documents';
 const deviceWidth = Dimensions.get('window').width;
@@ -42,6 +50,18 @@ const CategoryBrandScreen = props => {
     state => (state.categorybrandReducer || {}).brandsData || [],
   );
 
+  const initialSelectedCategories = useSelector(
+    state => (state.categorybrandReducer || {}).initialcategories || [],
+  );
+
+  const selectedCategories = useSelector(
+    state => (state.categorybrandReducer || {}).selectcategories || [],
+  );
+
+  const stateCategories = useSelector(
+    state => (state.categorybrandReducer || {}).categories || [],
+  );
+
   const [categoryCode, setcategoryCode] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [brandName, setBrandName] = useState('');
@@ -52,12 +72,16 @@ const CategoryBrandScreen = props => {
     loading: false,
     showDoc: false,
     closeDoc: false,
+    errorState: false,
+    errorText: 'Certificate upload failed.Please try again.',
   });
   const [expiryDate, setExpiryDate] = useState('');
   const [brandUrl, setBrandUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [brandNameError, setBrandNameError] = useState(false);
   const [brand, setBrand] = useState({});
+  const [initialCategories, setInitialCategories] = useState([]);
+  const [nextLoader, setNextLoader] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -69,12 +93,13 @@ const CategoryBrandScreen = props => {
       placeholder: 'Select Categories',
       fromAddCategory: true,
       extraView: true,
-      value: categoryCode || categories.label,
+      value: selectedCategories,
+      // || categories.label
       onPress: () =>
         props.navigation.navigate('Category', {
           fetchCategoryfromApi: true,
-          setcategoryCode: setcategoryCode,
-          categoryCode: categoryCode,
+          //   setcategoryCode: setcategoryCode,
+          initialCategories: selectedCategories,
         }),
     },
     brand: {
@@ -147,10 +172,13 @@ const CategoryBrandScreen = props => {
       loading: brandCertificate && brandCertificate.loading,
       closeDoc: brandCertificate && brandCertificate.closeDoc,
       value: brandCertificate && brandCertificate.value,
+      errorState: brandCertificate && brandCertificate.errorState,
+      errorText: brandCertificate && brandCertificate.errorText,
       onRemove: () => onRemove(),
       closeDoc: brandCertificate && brandCertificate.closeDoc,
       fromCategoryBrand: true,
       uploadDocument: () => uploadFromFileExp(),
+      onPress: () => uploadFromFileExp(),
       component: FileUpload,
     },
     date: {
@@ -184,10 +212,49 @@ const CategoryBrandScreen = props => {
     }
   }, [brandCertificate]);
 
+  useEffect(() => {
+    if (initialSelectedCategories && initialSelectedCategories.length) {
+      filterSelectedArr();
+    }
+  }, [initialSelectedCategories]);
+
+  useEffect(() => {
+    console.log('state data hai');
+  }, [stateCategories]);
+
+  const filterSelectedArr = async () => {
+    const {data} = await getAllCategories();
+
+    let arr = [];
+    (data.data || []).forEach(ele => {
+      initialSelectedCategories.forEach(e => {
+        if (ele.categoryCode == e.categoryCode) {
+          arr.push({...e, categoryName: ele.categoryName});
+        }
+      });
+    });
+
+    let mutateArr = arr.map(_ => ({
+      label: _.categoryName,
+      checked: true,
+      id: _.categoryCode,
+      value: _.categoryCode,
+    }));
+
+    dispatch(setSelectCategories(mutateArr));
+    dispatch(setCategories(mutateArr));
+  };
+
   const uploadDocu = async data => {
     let res = await uploadDocumentService(data);
     console.log('uploadDocument ka res hai bhaiii!', res);
-    setDocument(res);
+    let {resp} = res;
+
+    if (resp.error) {
+      setErrorData();
+    } else {
+      setDocument(res);
+    }
   };
 
   const uploadDocumentService = async data => {
@@ -238,6 +305,14 @@ const CategoryBrandScreen = props => {
     });
   };
 
+  const setErrorData = () => {
+    setBrandCertificate({
+      ...brandCertificate,
+      loading: false,
+      errorState: true,
+    });
+  };
+
   const onRemove = () => {
     setBrandCertificate({
       ...brandCertificate,
@@ -274,23 +349,21 @@ const CategoryBrandScreen = props => {
         isImp={true}
       />
     ) : (
-      <TouchableOpacity>
-        <FloatingLabelInputField
-          label={label}
-          isImp={isImp}
-          value={value}
-          onChangeText={onChangeText}
-          fromAddCategory={fromAddCategory}
-          extraView={() => (
-            <TouchableOpacity
-              onPress={() => props.navigation.navigate('Brands')}>
-              <CustomeIcon
-                name={'arrow-right-line'}
-                size={Dimension.font22}
-                color={colors.FontColor}></CustomeIcon>
-            </TouchableOpacity>
-          )}
-        />
+      <TouchableOpacity onPress={() => props.navigation.navigate('Brands')}>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.labelStyle}>{label}</Text>
+          <Text style={styles.starIcon}>*</Text>
+        </View>
+        <View style={styles.inputContainerStyle}>
+          <Text style={styles.placeholderCss}>Select</Text>
+          <TouchableOpacity onPress={() => props.navigation.navigate('Brands')}>
+            <CustomeIcon
+              name={'eye-open'}
+              size={Dimension.font20}
+              color={colors.eyeIcon}
+            />
+          </TouchableOpacity>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -321,23 +394,43 @@ const CategoryBrandScreen = props => {
       ...data,
       loading: true,
       key: 'brandCertificate',
+      errorState: false,
     });
   };
 
   console.log('addedBrands', addedBrand, categories, expiryDate);
 
-  const onSubmit = () => {
-    let brandObj = {
-      supplierId: '',
-      brandCode: brand && brand.code,
-      fileKey: brandCertificate && brandCertificate.value,
-      businessNature: natureOfBusiness,
-      expiryDate: expiryDate,
-      isDeleted: '0',
-      isRaiseRequest: 'true',
-      brandListingUrl: brandUrl,
-    };
-    dispatch(addBrandData(brandObj));
+  const onSubmit = raiseRequest => {
+    let currBrand = (raisedBrand || []).find(_ => _.brandName == brand.name);
+    console.log(currBrand);
+    if (currBrand) {
+      let currBrandObj = {
+        supplierId: '',
+        brandCode: (brand && brand.code) || 'collectiontest',
+        fileKey: brandCertificate && brandCertificate.value,
+        businessNature: natureOfBusiness,
+        expiryDate: expiryDate,
+        isDeleted: '0',
+        isRaiseRequest: raiseRequest ? 'true' : 'false',
+        brandListingUrl: brandUrl,
+        brandName: brand && brand.name,
+      };
+      dispatch(updateBrandData(currBrandObj));
+    } else {
+      let brandObj = {
+        supplierId: '',
+        brandCode: (brand && brand.code) || 'collectiontest',
+        fileKey: brandCertificate && brandCertificate.value,
+        businessNature: natureOfBusiness,
+        expiryDate: expiryDate,
+        isDeleted: '0',
+        isRaiseRequest: raiseRequest ? 'true' : 'false',
+        brandListingUrl: brandUrl,
+        brandName: brand && brand.name,
+      };
+      dispatch(addBrandData(brandObj));
+    }
+
     setModalVisible(false);
   };
 
@@ -347,17 +440,23 @@ const CategoryBrandScreen = props => {
       code: brand.code,
     });
     setBrandName(brand.name);
+    setnatureOfBusiness(1);
+    setBrandCertificate({
+      title: '',
+      value: '',
+      loading: false,
+      showDoc: false,
+      closeDoc: false,
+      errorState: false,
+      errorText: 'Certificate upload failed.Please try again.',
+    });
+    setExpiryDate('');
+    setBrandUrl('');
     setModalVisible(true);
   };
 
   const checkCommonValidation = () => {
-    return (
-      brandName &&
-      brandName.length &&
-      natureOfBusiness &&
-      expiryDate &&
-      expiryDate.length
-    );
+    return brandName && brandName.length && natureOfBusiness && expiryDate;
   };
   const checkValidation = () => {
     return brandName && brandName.length && natureOfBusiness;
@@ -375,11 +474,30 @@ const CategoryBrandScreen = props => {
     );
   };
 
+  const checkValidationReqBrand = () => {
+    return (
+      brandName &&
+      brandName.length &&
+      natureOfBusiness &&
+      brandUrl &&
+      brandUrl.length
+    );
+  };
+
   const getButtonColor = () => {
     if (natureOfBusiness == 3 && checkCommonValidation()) {
-      console.log(expiryDate);
       return true;
     } else if (natureOfBusiness != 3 && checkValidation()) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const getButtonColorReqBrand = () => {
+    if (natureOfBusiness == 3 && checkCommonValidationReqBrand()) {
+      return true;
+    } else if (natureOfBusiness != 3 && checkValidationReqBrand()) {
       return true;
     } else {
       return false;
@@ -396,25 +514,79 @@ const CategoryBrandScreen = props => {
   // "brandListingUrl": ""
 
   const onNext = async () => {
-    let mutatebrands = (addedBrand || []).map((_, i) => ({
+    // setNextLoader(true);
+
+    let mutatebrands = (addedBrand || [])
+      .filter(it => !it.isDocumentRequired && it.status)
+      .map((_, i) => ({
+        supplierId: '',
+        brandCode: _.code,
+        fileKey: '',
+        businessNature: '1',
+        expiryDate: '',
+        isDeleted: '0',
+        isRaiseRequest: 'false',
+        brandListingUrl: '',
+      }));
+
+    let mutateRaisedbrands = (raisedBrand || []).map((_, i) => ({
       supplierId: '',
-      brandCode: _.code,
-      fileKey: '',
-      businessNature: '1',
-      expiryDate: '',
-      isDeleted: '0',
-      isRaiseRequest: 'false',
-      brandListingUrl: '',
+      brandCode: _.brandCode,
+      fileKey: _.fileKey,
+      businessNature: _.businessNature,
+      expiryDate: _.expiryDate,
+      isDeleted: _.isDeleted,
+      isRaiseRequest: _.isRaiseRequest,
+      brandListingUrl: _.brandListingUrl,
     }));
 
-    let categoryIds = (categories || []).map((_, i) => _.id);
-    let brandsarr = [...mutatebrands, ...raisedBrand];
-    let payloadObj = {
-      categoryCode: [...categoryIds],
-      brandList: [...brandsarr],
-    };
-    const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
-    console.log('data updated hi hai', data);
+    console.log('mutateBrands', mutatebrands);
+    console.log('raisedBrands', mutateRaisedbrands);
+
+    let brandsarr = [...mutatebrands, ...mutateRaisedbrands];
+    console.log('brandsArr', brandsarr);
+    // let categoryIds = ([...selectedCategories] || []).map((_, i) => _.id);
+    // let payloadObj = {
+    //   categoryCode: [...categoryIds],
+    //   brandList: [...brandsarr],
+    // };
+    // let payloadObj = {
+    //   categoryCode: ['122000000', '260000000'],
+    //   brandList: [
+    //     {
+    //       supplierId: '',
+    //       brandCode: 'd3876965-ceba-4052-8526-42c3534a72bf',
+    //       fileKey: '9a73dc34dcd5cb1f81aedfd409769347',
+    //       businessNature: '2',
+    //       expiryDate: '',
+    //       isDeleted: '0',
+    //       isRaiseRequest: 'false',
+    //       brandListingUrl: '',
+    //     },
+    //     {
+    //       supplierId: '',
+    //       brandCode: 'bd5b7209-59d8-405e-b47a-72f2677ad497',
+    //       fileKey: 'd5825501532840e9db36308326a4ce9b',
+    //       businessNature: '3',
+    //       expiryDate: '24-02-2022',
+    //       isDeleted: '0',
+    //       isRaiseRequest: 'false',
+    //       brandListingUrl: '',
+    //     },
+    //     {
+    //       supplierId: '',
+    //       brandCode: 'dd20c1c6-7cc5-441d-8547-fc1f19c1cdff',
+    //       fileKey: '',
+    //       businessNature: '1',
+    //       expiryDate: '',
+    //       isDeleted: '0',
+    //       isRaiseRequest: 'false',
+    //       brandListingUrl: '',
+    //     },
+    //   ],
+    // };
+    // const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
+    // console.log('data updated hi hai', data);
   };
 
   console.log(
@@ -424,16 +596,18 @@ const CategoryBrandScreen = props => {
     brandName.length,
     !checkCommonValidationReqBrand,
     !checkValidation,
+    'hhee',
+    checkCommonValidation(),
   );
 
   return (
     <View style={{flex: 1}}>
       <Header
         howBack
-        showText={'Business Details'}
+        showText={'Category & Brand'}
         rightIconName={'category--brand'}></Header>
       <ScrollView style={styles.ContainerCss}>
-        <View >
+        <View>
           {BRAND_CATEGORY.map(_ => renderInputText(_))
             .toList()
             .toArray()}
@@ -484,14 +658,14 @@ const CategoryBrandScreen = props => {
               .filter(item => !item.status)
               .map((_, i) => (
                 <View style={styles.BrandWrap}>
-                  <Text style={styles.brandTitleTxt}>Brand Name</Text>
-                  <Text style={styles.brandNameTxt}>{_.name}</Text>
-                  <>
-                    <TouchableOpacity onPress={() => openModal(_)} style={styles.fillBtn}>
-                      <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
-                    </TouchableOpacity>
-                  </>
-                </View>
+                    <Text style={styles.brandTitleTxt}>Brand Name</Text>
+                    <Text style={styles.brandNameTxt}>{_.name}</Text>
+                    <>
+                      <TouchableOpacity onPress={() => openModal(_)} style={styles.fillBtn}>
+                        <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
+                      </TouchableOpacity>
+                    </>
+                  </View>
               ))}
           </View>
         </View>
@@ -512,17 +686,8 @@ const CategoryBrandScreen = props => {
         }}
         onBackdropPress={() => {
           setModalVisible(false);
-        }}
-        style={{margin:0,padding:0}}>
-        <View style={styles.modalContainer}>
-        <View style={styles.TopWrap}>
-        <View style={styles.topbdr}></View>
-        <View style={styles.ModalheadingWrapper}>
-          <Text style={styles.ModalHeading}>Taparia</Text>
-          <CustomeIcon name={'close'} size={Dimension.font22} color={colors.FontColor}></CustomeIcon>
-
-        </View>
-        <View style={styles.ModalFormWrap}>
+        }}>
+        <View style={{backgroundColor: '#fff'}}>
           {FORM_FIELDS.map((field, fieldKey) => (
             <field.component
               fileUpload={natureOfBusiness}
@@ -530,57 +695,49 @@ const CategoryBrandScreen = props => {
               key={fieldKey}
             />
           )).toList()}
-          </View>
-          {/* natureOfBusiness == 3 && checkCommonValidation() ? colors.BrandColor :
-          natureOfBusiness !== 3 && checkValidation() ? colors.BrandColor :
-          'dodgerblue' */}
-          </View>
-          <View  style={styles.ModalBottomBtnWrap}>
           {brand && brand.code ? (
             <CustomButton
-            buttonColor={getButtonColor() ? colors.BrandColor : colors.DisableStateColor} borderColor={colors.BrandColor}
-            TextColor={getButtonColor() ? colors.WhiteColor : colors.FontColor}
-            TextFontSize={Dimension.font16}
-              title={'SUBMIT'}
+              buttonColor={getButtonColor() ? colors.BrandColor : 'dodgerblue'}
+              borderColor={colors.BrandColor}
+              TextColor={colors.WhiteColor}
+              TextFontSize={Dimension.font16}
+              title={'Submit'}
               disabled={
                 natureOfBusiness == 3
                   ? !checkCommonValidation()
                   : !checkValidation()
               }
-              onPress={onSubmit}
+              onPress={() => onSubmit(false)}
             />
           ) : (
             <CustomButton
-            buttonColor={getButtonColor() ? colors.BrandColor : colors.DisableStateColor} borderColor={colors.BrandColor}
-            TextColor={getButtonColor() ? colors.WhiteColor : colors.FontColor}
-            TextFontSize={Dimension.font16}
-              title={'SUBMIt'}
+              buttonColor={
+                getButtonColorReqBrand() ? colors.BrandColor : 'dodgerblue'
+              }
+              borderColor={colors.BrandColor}
+              TextColor={colors.WhiteColor}
+              TextFontSize={Dimension.font16}
+              title={'Submit'}
               disabled={
                 natureOfBusiness == 3
                   ? !checkCommonValidationReqBrand()
-                  : !checkValidation()
+                  : !checkValidationReqBrand()
               }
-              onPress={onSubmit}
+              onPress={() => onSubmit(true)}
             />
           )}
-          </View>
         </View>
-        
       </Modal>
-      <View  style={styles.ModalBottomBtnWrap}>
       <CustomButton
         buttonColor={colors.BrandColor}
         borderColor={colors.BrandColor}
         TextColor={colors.WhiteColor}
         TextFontSize={Dimension.font16}
         title={'Next'}
-        // disabled={
-        //   natureOfBusiness == 3 ? !checkCommonValidation() : !checkValidation()
-        // }
-        loading={loading}
+        loading={nextLoader}
+        loadingColor={'#fff'}
         onPress={onNext}
       />
-      </View>
     </View>
   );
 };

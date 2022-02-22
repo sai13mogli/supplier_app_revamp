@@ -28,10 +28,13 @@ const FileUpload = props => {
     fileUpload,
     fromCategoryBrand,
     uploadDocument,
+    errorState,
+    errorText,
   } = props;
+
   if (fileUpload == 2 || fileUpload == 3) {
     return (
-      <View>
+      <TouchableOpacity onPress={onPress}>
         <View style={{flexDirection: 'row'}}>
           <Text style={styles.labelStyle}>{label}</Text>
           {isImp ? <Text style={styles.starIcon}>*</Text> : null}
@@ -79,7 +82,10 @@ const FileUpload = props => {
             </TouchableOpacity>
           )}
         </View>
-      </View>
+        {errorState ? (
+          <Text style={{color: 'red', fontSize: 12}}>{errorText}</Text>
+        ) : null}
+      </TouchableOpacity>
     );
   } else {
     return null;

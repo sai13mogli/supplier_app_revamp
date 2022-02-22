@@ -21,7 +21,7 @@ const BusinessDetailsScreen = props => {
   const businessDetails = useSelector(
     state => state.profileReducer.businessDetails.data || {},
   );
-  console.log("bussiness====>",businessDetails);
+  console.log('bussiness====>', businessDetails);
   const businessDetailsStatus = useSelector(
     state =>
       state.profileReducer.businessDetails.status || STATE_STATUS.FETCHING,
@@ -269,7 +269,7 @@ const BusinessDetailsScreen = props => {
   }, [businessDetailsStatus]);
 
   useEffect(() => {
-    if (pincode.length && pincode.length == 6) {
+    if (pincode && pincode.length && pincode.length == 6) {
       onPincodeBlur();
     }
   }, [pincode]);

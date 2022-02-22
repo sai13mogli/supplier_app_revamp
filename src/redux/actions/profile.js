@@ -72,7 +72,6 @@ export const fetchAddressDetails = () => {
   return {
     type: PROFILE_ACTIONS.FETCH_ADDRESSES,
   };
- 
 };
 
 export const fetchedAddressDetails = data => {
@@ -95,7 +94,6 @@ export const fetchBankDetails = () => {
   return {
     type: PROFILE_ACTIONS.FETCH_BANK_DETAILS,
   };
- 
 };
 
 export const fetchedBankDetails = data => {
