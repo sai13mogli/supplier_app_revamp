@@ -76,6 +76,7 @@ export const ADDRESSES_TAB_SCREENS = [
     name: 'PickedUp',
     component: PickedUp,
   },
+  
 
 ];
 
