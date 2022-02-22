@@ -4,7 +4,8 @@ import Dimension from '../../../../../Theme/Dimension';
 const styles = StyleSheet.create({
 Wrapper:{
   marginTop:Dimension.margin20,
-  flexDirection:"row"
+  flexDirection:"row",
+  backgroundColor:"#fff"
   },
   activeBackground: {
    backgroundColor:Colors.grayShade1,
@@ -18,7 +19,8 @@ Wrapper:{
   },
   leftPart:{
     flex:.8,
-    marginRight:Dimension.margin10
+    marginRight:Dimension.margin10,
+    marginBottom:80,
   },
   rightPart:{
     flex:1
@@ -58,6 +60,11 @@ CloseIcon:{
     right:Dimension.padding15,
     fontSize:Dimension.font18,
     color:Colors.BrandColor  
+},
+NoDataTxt:{
+  fontSize:Dimension.font14,
+    color:Colors.FontColor,
+    fontFamily:Dimension.CustomSemiBoldFont,
 },
 });
 

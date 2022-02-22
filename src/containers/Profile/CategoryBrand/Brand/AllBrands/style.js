@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding20,
     position: 'relative',
+    backgroundColor:"#fff"
   },
 
   leftPart: {
@@ -64,6 +65,26 @@ const styles = StyleSheet.create({
     right: Dimension.padding20,
     fontSize: Dimension.font18,
     color: Colors.BrandColor,
+  },
+
+  NoBrandWrap:{
+borderWidth:1,
+borderColor:Colors.BoxBorderColor,
+borderRadius:4,
+paddingHorizontal:Dimension.padding15,
+paddingVertical:Dimension.padding20,
+flexDirection:"row",
+justifyContent:"space-between"
+  },
+  NoDataTxt:{
+    fontSize:Dimension.font12,
+      color:Colors.FontColor,
+      fontFamily:Dimension.CustomRegularFont,
+  },
+  addBrandTxt:{
+    fontSize:Dimension.font12,
+    color:Colors.BrandColor,
+    fontFamily:Dimension.CustomMediumFont,
   },
 });
 

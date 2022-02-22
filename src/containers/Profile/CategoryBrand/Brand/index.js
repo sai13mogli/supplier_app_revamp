@@ -18,6 +18,7 @@ import Modal from 'react-native-modal';
 import MultiSelect from '../../../../component/common/MultiSelect';
 import {TOP_BRANDS_SCREENS} from '../../../../constants';
 import Tabs from '../../../../component/common/Tabs';
+import Header from '../../../../component/common/Header';
 const deviceWidth = Dimensions.get('window').width;
 
 const TABS = [
@@ -45,6 +46,10 @@ const BrandScreen = props => {
 
   return (
     <>
+    <Header
+        howBack
+        showText={'Brand Selection'}
+        rightIconName={'category--brand'}></Header>
       <Tabs data={TABS.map(_ => ({..._}))} />
       <View style={styles.bottombtnWrap}>
         <TouchableOpacity style={styles.BrandNumWrap}>

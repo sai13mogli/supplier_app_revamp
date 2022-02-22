@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     bottom: 0,
-
     paddingTop: Dimension.padding10,
   },
   TopWrap: {

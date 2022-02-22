@@ -10,18 +10,21 @@ return (
     <Header
   backgroundColor="#fff"
   barStyle="dark-content"
+  placement="left"
+  elevated={true}
   containerStyle={{paddingVertical:Dimension.padding25,}}
-  leftContainerStyle={{flex:1}}
+  //leftContainerStyle={{flex:1}}
+  centerComponent={{ text: props.showText, style: styles.headerTxt}}
   leftComponent={
     <View style={styles.leftSection}>
     <CustomeIcon name={'arrow-back'} size={Dimension.font20} color={colors.FontColor}></CustomeIcon>
-     <Text style={styles.headerTxt}>{props.showText}</Text>
+     {/* <Text style={styles.headerTxt}>{props.showText}</Text> */}
  </View>
  
     
     }
-    rightContainerStyle={{flex:1}}
-    
+    //rightContainerStyle={{flex:1}}
+    centerContainerStyle={{paddingLeft:Dimension.padding10}}
   rightComponent={
 
     <CustomeIcon name={props.rightIconName} size={Dimension.font20} color={colors.FontColor}></CustomeIcon>
@@ -41,7 +44,7 @@ const styles = StyleSheet.create({
       color:colors.headerTxtColor,
       fontFamily:Dimension.CustomSemiBoldFont,
       marginTop:Dimension.margin5,
-      marginLeft:Dimension.margin10
+      //marginLeft:Dimension.margin10
       
     },
     leftSection:{flexDirection:'row'}
