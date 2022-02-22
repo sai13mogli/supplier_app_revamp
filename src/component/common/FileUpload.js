@@ -25,55 +25,71 @@ const FileUpload = props => {
     closeDoc,
     openDoc,
     uploadFromCamera,
+    fileUpload,
+    fromCategoryBrand,
+    uploadDocument,
+    errorState,
+    errorText,
   } = props;
 
-  return (
-    <View>
-      <View style={{flexDirection: 'row'}}>
-        <Text style={styles.labelStyle}>{label}</Text>
-        {isImp ? <Text style={styles.starIcon}>*</Text> : null}
-      </View>
-      <View style={styles.inputContainerStyle}>
-        {!value ? (
-          <Text style={styles.placeholderCss}>Tap to upload</Text>
-        ) : (
-          <View style={{flexDirection: 'row',width:'85%'}}>
-            <Text style={styles.inputStyle} numberOfLines={1}>{value}</Text>
-            {closeDoc ? (
-              <TouchableOpacity onPress={() => onRemove(id)}>
-                <CustomeIcon
-                  name={'close'}
-                  size={Dimension.font20}
-                  color={colors.FontColor}
-                />
-              </TouchableOpacity>
-            ) : null}
-          </View>
-        )}
-        {loading ? (
-          <ActivityIndicator
-            size={'small'}
-            color={'red'}
-            style={{marginRight: 4}}
-          />
-        ) : showDoc ? (
-          <TouchableOpacity onPress={() => openDoc(id)}>
-            <CustomeIcon
-              name={'eye-open'}
-              size={Dimension.font20}
-              color={colors.eyeIcon}
+  if (fileUpload == 2 || fileUpload == 3) {
+    return (
+      <TouchableOpacity onPress={onPress}>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.labelStyle}>{label}</Text>
+          {isImp ? <Text style={styles.starIcon}>*</Text> : null}
+        </View>
+        <View style={styles.inputContainerStyle}>
+          {!value ? (
+            <Text style={styles.placeholderCss}>Tap to upload</Text>
+          ) : (
+            <View style={{flexDirection: 'row', width: '85%'}}>
+              <Text style={styles.inputStyle} numberOfLines={1}>
+                {value}
+              </Text>
+              {closeDoc ? (
+                <TouchableOpacity onPress={() => onRemove(id)}>
+                  <CustomeIcon
+                    name={'close'}
+                    size={Dimension.font20}
+                    color={colors.FontColor}
+                  />
+                </TouchableOpacity>
+              ) : null}
+            </View>
+          )}
+          {loading ? (
+            <ActivityIndicator
+              size={'small'}
+              color={'red'}
+              style={{marginRight: 4}}
             />
-          </TouchableOpacity>
-        ) : (
-          <CustomeIcon
-            name={'upload'}
-            size={Dimension.font20}
-            color={colors.BrandColor}
-          />
-        )}
-      </View>
-    </View>
-  );
+          ) : showDoc ? (
+            <TouchableOpacity onPress={() => openDoc(id)}>
+              <CustomeIcon
+                name={'eye-open'}
+                size={Dimension.font20}
+                color={colors.eyeIcon}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={uploadDocument}>
+              <CustomeIcon
+                name={'upload'}
+                size={Dimension.font20}
+                color={colors.BrandColor}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+        {errorState ? (
+          <Text style={{color: 'red', fontSize: 12}}>{errorText}</Text>
+        ) : null}
+      </TouchableOpacity>
+    );
+  } else {
+    return null;
+  }
 };
 const styles = StyleSheet.create({
   WrapperStyle: {
@@ -114,7 +130,6 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomRegularFont,
 
     paddingLeft: 0,
-    
   },
   iconStyle: {
     width: Dimension.width24,

@@ -68,3 +68,11 @@ export const getGstDetails = async gstin =>
   axios.get(
     `https://supplierapiqa.moglilabs.com/util/validateGstin?gstin=${gstin}`,
   );
+
+export const getCategoriesBrands = async () =>
+  axios.get(`${BASE_URL}profile/fetchCataegoriesAndBrands`, {
+    headers: {
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });

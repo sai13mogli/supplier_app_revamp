@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
     marginBottom:Dimension.margin10,
     backgroundColor:colors.WhiteColor,
     textAlignVertical:'center',
-    paddingVertical:Dimension.padding12
+    paddingVertical:Dimension.padding12,
+    marginBottom:Dimension.margin20
   },
   placeholderCss:{
     fontSize: Dimension.font14,

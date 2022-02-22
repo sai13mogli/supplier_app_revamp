@@ -14,10 +14,16 @@ import {
   fetchBrandSearchResult,
   fetchBrandSearchResultByAlphabet,
   addBrand,
+  addBrandData,
 } from '../../../../../redux/actions/categorybrand';
 import {STATE_STATUS} from '../../../../../redux/constants';
 import {ALPHABETS} from '../../../../../redux/constants/categorybrand';
 import debounce from 'lodash.debounce';
+import styles from './style';
+import Checkbox from '../../../../../component/common/Checkbox/index';
+import CustomeIcon from '../../../../../component/common/CustomeIcon';
+
+import Dimension from '../../../../../Theme/Dimension';
 import Colors from '../../../../../Theme/Colors';
 import MultiSelect from '../../../../../component/common/MultiSelect/index';
 
@@ -55,16 +61,30 @@ const AllBrandsScreen = props => {
     state => (state.categorybrandReducer || {}).brandsAdded || [],
   );
 
+  const payloadParams = useSelector(
+    state =>
+      ((state.categorybrandReducer || {}).allBrands || {}).params || ['0-9'],
+  );
+
   // const [alphabet, setAlphabet] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const [activeTerm, setActiveTerm] = useState('0-9');
+  const [loader, setLoader] = useState(true);
+  const [initLoader, setInitLoader] = useState(true);
+  const onEndReachedCalledDuringMomentum = useRef(true);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     fetchListingData(64);
+    setInitLoader(false);
   }, []);
 
-  console.log('addedBrand', addedBrand);
+  useEffect(() => {
+    if (allBrandsStatus == STATE_STATUS.FETCHED && loader && !initLoader) {
+      setLoader(false);
+    }
+  }, [allBrandsStatus]);
 
   //action dispatch for saga and service
   const fetchListingData = (pageNo, search) => {
@@ -82,9 +102,16 @@ const AllBrandsScreen = props => {
     dispatch(fetchBrandSearchResult(fetchListingObj));
   };
 
+  console.log(payloadParams[0], 'payloadParams');
+
   const fetchListingDataByAlphabet = term => {
+    if (term == '0-9') {
+      setActiveTerm('0-9');
+    } else {
+      setActiveTerm(String.fromCharCode(term));
+    }
     let fetchListingObj = {
-      categoryCodes: [String.fromCharCode(term)],
+      categoryCodes: term == '0-9' ? ['0-9'] : [String.fromCharCode(term)],
       searchString: '',
       pageNo: 64,
     };
@@ -102,20 +129,29 @@ const AllBrandsScreen = props => {
     debouncedSave(text);
   };
 
-  // const renderItem = ({item, index}) => {
-  //   return (
-  //     <TouchableOpacity key={item.id}>
-  //       <Text style={{color: '#000'}}>{item.name}</Text>
-  //     </TouchableOpacity>
-  //   );
-  // };
-
   const renderAlphabet = ({item, index}) => {
     return (
       <TouchableOpacity
         key={index}
         onPress={() => fetchListingDataByAlphabet(item)}>
-        <Text style={{color: '#000'}}>{String.fromCharCode(item)}</Text>
+        {item == '0-9' ? (
+          <Text
+            style={
+              activeTerm == '0-9'
+                ? styles.activealphbetText
+                : styles.alphbetText
+            }>
+            0-9
+          </Text>
+        ) : null}
+        <Text
+          style={
+            activeTerm == String.fromCharCode(item)
+              ? styles.activealphbetText
+              : styles.alphbetText
+          }>
+          {String.fromCharCode(item)}
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -127,7 +163,8 @@ const AllBrandsScreen = props => {
       pageIndex + 1 < maxPage &&
       !inputValue &&
       !inputValue.length &&
-      !alphabetEndReached
+      !alphabetEndReached &&
+      !loader
     ) {
       fetchListingData(pageIndex + 1);
     }
@@ -165,74 +202,91 @@ const AllBrandsScreen = props => {
     return null;
   };
 
-  const listEmptyComponent = () => (
-    <View>
-      <Text style={{color: '#000'}}>No Brand Found</Text>
-      <TouchableOpacity onPress={() => dispatch(addBrand(inputValue))}>
-        <Text style={{color: 'red'}}>Add Brand</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  const listEmptyComponent = () => {
+    if (inputValue && inputValue != '') {
+      return (
+        <View>
+          <Text style={{color: '#000'}}>No Brand Found</Text>
+          <TouchableOpacity
+            onPress={() => dispatch(addBrand({name: inputValue}))}>
+            <Text style={{color: 'red'}}>Add Brand</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    if (allBrandsStatus !== STATE_STATUS.FETCHED) {
+      return <Text style={{color: '#000'}}>Something Went woring!!</Text>;
+    }
+    return null;
+  };
 
   const brandListing = () => {
     return (
       <>
-        {/* <TextInput
-          placeholder="Search"
-          placeholderTextColor={'#000'}
-          selectionColor={'#888'}
-          returnKeyType={'search'}
-          value={inputValue}
-          onChangeText={onSearchText}
-        />
-
-         <FlatList
-          data={ALPHABETS}
-          renderItem={renderAlphabet}
-          keyExtractor={(item, index) => `${index}-item`}
-        /> 
-        <FlatList
-          data={allbrands}
-          renderItem={renderItem}
-          style={{paddingBottom: 380}}
-          contentContainerStyle={{paddingBottom: 380}}
-          keyExtractor={(item, index) => `${index}-item`}
-          onEndReachedThreshold={0.9}
-          ListFooterComponent={renderFooter}
-          onEndReached={endReachedfetchListing}
-          removeClippedSubviews={true}
-          maxToRenderPerBatch={20}
-          ListEmptyComponent={listEmptyComponent}     
-        /> */}
-
-        <MultiSelect
-          value={inputValue}
-          onChangeText={onSearchText}
-          placeholder={'Search'}
-          placeholderTextColor={Colors.eyeIcon}
-          blurOnSubmit={true}
-          selectedValues={addedBrand}
-          data={allbrands}
-          onChangeDataChoosed={data => {
-            console.log('data', data);
-            // dispatch(addBrand(data));
-          }}
-          onEndReachedThreshold={0.9}
-          ListFooterComponent={renderFooter}
-          onEndReached={endReachedfetchListing}
-          removeClippedSubviews={true}
-          maxToRenderPerBatch={20}
-          ListEmptyComponent={listEmptyComponent}
-          fromAllBrands={true}
-        />
+        <View style={styles.Wrapper}>
+          <View style={styles.leftPart}>
+            <MultiSelect
+              value={inputValue}
+              onChangeText={onSearchText}
+              placeholder={'Search'}
+              placeholderTextColor={Colors.eyeIcon}
+              blurOnSubmit={true}
+              selectedValues={addedBrand}
+              data={allbrands}
+              onChangeDataChoosed={data => {
+                // console.log('data', data);
+                // dispatch(addBrand(data));
+              }}
+              onEndReachedThreshold={0.9}
+              ListFooterComponent={renderFooter}
+              // onEndReached={({distanceFromEnd}) => {
+              //   console.log(
+              //     'onEndReached',
+              //     onEndReachedCalledDuringMomentum.current,
+              //   );
+              //   if (!onEndReachedCalledDuringMomentum.current) {
+              //     endReachedfetchListing();
+              //     onEndReachedCalledDuringMomentum.current = true;
+              //   }
+              // }}
+              // onMomentumScrollBegin={() => {
+              //   console.log('onMomentumScrollBegin!!!!!!!');
+              //   onEndReachedCalledDuringMomentum.current = false;
+              // }}
+              onEndReached={endReachedfetchListing}
+              removeClippedSubviews={true}
+              // maxToRenderPerBatch={30}
+              ListEmptyComponent={listEmptyComponent}
+              fromAllBrands={true}
+              // windowSize={30}
+              initialNumToRender={10}
+              // updateCellsBatchingPeriod={2}
+            />
+          </View>
+          <View style={styles.AlphabetWrap}>
+            <FlatList
+              data={ALPHABETS}
+              renderItem={renderAlphabet}
+              keyExtractor={(item, index) => `${index}-item`}
+              contentContainerStyle={{paddingBottom: 380}}
+            />
+          </View>
+        </View>
       </>
     );
   };
 
   const renderListing = () => {
-    if (
-      pageIndex == 64 &&
-      [STATE_STATUS.UNFETCHED, STATE_STATUS.FETCHING].includes(allBrandsStatus)
+    console.log('pageIndex', pageIndex, allBrandsStatus);
+    if (initLoader) {
+      return renderLoader();
+    } else if (
+      loader ||
+      (pageIndex == 64 &&
+        payloadParams[0] == '0-9' &&
+        [STATE_STATUS.UNFETCHED, STATE_STATUS.FETCHING].includes(
+          allBrandsStatus,
+        ))
     ) {
       return renderLoader();
     }

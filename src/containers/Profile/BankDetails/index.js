@@ -5,13 +5,8 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {
-  createMaterialTopTabNavigator
-} from '@react-navigation/material-top-tabs';
-import {
-
-  TOP_TAB_SCREENS,
-} from '../../../constants';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {TOP_TAB_SCREENS,} from '../../../constants';
 
 const Tab = createMaterialTopTabNavigator();
 
