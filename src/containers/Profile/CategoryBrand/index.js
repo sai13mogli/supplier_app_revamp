@@ -611,43 +611,50 @@ const CategoryBrandScreen = props => {
           {BRAND_CATEGORY.map(_ => renderInputText(_))
             .toList()
             .toArray()}
-          {addedBrand.filter(i => i.status).length ? (
-            <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
-          ) : null}
-          <View>
-            {addedBrand
-              .filter(item => item.status)
-              .map((_, i) => (
-                <View style={styles.BrandWrap}>
-                <View style={{flex:1}}>
-                  <Text style={styles.brandTitleTxt}>Brand Name</Text>
-                  <Text style={styles.brandNameTxt}>{_.name}</Text>
-                  </View>
+          <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
+          {(addedBrand || []).filter(_ => _.status).length ? (
+            <View>
+              {addedBrand
+                .filter(item => item.status)
+                .map((_, i) => (
+                  <View style={styles.BrandWrap}>
+                    <View style={{flex: 1}}>
+                      <Text style={styles.brandTitleTxt}>Brand Name</Text>
+                      <Text style={styles.brandNameTxt}>{_.name}</Text>
+                    </View>
 
-                  <View style={{flex:1}}>
-                    <Text style={styles.brandTitleTxt}>Status</Text>
-                    {_.status && !_.isDocumentRequired ? (
-                    <Text style={styles.ApprovedStatus}>Approved</Text>
-                  ) : (
-                    <Text style={styles.pendingStatus}>Pending</Text>
-                  )}
+                    <View style={{flex: 1}}>
+                      <Text style={styles.brandTitleTxt}>Status</Text>
+                      {_.status && !_.isDocumentRequired ? (
+                        <Text style={styles.ApprovedStatus}>Approved</Text>
+                      ) : (
+                        <Text style={styles.pendingStatus}>Pending</Text>
+                      )}
+                    </View>
+                    <View style={{flex: 1}}>
+                      {_.status && !_.isDocumentRequired ? (
+                        <TouchableOpacity
+                          style={styles.ArrowBtn}
+                          onPress={() => openModal(_)}>
+                          <CustomeIcon
+                            name={'arrow-right-line'}
+                            size={Dimension.font28}
+                            color={colors.FontColor}></CustomeIcon>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => openModal(_)}
+                          style={styles.fillBtn}>
+                          <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
                   </View>
-                  <View style={{flex:1}}>
-                  {_.status && !_.isDocumentRequired ? (
-                     <TouchableOpacity style={styles.ArrowBtn} onPress={() => openModal(_)}>
-                     <CustomeIcon name={'arrow-right-line'} size={Dimension.font28}color={colors.FontColor}></CustomeIcon>
-                    </TouchableOpacity>
-                  ) : (
-                   
-                  <TouchableOpacity onPress={() => openModal(_)} style={styles.fillBtn}>
-                        <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
-                      </TouchableOpacity>
-                   
-                  )}
-                </View>
-                </View>
-              ))}
-          </View>
+                ))}
+            </View>
+          ) : (
+            <Text style={{color: '#000'}}>No data Found</Text>
+          )}
           {addedBrand.filter(i => !i.status).length ? (
             <Text style={styles.brandHeadingTxt}>
               Brand you requested to add
@@ -658,14 +665,16 @@ const CategoryBrandScreen = props => {
               .filter(item => !item.status)
               .map((_, i) => (
                 <View style={styles.BrandWrap}>
-                    <Text style={styles.brandTitleTxt}>Brand Name</Text>
-                    <Text style={styles.brandNameTxt}>{_.name}</Text>
-                    <>
-                      <TouchableOpacity onPress={() => openModal(_)} style={styles.fillBtn}>
-                        <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
-                      </TouchableOpacity>
-                    </>
-                  </View>
+                  <Text style={styles.brandTitleTxt}>Brand Name</Text>
+                  <Text style={styles.brandNameTxt}>{_.name}</Text>
+                  <>
+                    <TouchableOpacity
+                      onPress={() => openModal(_)}
+                      style={styles.fillBtn}>
+                      <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
+                    </TouchableOpacity>
+                  </>
+                </View>
               ))}
           </View>
         </View>

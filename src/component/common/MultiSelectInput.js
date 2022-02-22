@@ -8,7 +8,12 @@ const MultiSelectInput = props => {
     if (selectedValue.length == 1) {
       return selectedValue[0].label;
     } else {
-      return `${selectedValue[0].label}, +${selectedValue.length - 1} more`;
+      return (
+        <Text style={{color: '#000'}}>
+          {selectedValue[0].label}
+          <Text style={{color: 'red'}}>+{selectedValue.length - 1} more</Text>
+        </Text>
+      );
     }
   };
 
@@ -23,7 +28,7 @@ const MultiSelectInput = props => {
   } = props;
 
   return (
-    <>
+    <TouchableOpacity onPress={onPress}>
       <View style={{flexDirection: 'row'}}>
         <Text style={styles.labelStyle}>{label}</Text>
         {isImp ? <Text style={styles.starIcon}>*</Text> : null}
@@ -40,7 +45,7 @@ const MultiSelectInput = props => {
           </TouchableOpacity>
         )}
       </View>
-    </>
+    </TouchableOpacity>
   );
 };
 
