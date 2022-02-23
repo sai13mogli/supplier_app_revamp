@@ -2,10 +2,10 @@ import axios from 'axios';
 import {BASE_URL} from '../redux/constants/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const getNotifications = async () =>
+export const getNotifications = async currentPage =>
   axios.post(
     `${BASE_URL}api/notification/list`,
-    {size: 100, currentPage: 0},
+    {size: 20, currentPage},
     {
       // params: {customerid: userId, orderid: orderId},
       headers: {

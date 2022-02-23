@@ -10,13 +10,13 @@ import {
   failedFetchNotifications,
 } from '../actions/notifications';
 
-function* fetchNotifications() {
+function* fetchNotifications({payload: {page}}) {
   try {
-    const {data, error} = yield call(getNotifications);
+    const {data, error} = yield call(getNotifications, page);
     if (error) {
       yield put(failedFetchNotifications(error));
     } else {
-      yield put(fetchedNotifications(data));
+      yield put(fetchedNotifications(page, data.data));
     }
   } catch (error) {
     yield put(failedFetchNotifications(error));

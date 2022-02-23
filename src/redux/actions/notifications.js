@@ -1,15 +1,19 @@
 import {NOTIFICATIONS_ACTIONS} from '../constants/notifications';
 
-export const fetchNotifications = () => {
+export const fetchNotifications = page => {
   return {
     type: NOTIFICATIONS_ACTIONS.FETCH_NOTIFICATIONS,
+    payload: {
+      page,
+    },
   };
 };
 
-export const fetchedNotifications = data => {
+export const fetchedNotifications = (page, data) => {
   return {
     type: NOTIFICATIONS_ACTIONS.FETCHED_NOTIFICATIONS,
     payload: {
+      page,
       data,
     },
   };
