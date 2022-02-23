@@ -20,6 +20,7 @@ import {TOP_BRANDS_SCREENS} from '../../../../constants';
 import Tabs from '../../../../component/common/Tabs';
 import Header from '../../../../component/common/Header';
 import {Tab, TabView} from 'react-native-elements';
+
 const deviceWidth = Dimensions.get('window').width;
 
 const TABS = [
@@ -48,12 +49,13 @@ const BrandScreen = props => {
 
   return (
     <>
-    <Header
+      <Header
         howBack
         showText={'Brand Selection'}
-        rightIconName={'category--brand'}></Header>
-      <Tabs data={TABS.map(_ => ({..._}))} />
-      {/* <Tab
+        rightIconName={'category--brand'}
+      />
+      {/* <Tabs data={TABS.map(_ => ({..._}))} /> */}
+      <Tab
         value={index}
         onChange={e => setIndex(e)}
         indicatorStyle={{
@@ -80,7 +82,7 @@ const BrandScreen = props => {
         <TabView.Item style={{width: '100%'}}>
           <AllBrandsScreen />
         </TabView.Item>
-      </TabView> */}
+      </TabView>
 
       <View style={styles.bottombtnWrap}>
         <TouchableOpacity style={styles.BrandNumWrap}>
