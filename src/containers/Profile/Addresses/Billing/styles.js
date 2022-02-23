@@ -4,6 +4,7 @@ import Dimension from '../../../../Theme/Dimension';
 
 const styles = StyleSheet.create({
   ContainerCss:{
+    backgroundColor:Colors.WhiteColor,
     paddingHorizontal:Dimension.padding15
   },
  wrap:{
@@ -74,7 +75,8 @@ addnewtxt:{
 bottombtnWrap:{
   padding:Dimension.padding15,
   borderTopColor:Colors.grayShade2,
-  borderTopWidth:1
+  borderTopWidth:1,
+  backgroundColor:Colors.WhiteColor
 }
 });
 

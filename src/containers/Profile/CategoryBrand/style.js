@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     bottom: 0,
-
     paddingTop: Dimension.padding10,
   },
   TopWrap: {
@@ -141,6 +140,20 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.grayShade2,
     padding: Dimension.padding15,
     backgroundColor: Colors.WhiteColor,
+  },
+  NoBrandWrap:{
+    backgroundColor:Colors.DisableStateColor,
+    borderRadius:4,
+    width:"100%",
+    height:200,
+    justifyContent:"center",
+    alignItems:"center"
+  },
+  NoBrandTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+   // marginBottom: Dimension.margin5,
   },
 });
 

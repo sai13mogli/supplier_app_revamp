@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
+import colors from "../../Theme/Colors";
+import Dimension from "../../Theme/Dimension";
 
 const Tabs = props => {
   const [activetab, setActiveTab] = useState(props.data[0].key);
 
   return (
-    <View style={{flex: 1, paddingTop: 100}}>
+    <>
       <View style={styles.tabContainer}>
         {props.data.map((tab, takIndex) => (
           <TouchableOpacity
@@ -36,7 +38,7 @@ const Tabs = props => {
         .map(_ => (
           <_.component {..._} />
         ))}
-    </View>
+    </>
   );
 };
 
@@ -48,27 +50,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     justifyContent: 'center',
-    borderRadius: 16,
-    backgroundColor: '#EAF2FF',
+   // borderRadius: 16,
+    backgroundColor: '#fff',
+    width:"100%"
+
   },
   activeTab: {
-    borderRadius: 8,
-    backgroundColor: '#000',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+   backgroundColor: '#fff',
+   //paddingVertical: 12,
+    width:"50%",
+    borderBottomColor:colors.BrandColor,
+   borderBottomWidth:3
   },
   inActiveTab: {
-    borderRadius: 8,
-    backgroundColor: '#EAF2FF',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+    
+    backgroundColor: '#fff',
+    borderBottomColor:colors.WhiteColor,
+   borderBottomWidth:3,
+    width:"50%"
   },
   activeTabText: {
     alignSelf: 'center',
-    color: '#fff',
+    color: colors.FontColor,
+    fontFamily:Dimension.CustomRegularFont,
+    fontSize:Dimension.font14
   },
   inActiveTabText: {
     alignSelf: 'center',
-    color: '#000',
+    color: colors.FontColor,
+    fontFamily:Dimension.CustomRegularFont,
+    fontSize:Dimension.font14
   },
 });

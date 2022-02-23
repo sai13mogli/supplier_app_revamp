@@ -20,6 +20,6 @@ export const submitProfile = token =>
 export const getDocuments = async token =>
   axios.get(`${BASE_URL}profile/documents`, {
     headers: {
-      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      Authorization: token,
     },
   });

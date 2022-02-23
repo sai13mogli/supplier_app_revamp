@@ -9,33 +9,23 @@ import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
 
 const PickedUp = () => {
-  const [data,setData]= useState( [
-    { id: '1', lable: 'First item', checked : false},
-    { id: '2', lable: 'Second item',checked : false },
-    { id: '3', lable: 'Third item' ,checked : false},
-    { id: '4', lable: 'Fourth item' ,checked : false},
-    { id: '5', lable: 'Fifth item' ,checked : false},
-    { id: '6', lable: 'Sixth item' ,checked : false},
-    { id: '7', lable: 'Seventh item',checked : false }
-  ]);
+ 
   const addressesData = useSelector(state => (state.profileReducer.addressesDetails.data));
+  console.log("ADdresses====>",addressesData);
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-   
-    dispatch(fetchAddressDetails());
-    
-   }, []);
 
    const renderItems = ({item}) => (
     <View style={{flex:1,}}>
       <View style={styles.wrap}>
         <View style={styles.nameWrap}>
         <Text style={styles.UserNameCss}>Nitin Bansal</Text>
-        <Text style={styles.AddressType}>default</Text>
+        {
+          item.isDefault?
+          <Text style={styles.AddressType}>default</Text>:null
+        }
         </View>
-        <Text style={styles.AddressTxt}>D-188,Block D ,Sector 10,Noida</Text>
-        <Text style={styles.AddressTxt}>Uttar Pardesh</Text>
+        <Text style={styles.AddressTxt}>{item.address1} ,{item.address2},{item.city}</Text>
+        <Text style={styles.AddressTxt}>{item.state},{item.pincode}</Text>
         <View style={styles.buttonWrap}>
           <View style={{marginRight:15,flex:1}}>
             <CustomButton
@@ -87,7 +77,7 @@ const PickedUp = () => {
      </View>  
        
        <FlatList
-       data={data}
+       data={addressesData}
        renderItem={renderItems}
        keyExtractor={(item, index) => index.toString()}
          />

@@ -358,7 +358,7 @@ const CategoryBrandScreen = props => {
           <Text style={styles.placeholderCss}>Select</Text>
           <TouchableOpacity onPress={() => props.navigation.navigate('Brands')}>
             <CustomeIcon
-              name={'eye-open'}
+              name={'arrow-right-line'}
               size={Dimension.font20}
               color={colors.eyeIcon}
             />
@@ -611,29 +611,53 @@ const CategoryBrandScreen = props => {
           {BRAND_CATEGORY.map(_ => renderInputText(_))
             .toList()
             .toArray()}
-          {addedBrand.filter(i => i.status).length ? (
-            <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
-          ) : null}
-          <View>
-            {addedBrand
-              .filter(item => item.status)
-              .map((_, i) => (
-                <TouchableOpacity>
-                  <Text style={{color: '#000'}}>Brand Name</Text>
-                  <Text style={{color: '#000'}}>{_.name}</Text>
-                  {_.status && !_.isDocumentRequired ? (
-                    <Text style={{color: 'blue'}}>Approved</Text>
-                  ) : (
-                    <>
-                      <Text style={{color: '#000'}}>Pending</Text>
-                      <TouchableOpacity onPress={() => openModal(_)}>
-                        <Text style={{color: 'red'}}>FILL DETAILS</Text>
-                      </TouchableOpacity>
-                    </>
-                  )}
-                </TouchableOpacity>
-              ))}
-          </View>
+          <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
+          {(addedBrand || []).filter(_ => _.status).length ? (
+            <View>
+              {addedBrand
+                .filter(item => item.status)
+                .map((_, i) => (
+                  <View style={styles.BrandWrap}>
+                    <View style={{flex: 1}}>
+                      <Text style={styles.brandTitleTxt}>Brand Name</Text>
+                      <Text style={styles.brandNameTxt}>{_.name}</Text>
+                    </View>
+
+                    <View style={{flex: 1}}>
+                      <Text style={styles.brandTitleTxt}>Status</Text>
+                      {_.status && !_.isDocumentRequired ? (
+                        <Text style={styles.ApprovedStatus}>Approved</Text>
+                      ) : (
+                        <Text style={styles.pendingStatus}>Pending</Text>
+                      )}
+                    </View>
+                    <View style={{flex: 1}}>
+                      {_.status && !_.isDocumentRequired ? (
+                        <TouchableOpacity
+                          style={styles.ArrowBtn}
+                          onPress={() => openModal(_)}>
+                          <CustomeIcon
+                            name={'arrow-right-line'}
+                            size={Dimension.font28}
+                            color={colors.FontColor}></CustomeIcon>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => openModal(_)}
+                          style={styles.fillBtn}>
+                          <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </View>
+                ))}
+            </View>
+          ) : (
+            <View style={styles.NoBrandWrap}>
+
+            <Text style={styles.NoBrandTxt}>Added Brands will appear here</Text>
+            </View>
+          )}
           {addedBrand.filter(i => !i.status).length ? (
             <Text style={styles.brandHeadingTxt}>
               Brand you requested to add
@@ -643,16 +667,17 @@ const CategoryBrandScreen = props => {
             {addedBrand
               .filter(item => !item.status)
               .map((_, i) => (
-                <TouchableOpacity>
-                  <Text style={{color: '#000'}}>Brand Name</Text>
-                  <Text style={{color: '#000'}}>{_.name}</Text>
-                  <>
-                    <Text style={{color: '#000'}}>Pending</Text>
-                    <TouchableOpacity onPress={() => openModal(_)}>
-                      <Text style={{color: 'red'}}>FILL DETAILS</Text>
-                    </TouchableOpacity>
-                  </>
-                </TouchableOpacity>
+                <View style={styles.BrandWrap}>
+                  <View style={{flex:1}}>
+                    <Text style={styles.brandTitleTxt}>Brand Name</Text>
+                    <Text style={styles.brandNameTxt}>{_.name}</Text>
+                    </View>
+                    <>
+                      <TouchableOpacity onPress={() => openModal(_)} style={styles.fillBtn}>
+                        <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
+                      </TouchableOpacity>
+                    </>
+                  </View>
               ))}
           </View>
         </View>
@@ -673,8 +698,18 @@ const CategoryBrandScreen = props => {
         }}
         onBackdropPress={() => {
           setModalVisible(false);
-        }}>
-        <View style={{backgroundColor: '#fff'}}>
+        }}
+        style={{padding: 0, margin: 0}}>
+        <View style={styles.modalContainer}>
+          <View style={styles.TopWrap}>
+          <View style={styles.topbdr}></View>
+          <View style={styles.ModalheadingWrapper}>
+            <Text style={styles.ModalHeading}>
+            Taparia
+            </Text>
+            <CustomeIcon name={'close'} size={Dimension.font22} color={colors.FontColor}></CustomeIcon>
+          </View>
+          <View style={styles.ModalFormWrap}>
           {FORM_FIELDS.map((field, fieldKey) => (
             <field.component
               fileUpload={natureOfBusiness}
@@ -682,13 +717,16 @@ const CategoryBrandScreen = props => {
               key={fieldKey}
             />
           )).toList()}
+          </View>
+          </View>
           {brand && brand.code ? (
+            <View style={styles.ModalBottomBtnWrap}>
             <CustomButton
-              buttonColor={getButtonColor() ? colors.BrandColor : 'dodgerblue'}
-              borderColor={colors.BrandColor}
-              TextColor={colors.WhiteColor}
+              buttonColor={getButtonColor() ? colors.BrandColor : colors.DisableStateColor}
+              borderColor={getButtonColor() ? colors.BrandColor : colors.DisableStateColor}
+              TextColor={getButtonColor() ? colors.WhiteColor : colors.FontColor}
               TextFontSize={Dimension.font16}
-              title={'Submit'}
+              title={'SUBMIT'}
               disabled={
                 natureOfBusiness == 3
                   ? !checkCommonValidation()
@@ -696,15 +734,17 @@ const CategoryBrandScreen = props => {
               }
               onPress={() => onSubmit(false)}
             />
+            </View>
           ) : (
+            <View style={styles.ModalBottomBtnWrap}>
             <CustomButton
               buttonColor={
-                getButtonColorReqBrand() ? colors.BrandColor : 'dodgerblue'
+                getButtonColorReqBrand() ? colors.BrandColor : colors.DisableStateColor
               }
-              borderColor={colors.BrandColor}
-              TextColor={colors.WhiteColor}
+              borderColor={getButtonColorReqBrand() ? colors.BrandColor : colors.DisableStateColor}
+              TextColor={getButtonColorReqBrand() ? colors.WhiteColor : colors.FontColor}
               TextFontSize={Dimension.font16}
-              title={'Submit'}
+              title={'SUBMIT'}
               disabled={
                 natureOfBusiness == 3
                   ? !checkCommonValidationReqBrand()
@@ -712,20 +752,24 @@ const CategoryBrandScreen = props => {
               }
               onPress={() => onSubmit(true)}
             />
+            </View>
           )}
         </View>
       </Modal>
+      <View style={styles.ModalBottomBtnWrap}>
       <CustomButton
         buttonColor={colors.BrandColor}
         borderColor={colors.BrandColor}
         TextColor={colors.WhiteColor}
         TextFontSize={Dimension.font16}
-        title={'Next'}
+        title={'NEXT'}
         loading={nextLoader}
         loadingColor={'#fff'}
         onPress={onNext}
       />
+      </View>
     </View>
+
   );
 };
 
