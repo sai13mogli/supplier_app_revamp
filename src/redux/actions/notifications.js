@@ -25,3 +25,34 @@ export const failedFetchNotifications = error => {
     error,
   };
 };
+
+export const markRead = id => {
+  return {
+    type: NOTIFICATIONS_ACTIONS.MARK_READ,
+    payload: {
+      id,
+    },
+  };
+};
+
+export const deleteNotification = id => {
+  return {
+    type: NOTIFICATIONS_ACTIONS.DELETE_NOTIFICATION,
+    payload: {
+      id,
+    },
+  };
+};
+
+export const markBulkRead = () => {
+  return {
+    type: NOTIFICATIONS_ACTIONS.MARK_BULK_READ,
+  };
+};
+
+export const deleteBulk = () => {
+  return {
+    type: NOTIFICATIONS_ACTIONS.DELETE_BULK,
+  };
+};
+

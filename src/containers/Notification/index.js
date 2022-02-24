@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react';
-import {FlatList, Text, View} from 'react-native';
+import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
-import {fetchNotifications} from '../../redux/actions/notifications';
+import {deleteBulk, deleteNotification, fetchNotifications, markBulkRead, markRead} from '../../redux/actions/notifications';
 import {STATE_STATUS} from '../../redux/constants';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const NotificationScreen = props => {
   const notifications = useSelector(
@@ -42,6 +43,7 @@ const NotificationScreen = props => {
   const renderItem = ({item, index}) => {
     return (
       <View
+        key={index}
         style={{
           borderRadius: 4,
           padding: 12,
@@ -50,18 +52,29 @@ const NotificationScreen = props => {
           marginHorizontal: 12,
           borderColor: '#000',
         }}>
+          <Icon name={"close"} color={'red'} onPress={() => dispatch(deleteNotification(item.id))} />
         <Text style={{color: '#000'}}>{item.title}</Text>
         <Text style={{color: '#000'}}>{item.content}</Text>
+        {item.readStatus ? null : <TouchableOpacity onPress={() => dispatch(markRead(item.id))}>
+          <Text style={{color: 'red'}}>Mark Read</Text>
+        </TouchableOpacity>}
       </View>
     );
   };
 
   return (
-    <View>
+    <View style={{flex:1, marginVertical: 12}}>
       <Text>NotificationScreen</Text>
+      <TouchableOpacity onPress={() => dispatch(markBulkRead())}>
+        <Text style={{color: 'red'}}>Mark all read</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => dispatch(deleteBulk())}>
+        <Text style={{color: 'red'}}>Clear all Notification</Text>
+      </TouchableOpacity>
       <FlatList
         onEndReachedThreshold={0.9}
         onEndReached={onEndReached}
+        ListEmptyComponent={notificationsStatus !== STATE_STATUS.FETCHING ? <Text style={{alignSelf: 'center',margin: 12, color: '#000'}}>No Notifications Found</Text> : null}
         data={notifications}
         renderItem={renderItem}
         keyExtractor={(item, index) => `${index}-item`}

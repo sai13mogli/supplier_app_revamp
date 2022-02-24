@@ -3,14 +3,21 @@ import {put, call, fork, takeEvery} from 'redux-saga/effects';
 // constants
 import {NOTIFICATIONS_ACTIONS} from '../constants/notifications';
 // api call
-import {getNotifications} from '../../services/notifications';
+import {
+  getNotifications,
+  markNotificatioReadById,
+  deleteNotificationById,
+  markBulkNotificationRead,
+  deleteBulkNotification
+} from '../../services/notifications';
 // actions
 import {
+  fetchNotifications,
   fetchedNotifications,
   failedFetchNotifications,
 } from '../actions/notifications';
 
-function* fetchNotifications({payload: {page}}) {
+function* fetchNotification({payload: {page}}) {
   try {
     const {data, error} = yield call(getNotifications, page);
     if (error) {
@@ -23,9 +30,79 @@ function* fetchNotifications({payload: {page}}) {
   }
 }
 
+function* markRead({payload: {id}}) {
+  try {
+    const {data, error} = yield call(markNotificatioReadById, id);
+    if (error) {
+
+    } else {
+      yield put(fetchNotifications(0));
+    }
+  } catch (error) {
+
+  }
+}
+
+function* deleteNotification({payload: {id}}) {
+  try {
+    const {data, error} = yield call(deleteNotificationById, id);
+    if (error) {
+
+    } else {
+      yield put(fetchNotifications(0));
+    }
+  } catch (error) {
+
+  }
+}
+
+
+function* markBulkRead() {
+  try {
+    const {data, error} = yield call(markBulkNotificationRead);
+    if (error) {
+
+    } else {
+      yield put(fetchNotifications(0));
+    }
+  } catch (error) {
+
+  }
+}
+
+
+function* deleteBulk() {
+  try {
+    const {data, error} = yield call(deleteBulkNotification);
+    if (error) {
+
+    } else {
+      yield put(fetchNotifications(0));
+    }
+  } catch (error) {
+
+  }
+}
+
 export default fork(function* () {
   yield takeEvery(
     NOTIFICATIONS_ACTIONS.FETCH_NOTIFICATIONS,
-    fetchNotifications,
+    fetchNotification,
+  );
+  yield takeEvery(
+    NOTIFICATIONS_ACTIONS.MARK_READ,
+    markRead,
+  );
+  yield takeEvery(
+    NOTIFICATIONS_ACTIONS.DELETE_NOTIFICATION,
+    deleteNotification,
+  );
+  yield takeEvery(
+    NOTIFICATIONS_ACTIONS.MARK_BULK_READ,
+    markBulkRead,
+  );
+  yield takeEvery(
+    NOTIFICATIONS_ACTIONS.DELETE_BULK,
+    deleteBulk,
   );
 });
