@@ -74,6 +74,7 @@ const NotificationScreen = props => {
       <FlatList
         onEndReachedThreshold={0.9}
         onEndReached={onEndReached}
+        ListEmptyComponent={notificationsStatus !== STATE_STATUS.FETCHING ? <Text style={{alignSelf: 'center',margin: 12, color: '#000'}}>No Notifications Found</Text> : null}
         data={notifications}
         renderItem={renderItem}
         keyExtractor={(item, index) => `${index}-item`}
