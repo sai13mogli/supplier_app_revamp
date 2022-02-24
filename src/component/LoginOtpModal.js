@@ -11,6 +11,7 @@ const LoginOtpModal = props => {
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     onSendOtp();
@@ -19,7 +20,10 @@ const LoginOtpModal = props => {
   const onSendOtp = async () => {
     const {data} = await sendOtpForLogin(props.email);
     if (!data.success) {
+      alert(data.message);
       props.onClose();
+    } else {
+      setIsVisible(true);
     }
   };
 
@@ -51,7 +55,7 @@ const LoginOtpModal = props => {
     <Modal
       animationType="slide"
       transparent={false}
-      visible={props.visible}
+      visible={props.visible && isVisible}
       hasBackdrop={true}
       backdropOpacity={0.4}
       onRequestClose={props.onClose}>

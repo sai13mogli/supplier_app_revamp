@@ -16,25 +16,29 @@ import CustomeIcon from '../CustomeIcon';
 import styles from './styles';
 
 const CustomeDatePicker = props => {
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [text, setText] = useState('Select Date');
 
   const onchangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+    console.log('event', event);
+    const currentDate = selectedDate;
     setShow(Platform.OS === 'ios');
-    setDate(currentDate);
+    if (event.type != 'dismissed') {
+      setDate(currentDate);
 
-    let tempDate = new Date(currentDate);
-    let fDate =
-      tempDate.getDate() +
-      '-' +
-      (tempDate.getMonth() + 1) +
-      '-' +
-      tempDate.getFullYear();
-    props.onChange(fDate);
-    setText(fDate);
+      let tempDate = new Date(currentDate);
+      let fDate =
+        tempDate.getDate() +
+        '-' +
+        (tempDate.getMonth() + 1) +
+        '-' +
+        tempDate.getFullYear();
+
+      props.onChange(fDate);
+      setText(fDate);
+    }
   };
 
   const showMode = currentMode => {

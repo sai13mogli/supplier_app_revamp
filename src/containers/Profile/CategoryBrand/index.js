@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
@@ -60,6 +61,10 @@ const CategoryBrandScreen = props => {
 
   const stateCategories = useSelector(
     state => (state.categorybrandReducer || {}).categories || [],
+  );
+  const supplierId = useSelector(
+    state =>
+      (((state.profileReducer || {}).data || {}).userInfo || {}).id || '',
   );
 
   const [categoryCode, setcategoryCode] = useState([]);
@@ -414,6 +419,7 @@ const CategoryBrandScreen = props => {
         isRaiseRequest: raiseRequest ? 'true' : 'false',
         brandListingUrl: brandUrl,
         brandName: brand && brand.name,
+        filled: true,
       };
       dispatch(updateBrandData(currBrandObj));
     } else {
@@ -427,6 +433,7 @@ const CategoryBrandScreen = props => {
         isRaiseRequest: raiseRequest ? 'true' : 'false',
         brandListingUrl: brandUrl,
         brandName: brand && brand.name,
+        filled: true,
       };
       dispatch(addBrandData(brandObj));
     }
@@ -514,91 +521,108 @@ const CategoryBrandScreen = props => {
   // "brandListingUrl": ""
 
   const onNext = async () => {
-    // setNextLoader(true);
+    setNextLoader(true);
+    try {
+      let mutatebrands = (addedBrand || [])
+        .filter(it => !it.isDocumentRequired && it.status)
+        .map((_, i) => ({
+          supplierId: supplierId,
+          brandCode: _.code,
+          fileKey: '',
+          businessNature: '1',
+          expiryDate: '',
+          isDeleted: '0',
+          isRaiseRequest: 'false',
+          brandListingUrl: '',
+        }));
 
-    let mutatebrands = (addedBrand || [])
-      .filter(it => !it.isDocumentRequired && it.status)
-      .map((_, i) => ({
-        supplierId: '',
-        brandCode: _.code,
-        fileKey: '',
-        businessNature: '1',
-        expiryDate: '',
-        isDeleted: '0',
-        isRaiseRequest: 'false',
-        brandListingUrl: '',
+      let mutateRaisedbrands = (raisedBrand || []).map((_, i) => ({
+        supplierId: supplierId,
+        brandCode: _.brandCode,
+        fileKey: _.fileKey,
+        businessNature: _.businessNature,
+        expiryDate: _.expiryDate,
+        isDeleted: _.isDeleted,
+        isRaiseRequest: _.isRaiseRequest,
+        brandListingUrl: _.brandListingUrl,
       }));
 
-    let mutateRaisedbrands = (raisedBrand || []).map((_, i) => ({
-      supplierId: '',
-      brandCode: _.brandCode,
-      fileKey: _.fileKey,
-      businessNature: _.businessNature,
-      expiryDate: _.expiryDate,
-      isDeleted: _.isDeleted,
-      isRaiseRequest: _.isRaiseRequest,
-      brandListingUrl: _.brandListingUrl,
-    }));
+      console.log('mutateBrands', mutatebrands);
+      console.log('raisedBrands', mutateRaisedbrands);
 
-    console.log('mutateBrands', mutatebrands);
-    console.log('raisedBrands', mutateRaisedbrands);
-
-    let brandsarr = [...mutatebrands, ...mutateRaisedbrands];
-    console.log('brandsArr', brandsarr);
-    // let categoryIds = ([...selectedCategories] || []).map((_, i) => _.id);
-    // let payloadObj = {
-    //   categoryCode: [...categoryIds],
-    //   brandList: [...brandsarr],
-    // };
-    // let payloadObj = {
-    //   categoryCode: ['122000000', '260000000'],
-    //   brandList: [
-    //     {
-    //       supplierId: '',
-    //       brandCode: 'd3876965-ceba-4052-8526-42c3534a72bf',
-    //       fileKey: '9a73dc34dcd5cb1f81aedfd409769347',
-    //       businessNature: '2',
-    //       expiryDate: '',
-    //       isDeleted: '0',
-    //       isRaiseRequest: 'false',
-    //       brandListingUrl: '',
-    //     },
-    //     {
-    //       supplierId: '',
-    //       brandCode: 'bd5b7209-59d8-405e-b47a-72f2677ad497',
-    //       fileKey: 'd5825501532840e9db36308326a4ce9b',
-    //       businessNature: '3',
-    //       expiryDate: '24-02-2022',
-    //       isDeleted: '0',
-    //       isRaiseRequest: 'false',
-    //       brandListingUrl: '',
-    //     },
-    //     {
-    //       supplierId: '',
-    //       brandCode: 'dd20c1c6-7cc5-441d-8547-fc1f19c1cdff',
-    //       fileKey: '',
-    //       businessNature: '1',
-    //       expiryDate: '',
-    //       isDeleted: '0',
-    //       isRaiseRequest: 'false',
-    //       brandListingUrl: '',
-    //     },
-    //   ],
-    // };
-    // const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
-    // console.log('data updated hi hai', data);
+      let brandsarr = [...mutatebrands, ...mutateRaisedbrands];
+      console.log('brandsArr', brandsarr);
+      let categoryIds = ([...selectedCategories] || []).map((_, i) => _.id);
+      let payloadObj = {
+        categoryCode: [...categoryIds],
+        brandList: [...brandsarr],
+      };
+      console.log(payloadObj);
+      // let payloadObj = {
+      //   categoryCode: ['122000000', '260000000'],
+      //   brandList: [
+      //     {
+      //       supplierId: '',
+      //       brandCode: 'd3876965-ceba-4052-8526-42c3534a72bf',
+      //       fileKey: '9a73dc34dcd5cb1f81aedfd409769347',
+      //       businessNature: '2',
+      //       expiryDate: '',
+      //       isDeleted: '0',
+      //       isRaiseRequest: 'false',
+      //       brandListingUrl: '',
+      //     },
+      //     {
+      //       supplierId: '',
+      //       brandCode: 'bd5b7209-59d8-405e-b47a-72f2677ad497',
+      //       fileKey: 'd5825501532840e9db36308326a4ce9b',
+      //       businessNature: '3',
+      //       expiryDate: '24-02-2022',
+      //       isDeleted: '0',
+      //       isRaiseRequest: 'false',
+      //       brandListingUrl: '',
+      //     },
+      //     {
+      //       supplierId: '',
+      //       brandCode: 'dd20c1c6-7cc5-441d-8547-fc1f19c1cdff',
+      //       fileKey: '',
+      //       businessNature: '1',
+      //       expiryDate: '',
+      //       isDeleted: '0',
+      //       isRaiseRequest: 'false',
+      //       brandListingUrl: '',
+      //     },
+      //   ],
+      // };
+      const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
+      if (data && data.success) {
+        setNextLoader(false);
+      } else {
+        setNextLoader(false);
+      }
+    } catch (error) {
+      setNextLoader(false);
+    }
   };
 
-  console.log(
-    'natureofBusiness',
-    natureOfBusiness,
-    brandName,
-    brandName.length,
-    !checkCommonValidationReqBrand,
-    !checkValidation,
-    'hhee',
-    checkCommonValidation(),
-  );
+  const getNextStatus = () => {
+    let addedBrandCount = (addedBrand || []).filter(
+      _ => _.isDocumentRequired || !_.id,
+    ).length;
+    let filledData = (raisedBrand || [])
+      .filter(_ => _.filled)
+      .map(_ => _.filled).length;
+    if (
+      addedBrand.length != 0 &&
+      addedBrandCount == filledData &&
+      selectedCategories.length > 0
+    ) {
+      console.log('inside true');
+      return true;
+    } else {
+      console.log('inside false');
+      return false;
+    }
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -654,8 +678,9 @@ const CategoryBrandScreen = props => {
             </View>
           ) : (
             <View style={styles.NoBrandWrap}>
-
-            <Text style={styles.NoBrandTxt}>Added Brands will appear here</Text>
+              <Text style={styles.NoBrandTxt}>
+                Added Brands will appear here
+              </Text>
             </View>
           )}
           {addedBrand.filter(i => !i.status).length ? (
@@ -668,16 +693,18 @@ const CategoryBrandScreen = props => {
               .filter(item => !item.status)
               .map((_, i) => (
                 <View style={styles.BrandWrap}>
-                  <View style={{flex:1}}>
+                  <View style={{flex: 1}}>
                     <Text style={styles.brandTitleTxt}>Brand Name</Text>
                     <Text style={styles.brandNameTxt}>{_.name}</Text>
-                    </View>
-                    <>
-                      <TouchableOpacity onPress={() => openModal(_)} style={styles.fillBtn}>
-                        <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
-                      </TouchableOpacity>
-                    </>
                   </View>
+                  <>
+                    <TouchableOpacity
+                      onPress={() => openModal(_)}
+                      style={styles.fillBtn}>
+                      <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
+                    </TouchableOpacity>
+                  </>
+                </View>
               ))}
           </View>
         </View>
@@ -702,74 +729,101 @@ const CategoryBrandScreen = props => {
         style={{padding: 0, margin: 0}}>
         <View style={styles.modalContainer}>
           <View style={styles.TopWrap}>
-          <View style={styles.topbdr}></View>
-          <View style={styles.ModalheadingWrapper}>
-            <Text style={styles.ModalHeading}>
-            Taparia
-            </Text>
-            <CustomeIcon name={'close'} size={Dimension.font22} color={colors.FontColor}></CustomeIcon>
-          </View>
-          <View style={styles.ModalFormWrap}>
-          {FORM_FIELDS.map((field, fieldKey) => (
-            <field.component
-              fileUpload={natureOfBusiness}
-              {...field}
-              key={fieldKey}
-            />
-          )).toList()}
-          </View>
+            <View style={styles.topbdr}></View>
+            <View style={styles.ModalheadingWrapper}>
+              <Text style={styles.ModalHeading}>{brand && brand.name}</Text>
+              <CustomeIcon
+                name={'close'}
+                size={Dimension.font22}
+                color={colors.FontColor}
+                onPress={() => setModalVisible(false)}></CustomeIcon>
+            </View>
+            <View style={styles.ModalFormWrap}>
+              {FORM_FIELDS.map((field, fieldKey) => (
+                <field.component
+                  fileUpload={natureOfBusiness}
+                  {...field}
+                  key={fieldKey}
+                />
+              )).toList()}
+            </View>
           </View>
           {brand && brand.code ? (
             <View style={styles.ModalBottomBtnWrap}>
-            <CustomButton
-              buttonColor={getButtonColor() ? colors.BrandColor : colors.DisableStateColor}
-              borderColor={getButtonColor() ? colors.BrandColor : colors.DisableStateColor}
-              TextColor={getButtonColor() ? colors.WhiteColor : colors.FontColor}
-              TextFontSize={Dimension.font16}
-              title={'SUBMIT'}
-              disabled={
-                natureOfBusiness == 3
-                  ? !checkCommonValidation()
-                  : !checkValidation()
-              }
-              onPress={() => onSubmit(false)}
-            />
+              <CustomButton
+                buttonColor={
+                  getButtonColor()
+                    ? colors.BrandColor
+                    : colors.DisableStateColor
+                }
+                borderColor={
+                  getButtonColor()
+                    ? colors.BrandColor
+                    : colors.DisableStateColor
+                }
+                TextColor={
+                  getButtonColor() ? colors.WhiteColor : colors.FontColor
+                }
+                TextFontSize={Dimension.font16}
+                title={'SUBMIT'}
+                disabled={
+                  natureOfBusiness == 3
+                    ? !checkCommonValidation()
+                    : !checkValidation()
+                }
+                onPress={() => onSubmit(false)}
+              />
             </View>
           ) : (
             <View style={styles.ModalBottomBtnWrap}>
-            <CustomButton
-              buttonColor={
-                getButtonColorReqBrand() ? colors.BrandColor : colors.DisableStateColor
-              }
-              borderColor={getButtonColorReqBrand() ? colors.BrandColor : colors.DisableStateColor}
-              TextColor={getButtonColorReqBrand() ? colors.WhiteColor : colors.FontColor}
-              TextFontSize={Dimension.font16}
-              title={'SUBMIT'}
-              disabled={
-                natureOfBusiness == 3
-                  ? !checkCommonValidationReqBrand()
-                  : !checkValidationReqBrand()
-              }
-              onPress={() => onSubmit(true)}
-            />
+              <CustomButton
+                buttonColor={
+                  getButtonColorReqBrand()
+                    ? colors.BrandColor
+                    : colors.DisableStateColor
+                }
+                borderColor={
+                  getButtonColorReqBrand()
+                    ? colors.BrandColor
+                    : colors.DisableStateColor
+                }
+                TextColor={
+                  getButtonColorReqBrand()
+                    ? colors.WhiteColor
+                    : colors.FontColor
+                }
+                TextFontSize={Dimension.font16}
+                title={'SUBMIT'}
+                disabled={
+                  natureOfBusiness == 3
+                    ? !checkCommonValidationReqBrand()
+                    : !checkValidationReqBrand()
+                }
+                onPress={() => onSubmit(true)}
+              />
             </View>
           )}
         </View>
       </Modal>
       <View style={styles.ModalBottomBtnWrap}>
-      <CustomButton
-        buttonColor={colors.BrandColor}
-        borderColor={colors.BrandColor}
-        TextColor={colors.WhiteColor}
-        TextFontSize={Dimension.font16}
-        title={'NEXT'}
-        loading={nextLoader}
-        loadingColor={'#fff'}
-        onPress={onNext}
-      />
+        <CustomButton
+          buttonColor={
+            getNextStatus() ? colors.BrandColor : colors.DisableStateColor
+          }
+          borderColor={
+            getNextStatus() ? colors.BrandColor : colors.DisableStateColor
+          }
+          TextColor={getNextStatus() ? colors.WhiteColor : colors.FontColor}
+          TextFontSize={Dimension.font16}
+          title={'NEXT'}
+          loading={nextLoader}
+          loadingColor={'#fff'}
+          onPress={onNext}
+          disabled={!getNextStatus() || loading}
+          loading={nextLoader}
+        />
       </View>
     </View>
-
   );
 };
 

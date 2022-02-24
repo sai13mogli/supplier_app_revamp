@@ -28,7 +28,7 @@ const SignUpEndScreen = props => {
       selectedValue: natureOfBusiness,
       component: DropDown,
       isImp: true,
-      errorMessage: 'Invalid ',
+      errorMessage: 'Please select a business model',
       showError: natureOfBusinessError,
       placeholder: 'Please Select',
       onValueChange: text => setnatureOfBusiness(text),
@@ -53,7 +53,7 @@ const SignUpEndScreen = props => {
         }),
       component: MultiSelectInput,
       isImp: true,
-      errorMessage: 'Invalid ',
+      errorMessage: 'Please select a category code',
       showError: categoryCodeError,
     },
     gstin: {
@@ -62,7 +62,7 @@ const SignUpEndScreen = props => {
       value: gstin,
       component: FloatingLabelInputField,
       isImp: true,
-      errorMessage: 'Invalid ',
+      errorMessage: 'Please add a valid GSTIN',
       onBlur: () => onGstinBlur(),
       onChangeText: text => setgstin(text),
       showError: gstinError,
@@ -118,7 +118,6 @@ const SignUpEndScreen = props => {
   };
 
   const onLogin = async data => {
-    setOtpModal(false);
     await AsyncStorage.setItem('token', data.data.token);
     await AsyncStorage.setItem('userId', JSON.stringify(data.data.userId));
     props.route.params.setIsLoggedIn(true);

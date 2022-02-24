@@ -3,7 +3,13 @@ import {TouchableOpacity, View, Text, ScrollView} from 'react-native';
 import Header from '../../component/common/Header';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchBusinessDetails, fetchProfile,fetchBankDetails,fetchTdsInfoDetails,fetchAddressDetails} from '../../redux/actions/profile';
+import {
+  fetchBusinessDetails,
+  fetchProfile,
+  fetchBankDetails,
+  fetchTdsInfoDetails,
+  fetchAddressDetails,
+} from '../../redux/actions/profile';
 import {fetchCategoriesBrands} from '../../redux/actions/categorybrand';
 
 // import Progress from 'react-native-progress/Bar';
@@ -15,10 +21,14 @@ import Colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomeIcon from '../../component/common/CustomeIcon';
+import {STATE_STATUS} from '../../redux/constants';
 
 const ProfileScreen = props => {
   const {navigate} = useNavigation();
   const dispatch = useDispatch();
+  const profileStatus = useSelector(
+    state => (state.profileReducer || {}).status || STATE_STATUS.UNFETCHED,
+  );
 
   const profileData = useSelector(state => state.profileReducer.data || {});
   const PROGRESS = {
@@ -40,12 +50,14 @@ const ProfileScreen = props => {
   };
 
   useEffect(() => {
-    dispatch(fetchAddressDetails());
-    dispatch(fetchBusinessDetails());
-    dispatch(fetchBankDetails());
-    dispatch(fetchTdsInfoDetails());
-    dispatch(fetchProfile());
-    dispatch(fetchCategoriesBrands());
+    if (profileStatus !== STATE_STATUS.FETCHED) {
+      dispatch(fetchAddressDetails());
+      dispatch(fetchBusinessDetails());
+      dispatch(fetchBankDetails());
+      dispatch(fetchTdsInfoDetails());
+      dispatch(fetchProfile());
+      dispatch(fetchCategoriesBrands());
+    }
   }, []);
 
   const isCompleted = progress => {
