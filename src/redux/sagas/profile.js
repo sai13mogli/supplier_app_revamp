@@ -15,10 +15,19 @@ import {
 } from '../../services/profile';
 // actions
 import {
-  fetchedBusinessDetails,failedFetchBusinessDetails,fetchedUpdateBusinessDetails,
-  failedFetchUpdateBusinessDetails,failedFetchAddressDetails,fetchedAddressDetails, 
-  failedFetchBankDetails, fetchedBankDetails,fetchedProfile,failedFetchProfile,
-  failedFetchUpdateBankDetails,fetchedUpdateBankDetails,fetchedCategoriesBrands,
+  fetchedBusinessDetails,
+  failedFetchBusinessDetails,
+  fetchedUpdateBusinessDetails,
+  failedFetchUpdateBusinessDetails,
+  failedFetchAddressDetails,
+  fetchedAddressDetails,
+  failedFetchBankDetails,
+  fetchedBankDetails,
+  fetchedProfile,
+  failedFetchProfile,
+  failedFetchUpdateBankDetails,
+  fetchedUpdateBankDetails,
+  fetchedCategoriesBrands,
   failedFetchCategoriesBrands,
   failedFetchTdsInfoDetails,
   fetchedTdsInfoDetails,
@@ -30,7 +39,11 @@ function* fetchBusinessDetails() {
     if (error) {
       yield put(failedFetchBusinessDetails(error));
     } else {
-      yield put(fetchedBusinessDetails(data.data));
+      if (data.status == 400 || data.data.errors) {
+        yield put(failedFetchBusinessDetails(data.data.errors));
+      } else {
+        yield put(fetchedBusinessDetails(data.data));
+      }
     }
   } catch (error) {
     yield put(failedFetchBusinessDetails(error));
@@ -122,7 +135,13 @@ export default fork(function* () {
   yield takeEvery(PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS, fetchBusinessDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_ADDRESSES, fetchAddressDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BANK_DETAILS, fetchBankDetails);
-  yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,fetchUpdateBusinessDetails);
+  yield takeEvery(
+    PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,
+    fetchUpdateBusinessDetails,
+  );
   yield takeEvery(PROFILE_ACTIONS.FETCH_TDS_INFO_DETAILS, fetchTdsInfoDetails);
-  yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS,fetchUpdateBankDetails);
+  yield takeEvery(
+    PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS,
+    fetchUpdateBankDetails,
+  );
 });
