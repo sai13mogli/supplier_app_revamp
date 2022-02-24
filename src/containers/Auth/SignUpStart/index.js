@@ -1,7 +1,8 @@
 import {OrderedMap} from 'immutable';
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity,ImageBackground, ScrollView} from 'react-native';
 import CustomButton from '../../../component/common/Button';
+import CustomeIcon from '../../../component/common/CustomeIcon';
 import Checkbox from '../../../component/common/Checkbox/index';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import {
@@ -10,6 +11,8 @@ import {
   verifyOtp,
 } from '../../../services/auth';
 import Colors from '../../../Theme/Colors';
+import styles from './style';
+import Dimension from '../../../Theme/Dimension';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -55,16 +58,16 @@ const SignUpStartScreen = props => {
   const getExtraView = () => {
     if (phone && phone.length && phone.length == 10 && timer >= 1) {
       return (
-        <TouchableOpacity>
-          <Text style={{color: '#000'}}>
+        <TouchableOpacity style={styles.setndOtpBtn}>
+          <Text style={styles.sendOtptext}>
             00:{String(timer).length > 1 ? String(timer) : `0${timer}`}
           </Text>
         </TouchableOpacity>
       );
     } else {
       return (
-        <TouchableOpacity onPress={onSendOtp}>
-          <Text style={{color: '#000'}}>Send OTP</Text>
+        <TouchableOpacity onPress={onSendOtp} style={styles.setndOtpBtn}>
+          <Text style={styles.sendOtptext}>Send OTP</Text>
         </TouchableOpacity>
       );
     }
@@ -131,6 +134,7 @@ const SignUpStartScreen = props => {
       maxLength: 10,
       onBlur: () => onPhoneBlur(),
       extraView: () => getExtraView(),
+      isfromLogin :true,
     },
     otp: {
       title: 'OTP',
@@ -209,7 +213,37 @@ const SignUpStartScreen = props => {
   };
 
   return (
-    <View>
+    <View style={{flex:1}}>
+      <ScrollView style={styles.ContainerCss}>
+    <View style={styles.headerPart}>
+    <CustomeIcon
+            name={'arrow-back'}
+            size={Dimension.font20}
+            color={Colors.blackColor}
+          />
+        <View style={styles.greenBar}></View>
+        <View style={styles.garyBar}></View>
+    </View>
+     <CustomButton
+        title={'Already a Moglix Supplier? Sign In'}
+        buttonColor={Colors.LightBrandColor}
+        onPress={() => props.navigation.navigate('SignUpStart')}
+        TextColor={Colors.BrandColor}
+        borderColor={Colors.LightBrandColor}
+        TextFontSize={Dimension.font14}
+        icon={() => (
+          <CustomeIcon
+            name={'arrow-back'}
+            size={Dimension.font20}
+            color={Colors.BrandColor}
+          />
+        )}
+        
+      />
+      <Text style={styles.headingTxt}>Step 1 : Signup</Text>
+    <View style={styles.formWrap}>
+   
+    <ImageBackground source={require("../../../assets/images/SIgnUpBG.png")} resizeMode="cover">
       {FORM_FIELDS.map((field, fieldKey) => (
         <field.component key={fieldKey} {...field} />
       )).toList()}
@@ -223,13 +257,25 @@ const SignUpStartScreen = props => {
         onPress={() => setSendWhatsapp(!sendWhatsapp)}
         title={'Send WhatsApp Notifications.'}
       />
-      <CustomButton
+      
+      </ImageBackground>
+    </View>
+    </ScrollView>
+    <View>
+
+    </View>
+    <View style={styles.bottomBtnWrap}>
+
+    
+    <CustomButton
         title={'NEXT'}
-        buttonColor={'dodgerblue'}
+        buttonColor={Colors.BrandColor}
         onPress={onNext}
         TextColor={Colors.WhiteColor}
-        borderColor={Colors.WhiteColor}
+        borderColor={Colors.BrandColor}
+        TextFontSize={Dimension.font16}
       />
+      </View>
     </View>
   );
 };

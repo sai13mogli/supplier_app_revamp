@@ -1,0 +1,57 @@
+import {Dimensions, StyleSheet} from 'react-native';
+import Colors from '../../../Theme/Colors';
+import Dimension from '../../../Theme/Dimension';
+import { colors } from 'react-native-elements';
+
+const styles = StyleSheet.create({
+  ContainerCss:{
+    backgroundColor:Colors.WhiteColor,
+    paddingHorizontal:Dimension.padding15
+  },
+  headingTxt:{
+    fontSize:Dimension.font18,
+    color:Colors.FontColor,
+    fontFamily:Dimension.CustomSemiBoldFont,
+    marginBottom:Dimension.margin30,
+  },
+  errorTxt:{
+    fontSize:Dimension.font10,
+    color:Colors.BrandColor,
+    fontFamily:Dimension.CustomRegularFont,
+  },
+
+  
+  buttonWrap:{
+      flexDirection:"row",
+      marginTop:Dimension.margin20
+  },
+
+  orwrap:{
+      flexDirection:"row",
+      marginVertical:Dimension.margin20,
+      justifyContent:"center",
+      alignItems:"center"
+  },
+  leftHorizontal:{
+      height:1,
+      backgroundColor:Colors.grayShade4,
+      width:100,
+      borderRadius:4    
+  },
+  orTxt:{
+    fontSize:Dimension.font10,
+    color:Colors.eyeIcon,
+    fontFamily:Dimension.CustomRegularFont,
+    marginHorizontal:Dimension.margin5
+  },
+  allrighttxt:{
+    fontSize:Dimension.font8,
+    color:Colors.eyeIcon,
+    fontFamily:Dimension.CustomRegularFont,
+    marginVertical:Dimension.margin5,
+    alignSelf:"center"
+  }
+
+});
+
+export default styles;
