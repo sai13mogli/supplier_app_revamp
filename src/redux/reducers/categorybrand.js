@@ -261,7 +261,7 @@ export const categorybrandReducer = (state = initialState, action) => {
     case CATEGORY_BRAND_ACTIONS.FETCHED_CATEGORIES_BRANDS:
       return {
         ...state,
-        initialcategories: [...payload.data],
+        initialcategories: [...payload.data.categories],
       };
 
     case CATEGORY_BRAND_ACTIONS.SET_CATEGORIES:
