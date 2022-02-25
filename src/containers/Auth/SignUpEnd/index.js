@@ -1,6 +1,6 @@
 import {OrderedMap} from 'immutable';
 import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View,ScrollView,ImageBackground} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import DropDown from '../../../component/common/DropDown';
@@ -9,7 +9,9 @@ import {getGstDetails} from '../../../services/profile';
 import {signUp} from '../../../services/auth';
 import CustomButton from '../../../component/common/Button';
 import Colors from '../../../Theme/Colors';
-
+import Dimension from '../../../Theme/Dimension';
+import styles from './style';
+import CustomeIcon from '../../../component/common/CustomeIcon';
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
 
@@ -124,19 +126,66 @@ const SignUpEndScreen = props => {
   };
 
   return (
-    <View>
-      <Text>SignUpEnd</Text>
-      {FORM_FIELDS.map((field, fieldKey) => (
+    <View style={{flex:1}}>
+       <ImageBackground source={require("../../../assets/images/SignUpBg.png")} resizeMode="cover" style={{flex:1}}>
+
+    <ScrollView style={styles.ContainerCss}>
+     <View style={styles.headerPart}>
+  <CustomeIcon
+          name={'arrow-back'}
+          size={Dimension.font20}
+          color={Colors.blackColor}
+        />
+      <View style={styles.greenBar}></View>
+      <View style={styles.RightGrrenbar}></View>
+  </View>
+   <CustomButton
+      title={'Already a Moglix Supplier? Sign In'}
+      buttonColor={Colors.LightBrandColor}
+      onPress={() => props.navigation.navigate('SignUpStart')}
+      TextColor={Colors.BrandColor}
+      borderColor={Colors.LightBrandColor}
+      TextFontSize={Dimension.font14}
+      icon={() => (
+        <CustomeIcon
+          name={'arrow-back'}
+          size={Dimension.font20}
+          color={Colors.BrandColor}
+        />
+      )}
+      
+    />
+    <Text style={styles.headingTxt}>Step 2 : Important Details</Text>
+  <View style={styles.formWrap}>
+ 
+  
+  {FORM_FIELDS.map((field, fieldKey) => (
         <field.component {...field} key={fieldKey} />
       )).toList()}
-      <CustomButton
+    
+    
+   
+  </View>
+  
+  </ScrollView>
+  </ImageBackground>
+  <View>
+
+  </View>
+  <View style={styles.bottomBtnWrap}>
+
+  
+  <CustomButton
         title={'SUBMIT'}
-        buttonColor={'dodgerblue'}
+        buttonColor={Colors.BrandColor}
         onPress={onSignUp}
         TextColor={Colors.WhiteColor}
         borderColor={Colors.WhiteColor}
+        TextFontSize={Dimension.font16}
       />
     </View>
+  </View>
+    
   );
 };
 

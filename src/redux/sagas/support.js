@@ -7,13 +7,13 @@ import {getTickets} from '../../services/support';
 // actions
 import {fetchedTickets, failedFetchTickets} from '../actions/support';
 
-function* fetchTickets({payload: {page, days, openOnly, search}}) {
+function* fetchTickets({payload: {obj}}) {
   try {
-    const {data, error} = yield call(getTickets, page, days, openOnly, search);
+    const {data, error} = yield call(getTickets, obj);
     if (error) {
       yield put(failedFetchTickets(error));
     } else {
-      yield put(fetchedTickets(page, data.data));
+      yield put(fetchedTickets(obj.page, data.data));
     }
   } catch (error) {
     yield put(failedFetchTickets(error));

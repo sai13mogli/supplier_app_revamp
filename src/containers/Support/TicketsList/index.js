@@ -1,5 +1,11 @@
-import React, {useEffect} from 'react';
-import {View, FlatList, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  FlatList,
+  Text,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchTickets} from '../../../redux/actions/support';
 import {STATE_STATUS} from '../../../redux/constants';
@@ -9,14 +15,42 @@ const TicketsList = props => {
   const ticketsStatus = useSelector(
     state => state.supportReducer.status || STATE_STATUS.UNFETCHED,
   );
+  const pageIndex = useSelector(state => state.supportReducer.page || 0);
 
+  const maxPage = 15;
+  const [initLoader, setInitLoader] = useState(true);
+  const [loader, setLoader] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (ticketsStatus != STATE_STATUS.FETCHED) {
-      dispatch(fetchTickets(1, 0, 0, ''));
-    }
+    // if (ticketsStatus != STATE_STATUS.FETCHED) {
+    //   fetchTicketListing(1, '');
+    //   // dispatch(fetchTickets(1, 0, 0, ''));
+    // }
+    // if (ticketsStatus !== STATE_STATUS.FETCHED) {
+
+    // }
+
+    //fetch tickets commented!!!
+    // fetchTicketListing(1, '');
+    setInitLoader(false);
   }, []);
+
+  useEffect(() => {
+    if (ticketsStatus == STATE_STATUS.FETCHED && loader && !initLoader) {
+      setLoader(false);
+    }
+  }, [ticketsStatus]);
+
+  const fetchTicketListing = (pageNo, search) => {
+    let fetchTicketListingObj = {
+      page: pageNo,
+      days: 0,
+      openOnly: 0,
+      search: search,
+    };
+    dispatch(fetchTickets(fetchTicketListingObj));
+  };
 
   const renderItem = ({item, index}) => {
     return (
@@ -36,15 +70,87 @@ const TicketsList = props => {
     );
   };
 
-  return (
-    <View>
-      <FlatList
-        data={ticketsList}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => `${index}-item`}
-      />
-    </View>
+  const renderLoader = () => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          height: Dimensions.get('window').height,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 50,
+        }}>
+        <ActivityIndicator
+          size={'large'}
+          color={'red'}
+          style={{alignSelf: 'center'}}
+        />
+      </View>
+    );
+  };
+
+  const endReachedFetchListing = () => {
+    if (
+      ticketsStatus === STATE_STATUS.FETCHED &&
+      ticketsStatus !== STATE_STATUS.FETCHING &&
+      pageIndex + 1 < maxPage &&
+      !loader
+    ) {
+      fetchTicketListing(pageIndex + 1, '');
+    }
+  };
+
+  const listEmptyComponent = () => (
+    <Text style={{color: '#000'}}>No Tickets Found!!</Text>
   );
+
+  const ticketListing = () => {
+    return (
+      <View>
+        <FlatList
+          data={ticketsList}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => `${index}-item`}
+          onEndReachedThreshold={0.9}
+          ListFooterComponent={renderFooter}
+          onEndReached={endReachedFetchListing}
+          ListEmptyComponent={listEmptyComponent}
+        />
+      </View>
+    );
+  };
+
+  const renderFooter = () => {
+    if (ticketsStatus == STATE_STATUS.FETCHING && pageIndex > 0) {
+      return (
+        <View style={{padding: 100}}>
+          <ActivityIndicator
+            style={{alignSelf: 'center'}}
+            color="rgba(217, 35, 45, 1)"
+            size={'large'}
+          />
+        </View>
+      );
+    }
+    return null;
+  };
+
+  const renderListing = () => {
+    if (initLoader) {
+      return renderLoader();
+    } else if (
+      loader ||
+      (pageIndex == 0 &&
+        [(STATE_STATUS.UNFETCHED, STATE_STATUS.FETCHING)].includes(
+          ticketsStatus,
+        ))
+    ) {
+      return renderLoader();
+    }
+    return ticketListing();
+  };
+
+  return <View>{renderListing()}</View>;
 };
 
 export default TicketsList;

@@ -11,7 +11,7 @@ export const supportReducer = (state = initialState, action) => {
   const {type, payload, error} = action;
   switch (type) {
     case SUPPORT_ACTIONS.FETCH_TICKETS:
-      if (payload.page == 0) {
+      if (payload.page == 1) {
         return {
           data: [],
           page: payload.page,
@@ -23,7 +23,7 @@ export const supportReducer = (state = initialState, action) => {
       } else {
         return {
           ...state,
-          page: payload.page,
+          // page: payload.page,
           days: payload.days,
           openOnly: payload.openOnly,
           search: payload.search,
@@ -31,16 +31,18 @@ export const supportReducer = (state = initialState, action) => {
         };
       }
     case SUPPORT_ACTIONS.FETCHED_TICKETS:
-      if (payload.page == 0) {
+      if (payload.page == 1) {
         return {
           ...state,
           status: STATE_STATUS.FETCHED,
+          page: payload.page,
           data: payload.data.dataList,
         };
       } else {
         return {
           ...state,
           status: STATE_STATUS.FETCHED,
+          page: payload.page,
           data: [...state.data, ...payload.data.dataList],
         };
       }
