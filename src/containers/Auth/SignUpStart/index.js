@@ -1,6 +1,12 @@
 import {OrderedMap} from 'immutable';
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity,ImageBackground, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ImageBackground,
+  ScrollView,
+} from 'react-native';
 import CustomButton from '../../../component/common/Button';
 import CustomeIcon from '../../../component/common/CustomeIcon';
 import Checkbox from '../../../component/common/Checkbox/index';
@@ -136,7 +142,7 @@ const SignUpStartScreen = props => {
       maxLength: 10,
       onBlur: () => onPhoneBlur(),
       extraView: () => getExtraView(),
-      isfromLogin :true,
+      isfromLogin: true,
     },
     otp: {
       title: 'OTP',
@@ -214,75 +220,67 @@ const SignUpStartScreen = props => {
       onEmailBlur();
       onContactNameBlur();
     }
- };
+  };
 
   return (
-    <View style={{flex:1}}>
-      <ImageBackground source={require("../../../assets/images/SignUpBg.png")} resizeMode="cover" style={{flex:1}}>
-      <ScrollView style={styles.ContainerCss}>
-      
-    <View style={styles.headerPart}>
-    <CustomeIcon
-            name={'arrow-back'}
-            size={Dimension.font20}
-            color={Colors.blackColor}
+    <View style={{flex: 1}}>
+      <ImageBackground
+        source={require('../../../assets/images/SignUpBg.png')}
+        resizeMode="cover"
+        style={{flex: 1}}>
+        <ScrollView style={styles.ContainerCss}>
+          <View style={styles.headerPart}>
+            <CustomeIcon
+              name={'arrow-back'}
+              size={Dimension.font20}
+              color={Colors.blackColor}
+            />
+            <View style={styles.greenBar}></View>
+            <View style={styles.garyBar}></View>
+          </View>
+          <CustomButton
+            title={'Already a Moglix Supplier? Sign In'}
+            buttonColor={Colors.LightBrandColor}
+            onPress={() => props.navigation.navigate('Login')}
+            TextColor={Colors.BrandColor}
+            borderColor={Colors.LightBrandColor}
+            TextFontSize={Dimension.font14}
+            icon={() => (
+              <CustomeIcon
+                name={'arrow-back'}
+                size={Dimension.font20}
+                color={Colors.BrandColor}
+              />
+            )}
           />
-        <View style={styles.greenBar}></View>
-        <View style={styles.garyBar}></View>
-    </View>
-     <CustomButton
-        title={'Already a Moglix Supplier? Sign In'}
-        buttonColor={Colors.LightBrandColor}
-        onPress={() => props.navigation.navigate('SignUpStart')}
-        TextColor={Colors.BrandColor}
-        borderColor={Colors.LightBrandColor}
-        TextFontSize={Dimension.font14}
-        icon={() => (
-          <CustomeIcon
-            name={'arrow-back'}
-            size={Dimension.font20}
-            color={Colors.BrandColor}
-          />
-        )}
-        
-      />
-      <Text style={styles.headingTxt}>Step 1 : Signup</Text>
-    <View style={styles.formWrap}>
-   
-    
-      {FORM_FIELDS.map((field, fieldKey) => (
-        <field.component key={fieldKey} {...field} />
-      )).toList()}
-      <Checkbox
-        checked={tAndCAccepted}
-        onPress={() => setTAndCAccepted(!tAndCAccepted)}
-        title={'I Accept The Terms and Conditions'}
-      />
-      <Checkbox
-        checked={sendWhatsapp}
-        onPress={() => setSendWhatsapp(!sendWhatsapp)}
-        title={'Send WhatsApp Notifications.'}
-      />
-      
-      
-    </View>
-   
-    </ScrollView>
-    </ImageBackground>
-    <View>
-
-    </View>
-    <View style={styles.bottomBtnWrap}>
-
-    
-    <CustomButton
-        title={'NEXT'}
-        buttonColor={Colors.BrandColor}
-        onPress={onNext}
-        TextColor={Colors.WhiteColor}
-        borderColor={Colors.BrandColor}
-        TextFontSize={Dimension.font16}
-      />
+          <Text style={styles.headingTxt}>Step 1 : Signup</Text>
+          <View style={styles.formWrap}>
+            {FORM_FIELDS.map((field, fieldKey) => (
+              <field.component key={fieldKey} {...field} />
+            )).toList()}
+            <Checkbox
+              checked={tAndCAccepted}
+              onPress={() => setTAndCAccepted(!tAndCAccepted)}
+              title={'I Accept The Terms and Conditions'}
+            />
+            <Checkbox
+              checked={sendWhatsapp}
+              onPress={() => setSendWhatsapp(!sendWhatsapp)}
+              title={'Send WhatsApp Notifications.'}
+            />
+          </View>
+        </ScrollView>
+      </ImageBackground>
+      <View></View>
+      <View style={styles.bottomBtnWrap}>
+        <CustomButton
+          title={'NEXT'}
+          buttonColor={Colors.BrandColor}
+          onPress={onNext}
+          TextColor={Colors.WhiteColor}
+          borderColor={Colors.BrandColor}
+          TextFontSize={Dimension.font16}
+        />
       </View>
     </View>
   );

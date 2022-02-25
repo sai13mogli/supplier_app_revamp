@@ -8,7 +8,7 @@ const SupportScreen = () => {
       <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
         SupportScreen
       </Text>
-      <TicketsList />
+      {/* <TicketsList /> */}
     </View>
   );
 };
