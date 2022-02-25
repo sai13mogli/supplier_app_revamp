@@ -2,12 +2,12 @@ import axios from 'axios';
 import {BASE_URL} from '../redux/constants/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const getTickets = async (pageNum, daysCount, openOnly, search) =>
+export const getTickets = async ({page, days, openOnly, search}) =>
   axios.post(
     `${BASE_URL}api/ticket/list`,
     {
-      pageNum,
-      daysCount,
+      page,
+      days,
       openOnly,
       search,
       ticketNumber: '',

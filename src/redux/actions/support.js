@@ -1,13 +1,10 @@
 import {SUPPORT_ACTIONS} from '../constants/support';
 
-export const fetchTickets = (page, days, openOnly, search) => {
+export const fetchTickets = obj => {
   return {
     type: SUPPORT_ACTIONS.FETCH_TICKETS,
     payload: {
-      page,
-      days,
-      openOnly,
-      search,
+      obj,
     },
   };
 };
