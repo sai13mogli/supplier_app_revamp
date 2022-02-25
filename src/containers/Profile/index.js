@@ -104,7 +104,7 @@ const ProfileScreen = props => {
         {PROFILE_TABS.map((tab, tabIndex) => (
           <TouchableOpacity
             key={tabIndex}
-            onPress={() => props.navigation.navigate(tab.route)}
+            onPress={() => isActive(tabIndex, tab.route)}
             style={styles.profileTabWrap}>
             <View style={{flexDirection: 'row'}}>
               <View
@@ -127,13 +127,19 @@ const ProfileScreen = props => {
               </View>
               <View>
                 <Text style={styles.tabTitle}>{tab.title}</Text>
-                <Text style={styles.tabStatusNC}>Not Completed</Text>
+
                 <View style={{flexDirection: 'row'}}>
-                  <CustomeIcon
-                    name={'right-tick-line'}
-                    color={Colors.SuccessStateColor}
-                    size={Dimension.font12}></CustomeIcon>
-                  <Text style={styles.tabStatusC}>Completed</Text>
+                  {isCompleted(tab.progress) ? (
+                    <>
+                      <CustomeIcon
+                        name={'right-tick-line'}
+                        color={Colors.SuccessStateColor}
+                        size={Dimension.font12}></CustomeIcon>
+                      <Text style={styles.tabStatusC}>Completed</Text>
+                    </>
+                  ) : (
+                    <Text style={styles.tabStatusNC}>Not Completed</Text>
+                  )}
                 </View>
               </View>
             </View>
