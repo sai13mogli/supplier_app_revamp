@@ -79,25 +79,27 @@ const SignUpStartScreen = props => {
   };
 
   const onOtpBlur = async () => {
-    if (otp && otp.length && otp.length == 6) {
-      setotpError(false);
-      if (
-        phone &&
-        phone.length &&
-        phone.length == 10 &&
-        otp &&
-        otp.length &&
-        otp.length == 6
-      ) {
-        const {data} = await verifyOtp({phone, otp});
-        if (data.success) {
-          setOtpVerified(true);
-        } else {
-          setotpError(true);
+    if (!otpVerified) {
+      if (otp && otp.length && otp.length == 6) {
+        setotpError(false);
+        if (
+          phone &&
+          phone.length &&
+          phone.length == 10 &&
+          otp &&
+          otp.length &&
+          otp.length == 6
+        ) {
+          const {data} = await verifyOtp({phone, otp});
+          if (data.success) {
+            setOtpVerified(true);
+          } else {
+            setotpError(true);
+          }
         }
+      } else {
+        setotpError(true);
       }
-    } else {
-      setotpError(true);
     }
   };
 
@@ -171,41 +173,43 @@ const SignUpStartScreen = props => {
   });
 
   const onNext = () => {
-    props.navigation.navigate('SignUpEnd', {
-      phone,
-      email,
-      contactName,
-      phonePrefix: '+91',
-      rememberMe: true,
-      country: '110',
-    });
-    // if (
-    //   phone &&
-    //   phone.length &&
-    //   phone.length == 10 &&
-    //   otp &&
-    //   otp.length &&
-    //   otp.length == 6 &&
-    //   otpVerified &&
-    //   tAndCAccepted &&
-    //   email &&
-    //   email.length &&
-    //   email.match(emailRegex)
-    // ) {
-    //   props.navigation.navigate('SignUpEnd', {
+    // props.navigation.navigate('SignUpEnd', {
     //   phone,
     //   email,
     //   contactName,
-    //   phonePrefix: "+91",
+    //   phonePrefix: '+91',
     //   rememberMe: true,
-    //   country: "217"
+    //   country: '110',
     // });
-    // } else {
-    //   onPhoneBlur();
-    //   onOtpBlur();
-    //   onEmailBlur();
-    //   onContactNameBlur();
-    // }
+    if (
+      phone &&
+      phone.length &&
+      phone.length == 10 &&
+      otp &&
+      otp.length &&
+      otp.length == 6 &&
+      otpVerified &&
+      tAndCAccepted &&
+      email &&
+      email.length &&
+      email.match(emailRegex) &&
+      contactName &&
+      contactName.length
+    ) {
+      props.navigation.navigate('SignUpEnd', {
+        phone,
+        email,
+        contactName,
+        phonePrefix: '+91',
+        rememberMe: true,
+        country: '110',
+      });
+    } else {
+      onPhoneBlur();
+      onOtpBlur();
+      onEmailBlur();
+      onContactNameBlur();
+    }
   };
 
   return (

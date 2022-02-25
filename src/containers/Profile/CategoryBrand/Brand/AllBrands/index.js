@@ -188,7 +188,7 @@ const AllBrandsScreen = props => {
   );
 
   const renderFooter = () => {
-    if (allBrandsStatus != STATE_STATUS.FETCHED && pageIndex > 64) {
+    if (allBrandsStatus == STATE_STATUS.FETCHING && pageIndex > 64) {
       return (
         <View style={{padding: 100}}>
           <ActivityIndicator
@@ -293,7 +293,7 @@ const AllBrandsScreen = props => {
     return brandListing();
   };
 
-  return <View style={{flex:1}}>{renderListing()}</View>;
+  return <View style={{flex: 1}}>{renderListing()}</View>;
 };
 
 export default AllBrandsScreen;

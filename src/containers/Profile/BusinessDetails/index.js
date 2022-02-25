@@ -128,7 +128,7 @@ const BusinessDetailsScreen = props => {
       items: [
         {
           label: 'India',
-          value: 217,
+          value: 110,
         },
       ],
       enabled: false,
@@ -279,9 +279,9 @@ const BusinessDetailsScreen = props => {
       const {data} = await getPincodeDetails(pincode);
       if (data.data && data.data.length) {
         setpincodeError(false);
-        setStates([{value: data.data[0].stateId, label: data.data[0].state}]);
+        setStates([{value: data.data[0].state, label: data.data[0].state}]);
         setCities(data.data.map(_ => ({label: _.city, value: _.city})));
-        setstate(data.data[0].stateId);
+        setstate(data.data[0].state);
         if (data.data.length == 1) {
           setcity(data.data[0].city);
         }

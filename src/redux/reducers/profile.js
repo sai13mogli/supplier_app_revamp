@@ -170,35 +170,35 @@ export const profileReducer = (state = initialState, action) => {
         },
       };
     case PROFILE_ACTIONS.FETCH_TDS_INFO_DETAILS:
-        return {
-          ...state,
-          tdsInfoDetails: {
-            ...state.tdsInfoDetails,
-            status: STATE_STATUS.FETCHING,
-            data: {},
-            error: null,
-          },
-        };
+      return {
+        ...state,
+        tdsInfoDetails: {
+          ...state.tdsInfoDetails,
+          status: STATE_STATUS.FETCHING,
+          data: {},
+          error: null,
+        },
+      };
     case PROFILE_ACTIONS.FETCHED_TDS_INFO_DETAILS:
-        return {
-          ...state,
-          tdsInfoDetails: {
-            ...state.tdsInfoDetails,
-            status: STATE_STATUS.FETCHED,
-            data: payload.data,
-            error: null,
-          },
-        };
+      return {
+        ...state,
+        tdsInfoDetails: {
+          ...state.tdsInfoDetails,
+          status: STATE_STATUS.FETCHED,
+          data: payload.data,
+          error: null,
+        },
+      };
     case PROFILE_ACTIONS.FAILED_FETCH_TDS_INFO_DETAILS:
-        return {
-          ...state,
-          tdsInfoDetails: {
-            ...state.tdsInfoDetails,
-            status: STATE_STATUS.FAILED_FETCH,
-            data: {},
-            error: error,
-          },
-        };  
+      return {
+        ...state,
+        tdsInfoDetails: {
+          ...state.tdsInfoDetails,
+          status: STATE_STATUS.FAILED_FETCH,
+          data: {},
+          error: error,
+        },
+      };
     case PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS:
       return {
         ...state,
@@ -241,7 +241,8 @@ export const profileReducer = (state = initialState, action) => {
         categoryBrandDetails: {
           ...state.categoryBrandDetails,
           status: STATE_STATUS.FETCHED,
-          data: payload.data,
+          categories: payload.data.categories,
+          brands: payload.data.brands,
           error: null,
         },
       };
