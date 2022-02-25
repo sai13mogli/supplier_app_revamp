@@ -384,7 +384,7 @@ const DocumentsScreen = props => {
   const fetchDocuments = async () => {
     try {
       let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-      const {data} = await getDocuments(authToken);
+      const {data} = await getDocuments(token);
       setDocumentsData(data);
       console.log('data', data);
     } catch (error) {
@@ -696,7 +696,7 @@ const DocumentsScreen = props => {
       url,
       {
         'Content-Type': 'multipart/form-data',
-        Authorization: authToken,
+        Authorization: token,
       },
       [
         {
@@ -1000,7 +1000,7 @@ const DocumentsScreen = props => {
       `https://apigatewayqa.moglix.com/profile/file?download=0&key=${fileKey}`,
     );
     let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-    myrequest.setRequestHeader('Authorization', authToken);
+    myrequest.setRequestHeader('Authorization', token);
     myrequest.responseType = 'blob';
     myrequest.send();
     myrequest.onload = e => {
@@ -1129,17 +1129,17 @@ const DocumentsScreen = props => {
     try {
       setSubmitLoader(true);
       let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-      const {data} = await submitProfile(authToken);
+      const {data} = await submitProfile(token);
       if (data && data.success) {
         setSubmitLoader(false);
         setConfirmModal(false);
         dispatch(fetchProfile());
-        props.navigation.navigate('Profile');
+        props.navigation.goBack();
       } else {
         setSubmitLoader(false);
         setConfirmModal(false);
         dispatch(fetchProfile());
-        props.navigation.navigate('Profile');
+        props.navigation.goBack();
       }
     } catch (error) {
       console.log('err', error);
