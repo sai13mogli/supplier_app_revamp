@@ -9,6 +9,7 @@ import {
   fetchBankDetails,
   fetchTdsInfoDetails,
   fetchAddressDetails,
+  logout,
 } from '../../redux/actions/profile';
 import {fetchCategoriesBrands} from '../../redux/actions/categorybrand';
 
@@ -74,6 +75,7 @@ const ProfileScreen = props => {
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('userId');
     props.setIsLoggedIn(false);
+    dispatch(logout());
   };
 
   return (

@@ -1,4 +1,5 @@
 import {STATE_STATUS} from '../constants/index';
+import {PROFILE_ACTIONS} from '../constants/profile';
 import {SUPPORT_ACTIONS} from '../constants/support';
 
 const initialState = {
@@ -51,6 +52,12 @@ export const supportReducer = (state = initialState, action) => {
         ...state,
         status: STATE_STATUS.FAILED_FETCH,
         error: error,
+      };
+    case PROFILE_ACTIONS.LOGOUT:
+      return {
+        status: STATE_STATUS.UNFETCHED,
+        data: [],
+        page: 0,
       };
     default:
       return state;

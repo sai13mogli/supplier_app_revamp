@@ -256,6 +256,36 @@ export const profileReducer = (state = initialState, action) => {
         },
       };
 
+    case PROFILE_ACTIONS.LOGOUT:
+      return {
+        status: STATE_STATUS.UNFETCHED,
+        data: [],
+        businessDetails: {
+          status: STATE_STATUS.UNFETCHED,
+          data: {},
+          error: null,
+        },
+        addressesDetails: {
+          status: STATE_STATUS.UNFETCHED,
+          data: {},
+          error: null,
+        },
+        bankDetails: {
+          status: STATE_STATUS.UNFETCHED,
+          data: {},
+          error: null,
+        },
+        tdsInfoDetails: {
+          status: STATE_STATUS.UNFETCHED,
+          data: {},
+          error: null,
+        },
+        categoryBrandDetails: {
+          status: STATE_STATUS.UNFETCHED,
+          data: {},
+          error: null,
+        },
+      };
     default:
       return state;
   }

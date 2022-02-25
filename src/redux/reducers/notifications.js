@@ -1,5 +1,6 @@
 import {STATE_STATUS} from '../constants/index';
 import {NOTIFICATIONS_ACTIONS} from '../constants/notifications';
+import {PROFILE_ACTIONS} from '../constants/profile';
 
 const initialState = {
   status: STATE_STATUS.UNFETCHED,
@@ -46,6 +47,13 @@ export const notificationsReducer = (state = initialState, action) => {
         ...state,
         status: STATE_STATUS.FAILED_FETCH,
         error: error,
+      };
+    case PROFILE_ACTIONS.LOGOUT:
+      return {
+        status: STATE_STATUS.UNFETCHED,
+        data: [],
+        maxPage: 1,
+        page: 0,
       };
     default:
       return state;

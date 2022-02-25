@@ -1,5 +1,6 @@
 import {STATE_STATUS} from '../constants/index';
 import {HOMEPAGE_ACTIONS} from '../constants/homepage';
+import {PROFILE_ACTIONS} from '../constants/profile';
 
 const initialState = {
   status: STATE_STATUS.UNFETCHED,
@@ -25,6 +26,11 @@ export const homepageReducer = (state = initialState, action) => {
         ...state,
         status: STATE_STATUS.FAILED_FETCH,
         error: error,
+      };
+    case PROFILE_ACTIONS.LOGOUT:
+      return {
+        status: STATE_STATUS.UNFETCHED,
+        data: [],
       };
     default:
       return state;
