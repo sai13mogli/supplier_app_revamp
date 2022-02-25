@@ -36,6 +36,7 @@ import {
 } from '../../../redux/actions/categorybrand';
 import {addOrUpdateCategoryAndBrand} from '../../../services/categorybrand';
 import {getAllCategories} from '../../../services/auth';
+import {fetchProfile} from '../../../redux/actions/profile';
 
 // import {uploadDocumentService} from '../../../services/documents';
 const deviceWidth = Dimensions.get('window').width;
@@ -596,11 +597,15 @@ const CategoryBrandScreen = props => {
       const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
       if (data && data.success) {
         setNextLoader(false);
+        dispatch(fetchProfile());
+        props.navigation.goBack();
       } else {
         setNextLoader(false);
+        console.log('something went wrong!!');
       }
     } catch (error) {
       setNextLoader(false);
+      console.log(error);
     }
   };
 

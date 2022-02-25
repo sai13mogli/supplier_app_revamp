@@ -1,11 +1,15 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {Text, View} from 'react-native';
+import TicketsList from './TicketsList';
 
 const SupportScreen = () => {
   return (
-    <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
-      SupportScreen
-    </Text>
+    <View>
+      <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
+        SupportScreen
+      </Text>
+      <TicketsList />
+    </View>
   );
 };
 
