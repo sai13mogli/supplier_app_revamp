@@ -15,6 +15,7 @@ const Colors = {
   SuccessStateColor:"#54B110",
   BoxBorderColor:"#CFD2E2",
   LightBrandColor:"#FFF2F2",
+  
 
   //Secondary Color
 
@@ -31,6 +32,7 @@ headerTxtColor:"#3C3C3C",
 blackColor:'#000',
 PendingStateColor:"#D97023",
 modalBorder:'#CECECE',
+
 
 
 

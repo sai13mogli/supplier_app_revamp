@@ -214,11 +214,13 @@ const SignUpStartScreen = props => {
       onEmailBlur();
       onContactNameBlur();
     }
-  };
+ };
 
   return (
     <View style={{flex:1}}>
+      <ImageBackground source={require("../../../assets/images/SignUpBg.png")} resizeMode="cover" style={{flex:1}}>
       <ScrollView style={styles.ContainerCss}>
+      
     <View style={styles.headerPart}>
     <CustomeIcon
             name={'arrow-back'}
@@ -247,7 +249,7 @@ const SignUpStartScreen = props => {
       <Text style={styles.headingTxt}>Step 1 : Signup</Text>
     <View style={styles.formWrap}>
    
-    <ImageBackground source={require("../../../assets/images/SIgnUpBG.png")} resizeMode="cover">
+    
       {FORM_FIELDS.map((field, fieldKey) => (
         <field.component key={fieldKey} {...field} />
       )).toList()}
@@ -262,9 +264,11 @@ const SignUpStartScreen = props => {
         title={'Send WhatsApp Notifications.'}
       />
       
-      </ImageBackground>
+      
     </View>
+   
     </ScrollView>
+    </ImageBackground>
     <View>
 
     </View>

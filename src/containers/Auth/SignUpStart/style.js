@@ -12,9 +12,9 @@ const styles = StyleSheet.create({
         
     },
   ContainerCss:{
-    backgroundColor:Colors.WhiteColor,
+    //backgroundColor:Colors.WhiteColor,
     paddingHorizontal:Dimension.padding15,
-    flex:1
+    
   },
   formWrap:{
 

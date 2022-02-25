@@ -6,7 +6,8 @@ import { colors } from 'react-native-elements';
 const styles = StyleSheet.create({
   ContainerCss:{
     backgroundColor:Colors.WhiteColor,
-    paddingHorizontal:Dimension.padding15
+    paddingHorizontal:Dimension.padding15,
+    marginTop:Dimension.margin50
   },
   headingTxt:{
     fontSize:Dimension.font18,
@@ -50,6 +51,13 @@ const styles = StyleSheet.create({
     fontFamily:Dimension.CustomRegularFont,
     marginVertical:Dimension.margin5,
     alignSelf:"center"
+  },
+  fotgotTxt:{
+    fontSize:Dimension.font12,
+    color:Colors.FontColor,
+    fontFamily:Dimension.CustomSemiBoldFont,
+   
+    alignSelf:"flex-end"
   }
 
 });

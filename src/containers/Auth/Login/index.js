@@ -8,6 +8,7 @@ import Dimension from '../../../Theme/Dimension'
 import {loginWithPass, loginWithGoogle} from '../../../services/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginOtpModal from '../../../component/LoginOtpModal';
+import  CustomeIcon from '../../../component/common/CustomeIcon';
 import styles from "./style"
 import {
   GoogleSignin,
@@ -38,6 +39,8 @@ const LoginScreen = props => {
       errorMessage: 'Invalid Email',
       showError: emailError,
       onBlur: () => onEmailBlur(),
+      
+      
     },
     password: {
       label: 'Password',
@@ -51,6 +54,7 @@ const LoginScreen = props => {
       errorMessage: 'Invalid Password',
       showError: passwordError,
       onBlur: () => onPasswordBlur(),
+      extraView:() => <CustomeIcon name={'eye-open'} color={Colors.eyeIcon} size={Dimension.font20}></CustomeIcon>
 
     },
   });
@@ -177,9 +181,10 @@ const LoginScreen = props => {
   return (
     // <View style={{backgroundColor:"#fff",flex:1}}>
     //   <View style={{height:"30%",justifyContent:"center",}}>
-<>
+<View style={{backgroundColor:"#fff",flex:1}}>
 <StatusBar translucent backgroundColor='transparent' barStyle={"dark-content"} />
-    <ImageBackground source={require("../../../assets/images/loginBg.png")} resizeMode="cover" style={{flex:1}}>
+    <ImageBackground source={require("../../../assets/images/loginBg.png")} resizeMode="cover" //style={{flex:1}}
+    >
       
       <Image source={require("../../../assets/images/logo.png")} style={{height:44,width:180,marginTop:80,alignSelf:"center"}}/>
       
@@ -194,6 +199,9 @@ const LoginScreen = props => {
         <field.component {...field} />
       )).toList()}
       {error ? <Text style={styles.errorTxt}>{error}</Text> : null}
+      <View style={{justifyContent:"flex-end"}}>
+        <Text style={styles.fotgotTxt}>Forgot Password</Text>
+      </View>
       <View style={styles.buttonWrap}>
         <View style={{flex:1,marginRight:Dimension.margin15}}>
         <CustomButton
@@ -236,7 +244,7 @@ const LoginScreen = props => {
         />
       )}
       <GoogleSigninButton
-        style={{width: '100%', height: Dimension.height45,elevation:0}}
+        style={{width: '100%', height: Dimension.height45,elevation:0,}}
         size={GoogleSigninButton.Size.Wide}
         color={GoogleSigninButton.Color.Dark}
         onPress={googleSignIn}
@@ -250,13 +258,21 @@ const LoginScreen = props => {
         TextColor={Colors.BrandColor}
         borderColor={Colors.LightBrandColor}
         TextFontSize={Dimension.font14}
+        icon={() => (
+          <CustomeIcon
+            name={'arrow-forward'}
+            size={Dimension.font20}
+            color={Colors.BrandColor}
+          />
+        )}
+        showIcon={true}
       />
       </View>
       <Text style={styles.allrighttxt}>All rights reserved. Mogli labs Pvt Ltd.</Text>
      </View>
    {/* // </View>  */}
    
-   </>
+   </View>
   );
 };
 

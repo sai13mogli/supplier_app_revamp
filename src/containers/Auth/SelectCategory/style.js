@@ -32,6 +32,38 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font18,
     color: Colors.BrandColor,
   },
+  bottombtnWrap: {
+    padding: Dimension.padding15,
+    borderTopColor: Colors.grayShade2,
+    borderTopWidth: 1,
+    backgroundColor: Colors.WhiteColor,
+    flexDirection: 'row',
+  },
+  BrandNumWrap: {
+    flex: 1,
+  },
+  BrandNumTitle: {
+    fontSize: Dimension.font10,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+  },
+  BrandNumTxt: {
+    fontSize: Dimension.font20,
+    color: Colors.eyeIcon,
+    fontFamily: Dimension.CustomSemiBoldFont,
+  },
+  BrandNumTxt1: {
+    fontSize: Dimension.font20,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+  },
+  chekboxWrap:{
+    paddingVertical:Dimension.padding12,
+    borderTopWidth:.5,
+    borderTopColor:Colors.BoxBorderColor,
+    borderBottomWidth:.5,
+    borderBottomColor:Colors.BoxBorderColor,
+  },
 });
 
 export default styles;
