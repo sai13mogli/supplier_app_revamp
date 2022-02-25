@@ -11,7 +11,7 @@ return (
   backgroundColor="#fff"
   barStyle="dark-content"
   placement="left"
-  elevated={true}
+  elevated={false}
   containerStyle={{paddingVertical:Dimension.padding25,}}
   //leftContainerStyle={{flex:1}}
   centerComponent={{ text: props.showText, style: styles.headerTxt}}

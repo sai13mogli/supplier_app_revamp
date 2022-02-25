@@ -6,13 +6,15 @@ import {
   ActivityIndicator,
   Dimensions,
   TextInput,
-  Text,
+  Text,TouchableOpacity
 } from 'react-native';
 import Colors from '../../../Theme/Colors';
+import Dimension from '../../../Theme/Dimension';
 import {getAllCategories} from '../../../services/auth';
 import CustomButton from '../../../component/common/Button';
 import Checkbox from '../../../component/common/Checkbox/index';
 import CustomeIcon from '../../../component/common/CustomeIcon';
+import Header from '../../../component/common/Header';
 import styles from './style';
 
 const SelectCategoryScreen = props => {
@@ -87,6 +89,7 @@ const SelectCategoryScreen = props => {
           {(categories || [])
             .filter((_, i) => _.label.includes(inputValue))
             .map((item, i) => (
+              <View style={styles.chekboxWrap}>
               <Checkbox
                 checked={
                   (selectedValues || []).find(_ => _.id == item.id)
@@ -96,6 +99,7 @@ const SelectCategoryScreen = props => {
                 onPress={() => updateCategory(item)}
                 title={item.label}
               />
+              </View>
             ))}
           {(categories || []).filter((_, i) => _.label.includes(inputValue))
             .length ? null : (
@@ -129,23 +133,61 @@ const SelectCategoryScreen = props => {
               style={styles.seacrhIcon}></CustomeIcon>
           </View>
           {renderRight()}
+          <View style={styles.bottombtnWrap}>
+        <TouchableOpacity style={styles.BrandNumWrap}>
+          <Text style={styles.BrandNumTitle}>Categories Selected</Text>
+          <Text
+            style={
+              selectedValues.length == 0 ? styles.BrandNumTxt : styles.BrandNumTxt1
+            }>
+            {selectedValues.length}
+          </Text>
+        </TouchableOpacity>
+        <View style={{flex: 1}}>
           <CustomButton
+            title={'SUBMIT'}
+            onPress={onSubmit}
+            buttonColor={
+              selectedValues.length ? Colors.BrandColor : Colors.grayShade1
+            }
+            disabled={selectedValues.length ? false : true}
+            TextColor={ selectedValues.length ? Colors.WhiteColor : Colors.FontColor
+            }
+            borderColor={ selectedValues.length ? Colors.BrandColor : Colors.grayShade1
+            }
+            TextFontSize={Dimension.font16}
+          />
+        </View>
+      </View>
+          {/* <CustomButton
             title={`SUBMIT (${selectedValues && selectedValues.length})`}
             onPress={onSubmit}
             buttonColor={
-              selectedValues.length ? Colors.BrandColor : 'dodgerblue'
+              selectedValues.length ? Colors.BrandColor : Colors.grayShade1
             }
             disabled={selectedValues.length ? false : true}
-            TextColor={Colors.WhiteColor}
-            borderColor={Colors.WhiteColor}
-          />
+            TextColor={ selectedValues.length ? Colors.WhiteColor : Colors.FontColor
+            }
+            borderColor={ selectedValues.length ? Colors.BrandColor : Colors.grayShade1
+            }
+            TextFontSize={Dimension.font16}
+          /> */}
         </>
       );
     }
     return renderLoader();
   };
 
-  return <View style={{flex: 1}}>{renderCategories()}</View>;
+  return (<View style={{flex: 1,backgroundColor:"#fff"}}>
+    <Header
+        howBack
+        showText={'Category & Brand'}
+        rightIconName={'category--brand'}>
+
+        </Header>
+    {renderCategories()}
+    </View>
+  );
 };
 
 export default SelectCategoryScreen;
