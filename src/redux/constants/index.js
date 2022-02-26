@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://apigatewayqa.moglix.com/';
+export const BASE_URL = 'https://apigatewayqa.moglix.com/';
 export const CMS_BASE_URL = 'https://cmsapi.moglix.com//';
 export const SEARCH_API_URL = 'https://suppliersearchapiqa.moglilabs.com/';
 export const authToken =
