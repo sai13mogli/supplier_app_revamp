@@ -24,71 +24,71 @@ const OrdersScreen = props => {
       <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
         OrdersScreen
       </Text>
+      <CustomButton
+        title={'Hello'}
+        buttonColor={'dodgerblue'}
+        iconName={'user'}
+        icon={() => (
+          <CustomeIcon
+            name={'add-box'}
+            size={Dimension.font22}
+            color={colors.BrandColor}
+          />
+        )}
+        showIcon
+        iconColor={'#fff'}
+        iconType={'font-awesome'}
+        onPress={() => alert('running')}
+        TextColor={colors.WhiteColor}
+        borderColor={colors.WhiteColor}
+      />
+
+      <CustomButton
+        title={'Open Notifications'}
+        buttonColor={'dodgerblue'}
+        iconName={'user'}
+        icon={() => (
+          <CustomeIcon
+            name={'add-box'}
+            size={Dimension.font22}
+            color={colors.BrandColor}
+          />
+        )}
+        showIcon
+        iconColor={'#fff'}
+        iconType={'font-awesome'}
+        onPress={() => props.navigation.navigate('Notification')}
+        TextColor={colors.WhiteColor}
+        borderColor={colors.WhiteColor}
+      />
+      {/* End */}
+
+      {/* Example for Dropdown Component */}
+      <DropDown
+        // enabled={false}
+        placeholder={'Gender'}
+        items={[
+          {label: 'Male', value: 'M'},
+          {label: 'Female', value: 'F'},
+        ]}
+        selectedValue={gender}
+        onValueChange={onChange}
+        title={'select Something'}
+      />
+      {/* End */}
+
+      {/* Example for DatePicker Component */}
+
+      <CustomeDatePicker display={'default'} />
+      {/* Example for CheckBox Component */}
+      <Checkbox
+        checked={isSelected}
+        onPress={() => setSelection(!isSelected)}
+      />
     </>
   );
 };
 
 // Exampe for CustomButton Component
-// <CustomButton
-//   title={'Hello'}
-//   buttonColor={'dodgerblue'}
-//   iconName={'user'}
-//   icon={() => (
-//     <CustomeIcon
-//       name={'add-box'}
-//       size={Dimension.font22}
-//       color={colors.BrandColor}
-//     />
-//   )}
-//   showIcon
-//   iconColor={'#fff'}
-//   iconType={'font-awesome'}
-//   onPress={() => alert('running')}
-//   TextColor={colors.WhiteColor}
-//   borderColor={colors.WhiteColor}
-// />
-
-// <CustomButton
-//   title={'Open Notifications'}
-//   buttonColor={'dodgerblue'}
-//   iconName={'user'}
-//   icon={() => (
-//     <CustomeIcon
-//       name={'add-box'}
-//       size={Dimension.font22}
-//       color={colors.BrandColor}
-//     />
-//   )}
-//   showIcon
-//   iconColor={'#fff'}
-//   iconType={'font-awesome'}
-//   onPress={() => props.navigation.navigate('Notification')}
-//   TextColor={colors.WhiteColor}
-//   borderColor={colors.WhiteColor}
-// />
-// {/* End */}
-
-// {/* Example for Dropdown Component */}
-// <DropDown
-//   // enabled={false}
-//   placeholder={'Gender'}
-//   items={[
-//     {label: 'Male', value: 'M'},
-//     {label: 'Female', value: 'F'},
-//   ]}
-//   selectedValue={gender}
-//   onValueChange={onChange}
-//   title={'select Something'}
-// />
-// {/* End */}
-
-// {/* Example for DatePicker Component */}
-
-// <CustomeDatePicker display={'default'} />
-// {/* Example for CheckBox Component */}
-// <Checkbox
-//   checked={isSelected}
-//   onPress={() => setSelection(!isSelected)}
-// />
 
 export default OrdersScreen;
