@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Modal from 'react-native-modal';
 import {filtersTypeData, filtersData} from '../redux/constants/support';
 import {
@@ -15,27 +15,76 @@ import {
 import colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import DotCheckbox from './common/Checkbox';
+import CustomSlider from './CustomSlider';
+
 const deviceWidth = Dimensions.get('window').width;
 
 const FilterModal = props => {
-  const getValue = value => {
-    props.setFilterValue(value);
+  const [sliderIndex, setSliderIndex] = useState(0);
+  const [currentSlider, setCurrentSlider] = useState(0);
+
+  const getFilterValue = value => {
+    console.log('value hai dost', value);
+    props.setFiltersModal(false);
+    props.setTypeFilter(value);
   };
 
   const renderRight = () => {
-    if (
-      filtersData &&
-      filtersData[props.activeFilterType] &&
-      filtersData[props.activeFilterType].length
-    ) {
+    if (props.activeFilterType == 'type') {
       return (
         <DotCheckbox
           data={filtersData && filtersData[props.activeFilterType]}
-          onCheck={getValue}
-          value={props.filterValue}
+          onCheck={getFilterValue}
+          value={props.typeFilter}
         />
       );
+    } else {
+      return (
+        <View
+          style={{
+            marginTop: Dimension.margin10,
+            height: Dimension.height300,
+            right: '30%',
+            paddingVertical: Dimension.padding80,
+          }}>
+          <CustomSlider
+            values={[sliderIndex]}
+            min={1}
+            max={4}
+            LRpadding={0}
+            callback={singleSliderValueCallback}
+            single={true}
+          />
+        </View>
+      );
     }
+  };
+
+  const singleSliderValueCallback = values => {
+    let days = 180;
+    if (values[0] == 0) {
+      setSliderIndex(0);
+      days = 180;
+    }
+    if (values[0] == 1) {
+      setSliderIndex(1);
+      days = 90;
+    }
+    if (values[0] == 2) {
+      setSliderIndex(3);
+      days = 30;
+    }
+    if (values[0] == 3) {
+      setSliderIndex(3);
+      days = 15;
+    }
+    if (values[0] == 4) {
+      setSliderIndex(4);
+      days = 7;
+    }
+    setCurrentSlider(days);
+    props.setFiltersModal(false);
+    props.setTimeFilter(days);
   };
 
   return (

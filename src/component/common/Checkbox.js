@@ -12,7 +12,7 @@ const DotCheckbox = props => {
       {(data || []).map((_, i) => (
         <CheckBox
           title={_.title}
-          onPress={() => onCheck(_.title)}
+          onPress={() => onCheck(_.key)}
           checkedIcon={
             <CustomeIcon
               name={'radio-fill'}
@@ -27,7 +27,7 @@ const DotCheckbox = props => {
               color={colors.FontColor}
             />
           }
-          checked={_.title == value ? true : false}
+          checked={_.key == value ? true : false}
           textStyle={styles.checkboxTitle}
           fontFamily={Dimension.CustomMediumFont}
           wrapperStyle={styles.checkboxwrapper}
