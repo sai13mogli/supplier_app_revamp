@@ -5,10 +5,13 @@ import {
   Text,
   ActivityIndicator,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchTickets} from '../../../redux/actions/support';
 import {STATE_STATUS} from '../../../redux/constants';
+import FilterModal from '../../../component/FilterModal';
+import {filtersTypeData, filtersData} from '../../../redux/constants/support';
 
 const TicketsList = props => {
   const ticketsList = useSelector(state => state.supportReducer.data || []);
@@ -20,6 +23,9 @@ const TicketsList = props => {
   const maxPage = 15;
   const [initLoader, setInitLoader] = useState(true);
   const [loader, setLoader] = useState(true);
+  const [filtersModal, setFiltersModal] = useState(false);
+  const [activeFilterType, setActiveFilterType] = useState('');
+  const [filterValue, setFilterValue] = useState('Open and close');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,13 +38,14 @@ const TicketsList = props => {
     // }
 
     //fetch tickets commented!!!
-    // fetchTicketListing(1, '');
+    fetchTicketListing(1, '');
     setInitLoader(false);
   }, []);
 
   useEffect(() => {
     if (ticketsStatus == STATE_STATUS.FETCHED && loader && !initLoader) {
       setLoader(false);
+      setActiveFilterType(filtersTypeData[0].key);
     }
   }, [ticketsStatus]);
 
@@ -107,6 +114,17 @@ const TicketsList = props => {
   const ticketListing = () => {
     return (
       <View>
+        <TouchableOpacity onPress={() => setFiltersModal(true)}>
+          <Text
+            style={{
+              color: '#000',
+              fontSize: 14,
+              fontWeight: 'bold',
+              marginTop: 50,
+            }}>
+            Filters
+          </Text>
+        </TouchableOpacity>
         <FlatList
           data={ticketsList}
           renderItem={renderItem}
@@ -150,7 +168,21 @@ const TicketsList = props => {
     return ticketListing();
   };
 
-  return <View>{renderListing()}</View>;
+  return (
+    <View>
+      {renderListing()}
+      {filtersModal && (
+        <FilterModal
+          filtersModal={filtersModal}
+          setFiltersModal={setFiltersModal}
+          activeFilterType={activeFilterType}
+          setActiveFilterType={setActiveFilterType}
+          filterValue={filterValue}
+          setFilterValue={setFilterValue}
+        />
+      )}
+    </View>
+  );
 };
 
 export default TicketsList;
