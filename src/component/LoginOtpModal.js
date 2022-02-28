@@ -21,9 +21,10 @@ const LoginOtpModal = props => {
   const onSendOtp = async () => {
     const {data} = await sendOtpForLogin(props.email);
     if (!data.success) {
+      setIsVisible(true);
     
-      alert(data.message);
-      props.onClose();
+      // alert(data.message);
+      // props.onClose();
     } else {
       setIsVisible(true);
     }
