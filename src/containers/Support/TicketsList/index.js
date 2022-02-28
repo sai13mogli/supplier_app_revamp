@@ -14,6 +14,7 @@ import {STATE_STATUS} from '../../../redux/constants';
 import FilterModal from '../../../component/FilterModal';
 import {filtersTypeData, filtersData} from '../../../redux/constants/support';
 import CustomeIcon from '../../../component/common/CustomeIcon';
+import debounce from 'lodash.debounce';
 
 const TicketsList = props => {
   const ticketsList = useSelector(state => state.supportReducer.data || []);
@@ -71,6 +72,17 @@ const TicketsList = props => {
       fetchTicketListing(1, '');
     }
   }, [typeFilter, timeFilter]);
+
+  const debouncedSave = useRef(
+    debounce(text => {
+      fetchTicketListing(1, text);
+    }, 600),
+  ).current;
+
+  const onSearchText = text => {
+    setInputValue(text);
+    debouncedSave(text);
+  };
 
   const renderItem = ({item, index}) => {
     return (
@@ -136,9 +148,7 @@ const TicketsList = props => {
           selectionColor={'#888'}
           returnKeyType={'search'}
           value={inputValue}
-          onChangeText={value => {
-            setInputValue(value);
-          }}
+          onChangeText={onSearchText}
         />
         <CustomeIcon name={'search'}></CustomeIcon>
         <TouchableOpacity onPress={() => setFiltersModal(true)}>
@@ -171,10 +181,6 @@ const TicketsList = props => {
           onMomentumScrollBegin={() => {
             onEndReachedCalledDuringMomentum.current = false;
           }}
-          // onEndReached={() => {
-          //   console.log('***********');
-          //   endReachedFetchListing();
-          // }}
           ListEmptyComponent={listEmptyComponent}
         />
       </View>
