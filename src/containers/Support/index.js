@@ -19,7 +19,7 @@ const SupportScreen = props => {
         borderColor={Colors.WhiteColor}
         TextFontSize={Dimension.font16}
       />
-      <TicketsList />
+      <TicketsList navigation={props.navigation} />
     </View>
   );
 };

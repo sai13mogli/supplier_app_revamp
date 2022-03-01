@@ -38,3 +38,14 @@ export const getSubCategories = async id =>
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
   });
+
+export const getConversation = async body =>
+  axios.post(
+    `${BASE_URL}api/ticket/conversation`,
+    {...body},
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );

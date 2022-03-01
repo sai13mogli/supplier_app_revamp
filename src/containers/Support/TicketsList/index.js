@@ -86,19 +86,26 @@ const TicketsList = props => {
 
   const renderItem = ({item, index}) => {
     return (
-      <View
-        style={{
-          borderColor: '#000',
-          borderRadius: 4,
-          borderWidth: 0.5,
-          padding: 12,
-          marginHorizontal: 12,
-          marginTop: 12,
-        }}>
-        <Text style={{color: '#000'}}>{item.subject}</Text>
-        <Text style={{color: '#000'}}>Ticket ID: {item.id}</Text>
-        <Text style={{color: '#000'}}>{item.statusText}</Text>
-      </View>
+      <TouchableOpacity
+        onPress={() =>
+          props.navigation.navigate('Conversation', {
+            tickedId: item.id,
+          })
+        }>
+        <View
+          style={{
+            borderColor: '#000',
+            borderRadius: 4,
+            borderWidth: 0.5,
+            padding: 12,
+            marginHorizontal: 12,
+            marginTop: 12,
+          }}>
+          <Text style={{color: '#000'}}>{item.subject}</Text>
+          <Text style={{color: '#000'}}>Ticket ID: {item.id}</Text>
+          <Text style={{color: '#000'}}>{item.statusText}</Text>
+        </View>
+      </TouchableOpacity>
     );
   };
 

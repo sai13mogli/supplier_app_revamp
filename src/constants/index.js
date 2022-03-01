@@ -25,6 +25,7 @@ import PopularBrandsScreen from '../containers/Profile/CategoryBrand/Brand/Popul
 import AllBrandsScreen from '../containers/Profile/CategoryBrand/Brand/AllBrands';
 import NewTicket from '../containers/Support/NewTicket';
 import Error from '../containers/Auth/Login/Error';
+import Conversation from '../containers/Support/Conversation';
 
 export const BOTTOM_TAB_SCREENS = [
   //   {
@@ -163,6 +164,10 @@ export const APP_STACK_SCREENS = [
   {
     name: 'NewTicket',
     component: NewTicket,
+  },
+  {
+    name: 'Conversation',
+    component: Conversation,
   },
 ];
 
