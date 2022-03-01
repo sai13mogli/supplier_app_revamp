@@ -101,50 +101,93 @@ const NewTicket = props => {
     },
   });
 
-  const submit = async () => {
-    let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-    const url = `${BASE_URL}api/ticket/create`;
-    const response = await RNFetchBlob.fetch(
-      'POST',
-      url,
-      {
-        'Content-Type': 'multipart/form-data',
-        Authorization: token,
-      },
-      [
-        {
-          name: 'categoryId',
-          data: category,
-        },
-        {
-          name: 'subCategoryId',
-          data: subCategory,
-        },
-        {
-          name: 'businessType',
-          data: businessType,
-        },
-        {
-          name: 'description',
-          data: explainQuery,
-        },
-        ...docs.map(_ => ({
-          name: 'file',
-          filename: _.name,
-          type: _.type,
-          data: RNFetchBlob.wrap(_.uri),
-        })),
-      ],
-    );
+  const validateCategory = () => {
+    if (category) {
+      setcategoryError(false);
+    } else {
+      setcategoryError(true);
+    }
+  };
 
-    const res = await response.json();
-    // setLoader(false);
-    // return {
-    //   resp: res,
-    //   fileData: data,
-    // };
-    if (res.success) {
-      props.navigation.goBack();
+  const validateSubCategory = () => {
+    if (subCategory) {
+      setsubCategoryError(false);
+    } else {
+      setsubCategoryError(true);
+    }
+  };
+
+  const validateBusinessType = () => {
+    if (businessType) {
+      setbusinessTypeError(false);
+    } else {
+      setbusinessTypeError(true);
+    }
+  };
+
+  const validateExplainQuery = () => {
+    if (explainQuery) {
+      setexplainQueryError(false);
+    } else {
+      setexplainQueryError(true);
+    }
+  };
+
+  const submit = async () => {
+    if (!category || !subCategory || !businessType || !explainQuery) {
+      validateCategory();
+      validateSubCategory();
+      validateBusinessType();
+      validateExplainQuery();
+    } else {
+      setcategoryError(false);
+      setsubCategoryError(false);
+      setbusinessTypeError(false);
+      setexplainQueryError(false);
+      let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+      const url = `${BASE_URL}api/ticket/create`;
+      const response = await RNFetchBlob.fetch(
+        'POST',
+        url,
+        {
+          'Content-Type': 'multipart/form-data',
+          Authorization: token,
+        },
+        [
+          {
+            name: 'categoryId',
+            data: category,
+          },
+          {
+            name: 'subCategoryId',
+            data: subCategory,
+          },
+          {
+            name: 'businessType',
+            data: businessType,
+          },
+          {
+            name: 'description',
+            data: explainQuery,
+          },
+          ...docs.map(_ => ({
+            name: 'file',
+            filename: _.name,
+            type: _.type,
+            data: RNFetchBlob.wrap(_.uri),
+          })),
+        ],
+      );
+
+      const res = await response.json();
+      // setLoader(false);
+      // return {
+      //   resp: res,
+      //   fileData: data,
+      // };
+      if (res.success) {
+        props.navigation.goBack();
+      }
     }
   };
 
