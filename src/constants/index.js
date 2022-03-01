@@ -23,6 +23,8 @@ import Billing from '../containers/Profile/Addresses/Billing';
 import CategoryScreen from '../containers/Profile/CategoryBrand/Category';
 import PopularBrandsScreen from '../containers/Profile/CategoryBrand/Brand/PopularBrands';
 import AllBrandsScreen from '../containers/Profile/CategoryBrand/Brand/AllBrands';
+import NewTicket from '../containers/Support/NewTicket';
+import Error from '../containers/Auth/Login/Error';
 
 export const BOTTOM_TAB_SCREENS = [
   //   {
@@ -100,6 +102,10 @@ export const AUTH_STACK_SCREENS = [
     component: LoginScreen,
   },
   {
+    name: 'Error',
+    component: Error,
+  },
+  {
     name: 'SignUpStart',
     component: SignUpStartScreen,
   },
@@ -153,6 +159,10 @@ export const APP_STACK_SCREENS = [
   {
     name: 'Category',
     component: CategoryScreen,
+  },
+  {
+    name: 'NewTicket',
+    component: NewTicket,
   },
 ];
 
