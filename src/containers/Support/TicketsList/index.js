@@ -29,7 +29,7 @@ const TicketsList = props => {
   const [filtersModal, setFiltersModal] = useState(false);
   const [activeFilterType, setActiveFilterType] = useState('type');
   const [typeFilter, setTypeFilter] = useState(0);
-  const [timeFilter, setTimeFilter] = useState('0');
+  const [timeFilter, setTimeFilter] = useState(180);
   const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch();
   const onEndReachedCalledDuringMomentum = useRef(true);
