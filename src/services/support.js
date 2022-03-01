@@ -2,6 +2,8 @@ import axios from 'axios';
 import {BASE_URL} from '../redux/constants/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const SUPPLIER = 'https://supplierapiqa.moglilabs.com/';
+
 export const getTickets = async ({page, days, openOnly, search}) =>
   axios.post(
     `${BASE_URL}api/ticket/list`,
@@ -22,3 +24,17 @@ export const getTickets = async ({page, days, openOnly, search}) =>
       },
     },
   );
+
+export const getCategories = async () =>
+  axios.get(`${SUPPLIER}util/ticketCategory`, {
+    headers: {
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
+
+export const getSubCategories = async id =>
+  axios.get(`${SUPPLIER}util/ticketSubCategory?parentId=${id}`, {
+    headers: {
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
