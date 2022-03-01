@@ -8,11 +8,10 @@ export const getTickets = async ({page, days, openOnly, search}) =>
   axios.post(
     `${BASE_URL}api/ticket/list`,
     {
-      page,
-      days,
+      pageNum: page,
+      daysCount: days,
       openOnly,
-      search,
-      ticketNumber: '',
+      ticketNumber: search,
       recordLimit: 30,
       supplierId: await AsyncStorage.getItem('userId'),
       orderBy: 'CREATED_AT',

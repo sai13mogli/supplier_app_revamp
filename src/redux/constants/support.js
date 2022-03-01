@@ -11,15 +11,15 @@ export const filtersTypeData = [
 
 export const filtersData = {
   type: [
-    {key: 'Openclose', title: 'Open and close'},
-    {key: 'Open', title: 'Open'},
-    {key: 'Close', title: 'Close'},
+    {key: 0, title: 'Open and close'},
+    {key: 1, title: 'Open'},
+    {key: 2, title: 'Close'},
   ],
   time: [
-    {key: '7days', title: '7 days'},
-    {key: '15days', title: '15 days'},
-    {key: '1month', title: '1 month'},
-    {key: '3months', title: '3 months'},
-    {key: '6months', title: '6 months'},
+    {key: '0', title: '7 days'},
+    {key: '15', title: '15 days'},
+    {key: '30', title: '1 month'},
+    {key: '90', title: '3 months'},
+    {key: '180', title: '6 months'},
   ],
 };

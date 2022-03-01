@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   FlatList,
@@ -6,12 +6,15 @@ import {
   ActivityIndicator,
   Dimensions,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchTickets} from '../../../redux/actions/support';
 import {STATE_STATUS} from '../../../redux/constants';
 import FilterModal from '../../../component/FilterModal';
 import {filtersTypeData, filtersData} from '../../../redux/constants/support';
+import CustomeIcon from '../../../component/common/CustomeIcon';
+import debounce from 'lodash.debounce';
 
 const TicketsList = props => {
   const ticketsList = useSelector(state => state.supportReducer.data || []);
@@ -24,9 +27,12 @@ const TicketsList = props => {
   const [initLoader, setInitLoader] = useState(true);
   const [loader, setLoader] = useState(true);
   const [filtersModal, setFiltersModal] = useState(false);
-  const [activeFilterType, setActiveFilterType] = useState('');
-  const [filterValue, setFilterValue] = useState('Open and close');
+  const [activeFilterType, setActiveFilterType] = useState('type');
+  const [typeFilter, setTypeFilter] = useState(0);
+  const [timeFilter, setTimeFilter] = useState('0');
+  const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch();
+  const onEndReachedCalledDuringMomentum = useRef(true);
 
   useEffect(() => {
     // if (ticketsStatus != STATE_STATUS.FETCHED) {
@@ -52,11 +58,30 @@ const TicketsList = props => {
   const fetchTicketListing = (pageNo, search) => {
     let fetchTicketListingObj = {
       page: pageNo,
-      days: 0,
-      openOnly: 0,
+      days: timeFilter,
+      openOnly: typeFilter,
       search: search,
     };
     dispatch(fetchTickets(fetchTicketListingObj));
+  };
+
+  //api hit for orderWay, orderBy, appliedFilter changes
+  useEffect(() => {
+    if (!loader) {
+      setLoader(true);
+      fetchTicketListing(1, '');
+    }
+  }, [typeFilter, timeFilter]);
+
+  const debouncedSave = useRef(
+    debounce(text => {
+      fetchTicketListing(1, text);
+    }, 600),
+  ).current;
+
+  const onSearchText = text => {
+    setInputValue(text);
+    debouncedSave(text);
   };
 
   const renderItem = ({item, index}) => {
@@ -114,6 +139,18 @@ const TicketsList = props => {
   const ticketListing = () => {
     return (
       <View>
+        <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
+          Search Tickets
+        </Text>
+        <TextInput
+          placeholder="Type your question here"
+          placeholderTextColor={'#A2A2A2'}
+          selectionColor={'#888'}
+          returnKeyType={'search'}
+          value={inputValue}
+          onChangeText={onSearchText}
+        />
+        <CustomeIcon name={'search'}></CustomeIcon>
         <TouchableOpacity onPress={() => setFiltersModal(true)}>
           <Text
             style={{
@@ -131,7 +168,19 @@ const TicketsList = props => {
           keyExtractor={(item, index) => `${index}-item`}
           onEndReachedThreshold={0.9}
           ListFooterComponent={renderFooter}
-          onEndReached={endReachedFetchListing}
+          style={{paddingBottom: 380}}
+          contentContainerStyle={{paddingBottom: 380}}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={10}
+          onEndReached={({distanceFromEnd}) => {
+            if (!onEndReachedCalledDuringMomentum.current) {
+              endReachedFetchListing();
+              onEndReachedCalledDuringMomentum.current = true;
+            }
+          }}
+          onMomentumScrollBegin={() => {
+            onEndReachedCalledDuringMomentum.current = false;
+          }}
           ListEmptyComponent={listEmptyComponent}
         />
       </View>
@@ -177,8 +226,10 @@ const TicketsList = props => {
           setFiltersModal={setFiltersModal}
           activeFilterType={activeFilterType}
           setActiveFilterType={setActiveFilterType}
-          filterValue={filterValue}
-          setFilterValue={setFilterValue}
+          typeFilter={typeFilter}
+          setTypeFilter={setTypeFilter}
+          timeFilter={timeFilter}
+          setTimeFilter={setTimeFilter}
         />
       )}
     </View>
