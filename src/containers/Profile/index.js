@@ -65,10 +65,16 @@ const ProfileScreen = props => {
     return profileData.verificationStatus >= progress;
   };
 
-  const isActive = (tab, route) => {
-    // if (NEXT_ACTIVE_TAB[profileData.verificationStatus] == tab) {
-    props.navigation.navigate(route);
-    // }
+  const isActive = (tab, route, tabData) => {
+    console.log(tab, profileData, tabData);
+    if (
+      NEXT_ACTIVE_TAB[profileData.verificationStatus] == tab ||
+      tabData.activity < profileData.verificationStatus
+    ) {
+      props.navigation.navigate(route, {
+        disabled: tabData.activity < profileData.verificationStatus,
+      });
+    }
   };
 
   const onLogout = async () => {
@@ -106,7 +112,7 @@ const ProfileScreen = props => {
         {PROFILE_TABS.map((tab, tabIndex) => (
           <TouchableOpacity
             key={tabIndex}
-            onPress={() => isActive(tabIndex, tab.route)}
+            onPress={() => isActive(tabIndex, tab.route, tab)}
             style={styles.profileTabWrap}>
             <View style={{flexDirection: 'row'}}>
               <View
