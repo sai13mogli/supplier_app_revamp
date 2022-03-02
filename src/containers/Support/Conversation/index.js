@@ -9,19 +9,25 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getConversation, closeTicket} from '../../../services/support';
+import {getConversation, closeTicket, reOpen} from '../../../services/support';
 import Header from '../../../component/common/Header';
 import styles from './style';
 import Colors from '../../../Theme/Colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {BASE_URL} from '../../../redux/constants';
 import RNFetchBlob from 'rn-fetch-blob';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchTickets} from '../../../redux/actions/support';
 
 const Conversation = props => {
   const [ticketId, setTicketId] = useState(props.route.params.tickedId || '');
+  const [page, setPage] = useState(props.route.params.page || 1);
+  const [days, setDays] = useState(props.route.params.days || 180);
+  const [openOnly, setOpenOnly] = useState(props.route.params.openOnly || 0);
+  const [search, setSearch] = useState(props.route.params.search || '');
   const [ticketConversation, setTicketConversation] = useState({});
   const [body, setBody] = useState('');
-
+  const dispatch = useDispatch();
   useEffect(() => {
     getTicketConversation();
   }, []);
@@ -303,7 +309,7 @@ const Conversation = props => {
         useDownloadManager: true,
         notification: true,
         description: 'Downloading file',
-        path: downloads + '/' + name + '.pdf',
+        path: downloads + '/' + name,
       },
     };
     config(options)
@@ -364,6 +370,14 @@ const Conversation = props => {
     );
   };
 
+  const listEmptyComponent = () => (
+    <TouchableOpacity onPress={() => props.navigation.navigate('NewTicket')}>
+      <Text style={{color: '#000', fontSize: 12, fontWeight: 'bold'}}>
+        Raise new Ticket
+      </Text>
+    </TouchableOpacity>
+  );
+
   //render conversation
   const renderConversation = () => {
     return (
@@ -372,14 +386,32 @@ const Conversation = props => {
         renderItem={renderItem}
         keyExtractor={(item, index) => `${index}-item`}
         ListHeaderComponent={renderListHeader()}
+        ListEmptyComponent={listEmptyComponent}
       />
     );
   };
 
   const closeOpenedTicket = async () => {
     try {
+      setTicketConversation({});
       const {data} = await closeTicket(ticketId);
-      console.log('closeticket data', data.data.message);
+      if (data && data.success) {
+        getTicketConversation();
+        fetchTicketListing();
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  const reopenTicket = async () => {
+    try {
+      setTicketConversation({});
+      const {data} = await reOpen(ticketId);
+      if (data && data.success) {
+        getTicketConversation();
+        fetchTicketListing();
+      }
     } catch (error) {
       console.log('error', error);
     }
@@ -400,13 +432,23 @@ const Conversation = props => {
       );
     } else {
       return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => reopenTicket()}>
           <Text style={{fontSize: 12, fontWeight: '500', color: '#000'}}>
             CLICK REOPEN TICKET
           </Text>
         </TouchableOpacity>
       );
     }
+  };
+
+  const fetchTicketListing = () => {
+    let fetchTicketListingObj = {
+      page: page,
+      days: days,
+      openOnly: openOnly,
+      search: search,
+    };
+    dispatch(fetchTickets(fetchTicketListingObj));
   };
 
   if (ticketConversation && ticketConversation.ticket) {
