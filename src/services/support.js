@@ -49,3 +49,11 @@ export const getConversation = async body =>
       },
     },
   );
+
+export const closeTicket = async id =>
+  axios.get(`${BASE_URL}api/ticket/close`, {
+    params: {Id: id},
+    headers: {
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });

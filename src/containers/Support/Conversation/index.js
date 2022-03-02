@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getConversation} from '../../../services/support';
+import {getConversation, closeTicket} from '../../../services/support';
 import Header from '../../../component/common/Header';
 import styles from './style';
 import Colors from '../../../Theme/Colors';
@@ -227,41 +227,101 @@ const Conversation = props => {
   const renderListHeader = () => {
     return ticketConversation && ticketConversation.ticket ? (
       <View style={{backgroundColor: 'blue'}}>
-        <TouchableOpacity>
-          <Text style={{color: '#000', fontSize: 14, fontWeight: 'bold'}}>
-            {(ticketConversation &&
+        <Text style={{color: '#000', fontSize: 14, fontWeight: 'bold'}}>
+          {(ticketConversation &&
+            ticketConversation.ticket &&
+            ticketConversation.ticket.subject) ||
+            ''}
+        </Text>
+        {ticketConversation &&
+        ticketConversation.ticket &&
+        ticketConversation.ticket.attachments &&
+        ticketConversation.ticket.attachments.length ? (
+          <TouchableOpacity
+            style={{backgroundColor: 'red'}}
+            onPress={() =>
+              downloadFile(
+                ticketConversation &&
+                  ticketConversation.ticket &&
+                  ticketConversation.ticket.attachments &&
+                  ticketConversation.ticket.attachments[0],
+              )
+            }>
+            <Text style={{color: '#fff', fontSize: 12, fontWeight: '300'}}>
+              {getFileSize(
+                ticketConversation &&
+                  ticketConversation.ticket &&
+                  ticketConversation.ticket.attachments &&
+                  ticketConversation.ticket.attachments[0].size,
+              )}
+              MB
+            </Text>
+            <Text style={{color: '#000'}}>download</Text>
+          </TouchableOpacity>
+        ) : null}
+
+        <Text style={{color: '#000', fontSize: 14, fontWeight: 'bold'}}>
+          {getDate(
+            (ticketConversation &&
               ticketConversation.ticket &&
-              ticketConversation.ticket.subject) ||
-              ''}
-          </Text>
-          <Text style={{color: '#000', fontSize: 14, fontWeight: 'bold'}}>
-            {getDate(
-              (ticketConversation &&
-                ticketConversation.ticket &&
-                ticketConversation.ticket.created_at) ||
-                '',
-            )}
-          </Text>
-        </TouchableOpacity>
+              ticketConversation.ticket.created_at) ||
+              '',
+          )}
+        </Text>
       </View>
     ) : null;
   };
 
   const downloadFile = attachment => {
+    console.log('attachment', attachment);
     const {attachment_url, content_type, name, size} = attachment;
     const {config, fs} = RNFetchBlob;
     const downloads = fs.dirs.DownloadDir;
-    return config({
-      // add this option that makes response data to be stored as a file,
-      // this is much more performant.
+    // return config({
+    //   // add this option that makes response data to be stored as a file,
+    //   // this is much more performant.
+    //   fileCache: true,
+    //   addAndroidDownloads: {
+    //     useDownloadManager: true,
+    //     notification: true,
+    //     description: 'Downloading file',
+    //     path: downloads + '/' + name + '.pdf',
+    //   },
+    // })
+    //   .fetch('GET', attachment_url)
+    //   .then(res => {
+    //     console.log('res hai dost', res);
+    //   })
+    //   .catch(e => {
+    //     console.log('err hai dost', e);
+    //   });
+
+    let options = {
       fileCache: true,
       addAndroidDownloads: {
+        //Related to the Android only
         useDownloadManager: true,
         notification: true,
         description: 'Downloading file',
         path: downloads + '/' + name + '.pdf',
       },
-    }).fetch('GET', attachment_url);
+    };
+    config(options)
+      .fetch('GET', attachment_url)
+      .then(res => {
+        //Showing alert after successful downloading
+        alert(JSON.stringify(res));
+        console.log('res -> ', JSON.stringify(res));
+        // Toast.show({
+        //   type: 'success',
+        //   text2: 'Invoice Downloaded',
+        //   visibilityTime: 2000,
+        //   autoHide: true,
+        // });
+      })
+      .catch(err => {
+        console.log(err, 'error hai');
+      });
   };
 
   const renderItem = ({item, index}) => {
@@ -316,6 +376,39 @@ const Conversation = props => {
     );
   };
 
+  const closeOpenedTicket = async () => {
+    try {
+      const {data} = await closeTicket(ticketId);
+      console.log('closeticket data', data.data.message);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  const renderOpenCloseTicket = () => {
+    if (
+      ticketConversation &&
+      ticketConversation.ticket &&
+      ticketConversation.ticket.statusText == 'Open'
+    ) {
+      return (
+        <TouchableOpacity onPress={() => closeOpenedTicket()}>
+          <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+            CLOSE TICKET
+          </Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity>
+          <Text style={{fontSize: 12, fontWeight: '500', color: '#000'}}>
+            CLICK REOPEN TICKET
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+  };
+
   if (ticketConversation && ticketConversation.ticket) {
     return (
       <View>
@@ -337,6 +430,7 @@ const Conversation = props => {
               : ''
           }
         />
+        {renderOpenCloseTicket()}
         <View
           style={{
             flexDirection: 'row',
