@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getConversation} from '../../../services/support';
 import Header from '../../../component/common/Header';
 import styles from './style';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const Conversation = props => {
   const [ticketId, setTicketId] = useState(props.route.params.tickedId || '');
@@ -194,6 +195,23 @@ const Conversation = props => {
     ) : null;
   };
 
+  const downloadFile = attachment => {
+    const {attachment_url, content_type, name, size} = attachment;
+    const {config, fs} = RNFetchBlob;
+    const downloads = fs.dirs.DownloadDir;
+    return config({
+      // add this option that makes response data to be stored as a file,
+      // this is much more performant.
+      fileCache: true,
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        description: 'Downloading file',
+        path: downloads + '/' + name + '.pdf',
+      },
+    }).fetch('GET', attachment_url);
+  };
+
   const renderItem = ({item, index}) => {
     return (
       <>
@@ -208,7 +226,8 @@ const Conversation = props => {
                 width: 90,
                 height: 50,
                 backgroundColor: 'red',
-              }}>
+              }}
+              onPress={() => downloadFile(item && item.attachments[0])}>
               <Text style={{color: '#fff', fontSize: 12, fontWeight: '300'}}>
                 {item.attachments &&
                   item.attachments[0] &&
