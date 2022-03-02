@@ -57,3 +57,11 @@ export const closeTicket = async id =>
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
   });
+
+export const reOpen = async id =>
+  axios.get(`${BASE_URL}api/ticket/reOpen`, {
+    params: {Id: id},
+    headers: {
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });

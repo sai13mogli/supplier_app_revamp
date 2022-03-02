@@ -90,6 +90,10 @@ const TicketsList = props => {
         onPress={() =>
           props.navigation.navigate('Conversation', {
             tickedId: item.id,
+            page: 1,
+            days: timeFilter,
+            openOnly: typeFilter,
+            search: '',
           })
         }>
         <View
