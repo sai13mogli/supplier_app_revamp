@@ -14,6 +14,7 @@ import {getCategories, getSubCategories} from '../../../services/support';
 import AppHeader from '../../../component/common/Header';
 
 const NewTicket = props => {
+  const [loading, setLoading] = useState(false);
   const [category, setcategory] = useState('');
   const [subCategory, setsubCategory] = useState('');
   const [businessType, setbusinessType] = useState('');
@@ -82,9 +83,9 @@ const NewTicket = props => {
       placeholder: 'Please Select a Business Type',
       onValueChange: text => setbusinessType(text),
       items: [
-        {label: 'B2B', value: 'Online'},
-        {label: 'B2C', value: 2},
-        {label: 'Both', value: 30},
+        {label: 'Enterprise', value: 'Enterprise'},
+        {label: 'Online', value: 'Online'},
+        {label: 'ABFRL', value: 'ABFRL'},
       ],
       enabled: true,
     },
@@ -140,6 +141,31 @@ const NewTicket = props => {
       validateBusinessType();
       validateExplainQuery();
     } else {
+      setLoading(true);
+      console.log([
+        {
+          name: 'categoryId',
+          data: category,
+        },
+        {
+          name: 'subCategoryId',
+          data: subCategory,
+        },
+        {
+          name: 'businessType',
+          data: businessType,
+        },
+        {
+          name: 'description',
+          data: explainQuery,
+        },
+        ...docs.map(_ => ({
+          name: 'attachments',
+          filename: _.name,
+          type: _.type,
+          data: RNFetchBlob.wrap(_.uri),
+        })),
+      ]);
       setcategoryError(false);
       setsubCategoryError(false);
       setbusinessTypeError(false);
@@ -171,7 +197,7 @@ const NewTicket = props => {
             data: explainQuery,
           },
           ...docs.map(_ => ({
-            name: 'file',
+            name: 'attachments',
             filename: _.name,
             type: _.type,
             data: RNFetchBlob.wrap(_.uri),
@@ -185,9 +211,11 @@ const NewTicket = props => {
       //   resp: res,
       //   fileData: data,
       // };
+      console.log(res);
       if (res.success) {
         props.navigation.goBack();
       }
+      setLoading(false);
     }
   };
 
@@ -213,6 +241,8 @@ const NewTicket = props => {
           onRemove={id => setdocs(docs.filter(doc => doc.id !== id))}
         />
         <CustomButton
+          loading={loading}
+          disabled={loading}
           title={'SUBMIT'}
           buttonColor={Colors.BrandColor}
           onPress={submit}
