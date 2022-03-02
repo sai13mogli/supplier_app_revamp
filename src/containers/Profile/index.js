@@ -66,9 +66,9 @@ const ProfileScreen = props => {
   };
 
   const isActive = (tab, route) => {
-    if (NEXT_ACTIVE_TAB[profileData.verificationStatus] == tab) {
-      props.navigation.navigate(route);
-    }
+    // if (NEXT_ACTIVE_TAB[profileData.verificationStatus] == tab) {
+    props.navigation.navigate(route);
+    // }
   };
 
   const onLogout = async () => {

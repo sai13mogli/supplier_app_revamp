@@ -182,19 +182,19 @@ const NewTicket = props => {
         [
           {
             name: 'categoryId',
-            data: category,
+            data: String(category),
           },
           {
             name: 'subCategoryId',
-            data: subCategory,
+            data: String(subCategory),
           },
           {
             name: 'businessType',
-            data: businessType,
+            data: String(businessType),
           },
           {
             name: 'description',
-            data: explainQuery,
+            data: String(explainQuery),
           },
           ...docs.map(_ => ({
             name: 'attachments',

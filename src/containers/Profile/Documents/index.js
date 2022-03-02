@@ -717,6 +717,7 @@ const DocumentsScreen = props => {
     );
 
     const res = await response.json();
+    console.log(res);
     // setLoader(false);
     return {
       resp: res,
