@@ -13,6 +13,12 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
   },
+  systemchatmargin: {
+    marginLeft: 10,
+  },
+  userchatmargin: {
+    marginLeft: 200,
+  },
 });
 
 export default styles;
