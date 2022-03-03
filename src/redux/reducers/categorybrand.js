@@ -22,6 +22,7 @@ const initialState = {
     status: STATE_STATUS.UNFETCHED,
   },
   selectcategories: [],
+  confirmedbrands: [],
 
   // brandsStatus: STATE_STATUS.UNFETCHED,
 
@@ -269,6 +270,12 @@ export const categorybrandReducer = (state = initialState, action) => {
       return {
         ...state,
         categories: [...payload.data],
+      };
+
+    case CATEGORY_BRAND_ACTIONS.CONFRIM_BRANDS:
+      return {
+        ...state,
+        confirmedbrands: [...payload.data],
       };
 
     case PROFILE_ACTIONS.LOGOUT:

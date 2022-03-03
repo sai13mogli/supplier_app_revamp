@@ -141,6 +141,7 @@ const CategoryScreen = props => {
         <>
           <Header
             showBack
+            navigation={props.navigation}
             showText={'Category & Brand'}
             rightIconName={'category--brand'}></Header>
           <View style={styles.searchWrapper}>

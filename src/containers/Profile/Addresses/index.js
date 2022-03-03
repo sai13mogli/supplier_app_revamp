@@ -1,24 +1,14 @@
-import React, {useState,} from 'react';
-import Header from '../../../component/common/Header'
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useState} from 'react';
+import Header from '../../../component/common/Header';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
-import {
-  createMaterialTopTabNavigator
-} from '@react-navigation/material-top-tabs';
-import {
-
-  ADDRESSES_TAB_SCREENS,
-} from '../../../constants';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {ADDRESSES_TAB_SCREENS} from '../../../constants';
 
 const Tab = createMaterialTopTabNavigator();
 
 const Addresses = props => {
-  
   const tabBarIcon = (focused, color, route, rest) => {
     let currentScreen = ADDRESSES_TAB_SCREENS.find(
       screen => screen.name === route.name,
@@ -37,28 +27,27 @@ const Addresses = props => {
   };
 
   return (
-  
-      <>
-   <Header howBack showText={'Addresses'} rightIconName={'business-details'}></Header>
-    <Tab.Navigator
-       screenOptions={({route, ...rest}) => ({
+    <>
+      <Header
+        showBack
+        navigation={props.navigation}
+        showText={'Addresses'}
+        rightIconName={'business-details'}></Header>
+      <Tab.Navigator
+        screenOptions={({route, ...rest}) => ({
           headerShown: false,
           tabBarIcon: ({focused, color}) =>
             tabBarIcon(focused, color, route, rest),
-           lazy: false,
+          lazy: false,
           safeAreaInsets: {bottom: 0},
-            })}
-        tabBarOptions={tabBarOptions}
-        
-       >
+        })}
+        tabBarOptions={tabBarOptions}>
         {ADDRESSES_TAB_SCREENS.map((screen, key) => (
           <Tab.Screen
             key={key}
             lazy={false}
             name={screen.name}
-            component={prop => (
-              <screen.component {...prop} />
-            )}
+            component={prop => <screen.component {...prop} />}
           />
         ))}
       </Tab.Navigator>
@@ -66,26 +55,23 @@ const Addresses = props => {
   );
 };
 const styles = StyleSheet.create({
+  tabText: {
+    fontSize: Dimension.font14,
+    width: '100%',
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomRobotoBold,
+    fontWeight: 'normal',
+  },
 
-tabText:{
-  fontSize: Dimension.font14,
-  width:'100%',
-  color: Colors.FontColor,
-  fontFamily: Dimension.CustomRobotoBold,
-  fontWeight:"normal"
- },
-
- tabBar: {
-  backgroundColor: '#fff',
-},
-iconAlignment: {
-  backgroundColor:"#fff",
-  width:"100%",
-  flex:1,
-  //paddingHorizontal:50
-  
-  
-},
+  tabBar: {
+    backgroundColor: '#fff',
+  },
+  iconAlignment: {
+    backgroundColor: '#fff',
+    width: '100%',
+    flex: 1,
+    //paddingHorizontal:50
+  },
 });
 
 const tabBarOptions = {

@@ -37,9 +37,11 @@ const SignUpStartScreen = props => {
   const [contactNameError, setcontactNameError] = useState(false);
   const [otpError, setotpError] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [resendOtp, setResendOtp] = useState(false);
 
   const initializeCounter = () => {
-    setTimer(30);
+    setTimer(60);
+    setResendOtp(true);
     interval = setInterval(() => {
       setTimer(timer => {
         if (timer > 0) {
@@ -73,9 +75,23 @@ const SignUpStartScreen = props => {
     } else {
       return (
         <TouchableOpacity onPress={onSendOtp} style={styles.setndOtpBtn}>
-          <Text style={styles.sendOtptext}>Send OTP</Text>
+          <Text style={styles.sendOtptext}>
+            {resendOtp ? 'Resend OTP' : 'Send OTP'}
+          </Text>
         </TouchableOpacity>
       );
+    }
+  };
+
+  const getCheckMarkView = () => {
+    if (otpVerified) {
+      return (
+        <TouchableOpacity style={styles.setndOtpBtn}>
+          <Text style={styles.sendOtptext}>ch</Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return null;
     }
   };
 
@@ -156,6 +172,7 @@ const SignUpStartScreen = props => {
       secureTextEntry: true,
       maxLength: 6,
       keyboardType: 'number-pad',
+      extraView: () => getCheckMarkView(),
       onBlur: () => onOtpBlur(),
     },
     email: {

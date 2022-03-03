@@ -48,6 +48,9 @@ const CategoryBrandScreen = props => {
   const addedBrand = useSelector(
     state => (state.categorybrandReducer || {}).brandsAdded || [],
   );
+  const confirmbrands = useSelector(
+    state => (state.categorybrandReducer || {}).confirmedbrands || [],
+  );
   const raisedBrand = useSelector(
     state => (state.categorybrandReducer || {}).brandsData || [],
   );
@@ -524,7 +527,7 @@ const CategoryBrandScreen = props => {
   const onNext = async () => {
     setNextLoader(true);
     try {
-      let mutatebrands = (addedBrand || [])
+      let mutatebrands = (confirmbrands || [])
         .filter(it => !it.isDocumentRequired && it.status)
         .map((_, i) => ({
           supplierId: supplierId,
@@ -610,14 +613,14 @@ const CategoryBrandScreen = props => {
   };
 
   const getNextStatus = () => {
-    let addedBrandCount = (addedBrand || []).filter(
+    let addedBrandCount = (confirmbrands || []).filter(
       _ => _.isDocumentRequired || !_.id,
     ).length;
     let filledData = (raisedBrand || [])
       .filter(_ => _.filled)
       .map(_ => _.filled).length;
     if (
-      addedBrand.length != 0 &&
+      confirmbrands.length != 0 &&
       addedBrandCount == filledData &&
       selectedCategories.length > 0
     ) {
@@ -632,7 +635,8 @@ const CategoryBrandScreen = props => {
   return (
     <View style={{flex: 1}}>
       <Header
-        howBack
+        showBack
+        navigation={props.navigation}
         showText={'Category & Brand'}
         rightIconName={'category--brand'}></Header>
       <ScrollView style={styles.ContainerCss}>
@@ -641,9 +645,9 @@ const CategoryBrandScreen = props => {
             .toList()
             .toArray()}
           <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
-          {(addedBrand || []).filter(_ => _.status).length ? (
+          {(confirmbrands || []).filter(_ => _.status).length ? (
             <View>
-              {addedBrand
+              {confirmbrands
                 .filter(item => item.status)
                 .map((_, i) => (
                   <View style={styles.BrandWrap}>
@@ -688,13 +692,14 @@ const CategoryBrandScreen = props => {
               </Text>
             </View>
           )}
-          {addedBrand.filter(i => !i.status).length ? (
+          {confirmbrands.filter(i => !i.status).length ? (
             <Text style={styles.brandHeadingTxt}>
               Brand you requested to add
             </Text>
           ) : null}
+
           <View>
-            {addedBrand
+            {confirmbrands
               .filter(item => !item.status)
               .map((_, i) => (
                 <View style={styles.BrandWrap}>
