@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux';
 import {deleteBulk, deleteNotification, fetchNotifications, markBulkRead, markRead} from '../../redux/actions/notifications';
 import {STATE_STATUS} from '../../redux/constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Header from '../../component/common/Header';
 
 const NotificationScreen = props => {
   const notifications = useSelector(
@@ -63,14 +64,16 @@ const NotificationScreen = props => {
   };
 
   return (
-    <View style={{flex:1, marginVertical: 12}}>
-      <Text>NotificationScreen</Text>
-      <TouchableOpacity onPress={() => dispatch(markBulkRead())}>
+
+    <View style={{flex:1,}}>
+      <Header showText={'Notifications'} rightIconName ={'notification'} />
+      
+      {/* <TouchableOpacity onPress={() => dispatch(markBulkRead())}>
         <Text style={{color: 'red'}}>Mark all read</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => dispatch(deleteBulk())}>
         <Text style={{color: 'red'}}>Clear all Notification</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <FlatList
         onEndReachedThreshold={0.9}
         onEndReached={onEndReached}

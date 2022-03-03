@@ -16,10 +16,11 @@ return (
   //leftContainerStyle={{flex:1}}
   centerComponent={{ text: props.showText, style: styles.headerTxt}}
   leftComponent={
-    <View style={styles.leftSection}>
+    props.showBack ?<View style={styles.leftSection}>
     <CustomeIcon name={'arrow-back'} size={Dimension.font20} color={colors.FontColor}></CustomeIcon>
      {/* <Text style={styles.headerTxt}>{props.showText}</Text> */}
- </View>
+ </View>:null
+    
  
     
     }
