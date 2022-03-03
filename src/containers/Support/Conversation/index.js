@@ -332,7 +332,12 @@ const Conversation = props => {
 
   const renderItem = ({item, index}) => {
     return (
-      <>
+      <View
+        style={[
+          item && item.response
+            ? styles.systemchatmargin
+            : styles.userchatmargin,
+        ]}>
         <View
           style={[item && item.response ? styles.systemchat : styles.userchat]}>
           <Text style={{color: '#fff', fontSize: 14, fontWeight: 'bold'}}>
@@ -366,7 +371,7 @@ const Conversation = props => {
         <Text style={{color: '#000', fontSize: 12, fontWeight: 'bold'}}>
           {getCreatedDate(item && item.created_at)}
         </Text>
-      </>
+      </View>
     );
   };
 
@@ -382,7 +387,7 @@ const Conversation = props => {
   const renderConversation = () => {
     return (
       <FlatList
-        data={ticketConversation && ticketConversation.conversation}
+        data={conversations}
         renderItem={renderItem}
         keyExtractor={(item, index) => `${index}-item`}
         ListHeaderComponent={renderListHeader()}
