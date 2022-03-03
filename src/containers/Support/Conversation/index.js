@@ -461,6 +461,7 @@ const Conversation = props => {
       <View>
         <Header
           showBack
+          navigation={props.navigation}
           showText={
             ticketConversation && ticketConversation.ticket
               ? `${

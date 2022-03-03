@@ -86,7 +86,7 @@ const ProfileScreen = props => {
 
   return (
     <View>
-      <Header showBack showText={'My Profile'} />
+      <Header showBack navigation={props.navigation} showText={'My Profile'} />
       <ScrollView style={styles.ContainerCss}>
         <View style={styles.UserDetailWrap}>
           <Text style={styles.UserName}>

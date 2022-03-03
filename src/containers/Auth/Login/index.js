@@ -159,7 +159,7 @@ const LoginScreen = props => {
   const logInWithGoogleToServer = async token => {
     // this.setState({loading:true})
     const request = {
-      token: token,
+      token: `${token}heheh`,
       source: Platform.OS === 'ios' ? 2 : 1,
       deviceToken: '',
     };

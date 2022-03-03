@@ -1151,6 +1151,7 @@ const DocumentsScreen = props => {
     <View style={{flex: 1}}>
       <Header
         showBack
+        navigation={props.navigation}
         showText={'Documents'}
         rightIconName={'single-product-upload'}
       />

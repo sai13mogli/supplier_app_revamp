@@ -6,7 +6,8 @@ import {
   ActivityIndicator,
   Dimensions,
   TextInput,
-  Text,TouchableOpacity
+  Text,
+  TouchableOpacity,
 } from 'react-native';
 import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
@@ -90,15 +91,15 @@ const SelectCategoryScreen = props => {
             .filter((_, i) => _.label.includes(inputValue))
             .map((item, i) => (
               <View style={styles.chekboxWrap}>
-              <Checkbox
-                checked={
-                  (selectedValues || []).find(_ => _.id == item.id)
-                    ? true
-                    : false
-                }
-                onPress={() => updateCategory(item)}
-                title={item.label}
-              />
+                <Checkbox
+                  checked={
+                    (selectedValues || []).find(_ => _.id == item.id)
+                      ? true
+                      : false
+                  }
+                  onPress={() => updateCategory(item)}
+                  title={item.label}
+                />
               </View>
             ))}
           {(categories || []).filter((_, i) => _.label.includes(inputValue))
@@ -134,31 +135,35 @@ const SelectCategoryScreen = props => {
           </View>
           {renderRight()}
           <View style={styles.bottombtnWrap}>
-        <TouchableOpacity style={styles.BrandNumWrap}>
-          <Text style={styles.BrandNumTitle}>Categories Selected</Text>
-          <Text
-            style={
-              selectedValues.length == 0 ? styles.BrandNumTxt : styles.BrandNumTxt1
-            }>
-            {selectedValues.length}
-          </Text>
-        </TouchableOpacity>
-        <View style={{flex: 1}}>
-          <CustomButton
-            title={'SUBMIT'}
-            onPress={onSubmit}
-            buttonColor={
-              selectedValues.length ? Colors.BrandColor : Colors.grayShade1
-            }
-            disabled={selectedValues.length ? false : true}
-            TextColor={ selectedValues.length ? Colors.WhiteColor : Colors.FontColor
-            }
-            borderColor={ selectedValues.length ? Colors.BrandColor : Colors.grayShade1
-            }
-            TextFontSize={Dimension.font16}
-          />
-        </View>
-      </View>
+            <TouchableOpacity style={styles.BrandNumWrap}>
+              <Text style={styles.BrandNumTitle}>Categories Selected</Text>
+              <Text
+                style={
+                  selectedValues.length == 0
+                    ? styles.BrandNumTxt
+                    : styles.BrandNumTxt1
+                }>
+                {selectedValues.length}
+              </Text>
+            </TouchableOpacity>
+            <View style={{flex: 1}}>
+              <CustomButton
+                title={'SUBMIT'}
+                onPress={onSubmit}
+                buttonColor={
+                  selectedValues.length ? Colors.BrandColor : Colors.grayShade1
+                }
+                disabled={selectedValues.length ? false : true}
+                TextColor={
+                  selectedValues.length ? Colors.WhiteColor : Colors.FontColor
+                }
+                borderColor={
+                  selectedValues.length ? Colors.BrandColor : Colors.grayShade1
+                }
+                TextFontSize={Dimension.font16}
+              />
+            </View>
+          </View>
           {/* <CustomButton
             title={`SUBMIT (${selectedValues && selectedValues.length})`}
             onPress={onSubmit}
@@ -178,14 +183,14 @@ const SelectCategoryScreen = props => {
     return renderLoader();
   };
 
-  return (<View style={{flex: 1,backgroundColor:"#fff"}}>
-    <Header
-        howBack
+  return (
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
+      <Header
+        showBack
+        navigation={props.navigation}
         showText={'Category & Brand'}
-        rightIconName={'category--brand'}>
-
-        </Header>
-    {renderCategories()}
+        rightIconName={'category--brand'}></Header>
+      {renderCategories()}
     </View>
   );
 };

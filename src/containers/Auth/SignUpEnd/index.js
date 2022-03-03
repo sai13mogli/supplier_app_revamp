@@ -22,7 +22,7 @@ const SignUpEndScreen = props => {
   const [natureOfBusinessError, setnatureOfBusinessError] = useState(false);
   const [categoryCodeError, setcategoryCodeError] = useState(false);
   const [gstinError, setgstinError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [nextLoader, setNextLoader] = useState(false);
 
   const FORM_FIELDS = new OrderedMap({
     natureOfBusiness: {
@@ -87,6 +87,7 @@ const SignUpEndScreen = props => {
   };
 
   const onSignUp = async () => {
+    setNextLoader(true);
     if (
       natureOfBusiness &&
       categoryCode &&
@@ -104,10 +105,12 @@ const SignUpEndScreen = props => {
       };
       const {data} = await signUp(body);
       if (data.success) {
+        setNextLoader(false);
         onLogin(data);
       }
       setLoading(false);
     } else {
+      setNextLoader(false);
       onGstinBlur();
       if (categoryCode && categoryCode.length) {
         setcategoryCodeError(false);
@@ -171,13 +174,14 @@ const SignUpEndScreen = props => {
       <View style={styles.bottomBtnWrap}>
         <CustomButton
           title={'SUBMIT'}
-          loading={loading}
-          disabled={loading}
           buttonColor={Colors.BrandColor}
           onPress={onSignUp}
           TextColor={Colors.WhiteColor}
           borderColor={Colors.WhiteColor}
           TextFontSize={Dimension.font16}
+          loading={nextLoader}
+          loadingColor={'#fff'}
+          disabled={nextLoader}
         />
       </View>
     </View>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -19,6 +19,7 @@ import MultiSelect from '../../../../component/common/MultiSelect';
 import {TOP_BRANDS_SCREENS} from '../../../../constants';
 import Tabs from '../../../../component/common/Tabs';
 import Header from '../../../../component/common/Header';
+import {confirmBrands} from '../../../../redux/actions/categorybrand';
 import {Tab, TabView} from 'react-native-elements';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -40,22 +41,38 @@ const BrandScreen = props => {
   const addedBrand = useSelector(
     state => (state.categorybrandReducer || {}).brandsAdded || [],
   );
+  const confirmbrands = useSelector(
+    state => (state.categorybrandReducer || {}).confirmedbrands || [],
+  );
   const [modalVisible, setModalVisible] = useState(false);
   const [index, setIndex] = useState(0);
+
+  const dispatch = useDispatch();
 
   const renderItem = ({item}) => (
     <Text style={{color: '#000'}}>{item.name}</Text>
   );
 
+  const onConfirm = () => {
+    let mutatebrands = [...addedBrand];
+    mutatebrands = mutatebrands.map((_, i) => ({
+      ..._,
+      submitted: true,
+    }));
+    dispatch(confirmBrands(mutatebrands));
+    props.navigation.navigate('CategoryBrand');
+  };
+
   return (
     <>
       <Header
-        howBack
+        showBack
+        navigation={props.navigation}
         showText={'Brand Selection'}
         rightIconName={'category--brand'}
       />
-      {/* <Tabs data={TABS.map(_ => ({..._}))} /> */}
-      <Tab
+      <Tabs data={TABS.map(_ => ({..._}))} />
+      {/* <Tab
         value={index}
         onChange={e => setIndex(e)}
         indicatorStyle={{
@@ -82,7 +99,7 @@ const BrandScreen = props => {
         <TabView.Item style={{width: '100%'}}>
           <AllBrandsScreen />
         </TabView.Item>
-      </TabView>
+      </TabView> */}
 
       <View style={styles.bottombtnWrap}>
         <TouchableOpacity style={styles.BrandNumWrap}>
@@ -181,7 +198,7 @@ const BrandScreen = props => {
                 loadingColor={'#fff'}
                 onPress={() => {
                   setModalVisible(false);
-                  props.navigation.navigate('CategoryBrand');
+                  onConfirm();
                 }}></CustomButton>
             </View>
           </View>
