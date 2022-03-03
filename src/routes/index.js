@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
+import {navigationRef} from './RootNavigation';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
@@ -105,7 +106,7 @@ const Routes = props => {
   };
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <AppStack.Navigator
         screenOptions={{
           headerShown: false,

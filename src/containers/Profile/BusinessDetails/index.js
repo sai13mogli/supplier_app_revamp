@@ -201,7 +201,7 @@ const BusinessDetailsScreen = props => {
     },
     tan: {
       title: 'TAN',
-      isImp: true,
+      isImp: false,
       label: 'TAN',
       placeholder: '',
       errorMessage: 'Enter valid tan',
