@@ -393,7 +393,14 @@ const BusinessDetailsScreen = props => {
         rightIconName={'business-details'}></Header>
       <ScrollView style={styles.ContainerCss}>
         {FORM_FIELDS.map((field, fieldKey) => (
-          <field.component {...field} key={fieldKey} />
+          <field.component
+            {...field}
+            key={fieldKey}
+            disabled={props.route.params.disabled || field.disabled}
+            enabled={
+              props.route.params.disabled ? false : true || field.enabled
+            }
+          />
         )).toList()}
       </ScrollView>
       <View style={styles.bottombtnWrap}>
