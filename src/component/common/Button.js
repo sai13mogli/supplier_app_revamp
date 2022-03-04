@@ -1,8 +1,8 @@
 import React from 'react';
 import {Button} from 'react-native-elements';
 import {StyleSheet} from 'react-native';
-import Dimension from "../../Theme/Dimension";
-import colors from "../../Theme/Colors"
+import Dimension from '../../Theme/Dimension';
+import colors from '../../Theme/Colors';
 
 const CustomButton = props => {
   const {
@@ -19,8 +19,10 @@ const CustomButton = props => {
     buttonColor,
     TextColor,
     borderColor,
-    buttonStyle
+    CustomeButtonStyle,
+    TextFontSize,
   } = props;
+
   return (
     <Button
       onPress={onPress}
@@ -34,26 +36,40 @@ const CustomButton = props => {
       disabled={disabled || loading}
       iconRight={showIcon}
       iconContainerStyle={styles.iconWrapper}
-      buttonStyle={[styles.btnStyle,{backgroundColor:buttonColor,borderColor:borderColor}],buttonStyle}
+      buttonStyle={[
+        styles.btnStyle,
+        {backgroundColor: buttonColor, borderColor: borderColor},
+      ]}
+      customeButtonStyle={CustomeButtonStyle}
       containerStyle={styles.btnWrapper}
-      titleStyle={[styles.btnTextStyle,{color:TextColor}]}
+      titleStyle={[
+        styles.btnTextStyle,
+        {color: TextColor, fontSize: TextFontSize},
+      ]}
+      disabledStyle={[
+        styles.btnStyle,
+        {backgroundColor: buttonColor, borderColor: borderColor},
+      ]}
+      disabledTitleStyle={[
+        styles.btnTextStyle,
+        {color: TextColor, fontSize: TextFontSize},
+      ]}
     />
   );
 };
 const styles = StyleSheet.create({
-  btnStyle:{
-      backgroundColor: colors.BrandColor,
-      borderWidth: 1,
-      borderRadius: 4,
+  btnStyle: {
+    backgroundColor: colors.BrandColor,
+    borderWidth: 1,
+    borderRadius: 4,
+    width: '100%',
   },
-  btnTextStyle:{
-    fontSize:Dimension.font16,
-    color:colors.WhiteColor,
-    fontFamily:Dimension.CustomMediumFont
+  btnTextStyle: {
+    fontSize: Dimension.font16,
+    color: colors.WhiteColor,
+    fontFamily: Dimension.CustomMediumFont,
   },
-  btnWrapper:{
-
-  },
-  iconWrapper:{marginLeft:Dimension.margin15},
+  btnWrapper: {},
+  iconWrapper: {marginLeft: Dimension.margin15},
 });
 export default CustomButton;

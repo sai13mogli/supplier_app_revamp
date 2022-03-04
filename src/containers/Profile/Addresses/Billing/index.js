@@ -1,49 +1,58 @@
 import React, { useEffect,useState,} from 'react';
-import {Text,View,FlatList,ScrollView, TouchableOpacity} from 'react-native';
+import {Text,View,FlatList,ScrollView, StyleSheet,TouchableOpacity} from 'react-native';
+
 import colors from "../../../../Theme/Colors"
 import {useSelector, useDispatch} from 'react-redux';
-import {fetchAddressDetails} from '../../../../redux/actions/profile';
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
 import AddressesModal from '../../../../component/common/AddressesModal';
 
-const SupportScreen = () => {
-  const [data,setData]= useState( [
-    { id: '1', lable: 'First item', checked : false},
-    { id: '2', lable: 'Second item',checked : false },
-    { id: '3', lable: 'Third item' ,checked : false},
-    { id: '4', lable: 'Fourth item' ,checked : false},
-    { id: '5', lable: 'Fifth item' ,checked : false},
-    { id: '6', lable: 'Sixth item' ,checked : false},
-    { id: '7', lable: 'Seventh item',checked : false }
-  ]);
+const Billing = () => {
+  
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const addressesData = useSelector(state => (state.profileReducer.addressesDetails.data));
-  // console.log("Daakka====>",addressesData);
-  const dispatch = useDispatch();
+  console.log("Daakka====>",addressesData);
 
-  useEffect(() => {
-      dispatch(fetchAddressDetails());
-  },[]);
-
-   const renderItems = ({item}) => (
-    <View style={{flex:1,top:60}}>
+  const renderItems = ({item}) => (
+    <View style={{flex:1,}}>
       <View style={styles.wrap}>
         <View style={styles.nameWrap}>
-        <Text style={[styles.name,{fontSize:15,}]}>Nitin Bansal</Text>
-        <Text style={styles.type}>default</Text>
+        <Text style={styles.UserNameCss}>Nitin Bansal</Text>
+        {
+          item.isDefault?
+          <Text style={styles.AddressType}>default</Text>:null
+        }
         </View>
-        <Text style={styles.addresses}>D-188,Block D ,Sector 10,Noida</Text>
-        <Text style={[styles.addresses,{top:20,fontSize:12}]}>Uttar Pardesh</Text>
+        <Text style={styles.AddressTxt}>{item.address1} ,{item.address2},{item.city}</Text>
+        <Text style={styles.AddressTxt}>{item.state},{item.pincode}</Text>
         <View style={styles.buttonWrap}>
-        <View style={styles.remove}>
-          <Text style={[styles.name,{fontSize:15,top:2}]}>Remove</Text>
-        </View> 
-        <View style={styles.remove}>
-        <Text style={[styles.name,{fontSize:15,top:2}]}>Edit</Text>
-          </View> 
+          <View style={{marginRight:15,flex:1}}>
+            <CustomButton
+            title={"REMOVE"}
+            buttonColor={colors.WhiteColor}
+           // onPress={navigateToAddresses}
+            TextColor={colors.FontColor}
+            borderColor={colors.grayShade1}
+            TextFontSize={Dimension.font14}
+            >
+
+            </CustomButton>
+          </View>
+          <View style={{flex:1}}>
+            <CustomButton
+            title={"EDIT"}
+            buttonColor={colors.WhiteColor}
+            onPress={() => setModalVisible(true)}
+            onPress={() => setModalVisible(!modalVisible)}
+            TextColor={colors.BrandColor}
+            borderColor={colors.BrandColor}
+            TextFontSize={Dimension.font14}
+            />
+          </View>
+       
         </View>
         
       </View>
@@ -52,33 +61,35 @@ const SupportScreen = () => {
 
   return (
     <View style={{flex:1}}>
-      <ScrollView indicatorStyle="white">
-       <View style={{flexDirection:'row',top:30,justifyContent:'space-between'}}>
-        <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000',left:20}}>
+      <ScrollView style={styles.ContainerCss}>
+       <View style={styles.TopWrap}>
+        <Text style={styles.Pageheading}>
           03 Billing Address
         </Text>
-        <CustomeIcon name={'add-box'} size={Dimension.font22} color={colors.BrandColor}
-        style={{left:50}} />
-        <TouchableOpacity >
-           <Text style={{fontSize: 16, fontWeight: 'bold', color: colors.BrandColor,right:20}}>
+        <View style={{flexDirection:"row"}}>
+        <CustomeIcon name={'add-circle'} size={Dimension.font18} color={colors.BrandColor} />
+        <Text style={styles.addnewtxt}>
           Add new
         </Text>
-        </TouchableOpacity>
-       
+        </View>
+        
         </View>  
           
           <FlatList
-          data={data}
+          data={addressesData}
           renderItem={renderItems}
           keyExtractor={(item, index) => index.toString()}
             />
           </ScrollView> 
+          <View style={styles.bottombtnWrap}>
             <CustomButton
-              title={'SUBMIT'}
-              buttonStyle={styles.submit}
-              // onPress={navigateToAddresses}
-              TextColor={colors.WhiteColor}
-              borderColor={colors.WhiteColor}
+               buttonColor={colors.BrandColor}
+               borderColor={colors.BrandColor }
+               TextColor={colors.WhiteColor }
+               TextFontSize={Dimension.font16}
+               title={'NEXT'}
+               loading={loading}
+              //  onPress={onSubmit}
             /> 
           <AddressesModal
            visible={modalVisible}
@@ -88,8 +99,9 @@ const SupportScreen = () => {
           />  
          
     </View>
+    </View>
     
   );
 };
 
-export default SupportScreen;
+export default Billing;

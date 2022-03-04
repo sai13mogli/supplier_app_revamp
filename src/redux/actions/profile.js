@@ -72,7 +72,6 @@ export const fetchAddressDetails = () => {
   return {
     type: PROFILE_ACTIONS.FETCH_ADDRESSES,
   };
- 
 };
 
 export const fetchedAddressDetails = data => {
@@ -95,7 +94,6 @@ export const fetchBankDetails = () => {
   return {
     type: PROFILE_ACTIONS.FETCH_BANK_DETAILS,
   };
- 
 };
 
 export const fetchedBankDetails = data => {
@@ -111,5 +109,57 @@ export const failedFetchBankDetails = error => {
   return {
     type: PROFILE_ACTIONS.FAILED_FETCH_BANK_DETAILS,
     error,
+  };
+};
+
+export const fetchTdsInfoDetails = () => {
+  return {
+    type: PROFILE_ACTIONS.FETCH_TDS_INFO_DETAILS,
+  };
+};
+
+export const fetchedTdsInfoDetails = data => {
+  return {
+    type: PROFILE_ACTIONS.FETCHED_TDS_INFO_DETAILS,
+    payload: {
+      data,
+    },
+  };
+};
+
+export const failedFetchTdsInfoDetails = error => {
+  return {
+    type: PROFILE_ACTIONS.FAILED_FETCH_TDS_INFO_DETAILS,
+    error,
+  };
+};
+
+export const fetchUpdateBankDetails = formData => {
+  return {
+    type: PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS,
+    payload: {formData},
+  };
+};
+
+export const fetchedUpdateBankDetails = (formData, data) => {
+  return {
+    type: PROFILE_ACTIONS.FETCHED_UPDATE_BANK_DETAILS,
+    payload: {
+      formData,
+      data,
+    },
+  };
+};
+
+export const failedFetchUpdateBankDetails = error => {
+  return {
+    type: PROFILE_ACTIONS.FAILED_FETCH_UPDATE_BANK_DETAILS,
+    error,
+  };
+};
+
+export const logout = () => {
+  return {
+    type: PROFILE_ACTIONS.LOGOUT,
   };
 };

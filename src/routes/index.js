@@ -8,10 +8,14 @@ import {
   View,
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
+import {navigationRef} from './RootNavigation';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {APP_STACK_SCREENS, BOTTOM_TAB_SCREENS} from '../constants/index';
-
+import {
+  APP_STACK_SCREENS,
+  AUTH_STACK_SCREENS,
+  BOTTOM_TAB_SCREENS,
+} from '../constants/index';
 
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -42,6 +46,8 @@ const navOptionHandler = () => ({
 });
 
 const Routes = props => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const tabBarIcon = (focused, color, route, rest) => {
     let currentScreen = BOTTOM_TAB_SCREENS.find(
       screen => screen.name === route.name,
@@ -70,6 +76,9 @@ const Routes = props => {
   const TabNavigator = () => {
     return (
       <Tab.Navigator
+        initialParams={{
+          setIsLoggedIn,
+        }}
         screenOptions={({route, ...rest}) => ({
           headerShown: false,
           tabBarIcon: ({focused, color}) =>
@@ -81,9 +90,15 @@ const Routes = props => {
         {BOTTOM_TAB_SCREENS.map((screen, key) => (
           <Tab.Screen
             key={key}
-            lazy={false}
+            // lazy={false}
+            params={{setIsLoggedIn}}
+            initialParams={{
+              setIsLoggedIn,
+            }}
             name={screen.name}
-            component={screen.component}
+            component={prop => (
+              <screen.component {...prop} setIsLoggedIn={setIsLoggedIn} />
+            )}
           />
         ))}
       </Tab.Navigator>
@@ -91,32 +106,57 @@ const Routes = props => {
   };
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <AppStack.Navigator
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName="HomeApp">
-        <AppStack.Screen
-          screenOptions={{
-            headerShown: false,
-          }}
-          name="HomeApp"
-          component={TabNavigator}
-          options={navOptionHandler}
-        />
-        {APP_STACK_SCREENS.map((screen, key) => (
-          <AppStack.Screen
-            key={key}
-            name={screen.name}
-            screenOptions={{
-              headerShown: false,
-            }}
-            component={screen.component}
-            // options={navOptionHandler}
-          />
-
-        ))}
+        initialRouteName="Splash">
+        {!isLoggedIn ? (
+          <>
+            {AUTH_STACK_SCREENS.map((screen, key) => (
+              <AppStack.Screen
+                key={key}
+                name={screen.name}
+                screenOptions={{
+                  headerShown: false,
+                }}
+                component={screen.component}
+                initialParams={{
+                  setIsLoggedIn,
+                }}
+              />
+            ))}
+          </>
+        ) : (
+          <>
+            <AppStack.Screen
+              screenOptions={{
+                headerShown: false,
+              }}
+              name="HomeApp"
+              component={TabNavigator}
+              options={navOptionHandler}
+              initialParams={{
+                setIsLoggedIn,
+              }}
+            />
+            {APP_STACK_SCREENS.map((screen, key) => (
+              <AppStack.Screen
+                key={key}
+                name={screen.name}
+                screenOptions={{
+                  headerShown: false,
+                }}
+                initialParams={{
+                  setIsLoggedIn,
+                }}
+                component={screen.component}
+                // options={navOptionHandler}
+              />
+            ))}
+          </>
+        )}
       </AppStack.Navigator>
     </NavigationContainer>
   );

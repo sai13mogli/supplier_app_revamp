@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Image,
   Dimensions,
+  StyleSheet,
 } from 'react-native';
 import {OrderedMap, setIn} from 'immutable';
 import CustomeIcon from '../../../component/common/CustomeIcon';
@@ -15,23 +16,36 @@ import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
-import styles from '../style';
-import {BASE_URL} from '../../../redux/constants/index';
+import styles from './style';
+import {authToken, BASE_URL} from '../../../redux/constants/index';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import CustomButton from '../../../component/common/Button';
 import Modal from 'react-native-modal';
 import PDFView from 'react-native-view-pdf';
 import Checkbox from '../../../component/common/Checkbox/index';
+import {submitProfile, getDocuments} from '../../../services/documents';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchProfile} from '../../../redux/actions/profile';
+import Header from '../../../component/common/Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const deviceWidth = Dimensions.get('window').width;
 
 const DocumentsScreen = props => {
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
+  const dispatch = useDispatch();
+
   const [pancard, setPancard] = useState({
     title: '',
     value: '',
     loading: false,
     showDoc: false,
     closeDoc: false,
+    errorState: false,
+    errorText: 'Pancard upload failed.Please try again.',
+    setUpload: true,
   });
   const [pancardError, setPancardError] = useState(false);
   const [gstin, setGstIn] = useState({
@@ -40,6 +54,9 @@ const DocumentsScreen = props => {
     loading: false,
     showDoc: false,
     closeDoc: false,
+    errorState: false,
+    errorText: 'GSTIN upload failed.Please try again.',
+    setUpload: true,
   });
   const [gstinError, setGstInError] = useState(false);
   const [cheque, setCheque] = useState({
@@ -48,6 +65,9 @@ const DocumentsScreen = props => {
     loading: false,
     showDoc: false,
     closeDoc: false,
+    errorState: false,
+    errorText: 'Cancelled Cheque upload failed.Please try again.',
+    setUpload: true,
   });
   const [chequeError, setChequeError] = useState(false);
   const [bankStatement, setBankStatement] = useState({
@@ -56,6 +76,9 @@ const DocumentsScreen = props => {
     loading: false,
     showDoc: false,
     closeDoc: false,
+    errorState: false,
+    errorText: 'Bank Statement upload failed.Please try again.',
+    setUpload: true,
   });
   const [bankStatementError, setBankStatementError] = useState(false);
   const [corporateCertificate, setCorporateCertificate] = useState({
@@ -64,6 +87,9 @@ const DocumentsScreen = props => {
     loading: false,
     showDoc: false,
     closeDoc: false,
+    errorState: false,
+    errorText: 'Corporate Certificate upload failed.Please try again.',
+    setUpload: true,
   });
   const [corpCertificateError, setCorpCertificateError] = useState(false);
   const [addressProof, setAddressProof] = useState({
@@ -72,6 +98,9 @@ const DocumentsScreen = props => {
     loading: false,
     showDoc: false,
     closeDoc: false,
+    errorState: false,
+    errorText: 'Address proof upload failed.Please try again.',
+    setUpload: true,
   });
   const [addressProofError, setAddressProofError] = useState(false);
   const [pickupAddressProof, setPickupAddressProof] = useState({
@@ -80,6 +109,9 @@ const DocumentsScreen = props => {
     loading: false,
     showDoc: false,
     closeDoc: false,
+    errorState: false,
+    errorText: 'Pickup Address proof upload failed.Please try again.',
+    setUpload: true,
   });
   const [pickupAddressProofError, setpickupAddressProofError] = useState(false);
   const [signature, setSignature] = useState({
@@ -88,7 +120,11 @@ const DocumentsScreen = props => {
     loading: false,
     showDoc: false,
     closeDoc: false,
+    errorState: false,
+    errorText: 'Signature upload failed.Please try again.',
+    setUpload: true,
   });
+
   const [signatureError, setSignatureError] = useState(false);
   const [fId, setFId] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
@@ -96,6 +132,9 @@ const DocumentsScreen = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loader, setLoader] = useState(false);
   const [isSelected, setSelection] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [submitLoader, setSubmitLoader] = useState(false);
+  const [uploadDisabled, setUploadDisabled] = useState(false);
   // const source = {uri: imageUrl, cache: true};
   // const [init, setInit] = useState(false);
   // const [eye, setEye] = useState(false);
@@ -116,8 +155,10 @@ const DocumentsScreen = props => {
       showDoc: pancard && pancard.showDoc,
       loading: pancard && pancard.loading,
       closeDoc: pancard && pancard.closeDoc,
-      errorText: 'Kindly upload your pan card',
+      errorState: pancard && pancard.errorState,
+      errorText: pancard && pancard.errorText,
       placeholder: 'Tap to Upload',
+      setUpload: pancard && pancard.setUpload,
     },
     gst_doc: {
       id: 'gst',
@@ -133,12 +174,14 @@ const DocumentsScreen = props => {
       showDoc: gstin && gstin.showDoc,
       loading: gstin && gstin.loading,
       closeDoc: gstin && gstin.closeDoc,
-      errorText: 'Kindly upload your GSTIN Document',
+      errorState: gstin && gstin.errorState,
+      errorText: gstin && gstin.errorText,
       placeholder: 'Tap to Upload',
+      setUpload: gstin && gstin.setUpload,
     },
     cancelled_cheque: {
       id: 'cheque',
-      title: 'Cancelled Cheque*',
+      title: 'Cancelled Cheque',
       state: cheque,
       errorState: chequeError,
       disabled: false,
@@ -150,8 +193,10 @@ const DocumentsScreen = props => {
       showDoc: cheque && cheque.showDoc,
       loading: cheque && cheque.loading,
       closeDoc: cheque && cheque.closeDoc,
-      errorText: 'Kindly upload your Cancelled Cheque',
+      errorState: cheque && cheque.errorState,
+      errorText: cheque && cheque.errorText,
       placeholder: 'Tap to Upload',
+      setUpload: cheque && cheque.setUpload,
     },
     bank_statement: {
       id: 'statement',
@@ -167,12 +212,14 @@ const DocumentsScreen = props => {
       showDoc: bankStatement && bankStatement.showDoc,
       loading: bankStatement && bankStatement.loading,
       closeDoc: bankStatement && bankStatement.closeDoc,
-      errorText: 'Kindly upload your Bank Statement Copy',
+      errorState: bankStatement && bankStatement.errorState,
+      errorText: bankStatement && bankStatement.errorText,
       placeholder: 'Tap to Upload',
+      setUpload: bankStatement && bankStatement.setUpload,
     },
     coroporate_certificate: {
       id: 'cc',
-      title: 'Certificate of Corporation*',
+      title: 'Certificate of Corporation',
       state: corporateCertificate,
       errorState: corpCertificateError,
       disabled: false,
@@ -184,12 +231,14 @@ const DocumentsScreen = props => {
       showDoc: corporateCertificate && corporateCertificate.showDoc,
       loading: corporateCertificate && corporateCertificate.loading,
       closeDoc: corporateCertificate && corporateCertificate.closeDoc,
-      errorText: 'Kindly upload your Certificate of Corporation',
+      errorState: corporateCertificate && corporateCertificate.errorState,
+      errorText: corporateCertificate && corporateCertificate.errorText,
       placeholder: 'Tap to Upload',
+      setUpload: corporateCertificate && corporateCertificate.setUpload,
     },
     business_address: {
       id: 'bAdd',
-      title: 'Business Address Proof*',
+      title: 'Business Address Proof',
       state: addressProof,
       errorState: addressProofError,
       disabled: false,
@@ -201,12 +250,14 @@ const DocumentsScreen = props => {
       showDoc: addressProof && addressProof.showDoc,
       loading: addressProof && addressProof.loading,
       closeDoc: addressProof && addressProof.closeDoc,
-      errorText: 'Kindly upload your Business Address Proof',
+      errorState: addressProof && addressProof.errorState,
+      errorText: addressProof && addressProof.errorText,
       placeholder: 'Tap to Upload',
+      setUpload: addressProof && addressProof.setUpload,
     },
     pickup_address: {
       id: 'pAdd',
-      title: 'Pickup Address Proof*',
+      title: 'Pickup Address Proof',
       state: pickupAddressProof,
       errorState: pickupAddressProofError,
       disabled: false,
@@ -218,12 +269,14 @@ const DocumentsScreen = props => {
       showDoc: pickupAddressProof && pickupAddressProof.showDoc,
       loading: pickupAddressProof && pickupAddressProof.loading,
       closeDoc: pickupAddressProof && pickupAddressProof.closeDoc,
-      errorText: 'Kindly upload your Pickup Address Proof',
+      errorState: pickupAddressProof && pickupAddressProof.errorState,
+      errorText: pickupAddressProof && pickupAddressProof.errorText,
       placeholder: 'Tap to Upload',
+      setUpload: pickupAddressProof && pickupAddressProof.setUpload,
     },
     sign: {
       id: 'sign',
-      title: 'Signature*',
+      title: 'Signature',
       state: signature,
       errorState: signatureError,
       disabled: false,
@@ -235,8 +288,10 @@ const DocumentsScreen = props => {
       showDoc: signature && signature.showDoc,
       loading: signature && signature.loading,
       closeDoc: signature && signature.closeDoc,
-      errorText: 'Kindly upload your Signature',
+      errorState: signature && signature.errorState,
+      errorText: signature && signature.errorText,
       placeholder: 'Tap to Upload',
+      setUpload: signature && signature.setUpload,
     },
   });
 
@@ -249,6 +304,11 @@ const DocumentsScreen = props => {
   ];
 
   useEffect(() => {
+    fetchDocuments();
+  }, []);
+
+  useEffect(() => {
+    console.log(pancard && pancard.loading);
     if (pancard && pancard.key == 'panCard' && pancard.loading) {
       uploadDocument(pancard);
     }
@@ -306,9 +366,172 @@ const DocumentsScreen = props => {
   }, [signature]);
 
   const uploadDocument = async data => {
-    let res = await uploadDocumentService(data);
+    try {
+      let res = await uploadDocumentService(data);
+      console.log('uploadDocument ka res hai bhaiii!', res);
+      let {resp} = res;
+      if (resp.error) {
+        setErrorData();
+      } else {
+        setDocument(res);
+      }
+      console.log(fId, 'fId');
+    } catch (error) {
+      console.log('err', error);
+    }
+  };
 
-    setDocument(res);
+  const fetchDocuments = async () => {
+    try {
+      let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+      const {data} = await getDocuments(token);
+      setDocumentsData(data);
+      console.log('data', data);
+    } catch (error) {
+      console.log('err', error);
+    }
+
+    // if (
+    //   data &&
+    //   data.data &&
+    //   data.data.panCard &&
+    //   data.data.gstin &&
+    //   data.data.cancelledCheque &&
+    //   data.data.corporationCertificate &&
+    //   data.data.signature
+    // ) {
+    //   setUploadDisabled(true);
+    // }
+  };
+
+  const setDocumentsData = data => {
+    console.log('data', data);
+    if (data && data.data && data.data.panCard && data.data.panCard != ' ') {
+      console.log('pancard');
+      setPancard({
+        ...pancard,
+        title: 'pan',
+        value: data.data && data.data.panCard,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+        setUpload: false,
+      });
+    }
+    if (data && data.data && data.data.gstin && data.data.gstin != ' ') {
+      console.log('gstin');
+      setGstIn({
+        ...gstin,
+        title: 'gst',
+        value: data.data && data.data.gstin,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+        setUpload: false,
+      });
+    }
+    if (
+      data &&
+      data.data &&
+      data.data.cancelledCheque &&
+      data.data.cancelledCheque != ' '
+    ) {
+      console.log('cancelledCheque');
+      setCheque({
+        ...cheque,
+        title: 'Cancelled Cheque',
+        value: data.data && data.data.cancelledCheque,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+        setUpload: false,
+      });
+    }
+
+    if (
+      data &&
+      data.data &&
+      data.data.bankStatement &&
+      data.data.bankStatement != ' '
+    ) {
+      console.log('bankStatement');
+      setBankStatement({
+        ...bankStatement,
+        title: 'Bank Statement Copy',
+        value: data.data && data.data.bankStatement,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+        setUpload: false,
+      });
+    }
+    if (
+      data &&
+      data.data &&
+      data.data.corporationCertificate &&
+      data.data.corporationCertificate != ' '
+    ) {
+      setCorporateCertificate({
+        ...corporateCertificate,
+        title: 'Certificate of Corporation',
+        value: data.data && data.data.corporationCertificate,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+        setUpload: false,
+      });
+    }
+
+    if (
+      data &&
+      data.data &&
+      data.data.businessAddress &&
+      data.data.businessAddress != ' '
+    ) {
+      setAddressProof({
+        ...addressProof,
+        title: 'Business Address Proof',
+        value: data.data && data.data.businessAddress,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+        setUpload: false,
+      });
+    }
+
+    if (
+      data &&
+      data.data &&
+      data.data.pickupAddress &&
+      data.data.pickupAddress != ' '
+    ) {
+      setPickupAddressProof({
+        ...pickupAddressProof,
+        title: 'Pickup Address Proof',
+        value: data.data && data.data.pickupAddress,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+        setUpload: false,
+      });
+    }
+
+    if (
+      data &&
+      data.data &&
+      data.data.signature &&
+      data.data.signature != ' '
+    ) {
+      setSignature({
+        ...signature,
+        title: 'Signature',
+        value: data.data && data.data.signature,
+        loading: false,
+        showDoc: true,
+        closeDoc: false,
+        setUpload: false,
+      });
+    }
   };
 
   const setDocument = ({fileData, resp}) => {
@@ -399,17 +622,81 @@ const DocumentsScreen = props => {
     }
   };
 
+  const setErrorData = () => {
+    switch (fId) {
+      case 'pancard':
+        setPancard({
+          ...pancard,
+          loading: false,
+          errorState: true,
+        });
+
+        break;
+      case 'gst':
+        setGstIn({
+          ...gstin,
+          loading: false,
+          errorState: true,
+        });
+        break;
+      case 'cheque':
+        setCheque({
+          ...cheque,
+          loading: false,
+          errorState: true,
+        });
+        break;
+      case 'statement':
+        setBankStatement({
+          ...bankStatement,
+          loading: false,
+          errorState: true,
+        });
+        break;
+      case 'cc':
+        setCorporateCertificate({
+          ...corporateCertificate,
+          loading: false,
+          errorState: true,
+        });
+        break;
+      case 'bAdd':
+        setAddressProof({
+          ...addressProof,
+          loading: false,
+          errorState: true,
+        });
+        break;
+      case 'pAdd':
+        setPickupAddressProof({
+          ...addressProof,
+          loading: false,
+          errorState: true,
+        });
+        break;
+      case 'sign':
+        setSignature({
+          ...signature,
+          loading: false,
+          errorState: true,
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
   //upload document logic
   const uploadDocumentService = async data => {
     // setLoader(true);
+    let token = `Bearer ${await AsyncStorage.getItem('token')}`;
     const url = `${BASE_URL}profile/file/upload`;
     const response = await RNFetchBlob.fetch(
       'POST',
       url,
       {
         'Content-Type': 'multipart/form-data',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MDkiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM0NzksImV4cCI6MTY0NDM4OTg3OX0.sizpT3AbsSvaUaj_0sNSbDAbI08kwBnEU85CCZSgRzK9zeaqyz6fBUyxLqWw4gFqPYRTkSk7QTZsQ496HKD_sQ',
+        Authorization: token,
       },
       [
         {
@@ -428,7 +715,9 @@ const DocumentsScreen = props => {
         },
       ],
     );
+
     const res = await response.json();
+    console.log(res);
     // setLoader(false);
     return {
       resp: res,
@@ -439,11 +728,6 @@ const DocumentsScreen = props => {
   //openSelection
   const openSelection = async selection => {
     switch (selection) {
-      case 'Camera':
-        await SheetManager.hide('action_sheet');
-        uploadFromCamera(false);
-        break;
-
       case 'File Explorer':
         await SheetManager.hide('action_sheet');
         uploadFromFileExp();
@@ -462,7 +746,7 @@ const DocumentsScreen = props => {
       const res = await DocumentPicker.pick({
         // type: [DocumentPicker],
       });
-
+      console.log('doc', res[0]);
       setFormState(res[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -476,21 +760,35 @@ const DocumentsScreen = props => {
 
   // set Id of a particular doc
   const setFormState = data => {
+    console.log(fId);
     switch (fId) {
       case 'pancard':
         setPancard({
           ...pancard,
           ...data,
+          errorState: false,
           loading: true,
           key: 'panCard',
           closeDoc: true,
         });
         break;
       case 'gst':
-        setGstIn({...gstin, ...data, loading: true, key: 'gstin'});
+        setGstIn({
+          ...gstin,
+          ...data,
+          loading: true,
+          key: 'gstin',
+          errorState: false,
+        });
         break;
       case 'cheque':
-        setCheque({...cheque, ...data, loading: true, key: 'cancelledCheque'});
+        setCheque({
+          ...cheque,
+          ...data,
+          loading: true,
+          key: 'cancelledCheque',
+          errorState: false,
+        });
         break;
       case 'statement':
         setBankStatement({
@@ -498,6 +796,7 @@ const DocumentsScreen = props => {
           ...data,
           loading: true,
           key: 'bankStatement',
+          errorState: false,
         });
         break;
       case 'cc':
@@ -506,6 +805,7 @@ const DocumentsScreen = props => {
           ...data,
           loading: true,
           key: 'corporationCertificate',
+          errorState: false,
         });
         break;
       case 'bAdd':
@@ -514,6 +814,7 @@ const DocumentsScreen = props => {
           ...data,
           loading: true,
           key: 'businessAddress',
+          errorState: false,
         });
         break;
       case 'pAdd':
@@ -522,10 +823,17 @@ const DocumentsScreen = props => {
           ...data,
           loading: true,
           key: 'pickupAddress',
+          errorState: false,
         });
         break;
       case 'sign':
-        setSignature({...signature, ...data, loading: true, key: 'signature'});
+        setSignature({
+          ...signature,
+          ...data,
+          loading: true,
+          key: 'signature',
+          errorState: false,
+        });
         break;
       default:
         break;
@@ -674,7 +982,7 @@ const DocumentsScreen = props => {
     }
   };
 
-  const openDocView = fileKey => {
+  const openDocView = async fileKey => {
     setLoader(true);
     setModalVisible(true);
     var myrequest = new XMLHttpRequest();
@@ -690,12 +998,10 @@ const DocumentsScreen = props => {
     };
     myrequest.open(
       'GET',
-      `http://apigatewayqa.moglix.com/profile/file?download=0&key=${fileKey}`,
+      `https://apigatewayqa.moglix.com/profile/file?download=0&key=${fileKey}`,
     );
-    myrequest.setRequestHeader(
-      'Authorization',
-      `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NjY2MDkiLCJyb2xlIjoiU1VQUExJRVIiLCJpYXQiOjE2NDQzMDM0NzksImV4cCI6MTY0NDM4OTg3OX0.sizpT3AbsSvaUaj_0sNSbDAbI08kwBnEU85CCZSgRzK9zeaqyz6fBUyxLqWw4gFqPYRTkSk7QTZsQ496HKD_sQ `,
-    );
+    let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+    myrequest.setRequestHeader('Authorization', token);
     myrequest.responseType = 'blob';
     myrequest.send();
     myrequest.onload = e => {
@@ -709,6 +1015,7 @@ const DocumentsScreen = props => {
       }
       if (response) {
         setLoader(false);
+        // alert('success', JSON.stringify(response));
         const fileReaderInstance = new FileReader();
         fileReaderInstance.readAsDataURL(response);
         fileReaderInstance.onload = () => {
@@ -724,8 +1031,14 @@ const DocumentsScreen = props => {
             setImageUrl(fields);
           }
         };
+      } else {
+        alert('error', JSON.stringify(response));
       }
     };
+  };
+
+  const onPress = id => {
+    SheetManager.show('action_sheet', id);
   };
 
   //render each doc
@@ -735,45 +1048,55 @@ const DocumentsScreen = props => {
     isImp,
     showDoc,
     state,
-    errorState,
     disabled,
-    errorText,
     placeholder,
     documents,
     loading,
     closeDoc,
+    errorState,
+    errorText,
+    setUpload,
   }) => {
     return (
-      <TouchableOpacity
-        onPress={() => {
-          SheetManager.show('action_sheet', id);
-        }}
-        disabled={loading}>
-        <FileUpload
-          label={title}
-          isImp={isImp}
-          value={documents && documents.title}
-          documents={documents}
-          loading={loading}
-          showDoc={showDoc}
-          onRemove={onRemove}
-          id={id}
-          fId={fId}
-          closeDoc={closeDoc}
-          openDoc={openDoc}
-        />
-      </TouchableOpacity>
+      <FileUpload
+        label={title}
+        isImp={isImp}
+        value={documents && documents.title}
+        documents={documents}
+        loading={loading}
+        showDoc={showDoc}
+        onRemove={onRemove}
+        id={id}
+        fId={fId}
+        closeDoc={closeDoc}
+        openDoc={openDoc}
+        fileUpload={2}
+        errorState={errorState}
+        errorText={errorText}
+        onPress={() => (setUpload ? onPress(id) : openDoc(id))}
+        disabled={uploadDisabled}
+        uploadDocument={() => onPress(id)}
+        setUpload={setUpload}
+      />
     );
   };
 
   const noteText = () => (
     <>
-      <Text style={{color: 'red'}}>Note</Text>
-      {noteArr.map((_, i) => (
-        <View key={i}>
-          <Text style={{color: '#000'}}>{_.note}</Text>
-        </View>
-      ))}
+      <Text style={styles.Notetxt}>Note</Text>
+      {signature && signature.title && signature.value ? (
+        <Text style={styles.NoteData}>
+          Please ensure that the im age of the signature is of the signature is
+          of an authorised signatory (as endorsed by the tax authorities).Sign
+          on a white background,scan the signature and upload.
+        </Text>
+      ) : (
+        noteArr.map((_, i) => (
+          <View key={i}>
+            <Text style={styles.NoteData}>{_.note}</Text>
+          </View>
+        ))
+      )}
     </>
   );
 
@@ -798,28 +1121,72 @@ const DocumentsScreen = props => {
     );
   };
 
+  // useEffect(() => {
+  //   if (profileData && profileData.documents) {
+  //   }
+  // }, [profileData]);
+
+  const onSubmit = async () => {
+    try {
+      setSubmitLoader(true);
+      let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+      const {data} = await submitProfile(token);
+      if (data && data.success) {
+        setSubmitLoader(false);
+        setConfirmModal(false);
+        dispatch(fetchProfile());
+        props.navigation.goBack();
+      } else {
+        setSubmitLoader(false);
+        setConfirmModal(false);
+        dispatch(fetchProfile());
+        props.navigation.goBack();
+      }
+    } catch (error) {
+      console.log('err', error);
+    }
+  };
+
   return (
-    <ScrollView>
-      {Documents.map(_ => renderInputText(_))
-        .toList()
-        .toArray()}
-      {noteText()}
-      <Text style={{color: '#000'}}>By registering you agree to our</Text>
-      <Checkbox
-        checked={isSelected}
-        onPress={() => setSelection(!isSelected)}
+    <View style={{flex: 1}}>
+      <Header
+        showBack
+        navigation={props.navigation}
+        showText={'Documents'}
+        rightIconName={'single-product-upload'}
       />
-      <CustomButton
-        title="SUBMIT"
-        buttonColor="gray"
-        disabled={!checkCommonValidation()}
-        // onPress={() => onBusinessDetailsUpdate()}
-        buttonStyle={[
-          {
-            backgroundColor: !checkCommonValidation() ? '#C4C4C4' : '#D9232D',
-          },
-        ]}
-      />
+      <ScrollView style={styles.ContainerCss}>
+        {Documents.map(_ => renderInputText(_))
+          .toList()
+          .toArray()}
+        {!uploadDisabled ? noteText() : null}
+        {!uploadDisabled ? (
+          <Checkbox
+            checked={isSelected}
+            onPress={() => setSelection(!isSelected)}
+            title={'By registering you agree to our'}
+          />
+        ) : null}
+      </ScrollView>
+      {!uploadDisabled ? (
+        <View style={styles.bottombtnWrap}>
+          <CustomButton
+            title="SUBMIT"
+            buttonColor={
+              !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
+            }
+            disabled={!checkCommonValidation()}
+            borderColor={
+              !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
+            }
+            TextColor={
+              !checkCommonValidation() ? colors.FontColor : colors.WhiteColor
+            }
+            TextFontSize={Dimension.font16}
+            onPress={() => setConfirmModal(true)}
+          />
+        </View>
+      ) : null}
 
       <ActionSheet
         id="action_sheet"
@@ -827,7 +1194,7 @@ const DocumentsScreen = props => {
           setFId(data);
         }}>
         <View style={styles.actionSheet}>
-          {['Camera', 'File Explorer', 'Cancel'].map(_ => (
+          {['File Explorer', 'Cancel'].map(_ => (
             <TouchableOpacity onPress={() => openSelection(_)}>
               <Text style={styles.modalText}>{_}</Text>
             </TouchableOpacity>
@@ -838,6 +1205,7 @@ const DocumentsScreen = props => {
       <Modal
         overlayPointerEvents={'auto'}
         isVisible={modalVisible}
+        // isVisible={true}
         onTouchOutside={() => {
           setModalVisible(false);
         }}
@@ -852,7 +1220,8 @@ const DocumentsScreen = props => {
         }}
         onBackdropPress={() => {
           setModalVisible(false);
-        }}>
+        }}
+        style={styles.ModalCss}>
         {loader ? (
           <ActivityIndicator
             size={'small'}
@@ -868,13 +1237,71 @@ const DocumentsScreen = props => {
             resourceType="base64"
           />
         ) : (
+          // <Text style={{color: 'red', fontSize: 16, fontWeight: 'bold'}}>
+          //   No Image Found!!
+          // </Text>
           <Image
             source={{uri: imageUrl}}
-            style={{height: 200, width: 200, flex: 1}}
+            style={{height: '100%', width: '100%', flex: 1}}
           />
         )}
       </Modal>
-    </ScrollView>
+      <Modal
+        overlayPointerEvents={'auto'}
+        isVisible={confirmModal}
+        //isVisible={true}
+        onTouchOutside={() => {
+          setConfirmModal(false);
+        }}
+        onDismiss={() => {
+          setConfirmModal(false);
+        }}
+        coverScreen={true}
+        deviceWidth={deviceWidth}
+        onBackButtonPress={() => {
+          setConfirmModal(false);
+        }}
+        onBackdropPress={() => {
+          setConfirmModal(false);
+        }}
+        style={styles.ModalCss}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.ModalHeading}>Confirm Submission</Text>
+          <Text style={styles.Modaltext}>
+            By confirming the submission of all the details you agree that all
+            the details are true and no false details are provided.Once
+            validated you'll receive an email regarding the status of your
+            profile
+          </Text>
+          <View style={styles.ModalBtnWrap}>
+            <View style={{flex: 1}}>
+              <CustomButton
+                title="CANCEL"
+                buttonColor={colors.WhiteColor}
+                borderColor={colors.WhiteColor}
+                TextColor={colors.FontColor}
+                TextFontSize={Dimension.font16}
+                onPress={() => setConfirmModal(false)}></CustomButton>
+            </View>
+            <View style={{flex: 1}}>
+              <CustomButton
+                title="CONFIRM"
+                buttonColor={colors.BrandColor}
+                borderColor={colors.BrandColor}
+                TextColor={colors.WhiteColor}
+                TextFontSize={Dimension.font16}
+                onPress={onSubmit}
+                loading={submitLoader}
+                loadingColor={'#fff'}
+              />
+            </View>
+          </View>
+          {/* <TouchableOpacity onPress={() => setConfirmModal(false)}>
+            <Text style={{color: '#000'}}>CANCEL</Text>
+          </TouchableOpacity> */}
+        </View>
+      </Modal>
+    </View>
   );
 };
 

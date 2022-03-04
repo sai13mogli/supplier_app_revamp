@@ -1,173 +1,238 @@
 import React, {useEffect, useState} from 'react';
-import {View,TextInput,ScrollView,FlatList,Text, TouchableOpacity,StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  ScrollView,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 //import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useNavigation} from '@react-navigation/native'
+import {useNavigation} from '@react-navigation/native';
 //import styles from './styles';
-import Dimension from "../../../Theme/Dimension";
-import colors from "../../../Theme/Colors";
+import Dimension from '../../../Theme/Dimension';
+import colors from '../../../Theme/Colors';
 import CustomeIcon from '../CustomeIcon';
-
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  addBrand,
+  removeBrand,
+  addCategory,
+  removeCategory,
+} from '../../../redux/actions/categorybrand';
 
 const MultiSelect = props => {
- 
   const [choosedList, setChoosedList] = useState([]);
   const [dataList, setDataList] = useState(props.data);
   const [customeList, setCustomeList] = useState([]);
-  const {navigate} = useNavigation()
-  const navigation = useNavigation()
+  const {navigate} = useNavigation();
+  const navigation = useNavigation();
   const [search, setSearch] = useState([]);
-  
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setData();
+  }, []);
+
+  const setData = () => {
+    let selected = props.selectedValues.map(_ => _.id);
+    let initialData = [...props.data];
+    initialData = initialData.map(_ => ({
+      ..._,
+      checked: selected.includes(_.id),
+    }));
+    setChoosedList(props.selectedValues);
+    setCustomeList(initialData);
+    setDataList(initialData);
+  };
+
   const {
     blurOnSubmit,
     onChangeText,
     value,
     placeholder,
     placeholderTextColor,
+    selectedValues,
+    onEndReachedThreshold,
+    onEndReached,
+    removeClippedSubviews,
+    maxToRenderPerBatch,
+    ListEmptyComponent,
+    ListFooterComponent,
+    onMomentumScrollBegin,
+    windowSize,
+    initialNumToRender,
+    updateCellsBatchingPeriod,
   } = props;
 
-  useEffect(()=>{
-    setDataList(props.data);
-  },[props.data])
+  useEffect(() => {
+    setData();
+  }, [props.data]);
 
-  useEffect(()=>{
-    if(dataList){
-     let dataListNow= dataList;
-     dataListNow.map(item=>{
-        item.checked = false;
-      });
-      setCustomeList(dataListNow)
-    }
-  },[dataList])
+  // useEffect(() => {
+  //   if (dataList) {
+  //     let dataListNow = dataList;
+  //     dataListNow.map(item => {
+  //       item.checked = false;
+  //     });
+  //     setCustomeList(dataListNow);
+  //   }
+  // }, [dataList]);
 
-  const onPressItem = id =>{
-    let customeListNow =[...customeList]
-    for (const item in customeListNow){
-      if(customeListNow[item].id===id){
-        if(customeListNow[item].checked === false){
-        customeListNow[item].checked = true
-        let itemChoosed = customeListNow[item]
-        setChoosedList([...choosedList, itemChoosed])
+  const onPressItem = (id, allBrands) => {
+    let customeListNow = [...customeList];
+    console.log(id, customeListNow);
+    for (const item in customeListNow) {
+      if (customeListNow[item].id === id) {
+        if (customeListNow[item].checked === false) {
+          customeListNow[item].checked = true;
+          let itemChoosed = customeListNow[item];
+          if (allBrands) {
+            dispatch(addBrand(customeListNow[item]));
+          }
+          if (props.fromCategory) {
+            dispatch(addCategory(customeListNow[item]));
+          }
+
+          setChoosedList([...choosedList, itemChoosed]);
+        } else {
+          customeListNow[item].checked = false;
+          let choosedListNow = [...choosedList].filter(item => item.id !== id);
+          if (allBrands) {
+            dispatch(removeBrand(customeListNow[item]));
+          }
+          if (props.fromCategory) {
+            dispatch(removeCategory(customeListNow[item]));
+          }
+          setChoosedList([...choosedListNow]);
+        }
       }
-      else {
-        customeListNow[item].checked = false
-        let choosedListNow = choosedList.filter(item=>item.id)
-        setChoosedList([choosedListNow])
-      }
     }
-  }
-  setCustomeList(customeListNow);
-};
+    setCustomeList(customeListNow);
+  };
 
+  // const onSearch = async () => {
+  //   var dataListNow = search
+  //   if ((customeList = search)) {
+  //     setChoosedList([dataListNow])
+  //   }
+  // }
 
-// const onSearch = async () => {
-//   var dataListNow = search
-//   if ((customeList = search)) {
-//     setChoosedList([dataListNow])
-//   } 
-// }
+  useEffect(() => {
+    props.onChangeDataChoosed(choosedList);
+  }, [choosedList]);
 
-useEffect(()=>{
-  props.onChangeDataChoosed(choosedList)
-},[choosedList])
+  // useEffect(()=>{
+  //   props.onSearchData(choosedList)
+  // },[choosedList])
 
-// useEffect(()=>{
-//   props.onSearchData(choosedList)
-// },[choosedList])
-
-
-
-
-
- const renderItem = (item,id)=>{
-   return(
-     <View>
-         <TouchableOpacity    
-          onPress={()=>onPressItem(item.item.id)} style={styles.checkboxContainer}>
-          <CustomeIcon name={ !item.item.checked? 'checkbox-blank': 'checkbox-tick'} color={ !item.item.checked? colors.FontColor:colors.BrandColor} size={Dimension.font22} 
+  const renderItem = ({item}) => {
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={() =>
+            onPressItem(
+              item.value || item.id,
+              props.fromAllBrands,
+              props.fromCategory,
+            )
+          }
+          style={styles.checkboxContainer}>
+          <CustomeIcon
+            name={!item.checked ? 'checkbox-blank' : 'checkbox-tick'}
+            color={!item.checked ? colors.FontColor : colors.BrandColor}
+            size={Dimension.font22}
           />
-          <Text style={styles.checkboxTitle}>
-          { item.item.lable}
+          <Text style={styles.CheckboxTitle}>
+            {item.label || item.name || item.categoryName}
           </Text>
-        
-        </TouchableOpacity> 
-        
-     </View>
-   )
- }
+        </TouchableOpacity>
+      </View>
+    );
+  };
   return (
-   <>
-        <View style={styles.InputWrap}>
-            <TextInput
-                  placeholderTextColor={placeholderTextColor}
-                  onChangeText={onChangeText}
-                  value={value}
-                  blurOnSubmit={blurOnSubmit}
-                  placeholder={placeholder}
-                  style={styles.inputContainerStyle}
-              
-                  
-                  >
-            </TextInput>
-              <View style={styles.IconWrap}>
-               <CustomeIcon name={'search'} size={Dimension.font20} color={colors.FontColor}></CustomeIcon>
-             </View>
+    <>
+      {!props.fromBrand ? (
+        <View style={styles.searchWrapper}>
+          <TextInput
+            placeholderTextColor={placeholderTextColor}
+            onChangeText={onChangeText}
+            value={value}
+            blurOnSubmit={blurOnSubmit}
+            placeholder={placeholder}
+            style={styles.SearchInputCss}></TextInput>
+          <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+          {/* <CustomeIcon name={'close'} style={styles.CloseIcon}></CustomeIcon>
+           */}
         </View>
-    
-        <FlatList
-            keyExtractor={(item,index) => item.toString()}
-            extraData={props.extraData}
-            data={customeList}
-            renderItem={(item,id) => (renderItem(item,id))}
-        />
-  </>
-  
+      ) : null}
+
+      <FlatList
+        // keyExtractor={(item, index) => item.toString()}
+        keyExtractor={(item, index) => index.toString()}
+        extraData={props.extraData}
+        data={customeList}
+        renderItem={renderItem}
+        onEndReachedThreshold={onEndReachedThreshold}
+        onEndReached={onEndReached}
+        removeClippedSubviews={removeClippedSubviews}
+        maxToRenderPerBatch={maxToRenderPerBatch}
+        ListEmptyComponent={ListEmptyComponent}
+        ListFooterComponent={ListFooterComponent}
+        onMomentumScrollBegin={onMomentumScrollBegin}
+        windowSize={windowSize}
+        initialNumToRender={initialNumToRender}
+        updateCellsBatchingPeriod={updateCellsBatchingPeriod}
+      />
+    </>
   );
 };
 const styles = StyleSheet.create({
-  checkboxTitle:{
-    fontSize:Dimension.font14,
-    color:colors.FontColor,
-    
-    marginHorizontal:Dimension.margin10,
-    fontFamily:Dimension.CustomRegularFont
+  CheckboxTitle: {
+    fontSize: Dimension.font16,
+    color: colors.FontColor,
+    marginLeft: Dimension.margin10,
+    fontFamily: Dimension.CustomRegularFont,
   },
-  checkboxwrapper:{
-    backgroundColor:colors.transparent,
-    
+  checkboxwrapper: {
+    backgroundColor: colors.transparent,
   },
-  checkboxContainer:{
-    
-    width:"auto",
-    flexDirection:"row"
+  checkboxContainer: {
+    width: 'auto',
+    flexDirection: 'row',
+    marginBottom: Dimension.margin8,
+  },
+  searchWrapper: {
+    marginBottom: Dimension.margin20,
+    position: 'relative',
+  },
 
-  },
-  inputContainerStyle: {
+  SearchInputCss: {
+    fontSize: Dimension.font12,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+    borderRadius: 4,
     borderWidth: 1,
     borderColor: colors.BoxBorderColor,
-    borderRadius: 4,
-    paddingHorizontal: Dimension.padding12,
-    //height: Dimension.height40,
-    paddingBottom: 0,
-    flexDirection:"row",
-    justifyContent:"space-between",
-    marginBottom:Dimension.margin10,
-    backgroundColor:colors.WhiteColor,
-    textAlignVertical:'center',
-    paddingVertical:Dimension.padding12
-    
-
+    paddingHorizontal: Dimension.padding10,
+    paddingVertical: Dimension.padding10,
   },
-  InputWrap:{
-    position:"relative"
+  seacrhIcon: {
+    position: 'absolute',
+    top: Dimension.padding12,
+    right: Dimension.padding10,
+    fontSize: Dimension.font18,
+    color: colors.FontColor,
   },
-IconWrap:{
-  position:"absolute",
-  top:0,
-  right:0,
-  height:Dimension.height40,
-  paddingVertical:Dimension.padding10,
-  paddingHorizontal:Dimension.padding12
-},
+  CloseIcon: {
+    position: 'absolute',
+    top: Dimension.padding15,
+    right: Dimension.padding20,
+    fontSize: Dimension.font18,
+    color: colors.BrandColor,
+  },
 });
 export default MultiSelect;

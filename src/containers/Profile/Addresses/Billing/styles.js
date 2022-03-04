@@ -3,56 +3,81 @@ import Colors from '../../../../Theme/Colors';
 import Dimension from '../../../../Theme/Dimension';
 
 const styles = StyleSheet.create({
+  ContainerCss:{
+    backgroundColor:Colors.WhiteColor,
+    paddingHorizontal:Dimension.padding15
+  },
  wrap:{
-   borderWidth:0.9,
-   padding:Dimension.padding2,
-   paddingHorizontal:Dimension.padding10,
-   marginHorizontal:Dimension.margin10,
-   height:Dimension.height130,
-   borderRadius:3,
-   borderColor:Colors.FontColor,
-   marginVertical:Dimension.margin8
- },
- submit:{
-  backgroundColor:Colors.BrandColor,
-  marginHorizontal:Dimensions.margin10,
- },
+   borderWidth:1,
+   padding:Dimension.padding15,
+   borderRadius:4,
+   borderColor:Colors.eyeIcon,
+   marginBottom:Dimension.margin10
+  },
+//  submit:{
+//   backgroundColor:Colors.BrandColor,
+//   marginHorizontal:Dimensions.margin10,
+//  },
  nameWrap:{
   flexDirection:'row',
-  top:10,
-  left:10
+  marginBottom:Dimension.margin5
  },
- name:{
+ UserNameCss:{
   alignSelf:'center' ,
-  fontSize:Dimension.font13
+  fontSize:Dimension.font14,
+  color:Colors.FontColor,
+  fontFamily:Dimension.CustomSemiBoldFont
  },
- type:{
+ AddressType:{
   alignSelf:'center' ,
-  left:10,
-  borderWidth:1,
-  backgroundColor:'#eeeeee',
-  borderColor:'#eeeeee',
-  fontSize:Dimension.font13
+  backgroundColor:Colors.grayShade1,
+ fontSize:Dimension.font10,
+ color:Colors.FontColor,
+  fontFamily:Dimension.CustomMediumFont,
+  marginLeft:Dimension.margin10,
+  paddingHorizontal:Dimension.padding12,
+  paddingVertical:Dimension.padding3
+
+
  },
- addresses:{
-  top:15,
-  left:10,
-  fontSize:Dimension.font13
+ AddressTxt:{
+  fontSize:Dimension.font14,
+  color:Colors.FontColor,
+  fontFamily:Dimension.CustomRegularFont,
+ 
+
  },
  buttonWrap:{
  flexDirection:'row',
  justifyContent:'space-around',
+ flex:1,
+ marginTop:Dimension.margin15
  },
- remove:{
-    borderWidth:0.9,
-    top:33,
-    padding:Dimension.padding2,
-    paddingHorizontal:Dimension.padding42,
-    height:Dimension.height30,
-    borderRadius:3,
-    borderColor:Colors.BoxBorderColor,
-    marginVertical:Dimension.margin8
- },
+
+ TopWrap:{
+  flexDirection:'row',
+  justifyContent:'space-between',
+  paddingVertical:Dimension.padding25,
+  
+
+},
+Pageheading:{
+  fontSize:Dimension.font14,
+  color:Colors.FontColor,
+  fontFamily:Dimension.CustomMediumFont,
+},
+addnewtxt:{
+  fontSize:Dimension.font14,
+  color:Colors.BrandColor,
+  fontFamily:Dimension.CustomMediumFont, 
+  marginLeft:Dimension.margin5
+},
+bottombtnWrap:{
+  padding:Dimension.padding15,
+  borderTopColor:Colors.grayShade2,
+  borderTopWidth:1,
+  backgroundColor:Colors.WhiteColor
+}
 });
 
 export default styles;
