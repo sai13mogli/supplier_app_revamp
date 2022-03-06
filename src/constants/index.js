@@ -23,6 +23,9 @@ import Billing from '../containers/Profile/Addresses/Billing';
 import CategoryScreen from '../containers/Profile/CategoryBrand/Category';
 import PopularBrandsScreen from '../containers/Profile/CategoryBrand/Brand/PopularBrands';
 import AllBrandsScreen from '../containers/Profile/CategoryBrand/Brand/AllBrands';
+import NewTicket from '../containers/Support/NewTicket';
+import Error from '../containers/Auth/Login/Error';
+import Conversation from '../containers/Support/Conversation';
 
 export const BOTTOM_TAB_SCREENS = [
   //   {
@@ -100,6 +103,10 @@ export const AUTH_STACK_SCREENS = [
     component: LoginScreen,
   },
   {
+    name: 'Error',
+    component: Error,
+  },
+  {
     name: 'SignUpStart',
     component: SignUpStartScreen,
   },
@@ -154,6 +161,14 @@ export const APP_STACK_SCREENS = [
     name: 'Category',
     component: CategoryScreen,
   },
+  {
+    name: 'NewTicket',
+    component: NewTicket,
+  },
+  {
+    name: 'Conversation',
+    component: Conversation,
+  },
 ];
 
 export const PROFILE_TABS = new OrderedMap({
@@ -162,29 +177,34 @@ export const PROFILE_TABS = new OrderedMap({
     title: 'Business Details',
     icon: 'business-details',
     progress: 2,
+    activity: 1,
   },
   category_brands: {
     route: 'CategoryBrand',
     title: 'Category & Brand',
     icon: 'category--brand',
     progress: 3,
+    activity: 2,
   },
   addresses: {
     route: 'Addresses',
     title: 'Addresses',
     icon: 'address',
     progress: 4,
+    activity: 3,
   },
   bank_details: {
     route: 'BankDetails',
     title: 'Bank Details',
     icon: 'bank-details',
     progress: 5,
+    activity: 4,
   },
   documents: {
     route: 'Documents',
     title: 'Documents',
     icon: 'single-product-upload',
     progress: 7,
+    activity: 5,
   },
 });

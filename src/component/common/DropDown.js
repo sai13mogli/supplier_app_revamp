@@ -5,10 +5,18 @@ import colors from '../../Theme/Colors';
 import {StyleSheet, View, Text} from 'react-native';
 import CustomeIcon from './CustomeIcon';
 const DropDown = props => {
-  const {items, title, selectedValue, placeholder, onValueChange, enabled} =
-    props;
+  const {
+    items,
+    title,
+    selectedValue,
+    placeholder,
+    onValueChange,
+    enabled,
+    showError,
+    errorMessage,
+  } = props;
   return (
-    <>
+    <View style={{marginBottom: Dimension.margin20}}>
       <View style={{flexDirection: 'row'}}>
         <Text style={styles.labelStyle}>{props.label}</Text>
         {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
@@ -48,7 +56,8 @@ const DropDown = props => {
           />
         </View>
       </View>
-    </>
+      {showError ? <Text style={styles.starIcon}>{errorMessage}</Text> : null}
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -71,7 +80,6 @@ const styles = StyleSheet.create({
     borderColor: colors.FontColor,
     padding: 1,
     position: 'relative',
-    marginBottom:Dimension.margin20
   },
   pickerStyle: {
     backgroundColor: colors.WhiteColor,

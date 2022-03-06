@@ -23,25 +23,7 @@ function* fetchNotification({payload: {page}}) {
     if (error) {
       yield put(failedFetchNotifications(error));
     } else {
-      yield put(
-        fetchedNotifications(page, {
-          totalPages: 1,
-          dataList: [
-            {
-              id: 1,
-              title: 'test Notif',
-              content: 'test conraedw ewdkfdhewd edwewdun dewdw',
-              readStatus: false,
-            },
-            {
-              id: 1,
-              title: 'test titlke',
-              content: 'd dwe fewf efw we weufewufew f wef ew f ew ff',
-              readStatus: true,
-            },
-          ],
-        }),
-      );
+      yield put(fetchedNotifications(page, data.data));
       // ));
     }
   } catch (error) {

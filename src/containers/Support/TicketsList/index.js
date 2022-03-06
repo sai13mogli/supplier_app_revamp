@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   FlatList,
@@ -6,12 +6,18 @@ import {
   ActivityIndicator,
   Dimensions,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchTickets} from '../../../redux/actions/support';
 import {STATE_STATUS} from '../../../redux/constants';
 import FilterModal from '../../../component/FilterModal';
 import {filtersTypeData, filtersData} from '../../../redux/constants/support';
+import CustomeIcon from '../../../component/common/CustomeIcon';
+import styles from '../style'
+import debounce from 'lodash.debounce';
+import Dimension from '../../../Theme/Dimension';
+import colors from '../../../Theme/Colors';
 
 const TicketsList = props => {
   const ticketsList = useSelector(state => state.supportReducer.data || []);
@@ -24,9 +30,12 @@ const TicketsList = props => {
   const [initLoader, setInitLoader] = useState(true);
   const [loader, setLoader] = useState(true);
   const [filtersModal, setFiltersModal] = useState(false);
-  const [activeFilterType, setActiveFilterType] = useState('');
-  const [filterValue, setFilterValue] = useState('Open and close');
+  const [activeFilterType, setActiveFilterType] = useState('type');
+  const [typeFilter, setTypeFilter] = useState(0);
+  const [timeFilter, setTimeFilter] = useState(180);
+  const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch();
+  const onEndReachedCalledDuringMomentum = useRef(true);
 
   useEffect(() => {
     // if (ticketsStatus != STATE_STATUS.FETCHED) {
@@ -52,28 +61,59 @@ const TicketsList = props => {
   const fetchTicketListing = (pageNo, search) => {
     let fetchTicketListingObj = {
       page: pageNo,
-      days: 0,
-      openOnly: 0,
+      days: timeFilter,
+      openOnly: typeFilter,
       search: search,
     };
     dispatch(fetchTickets(fetchTicketListingObj));
   };
 
+  //api hit for orderWay, orderBy, appliedFilter changes
+  useEffect(() => {
+    if (!loader) {
+      setLoader(true);
+      fetchTicketListing(1, '');
+    }
+  }, [typeFilter, timeFilter]);
+
+  const debouncedSave = useRef(
+    debounce(text => {
+      fetchTicketListing(1, text);
+    }, 600),
+  ).current;
+
+  const onSearchText = text => {
+    setInputValue(text);
+    debouncedSave(text);
+  };
+
   const renderItem = ({item, index}) => {
+    console.log(item);
     return (
-      <View
-        style={{
-          borderColor: '#000',
-          borderRadius: 4,
-          borderWidth: 0.5,
-          padding: 12,
-          marginHorizontal: 12,
-          marginTop: 12,
-        }}>
-        <Text style={{color: '#000'}}>{item.subject}</Text>
-        <Text style={{color: '#000'}}>Ticket ID: {item.id}</Text>
-        <Text style={{color: '#000'}}>{item.statusText}</Text>
-      </View>
+      <TouchableOpacity
+        onPress={() =>
+          props.navigation.navigate('Conversation', {
+            tickedId: item.id,
+            page: 1,
+            days: timeFilter,
+            openOnly: typeFilter,
+            search: '',
+          })
+          
+        }
+        style={styles.TicketOuterWrap}>
+        <View style={styles.TicketTopWrap}>
+        <Text style={styles.ticketStatus}>{item.statusText}</Text>
+        <Text style={styles.ticketIdTxt}>Ticket ID: {item.id}</Text>
+          <View style={styles.TicketTypeWrap}>
+            <Text style={styles.tickettypetxt}>Ticket Type</Text>
+          </View>
+        </View>
+        <View style={styles.ticketBottomWrap}>
+        <Text style={styles.ticketSubTxt}>{item.subject}</Text>
+        <Text style={styles.TicketDate}>Date</Text>
+        </View>
+      </TouchableOpacity>
     );
   };
 
@@ -114,24 +154,50 @@ const TicketsList = props => {
   const ticketListing = () => {
     return (
       <View>
-        <TouchableOpacity onPress={() => setFiltersModal(true)}>
-          <Text
-            style={{
-              color: '#000',
-              fontSize: 14,
-              fontWeight: 'bold',
-              marginTop: 50,
-            }}>
+        <Text style={styles.SearchTicketTxt}>
+          Search Tickets
+        </Text>
+        <View style={styles.searchWrapper}>
+        <TextInput
+          placeholder="Type your question here"
+          placeholderTextColor={'#A2A2A2'}
+          selectionColor={'#888'}
+          returnKeyType={'search'}
+          value={inputValue}
+          onChangeText={onSearchText}
+          style={styles.SearchInputCss}
+        />
+        <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+        </View>
+        <View style={styles.filterRowWrap}>
+          <Text style={styles.ticketTxt}>Tickets</Text>
+          <TouchableOpacity onPress={() => setFiltersModal(true)} style={styles.filterBtn}>
+          <CustomeIcon name={'filter-fill'} size={Dimension.font20} color={colors.FontColor}></CustomeIcon>
+          <Text style={styles.filterTxt}>
             Filters
           </Text>
         </TouchableOpacity>
+        </View>
+        
         <FlatList
           data={ticketsList}
           renderItem={renderItem}
           keyExtractor={(item, index) => `${index}-item`}
           onEndReachedThreshold={0.9}
           ListFooterComponent={renderFooter}
-          onEndReached={endReachedFetchListing}
+          style={{paddingBottom: 380}}
+          contentContainerStyle={{paddingBottom: 380}}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={10}
+          onEndReached={({distanceFromEnd}) => {
+            if (!onEndReachedCalledDuringMomentum.current) {
+              endReachedFetchListing();
+              onEndReachedCalledDuringMomentum.current = true;
+            }
+          }}
+          onMomentumScrollBegin={() => {
+            onEndReachedCalledDuringMomentum.current = false;
+          }}
           ListEmptyComponent={listEmptyComponent}
         />
       </View>
@@ -169,7 +235,7 @@ const TicketsList = props => {
   };
 
   return (
-    <View>
+    <View style={styles.ticketListContainer}>
       {renderListing()}
       {filtersModal && (
         <FilterModal
@@ -177,8 +243,10 @@ const TicketsList = props => {
           setFiltersModal={setFiltersModal}
           activeFilterType={activeFilterType}
           setActiveFilterType={setActiveFilterType}
-          filterValue={filterValue}
-          setFilterValue={setFilterValue}
+          typeFilter={typeFilter}
+          setTypeFilter={setTypeFilter}
+          timeFilter={timeFilter}
+          setTimeFilter={setTimeFilter}
         />
       )}
     </View>

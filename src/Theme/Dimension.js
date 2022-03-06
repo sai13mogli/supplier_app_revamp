@@ -178,7 +178,9 @@ const Dimension = {
   padding95: normalize(95),
   padding100: normalize(100),
   padding110: normalize(110),
+  padding140: normalize(140),
 
+  
   width50: normalize(50),
   width55: normalize(55),
 

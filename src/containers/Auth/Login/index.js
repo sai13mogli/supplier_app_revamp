@@ -166,6 +166,10 @@ const LoginScreen = props => {
     const {data} = await loginWithGoogle(request);
     if (data.success) {
       onLogin(data);
+    } else {
+      props.navigation.navigate('Error', {
+        email,
+      });
     }
   };
 

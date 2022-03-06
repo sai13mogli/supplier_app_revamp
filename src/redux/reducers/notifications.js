@@ -1,7 +1,7 @@
 import {STATE_STATUS} from '../constants/index';
 import {NOTIFICATIONS_ACTIONS} from '../constants/notifications';
 import {PROFILE_ACTIONS} from '../constants/profile';
-
+import {OrderedMap} from 'immutable';
 const initialState = {
   status: STATE_STATUS.UNFETCHED,
   data: [],
@@ -9,11 +9,49 @@ const initialState = {
   page: 0,
 };
 
+const getTime = time => {
+  let months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sept',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  let date = new Date(time);
+  let currentDate = new Date();
+  if (currentDate.getFullYear() == date.getFullYear()) {
+    if (currentDate.getMonth() == date.getMonth()) {
+      if (currentDate.getDate() == date.getDate()) {
+        return `Today`;
+      } else if (currentDate.getDate() - date.getDate() == 1) {
+        return `Yesterday`;
+      } else {
+        return `${date.getDate()} ${
+          months[date.getMonth()]
+        } ${date.getFullYear()}`;
+      }
+    } else {
+      return `${date.getDate()} ${
+        months[date.getMonth()]
+      } ${date.getFullYear()}`;
+    }
+  } else {
+    return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+  }
+};
+
 export const notificationsReducer = (state = initialState, action) => {
   const {type, payload, error} = action;
   switch (type) {
     case NOTIFICATIONS_ACTIONS.FETCH_NOTIFICATIONS:
-      if (payload.page == 0) {
+      if (payload.page == 1) {
         return {
           data: [],
           page: payload.page,
@@ -27,19 +65,44 @@ export const notificationsReducer = (state = initialState, action) => {
         };
       }
     case NOTIFICATIONS_ACTIONS.FETCHED_NOTIFICATIONS:
-      if (payload.page == 0) {
+      let newData =
+        payload.page == 1
+          ? payload.data.dataList
+          : [...state.data, ...payload.data.dataList];
+      let groupedObj = {};
+      newData = newData.map(_ => {
+        if (groupedObj[`${getTime(_.createdAt)}`]) {
+          groupedObj[`${getTime(_.createdAt)}`] = [
+            ...groupedObj[`${getTime(_.createdAt)}`],
+            _,
+          ];
+        } else {
+          groupedObj[`${getTime(_.createdAt)}`] = [];
+          groupedObj[`${getTime(_.createdAt)}`] = [
+            ...groupedObj[`${getTime(_.createdAt)}`],
+            _,
+          ];
+        }
+      });
+
+      groupedObj = new OrderedMap(groupedObj).toList().toArray();
+      groupedObj = groupedObj.map(_ => ({
+        title: getTime(_[0].createdAt),
+        data: _,
+      }));
+      if (payload.page == 1) {
         return {
           ...state,
           maxPage: payload.data.totalPages,
           status: STATE_STATUS.FETCHED,
-          data: payload.data.dataList,
+          data: groupedObj,
         };
       } else {
         return {
           ...state,
           maxPage: payload.data.totalPages,
           status: STATE_STATUS.FETCHED,
-          data: [...state.data, ...payload.data.dataList],
+          data: groupedObj,
         };
       }
     case NOTIFICATIONS_ACTIONS.FAILED_FETCH_NOTIFICATIONS:
