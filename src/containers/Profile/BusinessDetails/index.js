@@ -201,7 +201,7 @@ const BusinessDetailsScreen = props => {
     },
     tan: {
       title: 'TAN',
-      isImp: true,
+      isImp: false,
       label: 'TAN',
       placeholder: '',
       errorMessage: 'Enter valid tan',
@@ -388,7 +388,8 @@ const BusinessDetailsScreen = props => {
   return (
     <View style={{flex: 1}}>
       <Header
-        howBack
+        showBack
+        navigation={props.navigation}
         showText={'Business Details'}
         rightIconName={'business-details'}></Header>
       <ScrollView style={styles.ContainerCss}>

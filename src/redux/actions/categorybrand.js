@@ -181,3 +181,12 @@ export const failedFetchCategoriesBrands = error => {
     error,
   };
 };
+
+export const confirmBrands = data => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.CONFRIM_BRANDS,
+    payload: {
+      data,
+    },
+  };
+};

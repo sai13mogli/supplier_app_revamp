@@ -89,6 +89,8 @@ const PopularBrandsScreen = props => {
     }
   }, [popularCategories]);
 
+  console.log('activeId', activeId);
+
   useEffect(() => {
     if (brandsStatus == STATE_STATUS.FETCHED) {
       let currId = popularCategories && popularCategories[0];
@@ -124,7 +126,7 @@ const PopularBrandsScreen = props => {
   const renderRight = () => {
     if (brands && brands[activeId] && brands[activeId].length) {
       return (
-        <ScrollView style={{marginBottom:100}}>
+        <ScrollView style={{marginBottom: 100}}>
           {((brands && brands[activeId]) || [])
             .filter((_, i) => _.name.includes(inputValue))
             .map((item, i) => (
@@ -171,10 +173,7 @@ const PopularBrandsScreen = props => {
       return (
         <>
           <View style={styles.Wrapper}>
-            <ScrollView 
-              style={styles.leftPart}>
-                {renderLeft()}
-                </ScrollView>
+            <ScrollView style={styles.leftPart}>{renderLeft()}</ScrollView>
             <View style={styles.rightPart}>
               <View style={styles.searchWrapper}>
                 <TextInput
@@ -201,7 +200,11 @@ const PopularBrandsScreen = props => {
     return renderLoader();
   };
 
-  return <View style={{backgroundColor:"#fff",flex:1}}>{renderCategoriesBrands()}</View>;
+  return (
+    <View style={{backgroundColor: '#fff', flex: 1}}>
+      {renderCategoriesBrands()}
+    </View>
+  );
 };
 
 export default PopularBrandsScreen;
