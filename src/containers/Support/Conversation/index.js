@@ -5,7 +5,7 @@ import {
   Dimensions,
   TouchableOpacity,
   TextInput,
-  FlatList,
+  FlatList,Image
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,6 +18,8 @@ import {BASE_URL} from '../../../redux/constants';
 import RNFetchBlob from 'rn-fetch-blob';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchTickets} from '../../../redux/actions/support';
+import Dimension from '../../../Theme/Dimension';
+import CustomeIcon from '../../../component/common/CustomeIcon';
 
 const Conversation = props => {
   const [ticketId, setTicketId] = useState(props.route.params.tickedId || '');
@@ -232,14 +234,14 @@ const Conversation = props => {
 
   const renderListHeader = () => {
     return ticketConversation && ticketConversation.ticket ? (
-      <View style={{backgroundColor: 'blue'}}>
-        <Text style={{color: '#000', fontSize: 14, fontWeight: 'bold'}}>
+      <View style={styles.headerListInnerWrap}>
+        <Text style={styles.HeaderTicketTxt}>
           {(ticketConversation &&
             ticketConversation.ticket &&
             ticketConversation.ticket.subject) ||
             ''}
         </Text>
-        {ticketConversation &&
+        {/* {ticketConversation &&
         ticketConversation.ticket &&
         ticketConversation.ticket.attachments &&
         ticketConversation.ticket.attachments.length ? (
@@ -264,9 +266,9 @@ const Conversation = props => {
             </Text>
             <Text style={{color: '#000'}}>download</Text>
           </TouchableOpacity>
-        ) : null}
+        ) : null} */}
 
-        <Text style={{color: '#000', fontSize: 14, fontWeight: 'bold'}}>
+        <Text style={styles.HeaderTicketDate}>
           {getDate(
             (ticketConversation &&
               ticketConversation.ticket &&
@@ -335,28 +337,25 @@ const Conversation = props => {
       <View
         style={[
           item && item.response
-            ? styles.systemchatmargin
-            : styles.userchatmargin,
+            ? styles.systemChatWrap
+            : styles.userchatmWrap,
         ]}>
         <View
           style={[item && item.response ? styles.systemchat : styles.userchat]}>
-          <Text style={{color: '#fff', fontSize: 14, fontWeight: 'bold'}}>
+          <Text style={[item && item.response ? styles.systemchatTxt : styles.userchatTxt]}>
             {item.body_text}
           </Text>
           {item && item.attachments && item.attachments.length ? (
             <TouchableOpacity
-              style={{
-                width: 90,
-                height: 50,
-                backgroundColor: 'red',
-              }}
+              style={styles.DocDownWrapBtn}
               onPress={() => downloadFile(item && item.attachments[0])}>
-              <Text style={{color: '#fff', fontSize: 12, fontWeight: '300'}}>
+                <View style={{flex:1}}>
+                <Text style={styles.DocName} numberOfLines={1}>
                 {item.attachments &&
                   item.attachments[0] &&
                   item.attachments[0].name}
               </Text>
-              <Text style={{color: '#fff', fontSize: 12, fontWeight: '300'}}>
+              <Text style={styles.DocName}>
                 {getFileSize(
                   item.attachments &&
                     item.attachments[0] &&
@@ -364,11 +363,16 @@ const Conversation = props => {
                 )}
                 MB
               </Text>
-              <Text style={{color: '#000'}}>download</Text>
+                </View>
+                <View style={{flex:1,flexDirection:"row",alignItems:"center",justifyContent:"flex-end"}}>
+                <CustomeIcon name={'download'} color={Colors.BrandColor} size={Dimension.font16}></CustomeIcon>
+              <Text style={styles.DownloadTxt}>Download</Text>
+
+              </View>
             </TouchableOpacity>
           ) : null}
         </View>
-        <Text style={{color: '#000', fontSize: 12, fontWeight: 'bold'}}>
+        <Text style={[item && item.response ? styles.systemchatDate : styles.userchatDate]}>
           {getCreatedDate(item && item.created_at)}
         </Text>
       </View>
@@ -390,7 +394,7 @@ const Conversation = props => {
         data={conversations}
         renderItem={renderItem}
         keyExtractor={(item, index) => `${index}-item`}
-        ListHeaderComponent={renderListHeader()}
+        //ListHeaderComponent={renderListHeader()}
         ListEmptyComponent={listEmptyComponent}
       />
     );
@@ -429,18 +433,20 @@ const Conversation = props => {
       ticketConversation.ticket.statusText == 'Open'
     ) {
       return (
-        <TouchableOpacity onPress={() => closeOpenedTicket()}>
-          <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
-            CLOSE TICKET
+        <TouchableOpacity onPress={() => closeOpenedTicket()} style={styles.ticketStatusBtn}>
+          <Text style={styles.ticketstatusTxt}>
+          CLICK TO CLOSE THE TICKET
           </Text>
+          <CustomeIcon name={'arrow-forward'} color={Colors.FontColor} size={Dimension.font20}></CustomeIcon>
         </TouchableOpacity>
       );
     } else {
       return (
-        <TouchableOpacity onPress={() => reopenTicket()}>
-          <Text style={{fontSize: 12, fontWeight: '500', color: '#000'}}>
-            CLICK REOPEN TICKET
+        <TouchableOpacity onPress={() => reopenTicket()} style={styles.ticketStatusBtn}>
+          <Text style={styles.ticketstatusTxt}>
+          CLICK TO REOPEN THE TICKET
           </Text>
+          <CustomeIcon name={'arrow-forward'} color={Colors.FontColor} size={Dimension.font20}></CustomeIcon>
         </TouchableOpacity>
       );
     }
@@ -458,7 +464,7 @@ const Conversation = props => {
 
   if (ticketConversation && ticketConversation.ticket) {
     return (
-      <View>
+      <View style={styles.ContainerCss}>
         <Header
           showBack
           navigation={props.navigation}
@@ -478,37 +484,33 @@ const Conversation = props => {
               : ''
           }
         />
+        <View style={styles.headerListWrap}>
+        {renderListHeader()}
         {renderOpenCloseTicket()}
+        </View>
+        
+        
+        {renderConversation()}
+        
         <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            borderColor: '#000',
-            borderWidth: 0.6,
-            borderRadius: 4,
-            margin: 12,
-          }}>
+          style={styles.InputWrap}>
           <TextInput
             placeholder="Type message"
-            placeholderTextColor={'#ccc'}
+            placeholderTextColor={'#78849E'}
             value={body}
             onChangeText={text => setBody(text)}
-            style={{width: '78%', padding: 8, color: '#000'}}
+            style={styles.InputCss}
           />
           <TouchableOpacity
             disabled={!body}
             onPress={onReply}
-            style={{margin: 4, padding: 8, backgroundColor: Colors.BrandColor}}>
-            <Icon
-              name={'chevron-right'}
-              size={20}
-              style={{color: '#fff', alignSelf: 'center'}}
-              color={'#fff'}
-            />
+            style={styles.SendBtn}>
+            <Image
+          source={require('../../../assets/images/Send.png')}
+          style={{height: Dimension.width22, width: Dimension.width22,}}
+        />
           </TouchableOpacity>
         </View>
-        {renderConversation()}
       </View>
     );
   } else {
