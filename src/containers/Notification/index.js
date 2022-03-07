@@ -17,6 +17,7 @@ import {
 } from '../../redux/actions/notifications';
 import {STATE_STATUS} from '../../redux/constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Header from '../../component/common/Header';
 
 const NotificationScreen = props => {
   const notifications = useSelector(
@@ -118,6 +119,7 @@ const NotificationScreen = props => {
 
   return (
     <View style={{flex: 1, marginVertical: 12}}>
+      <Header showText={'Notifications'} rightIconName ={'notification'} />
       <Text>NotificationScreen</Text>
       <TouchableOpacity onPress={() => dispatch(markBulkRead())}>
         <Text style={{color: 'red'}}>Mark all read</Text>

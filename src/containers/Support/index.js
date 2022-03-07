@@ -4,14 +4,18 @@ import CustomButton from '../../component/common/Button';
 import Colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
 import TicketsList from './TicketsList';
-
+import Header from '../../component/common/Header';
+import styles from './style';
 const SupportScreen = props => {
   return (
-    <View>
-      <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
-        SupportScreen
-      </Text>
-      <CustomButton
+    <>
+    <View style={{flex:1}}>
+       <Header showText={'Support'} showBack />
+     <TicketsList navigation={props.navigation} />
+      
+    </View>
+    <View style={styles.BottomWrap}>
+    <CustomButton
         title={'New Ticket'}
         buttonColor={Colors.BrandColor}
         onPress={() => props.navigation.navigate('NewTicket')}
@@ -19,8 +23,8 @@ const SupportScreen = props => {
         borderColor={Colors.WhiteColor}
         TextFontSize={Dimension.font16}
       />
-      <TicketsList navigation={props.navigation} />
     </View>
+    </>
   );
 };
 

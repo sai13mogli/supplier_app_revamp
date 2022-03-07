@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView} from 'react-native';
+import {ScrollView,StyleSheet, View} from 'react-native';
 import {OrderedMap} from 'immutable';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import DropDown from '../../../component/common/DropDown';
@@ -220,14 +220,14 @@ const NewTicket = props => {
   };
 
   return (
-    <>
+    <View style={{flex:1}}>
       <AppHeader
         showBack
         navigation={props.navigation}
         showText={'New Ticket'}
         // rightIconName={'category--brand'}
       />
-      <ScrollView style={{padding: 12}}>
+      <ScrollView style={styles.ContainerCss}>
         {FORM_FIELDS.map((field, fieldKey) => (
           <field.component key={fieldKey} {...field} />
         )).toList()}
@@ -240,6 +240,9 @@ const NewTicket = props => {
           onUpload={doc => setdocs([...docs, doc])}
           onRemove={id => setdocs(docs.filter(doc => doc.id !== id))}
         />
+       
+      </ScrollView>
+      <View style={styles.BottomWrap}> 
         <CustomButton
           loading={loading}
           disabled={loading}
@@ -249,10 +252,19 @@ const NewTicket = props => {
           TextColor={Colors.WhiteColor}
           borderColor={Colors.WhiteColor}
           TextFontSize={Dimension.font16}
-        />
-      </ScrollView>
-    </>
+        /></View>
+    </View>
   );
 };
-
+const styles = StyleSheet.create({
+  ContainerCss:{
+      backgroundColor:Colors.WhiteColor,
+      paddingHorizontal:Dimension.padding15,
+      
+  },
+  BottomWrap: {borderTopWidth: 1,
+    borderTopColor: Colors.grayShade2,
+    padding: Dimension.padding15,
+    backgroundColor: Colors.WhiteColor,}
+})
 export default NewTicket;

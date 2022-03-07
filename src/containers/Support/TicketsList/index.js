@@ -14,7 +14,10 @@ import {STATE_STATUS} from '../../../redux/constants';
 import FilterModal from '../../../component/FilterModal';
 import {filtersTypeData, filtersData} from '../../../redux/constants/support';
 import CustomeIcon from '../../../component/common/CustomeIcon';
+import styles from '../style'
 import debounce from 'lodash.debounce';
+import Dimension from '../../../Theme/Dimension';
+import colors from '../../../Theme/Colors';
 
 const TicketsList = props => {
   const ticketsList = useSelector(state => state.supportReducer.data || []);
@@ -85,6 +88,7 @@ const TicketsList = props => {
   };
 
   const renderItem = ({item, index}) => {
+    console.log(item);
     return (
       <TouchableOpacity
         onPress={() =>
@@ -95,19 +99,19 @@ const TicketsList = props => {
             openOnly: typeFilter,
             search: '',
           })
-        }>
-        <View
-          style={{
-            borderColor: '#000',
-            borderRadius: 4,
-            borderWidth: 0.5,
-            padding: 12,
-            marginHorizontal: 12,
-            marginTop: 12,
-          }}>
-          <Text style={{color: '#000'}}>{item.subject}</Text>
-          <Text style={{color: '#000'}}>Ticket ID: {item.id}</Text>
-          <Text style={{color: '#000'}}>{item.statusText}</Text>
+          
+        }
+        style={styles.TicketOuterWrap}>
+        <View style={styles.TicketTopWrap}>
+        <Text style={styles.ticketStatus}>{item.statusText}</Text>
+        <Text style={styles.ticketIdTxt}>Ticket ID: {item.id}</Text>
+          <View style={styles.TicketTypeWrap}>
+            <Text style={styles.tickettypetxt}>Ticket Type</Text>
+          </View>
+        </View>
+        <View style={styles.ticketBottomWrap}>
+        <Text style={styles.ticketSubTxt}>{item.subject}</Text>
+        <Text style={styles.TicketDate}>Date</Text>
         </View>
       </TouchableOpacity>
     );
@@ -150,9 +154,10 @@ const TicketsList = props => {
   const ticketListing = () => {
     return (
       <View>
-        <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
+        <Text style={styles.SearchTicketTxt}>
           Search Tickets
         </Text>
+        <View style={styles.searchWrapper}>
         <TextInput
           placeholder="Type your question here"
           placeholderTextColor={'#A2A2A2'}
@@ -160,19 +165,20 @@ const TicketsList = props => {
           returnKeyType={'search'}
           value={inputValue}
           onChangeText={onSearchText}
+          style={styles.SearchInputCss}
         />
-        <CustomeIcon name={'search'}></CustomeIcon>
-        <TouchableOpacity onPress={() => setFiltersModal(true)}>
-          <Text
-            style={{
-              color: '#000',
-              fontSize: 14,
-              fontWeight: 'bold',
-              marginTop: 50,
-            }}>
+        <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+        </View>
+        <View style={styles.filterRowWrap}>
+          <Text style={styles.ticketTxt}>Tickets</Text>
+          <TouchableOpacity onPress={() => setFiltersModal(true)} style={styles.filterBtn}>
+          <CustomeIcon name={'filter-fill'} size={Dimension.font20} color={colors.FontColor}></CustomeIcon>
+          <Text style={styles.filterTxt}>
             Filters
           </Text>
         </TouchableOpacity>
+        </View>
+        
         <FlatList
           data={ticketsList}
           renderItem={renderItem}
@@ -229,7 +235,7 @@ const TicketsList = props => {
   };
 
   return (
-    <View>
+    <View style={styles.ticketListContainer}>
       {renderListing()}
       {filtersModal && (
         <FilterModal

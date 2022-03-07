@@ -33,6 +33,7 @@ import {
   fetchedTdsInfoDetails,
   fetchProfile,
 } from '../actions/profile';
+import * as RootNavigation from '../../routes/RootNavigation';
 
 function* fetchBusinessDetails() {
   try {
@@ -87,6 +88,9 @@ function* fetchUserProfile({}) {
       yield put(failedFetchProfile(error));
     } else {
       yield put(fetchedProfile(data.data));
+      if (data.data.verificationStatus < 10) {
+        RootNavigation.navigate('Profile');
+      }
     }
   } catch (error) {
     yield put(failedFetchProfile(error));

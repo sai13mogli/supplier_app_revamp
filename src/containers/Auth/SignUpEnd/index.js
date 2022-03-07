@@ -96,6 +96,7 @@ const SignUpEndScreen = props => {
       gstin.length >= 15 &&
       gstin.match(gstinRegex)
     ) {
+      setLoading(true);
       let body = {
         ...props.route.params,
         natureOfBusiness,
@@ -107,6 +108,7 @@ const SignUpEndScreen = props => {
         setNextLoader(false);
         onLogin(data);
       }
+      setLoading(false);
     } else {
       setNextLoader(false);
       onGstinBlur();

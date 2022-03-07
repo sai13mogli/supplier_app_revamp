@@ -12,7 +12,7 @@ const AppHeader = props => {
       barStyle="dark-content"
       placement="left"
       elevated={false}
-      containerStyle={{paddingVertical: Dimension.padding25}}
+      containerStyle={{paddingVertical: Dimension.padding15}}
       //leftContainerStyle={{flex:1}}
       centerComponent={{text: props.showText, style: styles.headerTxt}}
       leftComponent={

@@ -12,10 +12,11 @@ import {
   Button,
   Dimensions,
 } from 'react-native';
-import colors from '../Theme/Colors';
+import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import DotCheckbox from './common/Checkbox';
 import CustomSlider from './CustomSlider';
+import CustomeIcon from './common/CustomeIcon'
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -32,20 +33,24 @@ const FilterModal = props => {
   const renderRight = () => {
     if (props.activeFilterType == 'type') {
       return (
+        <View style={styles.RightInnerPart}>
         <DotCheckbox
           data={filtersData && filtersData[props.activeFilterType]}
           onCheck={getFilterValue}
           value={props.typeFilter}
+          formfilterModal ={true}
         />
+        </View>
       );
     } else {
       return (
+        <View style={styles.RightInnerPart}>
         <View
           style={{
-            marginTop: Dimension.margin10,
-            height: Dimension.height300,
-            right: '30%',
-            paddingVertical: Dimension.padding80,
+           // marginTop: Dimension.margin10,
+            //height: Dimension.height300,
+            //right: '30%',
+            //paddingVertical: Dimension.padding80,
           }}>
           <CustomSlider
             values={[sliderIndex]}
@@ -55,6 +60,7 @@ const FilterModal = props => {
             callback={singleSliderValueCallback}
             single={true}
           />
+        </View>
         </View>
       );
     }
@@ -98,32 +104,27 @@ const FilterModal = props => {
         props.setFiltersModal(false);
       }}
       coverScreen={true}
-      style={styles.modalWrap}
+      style={{padding: 0, margin: 0}}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
       onBackdropPress={() => props.setFiltersModal(false)}
       onBackButtonPress={() => props.setFiltersModal(false)}>
-      <View style={styles.modalView}>
-        <View style={styles.modalViewInner}>
-          <View style={styles.ModalContentWrap}>
-            <View style={styles.signUpWrap}>
-              <View style={styles.textView}>
-                <View style={styles.sortBy}>
-                  <Text style={styles.Title}>Filter</Text>
-                </View>
-                <View>
-                  <TouchableOpacity
-                    onPress={() => {
-                      props.setFiltersModal(false);
-                    }}>
-                    <Text
-                      style={{color: '#000', fontSize: 12, fontWeight: 'bold'}}>
-                      close
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
+      <View style={styles.modalContainer}>
+      <View style={styles.topbdr}></View>
+      <View style={styles.ModalheadingWrapper}>
+              <Text style={styles.ModalHeading}>filter</Text>
+              <CustomeIcon
+                name={'close'}
+                size={Dimension.font22}
+                color={Colors.FontColor}
+                onPress={() => {
+                  props.setFiltersModal(false);
+                }}></CustomeIcon>
+            </View>
+               
+            
+            <View style={styles.MidWrapper}>
+              <View style={styles.leftPart}>
               {filtersTypeData.map((item, index) => (
                 <TouchableOpacity
                   onPress={() => props.setActiveFilterType(item.key)}
@@ -133,92 +134,109 @@ const FilterModal = props => {
                       : styles.inactiveBackground,
                   ]}>
                   <Text
-                    style={{
-                      color: '#000',
-                      fontSize: 12,
-                      fontWeight: 'bold',
-                      margin: 10,
-                    }}>
+                    style={[
+                      item && item.key == props.activeFilterType
+                        ? styles.LeftActiveTxt
+                        : styles.LeftInActiveTxt,
+                    ]}>
                     {item.title}
                   </Text>
                 </TouchableOpacity>
               ))}
+              </View>
+              <View style={styles.rightPart}>
               {renderRight()}
+              </View>
             </View>
-          </View>
-        </View>
+             
+             
+           
       </View>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  ModalContentWrap: {
-    paddingRight: 0,
-    paddingBottom: 0,
-    paddingTop: 0,
-    paddingLeft: 0,
-    // backgroundColor: colors.PrimaryTextColor,
-  },
-  signUpWrap: {
-    backgroundColor: colors.WhiteColor,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    paddingTop: 200,
-    padding: 100,
-  },
-  SoryByData: {
-    borderTopColor: colors.ProductBorderColor,
-    flexDirection: 'row',
-    padding: Dimension.padding15,
-    borderTopWidth: 1,
-    justifyContent: 'space-between',
-    backgroundColor: '#fff',
-  },
-  radioWrap: {marginTop: Dimension.margin5},
-  sortBtdata: {
-    alignSelf: 'center',
-    fontSize: Dimension.font12,
-    fontFamily: Dimension.CustomMediumFont,
-    color: colors.PrimaryTextColor,
-    marginLeft: Dimension.margin20,
-  },
-  modalWrap: {
-    paddingRight: 0,
-    paddingBottom: 0,
-    paddingTop: 0,
-    paddingLeft: 0,
-    margin: 0,
-  },
-  modalView: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,.5)',
-    position: 'relative',
+  modalContainer: {
+    backgroundColor: Colors.WhiteColor,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     width: '100%',
+    position: 'absolute',
+    bottom: 0,
+    paddingTop: Dimension.padding10,
   },
-  modalViewInner: {position: 'absolute', bottom: 0, width: '100%'},
-  textView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  TopWrap: {
     paddingHorizontal: Dimension.padding15,
   },
-  sortBy: {paddingBottom: Dimension.padding15},
-  modalClose: {fontSize: Dimension.font20},
-  row: {flexDirection: 'row'},
-  Title: {
-    fontSize: Dimension.font14,
-    color: colors.PrimaryTextColor,
+  topbdr: {
+    alignSelf: 'center',
+    height: 3,
+    backgroundColor: Colors.modalBorder,
+    borderRadius: 2,
+    width: Dimension.width70,
+  },
+  ModalheadingWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: Dimension.padding15,
+  },
+  ModalHeading: {
+    fontSize: Dimension.font16,
+    color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
+    marginBottom: Dimension.margin5,
+  },
+  ModalFormWrap: {
+    marginBottom: Dimension.margin20,
+  },
+  ModalBottomBtnWrap: {
+    borderTopWidth: 1,
+    borderTopColor: Colors.grayShade2,
+    padding: Dimension.padding15,
+    backgroundColor: Colors.WhiteColor,
+  },
+
+  MidWrapper:{
+    flexDirection:"row",
+    borderTopColor:Colors.grayShade2,
+    borderTopWidth:1,
+
+  },
+  leftPart:{
+    flex:3,
+    borderRightColor:Colors.grayShade2,
+    borderRightWidth:1,
+
+
   },
   activeBackground: {
-    backgroundColor: 'red',
+    backgroundColor: Colors.LightBrandColor,
+    paddingVertical:Dimension.padding15,
+    paddingHorizontal:Dimension.padding20
   },
   inactiveBackground: {
     backgroundColor: '#fff',
+    paddingVertical:Dimension.padding15,
+    paddingHorizontal:Dimension.padding20
+  },
+  LeftInActiveTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+  },
+  LeftActiveTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.BrandColor,
+    fontFamily: Dimension.CustomMediumFont,
+  },
+  rightPart:{
+    flex:7,
+    //alignItems:"flex-start"
+  },
+  RightInnerPart:{
+    paddingLeft:Dimension.padding30,
+    marginBottom:Dimension.padding30
   },
 });
 
