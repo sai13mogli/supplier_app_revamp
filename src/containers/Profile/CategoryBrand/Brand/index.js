@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, createRef} from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -6,6 +6,7 @@ import {
   Dimensions,
   FlatList,
   ScrollView,
+  useWindowDimensions,
 } from 'react-native';
 import AllBrandsScreen from './AllBrands';
 import PopularBrandsScreen from './PopularBrands';
@@ -20,20 +21,27 @@ import {TOP_BRANDS_SCREENS} from '../../../../constants';
 import Tabs from '../../../../component/common/Tabs';
 import Header from '../../../../component/common/Header';
 import {confirmBrands} from '../../../../redux/actions/categorybrand';
-import {Tab, TabView} from 'react-native-elements';
+// import {Tab, TabView} from 'react-native-elements';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {TabView, SceneMap} from 'react-native-tab-view';
 
 const deviceWidth = Dimensions.get('window').width;
+// const Tab = createMaterialTopTabNavigator();
 
 const TABS = [
   {
-    name: 'PopularBrands',
+    name: 'Popular Brands',
     key: 'popularbrands',
     component: PopularBrandsScreen,
+    ref: createRef(),
+    idx: 0,
   },
   {
-    name: 'AllBrands',
+    name: 'All Brands',
     key: 'allbrands',
     component: AllBrandsScreen,
+    ref: createRef(),
+    idx: 1,
   },
 ];
 
@@ -45,7 +53,20 @@ const BrandScreen = props => {
     state => (state.categorybrandReducer || {}).confirmedbrands || [],
   );
   const [modalVisible, setModalVisible] = useState(false);
+  const [routes] = useState([
+    {
+      name: 'Popular Brands',
+      key: 'popularbrands',
+      idx: 0,
+    },
+    {
+      name: 'All Brands',
+      key: 'allbrands',
+      idx: 1,
+    },
+  ]);
   const [index, setIndex] = useState(0);
+  const layout = useWindowDimensions();
 
   const dispatch = useDispatch();
 
@@ -63,6 +84,32 @@ const BrandScreen = props => {
     props.navigation.navigate('CategoryBrand');
   };
 
+  // const tabBarIcon = (focused, color, route, rest) => {
+  //   let currentScreen = TABS.find(screen => screen.name === route.name);
+  //   let tabName = currentScreen['name'];
+  //   //   let iconName = currentScreen[focused ? 'activeIcon' : 'inactiveIcon'];
+  //   return (
+  //     <TouchableOpacity
+  //       style={styles.iconAlignment}
+  //       onPress={() => rest.navigation.navigate(route.name)}>
+  //       <Text
+  //         numberOfLines={0}
+  //         style={[styles.tabText, {color: focused ? color : '#3c3c3c'}]}>
+  //         {tabName}
+  //       </Text>
+  //     </TouchableOpacity>
+  //   );
+  // };
+
+  const FirstRoute = () => <PopularBrandsScreen />;
+
+  const SecondRoute = () => <AllBrandsScreen />;
+
+  const renderScene = SceneMap({
+    popularbrands: FirstRoute,
+    allbrands: SecondRoute,
+  });
+
   return (
     <>
       <Header
@@ -71,6 +118,31 @@ const BrandScreen = props => {
         showText={'Brand Selection'}
         rightIconName={'category--brand'}
       />
+
+      {/* <TabView
+        navigationState={{index, routes}}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{width: layout.width}}
+      /> */}
+      {/* <Tab.Navigator
+        screenOptions={({route, ...rest}) => ({
+          headerShown: false,
+          tabBarIcon: ({focused, color}) =>
+            tabBarIcon(focused, color, route, rest),
+          lazy: false,
+          safeAreaInsets: {bottom: 0},
+        })}
+        tabBarOptions={tabBarOptions}>
+        {TABS.map((screen, key) => (
+          <Tab.Screen
+            key={key}
+            lazy={false}
+            name={screen.name}
+            component={prop => <screen.component {...prop} />}
+          />
+        ))}
+      </Tab.Navigator> */}
       <Tabs data={TABS.map(_ => ({..._}))} />
       {/* <Tab
         value={index}
