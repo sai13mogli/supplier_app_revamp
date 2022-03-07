@@ -30,7 +30,11 @@ const DotCheckbox = props => {
           checked={_.key == value ? true : false}
           textStyle={styles.checkboxTitle}
           fontFamily={Dimension.CustomMediumFont}
-          wrapperStyle={props.formfilterModal ? styles.withMargincheckboxwrapper:styles.checkboxwrapper}
+          wrapperStyle={
+            props.formfilterModal
+              ? styles.withMargincheckboxwrapper
+              : styles.checkboxwrapper
+          }
           containerStyle={styles.checkboxContainer}
         />
       ))}
@@ -46,11 +50,10 @@ const styles = StyleSheet.create({
   },
   checkboxwrapper: {
     backgroundColor: colors.transparent,
-  
   },
   withMargincheckboxwrapper: {
     backgroundColor: colors.transparent,
-    marginBottom:Dimension.margin30
+    marginBottom: Dimension.margin30,
   },
   checkboxContainer: {
     backgroundColor: colors.transparent,

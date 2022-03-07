@@ -1,24 +1,46 @@
-import {View, Text, Dimensions} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Modal from 'react-native-modal';
 import Dimension from '../Theme/Dimension';
 import colors from '../Theme/Colors';
+import DotCheckbox from '../component/common/Checkbox';
 
 // onBackdropPress={() => props.setFiltersModal(false)}
 //       onBackButtonPress={() => props.setFiltersModal(false)}
 
-const BusinessNatureModal = props => {
+const deviceWidth = Dimensions.get('window').width;
+
+const DropDownModal = props => {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    let mutateItems = (props.items || []).map((_, i) => ({
+      ..._,
+      title: _.label,
+      key: _.value,
+    }));
+    setItems(mutateItems);
+  }, []);
+
+  const getFilterValue = value => {
+    console.log(value);
+    props.onSelect(value);
+  };
+
   return (
     <Modal
       overlayPointerEvents={'auto'}
-      isVisible={false}
-      //   onTouchOutside={() => {
-      //     props.setFiltersModal(false);
-      //   }}
-      //   onDismiss={() => {
-      //     props.setFiltersModal(false);
-      //   }}
+      isVisible={props.visible}
+      onTouchOutside={props.closeModal}
+      onDismiss={props.closeModal}
       coverScreen={true}
+      onBackButtonPress={props.closeModal}
       style={styles.modalWrap}
       deviceWidth={deviceWidth}
       hasBackdrop={true}>
@@ -31,7 +53,7 @@ const BusinessNatureModal = props => {
                   <Text style={styles.Title}>Filter</Text>
                 </View>
                 <View>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={props.closeModal}>
                     <Text
                       style={{color: '#000', fontSize: 12, fontWeight: 'bold'}}>
                       close
@@ -39,6 +61,13 @@ const BusinessNatureModal = props => {
                   </TouchableOpacity>
                 </View>
               </View>
+
+              <DotCheckbox
+                data={items}
+                onCheck={getFilterValue}
+                value={props.selectedValue}
+                formfilterModal={true}
+              />
 
               {/* {filtersTypeData.map((item, index) => (
                 <TouchableOpacity
@@ -138,4 +167,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BusinessNatureModal;
+export default DropDownModal;

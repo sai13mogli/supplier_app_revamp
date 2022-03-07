@@ -385,6 +385,8 @@ const BusinessDetailsScreen = props => {
     }
   };
 
+  console.log('route params', props.route.params);
+
   return (
     <View style={{flex: 1}}>
       <Header

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Picker} from '@react-native-picker/picker';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import CustomeIcon from './CustomeIcon';
+import DropDownModal from '../DropDownModal';
+
 const DropDown = props => {
   const {
     items,
@@ -15,14 +17,37 @@ const DropDown = props => {
     showError,
     errorMessage,
   } = props;
+
+  const [isVisible, setIsVisible] = useState(false);
+  const getTitle = () => {
+    return (items.find(_ => _.value == selectedValue) || {}).label;
+  };
+
   return (
     <View style={{marginBottom: Dimension.margin20}}>
       <View style={{flexDirection: 'row'}}>
         <Text style={styles.labelStyle}>{props.label}</Text>
         {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
       </View>
-      <View style={styles.pickerWrapper}>
-        <Picker
+      <TouchableOpacity
+        disabled={!enabled}
+        style={styles.pickerWrapper}
+        onPress={() => setIsVisible(true)}>
+        <View style={styles.pickerStyle}>
+          <Text
+            style={[
+              {
+                color: '#000',
+                fontSize: 14,
+                fontFamily: Dimension.CustomRegularFont,
+              },
+              styles.PickerItemStyle,
+            ]}>
+            {getTitle() || placeholder}
+          </Text>
+        </View>
+
+        {/* <Picker
           mode="dropdown"
           note
           selectedValue={selectedValue}
@@ -47,7 +72,7 @@ const DropDown = props => {
               fontFamily={Dimension.CustomRegularFont}
             />
           ))}
-        </Picker>
+        </Picker> */}
         <View style={styles.iconWrapper}>
           <CustomeIcon
             name={'arrow-drop-down-line'}
@@ -55,8 +80,20 @@ const DropDown = props => {
             color={colors.FontColor}
           />
         </View>
-      </View>
+      </TouchableOpacity>
       {showError ? <Text style={styles.starIcon}>{errorMessage}</Text> : null}
+      {isVisible && (
+        <DropDownModal
+          visible={isVisible}
+          closeModal={() => setIsVisible(false)}
+          onSelect={val => {
+            onValueChange(val);
+            setIsVisible(false);
+          }}
+          items={items}
+          selectedValue={selectedValue}
+        />
+      )}
     </View>
   );
 };
@@ -78,7 +115,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     borderColor: colors.FontColor,
-    padding: 1,
+    padding: 10,
     position: 'relative',
   },
   pickerStyle: {

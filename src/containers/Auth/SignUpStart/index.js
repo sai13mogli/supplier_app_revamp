@@ -251,6 +251,7 @@ const SignUpStartScreen = props => {
               name={'arrow-back'}
               size={Dimension.font20}
               color={Colors.blackColor}
+              onPress={() => props.navigation.goBack()}
             />
             <View style={styles.greenBar}></View>
             <View style={styles.garyBar}></View>
@@ -267,6 +268,7 @@ const SignUpStartScreen = props => {
                 name={'arrow-back'}
                 size={Dimension.font20}
                 color={Colors.BrandColor}
+                onPress={() => props.navigation.goBack()}
               />
             )}
           />
