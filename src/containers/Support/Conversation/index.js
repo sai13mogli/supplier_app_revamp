@@ -380,11 +380,16 @@ const Conversation = props => {
   };
 
   const listEmptyComponent = () => (
+    <View>
+      <Text>EmptyChat.png</Text>
+    <Text>Voila! You Have Not Raised Any Query Yet</Text>
+    <Text>Click on below button as soon as you face any problem</Text>
     <TouchableOpacity onPress={() => props.navigation.navigate('NewTicket')}>
       <Text style={{color: '#000', fontSize: 12, fontWeight: 'bold'}}>
         Raise new Ticket
       </Text>
     </TouchableOpacity>
+    </View>
   );
 
   //render conversation
@@ -392,7 +397,7 @@ const Conversation = props => {
     return (
       <FlatList
         data={conversations}
-        renderItem={renderItem}
+       // renderItem={renderItem}
         keyExtractor={(item, index) => `${index}-item`}
         //ListHeaderComponent={renderListHeader()}
         ListEmptyComponent={listEmptyComponent}
