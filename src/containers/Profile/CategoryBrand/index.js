@@ -826,7 +826,7 @@ const CategoryBrandScreen = props => {
           TextColor={getNextStatus() ? colors.WhiteColor : colors.FontColor}
           TextFontSize={Dimension.font16}
           title={'NEXT'}
-          loading={nextLoader}
+          // loading={nextLoader}
           loadingColor={'#fff'}
           onPress={onNext}
           disabled={!getNextStatus() || loading}

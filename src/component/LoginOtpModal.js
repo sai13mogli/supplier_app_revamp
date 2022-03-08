@@ -46,7 +46,6 @@ const LoginOtpModal = props => {
           otp: otp,
         };
         const {data} = await updatePhone(payload);
-        console.log('updatePhone', data);
         let suc = true;
         if (data.success) {
           setLoading(false);

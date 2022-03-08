@@ -14,6 +14,7 @@ import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import {
   sendOtpForLogin,
   sendOtpForSignUp,
+  validateEmailPhone,
   verifyOtp,
 } from '../../../services/auth';
 import Colors from '../../../Theme/Colors';
@@ -200,7 +201,7 @@ const SignUpStartScreen = props => {
     },
   });
 
-  const onNext = () => {
+  const onNext = async () => {
     // props.navigation.navigate('SignUpEnd', {
     //   phone,
     //   email,
@@ -224,14 +225,23 @@ const SignUpStartScreen = props => {
       contactName &&
       contactName.length
     ) {
-      props.navigation.navigate('SignUpEnd', {
-        phone,
+      let payload = {
         email,
-        contactName,
-        phonePrefix: '+91',
-        rememberMe: true,
-        country: '110',
-      });
+        phone,
+      };
+      const {data} = await validateEmailPhone(payload);
+      if (data.success) {
+        props.navigation.navigate('SignUpEnd', {
+          phone,
+          email,
+          contactName,
+          phonePrefix: '+91',
+          rememberMe: true,
+          country: '110',
+        });
+      } else {
+        alert(data.message);
+      }
     } else {
       onPhoneBlur();
       onOtpBlur();

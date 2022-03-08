@@ -20,3 +20,8 @@ export const loginWithGoogle = data =>
 export const getAllCategories = () => axios.get(`${AUTH}util/categoryList`);
 
 export const signUp = data => axios.post(`${AUTH}auth/newSignup`, data);
+
+export const validateEmailPhone = data =>
+  axios.post(
+    `${AUTH}auth/validateEmailPhone?email=${data.email}&phone=${data.phone}`,
+  );
