@@ -164,7 +164,7 @@ marginLeft:Dimension.margin6,
   },
   logoutBtnWrap:{
     paddingHorizontal:Dimension.padding15,
-  paddingVertical:Dimension.paddng15,
+    paddingVertical:Dimension.paddng15,
     backgroundColor:Colors.grayShade3
 
   },

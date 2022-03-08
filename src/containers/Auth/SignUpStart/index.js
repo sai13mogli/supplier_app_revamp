@@ -86,12 +86,12 @@ const SignUpStartScreen = props => {
   const getCheckMarkView = () => {
     if (otpVerified) {
       return (
-        <TouchableOpacity style={styles.setndOtpBtn}>
-          <Text style={styles.sendOtptext}>ch</Text>
-        </TouchableOpacity>
+        <CustomeIcon name={'right-tick-line'} color={Colors.SuccessStateColor} size={Dimension.font20}></CustomeIcon>
       );
     } else {
-      return null;
+      return(
+        null
+      )
     }
   };
 
@@ -174,6 +174,7 @@ const SignUpStartScreen = props => {
       keyboardType: 'number-pad',
       extraView: () => getCheckMarkView(),
       onBlur: () => onOtpBlur(),
+      isfromLogin: true,
     },
     email: {
       title: 'Email',
