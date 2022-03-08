@@ -51,6 +51,12 @@ const PopularBrandsScreen = props => {
       STATE_STATUS.UNFETCHED,
   );
 
+  const signupCategories = useSelector(
+    state =>
+      ((state.profileReducer || {}).categoryBrandDetails || {}).categories ||
+      [],
+  );
+
   const [categories, setCategories] = useState([]);
 
   const [activeId, setActiveId] = useState('');
@@ -67,7 +73,11 @@ const PopularBrandsScreen = props => {
   const getCategories = async () => {
     const {data} = await getAllCategories();
     if (data.success) {
-      dispatch(setPopularCategories(data.data));
+      let categoryIds = ([...signupCategories] || []).map(_ => _.categoryCode);
+      let filteredCategories = (data.data || []).filter((_, i) =>
+        categoryIds.includes(_.categoryCode),
+      );
+      dispatch(setPopularCategories(filteredCategories));
     }
   };
 

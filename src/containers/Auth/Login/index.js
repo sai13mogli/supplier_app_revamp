@@ -24,6 +24,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+const phoneRegex = '^[1-9][0-9]{9}$';
 
 const LoginScreen = props => {
   const [loading, setLoading] = useState(false);
@@ -148,11 +149,20 @@ const LoginScreen = props => {
     if (
       email &&
       email.length &&
-      (email.match(emailRegex) || email.length == 10)
+      (email.match(phoneRegex) || email.length == 10)
     ) {
       setOtpModal(true);
+    }
+    // } else {
+    //   onEmailBlur();
+    // }
+  };
+
+  const loginViaOtp = () => {
+    if (email && email.length && email.match(phoneRegex) && email.length) {
+      return false;
     } else {
-      onEmailBlur();
+      true;
     }
   };
 
@@ -226,7 +236,7 @@ const LoginScreen = props => {
             <CustomButton
               title={'LOGIN VIA OTP'}
               buttonColor={Colors.FontColor}
-              disabled={loading}
+              disabled={loginViaOtp() || loading}
               onPress={onSendOtp}
               TextColor={Colors.WhiteColor}
               borderColor={Colors.FontColor}

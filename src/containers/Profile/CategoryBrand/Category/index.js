@@ -71,6 +71,7 @@ const CategoryScreen = props => {
     const filteredArr = mergeArr.filter(
       ({id}, index) => !categoryIds.includes(id, index + 1),
     );
+    
     dispatch(setSelectCategories(filteredArr));
     props.navigation.goBack();
   };
