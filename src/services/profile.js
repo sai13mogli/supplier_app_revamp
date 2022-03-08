@@ -56,7 +56,7 @@ export const getTdsInfoDetails = async () =>
       userId: await AsyncStorage.getItem('userId'),
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
-  });  
+  });
 
 export const setBankDetails = async data =>
   axios.post(`${BASE_URL}profile/updateBankAccount`, data, {
@@ -70,7 +70,9 @@ export const getPincodeDetails = async pin =>
   axios.get(`https://supplierapiqa.moglilabs.com/util/getStateCity?pin=${pin}`);
 
 export const getIfscCodeDetails = async ifscCode =>
-  axios.get(`https://supplierapiqa.moglilabs.com/util/validateifscCode?ifscCode=${ifscCode}`);  
+  axios.get(
+    `https://supplierapiqa.moglilabs.com/util/validateifscCode?ifscCode=${ifscCode}`,
+  );
 
 export const getGstDetails = async gstin =>
   axios.get(
@@ -81,6 +83,27 @@ export const getCategoriesBrands = async () =>
   axios.get(`${BASE_URL}profile/fetchCataegoriesAndBrands`, {
     headers: {
       userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
+
+export const sendOtpForVerification = async type =>
+  axios.get(`${BASE_URL}profile/sendOtp`, {
+    params: {type: type},
+    headers: {
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
+
+export const updatePhone = async data =>
+  axios.post(`${BASE_URL}profile/updatePhone`, data, {
+    headers: {
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
+export const updateEmail = async data =>
+  axios.post(`${BASE_URL}profile/updateEmail`, data, {
+    headers: {
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
   });

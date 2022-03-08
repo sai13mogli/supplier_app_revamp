@@ -1,10 +1,14 @@
 import {OrderedMap} from 'immutable';
 import React, {useEffect, useState} from 'react';
-import {Text, ScrollView, View} from 'react-native';
+import {Text, ScrollView, View, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import DropDown from '../../../component/common/DropDown';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
-import {getPincodeDetails, getGstDetails} from '../../../services/profile';
+import {
+  getPincodeDetails,
+  getGstDetails,
+  sendOtpForVerification,
+} from '../../../services/profile';
 import {fetchUpdateBusinessDetails} from '../../../redux/actions/profile';
 import CustomButton from '../../../component/common/Button';
 import {STATE_STATUS} from '../../../redux/constants';
@@ -12,16 +16,17 @@ import styles from './style';
 import Header from '../../../component/common/Header';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
+import LoginOtpModal from '../../../component/LoginOtpModal';
 
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
 const BusinessDetailsScreen = props => {
+  let interval = {};
   const businessDetails = useSelector(
     state => state.profileReducer.businessDetails.data || {},
   );
-  console.log('bussiness====>', businessDetails);
   const businessDetailsStatus = useSelector(
     state =>
       state.profileReducer.businessDetails.status || STATE_STATUS.FETCHING,
@@ -63,8 +68,20 @@ const BusinessDetailsScreen = props => {
   const [stateError, setstateError] = useState(false);
   const [cityError, setcityError] = useState(false);
   const [phoneError, setphoneError] = useState(false);
+  const [phoneErrorMsg, setPhoneErrorMsg] = useState('');
   const [emailError, setemailError] = useState(false);
+  const [emailErrorMsg, setEmailErrorMsg] = useState('');
   const [tanError, settanError] = useState(false);
+  const [timer, setTimer] = useState(0);
+  const [timerEmail, setTimerEmail] = useState(0);
+  const [sendOtp, setSendOtp] = useState(false);
+  const [sendOtpEmail, setSendOtpEmail] = useState(false);
+  const [resendOtp, setResendOtp] = useState(false);
+  const [resendOtpEmail, setResendOtpEmail] = useState(false);
+  const [otpModal, setOtpModal] = useState(false);
+  const [type, setType] = useState(6);
+  const [phoneVerified, setPhoneVerified] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
 
   const FORM_FIELDS = new OrderedMap({
     legalEntityName: {
@@ -78,6 +95,7 @@ const BusinessDetailsScreen = props => {
       onBlur: () => onLegalNameBllur(),
       onChangeText: text => setlegalEntityName(text),
       component: FloatingLabelInputField,
+      disabled: props.route.params && props.route.params.disabled,
     },
     tradeName: {
       title: 'Trade Name',
@@ -90,6 +108,7 @@ const BusinessDetailsScreen = props => {
       onBlur: () => onTradeNameBlur(),
       onChangeText: text => settradeName(text),
       component: FloatingLabelInputField,
+      disabled: props.route.params && props.route.params.disabled,
     },
     contactName: {
       title: 'Contact Name',
@@ -102,6 +121,7 @@ const BusinessDetailsScreen = props => {
       onBlur: () => onContactNameBlur(),
       onChangeText: text => setcontactName(text),
       component: FloatingLabelInputField,
+      disabled: props.route.params && props.route.params.disabled,
     },
     gstin: {
       title: 'GSTIN',
@@ -114,6 +134,7 @@ const BusinessDetailsScreen = props => {
       onChangeText: text => setgstin(text),
       component: FloatingLabelInputField,
       onBlur: () => onGstinBlur(),
+      disabled: props.route.params && props.route.params.disabled,
     },
     country: {
       title: 'Country',
@@ -125,6 +146,7 @@ const BusinessDetailsScreen = props => {
       selectedValue: country,
       onValueChange: text => setcountry(text),
       component: DropDown,
+      disabled: props.route.params && props.route.params.disabled,
       items: [
         {
           label: 'India',
@@ -146,6 +168,7 @@ const BusinessDetailsScreen = props => {
       onChangeText: text => setpincode(text),
       component: FloatingLabelInputField,
       onBlur: () => onPincodeBlur(),
+      disabled: props.route.params && props.route.params.disabled,
     },
     state: {
       title: 'State',
@@ -158,7 +181,8 @@ const BusinessDetailsScreen = props => {
       onValueChange: text => setstate(text),
       component: DropDown,
       items: states,
-      enabled: true,
+      // enabled: true,
+      disabled: props.route.params && props.route.params.disabled,
     },
     city: {
       title: 'City',
@@ -171,14 +195,15 @@ const BusinessDetailsScreen = props => {
       onValueChange: text => setcity(text),
       component: DropDown,
       items: cities,
-      enabled: true,
+      // enabled: true,
+      disabled: props.route.params && props.route.params.disabled,
     },
     phone: {
       title: 'Phone',
       isImp: true,
       label: 'Phone',
       placeholder: '',
-      errorMessage: 'Enter valid pincode',
+      errorMessage: phoneErrorMsg || 'Enter a valid phone number',
       showError: phoneError,
       value: phone,
       maxLength: 10,
@@ -186,18 +211,22 @@ const BusinessDetailsScreen = props => {
       keyboardType: 'number-pad',
       onChangeText: text => setphone(text),
       component: FloatingLabelInputField,
+      disabled: false,
+      extraView: () => getExtraView(),
     },
     email: {
       title: 'Email',
       isImp: true,
       label: 'Email',
       placeholder: '',
-      errorMessage: 'Enter valid email',
+      errorMessage: emailErrorMsg || 'Enter valid email',
       showError: emailError,
       value: email,
       onBlur: () => onEmailBlur(),
       onChangeText: text => setemail(text),
       component: FloatingLabelInputField,
+      disabled: false,
+      extraView: () => getExtraViewEmail(),
     },
     tan: {
       title: 'TAN',
@@ -210,6 +239,7 @@ const BusinessDetailsScreen = props => {
       onBlur: () => onTanBlur(),
       onChangeText: text => settan(text),
       component: FloatingLabelInputField,
+      disabled: props.route.params && props.route.params.disabled,
     },
   });
 
@@ -273,6 +303,33 @@ const BusinessDetailsScreen = props => {
       onPincodeBlur();
     }
   }, [pincode]);
+
+  useEffect(() => {
+    if (
+      phone &&
+      phone.length &&
+      phone.length == 10 &&
+      props.route.params.disabled &&
+      phone !== (businessDetails.profile || {}).phone
+    ) {
+      setPhoneVerified(false);
+      setSendOtp(true);
+    }
+  }, [phone]);
+
+  useEffect(() => {
+    if (
+      email &&
+      email &&
+      email.length &&
+      email.match(emailRegex) &&
+      props.route.params.disabled &&
+      email !== (businessDetails.profile || {}).email
+    ) {
+      setEmailVerified(false);
+      setSendOtpEmail(true);
+    }
+  }, [email]);
 
   const onPincodeBlur = async () => {
     if (pincode && pincode.length == 6) {
@@ -385,6 +442,161 @@ const BusinessDetailsScreen = props => {
     }
   };
 
+  // const initializeCounter = () => {
+  //   setTimer(60);
+  //   setResendOtp(true);
+  //   interval = setInterval(() => {
+  //     setTimer(timer => {
+  //       if (timer > 0) {
+  //         return timer - 1;
+  //       } else {
+  //         clearInterval(interval);
+  //         return 0;
+  //       }
+  //     });
+  //   }, 1000);
+  // };
+
+  const initializeCounter = type => {
+    if (type == 6) {
+      setTimer(10);
+      setResendOtp(true);
+      setType(6);
+      interval = setInterval(() => {
+        setTimer(timer => {
+          if (timer > 0) {
+            return timer - 1;
+          } else {
+            clearInterval(interval);
+            return 0;
+          }
+        });
+      }, 1000);
+    } else {
+      setTimerEmail(10);
+      setResendOtpEmail(true);
+      setType(5);
+      interval = setInterval(() => {
+        setTimerEmail(timer => {
+          if (timer > 0) {
+            return timer - 1;
+          } else {
+            clearInterval(interval);
+            return 0;
+          }
+        });
+      }, 1000);
+    }
+  };
+
+  const onSendOtp = async type => {
+    if (type == 6) {
+      if (phone === (businessDetails.profile || {}).phone) {
+        setphoneError(true);
+        setPhoneErrorMsg('This phone number already registered with us.');
+      } else {
+        if (phone && phone.length && phone.length == 10) {
+          initializeCounter(type);
+          const {data} = await sendOtpForVerification(type);
+          console.log('data', data);
+          setOtpModal(true);
+        } else {
+          setphoneError(true);
+        }
+      }
+    } else {
+      if (email === (businessDetails.profile || {}).email) {
+        setemailError(true);
+        setEmailErrorMsg('This email ID already registered with us.');
+      } else {
+        if (email && email.length && email.match(emailRegex)) {
+          initializeCounter(type);
+          const {data} = await sendOtpForVerification(type);
+          console.log('data', data);
+          setOtpModal(true);
+        } else {
+          setemailError(true);
+        }
+      }
+    }
+  };
+
+  const getExtraView = () => {
+    if (phoneVerified) {
+      return (
+        <TouchableOpacity style={styles.setndOtpBtn}>
+          <Text style={styles.sendOtptext}>check</Text>
+        </TouchableOpacity>
+      );
+    } else {
+      if (sendOtp) {
+        if (phone && phone.length && phone.length == 10 && timer >= 1) {
+          return (
+            <TouchableOpacity style={styles.setndOtpBtn}>
+              <Text style={styles.sendOtptext}>
+                00:{String(timer).length > 1 ? String(timer) : `0${timer}`}
+              </Text>
+            </TouchableOpacity>
+          );
+        } else {
+          return (
+            <TouchableOpacity
+              onPress={() => onSendOtp(6)}
+              style={styles.setndOtpBtn}>
+              <Text style={styles.sendOtptext}>
+                {resendOtp ? 'Resend OTP' : 'Send OTP'}
+              </Text>
+            </TouchableOpacity>
+          );
+        }
+      }
+    }
+  };
+
+  const getExtraViewEmail = () => {
+    if (emailVerified) {
+      return (
+        <TouchableOpacity style={styles.setndOtpBtn}>
+          <Text style={styles.sendOtptext}>check</Text>
+        </TouchableOpacity>
+      );
+    } else {
+      if (sendOtpEmail) {
+        if (
+          email &&
+          email.length &&
+          email.match(emailRegex) &&
+          timerEmail >= 1
+        ) {
+          return (
+            <TouchableOpacity style={styles.setndOtpBtn}>
+              <Text style={styles.sendOtptext}>
+                00:
+                {String(timerEmail).length > 1
+                  ? String(timerEmail)
+                  : `0${timerEmail}`}
+              </Text>
+            </TouchableOpacity>
+          );
+        } else {
+          return (
+            <TouchableOpacity
+              onPress={() => onSendOtp(5)}
+              style={styles.setndOtpBtn}>
+              <Text style={styles.sendOtptext}>
+                {resendOtpEmail ? 'Resend OTP' : 'Send OTP'}
+              </Text>
+            </TouchableOpacity>
+          );
+        }
+      }
+    }
+  };
+
+  const onLogin = () => {
+    console.log('login!!');
+  };
+
   return (
     <View style={{flex: 1}}>
       <Header
@@ -397,12 +609,29 @@ const BusinessDetailsScreen = props => {
           <field.component
             {...field}
             key={fieldKey}
-            disabled={props.route.params.disabled || field.disabled}
-            enabled={
-              props.route.params.disabled ? false : true || field.enabled
-            }
+            disabled={field.disabled}
+            // enabled={field.enabled}
+            // enabled={
+            //   props.route.params.disabled ? false : true || field.enabled
+            // }
           />
         )).toList()}
+        {otpModal && (
+          <LoginOtpModal
+            visible={otpModal}
+            onLogin={onLogin}
+            onClose={() => setOtpModal(false)}
+            email={type == 6 ? phone : email}
+            frombusinessDetails={true}
+            type={type}
+            phoneVerified={phoneVerified}
+            setPhoneVerified={setPhoneVerified}
+            emailVerified={emailVerified}
+            setEmailVerified={setEmailVerified}
+            setresendOtp={setResendOtp}
+            setresendOtpEmail={setResendOtpEmail}
+          />
+        )}
       </ScrollView>
       <View style={styles.bottombtnWrap}>
         <CustomButton

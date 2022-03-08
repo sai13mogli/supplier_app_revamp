@@ -42,15 +42,6 @@ const FloatingLabelInputField = props => {
       props.onBlur();
     }
   };
-  const categoriesArr = ['Electrical', 'Power Tools', 'Automotive'];
-  const getCategories = () => {
-    return (
-      <>
-        <Text style={{color: '#000'}}>{categoriesArr[0]}</Text>
-        <Text style={{color: '#000'}}>+{categoriesArr.length - 1}MORE</Text>
-      </>
-    );
-  };
 
   return (
     <TouchableOpacity activeOpacity={1}>
@@ -76,7 +67,9 @@ const FloatingLabelInputField = props => {
         inputContainerStyle={styles.inputContainerStyle}
         inputStyle={styles.inputStyle}
         labelStyle={styles.labelStyle}
-        rightIconContainerStyle={props.isfromLogin ? styles.iconBtnstyle :styles.iconStyle}
+        rightIconContainerStyle={
+          props.isfromLogin ? styles.iconBtnstyle : styles.iconStyle
+        }
         errorStyle={styles.errorText}
         disabledInputStyle={styles.disabledInputStyle}
         errorMessage={props.showError ? props.errorMessage : null}
@@ -134,8 +127,8 @@ const styles = StyleSheet.create({
     height: Dimension.height24,
     paddingRight: 0,
   },
-  iconBtnstyle:{
-    paddingRight:0
+  iconBtnstyle: {
+    paddingRight: 0,
   },
   errorText: {
     fontSize: Dimension.font10,

@@ -73,6 +73,8 @@ const SignUpEndScreen = props => {
     },
   });
 
+  console.log(natureOfBusiness);
+
   const onGstinBlur = async () => {
     if (gstin && gstin.length >= 15 && gstin.match(gstinRegex)) {
       const {data} = await getGstDetails(gstin);
@@ -143,6 +145,7 @@ const SignUpEndScreen = props => {
               name={'arrow-back'}
               size={Dimension.font20}
               color={Colors.blackColor}
+              onPress={() => props.navigation.goBack()}
             />
             <View style={styles.greenBar}></View>
             <View style={styles.RightGrrenbar}></View>
@@ -159,6 +162,7 @@ const SignUpEndScreen = props => {
                 name={'arrow-back'}
                 size={Dimension.font20}
                 color={Colors.BrandColor}
+                onPress={() => props.navigation.goBack()}
               />
             )}
           />
