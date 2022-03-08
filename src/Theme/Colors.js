@@ -32,10 +32,15 @@ grayShade5:"#F2F2F2",
 grayShade6:'#727272',
 grayShade7:"#F5F5F5",
 grayShade8:'#EFEFF4',
+grayShade9:"#F7F7FA",
+grayShade10:"#EBEBEB",
+grayShade11:"#E8E8E8",
+
 headerTxtColor:"#3C3C3C",
 blackColor:'#000',
 PendingStateColor:"#D97023",
 modalBorder:'#CECECE',
+NudgeColor1:'#FFCEB4'
 
 
 
