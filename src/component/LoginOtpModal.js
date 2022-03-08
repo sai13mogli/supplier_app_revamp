@@ -55,12 +55,12 @@ const LoginOtpModal = props => {
           props.setresendOtp(false);
         } else {
           setLoading(false);
-          setOtpError(true);
+          setIsVisible(false);
           alert('Error!!');
         }
       } else if (props.frombusinessDetails && props.type == 5) {
         let payload = {
-          phone: props.email,
+          email: props.email,
           otp: otp,
         };
         const {data} = await updateEmail(payload);
@@ -72,7 +72,7 @@ const LoginOtpModal = props => {
           props.setresendOtpEmail(false);
         } else {
           setLoading(false);
-          setOtpError(true);
+          setIsVisible(false);
           alert('Error!!');
         }
       } else {
