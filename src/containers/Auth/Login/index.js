@@ -25,6 +25,7 @@ import {
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const phoneRegex = '^[1-9][0-9]{9}$';
+//
 
 const LoginScreen = props => {
   const [loading, setLoading] = useState(false);
@@ -166,10 +167,10 @@ const LoginScreen = props => {
     }
   };
 
-  const logInWithGoogleToServer = async token => {
+  const logInWithGoogleToServer = async (token, googleemail) => {
     // this.setState({loading:true})
     const request = {
-      token: `${token}heheh`,
+      token: `${token}heh`,
       source: Platform.OS === 'ios' ? 2 : 1,
       deviceToken: '',
     };
@@ -178,7 +179,7 @@ const LoginScreen = props => {
       onLogin(data);
     } else {
       props.navigation.navigate('Error', {
-        email,
+        email: googleemail,
       });
     }
   };
@@ -187,7 +188,7 @@ const LoginScreen = props => {
     try {
       await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
       const userInfo = await GoogleSignin.signIn();
-      logInWithGoogleToServer(userInfo.idToken);
+      logInWithGoogleToServer(userInfo.idToken, userInfo.user.email);
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
