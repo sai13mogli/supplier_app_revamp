@@ -616,9 +616,10 @@ const BusinessDetailsScreen = props => {
             // }
           />
         )).toList()}
-        {otpModal && (
+        {/* {otpModal && ( */}
           <LoginOtpModal
-            visible={otpModal}
+            //visible={otpModal}
+            visible={true}
             onLogin={onLogin}
             onClose={() => setOtpModal(false)}
             email={type == 6 ? phone : email}
@@ -631,7 +632,7 @@ const BusinessDetailsScreen = props => {
             setresendOtp={setResendOtp}
             setresendOtpEmail={setResendOtpEmail}
           />
-        )}
+        {/* )} */}
       </ScrollView>
       <View style={styles.bottombtnWrap}>
         <CustomButton
