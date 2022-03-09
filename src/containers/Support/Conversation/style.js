@@ -188,7 +188,49 @@ width:"80%"
     marginTop:1,
     marginLeft:Dimension.margin5
   },
+  SearchInputCss: {
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.BoxBorderColor,
+    paddingHorizontal: Dimension.padding10,
+    paddingVertical: Dimension.padding10,
+    backgroundColor:Colors.grayShade7
+  },
+  seacrhIcon: {
+    position: 'absolute',
+    top: Dimension.padding12,
+    right: Dimension.padding15,
+    fontSize: Dimension.font18,
+    color: Colors.FontColor,
+  },
+  searchWrapper: {
+    marginBottom: Dimension.margin20,
+    position: 'relative',
+  },
 
+  CloseIcon: {
+    position: 'absolute',
+    top: Dimension.padding12,
+    right: Dimension.padding15,
+    fontSize: Dimension.font18,
+    color: Colors.BrandColor,
+  },
+  SearchTicketTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+    marginBottom:Dimension.margin5   
+  },
+  ticketTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomBoldFont,
+    paddingVertical:Dimension.padding10
+
+  },
 });
 
 export default styles;

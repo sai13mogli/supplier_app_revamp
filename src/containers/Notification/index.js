@@ -140,7 +140,7 @@ const NotificationScreen = props => {
               <Text style={styles.boldtxt}>
               No Notifications Yet
               </Text>
-              <TouchableOpacity style={styles.NewTicktbtn}>
+        <TouchableOpacity style={styles.NewTicktbtn}>
        <Text style={styles.NewTicktbtnTxt}>
        Upload More Products
       </Text>

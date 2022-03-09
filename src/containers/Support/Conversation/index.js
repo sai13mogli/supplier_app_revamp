@@ -385,8 +385,25 @@ const Conversation = props => {
   };
 
   const listEmptyComponent = () => (
+    <>
+    <View style={{paddingHorizontal:Dimension.padding10, backgroundColor:Colors.grayShade3,}}><Text style={styles.SearchTicketTxt}>
+          Search Tickets
+        </Text>
+        <View style={styles.searchWrapper}>
+        <TextInput
+          placeholder="Type your question here"
+          placeholderTextColor={'#A2A2A2'}
+          selectionColor={'#888'}
+          returnKeyType={'search'}
+         // value={inputValue}
+          //onChangeText={onSearchText}
+          style={styles.SearchInputCss}
+        />
+        <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+        </View>
+     <Text style={styles.ticketTxt}>Tickets</Text></View>
     <View style={styles.EmptyChatWrap}>
-      
+       
       <Image source={require('../../../assets/images/EmptyChat.png')} 
             style={{height:Dimension.height250,width:Dimension.width150}} />
     <Text style={styles.EmptyBoldTxt}>Voila! You Have Not Raised Any Query Yet</Text>
@@ -398,6 +415,7 @@ const Conversation = props => {
       </Text>
     </TouchableOpacity>
     </View>
+    </>
   );
 
   //render conversation
@@ -405,9 +423,9 @@ const Conversation = props => {
     return (
       
       <FlatList
-        data={conversations}
-       renderItem={renderItem}
-        keyExtractor={(item, index) => `${index}-item`}
+       // data={conversations}
+       //renderItem={renderItem}
+        //keyExtractor={(item, index) => `${index}-item`}
         //ListHeaderComponent={renderListHeader1()}
         ListEmptyComponent={listEmptyComponent}
       />
