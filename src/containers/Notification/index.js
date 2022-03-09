@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   SectionList,
+  Image
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
@@ -18,7 +19,8 @@ import {
 import {STATE_STATUS} from '../../redux/constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../../component/common/Header';
-
+import Dimension from '../../Theme/Dimension';
+import styles from './style';
 const NotificationScreen = props => {
   const notifications = useSelector(
     state => state.notificationsReducer.data || [],
@@ -118,9 +120,9 @@ const NotificationScreen = props => {
   };
 
   return (
-    <View style={{flex: 1, marginVertical: 12}}>
+    <View style={styles.ContainerCss}>
       <Header showText={'Notifications'} rightIconName ={'notification'} />
-      <Text>NotificationScreen</Text>
+     
       <TouchableOpacity onPress={() => dispatch(markBulkRead())}>
         <Text style={{color: 'red'}}>Mark all read</Text>
       </TouchableOpacity>
@@ -132,9 +134,18 @@ const NotificationScreen = props => {
         onEndReached={onEndReached}
         ListEmptyComponent={
           notificationsStatus !== STATE_STATUS.FETCHING ? (
-            <Text style={{alignSelf: 'center', margin: 12, color: '#000'}}>
-              No Notifications Found
-            </Text>
+            <View style={styles.EmptyNotificationList}>
+             <Image source={require('../../assets/images/EmptyNotification.png')} 
+            style={{height:Dimension.height200,width:Dimension.width200}} />
+              <Text style={styles.boldtxt}>
+              No Notifications Yet
+              </Text>
+        <TouchableOpacity style={styles.NewTicktbtn}>
+       <Text style={styles.NewTicktbtnTxt}>
+       Upload More Products
+      </Text>
+    </TouchableOpacity>
+            </View>
           ) : null
         }
         renderSectionHeader={({section}) => (

@@ -257,16 +257,16 @@ const ProfileScreen = props => {
             </TouchableOpacity>
           )).toList()}
         </View>
+        <View style={styles.logoutBtnWrap}>
+          <TouchableOpacity onPress={onLogout} style={styles.logoutBtn}>
+            <Text style={styles.logoutBtnTxt}>LOGOUT</Text>
+            <CustomeIcon
+              name={'shut-down'}
+              color={Colors.FontColor}
+              size={Dimension.font16}></CustomeIcon>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
-      <View style={styles.logoutBtnWrap}>
-        <TouchableOpacity onPress={onLogout} style={styles.logoutBtn}>
-          <Text style={styles.logoutBtnTxt}>LOGOUT</Text>
-          <CustomeIcon
-            name={'shut-down'}
-            color={Colors.FontColor}
-            size={Dimension.font16}></CustomeIcon>
-        </TouchableOpacity>
-      </View>
       {/* <CustomButton
           title={'LOGOUT'}
           buttonColor={Colors.grayShade1}

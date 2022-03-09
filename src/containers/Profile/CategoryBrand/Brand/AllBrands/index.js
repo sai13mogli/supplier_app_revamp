@@ -218,7 +218,7 @@ const AllBrandsScreen = props => {
       );
     }
     if (allBrandsStatus !== STATE_STATUS.FETCHED) {
-      return <Text style={{color: '#000'}}>Something Went woring!!</Text>;
+      return <Text style={styles.NoDataTxt}>Something Went woring!!</Text>;
     }
     return null;
   };

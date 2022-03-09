@@ -1,5 +1,6 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
+import Dimension from '../Theme/Dimension';
 
 const Item = props => {
   const checkActive = () => {
@@ -23,31 +24,32 @@ const Item = props => {
 };
 
 const styles = StyleSheet.create({
-  active: {
-    width: 60,
-    transform: [{rotate: '90deg'}],
-    textAlign: 'left',
-    fontSize: 10,
-    color: '#363636',
-    // fontFamily: Dimension.CustomMediumFont,
-    bottom: 50,
+  active:{
+    width:Dimension.width60,
+    transform: [{ rotate: '90deg' }],
+      textAlign: 'left',
+      fontSize:Dimension.font10,
+      color:'#363636',
+      fontFamily:Dimension.CustomMediumFont,
+      bottom:-Dimension.padding50
+
   },
-  inactive: {
-    width: 60,
-    flex: 1,
-    textAlignVertical: 'center',
-    textAlign: 'center',
-    fontWeight: 'normal',
-    color: '#363636',
-    fontSize: 10,
-    // fontFamily: Dimension.CustomMediumFont,
+  inactive:{
+      width:Dimension.width60,
+      flex:1,
+      textAlignVertical: 'center',
+      textAlign: 'center',
+      fontWeight:'normal',
+      color:'#363636',
+      fontSize:Dimension.font10,
+      fontFamily:Dimension.CustomMediumFont
   },
-  line: {
-    fontSize: 25,
-    textAlign: 'center',
-    color: '#0000001F',
-    marginTop: 20,
-  },
+  line:{
+      fontSize:25,
+      textAlign: 'center',
+      color:"#0000001F",
+      marginTop:-Dimension.margin20,
+  }
 });
 
 export default Item;
