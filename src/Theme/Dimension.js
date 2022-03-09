@@ -142,7 +142,9 @@ const Dimension = {
 
   height221: normalize(221),
   height218: normalize(218),
-
+  height300: normalize(300),
+  verticleSliderHeight: normalize(250),
+  sliderBottomheight: normalize(100),
   padding2: normalize(2),
   padding3: normalize(3),
   padding4: normalize(4),

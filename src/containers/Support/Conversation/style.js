@@ -150,6 +150,45 @@ width:"80%"
     fontFamily:Dimension.CustomRegularFont,
     
   },
+  EmptyChatWrap:{
+    backgroundColor:Colors.grayShade3,
+    padding:Dimension.padding20,
+    marginHorizontal:Dimension.margin10,
+    borderRadius:10,
+    alignItems:"center"
+  },
+  EmptyBoldTxt:{
+    fontSize:Dimension.font14,
+    color:Colors.FontColor,
+    fontFamily:Dimension.CustomSemiBoldFont,
+    marginVertical:Dimension.margin20 
+  },
+  EmptyLightTxt:{
+    fontSize:Dimension.font14,
+    color:Colors.FontColor,
+    fontFamily:Dimension.CustomMediumFont, 
+    alignSelf:"center",
+    textAlign:"center"
+  },
+  NewTicktbtn:{
+    backgroundColor:Colors.BrandColor,
+    paddingHorizontal:Dimension.padding30,
+    paddingVertical:Dimension.padding14,
+    borderRadius:4,
+    marginVertical:Dimension.margin30,
+    flexDirection:"row",
+    justifyContent:"center"
+  },
+  NewTicktbtnTxt:{
+    fontSize:Dimension.font14,
+    color:Colors.WhiteColor,
+    fontFamily:Dimension.CustomMediumFont, 
+    alignSelf:"center",
+    textAlign:"center",
+    marginTop:1,
+    marginLeft:Dimension.margin5
+  },
+
 });
 
 export default styles;
