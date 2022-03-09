@@ -34,11 +34,12 @@ const MultiSelect = props => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('props', props && props.selectedValues);
     setData();
   }, []);
 
   const setData = () => {
-    let selected = props.selectedValues.map(_ => _.id);
+    let selected = (props.selectedValues || []).map(_ => _.id);
     let initialData = [...props.data];
     initialData = initialData.map(_ => ({
       ..._,
@@ -147,7 +148,7 @@ const MultiSelect = props => {
             size={Dimension.font22}
           />
           <Text style={styles.CheckboxTitle}>
-            {item.label || item.name || item.categoryName}
+            {item.label || item.name || item.categoryName || item.brandName}
           </Text>
         </TouchableOpacity>
       </View>

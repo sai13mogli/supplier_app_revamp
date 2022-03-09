@@ -134,24 +134,25 @@ const AllBrandsScreen = props => {
       <TouchableOpacity
         key={index}
         onPress={() => fetchListingDataByAlphabet(item)}>
-        {item == '0-9' ? (
-          <Text
-            style={
-              activeTerm == '0-9'
-                ? styles.activealphbetText
-                : styles.alphbetText
-            }>
-            0-9
-          </Text>
-        ) : null}
         <Text
+          style={
+            activeTerm == '0-9' && item == '0-9'
+              ? styles.activealphbetText
+              : activeTerm == String.fromCharCode(item)
+              ? styles.activealphbetText
+              : styles.alphbetText
+          }>
+          {item == '0-9' ? '0-9' : String.fromCharCode(item)}
+        </Text>
+
+        {/* <Text
           style={
             activeTerm == String.fromCharCode(item)
               ? styles.activealphbetText
               : styles.alphbetText
           }>
           {String.fromCharCode(item)}
-        </Text>
+        </Text> */}
       </TouchableOpacity>
     );
   };
@@ -208,7 +209,9 @@ const AllBrandsScreen = props => {
         <View style={styles.NoBrandWrap}>
           <Text style={styles.NoDataTxt}>No Brand Found</Text>
           <TouchableOpacity
-            onPress={() => dispatch(addBrand({name: inputValue}))}>
+            onPress={() =>
+              dispatch(addBrand({name: inputValue, requested: true}))
+            }>
             <Text style={styles.addBrandTxt}>Add Brand</Text>
           </TouchableOpacity>
         </View>

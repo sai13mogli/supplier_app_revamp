@@ -15,6 +15,7 @@ import {
   addBrand,
   removeBrand,
   setPopularCategories,
+  addMultipleBrands,
 } from '../../../../../redux/actions/categorybrand';
 import {CATEGORIES} from '../../../../../redux/constants/categorybrand';
 import {STATE_STATUS} from '../../../../../redux/constants';
@@ -57,6 +58,16 @@ const PopularBrandsScreen = props => {
       [],
   );
 
+  const categoriesBrandsStatus = useSelector(
+    state =>
+      (state.categorybrandReducer || {}).categoriesbrandsStatus ||
+      STATE_STATUS.UNFETCHED,
+  );
+
+  const confirmbrands = useSelector(
+    state => (state.categorybrandReducer || {}).confirmedbrands || [],
+  );
+
   const [categories, setCategories] = useState([]);
 
   const [activeId, setActiveId] = useState('');
@@ -69,6 +80,11 @@ const PopularBrandsScreen = props => {
       getCategories();
     }
   }, []);
+
+  useEffect(() => {
+    console.log(categoriesBrandsStatus == STATE_STATUS.FETCHED, 'status');
+    dispatch(addMultipleBrands([...confirmbrands]));
+  }, [categoriesBrandsStatus]);
 
   const getCategories = async () => {
     const {data} = await getAllCategories();
@@ -99,7 +115,9 @@ const PopularBrandsScreen = props => {
     }
   }, [popularCategories]);
 
-  console.log('activeId', activeId);
+  useEffect(() => {
+    console.log('addedbrands', addedBrand, brands, brands[activeId]);
+  });
 
   useEffect(() => {
     if (brandsStatus == STATE_STATUS.FETCHED) {
@@ -124,7 +142,7 @@ const PopularBrandsScreen = props => {
   };
 
   const updatePopularBrand = item => {
-    let brandObj = (addedBrand || []).find(_ => _.id == item.id);
+    let brandObj = (addedBrand || []).find(_ => _.brandCode == item.code);
     console.log(brandObj);
     if (brandObj && brandObj.id) {
       dispatch(removeBrand(item));
@@ -142,7 +160,11 @@ const PopularBrandsScreen = props => {
             .map((item, i) => (
               <Checkbox
                 checked={
-                  (addedBrand || []).find(_ => _.id == item.id) ? true : false
+                  (addedBrand || []).find(
+                    _ => (_.brandCode || _.code) == item.code,
+                  )
+                    ? true
+                    : false
                 }
                 onPress={() => updatePopularBrand(item)}
                 title={item.name}

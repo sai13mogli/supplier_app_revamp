@@ -25,7 +25,7 @@ import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BASE_URL} from '../../../redux/constants/index';
+import {BASE_URL, STATE_STATUS} from '../../../redux/constants/index';
 import {
   addBrandData,
   addBrand,
@@ -33,6 +33,7 @@ import {
   emptyCategories,
   setCategories,
   updateBrandData,
+  fetchCategoriesBrands,
 } from '../../../redux/actions/categorybrand';
 import {addOrUpdateCategoryAndBrand} from '../../../services/categorybrand';
 import {getAllCategories} from '../../../services/auth';
@@ -57,6 +58,12 @@ const CategoryBrandScreen = props => {
 
   const initialSelectedCategories = useSelector(
     state => (state.categorybrandReducer || {}).initialcategories || [],
+  );
+
+  const categoriesBrandsStatus = useSelector(
+    state =>
+      (state.categorybrandReducer || {}).categoriesbrandsStatus ||
+      STATE_STATUS.UNFETCHED,
   );
 
   const selectedCategories = useSelector(
@@ -210,6 +217,24 @@ const CategoryBrandScreen = props => {
       component: FloatingLabelInputField,
     },
   });
+
+  useEffect(() => {
+    dispatch(fetchCategoriesBrands());
+  }, []);
+
+  useEffect(() => {
+    console.log(categoriesBrandsStatus == STATE_STATUS.FETCHED, 'status');
+    // if (categoriesBrandsStatus == STATE_STATUS.FETCHED) {
+    //   let brands = [...confirmbrands];
+    //   let raisebrand = ([...brands] || [])
+    //     .filter(_ => _.isDeleted == 2)
+    //     .map(_ => ({
+    //       ..._,
+    //       filled: true,
+    //     }));
+    //   dispatch(updateBrandData());
+    // }
+  }, [categoriesBrandsStatus]);
 
   useEffect(() => {
     if (
@@ -414,12 +439,12 @@ const CategoryBrandScreen = props => {
     console.log(currBrand);
     if (currBrand) {
       let currBrandObj = {
-        supplierId: '',
-        brandCode: (brand && brand.code) || 'collectiontest',
+        supplierId: supplierId,
+        brandCode: (brand && brand.code) || (brand && brand.name),
         fileKey: brandCertificate && brandCertificate.value,
         businessNature: natureOfBusiness,
         expiryDate: expiryDate,
-        isDeleted: '0',
+        // isDeleted: '0',
         isRaiseRequest: raiseRequest ? 'true' : 'false',
         brandListingUrl: brandUrl,
         brandName: brand && brand.name,
@@ -428,12 +453,12 @@ const CategoryBrandScreen = props => {
       dispatch(updateBrandData(currBrandObj));
     } else {
       let brandObj = {
-        supplierId: '',
-        brandCode: (brand && brand.code) || 'collectiontest',
+        supplierId: supplierId,
+        brandCode: (brand && brand.code) || (brand && brand.name),
         fileKey: brandCertificate && brandCertificate.value,
         businessNature: natureOfBusiness,
         expiryDate: expiryDate,
-        isDeleted: '0',
+        // isDeleted: '0',
         isRaiseRequest: raiseRequest ? 'true' : 'false',
         brandListingUrl: brandUrl,
         brandName: brand && brand.name,
@@ -528,16 +553,23 @@ const CategoryBrandScreen = props => {
     setNextLoader(true);
     try {
       let mutatebrands = (confirmbrands || [])
-        .filter(it => !it.isDocumentRequired && it.status)
+        .filter(
+          it =>
+            it.isNewBrand &&
+            ((!it.isDocumentRequired && it.status) ||
+              it.isDeleted == 0 ||
+              it.isDeleted == 4 ||
+              it.isDeleted == 2),
+        )
         .map((_, i) => ({
           supplierId: supplierId,
-          brandCode: _.code,
-          fileKey: '',
-          businessNature: '1',
-          expiryDate: '',
-          isDeleted: '0',
-          isRaiseRequest: 'false',
-          brandListingUrl: '',
+          brandCode: _.code || _.brandCode,
+          fileKey: _.fileKey || '',
+          businessNature: _.businessNature || '1',
+          expiryDate: _.expiryDate || '',
+          isDeleted: _.isDeleted || '0',
+          isRaiseRequest: _.isRaiseRequest || 'false',
+          brandListingUrl: _.brandListingUrl || '',
         }));
 
       let mutateRaisedbrands = (raisedBrand || []).map((_, i) => ({
@@ -554,8 +586,14 @@ const CategoryBrandScreen = props => {
       console.log('mutateBrands', mutatebrands);
       console.log('raisedBrands', mutateRaisedbrands);
 
-      let brandsarr = [...mutatebrands, ...mutateRaisedbrands];
-      console.log('brandsArr', brandsarr);
+      let brandCodes = ([...mutatebrands] || []).map(_ => _.brandCode);
+      let filterbrands = ([...mutateRaisedbrands] || []).filter(
+        _ => ![...brandCodes].includes(_.brandCode),
+      );
+      console.log(filterbrands, 'brands');
+
+      let brandsarr = [...mutatebrands, ...filterbrands];
+      console.log('brandsArr', brandsarr, mutatebrands, filterbrands);
       let categoryIds = ([...selectedCategories] || []).map((_, i) => _.id);
       let payloadObj = {
         categoryCode: [...categoryIds],
@@ -620,8 +658,8 @@ const CategoryBrandScreen = props => {
       .filter(_ => _.filled)
       .map(_ => _.filled).length;
     if (
-      confirmbrands.length != 0 &&
-      addedBrandCount == filledData &&
+      addedBrandCount.length != 0 &&
+      filledData.length != 0 &&
       selectedCategories.length > 0
     ) {
       console.log('inside true');
@@ -629,6 +667,28 @@ const CategoryBrandScreen = props => {
     } else {
       console.log('inside false');
       return false;
+    }
+  };
+
+  const getPendingStatus = (item, foundMoglix) => {
+    if (foundMoglix) {
+      let brandsData = [...confirmbrands];
+      let pendingStatus = ([...brandsData] || []).filter(
+        _ => _.brandCode == item.code,
+      );
+      if (pendingStatus.length) {
+        return 'Approved Pending';
+      }
+      return 'Pending';
+    } else {
+      let brandsData = [...raisedBrand];
+      let pendingStatus = ([...brandsData] || []).filter(
+        _ => _.brandCode == item.code,
+      );
+      if (pendingStatus.length) {
+        return 'Approved Pending';
+      }
+      return 'Pending';
     }
   };
 
@@ -640,84 +700,163 @@ const CategoryBrandScreen = props => {
         showText={'Category & Brand'}
         rightIconName={'category--brand'}></Header>
       <ScrollView style={styles.ContainerCss}>
-        <View>
-          {BRAND_CATEGORY.map(_ => renderInputText(_))
-            .toList()
-            .toArray()}
-          <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
-          {(confirmbrands || []).filter(_ => _.status).length ? (
-            <View>
-              {confirmbrands
-                .filter(item => item.status)
-                .map((_, i) => (
-                  <View style={styles.BrandWrap}>
-                    <View style={{flex: 1}}>
-                      <Text style={styles.brandTitleTxt}>Brand Name</Text>
-                      <Text style={styles.brandNameTxt}>{_.name}</Text>
-                    </View>
+        {categoriesBrandsStatus == STATE_STATUS.FETCHED ? (
+          <View>
+            {BRAND_CATEGORY.map(_ => renderInputText(_))
+              .toList()
+              .toArray()}
+            <Text style={styles.brandHeadingTxt}>Brand Found on Moglix</Text>
+            {(confirmbrands || []).filter(
+              _ =>
+                (_ && _.status) ||
+                (_ && (_.isDeleted == 0 || _.isDeleted == 4)),
+            ).length ? (
+              <View>
+                {confirmbrands
+                  .filter(
+                    it =>
+                      (it && it.status) ||
+                      (it && (it.isDeleted == 0 || it.isDeleted == 4)),
+                  )
+                  .map((_, i) => (
+                    <View style={styles.BrandWrap}>
+                      <View style={{flex: 1}}>
+                        <Text style={styles.brandTitleTxt}>Brand Name</Text>
+                        <Text style={styles.brandNameTxt}>
+                          {_.name || _.brandName}
+                        </Text>
+                      </View>
 
-                    <View style={{flex: 1}}>
-                      <Text style={styles.brandTitleTxt}>Status</Text>
-                      {_.status && !_.isDocumentRequired ? (
-                        <Text style={styles.ApprovedStatus}>Approved</Text>
-                      ) : (
-                        <Text style={styles.pendingStatus}>Pending</Text>
-                      )}
+                      <View style={{flex: 1}}>
+                        <Text style={styles.brandTitleTxt}>Status</Text>
+                        {(_.status && !_.isDocumentRequired) ||
+                        _.isDeleted == 0 ? (
+                          <Text style={styles.ApprovedStatus}>Approved</Text>
+                        ) : (
+                          <Text style={styles.pendingStatus}>
+                            {_.isDeleted == 4 ? 'Approved Pending' : 'Pending'}
+                            {/* {getPendingStatus(_, true) || 'Pending'} */}
+                          </Text>
+                        )}
+                      </View>
+                      {/* //onPress={() => openModal(_)} */}
+                      <View style={{flex: 1}}>
+                        {(_.status && !_.isDocumentRequired) ||
+                        _.isDeleted == 0 ||
+                        _.isDeleted == 4 ? (
+                          <TouchableOpacity style={styles.ArrowBtn}>
+                            <CustomeIcon
+                              name={'arrow-right-line'}
+                              size={Dimension.font28}
+                              color={colors.FontColor}></CustomeIcon>
+                          </TouchableOpacity>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => openModal(_)}
+                            style={styles.fillBtn}>
+                            <Text style={styles.fillDetailtxt}>
+                              FILL DETAILS
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
                     </View>
-                    <View style={{flex: 1}}>
-                      {_.status && !_.isDocumentRequired ? (
-                        <TouchableOpacity
-                          style={styles.ArrowBtn}
-                          onPress={() => openModal(_)}>
-                          <CustomeIcon
-                            name={'arrow-right-line'}
-                            size={Dimension.font28}
-                            color={colors.FontColor}></CustomeIcon>
-                        </TouchableOpacity>
-                      ) : (
+                  ))}
+              </View>
+            ) : (
+              <View style={styles.NoBrandWrap}>
+                <Text style={styles.NoBrandTxt}>
+                  Added Brands will appear here
+                </Text>
+              </View>
+            )}
+            {/* && !i.status */}
+            {confirmbrands.filter(
+              i => (i && i.requested) || (i && i.isDeleted == 2),
+            ).length ? (
+              <Text style={styles.brandHeadingTxt}>
+                Brand you requested to add
+              </Text>
+            ) : null}
+            {confirmbrands.filter(
+              item => (item && item.requested) || (item && item.isDeleted == 2),
+            ).length ? (
+              <View>
+                {confirmbrands
+                  .filter(
+                    item =>
+                      (item && item.requested) || (item && item.isDeleted == 2),
+                  )
+                  .map((_, i) => (
+                    <View style={styles.BrandWrap}>
+                      <View style={{flex: 1}}>
+                        <Text style={styles.brandTitleTxt}>Brand Name</Text>
+                        <Text style={styles.brandNameTxt}>
+                          {_.name || _.brandName}
+                        </Text>
+                      </View>
+
+                      <View style={{flex: 1}}>
+                        <Text style={styles.brandTitleTxt}>Status</Text>
+                        <Text style={styles.pendingStatus}>Pending</Text>
+
+                        {/* {(_.status && !_.isDocumentRequired) ||
+                        _.isDeleted == 0 ? (
+                          <Text style={styles.ApprovedStatus}>Approved</Text>
+                        ) : (
+                          <Text style={styles.pendingStatus}>
+                            {getPendingStatus(_) || 'Pending'}
+                          </Text>
+                        )} */}
+                      </View>
+
+                      <View style={{flex: 1}}>
+                        {_.isDeleted == 2 ? (
+                          <TouchableOpacity style={styles.ArrowBtn}>
+                            <CustomeIcon
+                              name={'arrow-right-line'}
+                              size={Dimension.font28}
+                              color={colors.FontColor}></CustomeIcon>
+                          </TouchableOpacity>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => openModal(_)}
+                            style={styles.fillBtn}>
+                            <Text style={styles.fillDetailtxt}>
+                              FILL DETAILS
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+
+                      {/* <>
                         <TouchableOpacity
                           onPress={() => openModal(_)}
                           style={styles.fillBtn}>
                           <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
                         </TouchableOpacity>
-                      )}
+                      </> */}
                     </View>
-                  </View>
-                ))}
-            </View>
-          ) : (
-            <View style={styles.NoBrandWrap}>
-              <Text style={styles.NoBrandTxt}>
-                Added Brands will appear here
-              </Text>
-            </View>
-          )}
-          {confirmbrands.filter(i => !i.status).length ? (
-            <Text style={styles.brandHeadingTxt}>
-              Brand you requested to add
-            </Text>
-          ) : null}
-
-          <View>
-            {confirmbrands
-              .filter(item => !item.status)
-              .map((_, i) => (
-                <View style={styles.BrandWrap}>
-                  <View style={{flex: 1}}>
-                    <Text style={styles.brandTitleTxt}>Brand Name</Text>
-                    <Text style={styles.brandNameTxt}>{_.name}</Text>
-                  </View>
-                  <>
-                    <TouchableOpacity
-                      onPress={() => openModal(_)}
-                      style={styles.fillBtn}>
-                      <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
-                    </TouchableOpacity>
-                  </>
-                </View>
-              ))}
+                  ))}
+              </View>
+            ) : null}
           </View>
-        </View>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              height: Dimensions.get('window').height,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <ActivityIndicator
+              // animating={true}
+              size={'large'}
+              color={'red'}
+              style={{alignSelf: 'center'}}
+            />
+          </View>
+        )}
       </ScrollView>
       <Modal
         overlayPointerEvents={'auto'}

@@ -190,3 +190,12 @@ export const confirmBrands = data => {
     },
   };
 };
+
+export const addMultipleBrands = data => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.ADD_MULTIPLE_BRANDS,
+    payload: {
+      data,
+    },
+  };
+};
