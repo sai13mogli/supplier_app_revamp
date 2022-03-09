@@ -87,12 +87,13 @@ const SignUpStartScreen = props => {
   const getCheckMarkView = () => {
     if (otpVerified) {
       return (
-        <CustomeIcon name={'right-tick-line'} color={Colors.SuccessStateColor} size={Dimension.font20}></CustomeIcon>
+        <CustomeIcon
+          name={'right-tick-line'}
+          color={Colors.SuccessStateColor}
+          size={Dimension.font20}></CustomeIcon>
       );
     } else {
-      return(
-        null
-      )
+      return null;
     }
   };
 

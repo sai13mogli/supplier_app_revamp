@@ -12,10 +12,12 @@ import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import styles from './style';
 import CustomeIcon from '../../../component/common/CustomeIcon';
+import CreatePasswordModal from '../../../component/common/CreatePasswordModal';
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
 
 const SignUpEndScreen = props => {
+  const [showCreatePass, setShowCreatePass] = useState(false);
   const [natureOfBusiness, setnatureOfBusiness] = useState('');
   const [categoryCode, setcategoryCode] = useState([]);
   const [gstin, setgstin] = useState('');
@@ -98,7 +100,6 @@ const SignUpEndScreen = props => {
       gstin.length >= 15 &&
       gstin.match(gstinRegex)
     ) {
-      setLoading(true);
       let body = {
         ...props.route.params,
         natureOfBusiness,
@@ -109,8 +110,9 @@ const SignUpEndScreen = props => {
       if (data.success) {
         setNextLoader(false);
         onLogin(data);
+      } else {
+        setNextLoader(false);
       }
-      setLoading(false);
     } else {
       setNextLoader(false);
       onGstinBlur();
@@ -130,6 +132,11 @@ const SignUpEndScreen = props => {
   const onLogin = async data => {
     await AsyncStorage.setItem('token', data.data.token);
     await AsyncStorage.setItem('userId', JSON.stringify(data.data.userId));
+    setShowCreatePass(true);
+  };
+
+  const onSuccess = () => {
+    setShowCreatePass(false);
     props.route.params.setIsLoggedIn(true);
   };
 
@@ -188,6 +195,11 @@ const SignUpEndScreen = props => {
           disabled={nextLoader}
         />
       </View>
+      <CreatePasswordModal
+        visible={showCreatePass}
+        onSuccess={onSuccess}
+        onClose={() => setShowCreatePass(false)}
+      />
     </View>
   );
 };
