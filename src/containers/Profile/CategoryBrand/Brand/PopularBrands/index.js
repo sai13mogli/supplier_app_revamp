@@ -51,6 +51,12 @@ const PopularBrandsScreen = props => {
       STATE_STATUS.UNFETCHED,
   );
 
+  const signupCategories = useSelector(
+    state =>
+      ((state.profileReducer || {}).categoryBrandDetails || {}).categories ||
+      [],
+  );
+
   const [categories, setCategories] = useState([]);
 
   const [activeId, setActiveId] = useState('');
@@ -67,7 +73,11 @@ const PopularBrandsScreen = props => {
   const getCategories = async () => {
     const {data} = await getAllCategories();
     if (data.success) {
-      dispatch(setPopularCategories(data.data));
+      let categoryIds = ([...signupCategories] || []).map(_ => _.categoryCode);
+      let filteredCategories = (data.data || []).filter((_, i) =>
+        categoryIds.includes(_.categoryCode),
+      );
+      dispatch(setPopularCategories(filteredCategories));
     }
   };
 
@@ -88,6 +98,8 @@ const PopularBrandsScreen = props => {
       // setActiveId(currId && currId.categoryCode);
     }
   }, [popularCategories]);
+
+  console.log('activeId', activeId);
 
   useEffect(() => {
     if (brandsStatus == STATE_STATUS.FETCHED) {
@@ -124,7 +136,7 @@ const PopularBrandsScreen = props => {
   const renderRight = () => {
     if (brands && brands[activeId] && brands[activeId].length) {
       return (
-        <ScrollView>
+        <ScrollView style={{marginBottom: 100}}>
           {((brands && brands[activeId]) || [])
             .filter((_, i) => _.name.includes(inputValue))
             .map((item, i) => (
@@ -139,12 +151,12 @@ const PopularBrandsScreen = props => {
           {((brands && brands[activeId]) || []).filter((_, i) =>
             _.name.includes(inputValue),
           ).length ? null : (
-            <Text style={{color: '#000'}}>No data found!!</Text>
+            <Text style={styles.NoDataTxt}>No data found!!</Text>
           )}
         </ScrollView>
       );
     } else {
-      return <Text style={{color: '#000'}}>No data found!!</Text>;
+      return <Text style={styles.NoDataTxt}>No data found!!</Text>;
     }
   };
   const renderLoader = () => {
@@ -198,7 +210,11 @@ const PopularBrandsScreen = props => {
     return renderLoader();
   };
 
-  return <View>{renderCategoriesBrands()}</View>;
+  return (
+    <View style={{backgroundColor: '#fff', flex: 1}}>
+      {renderCategoriesBrands()}
+    </View>
+  );
 };
 
 export default PopularBrandsScreen;

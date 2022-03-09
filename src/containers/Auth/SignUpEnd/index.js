@@ -1,6 +1,6 @@
 import {OrderedMap} from 'immutable';
 import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, ScrollView, ImageBackground} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import DropDown from '../../../component/common/DropDown';
@@ -9,7 +9,9 @@ import {getGstDetails} from '../../../services/profile';
 import {signUp} from '../../../services/auth';
 import CustomButton from '../../../component/common/Button';
 import Colors from '../../../Theme/Colors';
-
+import Dimension from '../../../Theme/Dimension';
+import styles from './style';
+import CustomeIcon from '../../../component/common/CustomeIcon';
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
 
@@ -20,6 +22,7 @@ const SignUpEndScreen = props => {
   const [natureOfBusinessError, setnatureOfBusinessError] = useState(false);
   const [categoryCodeError, setcategoryCodeError] = useState(false);
   const [gstinError, setgstinError] = useState(false);
+  const [nextLoader, setNextLoader] = useState(false);
 
   const FORM_FIELDS = new OrderedMap({
     natureOfBusiness: {
@@ -28,7 +31,7 @@ const SignUpEndScreen = props => {
       selectedValue: natureOfBusiness,
       component: DropDown,
       isImp: true,
-      errorMessage: 'Invalid ',
+      errorMessage: 'Please select a business model',
       showError: natureOfBusinessError,
       placeholder: 'Please Select',
       onValueChange: text => setnatureOfBusiness(text),
@@ -53,7 +56,7 @@ const SignUpEndScreen = props => {
         }),
       component: MultiSelectInput,
       isImp: true,
-      errorMessage: 'Invalid ',
+      errorMessage: 'Please select a category code',
       showError: categoryCodeError,
     },
     gstin: {
@@ -62,13 +65,15 @@ const SignUpEndScreen = props => {
       value: gstin,
       component: FloatingLabelInputField,
       isImp: true,
-      errorMessage: 'Invalid ',
+      errorMessage: 'Please add a valid GSTIN',
       onBlur: () => onGstinBlur(),
       onChangeText: text => setgstin(text),
       showError: gstinError,
       maxLength: 15,
     },
   });
+
+  console.log(natureOfBusiness);
 
   const onGstinBlur = async () => {
     if (gstin && gstin.length >= 15 && gstin.match(gstinRegex)) {
@@ -84,6 +89,7 @@ const SignUpEndScreen = props => {
   };
 
   const onSignUp = async () => {
+    setNextLoader(true);
     if (
       natureOfBusiness &&
       categoryCode &&
@@ -92,6 +98,7 @@ const SignUpEndScreen = props => {
       gstin.length >= 15 &&
       gstin.match(gstinRegex)
     ) {
+      setLoading(true);
       let body = {
         ...props.route.params,
         natureOfBusiness,
@@ -100,9 +107,12 @@ const SignUpEndScreen = props => {
       };
       const {data} = await signUp(body);
       if (data.success) {
+        setNextLoader(false);
         onLogin(data);
       }
+      setLoading(false);
     } else {
+      setNextLoader(false);
       onGstinBlur();
       if (categoryCode && categoryCode.length) {
         setcategoryCodeError(false);
@@ -118,25 +128,66 @@ const SignUpEndScreen = props => {
   };
 
   const onLogin = async data => {
-    setOtpModal(false);
     await AsyncStorage.setItem('token', data.data.token);
     await AsyncStorage.setItem('userId', JSON.stringify(data.data.userId));
     props.route.params.setIsLoggedIn(true);
   };
 
   return (
-    <View>
-      <Text>SignUpEnd</Text>
-      {FORM_FIELDS.map((field, fieldKey) => (
-        <field.component {...field} key={fieldKey} />
-      )).toList()}
-      <CustomButton
-        title={'SUBMIT'}
-        buttonColor={'dodgerblue'}
-        onPress={onSignUp}
-        TextColor={Colors.WhiteColor}
-        borderColor={Colors.WhiteColor}
-      />
+    <View style={{flex: 1}}>
+      <ImageBackground
+        source={require('../../../assets/images/SignUpBg.png')}
+        resizeMode="cover"
+        style={{flex: 1}}>
+        <ScrollView style={styles.ContainerCss}>
+          <View style={styles.headerPart}>
+            <CustomeIcon
+              name={'arrow-back'}
+              size={Dimension.font20}
+              color={Colors.blackColor}
+              onPress={() => props.navigation.goBack()}
+            />
+            <View style={styles.greenBar}></View>
+            <View style={styles.RightGrrenbar}></View>
+          </View>
+          <CustomButton
+            title={'Already a Moglix Supplier? Sign In'}
+            buttonColor={Colors.LightBrandColor}
+            onPress={() => props.navigation.navigate('SignUpStart')}
+            TextColor={Colors.BrandColor}
+            borderColor={Colors.LightBrandColor}
+            TextFontSize={Dimension.font14}
+            icon={() => (
+              <CustomeIcon
+                name={'arrow-back'}
+                size={Dimension.font20}
+                color={Colors.BrandColor}
+                onPress={() => props.navigation.goBack()}
+              />
+            )}
+          />
+          <Text style={styles.headingTxt}>Step 2 : Important Details</Text>
+          <View style={styles.formWrap}>
+            {FORM_FIELDS.map((field, fieldKey) => (
+              <field.component {...field} key={fieldKey} />
+            )).toList()}
+          </View>
+        </ScrollView>
+      </ImageBackground>
+      <View></View>
+      <View style={styles.bottomBtnWrap}>
+        <CustomButton
+          title={'SUBMIT'}
+          buttonColor={Colors.BrandColor}
+          onPress={onSignUp}
+          TextColor={Colors.WhiteColor}
+          borderColor={Colors.WhiteColor}
+          TextFontSize={Dimension.font16}
+          loading={nextLoader}
+          loadingColor={'#fff'}
+          disabled={nextLoader}
+        />
+      </View>
     </View>
   );
 };

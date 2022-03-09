@@ -188,7 +188,7 @@ const AllBrandsScreen = props => {
   );
 
   const renderFooter = () => {
-    if (allBrandsStatus != STATE_STATUS.FETCHED && pageIndex > 64) {
+    if (allBrandsStatus == STATE_STATUS.FETCHING && pageIndex > 64) {
       return (
         <View style={{padding: 100}}>
           <ActivityIndicator
@@ -205,11 +205,11 @@ const AllBrandsScreen = props => {
   const listEmptyComponent = () => {
     if (inputValue && inputValue != '') {
       return (
-        <View>
-          <Text style={{color: '#000'}}>No Brand Found</Text>
+        <View style={styles.NoBrandWrap}>
+          <Text style={styles.NoDataTxt}>No Brand Found</Text>
           <TouchableOpacity
             onPress={() => dispatch(addBrand({name: inputValue}))}>
-            <Text style={{color: 'red'}}>Add Brand</Text>
+            <Text style={styles.addBrandTxt}>Add Brand</Text>
           </TouchableOpacity>
         </View>
       );
@@ -293,7 +293,7 @@ const AllBrandsScreen = props => {
     return brandListing();
   };
 
-  return <View>{renderListing()}</View>;
+  return <View style={{flex: 1}}>{renderListing()}</View>;
 };
 
 export default AllBrandsScreen;

@@ -9,9 +9,12 @@ const MultiSelectInput = props => {
       return selectedValue[0].label;
     } else {
       return (
-        <Text style={{color: '#000'}}>
+        <Text style={styles.inputStyle}>
           {selectedValue[0].label}
-          <Text style={{color: 'red'}}>+{selectedValue.length - 1} more</Text>
+          <Text style={styles.redInputTxt}>
+            {' '}
+            +{selectedValue.length - 1} more
+          </Text>
         </Text>
       );
     }
@@ -69,6 +72,13 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomRegularFont,
 
     paddingLeft: 0,
+  },
+  redInputTxt: {
+    fontSize: Dimension.font14,
+    color: Colors.BrandColor,
+    fontFamily: Dimension.CustomRegularFont,
+    paddingLeft: Dimension.margin10,
+    fontWeight: 'bold',
   },
   inputContainerStyle: {
     borderWidth: 1,

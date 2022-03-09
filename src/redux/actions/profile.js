@@ -157,3 +157,9 @@ export const failedFetchUpdateBankDetails = error => {
     error,
   };
 };
+
+export const logout = () => {
+  return {
+    type: PROFILE_ACTIONS.LOGOUT,
+  };
+};

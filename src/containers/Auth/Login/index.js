@@ -1,14 +1,22 @@
 import {OrderedMap} from 'immutable';
 import React, {useEffect, useState} from 'react';
-import {View, Text, Platform,ImageBackground,Image} from 'react-native';
+import {
+  View,
+  Text,
+  Platform,
+  ImageBackground,
+  Image,
+  StatusBar,
+} from 'react-native';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import Colors from '../../../Theme/Colors';
-import Dimension from '../../../Theme/Dimension'
+import Dimension from '../../../Theme/Dimension';
 import {loginWithPass, loginWithGoogle} from '../../../services/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginOtpModal from '../../../component/LoginOtpModal';
-import styles from "./style"
+import CustomeIcon from '../../../component/common/CustomeIcon';
+import styles from './style';
 import {
   GoogleSignin,
   GoogleSigninButton,
@@ -16,6 +24,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+const phoneRegex = '^[1-9][0-9]{9}$';
 
 const LoginScreen = props => {
   const [loading, setLoading] = useState(false);
@@ -51,6 +60,12 @@ const LoginScreen = props => {
       errorMessage: 'Invalid Password',
       showError: passwordError,
       onBlur: () => onPasswordBlur(),
+      extraView: () => (
+        <CustomeIcon
+          name={'eye-open'}
+          color={Colors.eyeIcon}
+          size={Dimension.font20}></CustomeIcon>
+      ),
     },
   });
 
@@ -134,24 +149,37 @@ const LoginScreen = props => {
     if (
       email &&
       email.length &&
-      (email.match(emailRegex) || email.length == 10)
+      (email.match(phoneRegex) || email.length == 10)
     ) {
       setOtpModal(true);
+    }
+    // } else {
+    //   onEmailBlur();
+    // }
+  };
+
+  const loginViaOtp = () => {
+    if (email && email.length && email.match(phoneRegex) && email.length) {
+      return false;
     } else {
-      onEmailBlur();
+      true;
     }
   };
 
   const logInWithGoogleToServer = async token => {
     // this.setState({loading:true})
     const request = {
-      token: token,
+      token: `${token}heheh`,
       source: Platform.OS === 'ios' ? 2 : 1,
       deviceToken: '',
     };
     const {data} = await loginWithGoogle(request);
     if (data.success) {
       onLogin(data);
+    } else {
+      props.navigation.navigate('Error', {
+        email,
+      });
     }
   };
 
@@ -174,81 +202,104 @@ const LoginScreen = props => {
   };
 
   return (
-    <View>
-      <View style={{height:"50%"}}>
-
-    <ImageBackground source={require("../../../assets/images/loginBg.png")} resizeMode="cover" style={{flex:1}}>
-      
-      <Image source={require("../../../assets/images/logo.png")} style={{height:44,width:180}}/>
-      
-    
-      
-    </ImageBackground>
-  </View>
-  <View style={{backgroundColor:"#fff"}}>
-      {/* <Text>Login Screen</Text> */}
-      {FORM_FIELDS.map((field, fieldKey) => (
-        <field.component {...field} />
-      )).toList()}
-      {error ? <Text>{error}</Text> : null}
-      <View style={{flexDirection:"row"}}>
-        <View style={{flex:1,marginRight:Dimension.margin15}}>
-        <CustomButton
-        title={'LOGIN VIA OTP'}
-        buttonColor={Colors.FontColor}
-        disabled={loading}
-        onPress={onSendOtp}
-        TextColor={Colors.WhiteColor}
-        borderColor={Colors.FontColor}
-        TextFontSize={Dimension.font16}
+    // <View style={{backgroundColor:"#fff",flex:1}}>
+    //   <View style={{height:"30%",justifyContent:"center",}}>
+    <View style={{backgroundColor: '#fff', flex: 1}}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle={'dark-content'}
       />
-        </View>
-        <View style={{flex:1}}>
-        <CustomButton
-        loading={loading}
-        disabled={loading}
-        title={'CONTINUE'}
-        buttonColor={Colors.grayShade1}
-        onPress={onSubmit}
-        TextColor={Colors.FontColor}
-        borderColor={Colors.grayShade1}
-        TextFontSize={Dimension.font16}
-      />
-        </View>
-      </View>
-     <View>
-       <View>
-
-       </View>
-       <Text>OR</Text>
-       <View></View>
-     </View>
-      
-      {otpModal && (
-        <LoginOtpModal
-          visible={otpModal}
-          onLogin={onLogin}
-          onClose={() => setOtpModal(false)}
-          email={email}
+      <ImageBackground
+        source={require('../../../assets/images/loginBg.png')}
+        resizeMode="cover" //style={{flex:1}}
+      >
+        <Image
+          source={require('../../../assets/images/logo.png')}
+          style={{height: 44, width: 180, marginTop: 80, alignSelf: 'center'}}
         />
-      )}
-      <GoogleSigninButton
-        style={{width: '100%', height: Dimension.height40}}
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Dark}
-        onPress={googleSignIn}
-        disabled={loading}
-      />
-      <CustomButton
-        title={'Not a Moglix Supplier? SignUp now'}
-        buttonColor={Colors.LightBrandColor}
-        onPress={() => props.navigation.navigate('SignUpStart')}
-        TextColor={Colors.BrandColor}
-        borderColor={Colors.LightBrandColor}
-        TextFontSize={Dimension.font14}
-      />
-      <Text>All rights reserved. Mogli labs Pvt Ltd.</Text>
-    </View>
+      </ImageBackground>
+
+      {/* // </View> */}
+      <View style={styles.ContainerCss}>
+        <Text style={styles.headingTxt}>Sign In</Text>
+        {/* <Text>Login Screen</Text> */}
+        {FORM_FIELDS.map((field, fieldKey) => (
+          <field.component {...field} />
+        )).toList()}
+        {error ? <Text style={styles.errorTxt}>{error}</Text> : null}
+        <View style={{justifyContent: 'flex-end'}}>
+          <Text style={styles.fotgotTxt}>Forgot Password</Text>
+        </View>
+        <View style={styles.buttonWrap}>
+          <View style={{flex: 1, marginRight: Dimension.margin15}}>
+            <CustomButton
+              title={'LOGIN VIA OTP'}
+              buttonColor={Colors.FontColor}
+              disabled={loginViaOtp() || loading}
+              onPress={onSendOtp}
+              TextColor={Colors.WhiteColor}
+              borderColor={Colors.FontColor}
+              TextFontSize={Dimension.font16}
+            />
+          </View>
+          <View style={{flex: 1}}>
+            <CustomButton
+              loading={loading}
+              disabled={loading}
+              title={'CONTINUE'}
+              buttonColor={Colors.BrandColor}
+              onPress={onSubmit}
+              TextColor={Colors.WhiteColor}
+              borderColor={Colors.BrandColor}
+              TextFontSize={Dimension.font16}
+            />
+          </View>
+        </View>
+        <View style={styles.orwrap}>
+          <View style={styles.leftHorizontal}></View>
+          <Text style={styles.orTxt}>OR</Text>
+          <View style={styles.leftHorizontal}></View>
+        </View>
+
+        {otpModal && (
+          <LoginOtpModal
+            visible={otpModal}
+            onLogin={onLogin}
+            onClose={() => setOtpModal(false)}
+            email={email}
+          />
+        )}
+        <GoogleSigninButton
+          style={{width: '100%', height: Dimension.height45, elevation: 0}}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={googleSignIn}
+          disabled={loading}
+        />
+        <View style={{marginTop: 30}}>
+          <CustomButton
+            title={'Not a Moglix Supplier? SignUp now'}
+            buttonColor={Colors.LightBrandColor}
+            onPress={() => props.navigation.navigate('SignUpStart')}
+            TextColor={Colors.BrandColor}
+            borderColor={Colors.LightBrandColor}
+            TextFontSize={Dimension.font14}
+            icon={() => (
+              <CustomeIcon
+                name={'arrow-forward'}
+                size={Dimension.font20}
+                color={Colors.BrandColor}
+              />
+            )}
+            showIcon={true}
+          />
+        </View>
+        <Text style={styles.allrighttxt}>
+          All rights reserved. Mogli labs Pvt Ltd.
+        </Text>
+      </View>
+      {/* // </View>  */}
     </View>
   );
 };

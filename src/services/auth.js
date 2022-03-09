@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {BASE_URL} from '../redux/constants/index';
 
-const AUTH = 'http://supplierapiqa.moglilabs.com/';
+const AUTH = 'https://supplierapiqa.moglilabs.com/';
 
 export const loginWithPass = data => axios.post(`${AUTH}auth/login`, data);
 
@@ -20,3 +20,8 @@ export const loginWithGoogle = data =>
 export const getAllCategories = () => axios.get(`${AUTH}util/categoryList`);
 
 export const signUp = data => axios.post(`${AUTH}auth/newSignup`, data);
+
+export const validateEmailPhone = data =>
+  axios.post(
+    `${AUTH}auth/validateEmailPhone?email=${data.email}&phone=${data.phone}`,
+  );

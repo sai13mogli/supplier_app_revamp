@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text} from 'react-native';
+import {Text,TouchableOpacity} from 'react-native';
 import CustomButton from '../../component/common/Button';
 import DropDown from '../../component/common/DropDown';
 import CustomeIcon from '../../component/common/CustomeIcon';
@@ -7,25 +7,25 @@ import Checkbox from '../../component/common/Checkbox/index';
 import CustomeDatePicker from '../../component/common/Datepicker/index';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
+import {useNavigation} from '@react-navigation/native';
 const OrdersScreen = props => {
   const [gender, setGender] = useState('');
   const [isSelected, setSelection] = useState(false);
-
+  const {navigate} = useNavigation();
   const onChange = value => {
     setGender(value);
   };
 
   const onCheckAction = value => {
-    setSelection(value);
+    props.navigation.navigate('Notification')
+   // setSelection(value);
   };
 
   return (
     <>
-      <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
+      <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000',marginTop:100}}>
         OrdersScreen
       </Text>
-
-      {/* Exampe for CustomButton Component */}
       <CustomButton
         title={'Hello'}
         buttonColor={'dodgerblue'}
@@ -90,5 +90,7 @@ const OrdersScreen = props => {
     </>
   );
 };
+
+// Exampe for CustomButton Component
 
 export default OrdersScreen;

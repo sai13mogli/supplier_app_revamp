@@ -1,5 +1,6 @@
 import {STATE_STATUS} from '../constants/index';
 import {CATEGORY_BRAND_ACTIONS} from '../constants/categorybrand';
+import {PROFILE_ACTIONS} from '../constants/profile';
 
 const initialState = {
   popularBrands: {
@@ -21,6 +22,7 @@ const initialState = {
     status: STATE_STATUS.UNFETCHED,
   },
   selectcategories: [],
+  confirmedbrands: [],
 
   // brandsStatus: STATE_STATUS.UNFETCHED,
 
@@ -261,13 +263,42 @@ export const categorybrandReducer = (state = initialState, action) => {
     case CATEGORY_BRAND_ACTIONS.FETCHED_CATEGORIES_BRANDS:
       return {
         ...state,
-        initialcategories: [...payload.data],
+        initialcategories: [...payload.data.categories],
       };
 
     case CATEGORY_BRAND_ACTIONS.SET_CATEGORIES:
       return {
         ...state,
         categories: [...payload.data],
+      };
+
+    case CATEGORY_BRAND_ACTIONS.CONFRIM_BRANDS:
+      return {
+        ...state,
+        confirmedbrands: [...payload.data],
+      };
+
+    case PROFILE_ACTIONS.LOGOUT:
+      return {
+        popularBrands: {
+          status: STATE_STATUS.UNFETCHED,
+          data: {},
+        },
+        allBrands: {
+          status: STATE_STATUS.UNFETCHED,
+          data: [],
+          alphabetNo: [],
+          maxPage: 91,
+        },
+
+        brandsAdded: [],
+        categories: [],
+        brandsData: [],
+        popularcategories: {
+          data: [],
+          status: STATE_STATUS.UNFETCHED,
+        },
+        selectcategories: [],
       };
 
     default:

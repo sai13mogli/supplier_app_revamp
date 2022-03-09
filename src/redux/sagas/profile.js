@@ -15,14 +15,25 @@ import {
 } from '../../services/profile';
 // actions
 import {
-  fetchedBusinessDetails,failedFetchBusinessDetails,fetchedUpdateBusinessDetails,
-  failedFetchUpdateBusinessDetails,failedFetchAddressDetails,fetchedAddressDetails, 
-  failedFetchBankDetails, fetchedBankDetails,fetchedProfile,failedFetchProfile,
-  failedFetchUpdateBankDetails,fetchedUpdateBankDetails,fetchedCategoriesBrands,
+  fetchedBusinessDetails,
+  failedFetchBusinessDetails,
+  fetchedUpdateBusinessDetails,
+  failedFetchUpdateBusinessDetails,
+  failedFetchAddressDetails,
+  fetchedAddressDetails,
+  failedFetchBankDetails,
+  fetchedBankDetails,
+  fetchedProfile,
+  failedFetchProfile,
+  failedFetchUpdateBankDetails,
+  fetchedUpdateBankDetails,
+  fetchedCategoriesBrands,
   failedFetchCategoriesBrands,
   failedFetchTdsInfoDetails,
   fetchedTdsInfoDetails,
+  fetchProfile,
 } from '../actions/profile';
+import * as RootNavigation from '../../routes/RootNavigation';
 
 function* fetchBusinessDetails() {
   try {
@@ -30,7 +41,11 @@ function* fetchBusinessDetails() {
     if (error) {
       yield put(failedFetchBusinessDetails(error));
     } else {
-      yield put(fetchedBusinessDetails(data.data));
+      if (data.status == 400 || data.data.errors) {
+        yield put(failedFetchBusinessDetails(data.data.errors));
+      } else {
+        yield put(fetchedBusinessDetails(data.data));
+      }
     }
   } catch (error) {
     yield put(failedFetchBusinessDetails(error));
@@ -44,6 +59,7 @@ function* fetchUpdateBusinessDetails({payload: {formData}}) {
       yield put(failedFetchUpdateBusinessDetails(error));
     } else {
       yield put(fetchedUpdateBusinessDetails(formData, data.data));
+      yield put(fetchProfile());
     }
   } catch (error) {
     yield put(failedFetchUpdateBusinessDetails(error));
@@ -63,7 +79,7 @@ function* fetchUpdateBankDetails({payload: {formData}}) {
   }
 }
 
-function* fetchProfile({}) {
+function* fetchUserProfile({}) {
   try {
     let {data, error} = yield call(getProfile);
     const profileData = yield call(getUserInfo);
@@ -72,6 +88,9 @@ function* fetchProfile({}) {
       yield put(failedFetchProfile(error));
     } else {
       yield put(fetchedProfile(data.data));
+      if (data.data.verificationStatus < 10) {
+        RootNavigation.navigate('Profile');
+      }
     }
   } catch (error) {
     yield put(failedFetchProfile(error));
@@ -118,11 +137,17 @@ function* fetchTdsInfoDetails() {
 }
 
 export default fork(function* () {
-  yield takeEvery(PROFILE_ACTIONS.FETCH_PROFILE, fetchProfile);
+  yield takeEvery(PROFILE_ACTIONS.FETCH_PROFILE, fetchUserProfile);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS, fetchBusinessDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_ADDRESSES, fetchAddressDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BANK_DETAILS, fetchBankDetails);
-  yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,fetchUpdateBusinessDetails);
+  yield takeEvery(
+    PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,
+    fetchUpdateBusinessDetails,
+  );
   yield takeEvery(PROFILE_ACTIONS.FETCH_TDS_INFO_DETAILS, fetchTdsInfoDetails);
-  yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS,fetchUpdateBankDetails);
+  yield takeEvery(
+    PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS,
+    fetchUpdateBankDetails,
+  );
 });
