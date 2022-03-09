@@ -213,6 +213,7 @@ const BusinessDetailsScreen = props => {
       component: FloatingLabelInputField,
       disabled: false,
       extraView: () => getExtraView(),
+      isfromLogin: true,
     },
     email: {
       title: 'Email',
@@ -227,6 +228,7 @@ const BusinessDetailsScreen = props => {
       component: FloatingLabelInputField,
       disabled: false,
       extraView: () => getExtraViewEmail(),
+      
     },
     tan: {
       title: 'TAN',
@@ -524,9 +526,7 @@ const BusinessDetailsScreen = props => {
   const getExtraView = () => {
     if (phoneVerified) {
       return (
-        <TouchableOpacity style={styles.setndOtpBtn}>
-          <Text style={styles.sendOtptext}>check</Text>
-        </TouchableOpacity>
+        <CustomeIcon name={'right-tick-line'} color={Colors.SuccessStateColor} size={Dimension.font20}></CustomeIcon>
       );
     } else {
       if (sendOtp) {
@@ -556,9 +556,7 @@ const BusinessDetailsScreen = props => {
   const getExtraViewEmail = () => {
     if (emailVerified) {
       return (
-        <TouchableOpacity style={styles.setndOtpBtn}>
-          <Text style={styles.sendOtptext}>check</Text>
-        </TouchableOpacity>
+        <CustomeIcon name={'right-tick-line'} color={Colors.SuccessStateColor} size={Dimension.font20}></CustomeIcon>
       );
     } else {
       if (sendOtpEmail) {
@@ -618,8 +616,8 @@ const BusinessDetailsScreen = props => {
         )).toList()}
         {/* {otpModal && ( */}
           <LoginOtpModal
-            //visible={otpModal}
-            visible={true}
+            visible={otpModal}
+            //visible={true}
             onLogin={onLogin}
             onClose={() => setOtpModal(false)}
             email={type == 6 ? phone : email}
