@@ -423,9 +423,9 @@ const Conversation = props => {
     return (
       
       <FlatList
-       // data={conversations}
-       //renderItem={renderItem}
-        //keyExtractor={(item, index) => `${index}-item`}
+       data={conversations}
+       renderItem={renderItem}
+        keyExtractor={(item, index) => `${index}-item`}
         //ListHeaderComponent={renderListHeader1()}
         ListEmptyComponent={listEmptyComponent}
       />
