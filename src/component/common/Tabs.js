@@ -122,7 +122,7 @@ const Tabs = props => {
       <View
         style={{
           position: 'absolute',
-          top: -20,
+          top: -5,
           width,
         }}>
         <View
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   },
   activeTab: {
     backgroundColor: '#fff',
-    //paddingVertical: 12,
+   // paddingVertical: 12,
     width: '50%',
     borderBottomColor: colors.BrandColor,
     borderBottomWidth: 3,
@@ -268,6 +268,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.WhiteColor,
     borderBottomWidth: 3,
     width: '50%',
+   // paddingVertical: 12,
   },
   activeTabText: {
     alignSelf: 'center',
