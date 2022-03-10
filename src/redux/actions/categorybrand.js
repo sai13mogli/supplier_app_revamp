@@ -199,3 +199,12 @@ export const addMultipleBrands = data => {
     },
   };
 };
+
+export const removeRaisedBrands = data => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.REMOVE_RAISED_BRANDS,
+    payload: {
+      data,
+    },
+  };
+};

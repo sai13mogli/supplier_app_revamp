@@ -144,15 +144,6 @@ const AllBrandsScreen = props => {
           }>
           {item == '0-9' ? '0-9' : String.fromCharCode(item)}
         </Text>
-
-        {/* <Text
-          style={
-            activeTerm == String.fromCharCode(item)
-              ? styles.activealphbetText
-              : styles.alphbetText
-          }>
-          {String.fromCharCode(item)}
-        </Text> */}
       </TouchableOpacity>
     );
   };
@@ -210,7 +201,14 @@ const AllBrandsScreen = props => {
           <Text style={styles.NoDataTxt}>No Brand Found</Text>
           <TouchableOpacity
             onPress={() =>
-              dispatch(addBrand({name: inputValue, requested: true}))
+              dispatch(
+                addBrand({
+                  name: inputValue,
+                  requested: true,
+                  isNewBrand: true,
+                  isDeleted: 2,
+                }),
+              )
             }>
             <Text style={styles.addBrandTxt}>Add Brand</Text>
           </TouchableOpacity>
@@ -261,6 +259,7 @@ const AllBrandsScreen = props => {
               maxToRenderPerBatch={18}
               ListEmptyComponent={listEmptyComponent}
               fromAllBrands={true}
+              allbrandsListing={true}
               // windowSize={30}
               initialNumToRender={18}
               // updateCellsBatchingPeriod={2}

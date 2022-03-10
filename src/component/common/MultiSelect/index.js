@@ -39,15 +39,29 @@ const MultiSelect = props => {
   }, []);
 
   const setData = () => {
-    let selected = (props.selectedValues || []).map(_ => _.id);
-    let initialData = [...props.data];
-    initialData = initialData.map(_ => ({
-      ..._,
-      checked: selected.includes(_.id),
-    }));
-    setChoosedList(props.selectedValues);
-    setCustomeList(initialData);
-    setDataList(initialData);
+    if (props.fromAllBrands && props.allbrandsListing) {
+      let selected = (props.selectedValues || []).map(
+        _ => _.brandCode || _.code,
+      );
+      let initialData = [...props.data];
+      initialData = initialData.map(_ => ({
+        ..._,
+        checked: selected.includes(_.code),
+      }));
+      setChoosedList(props.selectedValues);
+      setCustomeList(initialData);
+      setDataList(initialData);
+    } else {
+      let selected = (props.selectedValues || []).map(_ => _.id);
+      let initialData = [...props.data];
+      initialData = initialData.map(_ => ({
+        ..._,
+        checked: selected.includes(_.id),
+      }));
+      setChoosedList(props.selectedValues);
+      setCustomeList(initialData);
+      setDataList(initialData);
+    }
   };
 
   const {

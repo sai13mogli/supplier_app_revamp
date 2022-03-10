@@ -34,6 +34,7 @@ import {
   setCategories,
   updateBrandData,
   fetchCategoriesBrands,
+  removeRaisedBrands,
 } from '../../../redux/actions/categorybrand';
 import {addOrUpdateCategoryAndBrand} from '../../../services/categorybrand';
 import {getAllCategories} from '../../../services/auth';
@@ -449,6 +450,7 @@ const CategoryBrandScreen = props => {
         brandListingUrl: brandUrl,
         brandName: brand && brand.name,
         filled: true,
+        isNewBrand: true,
       };
       dispatch(updateBrandData(currBrandObj));
     } else {
@@ -463,6 +465,7 @@ const CategoryBrandScreen = props => {
         brandListingUrl: brandUrl,
         brandName: brand && brand.name,
         filled: true,
+        isNewBrand: true,
       };
       dispatch(addBrandData(brandObj));
     }
@@ -556,6 +559,7 @@ const CategoryBrandScreen = props => {
         .filter(
           it =>
             it.isNewBrand &&
+            (it.brandCode || it.code) &&
             ((!it.isDocumentRequired && it.status) ||
               it.isDeleted == 0 ||
               it.isDeleted == 4 ||
@@ -572,21 +576,24 @@ const CategoryBrandScreen = props => {
           brandListingUrl: _.brandListingUrl || '',
         }));
 
-      let mutateRaisedbrands = (raisedBrand || []).map((_, i) => ({
-        supplierId: supplierId,
-        brandCode: _.brandCode,
-        fileKey: _.fileKey,
-        businessNature: _.businessNature,
-        expiryDate: _.expiryDate,
-        isDeleted: _.isDeleted,
-        isRaiseRequest: _.isRaiseRequest,
-        brandListingUrl: _.brandListingUrl,
-      }));
+      let mutateRaisedbrands = (raisedBrand || [])
+        .filter(item => item.isNewBrand)
+        .map((_, i) => ({
+          supplierId: supplierId,
+          brandCode: _.brandCode,
+          fileKey: _.fileKey,
+          businessNature: _.businessNature,
+          expiryDate: _.expiryDate,
+          isDeleted: _.isDeleted,
+          isRaiseRequest: _.isRaiseRequest,
+          brandListingUrl: _.brandListingUrl,
+        }));
 
       console.log('mutateBrands', mutatebrands);
       console.log('raisedBrands', mutateRaisedbrands);
 
       let brandCodes = ([...mutatebrands] || []).map(_ => _.brandCode);
+      console.log(brandCodes, 'all brand codes', mutateRaisedbrands);
       let filterbrands = ([...mutateRaisedbrands] || []).filter(
         _ => ![...brandCodes].includes(_.brandCode),
       );
@@ -638,6 +645,7 @@ const CategoryBrandScreen = props => {
       const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
       if (data && data.success) {
         setNextLoader(false);
+        dispatch(removeRaisedBrands([]));
         dispatch(fetchProfile());
         props.navigation.goBack();
       } else {
@@ -811,7 +819,7 @@ const CategoryBrandScreen = props => {
                       </View>
 
                       <View style={{flex: 1}}>
-                        {_.isDeleted == 2 ? (
+                        {_.isDeleted == 2 && !_.isNewBrand ? (
                           <TouchableOpacity style={styles.ArrowBtn}>
                             <CustomeIcon
                               name={'arrow-right-line'}

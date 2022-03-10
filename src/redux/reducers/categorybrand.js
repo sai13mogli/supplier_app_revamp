@@ -273,6 +273,14 @@ export const categorybrandReducer = (state = initialState, action) => {
         };
       }
 
+    case CATEGORY_BRAND_ACTIONS.REMOVE_RAISED_BRANDS:
+      if (state && state.brandsData) {
+        return {
+          ...state,
+          brandsData: payload.data,
+        };
+      }
+
     case CATEGORY_BRAND_ACTIONS.SET_POPULAR_CATEGORIES:
       return {
         ...state,
