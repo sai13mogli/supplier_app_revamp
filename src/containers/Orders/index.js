@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text,TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import CustomButton from '../../component/common/Button';
 import DropDown from '../../component/common/DropDown';
 import CustomeIcon from '../../component/common/CustomeIcon';
@@ -17,16 +17,22 @@ const OrdersScreen = props => {
   };
 
   const onCheckAction = value => {
-    props.navigation.navigate('Notification')
-   // setSelection(value);
+    props.navigation.navigate('Notification');
+    // setSelection(value);
   };
 
   return (
     <>
-      <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000',marginTop:100}}>
+      <Text
+        style={{
+          fontSize: 16,
+          fontWeight: 'bold',
+          color: '#000',
+          marginTop: 100,
+        }}>
         OrdersScreen
       </Text>
-      <CustomButton
+      {/* <CustomButton
         title={'Hello'}
         buttonColor={'dodgerblue'}
         iconName={'user'}
@@ -63,9 +69,7 @@ const OrdersScreen = props => {
         TextColor={colors.WhiteColor}
         borderColor={colors.WhiteColor}
       />
-      {/* End */}
 
-      {/* Example for Dropdown Component */}
       <DropDown
         // enabled={false}
         placeholder={'Gender'}
@@ -77,16 +81,11 @@ const OrdersScreen = props => {
         onValueChange={onChange}
         title={'select Something'}
       />
-      {/* End */}
-
-      {/* Example for DatePicker Component */}
-
       <CustomeDatePicker display={'default'} />
-      {/* Example for CheckBox Component */}
       <Checkbox
         checked={isSelected}
         onPress={() => setSelection(!isSelected)}
-      />
+      /> */}
     </>
   );
 };

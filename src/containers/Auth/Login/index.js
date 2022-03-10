@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Image,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
@@ -35,6 +36,8 @@ const LoginScreen = props => {
   const [passwordError, setPasswordError] = useState(false);
   const [error, setError] = useState('');
   const [otpModal, setOtpModal] = useState(false);
+  const [isSecure, setIsSecure] = useState(true);
+  // const [showForgotPass, setShowForgotPass] = useState(false);
 
   const FORM_FIELDS = new OrderedMap({
     email: {
@@ -56,13 +59,14 @@ const LoginScreen = props => {
       value: password,
       onChangeText: text => setPassword(text),
       placeholder: '',
-      secureTextEntry: true,
+      secureTextEntry: isSecure,
       component: FloatingLabelInputField,
       errorMessage: 'Invalid Password',
       showError: passwordError,
       onBlur: () => onPasswordBlur(),
       extraView: () => (
         <CustomeIcon
+          onPress={() => setIsSecure(!isSecure)}
           name={'eye-open'}
           color={Colors.eyeIcon}
           size={Dimension.font20}></CustomeIcon>
@@ -229,9 +233,11 @@ const LoginScreen = props => {
           <field.component {...field} />
         )).toList()}
         {error ? <Text style={styles.errorTxt}>{error}</Text> : null}
-        <View style={{justifyContent: 'flex-end'}}>
+        <TouchableOpacity
+          // onPress={() => setShowForgotPass(true)}
+          style={{justifyContent: 'flex-end'}}>
           <Text style={styles.fotgotTxt}>Forgot Password</Text>
-        </View>
+        </TouchableOpacity>
         <View style={styles.buttonWrap}>
           <View style={{flex: 1, marginRight: Dimension.margin15}}>
             <CustomButton

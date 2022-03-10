@@ -1,5 +1,12 @@
 import React, {useEffect} from 'react';
-import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Linking,
+} from 'react-native';
 import Header from '../../component/common/Header';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -153,6 +160,7 @@ const ProfileScreen = props => {
             <View style={{flex: 3}}>
               <CustomButton
                 title={'OPEN MAIL'}
+                onPress={() => Linking.openURL('mailto:')}
                 TextColor={Colors.WhiteColor}
                 buttonColor={Colors.FontColor}
                 borderColor={Colors.FontColor}
