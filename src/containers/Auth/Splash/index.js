@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, Image, ImageBackground, View} from 'react-native';
 
 const SplashScreen = props => {
   useEffect(() => {
@@ -18,9 +18,22 @@ const SplashScreen = props => {
   };
 
   return (
-    <View>
+    <ImageBackground
+      source={require('../../../assets/images/loginBg.png')}
+      resizeMode="stretch"
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#fff',
+      }}>
+      <Image
+        source={require('../../../assets/images/splash.png')}
+        resizeMode={'contain'}
+        style={{alignSelf: 'center', width: 200, height: 100, margin: 20}}
+      />
       <ActivityIndicator style={{alignSelf: 'center'}} />
-    </View>
+    </ImageBackground>
   );
 };
 
