@@ -8,7 +8,7 @@ import CustomButton from './Button';
 import CustomeIcon from './CustomeIcon';
 import FloatingLabelInputField from './FloatingInput';
 import {setUserPassword} from '../../services/auth';
-
+import Progress from 'react-native-progress/Bar';
 const deviceWidth = Dimensions.get('window').width;
 
 const CreatePasswordModal = props => {
@@ -29,11 +29,12 @@ const CreatePasswordModal = props => {
 
   const getExtraView = () => {
     return (
-      <Icon
+      
+      <CustomeIcon
         onPress={() => setIsSecure(!isSecure)}
-        name="eye"
-        color={'#ccc'}
-        size={20}
+        name="eye-open"
+        color={Colors.eyeIcon}
+        size={Dimension.font20}
       />
     );
   };
@@ -109,21 +110,61 @@ const CreatePasswordModal = props => {
             secureTextEntry={isSecure}
             extraView={() => getExtraView()}
           />
-          <Text style={{color: '#000'}}>
-            At least 8 characters—the more characters, the better.
-          </Text>
-          <Text style={{color: '#000'}}>
+          <View style={styles.progressbarWrap}>
+            <View style={{flex:.8}}>
+            <Progress
+              width={null}
+              animated={false}
+              progress={
+               // PROGRESS[profileData.verificationStatus]
+                0.5
+              }
+              color={Colors.SuccessStateColor}
+              unfilledColor={Colors.grayShade11}
+              borderColor={Colors.grayShade11}
+              height={Dimension.height5}
+            />
+            </View>
+            
+            <View style={{flex:.2,  alignItems:"flex-end",}}>
+            <Text style={styles.progressBottomtxt}>
+              Weak
+            </Text>
+            </View>
+            
+          </View>
+          <View style={styles.passwordConditionWrap}>
+
+          <View style={{flexDirection:"row",}}>
+          <View style={styles.dotStyle}></View>
+            <Text style={styles.ConditionTxt}>
+          
+          At least 8 characters—the more characters, the better.
+        </Text>
+          </View>
+          <View style={{flexDirection:"row",}}>
+          <View style={styles.dotStyle}></View>
+          <Text style={styles.ConditionTxt}>
             A mixture of both uppercase and lowercase letters.
           </Text>
-          <Text style={{color: '#000'}}>A mixture of letters and numbers.</Text>
-          <Text style={{color: '#000'}}>
+          </View>
+          
+          <View style={{flexDirection:"row",}}>
+          <View style={styles.dotStyle}></View>
+          <Text style={styles.ConditionTxt}>A mixture of letters and numbers.</Text>
+          </View>
+          <View style={{flexDirection:"row",}}>
+          <View style={styles.dotStyle}></View>
+          <Text style={styles.ConditionTxt}>
             Inclusion of at least one special character, e.g., ! @ # ? ]
           </Text>
+          </View>
+          </View>
         </View>
 
         <View style={styles.bottomBtnWrap}>
           <CustomButton
-            title={'NEXT'}
+            title={'CONFIRM'}
             disabled={loader || passwordError || !password}
             loading={loader}
             buttonColor={Colors.BrandColor}
@@ -158,7 +199,7 @@ const styles = StyleSheet.create({
   ModalheadingWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: Dimension.padding15,
+    padding: Dimension.padding15,
   },
   ModalHeading: {
     fontSize: Dimension.font16,
@@ -172,6 +213,39 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.grayShade1,
     borderTopWidth: 1,
     backgroundColor: '#fff',
+  },
+  passwordConditionWrap:{
+    paddingVertical:Dimension.padding30
+  },
+  ConditionTxt:{
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont ,
+    marginBottom: Dimension.margin3,
+  },
+  dotStyle:{
+    width:Dimension.height5,
+    height:Dimension.height5,
+    borderRadius:5,
+    backgroundColor:Colors.eyeIcon,
+    alignItems:"center",
+    marginRight:Dimension.margin5,
+    marginTop:Dimension.margin5
+  },
+  progressbarWrap:{
+    paddingVertical:Dimension.padding5,
+    flex:1,
+    flexDirection:"row",
+    justifyContent:"space-between",
+    alignItems:"center"
+  },
+ 
+  progressBottomtxt:{
+    fontSize: Dimension.font10,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+  
+    
   },
 });
 
