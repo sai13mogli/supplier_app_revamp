@@ -1,4 +1,4 @@
-import {PROFILE_ACTIONS} from '../constants/profile';
+import { PROFILE_ACTIONS } from '../constants/profile';
 
 export const fetchProfile = () => {
   return {
@@ -47,7 +47,7 @@ export const failedFetchBusinessDetails = error => {
 export const fetchUpdateBusinessDetails = formData => {
   return {
     type: PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,
-    payload: {formData},
+    payload: { formData },
   };
 };
 
@@ -86,6 +86,30 @@ export const fetchedAddressDetails = data => {
 export const failedFetchAddressDetails = error => {
   return {
     type: PROFILE_ACTIONS.FAILED_FETCH_ADDRESSES,
+    error,
+  };
+};
+
+export const fetchUpdateBillingAddress = formData => {
+  return {
+    type: PROFILE_ACTIONS.FETCH_UPDATE_BILLING_ADDRESS,
+    payload: { formData },
+  };
+};
+
+export const fetchedUpdateBillingAddress = (formData, data) => {
+  return {
+    type: PROFILE_ACTIONS.FETCHED_UPDATE_BILLING_ADDRESS,
+    payload: {
+      formData,
+      data,
+    },
+  };
+};
+
+export const failedFetchUpdateBillingAddress = error => {
+  return {
+    type: PROFILE_ACTIONS.FAILED_FETCH_UPDATE_BILLING_ADDRESS,
     error,
   };
 };
@@ -137,7 +161,7 @@ export const failedFetchTdsInfoDetails = error => {
 export const fetchUpdateBankDetails = formData => {
   return {
     type: PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS,
-    payload: {formData},
+    payload: { formData },
   };
 };
 

@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {CheckBox} from 'react-native-elements';
+import React, { useState } from 'react';
+import { CheckBox } from 'react-native-elements';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import CustomeIcon from './CustomeIcon';
 const DotCheckbox = props => {
-  const {data, onCheck, toggleCheck, value} = props;
+  const { data, onCheck, toggleCheck, value } = props;
 
   return (
     <>

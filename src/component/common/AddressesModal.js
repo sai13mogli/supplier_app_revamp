@@ -1,183 +1,153 @@
-import React, {useState}from "react";
-import {View,StyleSheet,Text,TouchableOpacity,Modal,ScrollView} from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Text, TouchableOpacity, Modal, ScrollView, FlatList } from "react-native";
 import CustomeIcon from '../../component/common/CustomeIcon';
 import Dimension from "../../Theme/Dimension";
 import colors from "../../Theme/Colors"
-import {OrderedMap} from 'immutable';
+import DotCheckbox from './Checkbox';
 
-const AddressesModal = props => { 
+import CustomButton from '../common/Button';
+import { filtersTypeData, filtersData } from '../../redux/constants/support';
 
-    // const FORM_FIELDS = new OrderedMap({
-    //     legalEntityName: {
-    //       title: 'Legal Entity Name',
-    //       placeholder: '',
-    //       value: legalEntityName,
-    //       onChangeText: text => setlegalEntityName(text),
-    //       component: FloatingLabelInputField,
-    //     },
-    //     tradeName: {
-    //       title: 'Trade Name',
-    //       placeholder: '',
-    //       value: tradeName,
-    //       onChangeText: text => settradeName(text),
-    //       component: FloatingLabelInputField,
-    //     },
-    //     contactName: {
-    //       title: 'Contact Name',
-    //       placeholder: '',
-    //       value: contactName,
-    //       onChangeText: text => setcontactName(text),
-    //       component: FloatingLabelInputField,
-    //     },
-    //     gstin: {
-    //       title: 'GSTIN',
-    //       placeholder: '',
-    //       value: gstin,
-    //       onChangeText: text => setgstin(text),
-    //       component: FloatingLabelInputField,
-    //       onBlur: () => onGstinBlur(),
-    //     },
-    //     country: {
-    //       title: 'Country',
-    //       placeholder: 'Country',
-    //       selectedValue: country,
-    //       onValueChange: text => setcountry(text),
-    //       component: DropDown,
-    //       items: [
-    //         {
-    //           label: 'India',
-    //           value: 217,
-    //         },
-    //       ],
-    //       enabled: false,
-    //     },
-    //     pincode: {
-    //       title: 'Pincode',
-    //       placeholder: '',
-    //       value: pincode,
-    //       maxLength: 6,
-    //       keyboardType: 'number-pad',
-    //       onChangeText: text => setpincode(text),
-    //       component: FloatingLabelInputField,
-    //       onBlur: () => onPincodeBlur(),
-    //     },
-    //     state: {
-    //       title: 'State',
-    //       placeholder: 'State',
-    //       selectedValue: state,
-    //       onValueChange: text => setstate(text),
-    //       component: DropDown,
-    //       items: states,
-    //       enabled: true,
-    //     },
-    //     city: {
-    //       title: 'City',
-    //       placeholder: 'City',
-    //       selectedValue: city,
-    //       onValueChange: text => setcity(text),
-    //       component: DropDown,
-    //       items: cities,
-    //       enabled: true,
-    //     },
-    //     phone: {
-    //       title: 'Phone',
-    //       placeholder: '',
-    //       value: phone,
-    //       maxLength: 10,
-    //       keyboardType: 'number-pad',
-    //       onChangeText: text => setphone(text),
-    //       component: FloatingLabelInputField,
-    //     },
-    //     email: {
-    //       title: 'Email',
-    //       placeholder: '',
-    //       value: email,
-    //       onChangeText: text => setemail(text),
-    //       component: FloatingLabelInputField,
-    //     },
-    //     tan: {
-    //       title: 'TAN',
-    //       placeholder: '',
-    //       value: tan,
-    //       onChangeText: text => settan(text),
-    //       component: FloatingLabelInputField,
-    //     },
-    //   });
-    
+const AddressesModal = props => {
 
+  const [loading, setLoading] = useState(false);
+  const [isSelected, setSelection] = useState(false);
   const {
     onPress,
+    onClose,
     visible,
-    transparent
+    dataList,
+    transparent,
   } = props;
 
+
+
+
+
   return (
-       <View style={styles.container}>
-       <Modal
-            animationType="slide"
-            transparent={false}
-            visible={props.visible}
-            hasBackdrop={true}
-            backdropOpacity={0.4}
-            onRequestClose={props.onClose}
-            >
-                <View
-                    style={{
-                      height: '80%',
-                      marginTop: 'auto',
-                      borderRadius: 8,
-                      padding: Dimension.padding10,
-                      backgroundColor: 'red',
-                    }}>
-              <View style={styles.crossView}>
-              <Text style={styles.AddressType}>default</Text>
+    <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={transparent}
+        visible={props.visible}
+        hasBackdrop={true}
+        backdropOpacity={0.4}
+        onRequestClose={onClose}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#0000004D',
+          }}>
+          <View
+            style={{
+              height: '60%',
+              marginTop: 'auto',
+              borderTopLeftRadius: 15,
+              borderTopRightRadius: 15,
+              padding: 10,
+              backgroundColor: 'white',
+            }}>
+            <View style={styles.crossView}>
+              <Text style={styles.AddressType}>Edit View (2020-2021)</Text>
+
               <TouchableOpacity
-               onPress={onPress}
-               >
-              <CustomeIcon name={'right-tick-line'} color={colors.SuccessStateColor} size={Dimension.font20}></CustomeIcon>
+                onPress={onPress}
+              >
+                <CustomeIcon name={'right-tick-line'} color={colors.SuccessStateColor} size={Dimension.font20}></CustomeIcon>
               </TouchableOpacity>
-              </View>  
-              <ScrollView style={styles.ContainerCss}>
-               
-               </ScrollView>      
-             
-           
             </View>
-          </Modal>
+            <ScrollView style={styles.ContainerCss}>
+              <View style={styles.sectionView}>
+                <Text>TDS filed for AY </Text>
+                <Text>ITR filed for AV </Text>
+                <Text>Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY</Text>
+                <Text>Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY</Text>
+                <Text>Turnover in financial year</Text>
+                <DotCheckbox
+                  checked={isSelected}
+                  onPress={() => setSelection(!isSelected)}
+                />
+                {/* <Text>
+                  {props.data}
+                </Text> */}
+                <Text>
+                  {props.filterListData}
+                </Text>
+                {/* <FlatList
+                  renderItem={props.renderContent}
+                  data={props.filterListData}
+                /> */}
+
+              </View>
+            </ScrollView>
+          </View>
+          <View style={styles.bottombtnWrap}>
+            <CustomButton
+              buttonColor={colors.BrandColor}
+              borderColor={colors.BrandColor}
+              TextColor={colors.WhiteColor}
+              TextFontSize={Dimension.font16}
+              title={'Next'}
+              loading={loading}
+            // onPress={onSubmit}
+            />
+          </View>
         </View>
-      
+      </Modal>
+    </View>
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#98B3B7',
-    justifyContent: 'center',
+    // flex: 1,
   },
-  crossView:{
-    flexDirection:'row',
-    justifyContent:'space-between'
+  RightInnerPart: {
+    paddingLeft: Dimension.padding30,
+    marginBottom: Dimension.padding30
   },
-  ContainerCss:{
-    backgroundColor:colors.WhiteColor,
-    paddingHorizontal:Dimension.padding15
+  Separater: {
+    height: 0.8,
+    backgroundColor: '#e0e0e0',
+    marginTop: 5,
   },
-  addButton: {
-    position: 'absolute',
-    zIndex: 11,
-    right: 20,
-    bottom: 90,
-    backgroundColor: '#98B3B7',
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 8,
+  radioText: {
+    fontSize: Dimension.font14,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
   },
-     
-  });
+  warp: {
+    flexDirection: 'row'
+  },
+  bottombtnWrap: {
+    padding: Dimension.padding15,
+    borderTopColor: colors.grayShade2,
+    borderTopWidth: 1,
+    backgroundColor: colors.WhiteColor
+  },
+  sectionView: {
+    borderColor: 'grey',
+    borderRadius: 5,
+    borderWidth: 0.9
+  },
+  crossView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  ContainerCss: {
+    backgroundColor: colors.WhiteColor,
+    paddingHorizontal: Dimension.padding15,
+    paddingVertical: Dimension.padding35
+  },
+  AddressType: {
+    color: 'black',
+    fontSize: Dimension.font18,
+    fontFamily: Dimension.CustomRobotoBold
+  }
+
+});
 
 export default AddressesModal;
 

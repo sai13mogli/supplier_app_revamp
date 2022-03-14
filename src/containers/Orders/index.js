@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { Text, TouchableOpacity } from 'react-native';
 import CustomButton from '../../component/common/Button';
 import DropDown from '../../component/common/DropDown';
 import CustomeIcon from '../../component/common/CustomeIcon';
@@ -7,11 +7,11 @@ import Checkbox from '../../component/common/Checkbox/index';
 import CustomeDatePicker from '../../component/common/Datepicker/index';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 const OrdersScreen = props => {
   const [gender, setGender] = useState('');
   const [isSelected, setSelection] = useState(false);
-  const {navigate} = useNavigation();
+  const { navigate } = useNavigation();
   const onChange = value => {
     setGender(value);
   };
@@ -74,8 +74,8 @@ const OrdersScreen = props => {
         enabled={true}
         placeholder={'Gender'}
         items={[
-          {label: 'Male', value: 'M'},
-          {label: 'Female', value: 'F'},
+          { label: 'Male', value: 'M' },
+          { label: 'Female', value: 'F' },
         ]}
         selectedValue={gender}
         onValueChange={onChange}

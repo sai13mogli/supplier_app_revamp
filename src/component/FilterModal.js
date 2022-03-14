@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-native-modal';
-import {filtersTypeData, filtersData} from '../redux/constants/support';
+import { filtersTypeData, filtersData } from '../redux/constants/support';
 import {
   Text,
   View,
@@ -38,38 +38,38 @@ const FilterModal = props => {
             marginTop: Dimension.margin10,
             height: Dimension.height300,
             //right: '30%',
-           // paddingVertical: Dimension.padding80,
+            // paddingVertical: Dimension.padding80,
           }}>
 
-         
-        <DotCheckbox
-          data={filtersData && filtersData[props.activeFilterType]}
-          onCheck={getFilterValue}
-          value={props.typeFilter}
-          formfilterModal ={true}
-        />
-         </View>
+
+            <DotCheckbox
+              data={filtersData && filtersData[props.activeFilterType]}
+              onCheck={getFilterValue}
+              value={props.typeFilter}
+              formfilterModal={true}
+            />
+          </View>
         </View>
       );
     } else {
       return (
         <View style={styles.RightInnerPart}>
-        <View
-          style={{
-           marginTop: Dimension.margin10,
-            height: Dimension.height300,
-            right: '30%',
-            paddingVertical: Dimension.padding80,
-          }}>
-          <CustomSlider
-            values={[sliderIndex]}
-            min={1}
-            max={4}
-            LRpadding={0}
-            callback={singleSliderValueCallback}
-            single={true}
-          />
-        </View>
+          <View
+            style={{
+              marginTop: Dimension.margin10,
+              height: Dimension.height300,
+              right: '30%',
+              paddingVertical: Dimension.padding80,
+            }}>
+            <CustomSlider
+              values={[sliderIndex]}
+              min={1}
+              max={4}
+              LRpadding={0}
+              callback={singleSliderValueCallback}
+              single={true}
+            />
+          </View>
         </View>
       );
     }
@@ -113,53 +113,53 @@ const FilterModal = props => {
         props.setFiltersModal(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 0}}
+      style={{ padding: 0, margin: 0 }}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
       onBackdropPress={() => props.setFiltersModal(false)}
       onBackButtonPress={() => props.setFiltersModal(false)}>
       <View style={styles.modalContainer}>
-      <View style={styles.topbdr}></View>
-      <View style={styles.ModalheadingWrapper}>
-              <Text style={styles.ModalHeading}>filter</Text>
-              <CustomeIcon
-                name={'close'}
-                size={Dimension.font22}
-                color={Colors.FontColor}
-                onPress={() => {
-                  props.setFiltersModal(false);
-                }}></CustomeIcon>
-            </View>
-               
-            
-            <View style={styles.MidWrapper}>
-              <View style={styles.leftPart}>
-              {filtersTypeData.map((item, index) => (
-                <TouchableOpacity
-                  onPress={() => props.setActiveFilterType(item.key)}
+        <View style={styles.topbdr}></View>
+        <View style={styles.ModalheadingWrapper}>
+          <Text style={styles.ModalHeading}>filter</Text>
+          <CustomeIcon
+            name={'close'}
+            size={Dimension.font22}
+            color={Colors.FontColor}
+            onPress={() => {
+              props.setFiltersModal(false);
+            }}></CustomeIcon>
+        </View>
+
+
+        <View style={styles.MidWrapper}>
+          <View style={styles.leftPart}>
+            {filtersTypeData.map((item, index) => (
+              <TouchableOpacity
+                onPress={() => props.setActiveFilterType(item.key)}
+                style={[
+                  item && item.key == props.activeFilterType
+                    ? styles.activeBackground
+                    : styles.inactiveBackground,
+                ]}>
+                <Text
                   style={[
                     item && item.key == props.activeFilterType
-                      ? styles.activeBackground
-                      : styles.inactiveBackground,
+                      ? styles.LeftActiveTxt
+                      : styles.LeftInActiveTxt,
                   ]}>
-                  <Text
-                    style={[
-                      item && item.key == props.activeFilterType
-                        ? styles.LeftActiveTxt
-                        : styles.LeftInActiveTxt,
-                    ]}>
-                    {item.title}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-              </View>
-              <View style={styles.rightPart}>
-              {renderRight()}
-              </View>
-            </View>
-             
-             
-           
+                  {item.title}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <View style={styles.rightPart}>
+            {renderRight()}
+          </View>
+        </View>
+
+
+
       </View>
     </Modal>
   );
@@ -206,46 +206,46 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WhiteColor,
   },
 
-  MidWrapper:{
-    flexDirection:"row",
-    borderTopColor:Colors.grayShade2,
-    borderTopWidth:1,
+  MidWrapper: {
+    flexDirection: "row",
+    borderTopColor: Colors.grayShade2,
+    borderTopWidth: 1,
 
   },
-  leftPart:{
-    flex:3,
-    borderRightColor:Colors.grayShade2,
-    borderRightWidth:1,
+  leftPart: {
+    flex: 3,
+    borderRightColor: Colors.grayShade2,
+    borderRightWidth: 1,
 
 
   },
   activeBackground: {
     backgroundColor: Colors.LightBrandColor,
-    paddingVertical:Dimension.padding15,
-    paddingHorizontal:Dimension.padding20
+    paddingVertical: Dimension.padding15,
+    paddingHorizontal: Dimension.padding20
   },
   inactiveBackground: {
     backgroundColor: '#fff',
-    paddingVertical:Dimension.padding15,
-    paddingHorizontal:Dimension.padding20
+    paddingVertical: Dimension.padding15,
+    paddingHorizontal: Dimension.padding20
   },
-  LeftInActiveTxt:{
+  LeftInActiveTxt: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomMediumFont,
   },
-  LeftActiveTxt:{
+  LeftActiveTxt: {
     fontSize: Dimension.font14,
     color: Colors.BrandColor,
     fontFamily: Dimension.CustomMediumFont,
   },
-  rightPart:{
-    flex:7,
+  rightPart: {
+    flex: 7,
     //alignItems:"flex-start"
   },
-  RightInnerPart:{
-    paddingLeft:Dimension.padding30,
-    marginBottom:Dimension.padding30
+  RightInnerPart: {
+    paddingLeft: Dimension.padding30,
+    marginBottom: Dimension.padding30
   },
 });
 
