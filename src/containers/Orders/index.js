@@ -32,7 +32,7 @@ const OrdersScreen = props => {
         }}>
         OrdersScreen
       </Text>
-      {/* <CustomButton
+      <CustomButton
         title={'Hello'}
         buttonColor={'dodgerblue'}
         iconName={'user'}
@@ -85,7 +85,7 @@ const OrdersScreen = props => {
       <Checkbox
         checked={isSelected}
         onPress={() => setSelection(!isSelected)}
-      /> */}
+      /> 
     </>
   );
 };
