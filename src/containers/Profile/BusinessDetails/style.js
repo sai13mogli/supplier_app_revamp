@@ -46,14 +46,14 @@ const styles = StyleSheet.create({
     color: Colors.BrandColor,
     fontFamily: Dimension.CustomRegularFont,
   },
-  setndOtpBtn: {
-    backgroundColor: Colors.LightBrandColor,
-    paddingVertical: Dimension.padding8,
-    paddingHorizontal: Dimension.padding10,
-    borderRadius: 2,
-    width: 100,
-    height: 50,
-    alignItems: 'center',
+  
+  setndOtpBtn:{
+   backgroundColor:Colors.LightBrandColor,
+   paddingVertical:Dimension.padding8,
+   paddingHorizontal:Dimension.padding10,
+   borderRadius:2,
+   
+   alignItems:"center"
   },
 });
 

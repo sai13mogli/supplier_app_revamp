@@ -17,16 +17,22 @@ const OrdersScreen = props => {
   };
 
   const onCheckAction = value => {
-    props.navigation.navigate('Notification')
+    props.navigation.navigate('Notification');
     // setSelection(value);
   };
 
   return (
     <>
-      <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000', marginTop: 100 }}>
-        OrdersScreen
+      <Text
+        style={{
+          fontSize: 16,
+          fontWeight: 'bold',
+          color: '#000',
+          marginTop: 40,
+        }}>
+        Orders Screen
       </Text>
-      <CustomButton
+      {/* <CustomButton
         title={'Hello'}
         buttonColor={'dodgerblue'}
         iconName={'user'}
@@ -43,7 +49,7 @@ const OrdersScreen = props => {
         onPress={() => alert('running')}
         TextColor={colors.WhiteColor}
         borderColor={colors.WhiteColor}
-      />
+      /> */}
 
       <CustomButton
         title={'Open Notifications'}
@@ -63,11 +69,9 @@ const OrdersScreen = props => {
         TextColor={colors.WhiteColor}
         borderColor={colors.WhiteColor}
       />
-      {/* End */}
 
-      {/* Example for Dropdown Component */}
-      <DropDown
-        // enabled={false}
+      {/* <DropDown
+        enabled={true}
         placeholder={'Gender'}
         items={[
           { label: 'Male', value: 'M' },
@@ -77,16 +81,11 @@ const OrdersScreen = props => {
         onValueChange={onChange}
         title={'select Something'}
       />
-      {/* End */}
-
-      {/* Example for DatePicker Component */}
-
       <CustomeDatePicker display={'default'} />
-      {/* Example for CheckBox Component */}
       <Checkbox
         checked={isSelected}
         onPress={() => setSelection(!isSelected)}
-      />
+      /> */}
     </>
   );
 };

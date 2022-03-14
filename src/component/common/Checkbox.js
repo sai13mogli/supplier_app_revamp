@@ -50,10 +50,11 @@ const styles = StyleSheet.create({
   },
   checkboxwrapper: {
     backgroundColor: colors.transparent,
+
   },
   withMargincheckboxwrapper: {
     backgroundColor: colors.transparent,
-    marginBottom: Dimension.margin30,
+    marginBottom: Dimension.margin25,
   },
   checkboxContainer: {
     backgroundColor: colors.transparent,

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {BASE_URL} from '../redux/constants/index';
 
@@ -24,4 +25,15 @@ export const signUp = data => axios.post(`${AUTH}auth/newSignup`, data);
 export const validateEmailPhone = data =>
   axios.post(
     `${AUTH}auth/validateEmailPhone?email=${data.email}&phone=${data.phone}`,
+  );
+
+export const setUserPassword = async password =>
+  axios.post(
+    `${BASE_URL}profile/createPassword?password=${password}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
   );

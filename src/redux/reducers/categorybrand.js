@@ -23,6 +23,7 @@ const initialState = {
   },
   selectcategories: [],
   confirmedbrands: [],
+  categoriesbrandsStatus: STATE_STATUS.UNFETCHED,
 
   // brandsStatus: STATE_STATUS.UNFETCHED,
 
@@ -166,8 +167,16 @@ export const categorybrandReducer = (state = initialState, action) => {
           _ => _.name == payload.obj.name,
         );
         if (currbrand && currbrand.name) {
-          console.log('curr brand is already added', currbrand);
+          return {
+            ...state,
+            brandsAdded: [
+              ...state.brandsAdded.filter(
+                _ => (_.brandCode || _.code) !== payload.obj.code,
+              ),
+            ],
+          };
         } else {
+          console.log('addbrand', payload.obj);
           return {
             ...state,
             brandsAdded: [...state.brandsAdded, payload.obj],
@@ -189,6 +198,26 @@ export const categorybrandReducer = (state = initialState, action) => {
           ],
         };
       }
+
+    case CATEGORY_BRAND_ACTIONS.ADD_MULTIPLE_BRANDS:
+      // if (state && state.brandsAdded) {
+      //   console.log('currbrand', state && state.brandsAdded);
+      //   let currbrand = (state && state.brandsAdded).find(
+      //     _ => _.name == payload.obj.name,
+      //   );
+      //   if (currbrand && currbrand.name) {
+      //     console.log('curr brand is already added', currbrand);
+      //   } else {
+      //     return {
+      //       ...state,
+      //       brandsAdded: [...state.brandsAdded, payload.obj],
+      //     };
+      //   }
+      // }
+      return {
+        ...state,
+        brandsAdded: payload.data,
+      };
 
     case CATEGORY_BRAND_ACTIONS.ADD_CATEGORY:
       if (state && state.categories) {
@@ -244,6 +273,14 @@ export const categorybrandReducer = (state = initialState, action) => {
         };
       }
 
+    case CATEGORY_BRAND_ACTIONS.REMOVE_RAISED_BRANDS:
+      if (state && state.brandsData) {
+        return {
+          ...state,
+          brandsData: payload.data,
+        };
+      }
+
     case CATEGORY_BRAND_ACTIONS.SET_POPULAR_CATEGORIES:
       return {
         ...state,
@@ -263,7 +300,9 @@ export const categorybrandReducer = (state = initialState, action) => {
     case CATEGORY_BRAND_ACTIONS.FETCHED_CATEGORIES_BRANDS:
       return {
         ...state,
-        initialcategories: [...payload.data.categories],
+        initialcategories: [...(payload.data.categories || [])],
+        confirmedbrands: [...(payload.data.brands || [])],
+        categoriesbrandsStatus: STATE_STATUS.FETCHED,
       };
 
     case CATEGORY_BRAND_ACTIONS.SET_CATEGORIES:
@@ -273,9 +312,13 @@ export const categorybrandReducer = (state = initialState, action) => {
       };
 
     case CATEGORY_BRAND_ACTIONS.CONFRIM_BRANDS:
+      // if (state && state.confirmedbrands && state.confirmedbrands.length) {
+      //   let brandIds = ([...payload.data] || []).map;
+      // }
+
       return {
         ...state,
-        confirmedbrands: [...payload.data],
+        confirmedbrands: [...state.confirmedbrands, ...payload.data],
       };
 
     case PROFILE_ACTIONS.LOGOUT:

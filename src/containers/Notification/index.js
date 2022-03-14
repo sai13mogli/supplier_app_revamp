@@ -1,11 +1,14 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Text,
   TouchableOpacity,
   View,
   SectionList,
+  Image,
+  ActivityIndicator,
 } from 'react-native';
+import Modal from 'react-native-modal';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
 import {
@@ -18,7 +21,10 @@ import {
 import {STATE_STATUS} from '../../redux/constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../../component/common/Header';
-
+import CustomeIcon from '../../component/common/CustomeIcon';
+import Dimension from '../../Theme/Dimension';
+import Colors from '../../Theme/Colors';
+import styles from './style';
 const NotificationScreen = props => {
   const notifications = useSelector(
     state => state.notificationsReducer.data || [],
@@ -35,9 +41,20 @@ const NotificationScreen = props => {
   );
 
   const dispatch = useDispatch();
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [singleNotificationAction, setsingleNotificationAction] =
+    useState(false);
+  const [selectedOrder, setSelectedOrder] = useState({});
+
   useEffect(() => {
     dispatch(fetchNotifications(1));
   }, []);
+
+  useEffect(() => {
+    if (!singleNotificationAction) {
+      setSelectedOrder({});
+    }
+  }, [singleNotificationAction]);
 
   const onEndReached = () => {
     if (
@@ -92,59 +109,245 @@ const NotificationScreen = props => {
     return (
       <View
         key={index}
-        style={{
-          borderRadius: 4,
-          padding: 12,
-          borderWidth: 0.5,
-          marginTop: 12,
-          marginHorizontal: 12,
-          borderColor: '#000',
-        }}>
-        <Icon
+        style={
+          item.readStatus
+            ? styles.notificationWrap
+            : styles.ActivenotificationWrap
+        }>
+        <View style={{flexDirection: 'row', flex: 7, alignItems: 'center'}}>
+          <View
+            style={
+              //styles.iconWrap
+              styles.ActioniconWrap
+            }>
+            <CustomeIcon
+              // name={'support-line'}
+              name={'orders-line'}
+              size={Dimension.font20}
+              //color={Colors.eyeIcon}
+              color={Colors.BrandColor}
+            />
+          </View>
+          {/* <Icon
           name={'close'}
           color={'red'}
           onPress={() => dispatch(deleteNotification(item.id))}
-        />
-        <Text style={{color: '#000'}}>{item.title}</Text>
-        <Text style={{color: '#000'}}>{item.content}</Text>
-        <Text style={{color: '#000'}}>{getTime(item.createdAt)}</Text>
-        {item.readStatus ? null : (
+        /> */}
+          {/* <Text style={styles.titleCss}>{item.title}</Text> */}
+          <Text style={styles.titleCss}>{item.content}</Text>
+        </View>
+        <View style={{flex: 3, alignItems: 'flex-end'}}>
+          {/* {item.readStatus ? null : ( */}
+          <TouchableOpacity
+            onPress={() => {
+              setsingleNotificationAction(true);
+              setSelectedOrder(item);
+            }}>
+            <Icon
+              name={'dots-horizontal'}
+              color={Colors.FontColor}
+              size={Dimension.font20}
+              //onPress={() => dispatch(markRead(item.id))}
+            ></Icon>
+          </TouchableOpacity>
+          {/* )} */}
+          <Text style={styles.timeorDateCss}>{getTime(item.createdAt)}</Text>
+          {/* {item.readStatus ? null : (
           <TouchableOpacity onPress={() => dispatch(markRead(item.id))}>
             <Text style={{color: 'red'}}>Mark Read</Text>
           </TouchableOpacity>
-        )}
+        )} */}
+        </View>
       </View>
     );
   };
 
+  const renderBulkActions = () => {
+    return (
+      <Modal
+        isVisible={isModalVisible}
+        onBackButtonPress={() => setModalVisible(false)}
+        onBackdropPress={() => setModalVisible(false)}
+        onDismiss={() => setModalVisible(false)}
+        overlayPointerEvents={'auto'}
+        coverScreen={true}
+        style={{padding: 0, margin: 0}}
+        //deviceWidth={deviceWidth}
+        hasBackdrop={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.topbdr}></View>
+          <View style={styles.ModalheadingWrapper}>
+            <Text style={styles.ModalHeading}>All Action</Text>
+            <CustomeIcon
+              name={'close'}
+              size={Dimension.font22}
+              color={Colors.FontColor}
+              onPress={() => setModalVisible(false)}></CustomeIcon>
+          </View>
+          <View
+            style={{
+              padding: Dimension.padding20,
+              marginBottom: Dimension.margin40,
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(markBulkRead());
+                setModalVisible(false);
+              }}
+              style={styles.modalBtn}>
+              <CustomeIcon
+                name={'right-tick-line'}
+                size={Dimension.font20}
+                color={Colors.FontColor}></CustomeIcon>
+              <Text style={styles.ModalTxt}>Mark All Read</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(deleteBulk());
+                setModalVisible(false);
+              }}
+              style={styles.modalBtn}>
+              <CustomeIcon
+                name={'delete'}
+                size={Dimension.font20}
+                color={Colors.FontColor}></CustomeIcon>
+
+              <Text style={styles.ModalTxt}>Delete All Notification</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
+
+  const renderIndividualAction = () => {
+    return (
+      <Modal
+        isVisible={singleNotificationAction}
+        onBackButtonPress={() => setsingleNotificationAction(false)}
+        onBackdropPress={() => setsingleNotificationAction(false)}
+        onDismiss={() => setsingleNotificationAction(false)}
+        overlayPointerEvents={'auto'}
+        coverScreen={true}
+        style={{padding: 0, margin: 0}}
+        //deviceWidth={deviceWidth}
+        hasBackdrop={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.topbdr}></View>
+          <View style={styles.ModalheadingWrapper}>
+            <Text style={styles.ModalHeading}>Action</Text>
+            <CustomeIcon
+              name={'close'}
+              size={Dimension.font22}
+              color={Colors.FontColor}
+              onPress={() => setsingleNotificationAction(false)}></CustomeIcon>
+          </View>
+          <View
+            style={{
+              padding: Dimension.padding20,
+              marginBottom: Dimension.margin40,
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(markRead(selectedOrder.id));
+                setsingleNotificationAction(false);
+              }}
+              style={styles.modalBtn}>
+              <CustomeIcon
+                name={'right-tick-line'}
+                size={Dimension.font20}
+                color={Colors.FontColor}></CustomeIcon>
+              <Text style={styles.ModalTxt}>Mark as Read</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(deleteNotification(selectedOrder.id));
+                setsingleNotificationAction(false);
+              }}
+              style={styles.modalBtn}>
+              <CustomeIcon
+                name={'delete'}
+                size={Dimension.font20}
+                color={Colors.FontColor}></CustomeIcon>
+
+              <Text style={styles.ModalTxt}>Delete Notification</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
+
   return (
-    <View style={{flex: 1, marginVertical: 12}}>
-      <Header showText={'Notifications'} rightIconName ={'notification'} />
-      <Text>NotificationScreen</Text>
-      <TouchableOpacity onPress={() => dispatch(markBulkRead())}>
-        <Text style={{color: 'red'}}>Mark all read</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => dispatch(deleteBulk())}>
-        <Text style={{color: 'red'}}>Clear all Notification</Text>
-      </TouchableOpacity>
-      <SectionList
-        onEndReachedThreshold={0.9}
-        onEndReached={onEndReached}
-        ListEmptyComponent={
-          notificationsStatus !== STATE_STATUS.FETCHING ? (
-            <Text style={{alignSelf: 'center', margin: 12, color: '#000'}}>
-              No Notifications Found
-            </Text>
-          ) : null
-        }
-        renderSectionHeader={({section}) => (
-          <Text style={{color: '#000'}}>{section.title}</Text>
-        )}
-        sections={notifications}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => `${index}-item`}
-      />
-    </View>
+    <>
+      <View style={styles.ContainerCss}>
+        <Header showText={'Notifications'} rightIconName={'notification'} />
+        {notifications && notifications.length ? (
+          <View
+            style={{
+              flexDirection: 'row-reverse',
+              marginHorizontal: Dimension.margin20,
+            }}>
+            <Icon
+              name={'dots-horizontal'}
+              color={Colors.FontColor}
+              size={Dimension.font20}
+              onPress={() => setModalVisible(true)}></Icon>
+          </View>
+        ) : null}
+        <SectionList
+          onEndReachedThreshold={0.9}
+          onEndReached={onEndReached}
+          ListFooterComponent={
+            notificationsStatus == STATE_STATUS.FETCHING ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: Dimension.padding12,
+                }}>
+                <ActivityIndicator
+                  style={{alignSelf: 'center'}}
+                  color={Colors.BrandColor}
+                  size={'small'}
+                />
+              </View>
+            ) : null
+          }
+          ListEmptyComponent={
+            notificationsStatus !== STATE_STATUS.FETCHING ? (
+              <View style={styles.EmptyNotificationList}>
+                <Image
+                  source={require('../../assets/images/EmptyNotification.png')}
+                  style={{
+                    height: Dimension.height200,
+                    width: Dimension.width200,
+                  }}
+                />
+                <Text style={styles.boldtxt}>No Notifications Yet</Text>
+                <TouchableOpacity style={styles.NewTicktbtn}>
+                  <Text style={styles.NewTicktbtnTxt}>
+                    Upload More Products
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : null
+          }
+          renderSectionHeader={({section}) => (
+            <View style={styles.titleDateWrap}>
+              <Text style={styles.TitleDateCss}>{section.title}</Text>
+            </View>
+          )}
+          sections={notifications}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => `${index}-item`}
+          style={{marginHorizontal: Dimension.margin8}}
+        />
+      </View>
+      {renderBulkActions()}
+      {renderIndividualAction()}
+    </>
   );
 };
 

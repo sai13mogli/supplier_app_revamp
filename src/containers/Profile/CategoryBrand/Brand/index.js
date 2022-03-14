@@ -79,8 +79,14 @@ const BrandScreen = props => {
     mutatebrands = mutatebrands.map((_, i) => ({
       ..._,
       submitted: true,
+      isNewBrand: true,
     }));
-    dispatch(confirmBrands(mutatebrands));
+    let statebrandsIds = ([...confirmbrands] || []).map((_, i) => _.brandCode);
+    let brands = ([...mutatebrands] || []).filter(
+      _ => ![...statebrandsIds].includes(_.code || _.brandCode),
+    );
+    console.log('brands', mutatebrands, statebrandsIds, brands);
+    dispatch(confirmBrands(brands));
     props.navigation.navigate('CategoryBrand');
   };
 

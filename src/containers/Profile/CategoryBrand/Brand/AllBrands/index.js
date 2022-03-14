@@ -134,23 +134,15 @@ const AllBrandsScreen = props => {
       <TouchableOpacity
         key={index}
         onPress={() => fetchListingDataByAlphabet(item)}>
-        {item == '0-9' ? (
-          <Text
-            style={
-              activeTerm == '0-9'
-                ? styles.activealphbetText
-                : styles.alphbetText
-            }>
-            0-9
-          </Text>
-        ) : null}
         <Text
           style={
-            activeTerm == String.fromCharCode(item)
+            activeTerm == '0-9' && item == '0-9'
+              ? styles.activealphbetText
+              : activeTerm == String.fromCharCode(item)
               ? styles.activealphbetText
               : styles.alphbetText
           }>
-          {String.fromCharCode(item)}
+          {item == '0-9' ? '0-9' : String.fromCharCode(item)}
         </Text>
       </TouchableOpacity>
     );
@@ -208,14 +200,23 @@ const AllBrandsScreen = props => {
         <View style={styles.NoBrandWrap}>
           <Text style={styles.NoDataTxt}>No Brand Found</Text>
           <TouchableOpacity
-            onPress={() => dispatch(addBrand({name: inputValue}))}>
+            onPress={() =>
+              dispatch(
+                addBrand({
+                  name: inputValue,
+                  requested: true,
+                  isNewBrand: true,
+                  isDeleted: 2,
+                }),
+              )
+            }>
             <Text style={styles.addBrandTxt}>Add Brand</Text>
           </TouchableOpacity>
         </View>
       );
     }
     if (allBrandsStatus !== STATE_STATUS.FETCHED) {
-      return <Text style={{color: '#000'}}>Something Went woring!!</Text>;
+      return <Text style={styles.NoDataTxt}>Something Went woring!!</Text>;
     }
     return null;
   };
@@ -258,6 +259,7 @@ const AllBrandsScreen = props => {
               maxToRenderPerBatch={18}
               ListEmptyComponent={listEmptyComponent}
               fromAllBrands={true}
+              allbrandsListing={true}
               // windowSize={30}
               initialNumToRender={18}
               // updateCellsBatchingPeriod={2}

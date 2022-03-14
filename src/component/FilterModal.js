@@ -34,12 +34,21 @@ const FilterModal = props => {
     if (props.activeFilterType == 'type') {
       return (
         <View style={styles.RightInnerPart}>
-          <DotCheckbox
-            data={filtersData && filtersData[props.activeFilterType]}
-            onCheck={getFilterValue}
-            value={props.typeFilter}
-            formfilterModal={true}
-          />
+          <View style={{
+            marginTop: Dimension.margin10,
+            height: Dimension.height300,
+            //right: '30%',
+            // paddingVertical: Dimension.padding80,
+          }}>
+
+
+            <DotCheckbox
+              data={filtersData && filtersData[props.activeFilterType]}
+              onCheck={getFilterValue}
+              value={props.typeFilter}
+              formfilterModal={true}
+            />
+          </View>
         </View>
       );
     } else {
@@ -47,10 +56,10 @@ const FilterModal = props => {
         <View style={styles.RightInnerPart}>
           <View
             style={{
-              // marginTop: Dimension.margin10,
-              //height: Dimension.height300,
-              //right: '30%',
-              //paddingVertical: Dimension.padding80,
+              marginTop: Dimension.margin10,
+              height: Dimension.height300,
+              right: '30%',
+              paddingVertical: Dimension.padding80,
             }}>
             <CustomSlider
               values={[sliderIndex]}
@@ -179,7 +188,7 @@ const styles = StyleSheet.create({
   ModalheadingWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: Dimension.padding15,
+    padding: Dimension.padding15,
   },
   ModalHeading: {
     fontSize: Dimension.font16,

@@ -190,3 +190,21 @@ export const confirmBrands = data => {
     },
   };
 };
+
+export const addMultipleBrands = data => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.ADD_MULTIPLE_BRANDS,
+    payload: {
+      data,
+    },
+  };
+};
+
+export const removeRaisedBrands = data => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.REMOVE_RAISED_BRANDS,
+    payload: {
+      data,
+    },
+  };
+};

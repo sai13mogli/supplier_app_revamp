@@ -231,7 +231,12 @@ const Conversation = props => {
     let mbsize = size / 1000000;
     return mbsize.toFixed(2);
   };
-
+  const renderListHeader1 = () => {
+      <View style={styles.headerListWrap}>
+        {renderListHeader()}
+        {renderOpenCloseTicket()}
+      </View>
+  }
   const renderListHeader = () => {
     return ticketConversation && ticketConversation.ticket ? (
       <View style={styles.headerListInnerWrap}>
@@ -380,26 +385,48 @@ const Conversation = props => {
   };
 
   const listEmptyComponent = () => (
-    <View>
-      <Text>EmptyChat.png</Text>
-    <Text>Voila! You Have Not Raised Any Query Yet</Text>
-    <Text>Click on below button as soon as you face any problem</Text>
-    <TouchableOpacity onPress={() => props.navigation.navigate('NewTicket')}>
-      <Text style={{color: '#000', fontSize: 12, fontWeight: 'bold'}}>
+    <>
+    <View style={{paddingHorizontal:Dimension.padding10, backgroundColor:Colors.grayShade3,}}><Text style={styles.SearchTicketTxt}>
+          Search Tickets
+        </Text>
+        <View style={styles.searchWrapper}>
+        <TextInput
+          placeholder="Type your question here"
+          placeholderTextColor={'#A2A2A2'}
+          selectionColor={'#888'}
+          returnKeyType={'search'}
+         // value={inputValue}
+          //onChangeText={onSearchText}
+          style={styles.SearchInputCss}
+        />
+        <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+        </View>
+     <Text style={styles.ticketTxt}>Tickets</Text></View>
+    <View style={styles.EmptyChatWrap}>
+       
+      <Image source={require('../../../assets/images/EmptyChat.png')} 
+            style={{height:Dimension.height250,width:Dimension.width150}} />
+    <Text style={styles.EmptyBoldTxt}>Voila! You Have Not Raised Any Query Yet</Text>
+    <Text style={styles.EmptyLightTxt}>Click on below button as soon as you face any problem</Text>
+    <TouchableOpacity onPress={() => props.navigation.navigate('NewTicket')} style={styles.NewTicktbtn}>
+      <CustomeIcon name={'add-circle'} color={Colors.WhiteColor} size={Dimension.font20}></CustomeIcon>
+      <Text style={styles.NewTicktbtnTxt}>
         Raise new Ticket
       </Text>
     </TouchableOpacity>
     </View>
+    </>
   );
 
   //render conversation
   const renderConversation = () => {
     return (
+      
       <FlatList
-        data={conversations}
-       // renderItem={renderItem}
+       data={conversations}
+       renderItem={renderItem}
         keyExtractor={(item, index) => `${index}-item`}
-        //ListHeaderComponent={renderListHeader()}
+        //ListHeaderComponent={renderListHeader1()}
         ListEmptyComponent={listEmptyComponent}
       />
     );
@@ -492,10 +519,8 @@ const Conversation = props => {
         <View style={styles.headerListWrap}>
         {renderListHeader()}
         {renderOpenCloseTicket()}
-        </View>
-        
-        
-        {renderConversation()}
+      </View>
+         {renderConversation()}
         
         <View
           style={styles.InputWrap}>
