@@ -6,6 +6,7 @@ import {
   View,
   SectionList,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {useDispatch} from 'react-redux';
@@ -281,20 +282,39 @@ const NotificationScreen = props => {
     <>
       <View style={styles.ContainerCss}>
         <Header showText={'Notifications'} rightIconName={'notification'} />
-        <View
-          style={{
-            flexDirection: 'row-reverse',
-            marginHorizontal: Dimension.margin20,
-          }}>
-          <Icon
-            name={'dots-horizontal'}
-            color={Colors.FontColor}
-            size={Dimension.font20}
-            onPress={() => setModalVisible(true)}></Icon>
-        </View>
+        {notifications && notifications.length ? (
+          <View
+            style={{
+              flexDirection: 'row-reverse',
+              marginHorizontal: Dimension.margin20,
+            }}>
+            <Icon
+              name={'dots-horizontal'}
+              color={Colors.FontColor}
+              size={Dimension.font20}
+              onPress={() => setModalVisible(true)}></Icon>
+          </View>
+        ) : null}
         <SectionList
           onEndReachedThreshold={0.9}
           onEndReached={onEndReached}
+          ListFooterComponent={
+            notificationsStatus == STATE_STATUS.FETCHING ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: Dimension.padding12,
+                }}>
+                <ActivityIndicator
+                  style={{alignSelf: 'center'}}
+                  color={Colors.BrandColor}
+                  size={'small'}
+                />
+              </View>
+            ) : null
+          }
           ListEmptyComponent={
             notificationsStatus !== STATE_STATUS.FETCHING ? (
               <View style={styles.EmptyNotificationList}>

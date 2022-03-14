@@ -28,11 +28,11 @@ const OrdersScreen = props => {
           fontSize: 16,
           fontWeight: 'bold',
           color: '#000',
-          marginTop: 100,
+          marginTop: 40,
         }}>
-        OrdersScreen
+        Orders Screen
       </Text>
-      <CustomButton
+      {/* <CustomButton
         title={'Hello'}
         buttonColor={'dodgerblue'}
         iconName={'user'}
@@ -49,7 +49,7 @@ const OrdersScreen = props => {
         onPress={() => alert('running')}
         TextColor={colors.WhiteColor}
         borderColor={colors.WhiteColor}
-      />
+      /> */}
 
       <CustomButton
         title={'Open Notifications'}
@@ -70,7 +70,7 @@ const OrdersScreen = props => {
         borderColor={colors.WhiteColor}
       />
 
-      <DropDown
+      {/* <DropDown
         enabled={true}
         placeholder={'Gender'}
         items={[
@@ -85,7 +85,7 @@ const OrdersScreen = props => {
       <Checkbox
         checked={isSelected}
         onPress={() => setSelection(!isSelected)}
-      />
+      /> */}
     </>
   );
 };
