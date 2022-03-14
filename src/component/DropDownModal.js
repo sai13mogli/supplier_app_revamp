@@ -8,9 +8,9 @@ import {
 import React, {useEffect, useState} from 'react';
 import Modal from 'react-native-modal';
 import Dimension from '../Theme/Dimension';
-import colors from '../Theme/Colors';
+import Colors from '../Theme/Colors';
 import DotCheckbox from '../component/common/Checkbox';
-
+import CustomeIcon from './common/CustomeIcon'
 // onBackdropPress={() => props.setFiltersModal(false)}
 //       onBackButtonPress={() => props.setFiltersModal(false)}
 
@@ -41,33 +41,31 @@ const DropDownModal = props => {
       onDismiss={props.closeModal}
       coverScreen={true}
       onBackButtonPress={props.closeModal}
-      style={styles.modalWrap}
+      style={{padding: 0, margin: 0}}
       deviceWidth={deviceWidth}
       hasBackdrop={true}>
-      <View style={styles.modalView}>
-        <View style={styles.modalViewInner}>
-          <View style={styles.ModalContentWrap}>
-            <View style={styles.signUpWrap}>
-              <View style={styles.textView}>
-                <View style={styles.sortBy}>
-                  <Text style={styles.Title}>Filter</Text>
-                </View>
-                <View>
-                  <TouchableOpacity onPress={props.closeModal}>
-                    <Text
-                      style={{color: '#000', fontSize: 12, fontWeight: 'bold'}}>
-                      close
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <DotCheckbox
+     <View style={styles.modalContainer}>
+      <View style={styles.topbdr}></View>
+            <View style={styles.ModalheadingWrapper}>
+              <Text style={styles.ModalHeading}>filter</Text>
+              <CustomeIcon
+                name={'close'}
+                size={Dimension.font22}
+                color={Colors.FontColor}
+                onPress={props.closeModal}></CustomeIcon>
+            </View>
+                  
+               
+            <View style={styles.MidWrapper}>
+            <DotCheckbox
                 data={items}
                 onCheck={getFilterValue}
                 value={props.selectedValue}
                 formfilterModal={true}
               />
+
+            </View>
+              
 
               {/* {filtersTypeData.map((item, index) => (
                 <TouchableOpacity
@@ -90,80 +88,45 @@ const DropDownModal = props => {
               ))}
               {renderRight()} */}
             </View>
-          </View>
-        </View>
-      </View>
+          
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  ModalContentWrap: {
-    paddingRight: 0,
-    paddingBottom: 0,
-    paddingTop: 0,
-    paddingLeft: 0,
-    // backgroundColor: colors.PrimaryTextColor,
-  },
-  signUpWrap: {
-    backgroundColor: colors.WhiteColor,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    paddingTop: 200,
-    padding: 100,
-  },
-  SoryByData: {
-    borderTopColor: colors.ProductBorderColor,
-    flexDirection: 'row',
-    padding: Dimension.padding15,
-    borderTopWidth: 1,
-    justifyContent: 'space-between',
-    backgroundColor: '#fff',
-  },
-  radioWrap: {marginTop: Dimension.margin5},
-  sortBtdata: {
-    alignSelf: 'center',
-    fontSize: Dimension.font12,
-    fontFamily: Dimension.CustomMediumFont,
-    color: colors.PrimaryTextColor,
-    marginLeft: Dimension.margin20,
-  },
-  modalWrap: {
-    paddingRight: 0,
-    paddingBottom: 0,
-    paddingTop: 0,
-    paddingLeft: 0,
-    margin: 0,
-  },
-  modalView: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,.5)',
-    position: 'relative',
+  modalContainer: {
+    backgroundColor: Colors.WhiteColor,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     width: '100%',
+    position: 'absolute',
+    bottom: 0,
+    paddingTop: Dimension.padding10,
   },
-  modalViewInner: {position: 'absolute', bottom: 0, width: '100%'},
-  textView: {
+ 
+  topbdr: {
+    alignSelf: 'center',
+    height: 3,
+    backgroundColor: Colors.modalBorder,
+    borderRadius: 2,
+    width: Dimension.width70,
+  },
+  ModalheadingWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: Dimension.padding15,
+    padding: Dimension.padding20,
   },
-  sortBy: {paddingBottom: Dimension.padding15},
-  modalClose: {fontSize: Dimension.font20},
-  row: {flexDirection: 'row'},
-  Title: {
-    fontSize: Dimension.font14,
-    color: colors.PrimaryTextColor,
+  ModalHeading: {
+    fontSize: Dimension.font16,
+    color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
+    marginBottom: Dimension.margin5,
   },
-  activeBackground: {
-    backgroundColor: 'red',
-  },
-  inactiveBackground: {
-    backgroundColor: '#fff',
+  
+
+  MidWrapper:{
+    marginVertical:Dimension.margin20,
+    paddingHorizontal:Dimension.padding15
   },
 });
 
