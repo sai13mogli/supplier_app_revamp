@@ -1,7 +1,7 @@
 // dependencies
-import {put, call, fork, takeEvery} from 'redux-saga/effects';
+import { put, call, fork, takeEvery } from 'redux-saga/effects';
 // constants
-import {PROFILE_ACTIONS} from '../constants/profile';
+import { PROFILE_ACTIONS } from '../constants/profile';
 // api call
 import {
   getBusinessDetails,
@@ -9,6 +9,7 @@ import {
   getProfile,
   getUserInfo,
   getAddressesDetails,
+  setUpdateBillingAddress,
   getBankDetails,
   getTdsInfoDetails,
   setBankDetails,
@@ -27,8 +28,8 @@ import {
   failedFetchProfile,
   failedFetchUpdateBankDetails,
   fetchedUpdateBankDetails,
-  fetchedCategoriesBrands,
-  failedFetchCategoriesBrands,
+  failedFetchUpdateBillingAddress,
+  fetchedUpdateBillingAddress,
   failedFetchTdsInfoDetails,
   fetchedTdsInfoDetails,
   fetchProfile,
@@ -37,7 +38,7 @@ import * as RootNavigation from '../../routes/RootNavigation';
 
 function* fetchBusinessDetails() {
   try {
-    const {data, error} = yield call(getBusinessDetails);
+    const { data, error } = yield call(getBusinessDetails);
     if (error) {
       yield put(failedFetchBusinessDetails(error));
     } else {
@@ -52,9 +53,9 @@ function* fetchBusinessDetails() {
   }
 }
 
-function* fetchUpdateBusinessDetails({payload: {formData}}) {
+function* fetchUpdateBusinessDetails({ payload: { formData } }) {
   try {
-    const {data, error} = yield call(setBusinessDetails, formData);
+    const { data, error } = yield call(setBusinessDetails, formData);
     if (error) {
       yield put(failedFetchUpdateBusinessDetails(error));
     } else {
@@ -66,9 +67,9 @@ function* fetchUpdateBusinessDetails({payload: {formData}}) {
   }
 }
 
-function* fetchUpdateBankDetails({payload: {formData}}) {
+function* fetchUpdateBankDetails({ payload: { formData } }) {
   try {
-    const {data, error} = yield call(setBankDetails, formData);
+    const { data, error } = yield call(setBankDetails, formData);
     if (error) {
       yield put(failedFetchUpdateBankDetails(error));
     } else {
@@ -79,9 +80,9 @@ function* fetchUpdateBankDetails({payload: {formData}}) {
   }
 }
 
-function* fetchUserProfile({}) {
+function* fetchUserProfile({ }) {
   try {
-    let {data, error} = yield call(getProfile);
+    let { data, error } = yield call(getProfile);
     const profileData = yield call(getUserInfo);
     data.data.userInfo = profileData.data.data;
     if (error) {
@@ -99,7 +100,7 @@ function* fetchUserProfile({}) {
 
 function* fetchAddressDetails() {
   try {
-    const {data, error} = yield call(getAddressesDetails);
+    const { data, error } = yield call(getAddressesDetails);
     if (error) {
       yield put(failedFetchAddressDetails(error));
     } else {
@@ -110,9 +111,23 @@ function* fetchAddressDetails() {
   }
 }
 
+function* fetchUpdateBillingAddress({ payload: { formData } }) {
+  try {
+    const { data, error } = yield call(setUpdateBillingAddress, formData);
+    if (error) {
+      yield put(failedFetchUpdateBillingAddress(error));
+    } else {
+      yield put(fetchedUpdateBillingAddress(formData, data.data));
+      yield put(fetchedAddressDetails(data.data));
+    }
+  } catch (error) {
+    yield put(failedFetchUpdateBillingAddress(error));
+  }
+}
+
 function* fetchBankDetails() {
   try {
-    const {data, error} = yield call(getBankDetails);
+    const { data, error } = yield call(getBankDetails);
     if (error) {
       yield put(failedFetchBankDetails(error));
     } else {
@@ -125,7 +140,7 @@ function* fetchBankDetails() {
 
 function* fetchTdsInfoDetails() {
   try {
-    const {data, error} = yield call(getTdsInfoDetails);
+    const { data, error } = yield call(getTdsInfoDetails);
     if (error) {
       yield put(failedFetchTdsInfoDetails(error));
     } else {
@@ -140,14 +155,9 @@ export default fork(function* () {
   yield takeEvery(PROFILE_ACTIONS.FETCH_PROFILE, fetchUserProfile);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS, fetchBusinessDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_ADDRESSES, fetchAddressDetails);
+  yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BILLING_ADDRESS, fetchUpdateBillingAddress);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BANK_DETAILS, fetchBankDetails);
-  yield takeEvery(
-    PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,
-    fetchUpdateBusinessDetails,
-  );
+  yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS, fetchUpdateBusinessDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_TDS_INFO_DETAILS, fetchTdsInfoDetails);
-  yield takeEvery(
-    PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS,
-    fetchUpdateBankDetails,
-  );
+  yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS, fetchUpdateBankDetails);
 });

@@ -1,13 +1,13 @@
 // dependencies
-import {put, call, fork, takeEvery} from 'redux-saga/effects';
+import { put, call, fork, takeEvery } from 'redux-saga/effects';
 // constants
-import {CATEGORY_BRAND_ACTIONS} from '../constants/categorybrand';
+import { CATEGORY_BRAND_ACTIONS } from '../constants/categorybrand';
 // api call
 import {
   getBrandsByCategoryCodes,
   getBrands,
 } from '../../services/categorybrand';
-import {getCategoriesBrands} from '../../services/profile';
+import { getCategoriesBrands } from '../../services/profile';
 // actions
 import {
   failedFetchBrandsByCategory,
@@ -22,9 +22,9 @@ import {
 } from '../actions/categorybrand';
 //
 
-function* fetchBrandsByCategoryCodes({payload: {payloadObj}}) {
+function* fetchBrandsByCategoryCodes({ payload: { payloadObj } }) {
   try {
-    const {data, error} = yield call(getBrandsByCategoryCodes, payloadObj);
+    const { data, error } = yield call(getBrandsByCategoryCodes, payloadObj);
     if (error) {
       yield put(failedFetchBrandsByCategory(error));
     } else {
@@ -35,9 +35,9 @@ function* fetchBrandsByCategoryCodes({payload: {payloadObj}}) {
   }
 }
 
-function* fetchBrands({payload: {obj}}) {
+function* fetchBrands({ payload: { obj } }) {
   try {
-    const {data, error} = yield call(getBrands, obj);
+    const { data, error } = yield call(getBrands, obj);
     console.log('fetechBrandsData', data);
     if (error) {
       yield put(failedFetchBrandSearchResult(error));
@@ -63,9 +63,9 @@ function* fetchBrands({payload: {obj}}) {
   }
 }
 
-function* fetchBrandsAlphabets({payload: {obj}}) {
+function* fetchBrandsAlphabets({ payload: { obj } }) {
   try {
-    const {data, error} = yield call(getBrands, obj);
+    const { data, error } = yield call(getBrands, obj);
     console.log('fetechBrandsData', data);
     if (error) {
       yield put(failedFetchBrandSearchResultByAlphabet(error));
@@ -89,11 +89,10 @@ function* fetchBrandsAlphabets({payload: {obj}}) {
 
 function* fetchCategoriesBrands() {
   try {
-    const {data, error} = yield call(getCategoriesBrands);
+    const { data, error } = yield call(getCategoriesBrands);
     if (error) {
       yield put(failedFetchCategoriesBrands(error));
     } else {
-      console.log('categoriesbrandsData', data.data);
       yield put(fetchedCategoriesBrands(data.data));
     }
   } catch (error) {

@@ -1,32 +1,29 @@
-import {OrderedMap} from 'immutable';
-import React, { useEffect,useState,} from 'react';
-import {Text,View,FlatList,ScrollView, TouchableOpacity} from 'react-native';
+import { OrderedMap } from 'immutable';
+import React, { useEffect, useState, } from 'react';
+import { Text, View, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import FloatingLabelInputField from '../../../../component/common/FloatingInput';
 import DropDown from '../../../../component/common/DropDown';
 import colors from "../../../../Theme/Colors"
-import {useSelector, useDispatch} from 'react-redux';
-import {STATE_STATUS} from '../../../../redux/constants';
+import { useSelector, useDispatch } from 'react-redux';
+import { STATE_STATUS } from '../../../../redux/constants';
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
-import {getIfscCodeDetails} from '../../../../services/profile';
-import {fetchUpdateBankDetails} from '../../../../redux/actions/profile';
+import { getIfscCodeDetails } from '../../../../services/profile';
+import { fetchUpdateBankDetails } from '../../../../redux/actions/profile';
 import styles from './styles';
-import AddressesModal from '../../../../component/common/AddressesModal';
 const ifscCodeRegex = '^[A-Za-z]{4}[a-zA-Z0-9]{7}$'
+
 const Accounts = (props) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const bankDetails = useSelector(state => (state.profileReducer.bankDetails.data||{}));
-  const bankDetailsStatus = useSelector(state => (state.profileReducer.bankDetails.status|| STATE_STATUS.FETCHING));
+  const bankDetails = useSelector(state => (state.profileReducer.bankDetails.data || {}));
+  const bankDetailsStatus = useSelector(state => (state.profileReducer.bankDetails.status || STATE_STATUS.FETCHING));
   const [loading, setLoading] = useState(false);
   const [accountHolderName, setAccountHolderName] = useState(bankDetails.accountHolderName);
   const [accountNumber, setAccountNumber] = useState(bankDetails.accountNumber);
   const [ifscCode, setIfscCode] = useState(bankDetails.ifscCode);
   const [branch, setBranch] = useState(bankDetails.branch);
   const [accountType, setAccountType] = useState(bankDetails.accountType);
-  const [accountTypes, setAccountTypes] = useState([]);
   const [bankName, setBankName] = useState(bankDetails.bankName);
-  const [bankNames, setBankNames] = useState([]);
   const [accountHolderNameError, setaccountHolderNameError] = useState(false);
   const [accountNumberError, setaccountNumberError] = useState(false);
   const [ifscCodeError, setifscCodeError] = useState(false);
@@ -34,7 +31,7 @@ const Accounts = (props) => {
   const [accountTypeError, setaccountTypeError] = useState(false);
   const [bankNameError, setbankNameError] = useState(false);
 
-  console.log("BankData====>",bankDetails);
+  console.log("BankData====>", bankDetails);
   const dispatch = useDispatch();
   const FORM_FIELDS = new OrderedMap({
     accountHolderName: {
@@ -119,20 +116,20 @@ const Accounts = (props) => {
       errorMessage: 'Select Account Type',
       showError: bankNameError,
       value: bankName,
-      onChangeText: text => setBranch(text),
+      onChangeText: text => setBankName(text),
       component: FloatingLabelInputField,
       onBlur: () => onBankNameBlur(),
     },
-   });
+  });
 
-   useEffect(() => {
+  useEffect(() => {
     if (loading && bankDetailsStatus == STATE_STATUS.UPDATED) {
       setLoading(false);
       props.navigation.goBack();
     }
   }, [bankDetailsStatus]);
 
-   const onHolderNameBlur = () => {
+  const onHolderNameBlur = () => {
     if (accountHolderName && accountHolderName.length) {
       setaccountHolderNameError(false);
     } else {
@@ -148,9 +145,9 @@ const Accounts = (props) => {
     }
   };
 
-  const onIfscCodeBlur  = async() => {
+  const onIfscCodeBlur = async () => {
     if (ifscCode && ifscCode.length >= 11 && ifscCode.match(ifscCodeRegex)) {
-      const {data} = await getIfscCodeDetails(ifscCode);
+      const { data } = await getIfscCodeDetails(ifscCode);
       if (!data.success) {
         setifscCodeError(true);
       } else {
@@ -162,14 +159,14 @@ const Accounts = (props) => {
   };
 
 
-  const onBranchBlur  = () => {
+  const onBranchBlur = () => {
     if (branch && branch.length) {
       setbranchError(false);
     } else {
       setbranchError(true);
     }
   };
-  const onBankNameBlur  = () => {
+  const onBankNameBlur = () => {
     if (bankName && bankName.length) {
       setbranchError(false);
     } else {
@@ -200,11 +197,11 @@ const Accounts = (props) => {
       accountType &&
       bankName &&
       bankName.length
-      
+
     ) {
       setLoading(true);
       const data = {
-        id:'',
+        id: '',
         accountHolderName: accountHolderName,
         accountNumber: accountNumber,
         accountType: '1',
@@ -215,7 +212,7 @@ const Accounts = (props) => {
         currencyType: '2',
         countryCode: '217',
         businessType: 'businessType',
-        
+
       };
       dispatch(fetchUpdateBankDetails(data));
     } else {
@@ -224,44 +221,107 @@ const Accounts = (props) => {
       onIfscCodeBlur();
       onBranchBlur();
       onBankNameBlur();
-     
+
     }
   };
 
-  
+
 
   return (
-    <View style={{flex:1}}>
+    <View style={{ flex: 1 }}>
       <ScrollView style={styles.ContainerCss}>
-          <View style={styles.TopWrap}>
-                <Text style={styles.Pageheading}>
-                  03 Billing Address
-                </Text>
-              <View style={{flexDirection:"row"}}>
-                    <CustomeIcon name={'add-circle'} size={Dimension.font18} color={colors.BrandColor} />
-                    <Text style={styles.addnewtxt}>
-                      Add new
-                    </Text>
-              </View>
-          </View> 
-            {FORM_FIELDS.map((field, fieldKey) => (
-              <field.component {...field} key={fieldKey} />
-            )).toList()}
+        <View style={styles.TopWrap}>
+          <Text style={styles.Pageheading}>
+            01 Account
+          </Text>
+          <TouchableOpacity onPress={() => {
+            props.navigation.navigate('AddBankAccount')
+          }}>
+            <View style={{ flexDirection: "row" }}>
+              <CustomeIcon name={'add-circle'} size={Dimension.font18} color={colors.BrandColor} />
+              <Text style={styles.addnewtxt}>
+                Add new
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        {FORM_FIELDS.map((field, fieldKey) => (
+          <field.component {...field} key={fieldKey} />
+        )).toList()}
+        <View style={styles.pendingBox}>
+          <View style={styles.pendingWrap}>
+            <Text style={styles.Pendingtxt}>Pending For Approval</Text>
+
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginHorizontal: -50 }}>
+            <View style={styles.textWrap}>
+              <Text style={styles.Detailtxt}>
+                Name
+              </Text>
+              <Text style={styles.Detailtxt}>
+                Account No
+              </Text>
+              <Text style={styles.Detailtxt}>
+                Account Type
+              </Text>
+              <Text style={styles.Detailtxt}>
+                IFSC
+              </Text>
+              <Text style={styles.Detailtxt}>
+                Bank name
+              </Text>
+              <Text style={styles.Detailtxt}>
+                Branch
+              </Text>
+              <Text style={styles.Detailtxt}>
+                Branch code
+              </Text>
+            </View>
+
+            <View style={styles.textWrap}>
+              <Text style={[styles.Detailtxt]}>
+                {bankDetails.accountHolderName}
+              </Text>
+              <Text style={styles.Detailtxt}>
+                {bankDetails.accountNumber}
+              </Text>
+              <Text style={styles.Detailtxt}>
+                {bankDetails.accountType}
+              </Text>
+              <Text style={styles.Detailtxt}>
+                {bankDetails.ifscCode}
+              </Text>
+              <Text style={styles.Detailtxt}>
+                {bankDetails.bankName}
+              </Text>
+              <Text style={styles.Detailtxt}>
+                {bankDetails.branch}
+              </Text>
+              <Text style={styles.Detailtxt}>
+                {/* {bankDetails.bra} */}
+              </Text>
+            </View>
+
+          </View>
+
+
+        </View>
+
       </ScrollView>
 
-          <View style={styles.bottombtnWrap}>
-                <CustomButton
-                buttonColor={colors.BrandColor}
-                borderColor={colors.BrandColor }
-                TextColor={colors.WhiteColor }
-                TextFontSize={Dimension.font16}
-                title={'Next'}
-                loading={loading}
-                onPress={onSubmit}
-              />
-          </View>
-     </View>
-    
+      <View style={styles.bottombtnWrap}>
+        <CustomButton
+          buttonColor={colors.BrandColor}
+          borderColor={colors.BrandColor}
+          TextColor={colors.WhiteColor}
+          TextFontSize={Dimension.font16}
+          title={'Next'}
+          loading={loading}
+          onPress={onSubmit}
+        />
+      </View>
+    </View>
+
   );
 };
 

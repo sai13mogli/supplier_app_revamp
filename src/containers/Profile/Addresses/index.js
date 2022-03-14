@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Header from '../../../component/common/Header';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {ADDRESSES_TAB_SCREENS} from '../../../constants';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { ADDRESSES_TAB_SCREENS } from '../../../constants';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -19,7 +19,7 @@ const Addresses = props => {
       <TouchableOpacity
         style={styles.iconAlignment}
         onPress={() => rest.navigation.navigate(route.name)}>
-        <Text style={[styles.tabText, {color: focused ? color : '#3c3c3c'}]}>
+        <Text style={[styles.tabText, { color: focused ? color : '#3c3c3c' }]}>
           {tabName}
         </Text>
       </TouchableOpacity>
@@ -34,12 +34,12 @@ const Addresses = props => {
         showText={'Addresses'}
         rightIconName={'business-details'}></Header>
       <Tab.Navigator
-        screenOptions={({route, ...rest}) => ({
+        screenOptions={({ route, ...rest }) => ({
           headerShown: false,
-          tabBarIcon: ({focused, color}) =>
+          tabBarIcon: ({ focused, color }) =>
             tabBarIcon(focused, color, route, rest),
           lazy: false,
-          safeAreaInsets: {bottom: 0},
+          safeAreaInsets: { bottom: 0 },
         })}
         tabBarOptions={tabBarOptions}>
         {ADDRESSES_TAB_SCREENS.map((screen, key) => (
@@ -56,11 +56,11 @@ const Addresses = props => {
 };
 const styles = StyleSheet.create({
   tabText: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font15,
+    height: 60,
     width: '100%',
-    color: Colors.FontColor,
     fontFamily: Dimension.CustomRobotoBold,
-    fontWeight: 'normal',
+    marginTop: 0,
   },
 
   tabBar: {
@@ -80,6 +80,6 @@ const tabBarOptions = {
   showLabel: false,
   lazy: false,
   style: styles.tabBar,
-  safeAreaInsets: {bottom: 0},
+  safeAreaInsets: { bottom: 0 },
 };
 export default Addresses;

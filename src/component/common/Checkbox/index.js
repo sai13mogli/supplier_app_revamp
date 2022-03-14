@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {CheckBox, Icon} from 'react-native-elements';
+import { View, StyleSheet } from 'react-native';
+import { CheckBox, Icon } from 'react-native-elements';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
 import CustomeIcon from '../CustomeIcon';
 import styles from './styles';
 
 const Checkbox = props => {
-  const {onPress, checked, title} = props;
+  const { onPress, checked, title } = props;
 
   return (
     <CheckBox

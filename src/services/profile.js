@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {BASE_URL} from '../redux/constants/index';
+import { BASE_URL } from '../redux/constants/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const getBusinessDetails = async () =>
@@ -66,6 +66,14 @@ export const setBankDetails = async data =>
     },
   });
 
+export const setUpdateBillingAddress = async data =>
+  axios.post(`${BASE_URL}profile/updateAddress`, data, {
+    headers: {
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
+
 export const getPincodeDetails = async pin =>
   axios.get(`https://supplierapiqa.moglilabs.com/util/getStateCity?pin=${pin}`);
 
@@ -89,7 +97,7 @@ export const getCategoriesBrands = async () =>
 
 export const sendOtpForVerification = async type =>
   axios.get(`${BASE_URL}profile/sendOtp`, {
-    params: {type: type},
+    params: { type: type },
     headers: {
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },

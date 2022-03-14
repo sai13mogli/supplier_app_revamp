@@ -1,5 +1,5 @@
-import {STATE_STATUS} from '../constants/index';
-import {PROFILE_ACTIONS} from '../constants/profile';
+import { STATE_STATUS } from '../constants/index';
+import { PROFILE_ACTIONS } from '../constants/profile';
 
 const initialState = {
   status: STATE_STATUS.UNFETCHED,
@@ -32,7 +32,7 @@ const initialState = {
 };
 
 export const profileReducer = (state = initialState, action) => {
-  const {type, payload, error} = action;
+  const { type, payload, error } = action;
   switch (type) {
     case PROFILE_ACTIONS.FETCH_PROFILE:
       return {
@@ -136,6 +136,32 @@ export const profileReducer = (state = initialState, action) => {
           ...state.addressesDetails,
           status: STATE_STATUS.FAILED_FETCH,
           data: {},
+          error: error,
+        },
+      };
+    case PROFILE_ACTIONS.FETCH_UPDATE_BILLING_ADDRESS:
+      return {
+        ...state,
+        addressesDetails: {
+          ...state.addressesDetails,
+          status: STATE_STATUS.UPDATING,
+        },
+      };
+    case PROFILE_ACTIONS.FETCHED_UPDATE_BILLING_ADDRESS:
+      return {
+        ...state,
+        addressesDetails: {
+          ...state.addressesDetails,
+          status: STATE_STATUS.UPDATED,
+          data: payload.data,
+        },
+      };
+    case PROFILE_ACTIONS.FAILED_FETCH_UPDATE_BILLING_ADDRESS:
+      return {
+        ...state,
+        addressesDetails: {
+          ...state.addressesDetails,
+          status: STATE_STATUS.FAILED_UPDATE,
           error: error,
         },
       };

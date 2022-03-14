@@ -15,7 +15,7 @@ import CategoryBrand from '../containers/Profile/CategoryBrand';
 import SelectCategoryScreen from '../containers/Auth/SelectCategory';
 import NotificationScreen from '../containers/Notification';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
-import {OrderedMap} from 'immutable';
+import { OrderedMap } from 'immutable';
 import Accounts from '../containers/Profile/BankDetails/Accounts';
 import TdsDetails from '../containers/Profile/BankDetails/TdsDetails';
 import PickedUp from '../containers/Profile/Addresses/PickedUp';
@@ -26,6 +26,9 @@ import AllBrandsScreen from '../containers/Profile/CategoryBrand/Brand/AllBrands
 import NewTicket from '../containers/Support/NewTicket';
 import Error from '../containers/Auth/Login/Error';
 import Conversation from '../containers/Support/Conversation';
+import EditAddress from '../containers/Profile/Addresses/EditAddress';
+import AddBankAccount from '../containers/Profile/BankDetails/Accounts/AddBankAccount';
+
 
 export const BOTTOM_TAB_SCREENS = [
   //   {
@@ -140,6 +143,14 @@ export const APP_STACK_SCREENS = [
   {
     name: 'Addresses',
     component: Addresses,
+  },
+  {
+    name: 'EditAddress',
+    component: EditAddress,
+  },
+  {
+    name: 'AddBankAccount',
+    component: AddBankAccount,
   },
   {
     name: 'BankDetails',
