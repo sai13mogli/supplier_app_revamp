@@ -6,10 +6,10 @@ const initialState = {
   status: STATE_STATUS.UNFETCHED,
   data: [],
   maxPage: 1,
-  page: 0,
+  page: 1,
 };
 
-const getTime = time => {
+const getTime = (time, ind) => {
   let months = [
     'Jan',
     'Feb',
@@ -71,17 +71,19 @@ export const notificationsReducer = (state = initialState, action) => {
           : [...state.data, ...payload.data.dataList];
       let groupedObj = {};
       newData = newData.map(_ => {
-        if (groupedObj[`${getTime(_.createdAt)}`]) {
-          groupedObj[`${getTime(_.createdAt)}`] = [
-            ...groupedObj[`${getTime(_.createdAt)}`],
-            _,
-          ];
-        } else {
-          groupedObj[`${getTime(_.createdAt)}`] = [];
-          groupedObj[`${getTime(_.createdAt)}`] = [
-            ...groupedObj[`${getTime(_.createdAt)}`],
-            _,
-          ];
+        if (_.id) {
+          if (groupedObj[`${getTime(_.createdAt)}`]) {
+            groupedObj[`${getTime(_.createdAt)}`] = [
+              ...groupedObj[`${getTime(_.createdAt)}`],
+              _,
+            ];
+          } else {
+            groupedObj[`${getTime(_.createdAt)}`] = [];
+            groupedObj[`${getTime(_.createdAt)}`] = [
+              ...groupedObj[`${getTime(_.createdAt)}`],
+              _,
+            ];
+          }
         }
       });
 
@@ -116,7 +118,7 @@ export const notificationsReducer = (state = initialState, action) => {
         status: STATE_STATUS.UNFETCHED,
         data: [],
         maxPage: 1,
-        page: 0,
+        page: 1,
       };
     default:
       return state;

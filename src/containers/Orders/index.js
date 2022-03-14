@@ -71,7 +71,7 @@ const OrdersScreen = props => {
       />
 
       <DropDown
-        // enabled={false}
+        enabled={true}
         placeholder={'Gender'}
         items={[
           {label: 'Male', value: 'M'},
@@ -85,7 +85,7 @@ const OrdersScreen = props => {
       <Checkbox
         checked={isSelected}
         onPress={() => setSelection(!isSelected)}
-      /> 
+      />
     </>
   );
 };

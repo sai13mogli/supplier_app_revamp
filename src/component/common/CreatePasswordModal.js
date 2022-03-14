@@ -29,7 +29,6 @@ const CreatePasswordModal = props => {
 
   const getExtraView = () => {
     return (
-      
       <CustomeIcon
         onPress={() => setIsSecure(!isSecure)}
         name="eye-open"
@@ -110,55 +109,60 @@ const CreatePasswordModal = props => {
             secureTextEntry={isSecure}
             extraView={() => getExtraView()}
           />
-          <View style={styles.progressbarWrap}>
-            <View style={{flex:.8}}>
-            <Progress
-              width={null}
-              animated={false}
-              progress={
-               // PROGRESS[profileData.verificationStatus]
-                0.5
-              }
-              color={Colors.SuccessStateColor}
-              unfilledColor={Colors.grayShade11}
-              borderColor={Colors.grayShade11}
-              height={Dimension.height5}
-            />
-            </View>
-            
-            <View style={{flex:.2,  alignItems:"flex-end",}}>
-            <Text style={styles.progressBottomtxt}>
-              Weak
-            </Text>
-            </View>
-            
-          </View>
-          <View style={styles.passwordConditionWrap}>
+          {password &&
+          password.match(
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+          ) ? (
+            <View style={styles.progressbarWrap}>
+              <View style={{flex: 0.8}}>
+                <Progress
+                  width={null}
+                  animated={false}
+                  progress={password.length >= 10 ? 1 : 0.5}
+                  color={
+                    password.length >= 10
+                      ? Colors.SuccessStateColor
+                      : Colors.WeakPasswordColor
+                  }
+                  unfilledColor={Colors.grayShade11}
+                  borderColor={Colors.grayShade11}
+                  height={Dimension.height5}
+                />
+              </View>
 
-          <View style={{flexDirection:"row",}}>
-          <View style={styles.dotStyle}></View>
-            <Text style={styles.ConditionTxt}>
-          
-          At least 8 characters—the more characters, the better.
-        </Text>
-          </View>
-          <View style={{flexDirection:"row",}}>
-          <View style={styles.dotStyle}></View>
-          <Text style={styles.ConditionTxt}>
-            A mixture of both uppercase and lowercase letters.
-          </Text>
-          </View>
-          
-          <View style={{flexDirection:"row",}}>
-          <View style={styles.dotStyle}></View>
-          <Text style={styles.ConditionTxt}>A mixture of letters and numbers.</Text>
-          </View>
-          <View style={{flexDirection:"row",}}>
-          <View style={styles.dotStyle}></View>
-          <Text style={styles.ConditionTxt}>
-            Inclusion of at least one special character, e.g., ! @ # ? ]
-          </Text>
-          </View>
+              <View style={{flex: 0.2, alignItems: 'flex-end'}}>
+                <Text style={styles.progressBottomtxt}>
+                  {password.length >= 10 ? 'Strong' : 'Weak'}
+                </Text>
+              </View>
+            </View>
+          ) : null}
+          <View style={styles.passwordConditionWrap}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={styles.dotStyle}></View>
+              <Text style={styles.ConditionTxt}>
+                At least 8 characters—the more characters, the better.
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <View style={styles.dotStyle}></View>
+              <Text style={styles.ConditionTxt}>
+                A mixture of both uppercase and lowercase letters.
+              </Text>
+            </View>
+
+            <View style={{flexDirection: 'row'}}>
+              <View style={styles.dotStyle}></View>
+              <Text style={styles.ConditionTxt}>
+                A mixture of letters and numbers.
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <View style={styles.dotStyle}></View>
+              <Text style={styles.ConditionTxt}>
+                Inclusion of at least one special character, e.g., ! @ # ? ]
+              </Text>
+            </View>
           </View>
         </View>
 
@@ -214,38 +218,36 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     backgroundColor: '#fff',
   },
-  passwordConditionWrap:{
-    paddingVertical:Dimension.padding30
+  passwordConditionWrap: {
+    paddingVertical: Dimension.padding30,
   },
-  ConditionTxt:{
+  ConditionTxt: {
     fontSize: Dimension.font12,
     color: Colors.FontColor,
-    fontFamily: Dimension.CustomRegularFont ,
+    fontFamily: Dimension.CustomRegularFont,
     marginBottom: Dimension.margin3,
   },
-  dotStyle:{
-    width:Dimension.height5,
-    height:Dimension.height5,
-    borderRadius:5,
-    backgroundColor:Colors.eyeIcon,
-    alignItems:"center",
-    marginRight:Dimension.margin5,
-    marginTop:Dimension.margin5
+  dotStyle: {
+    width: Dimension.height5,
+    height: Dimension.height5,
+    borderRadius: 5,
+    backgroundColor: Colors.eyeIcon,
+    alignItems: 'center',
+    marginRight: Dimension.margin5,
+    marginTop: Dimension.margin5,
   },
-  progressbarWrap:{
-    paddingVertical:Dimension.padding5,
-    flex:1,
-    flexDirection:"row",
-    justifyContent:"space-between",
-    alignItems:"center"
+  progressbarWrap: {
+    paddingVertical: Dimension.padding5,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
- 
-  progressBottomtxt:{
+
+  progressBottomtxt: {
     fontSize: Dimension.font10,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomMediumFont,
-  
-    
   },
 });
 
