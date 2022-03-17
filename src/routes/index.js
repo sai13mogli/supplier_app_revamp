@@ -90,7 +90,7 @@ const Routes = props => {
         {BOTTOM_TAB_SCREENS.map((screen, key) => (
           <Tab.Screen
             key={key}
-            // lazy={false}
+            // lazy={true}
             params={{setIsLoggedIn}}
             initialParams={{
               setIsLoggedIn,

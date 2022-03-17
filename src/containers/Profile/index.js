@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   Linking,
+  ActivityIndicator,
 } from 'react-native';
 import Header from '../../component/common/Header';
 import {useNavigation} from '@react-navigation/native';
@@ -94,158 +95,165 @@ const ProfileScreen = props => {
 
   return (
     <View style={{flex: 1}}>
-      <Header showBack navigation={props.navigation} showText={'My Profile'} />
-      <ScrollView style={styles.ContainerCss}>
-        <View style={styles.profileTopWrap}>
-          <View style={styles.UserDetailWrap}>
-            <View style={styles.userDetailLeft}>
-              <View style={styles.userIconWrap}>
-                <Image
-                  source={require('../../assets/images/UserIcon.png')}
-                  style={{
-                    height: Dimension.height45,
-                    width: Dimension.height45,
-                    alignSelf: 'center',
-                  }}
-                />
-              </View>
-            </View>
-            <View>
-              <Text style={styles.UserName}>
-                {(profileData.userInfo || {}).contactName}
-              </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginVertical: Dimension.margin6,
-                }}>
-                <CustomeIcon
-                  name={
-                    profileData?.isEmailVerified
-                      ? 'right-tick-line'
-                      : 'information-line'
-                  }
-                  color={Colors.WhiteColor}
-                  size={Dimension.font12}></CustomeIcon>
-                <Text style={styles.UserEmail}>
-                  {(profileData.userInfo || {}).email}
-                </Text>
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <CustomeIcon
-                  name={
-                    profileData?.phoneVerified
-                      ? 'right-tick-line'
-                      : 'information-line'
-                  }
-                  color={Colors.WhiteColor}
-                  size={Dimension.font12}></CustomeIcon>
-                <Text style={styles.UserContact}>
-                  {(profileData.userInfo || {}).phone}
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.UserEmailVerfyWrap}>
-            <View style={{flex: 6, marginRight: Dimension.margin10}}>
-              <Text style={styles.UserEmailVerfyBoldTxt}>
-                A verification link has been sent on your email.
-              </Text>
-              <Text style={styles.UserEmailVerfylightTxt}>
-                Link is active for 24 hours only.
-              </Text>
-            </View>
-            <View style={{flex: 3}}>
-              <CustomButton
-                title={'OPEN MAIL'}
-                onPress={() => Linking.openURL('mailto:')}
-                TextColor={Colors.WhiteColor}
-                buttonColor={Colors.FontColor}
-                borderColor={Colors.FontColor}
-                TextFontSize={Dimension.font12}></CustomButton>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.profileBottomWrap}>
-          <View style={styles.progressbarWrap}>
-            <Text style={styles.progressTxt}>
-              {PROGRESS[profileData.verificationStatus] * 100}%
-            </Text>
-            <Progress
-              width={null}
-              animated={false}
-              progress={
-                PROGRESS[profileData.verificationStatus]
-                //0.5
-              }
-              color={Colors.SuccessStateColor}
-              unfilledColor={Colors.grayShade11}
-              borderColor={Colors.grayShade11}
-              height={Dimension.height11}
-            />
-            <Text style={styles.progressBottomtxt}>
-              Complete your profile by sharing below details
-            </Text>
-          </View>
-
-          {/* navigate to activeTab isActive(tabIndex, tab.route) */}
-
-          {PROFILE_TABS.map((tab, tabIndex) => (
-            <TouchableOpacity
-              key={tabIndex}
-              onPress={() => isActive(tabIndex, tab.route, tab)}
-              style={styles.profileTabWrap}>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={[
-                    styles.IconWrap,
-                    {
-                      backgroundColor: isCompleted(tab.progress)
-                        ? Colors.grayShade3
-                        : Colors.BrandColor,
-                    },
-                  ]}>
-                  <CustomeIcon
-                    name={tab.icon}
-                    color={
-                      isCompleted(tab.progress)
-                        ? Colors.FontColor
-                        : Colors.WhiteColor
-                    }
-                    size={Dimension.font14}></CustomeIcon>
+      <Header showText={'My Profile'} />
+      {profileStatus == STATE_STATUS.FETCHING ? (
+        <ActivityIndicator
+          style={{alignSelf: 'center', margin: Dimension.margin12}}
+          size={'small'}
+          color={Colors.BrandColor}
+        />
+      ) : (
+        <ScrollView style={styles.ContainerCss}>
+          <View style={styles.profileTopWrap}>
+            <View style={styles.UserDetailWrap}>
+              <View style={styles.userDetailLeft}>
+                <View style={styles.userIconWrap}>
+                  <Image
+                    source={require('../../assets/images/UserIcon.png')}
+                    style={{
+                      height: Dimension.height45,
+                      width: Dimension.height45,
+                      alignSelf: 'center',
+                    }}
+                  />
                 </View>
-                <View>
-                  <Text style={styles.tabTitle}>{tab.title}</Text>
+              </View>
+              <View>
+                <Text style={styles.UserName}>
+                  {(profileData.userInfo || {}).contactName}
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginVertical: Dimension.margin6,
+                  }}>
+                  <CustomeIcon
+                    name={
+                      profileData?.isEmailVerified
+                        ? 'right-tick-line'
+                        : 'information-line'
+                    }
+                    color={Colors.WhiteColor}
+                    size={Dimension.font12}></CustomeIcon>
+                  <Text style={styles.UserEmail}>
+                    {(profileData.userInfo || {}).email}
+                  </Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <CustomeIcon
+                    name={
+                      profileData?.phoneVerified
+                        ? 'right-tick-line'
+                        : 'information-line'
+                    }
+                    color={Colors.WhiteColor}
+                    size={Dimension.font12}></CustomeIcon>
+                  <Text style={styles.UserContact}>
+                    {(profileData.userInfo || {}).phone}
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.UserEmailVerfyWrap}>
+              <View style={{flex: 6, marginRight: Dimension.margin10}}>
+                <Text style={styles.UserEmailVerfyBoldTxt}>
+                  A verification link has been sent on your email.
+                </Text>
+                <Text style={styles.UserEmailVerfylightTxt}>
+                  Link is active for 24 hours only.
+                </Text>
+              </View>
+              <View style={{flex: 3}}>
+                <CustomButton
+                  title={'OPEN MAIL'}
+                  onPress={() => Linking.openURL('mailto:')}
+                  TextColor={Colors.WhiteColor}
+                  buttonColor={Colors.FontColor}
+                  borderColor={Colors.FontColor}
+                  TextFontSize={Dimension.font12}></CustomButton>
+              </View>
+            </View>
+          </View>
 
-                  <View style={{flexDirection: 'row'}}>
-                    {isCompleted(tab.progress) ? (
-                      <>
-                        <CustomeIcon
-                          name={'right-tick-line'}
-                          color={Colors.SuccessStateColor}
-                          size={Dimension.font12}></CustomeIcon>
-                        <Text style={styles.tabStatusC}>Completed</Text>
-                      </>
-                    ) : (
-                      <Text style={styles.tabStatusNC}>Not Completed</Text>
-                    )}
+          <View style={styles.profileBottomWrap}>
+            <View style={styles.progressbarWrap}>
+              <Text style={styles.progressTxt}>
+                {PROGRESS[profileData.verificationStatus] * 100}%
+              </Text>
+              <Progress
+                width={null}
+                animated={false}
+                progress={
+                  PROGRESS[profileData.verificationStatus]
+                  //0.5
+                }
+                color={Colors.SuccessStateColor}
+                unfilledColor={Colors.grayShade11}
+                borderColor={Colors.grayShade11}
+                height={Dimension.height11}
+              />
+              <Text style={styles.progressBottomtxt}>
+                Complete your profile by sharing below details
+              </Text>
+            </View>
+
+            {/* navigate to activeTab isActive(tabIndex, tab.route) */}
+
+            {PROFILE_TABS.map((tab, tabIndex) => (
+              <TouchableOpacity
+                key={tabIndex}
+                onPress={() => isActive(tabIndex, tab.route, tab)}
+                style={styles.profileTabWrap}>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={[
+                      styles.IconWrap,
+                      {
+                        backgroundColor: isCompleted(tab.progress)
+                          ? Colors.grayShade3
+                          : Colors.BrandColor,
+                      },
+                    ]}>
+                    <CustomeIcon
+                      name={tab.icon}
+                      color={
+                        isCompleted(tab.progress)
+                          ? Colors.FontColor
+                          : Colors.WhiteColor
+                      }
+                      size={Dimension.font14}></CustomeIcon>
+                  </View>
+                  <View>
+                    <Text style={styles.tabTitle}>{tab.title}</Text>
+
+                    <View style={{flexDirection: 'row'}}>
+                      {isCompleted(tab.progress) ? (
+                        <>
+                          <CustomeIcon
+                            name={'right-tick-line'}
+                            color={Colors.SuccessStateColor}
+                            size={Dimension.font12}></CustomeIcon>
+                          <Text style={styles.tabStatusC}>Completed</Text>
+                        </>
+                      ) : (
+                        <Text style={styles.tabStatusNC}>Not Completed</Text>
+                      )}
+                    </View>
                   </View>
                 </View>
-              </View>
 
-              <CustomeIcon
-                name={'arrow-forward'}
-                color={
-                  isCompleted(tab.progress)
-                    ? Colors.FontColor
-                    : Colors.BrandColor
-                }
-                size={Dimension.font18}></CustomeIcon>
+                <CustomeIcon
+                  name={'arrow-forward'}
+                  color={
+                    isCompleted(tab.progress)
+                      ? Colors.FontColor
+                      : Colors.BrandColor
+                  }
+                  size={Dimension.font18}></CustomeIcon>
 
-              {/* <View>
+                {/* <View>
               
             onPress={() => props.navigation.navigate('CategoryBrand')}>
             <Text style={{color: isCompleted(tab.progress) ? 'green' : 'red'}}>
@@ -262,19 +270,20 @@ const ProfileScreen = props => {
               {' '}
               {'>'}{' '}
             </Text> */}
+              </TouchableOpacity>
+            )).toList()}
+          </View>
+          <View style={styles.logoutBtnWrap}>
+            <TouchableOpacity onPress={onLogout} style={styles.logoutBtn}>
+              <Text style={styles.logoutBtnTxt}>LOGOUT</Text>
+              <CustomeIcon
+                name={'shut-down'}
+                color={Colors.FontColor}
+                size={Dimension.font16}></CustomeIcon>
             </TouchableOpacity>
-          )).toList()}
-        </View>
-        <View style={styles.logoutBtnWrap}>
-          <TouchableOpacity onPress={onLogout} style={styles.logoutBtn}>
-            <Text style={styles.logoutBtnTxt}>LOGOUT</Text>
-            <CustomeIcon
-              name={'shut-down'}
-              color={Colors.FontColor}
-              size={Dimension.font16}></CustomeIcon>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          </View>
+        </ScrollView>
+      )}
       {/* <CustomButton
           title={'LOGOUT'}
           buttonColor={Colors.grayShade1}

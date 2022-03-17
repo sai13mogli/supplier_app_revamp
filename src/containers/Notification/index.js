@@ -116,16 +116,13 @@ const NotificationScreen = props => {
         }>
         <View style={{flexDirection: 'row', flex: 7, alignItems: 'center'}}>
           <View
-            style={
-              //styles.iconWrap
-              styles.ActioniconWrap
-            }>
+            style={item.readStatus ? styles.iconWrap : styles.ActioniconWrap}>
             <CustomeIcon
               // name={'support-line'}
               name={'orders-line'}
               size={Dimension.font20}
               //color={Colors.eyeIcon}
-              color={Colors.BrandColor}
+              color={item.readStatus ? Colors.eyeIcon : Colors.BrandColor}
             />
           </View>
           {/* <Icon
@@ -137,20 +134,20 @@ const NotificationScreen = props => {
           <Text style={styles.titleCss}>{item.content}</Text>
         </View>
         <View style={{flex: 3, alignItems: 'flex-end'}}>
-          {/* {item.readStatus ? null : ( */}
-          <TouchableOpacity
-            onPress={() => {
-              setsingleNotificationAction(true);
-              setSelectedOrder(item);
-            }}>
-            <Icon
-              name={'dots-horizontal'}
-              color={Colors.FontColor}
-              size={Dimension.font20}
-              //onPress={() => dispatch(markRead(item.id))}
-            ></Icon>
-          </TouchableOpacity>
-          {/* )} */}
+          {item.readStatus ? null : (
+            <TouchableOpacity
+              onPress={() => {
+                setsingleNotificationAction(true);
+                setSelectedOrder(item);
+              }}>
+              <Icon
+                name={'dots-horizontal'}
+                color={Colors.FontColor}
+                size={Dimension.font20}
+                //onPress={() => dispatch(markRead(item.id))}
+              ></Icon>
+            </TouchableOpacity>
+          )}
           <Text style={styles.timeorDateCss}>{getTime(item.createdAt)}</Text>
           {/* {item.readStatus ? null : (
           <TouchableOpacity onPress={() => dispatch(markRead(item.id))}>

@@ -9,21 +9,20 @@ import styles from './style';
 const SupportScreen = props => {
   return (
     <>
-    <View style={{flex:1}}>
-       <Header showText={'Support'} showBack />
-     <TicketsList navigation={props.navigation} />
-      
-    </View>
-    <View style={styles.BottomWrap}>
-    <CustomButton
-        title={'New Ticket'}
-        buttonColor={Colors.BrandColor}
-        onPress={() => props.navigation.navigate('NewTicket')}
-        TextColor={Colors.WhiteColor}
-        borderColor={Colors.WhiteColor}
-        TextFontSize={Dimension.font16}
-      />
-    </View>
+      <View style={{flex: 1}}>
+        <Header showText={'Support'} />
+        <TicketsList navigation={props.navigation} />
+      </View>
+      <View style={styles.BottomWrap}>
+        <CustomButton
+          title={'Raise New Ticket'}
+          buttonColor={Colors.BrandColor}
+          onPress={() => props.navigation.navigate('NewTicket')}
+          TextColor={Colors.WhiteColor}
+          borderColor={Colors.WhiteColor}
+          TextFontSize={Dimension.font16}
+        />
+      </View>
     </>
   );
 };

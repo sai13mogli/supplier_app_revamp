@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView,StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {OrderedMap} from 'immutable';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import DropDown from '../../../component/common/DropDown';
@@ -12,6 +12,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import {BASE_URL} from '../../../redux/constants';
 import {getCategories, getSubCategories} from '../../../services/support';
 import AppHeader from '../../../component/common/Header';
+import Toast from 'react-native-toast-message';
 
 const NewTicket = props => {
   const [loading, setLoading] = useState(false);
@@ -213,6 +214,12 @@ const NewTicket = props => {
       // };
       console.log(res);
       if (res.success) {
+        Toast.show({
+          type: 'success',
+          text2: 'Ticket created successfully',
+          visibilityTime: 2000,
+          autoHide: true,
+        });
         props.navigation.goBack();
       }
       setLoading(false);
@@ -220,7 +227,7 @@ const NewTicket = props => {
   };
 
   return (
-    <View style={{flex:1}}>
+    <View style={{flex: 1}}>
       <AppHeader
         showBack
         navigation={props.navigation}
@@ -240,9 +247,8 @@ const NewTicket = props => {
           onUpload={doc => setdocs([...docs, doc])}
           onRemove={id => setdocs(docs.filter(doc => doc.id !== id))}
         />
-       
       </ScrollView>
-      <View style={styles.BottomWrap}> 
+      <View style={styles.BottomWrap}>
         <CustomButton
           loading={loading}
           disabled={loading}
@@ -252,19 +258,21 @@ const NewTicket = props => {
           TextColor={Colors.WhiteColor}
           borderColor={Colors.WhiteColor}
           TextFontSize={Dimension.font16}
-        /></View>
+        />
+      </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
-  ContainerCss:{
-      backgroundColor:Colors.WhiteColor,
-      paddingHorizontal:Dimension.padding15,
-      
+  ContainerCss: {
+    backgroundColor: Colors.WhiteColor,
+    paddingHorizontal: Dimension.padding15,
   },
-  BottomWrap: {borderTopWidth: 1,
+  BottomWrap: {
+    borderTopWidth: 1,
     borderTopColor: Colors.grayShade2,
     padding: Dimension.padding15,
-    backgroundColor: Colors.WhiteColor,}
-})
+    backgroundColor: Colors.WhiteColor,
+  },
+});
 export default NewTicket;

@@ -10,7 +10,7 @@ import Modal from 'react-native-modal';
 import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import DotCheckbox from '../component/common/Checkbox';
-import CustomeIcon from './common/CustomeIcon'
+import CustomeIcon from './common/CustomeIcon';
 // onBackdropPress={() => props.setFiltersModal(false)}
 //       onBackButtonPress={() => props.setFiltersModal(false)}
 
@@ -44,30 +44,27 @@ const DropDownModal = props => {
       style={{padding: 0, margin: 0}}
       deviceWidth={deviceWidth}
       hasBackdrop={true}>
-     <View style={styles.modalContainer}>
-      <View style={styles.topbdr}></View>
-            <View style={styles.ModalheadingWrapper}>
-              <Text style={styles.ModalHeading}>filter</Text>
-              <CustomeIcon
-                name={'close'}
-                size={Dimension.font22}
-                color={Colors.FontColor}
-                onPress={props.closeModal}></CustomeIcon>
-            </View>
-                  
-               
-            <View style={styles.MidWrapper}>
-            <DotCheckbox
-                data={items}
-                onCheck={getFilterValue}
-                value={props.selectedValue}
-                formfilterModal={true}
-              />
+      <View style={styles.modalContainer}>
+        <View style={styles.topbdr}></View>
+        <View style={styles.ModalheadingWrapper}>
+          <Text style={styles.ModalHeading}>{props.title}</Text>
+          <CustomeIcon
+            name={'close'}
+            size={Dimension.font22}
+            color={Colors.FontColor}
+            onPress={props.closeModal}></CustomeIcon>
+        </View>
 
-            </View>
-              
+        <View style={styles.MidWrapper}>
+          <DotCheckbox
+            data={items}
+            onCheck={getFilterValue}
+            value={props.selectedValue}
+            formfilterModal={true}
+          />
+        </View>
 
-              {/* {filtersTypeData.map((item, index) => (
+        {/* {filtersTypeData.map((item, index) => (
                 <TouchableOpacity
                   onPress={() => props.setActiveFilterType(item.key)}
                   style={[
@@ -87,8 +84,7 @@ const DropDownModal = props => {
                 </TouchableOpacity>
               ))}
               {renderRight()} */}
-            </View>
-          
+      </View>
     </Modal>
   );
 };
@@ -103,7 +99,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingTop: Dimension.padding10,
   },
- 
+
   topbdr: {
     alignSelf: 'center',
     height: 3,
@@ -122,11 +118,10 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomSemiBoldFont,
     marginBottom: Dimension.margin5,
   },
-  
 
-  MidWrapper:{
-    marginVertical:Dimension.margin20,
-    paddingHorizontal:Dimension.padding15
+  MidWrapper: {
+    marginVertical: Dimension.margin20,
+    paddingHorizontal: Dimension.padding15,
   },
 });
 

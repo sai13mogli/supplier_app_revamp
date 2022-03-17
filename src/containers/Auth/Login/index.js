@@ -91,6 +91,10 @@ const LoginScreen = props => {
     setOtpModal(false);
     await AsyncStorage.setItem('token', data.data.token);
     await AsyncStorage.setItem('userId', JSON.stringify(data.data.userId));
+    await AsyncStorage.setItem(
+      'onlineShipmentMode',
+      JSON.stringify(data.data.onlineShipmentMode),
+    );
     props.route.params.setIsLoggedIn(true);
   };
 
