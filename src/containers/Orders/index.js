@@ -17,8 +17,7 @@ import {getImageUrl} from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
-// import CustomeIcon from '../../component/common/CustomeIcon';
-// import CustomButton from '../../component/common/Button';
+import {Icon} from 'react-native-elements';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -236,6 +235,10 @@ const OrdersScreen = props => {
             items={OPTIONS}
             enabled={true}
           />
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('Notification')}>
+            <Icon name="notifications" size={26}></Icon>
+          </TouchableOpacity>
           <FlatList
             data={OrderData.toArray()}
             stickyHeaderIndices={[0]}
