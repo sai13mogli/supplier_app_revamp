@@ -36,6 +36,9 @@ const OrdersScreen = props => {
   const maxPage = useSelector(state =>
     state.ordersReducer.getIn(['orders', 'maxPage']),
   );
+  const pageIndex = useSelector(state =>
+    state.ordersReducer.getIn(['orders', 'page']),
+  );
 
   const [selectedType, setSelectedType] = useState('Open_Orders');
   const [selectedTab, setSelectedTab] = useState('PENDING_ACCEPTANCE');
@@ -190,13 +193,21 @@ const OrdersScreen = props => {
   };
 
   const endReachedFetchListing = () => {
+    console.log(pageIndex, pageIndex < maxPage);
     if (
       OrderStatus === STATE_STATUS.FETCHED &&
       OrderStatus !== STATE_STATUS.FETCHING &&
-      pageIndex + 1 < maxPage &&
-      !loader
+      pageIndex + 1 < maxPage
     ) {
-      fetchTicketListing(pageIndex + 1, '');
+      fetchOrdersFunc(pageIndex + 1, '', selectedTab, 'ONESHIP', {
+        pickupFromDate: '',
+        pickupToDate: '',
+        poFromDate: '',
+        poToDate: '',
+        orderType: [],
+        deliveryType: [],
+        orderRefs: [],
+      });
     }
   };
 
@@ -247,20 +258,21 @@ const OrdersScreen = props => {
             keyExtractor={(item, index) => `${index}-item`}
             ListHeaderComponent={renderHeaderComponent}
             ListFooterComponent={renderFooterComponent}
-            // onEndReachedThreshold={0.9}
-            // style={{paddingBottom: 380}}
-            // contentContainerStyle={{paddingBottom: 380}}
-            // removeClippedSubviews={true}
-            // maxToRenderPerBatch={10}
-            // onEndReached={({distanceFromEnd}) => {
-            //   if (!onEndReachedCalledDuringMomentum.current) {
-            //     endReachedFetchListing();
-            //     onEndReachedCalledDuringMomentum.current = true;
-            //   }
-            // }}
-            // onMomentumScrollBegin={() => {
-            //   onEndReachedCalledDuringMomentum.current = false;
-            // }}
+            onEndReachedThreshold={0.9}
+            style={{paddingBottom: 380}}
+            contentContainerStyle={{paddingBottom: 380}}
+            removeClippedSubviews={true}
+            maxToRenderPerBatch={10}
+            onEndReached={({distanceFromEnd}) => {
+              if (!onEndReachedCalledDuringMomentum.current) {
+                endReachedFetchListing();
+                onEndReachedCalledDuringMomentum.current = true;
+              }
+            }}
+            onMomentumScrollBegin={() => {
+              onEndReachedCalledDuringMomentum.current = false;
+            }}
+            showsVerticalScrollIndicator={false}
           />
         </>
       )}

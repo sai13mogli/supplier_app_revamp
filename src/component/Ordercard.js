@@ -27,7 +27,6 @@ const Ordercard = props => {
   }, []);
 
   const fetchImage = async () => {
-    console.log('mc');
     const {data} = await getImageUrl(msn);
     let imageUrl =
       'https://cdn.moglix.com/' +
@@ -59,7 +58,6 @@ const Ordercard = props => {
       'Nov',
       'Dec',
     ];
-    console.log(time);
     let date = new Date(Number(time));
     return `${months[date.getMonth()]} ${date.getDate()},${date.getFullYear()}`;
   };

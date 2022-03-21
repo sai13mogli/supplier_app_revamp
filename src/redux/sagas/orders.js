@@ -25,11 +25,13 @@ function* fetchOrder({
       filters,
     );
     if (error) {
+      console.log(error, 'ifError');
       yield put(failedFetchOrders(error));
     } else {
       yield put(fetchedOrders(page, data.data));
     }
   } catch (error) {
+    console.log(error, 'catchError');
     yield put(failedFetchOrders(error));
   }
 }

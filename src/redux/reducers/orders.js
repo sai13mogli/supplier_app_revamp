@@ -50,20 +50,24 @@ export const ordersReducer = (state = initialState, action) => {
         return state
           .setIn(['orders', 'status'], STATE_STATUS.FETCHED)
           .setIn(['orders', 'data'], new List(payload.data.orderList))
-          .setIn(['orders', 'totalRecords'], payload.data.totalRecords)
           .setIn(
             ['orders', 'maxPage'],
             payload.data.totalRecords / payload.data.size,
-          );
+          )
+          .setIn(['orders', 'page'], payload.data.currentPage);
+        // .setIn(['orders', 'totalRecords'], payload.data.totalRecords);
       }
-      return state
-        .setIn(['orders', 'status'], STATE_STATUS.FETCHED)
-        .mergeIn(['orders', 'data'], new List(payload.data.orderList))
-        .setIn(['orders', 'totalRecords', payload.data.totalRecords])
-        .setIn(
-          ['orders', 'maxPage'],
-          payload.data.totalRecords / payload.data.size,
-        );
+      return (
+        state
+          .setIn(['orders', 'status'], STATE_STATUS.FETCHED)
+          .mergeIn(['orders', 'data'], new List(payload.data.orderList))
+          .setIn(
+            ['orders', 'maxPage'],
+            payload.data.totalRecords / payload.data.size,
+          )
+          // .setIn(['orders', 'totalRecords', payload.data.totalRecords])
+          .setIn(['orders', 'page'], payload.data.currentPage)
+      );
     case ORDERS_ACTIONS.FAILED_FETCH_ORDERS:
       return state
         .setIn(['orders', 'error'], error)
