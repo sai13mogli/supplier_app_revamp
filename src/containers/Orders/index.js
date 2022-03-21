@@ -14,8 +14,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {fetchOrders, fetchTabCount} from '../../redux/actions/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
-// import CustomeIcon from '../../component/common/CustomeIcon';
-// import CustomButton from '../../component/common/Button';
+import { Icon } from 'react-native-elements';
+ //import CustomeIcon from '../../component/common/CustomeIcon';
+ //import CustomButton from '../../component/common/Button';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -67,18 +68,18 @@ const OrdersScreen = props => {
     ],
   };
 
-  // useEffect(() => {
-  //   fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
-  //     pickupFromDate: '',
-  //     pickupToDate: '',
-  //     poFromDate: '',
-  //     poToDate: '',
-  //     orderType: [],
-  //     deliveryType: [],
-  //     orderRefs: [],
-  //   });
-  //   fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
-  // }, []);
+  useEffect(() => {
+    fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+      pickupFromDate: '',
+      pickupToDate: '',
+      poFromDate: '',
+      poToDate: '',
+      orderType: [],
+      deliveryType: [],
+      orderRefs: [],
+    });
+    fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
+  }, []);
 
   const fetchOrdersFunc = (
     page,
@@ -213,6 +214,9 @@ const OrdersScreen = props => {
             items={OPTIONS}
             enabled={true}
           />
+          <TouchableOpacity onPress={() => props.navigation.navigate('Notification')}>
+            <Icon name="notifications" size={26}></Icon>
+          </TouchableOpacity>
           <FlatList
             data={OrderData.toArray()}
             stickyHeaderIndices={[0]}
