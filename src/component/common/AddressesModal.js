@@ -20,10 +20,6 @@ const AddressesModal = props => {
     transparent,
   } = props;
 
-
-
-
-
   return (
     <View style={styles.container}>
       <Modal

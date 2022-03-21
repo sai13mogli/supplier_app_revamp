@@ -204,7 +204,7 @@ const Accounts = (props) => {
         id: '',
         accountHolderName: accountHolderName,
         accountNumber: accountNumber,
-        accountType: '1',
+        accountType: accountType,
         ifscCode: ifscCode,
         branch: branch,
         bankName: bankName,

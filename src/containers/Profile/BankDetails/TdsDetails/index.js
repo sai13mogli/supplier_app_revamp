@@ -208,7 +208,7 @@ const TdsDetails = () => {
       <AddressesModal
         visible={modalVisible}
         // data={section}
-        filterListData={console.log("Section===>", (section))}
+        // filterListData={console.log("Section===>", (section))}
         transparent={true}
         onClose={() => setModalVisible(true)}
         onPress={() => setModalVisible(!modalVisible)}
