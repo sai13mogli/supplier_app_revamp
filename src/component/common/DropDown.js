@@ -90,6 +90,7 @@ const DropDown = props => {
             onValueChange(val);
             setIsVisible(false);
           }}
+          title={title}
           items={items}
           selectedValue={selectedValue}
         />

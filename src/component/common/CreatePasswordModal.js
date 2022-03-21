@@ -75,9 +75,9 @@ const CreatePasswordModal = props => {
   return (
     <Modal
       isVisible={visible}
-      onBackButtonPress={onClose}
-      onBackdropPress={onClose}
-      onDismiss={onClose}
+      // onBackButtonPress={onClose}
+      // onBackdropPress={onClose}
+      // onDismiss={onClose}
       overlayPointerEvents={'auto'}
       coverScreen={true}
       style={{padding: 0, margin: 0}}
@@ -87,13 +87,11 @@ const CreatePasswordModal = props => {
         <View style={styles.topbdr}></View>
         <View style={styles.ModalheadingWrapper}>
           <Text style={styles.ModalHeading}>Create Password</Text>
-          <CustomeIcon
+          {/* <CustomeIcon
             name={'close'}
             size={Dimension.font22}
             color={Colors.FontColor}
-            onPress={() => {
-              props.setFiltersModal(false);
-            }}></CustomeIcon>
+            onPress={onClose}></CustomeIcon> */}
         </View>
         <View style={{padding: Dimension.padding10}}>
           <FloatingLabelInputField

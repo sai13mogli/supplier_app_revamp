@@ -4,6 +4,7 @@ import Routes from './src/routes';
 import store from './src/redux/store';
 import {Provider} from 'react-redux';
 import codePush from 'react-native-code-push';
+import Toast from 'react-native-toast-message';
 
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
@@ -36,9 +37,12 @@ class App extends React.Component {
 
   render() {
     return (
-      <Provider store={store}>
-        <Routes />
-      </Provider>
+      <>
+        <Provider store={store}>
+          <Routes />
+        </Provider>
+        <Toast />
+      </>
     );
   }
 }

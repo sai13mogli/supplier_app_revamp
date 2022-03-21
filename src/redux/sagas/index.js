@@ -4,6 +4,7 @@ import profileSaga from './profile';
 import categoryBrandSaga from './categorybrand';
 import notificationsSaga from './notifications';
 import supportSaga from './support';
+import ordersSaga from './orders';
 
 export default function* () {
   yield all([
@@ -12,5 +13,6 @@ export default function* () {
     categoryBrandSaga,
     notificationsSaga,
     supportSaga,
+    ordersSaga,
   ]);
 }

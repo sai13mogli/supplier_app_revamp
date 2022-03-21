@@ -3,6 +3,7 @@ import {
   View,
   FlatList,
   Text,
+  Image,
   ActivityIndicator,
   Dimensions,
   TouchableOpacity,
@@ -14,7 +15,7 @@ import {STATE_STATUS} from '../../../redux/constants';
 import FilterModal from '../../../component/FilterModal';
 import {filtersTypeData, filtersData} from '../../../redux/constants/support';
 import CustomeIcon from '../../../component/common/CustomeIcon';
-import styles from '../style'
+import styles from '../style';
 import debounce from 'lodash.debounce';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
@@ -79,7 +80,7 @@ const TicketsList = props => {
   const debouncedSave = useRef(
     debounce(text => {
       fetchTicketListing(1, text);
-    }, 600),
+    }, 300),
   ).current;
 
   const onSearchText = text => {
@@ -87,8 +88,30 @@ const TicketsList = props => {
     debouncedSave(text);
   };
 
+  const getDate = date => {
+    let mutatedate = date && date.split('T') && date.split('T')[0];
+    let modifieddate = new Date(mutatedate);
+    let months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
+    return `${
+      months[modifieddate.getMonth()]
+    } ${modifieddate.getDate()}, ${modifieddate.getFullYear()} `;
+  };
+
   const renderItem = ({item, index}) => {
-    console.log(item);
     return (
       <TouchableOpacity
         onPress={() =>
@@ -99,19 +122,29 @@ const TicketsList = props => {
             openOnly: typeFilter,
             search: '',
           })
-          
         }
         style={styles.TicketOuterWrap}>
         <View style={styles.TicketTopWrap}>
-        <Text style={styles.ticketStatus}>{item.statusText}</Text>
-        <Text style={styles.ticketIdTxt}>Ticket ID: {item.id}</Text>
+          <Text
+            style={[
+              styles.ticketStatus,
+              {
+                color:
+                  item.statusText == 'Open'
+                    ? colors.BrandColor
+                    : colors.blackColor,
+              },
+            ]}>
+            {item.statusText}
+          </Text>
+          <Text style={styles.ticketIdTxt}>Ticket ID: {item.id}</Text>
           <View style={styles.TicketTypeWrap}>
-            <Text style={styles.tickettypetxt}>Ticket Type</Text>
+            <Text style={styles.tickettypetxt}>{item.type}</Text>
           </View>
         </View>
         <View style={styles.ticketBottomWrap}>
-        <Text style={styles.ticketSubTxt}>{item.subject}</Text>
-        <Text style={styles.TicketDate}>Date</Text>
+          <Text style={styles.ticketSubTxt}>{item.subject}</Text>
+          <Text style={styles.TicketDate}>{getDate(item.created_at)}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -148,37 +181,58 @@ const TicketsList = props => {
   };
 
   const listEmptyComponent = () => (
-    <Text style={{color: '#000'}}>No Tickets Found!!</Text>
+    <View style={styles.EmptyChatWrap}>
+      <Image
+        source={require('../../../assets/images/EmptyChat.png')}
+        style={{height: Dimension.height250, width: Dimension.width150}}
+      />
+      <Text style={styles.EmptyBoldTxt}>
+        Voila! You Have Not Raised Any Query Yet
+      </Text>
+      <Text style={styles.EmptyLightTxt}>
+        Click on below button as soon as you face any problem
+      </Text>
+      <TouchableOpacity
+        onPress={() => props.navigation.navigate('NewTicket')}
+        style={styles.NewTicktbtn}>
+        <CustomeIcon
+          name={'add-circle'}
+          color={colors.WhiteColor}
+          size={Dimension.font20}></CustomeIcon>
+        <Text style={styles.NewTicktbtnTxt}>Raise new Ticket</Text>
+      </TouchableOpacity>
+    </View>
   );
 
   const ticketListing = () => {
     return (
       <View>
-        <Text style={styles.SearchTicketTxt}>
-          Search Tickets
-        </Text>
+        <Text style={styles.SearchTicketTxt}>Search Tickets</Text>
         <View style={styles.searchWrapper}>
-        <TextInput
-          placeholder="Type your question here"
-          placeholderTextColor={'#A2A2A2'}
-          selectionColor={'#888'}
-          returnKeyType={'search'}
-          value={inputValue}
-          onChangeText={onSearchText}
-          style={styles.SearchInputCss}
-        />
-        <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+          <TextInput
+            placeholder="Search by ticket number"
+            placeholderTextColor={'#A2A2A2'}
+            selectionColor={'#888'}
+            returnKeyType={'search'}
+            value={inputValue}
+            onChangeText={onSearchText}
+            style={styles.SearchInputCss}
+          />
+          <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
         </View>
         <View style={styles.filterRowWrap}>
           <Text style={styles.ticketTxt}>Tickets</Text>
-          <TouchableOpacity onPress={() => setFiltersModal(true)} style={styles.filterBtn}>
-          <CustomeIcon name={'filter-fill'} size={Dimension.font20} color={colors.FontColor}></CustomeIcon>
-          <Text style={styles.filterTxt}>
-            Filters
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setFiltersModal(true)}
+            style={styles.filterBtn}>
+            <CustomeIcon
+              name={'filter-fill'}
+              size={Dimension.font20}
+              color={colors.FontColor}></CustomeIcon>
+            <Text style={styles.filterTxt}>Filters</Text>
+          </TouchableOpacity>
         </View>
-        
+
         <FlatList
           data={ticketsList}
           renderItem={renderItem}

@@ -197,7 +197,6 @@ const SignUpEndScreen = props => {
       </View>
       <CreatePasswordModal
         visible={showCreatePass}
-        visible={true}
         onSuccess={onSuccess}
         onClose={() => setShowCreatePass(false)}
       />
