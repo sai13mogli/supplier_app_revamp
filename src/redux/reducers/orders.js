@@ -14,6 +14,7 @@ const initialState = new OrderedMap({
     filters: {},
     data: new List([]),
     page: 1,
+    maxPage: 5,
   }),
   tabCounts: new OrderedMap({
     status: STATE_STATUS.UNFETCHED,
@@ -49,12 +50,20 @@ export const ordersReducer = (state = initialState, action) => {
         return state
           .setIn(['orders', 'status'], STATE_STATUS.FETCHED)
           .setIn(['orders', 'data'], new List(payload.data.orderList))
-          .setIn(['orders', 'totalRecords'], payload.data.totalRecords);
+          .setIn(['orders', 'totalRecords'], payload.data.totalRecords)
+          .setIn(
+            ['orders', 'maxPage'],
+            payload.data.totalRecords / payload.data.size,
+          );
       }
       return state
         .setIn(['orders', 'status'], STATE_STATUS.FETCHED)
         .mergeIn(['orders', 'data'], new List(payload.data.orderList))
-        .setIn(['orders', 'totalRecords', payload.data.totalRecords]);
+        .setIn(['orders', 'totalRecords', payload.data.totalRecords])
+        .setIn(
+          ['orders', 'maxPage'],
+          payload.data.totalRecords / payload.data.size,
+        );
     case ORDERS_ACTIONS.FAILED_FETCH_ORDERS:
       return state
         .setIn(['orders', 'error'], error)

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {BASE_URL} from '../redux/constants/index';
+import {BASE_URL, SUPPLIER_CENTRAL_API} from '../redux/constants/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const getOrders = async (
@@ -39,3 +39,12 @@ export const getTabCount = async filters =>
       },
     },
   );
+
+export const getImageUrl = async productMsn =>
+  axios.get(`${SUPPLIER_CENTRAL_API}utility/productinfo`, {
+    params: {msn: productMsn},
+    // headers: {
+    //   userId: await AsyncStorage.getItem('userId'),
+    //   Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    // },
+  });

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -6,14 +6,17 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 import {STATE_STATUS} from '../../redux/constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchOrders, fetchTabCount} from '../../redux/actions/orders';
+import {getImageUrl} from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
+import Ordercard from '../../component/Ordercard';
 // import CustomeIcon from '../../component/common/CustomeIcon';
 // import CustomButton from '../../component/common/Button';
 
@@ -31,9 +34,13 @@ const OrdersScreen = props => {
   const OrderData = useSelector(state =>
     state.ordersReducer.getIn(['orders', 'data']),
   );
+  const maxPage = useSelector(state =>
+    state.ordersReducer.getIn(['orders', 'maxPage']),
+  );
 
   const [selectedType, setSelectedType] = useState('Open_Orders');
   const [selectedTab, setSelectedTab] = useState('PENDING_ACCEPTANCE');
+  const onEndReachedCalledDuringMomentum = useRef(true);
 
   const OPTIONS = [
     {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
@@ -67,18 +74,18 @@ const OrdersScreen = props => {
     ],
   };
 
-  // useEffect(() => {
-  //   fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
-  //     pickupFromDate: '',
-  //     pickupToDate: '',
-  //     poFromDate: '',
-  //     poToDate: '',
-  //     orderType: [],
-  //     deliveryType: [],
-  //     orderRefs: [],
-  //   });
-  //   fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
-  // }, []);
+  useEffect(() => {
+    fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+      pickupFromDate: '',
+      pickupToDate: '',
+      poFromDate: '',
+      poToDate: '',
+      orderType: [],
+      deliveryType: [],
+      orderRefs: [],
+    });
+    fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
+  }, []);
 
   const fetchOrdersFunc = (
     page,
@@ -104,16 +111,21 @@ const OrdersScreen = props => {
 
   const renderItem = ({item, index}) => {
     return (
-      <View
-        style={{
-          margin: 8,
-          padding: 12,
-          borderRadius: 4,
-          backgroundColor: '#fff',
-        }}>
-        <Text style={{color: '#000'}}>{item.productMsn}</Text>
-        <Text style={{color: '#000'}}>{item.productName}</Text>
-      </View>
+      <Ordercard
+        msn={item.productMsn}
+        quantity={item.quantity}
+        orderRef={item.orderRef}
+        itemRef={item.itemRef}
+        createdAt={item.createdAt}
+        transferPrice={item.transferPrice}
+        hsn={item.productHsn}
+        pickupDate={item.pickupDate}
+        productName={item.productName}
+        orderTypeString={item.orderTypeString}
+        shipmentMode={item.shipmentMode}
+        isVmi={item.isVmi}
+        shipmentModeString={item.shipmentModeString}
+      />
     );
   };
 
@@ -178,6 +190,17 @@ const OrdersScreen = props => {
     return null;
   };
 
+  const endReachedFetchListing = () => {
+    if (
+      OrderStatus === STATE_STATUS.FETCHED &&
+      OrderStatus !== STATE_STATUS.FETCHING &&
+      pageIndex + 1 < maxPage &&
+      !loader
+    ) {
+      fetchTicketListing(pageIndex + 1, '');
+    }
+  };
+
   return (
     <View style={{flex: 1, paddingTop: 80}}>
       {/* <CustomButton
@@ -221,6 +244,20 @@ const OrdersScreen = props => {
             keyExtractor={(item, index) => `${index}-item`}
             ListHeaderComponent={renderHeaderComponent}
             ListFooterComponent={renderFooterComponent}
+            // onEndReachedThreshold={0.9}
+            // style={{paddingBottom: 380}}
+            // contentContainerStyle={{paddingBottom: 380}}
+            // removeClippedSubviews={true}
+            // maxToRenderPerBatch={10}
+            // onEndReached={({distanceFromEnd}) => {
+            //   if (!onEndReachedCalledDuringMomentum.current) {
+            //     endReachedFetchListing();
+            //     onEndReachedCalledDuringMomentum.current = true;
+            //   }
+            // }}
+            // onMomentumScrollBegin={() => {
+            //   onEndReachedCalledDuringMomentum.current = false;
+            // }}
           />
         </>
       )}
