@@ -1,6 +1,9 @@
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image,StyleSheet} from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
 import {getImageUrl} from '../services/orders';
+import Dimension from '../Theme/Dimension';
+import Colors from '../Theme/Colors';
+import CustomeIcon from './common/CustomeIcon';
 
 const Ordercard = props => {
   const {
@@ -81,57 +84,174 @@ const Ordercard = props => {
 
   return (
     <View
-      style={{
-        margin: 8,
-        padding: 12,
-        borderRadius: 4,
-        backgroundColor: '#fff',
-      }}>
+      style={styles.orderCardwrap}>
+        <View style={styles.leftpart}>
+
+        
       <Image
         source={{
           uri:
             orderImage ||
             'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
         }}
-        style={{
-          height: 60,
-          width: 60,
-          alignSelf: 'center',
-        }}
+        style={styles.imgStyle}
       />
-      <Text style={{color: 'red'}}>{msn}</Text>
+      <View style={styles.quantityTxt}>
+       <Text style={styles.TitleLightTxt}>Qty - <Text style={styles.TitleBoldTxt}>{quantity}</Text></Text>
+       </View>
+       </View>
+       <View style={styles.rightPart}>
+
+       
+      <Text style={styles.msnName}>{msn}</Text>
       <Text
         onTextLayout={onTextLayout}
         numberOfLines={showMoreTxt ? undefined : 1}
-        style={{color: '#000'}}>
+        style={styles.productName}>
         {productName}
       </Text>
       {lengthMore ? (
-        <Text onPress={toggleShowMoreTxt} style={{color: 'red'}}>
+        <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
           {showMoreTxt ? 'Read less' : 'Read more'}
         </Text>
       ) : null}
-      <Text style={{color: '#000'}}>Qty - {quantity}</Text>
-      <Text style={{color: '#000'}}>PO ID - {orderRef}</Text>
-      <Text style={{color: '#000'}}>PO Date - {getTime(createdAt)}</Text>
-      <Text style={{color: '#000'}}>PO Item ID - {itemRef}</Text>
-      <Text style={{color: '#000'}}>
-        TP/Unit - ₹{Math.floor(transferPrice)}
+      <View style={{flexDirection:"row"}}>
+
+      
+      <View>
+      <Text style={styles.TitleLightTxt}>PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text></Text>
+      <Text style={styles.TitleLightTxt}>PO Date - <Text style={styles.TitleBoldTxt}>{getTime(createdAt)}</Text></Text>
+      <Text style={styles.TitleLightTxt}>PO Item ID - <Text style={styles.TitleBoldTxt}>{itemRef}</Text></Text>
+      </View>
+     
+      <View>
+      <Text style={styles.TitleLightTxt}>
+        TP/Unit -  <Text style={styles.TitleBoldTxt}>₹{Math.floor(transferPrice)}</Text>
       </Text>
-      <Text style={{color: '#000'}}>Product HSN - {hsn}</Text>
-      <Text style={{color: '#000'}}>Date - {getTime(pickupDate)}</Text>
-      <Text style={{color: '#000'}}>{orderTypeString}</Text>
-      <Text style={{color: '#000'}}>
+      <Text style={styles.TitleLightTxt}>Product HSN - <Text style={styles.TitleBoldTxt}>{hsn}</Text></Text>
+      <Text style={styles.TitleLightTxt}>Date - <Text style={styles.TitleBoldTxt}>{getTime(pickupDate)}</Text></Text>
+      </View>
+      </View>
+<View style={{flexDirection:"row"}}>
+<Text style={styles.GstWrapTxt}>{orderTypeString}</Text>
+      <Text style={styles.shipmentModeWrap}>
         {shipmentMode == 2
           ? 'Dropship'
           : shipmentMode == 3
           ? 'Door Delivery'
           : 'Oneship'}
       </Text>
-      {isVmi ? <Text style={{color: '#000'}}>VMI</Text> : null}
-      <Text style={{color: '#000'}}>{shipmentModeString}</Text>
+      {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
+      <Text style={styles.shipmentModeStringWrap}>{shipmentModeString}</Text>
+</View>
+</View> 
     </View>
   );
 };
+const styles = StyleSheet.create({
+ 
+  TitleLightTxt: {
+    fontSize: Dimension.font10,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+  },
+  TitleBoldTxt: {
+    fontSize: Dimension.font10,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomBoldFont,
+  },
+  msnName:{
+    fontSize: Dimension.font12,
+    color: Colors.BrandColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+  },
+  productName:{
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+  },
+  readMoretxt:{
+    fontSize: Dimension.font12,
+    color: Colors.BrandColor,
+    fontFamily: Dimension.CustomMediumFont,
+  },
+  GstWrapTxt:{
+    paddingVertical:Dimension.padding4,
+    paddingHorizontal:Dimension.padding10,
+    fontSize: Dimension.font10,
+    color: Colors.BrandColor,
+    fontFamily: Dimension.CustomMediumFont,
+    backgroundColor:Colors.LightBrandColor,
+    borderRadius:2,
+    marginRight:Dimension.margin5
+  },
+  shipmentModeWrap:{
+    paddingVertical:Dimension.padding4,
+    paddingHorizontal:Dimension.padding10,
+    fontSize: Dimension.font10,
+    color: Colors.BrandColor,
+    fontFamily: Dimension.CustomMediumFont,
+    backgroundColor:Colors.LightBrandColor,
+    borderRadius:2,
+    marginRight:Dimension.margin5
+  },
+  shipmentModeStringWrap:{
+   
+      paddingVertical:Dimension.padding4,
+      paddingHorizontal:Dimension.padding10,
+      fontSize: Dimension.font10,
+      color: Colors.BrandColor,
+      fontFamily: Dimension.CustomMediumFont,
+      backgroundColor:Colors.LightBrandColor,
+      borderRadius:2,
+      marginRight:Dimension.margin5
+  },
+  VMIWrap:{
+   
+    paddingVertical:Dimension.padding4,
+    paddingHorizontal:Dimension.padding10,
+    fontSize: Dimension.font10,
+    color: Colors.BrandColor,
+    fontFamily: Dimension.CustomMediumFont,
+    backgroundColor:Colors.LightBrandColor,
+    borderRadius:2,
+    marginRight:Dimension.margin5
+},
+orderCardwrap:{
+  borderRadius:8,
+borderWidth:1,
+borderColor:Colors.BoxBorderColor,
+backgroundColor:Colors.WhiteColor,
+marginBottom:Dimension.margin8,
+paddingHorizontal:Dimension.padding12,
+paddingVertical:Dimension.padding12,
+flex:1,
+flexDirection:"row"
+},
+leftpart:{
+flex:2,
+marginRight:Dimension.margin12
+},
+rightPart:{
+flex:7
+},
+imgStyle:{
+  borderRadius:4,
+  backgroundColor:Colors.WhiteColor,
+  padding:2,
+  height:Dimension.width50,
+  height:Dimension.height50,
+  //alignSelf:'center'
+},
+quantityTxt:{
+alignSelf:"center",
+backgroundColor:"#E2E2E2",
+borderRadius:2,
+marginTop:Dimension.margin8,
+width:"100%",
+alignItems:"center",
+paddingVertical:Dimension.padding5
 
+},
+});
 export default Ordercard;
