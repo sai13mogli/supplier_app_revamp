@@ -128,6 +128,8 @@ const OrdersScreen = props => {
         isVmi={item.isVmi}
         shipmentModeString={item.shipmentModeString}
         actionCTA={item.actionCTA}
+        taxPercentage={item.taxPercentage}
+        totalAmount={item.totalAmount}
       />
     );
   };
