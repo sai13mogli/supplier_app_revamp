@@ -43,8 +43,40 @@ export const getTabCount = async filters =>
 export const getImageUrl = async productMsn =>
   axios.get(`${SUPPLIER_CENTRAL_API}utility/productinfo`, {
     params: {msn: productMsn},
-    // headers: {
-    //   userId: await AsyncStorage.getItem('userId'),
-    //   Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
-    // },
   });
+
+export const acceptOrder = async body =>
+  axios.post(
+    `${BASE_URL}api/order/accept`,
+    {
+      ...body,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
+// export const getpoChallan = async orderRef =>
+//   axios.get(`${SUPPLIER_CENTRAL_API}utility/pochallan`, {
+//     params: {poid: orderRef, cid: 356},
+//   });
+
+export const getpoChallan = async orderRef =>
+  axios.get(
+    `https://suppliercentralqa.moglilabs.com/utility/pochallan?poid=121336&cid=356`,
+  );
+
+export const rejectOrder = async body =>
+  axios.post(
+    `${BASE_URL}api/order/reject`,
+    {
+      ...body,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
