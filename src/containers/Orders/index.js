@@ -127,6 +127,7 @@ const OrdersScreen = props => {
         shipmentMode={item.shipmentMode}
         isVmi={item.isVmi}
         shipmentModeString={item.shipmentModeString}
+        actionCTA={item.actionCTA}
       />
     );
   };
@@ -193,7 +194,6 @@ const OrdersScreen = props => {
   };
 
   const endReachedFetchListing = () => {
-    console.log(pageIndex, pageIndex < maxPage);
     if (
       OrderStatus === STATE_STATUS.FETCHED &&
       OrderStatus !== STATE_STATUS.FETCHING &&

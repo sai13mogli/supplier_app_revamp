@@ -1,4 +1,4 @@
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
 import {getImageUrl} from '../services/orders';
 
@@ -17,6 +17,7 @@ const Ordercard = props => {
     shipmentMode,
     isVmi,
     shipmentModeString,
+    actionCTA,
   } = props;
   const [orderImage, setOrderImage] = useState(null);
   const [showMoreTxt, setShowMoreTxt] = useState(false);
@@ -70,13 +71,26 @@ const Ordercard = props => {
     setShowMoreTxt(!showMoreTxt);
   };
 
-  const getShipmentMode = shipMode => {
-    let shipmentModeTxt = 'Oneship';
-    if (shipMode == 2) {
-      shipmentModeTxt = 'Dropship';
-    } else if (data.shipmentMode == 3) {
-      shipmentModeTxt = 'Door Delivery';
-    }
+  const renderCTAs = () => {
+    return actionCTA.map((_, i) => {
+      return (
+        <>
+          {_ == 'ACCEPT' ? (
+            <TouchableOpacity>
+              <Text style={{color: 'red', fontSize: 12}}>ACCEPT</Text>
+            </TouchableOpacity>
+          ) : _ == 'DOWNLOAD_PO_EMS' ? (
+            <TouchableOpacity>
+              <Text style={{color: '#000', fontSize: 12}}>DOWNLOAD PO</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity>
+              <Text style={{color: '#000', fontSize: 12}}>{_}</Text>
+            </TouchableOpacity>
+          )}
+        </>
+      );
+    });
   };
 
   return (
@@ -130,6 +144,7 @@ const Ordercard = props => {
       </Text>
       {isVmi ? <Text style={{color: '#000'}}>VMI</Text> : null}
       <Text style={{color: '#000'}}>{shipmentModeString}</Text>
+      {renderCTAs()}
     </View>
   );
 };
