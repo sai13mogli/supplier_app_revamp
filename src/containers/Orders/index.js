@@ -212,7 +212,7 @@ const OrdersScreen = props => {
   };
 
   return (
-    <View style={{flex: 1, paddingTop: 80}}>
+    <View style={{flex: 1,}}>
       {/* <CustomButton
         title={'Open Notifications'}
         buttonColor={'dodgerblue'}
@@ -235,7 +235,8 @@ const OrdersScreen = props => {
         <ActivityIndicator style={{alignSelf: 'center', margin: 12}} />
       ) : (
         <>
-          <DropDown
+        <View style={{flexDirection:"row",justifyContent:"space-between",padding:15}}>
+        <DropDown
             title={''}
             label={''}
             selectedValue={selectedType}
@@ -245,11 +246,14 @@ const OrdersScreen = props => {
             }}
             items={OPTIONS}
             enabled={true}
+            isFrom={'orders'}
           />
           <TouchableOpacity
             onPress={() => props.navigation.navigate('Notification')}>
             <Icon name="notifications" size={26}></Icon>
           </TouchableOpacity>
+        </View>
+         
           <FlatList
             data={OrderData.toArray()}
             stickyHeaderIndices={[0]}
