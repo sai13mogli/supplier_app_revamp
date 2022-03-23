@@ -43,8 +43,43 @@ export const getTabCount = async filters =>
 export const getImageUrl = async productMsn =>
   axios.get(`${SUPPLIER_CENTRAL_API}utility/productinfo`, {
     params: {msn: productMsn},
-    // headers: {
-    //   userId: await AsyncStorage.getItem('userId'),
-    //   Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
-    // },
   });
+
+export const acceptOrder = async body =>
+  axios.post(
+    `${BASE_URL}api/order/accept`,
+    {
+      ...body,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
+export const getpoChallan = async orderRef =>
+  axios.get(`https://purchase.moglilabs.com/purchase/api/v1/po/challan-spo`, {
+    params: {poID: orderRef, system: `SC`},
+    headers: {
+      Authorization: `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlbXNAb21nbGl4LmNvbSIsImlkUmVmcmVzaFRva2VuIjo2MzYsImV4cCI6MTY3MTA5MDM3OSwiaWF0IjoxNjM5NTU0Mzc5LCJlbWFpbCI6ImVtc0BvbWdsaXguY29tIn0.D-BMqbDVgZGn-qVIL4sbWL7WQyq0lvWeNwB_ZZnCTw2m-_3lFV8X02WK6SNcE1eOVbKXAdvH7KbzfeyFqOJzfg`,
+    },
+  });
+
+// export const getpoChallan = async orderRef =>
+//   axios.get(
+//     `https://purchase.moglilabs.com/purchase/api/v1/po/challan-spo?poid=121336&cid=356`,
+//   );
+
+export const rejectOrder = async body =>
+  axios.post(
+    `${BASE_URL}api/order/reject`,
+    {
+      ...body,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );

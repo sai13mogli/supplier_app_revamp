@@ -127,6 +127,14 @@ const OrdersScreen = props => {
         shipmentMode={item.shipmentMode}
         isVmi={item.isVmi}
         shipmentModeString={item.shipmentModeString}
+        actionCTA={item.actionCTA}
+        taxPercentage={item.taxPercentage}
+        totalAmount={item.totalAmount}
+        fetchOrdersFunc={fetchOrdersFunc}
+        selectedTab={selectedTab}
+        fetchTabCountFunc={fetchTabCountFunc}
+        itemId={item.itemId}
+        invoiceUrl={item.invoiceUrl}
       />
     );
   };
@@ -193,7 +201,6 @@ const OrdersScreen = props => {
   };
 
   const endReachedFetchListing = () => {
-    console.log(pageIndex, pageIndex < maxPage);
     if (
       OrderStatus === STATE_STATUS.FETCHED &&
       OrderStatus !== STATE_STATUS.FETCHING &&
