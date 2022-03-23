@@ -130,6 +130,11 @@ const OrdersScreen = props => {
         actionCTA={item.actionCTA}
         taxPercentage={item.taxPercentage}
         totalAmount={item.totalAmount}
+        fetchOrdersFunc={fetchOrdersFunc}
+        selectedTab={selectedTab}
+        fetchTabCountFunc={fetchTabCountFunc}
+        itemId={item.itemId}
+        invoiceUrl={item.invoiceUrl}
       />
     );
   };

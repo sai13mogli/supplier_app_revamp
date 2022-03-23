@@ -5,6 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator,
+  PermissionsAndroid,
 } from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
 import {getImageUrl} from '../services/orders';
@@ -12,8 +14,10 @@ import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
 import Modal from 'react-native-modal';
-import {colors} from 'react-native-elements';
-import {color} from 'react-native-elements/dist/helpers';
+import {acceptOrder, getpoChallan, rejectOrder} from '../services/orders';
+import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const deviceWidth = Dimensions.get('window').width;
 const Ordercard = props => {
@@ -34,14 +38,27 @@ const Ordercard = props => {
     actionCTA,
     taxPercentage,
     totalAmount,
+    itemId,
+    fetchOrdersFunc,
+    selectedTab,
+    fetchTabCountFunc,
+    invoiceUrl,
   } = props;
   const [orderImage, setOrderImage] = useState(null);
   const [showMoreTxt, setShowMoreTxt] = useState(false);
   const [lengthMore, setLengthMore] = useState(false);
   const [isOrderVisible, setIsOrderVisible] = useState(false);
+  const [acceptLoader, setAcceptLoader] = useState(false);
+  const [poLoader, setPoLoader] = useState(false);
+  const [invoiceLoader, setInvoiceLoader] = useState(false);
+  const [rejectLoader, setRejectLoader] = useState(false);
+  const [showMoreCTA, setShowMoreCTA] = useState(false);
 
   useEffect(() => {
     fetchImage();
+    if (actionCTA && actionCTA.length > 2) {
+      setShowMoreCTA(true);
+    }
   }, []);
 
   const fetchImage = async () => {
@@ -61,7 +78,7 @@ const Ordercard = props => {
     }
   };
 
-  const getTime = time => {
+  const getTime = (time, acceptrejectOrder) => {
     let months = [
       'Jan',
       'Feb',
@@ -77,6 +94,9 @@ const Ordercard = props => {
       'Dec',
     ];
     let date = new Date(Number(time));
+    if (acceptrejectOrder) {
+      return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    }
     return `${months[date.getMonth()]} ${date.getDate()},${date.getFullYear()}`;
   };
 
@@ -88,26 +108,280 @@ const Ordercard = props => {
     setShowMoreTxt(!showMoreTxt);
   };
 
-  const renderCTAs = () => {
+  //acceptOrder
+  const onAccept = async () => {
+    try {
+      setAcceptLoader(true);
+      let payload = {
+        supplierId: await AsyncStorage.getItem('userId'),
+        itemId: `${itemId}`,
+        pickupDate: getTime(pickupDate, true),
+      };
+      console.log(payload.pickupDate);
+      const {data} = await acceptOrder(payload);
+      if (data && data.success) {
+        fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+          pickupFromDate: '',
+          pickupToDate: '',
+          poFromDate: '',
+          poToDate: '',
+          orderType: [],
+          deliveryType: [],
+          orderRefs: [],
+        });
+        fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
+        setAcceptLoader(false);
+      } else {
+        setAcceptLoader(false);
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setAcceptLoader(false);
+      Toast.show({
+        type: 'error',
+        text2: 'Something went wrong',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    }
+  };
+
+  const getPOInvoice = (fromPO, invoiceUrl) => {
+    if (Platform.OS == 'android') {
+      try {
+        PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        ).then(granted => {
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log('Storage Permission Granted.');
+            downloadPDF(fromPO, invoiceUrl);
+          } else {
+          }
+        });
+      } catch (err) {
+        //To handle permission related issue
+        console.warn(err);
+      }
+    } else {
+      downloadPDF(fromPO, invoiceUrl);
+    }
+  };
+
+  const downloadPDF = async (isPO, pdfUrl) => {
+    //Main function to download the image
+    let date = new Date(); //To add the time suffix in filename
+
+    try {
+      let image_URL = '';
+      if (isPO) {
+        setPoLoader(true);
+        const {data} = await getpoChallan(orderRef);
+        if (data && data.success) {
+          //Image URL which we want to download
+          image_URL = data.responseMessage;
+        }
+      } else {
+        //Image URL which we want to download
+        setInvoiceLoader(true);
+        image_URL = pdfUrl;
+      }
+      //Getting the extention of the file
+      let ext = getExtention(image_URL);
+      ext = '.' + ext[0];
+      //Get config and fs from RNFetchBlob
+      //config: To pass the downloading related options
+      //fs: To get the directory path in which we want our image to download
+      const {config, fs} = RNFetchBlob;
+      let PictureDir =
+        Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+      let options = {
+        fileCache: true,
+        addAndroidDownloads: {
+          //Related to the Android only
+          useDownloadManager: true,
+          notification: true,
+          path:
+            PictureDir +
+            '/PDF_' +
+            Math.floor(date.getTime() + date.getSeconds() / 2) +
+            ext,
+          description: 'PDF',
+        },
+      };
+      config(options)
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
+        .then(res => {
+          //Showing alert after successful downloading
+          console.log('res -> ', JSON.stringify(res));
+          if (isPO) {
+            setPoLoader(false);
+          } else {
+            setInvoiceLoader(false);
+          }
+
+          Toast.show({
+            type: 'success',
+            text2: pdfUrl ? 'Invoice Downloaded' : 'PO Downloaded',
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        });
+    } catch (error) {
+      console.log(error);
+      if (isPO) {
+        setPoLoader(false);
+      } else {
+        setInvoiceLoader(false);
+      }
+      Toast.show({
+        type: 'success',
+        text2: 'Something went wrong',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    }
+  };
+
+  const getExtention = filename => {
+    //To get the file extension
+    return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
+  };
+
+  //rejectOrder
+  const onReject = async () => {
+    try {
+      setRejectLoader(true);
+      let payload = {
+        supplierId: await AsyncStorage.getItem('userId'),
+        itemId: `${itemId}`,
+        remark: 'Material is not ready',
+      };
+      const {data} = await rejectOrder(payload);
+      if (data && data.success) {
+        fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+          pickupFromDate: '',
+          pickupToDate: '',
+          poFromDate: '',
+          poToDate: '',
+          orderType: [],
+          deliveryType: [],
+          orderRefs: [],
+        });
+        fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
+        setRejectLoader(false);
+      } else {
+        setRejectLoader(false);
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setRejectLoader(false);
+      Toast.show({
+        type: 'error',
+        text2: 'Something went wrong',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    }
+  };
+
+  const renderCTAs = (cta, url) => {
+    return (
+      <>
+        {cta == 'ACCEPT' ? (
+          <TouchableOpacity
+            disabled={acceptLoader}
+            onPress={onAccept}
+            style={{
+              width: 100,
+              height: 100,
+              marginTop: 25,
+              backgroundColor: '#000',
+            }}>
+            <Text style={{color: 'red', fontSize: 12}}>ACCEPT</Text>
+            {acceptLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'DOWNLOAD_PO_EMS' ? (
+          <TouchableOpacity
+            disabled={poLoader}
+            onPress={() => getPOInvoice(true, '')}
+            style={{
+              width: 100,
+              height: 100,
+              marginTop: 25,
+              backgroundColor: 'red',
+            }}>
+            <Text style={{color: '#000', fontSize: 12}}>DOWNLOAD PO</Text>
+            {poLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'REJECT' ? (
+          <TouchableOpacity
+            disabled={rejectLoader}
+            onPress={onReject}
+            style={{
+              width: 100,
+              height: 100,
+              marginTop: 25,
+              backgroundColor: 'red',
+            }}>
+            <Text style={{color: '#000', fontSize: 12}}>{cta}</Text>
+            {rejectLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'DOWNLOAD_PO_OMS' ? (
+          <TouchableOpacity
+            disabled={invoiceLoader}
+            onPress={() => getPOInvoice(false, url)}
+            style={{
+              width: 100,
+              height: 100,
+              marginTop: 25,
+              backgroundColor: 'red',
+            }}>
+            <Text style={{color: '#000', fontSize: 12}}>DOWNLOAD Invoice</Text>
+            {invoiceLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : null}
+      </>
+    );
+  };
+
+  const renderPartialCTAs = url => {
     return (actionCTA || []).map((_, i) => {
-      return (
-        <>
-          {_ == 'ACCEPT' ? (
-            <TouchableOpacity>
-              <Text style={{color: 'red', fontSize: 12}}>ACCEPT</Text>
-            </TouchableOpacity>
-          ) : _ == 'DOWNLOAD_PO_EMS' ? (
-            <TouchableOpacity>
-              <Text style={{color: '#000', fontSize: 12}}>DOWNLOAD PO</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity>
-              <Text style={{color: '#000', fontSize: 12}}>{_}</Text>
-            </TouchableOpacity>
-          )}
-        </>
-      );
+      if (i < 2) {
+        return renderCTAs(_, url);
+      }
     });
+  };
+
+  const renderFurtherCTAs = url => {
+    return (actionCTA || []).map((_, i) => {
+      if (i > 1) {
+        return renderCTAs(_, url);
+      }
+    });
+  };
+
+  const toggleMoreCTAs = () => {
+    setShowMoreCTA(!showMoreCTA);
   };
 
   const toggleOrder = () => {
@@ -152,13 +426,11 @@ const Ordercard = props => {
           ) : (
             <Text style={styles.productName}>{productName}</Text>
           )}
-
           {lengthMore && !fromModal ? (
             <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
               {showMoreTxt ? 'Read less' : 'Read more'}
             </Text>
           ) : null}
-
           {fromModal ? (
             <>
               <Text style={{color: '#000'}}> ₹{Math.floor(totalAmount)}</Text>
@@ -172,7 +444,9 @@ const Ordercard = props => {
               </Text>
               <Text style={styles.TitleLightTxt}>
                 PO Date -{' '}
-                <Text style={styles.TitleBoldTxt}>{getTime(createdAt)}</Text>
+                <Text style={styles.TitleBoldTxt}>
+                  {getTime(createdAt, false)}
+                </Text>
               </Text>
               <Text style={styles.TitleLightTxt}>
                 PO Item ID - <Text style={styles.TitleBoldTxt}>{itemRef}</Text>
@@ -191,7 +465,9 @@ const Ordercard = props => {
               </Text>
               <Text style={styles.TitleLightTxt}>
                 Date -{' '}
-                <Text style={styles.TitleBoldTxt}>{getTime(pickupDate)}</Text>
+                <Text style={styles.TitleBoldTxt}>
+                  {getTime(pickupDate, false)}
+                </Text>
               </Text>
             </View>
           </View>
@@ -209,7 +485,13 @@ const Ordercard = props => {
               {shipmentModeString}
             </Text>
           </View>
-          {renderCTAs()}
+          {renderPartialCTAs(invoiceUrl)}
+          {actionCTA && actionCTA.length > 2 ? (
+            <Text onPress={toggleMoreCTAs} style={styles.readMoretxt}>
+              {showMoreCTA ? 'Dots' : 'Close'}
+            </Text>
+          ) : null}
+          {!showMoreCTA ? renderFurtherCTAs(invoiceUrl) : null}
         </View>
       </>
     );
