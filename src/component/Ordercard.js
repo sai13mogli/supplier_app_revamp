@@ -17,6 +17,7 @@ import Modal from 'react-native-modal';
 import {acceptOrder, getpoChallan, rejectOrder} from '../services/orders';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const deviceWidth = Dimensions.get('window').width;
 const Ordercard = props => {
@@ -41,6 +42,7 @@ const Ordercard = props => {
     fetchOrdersFunc,
     selectedTab,
     fetchTabCountFunc,
+    invoiceUrl,
   } = props;
   const [orderImage, setOrderImage] = useState(null);
   const [showMoreTxt, setShowMoreTxt] = useState(false);
@@ -48,10 +50,15 @@ const Ordercard = props => {
   const [isOrderVisible, setIsOrderVisible] = useState(false);
   const [acceptLoader, setAcceptLoader] = useState(false);
   const [poLoader, setPoLoader] = useState(false);
+  const [invoiceLoader, setInvoiceLoader] = useState(false);
   const [rejectLoader, setRejectLoader] = useState(false);
+  const [showMoreCTA, setShowMoreCTA] = useState(false);
 
   useEffect(() => {
     fetchImage();
+    if (actionCTA && actionCTA.length > 2) {
+      setShowMoreCTA(true);
+    }
   }, []);
 
   const fetchImage = async () => {
@@ -145,7 +152,7 @@ const Ordercard = props => {
     }
   };
 
-  const getPO = () => {
+  const getPOInvoice = (fromPO, invoiceUrl) => {
     if (Platform.OS == 'android') {
       try {
         PermissionsAndroid.request(
@@ -153,7 +160,7 @@ const Ordercard = props => {
         ).then(granted => {
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
             console.log('Storage Permission Granted.');
-            downloadPDF();
+            downloadPDF(fromPO, invoiceUrl);
           } else {
           }
         });
@@ -162,60 +169,76 @@ const Ordercard = props => {
         console.warn(err);
       }
     } else {
-      downloadPDF();
+      downloadPDF(fromPO, invoiceUrl);
     }
   };
 
-  const downloadPDF = async () => {
+  const downloadPDF = async (isPO, pdfUrl) => {
     //Main function to download the image
     let date = new Date(); //To add the time suffix in filename
 
     try {
-      setPoLoader(true);
-      const {data} = await getpoChallan(orderRef);
-      if (data && data.success) {
+      let image_URL = '';
+      if (isPO) {
+        setPoLoader(true);
+        const {data} = await getpoChallan(orderRef);
+        if (data && data.success) {
+          //Image URL which we want to download
+          image_URL = data.responseMessage;
+        }
+      } else {
         //Image URL which we want to download
-        let image_URL = data.responseMessage;
-        //Getting the extention of the file
-        let ext = getExtention(image_URL);
-        ext = '.' + ext[0];
-        //Get config and fs from RNFetchBlob
-        //config: To pass the downloading related options
-        //fs: To get the directory path in which we want our image to download
-        const {config, fs} = RNFetchBlob;
-        let PictureDir =
-          Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
-        let options = {
-          fileCache: true,
-          addAndroidDownloads: {
-            //Related to the Android only
-            useDownloadManager: true,
-            notification: true,
-            path:
-              PictureDir +
-              '/PDF_' +
-              Math.floor(date.getTime() + date.getSeconds() / 2) +
-              ext,
-            description: 'PDF',
-          },
-        };
-        config(options)
-          .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
-          .then(res => {
-            //Showing alert after successful downloading
-            console.log('res -> ', JSON.stringify(res));
-            setPoLoader(false);
-            Toast.show({
-              type: 'success',
-              text2: 'Invoice Downloaded',
-              visibilityTime: 2000,
-              autoHide: true,
-            });
-          });
+        setInvoiceLoader(true);
+        image_URL = pdfUrl;
       }
+      //Getting the extention of the file
+      let ext = getExtention(image_URL);
+      ext = '.' + ext[0];
+      //Get config and fs from RNFetchBlob
+      //config: To pass the downloading related options
+      //fs: To get the directory path in which we want our image to download
+      const {config, fs} = RNFetchBlob;
+      let PictureDir =
+        Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+      let options = {
+        fileCache: true,
+        addAndroidDownloads: {
+          //Related to the Android only
+          useDownloadManager: true,
+          notification: true,
+          path:
+            PictureDir +
+            '/PDF_' +
+            Math.floor(date.getTime() + date.getSeconds() / 2) +
+            ext,
+          description: 'PDF',
+        },
+      };
+      config(options)
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
+        .then(res => {
+          //Showing alert after successful downloading
+          console.log('res -> ', JSON.stringify(res));
+          if (isPO) {
+            setPoLoader(false);
+          } else {
+            setInvoiceLoader(false);
+          }
+
+          Toast.show({
+            type: 'success',
+            text2: pdfUrl ? 'Invoice Downloaded' : 'PO Downloaded',
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        });
     } catch (error) {
       console.log(error);
-      setPoLoader(false);
+      if (isPO) {
+        setPoLoader(false);
+      } else {
+        setInvoiceLoader(false);
+      }
       Toast.show({
         type: 'success',
         text2: 'Something went wrong',
@@ -273,68 +296,92 @@ const Ordercard = props => {
     }
   };
 
-  const renderCTAs = () => {
+  const renderCTAs = (cta, url) => {
+    return (
+      <>
+        {cta == 'ACCEPT' ? (
+          <TouchableOpacity
+            disabled={acceptLoader}
+            onPress={onAccept}
+            style={{
+              width: 100,
+              height: 100,
+              marginTop: 25,
+              backgroundColor: '#000',
+            }}>
+            <Text style={{color: 'red', fontSize: 12}}>ACCEPT</Text>
+            {acceptLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'DOWNLOAD_PO_EMS' ? (
+          <TouchableOpacity
+            disabled={poLoader}
+            onPress={() => getPOInvoice(true, '')}
+            style={{
+              width: 100,
+              height: 100,
+              marginTop: 25,
+              backgroundColor: 'red',
+            }}>
+            <Text style={{color: '#000', fontSize: 12}}>DOWNLOAD PO</Text>
+            {poLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'REJECT' ? (
+          <TouchableOpacity
+            disabled={rejectLoader}
+            onPress={onReject}
+            style={{
+              width: 100,
+              height: 100,
+              marginTop: 25,
+              backgroundColor: 'red',
+            }}>
+            <Text style={{color: '#000', fontSize: 12}}>{cta}</Text>
+            {rejectLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'DOWNLOAD_PO_OMS' ? (
+          <TouchableOpacity
+            disabled={invoiceLoader}
+            onPress={() => getPOInvoice(false, url)}
+            style={{
+              width: 100,
+              height: 100,
+              marginTop: 25,
+              backgroundColor: 'red',
+            }}>
+            <Text style={{color: '#000', fontSize: 12}}>DOWNLOAD Invoice</Text>
+            {invoiceLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : null}
+      </>
+    );
+  };
+
+  const renderPartialCTAs = url => {
     return (actionCTA || []).map((_, i) => {
-      return (
-        <>
-          {_ == 'ACCEPT' ? (
-            <TouchableOpacity
-              disabled={acceptLoader}
-              onPress={onAccept}
-              style={{
-                width: 100,
-                height: 100,
-                marginTop: 25,
-                backgroundColor: '#000',
-              }}>
-              <Text style={{color: 'red', fontSize: 12}}>ACCEPT</Text>
-              {acceptLoader && (
-                <ActivityIndicator
-                  color={'#fff'}
-                  style={{alignSelf: 'center'}}
-                />
-              )}
-            </TouchableOpacity>
-          ) : _ == 'DOWNLOAD_PO_EMS' ? (
-            <TouchableOpacity
-              disabled={poLoader}
-              onPress={getPO}
-              style={{
-                width: 100,
-                height: 100,
-                marginTop: 25,
-                backgroundColor: 'red',
-              }}>
-              <Text style={{color: '#000', fontSize: 12}}>DOWNLOAD PO</Text>
-              {poLoader && (
-                <ActivityIndicator
-                  color={'#fff'}
-                  style={{alignSelf: 'center'}}
-                />
-              )}
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              disabled={rejectLoader}
-              onPress={onReject}
-              style={{
-                width: 100,
-                height: 100,
-                marginTop: 25,
-                backgroundColor: 'red',
-              }}>
-              <Text style={{color: '#000', fontSize: 12}}>{_}</Text>
-              {rejectLoader && (
-                <ActivityIndicator
-                  color={'#fff'}
-                  style={{alignSelf: 'center'}}
-                />
-              )}
-            </TouchableOpacity>
-          )}
-        </>
-      );
+      if (i < 2) {
+        return renderCTAs(_, url);
+      }
     });
+  };
+
+  const renderFurtherCTAs = url => {
+    return (actionCTA || []).map((_, i) => {
+      if (i > 1) {
+        return renderCTAs(_, url);
+      }
+    });
+  };
+
+  const toggleMoreCTAs = () => {
+    setShowMoreCTA(!showMoreCTA);
   };
 
   const toggleOrder = () => {
@@ -379,13 +426,11 @@ const Ordercard = props => {
           ) : (
             <Text style={styles.productName}>{productName}</Text>
           )}
-
           {lengthMore && !fromModal ? (
             <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
               {showMoreTxt ? 'Read less' : 'Read more'}
             </Text>
           ) : null}
-
           {fromModal ? (
             <>
               <Text style={{color: '#000'}}> ₹{Math.floor(totalAmount)}</Text>
@@ -440,7 +485,13 @@ const Ordercard = props => {
               {shipmentModeString}
             </Text>
           </View>
-          {renderCTAs()}
+          {renderPartialCTAs(invoiceUrl)}
+          {actionCTA && actionCTA.length > 2 ? (
+            <Text onPress={toggleMoreCTAs} style={styles.readMoretxt}>
+              {showMoreCTA ? 'Dots' : 'Close'}
+            </Text>
+          ) : null}
+          {!showMoreCTA ? renderFurtherCTAs(invoiceUrl) : null}
         </View>
       </>
     );

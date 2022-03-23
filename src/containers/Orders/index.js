@@ -134,6 +134,7 @@ const OrdersScreen = props => {
         selectedTab={selectedTab}
         fetchTabCountFunc={fetchTabCountFunc}
         itemId={item.itemId}
+        invoiceUrl={item.invoiceUrl}
       />
     );
   };
