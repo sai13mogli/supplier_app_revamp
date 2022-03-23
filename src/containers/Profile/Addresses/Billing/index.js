@@ -10,14 +10,24 @@ import styles from './styles';
 
 
 const Billing = (props) => {
-
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const profileData = useSelector(state => state.profileReducer.data || {});
   const addressesData = useSelector(state => state.profileReducer.addressesDetails.data || {});
-  console.log('====================================');
-  console.log("Aakash====>", addressesData);
-  console.log('====================================');
+
+  const filterById = (obj) => {
+    if (obj.type==3) 
+    {
+      return true
+    } 
+    return false;
+  }
+  console.log(addressesData)
+  var BillingAddressData=addressesData.filter(filterById);
+  var sortedData = BillingAddressData.sort(function(x) {
+    return (x.default == 'true') ? 0 : x ? -1 : 1;
+  });
+console.log(sortedData)
   const renderItems = ({ item }) => (
     <View style={{ flex: 1, }}>
       <View style={styles.wrap}>
@@ -71,12 +81,10 @@ const Billing = (props) => {
       <ScrollView style={styles.ContainerCss}>
         <View style={styles.TopWrap}>
           <Text style={styles.Pageheading}>
-            03 Billing Address
+            {BillingAddressData.length} Billing Address
           </Text>
           <TouchableOpacity
-            onPress={() =>
-              props.navigation.navigate('EditAddress')
-            }
+             onPress={() => props.navigation.navigate('EditAddress')}
           >
             <View style={{ flexDirection: "row" }}>
               <CustomeIcon name={'add-circle'} size={Dimension.font18} color={colors.BrandColor} />
@@ -89,7 +97,7 @@ const Billing = (props) => {
         </View>
 
         <FlatList
-          data={addressesData}
+          data={BillingAddressData}
           renderItem={renderItems}
           keyExtractor={(item, index) => index.toString()}
         />
