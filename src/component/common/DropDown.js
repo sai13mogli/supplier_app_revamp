@@ -24,16 +24,23 @@ const DropDown = props => {
   };
 
   return (
-    <View style={{marginBottom: Dimension.margin20}}>
+    <View style={{
+      marginBottom: props.isFromOrders ? 0 :Dimension.margin20}}>
       <View style={{flexDirection: 'row'}}>
         <Text style={styles.labelStyle}>{props.label}</Text>
         {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
       </View>
       <TouchableOpacity
         disabled={!enabled}
-        style={styles.pickerWrapper}
+        style={ props.isFromOrders ?
+         styles.withoutborderPicker :styles.pickerWrapper 
+        }
         onPress={() => setIsVisible(true)}>
-        <View style={styles.pickerStyle}>
+        <View style={
+           props.isFromOrders ?
+          styles.withoutBGPickerStyle
+          :styles.pickerStyle
+          }>
           <Text
             style={[
               {
@@ -73,7 +80,14 @@ const DropDown = props => {
             />
           ))}
         </Picker> */}
-        <View style={styles.iconWrapper}>
+        <View 
+        style={
+          props.isFromOrders ?
+         styles.withoutBGiconWrapper
+         :styles.iconWrapper
+         }
+        
+          >
           <CustomeIcon
             name={'arrow-drop-down-line'}
             size={Dimension.font26}
@@ -147,6 +161,18 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin12,
     marginBottom: Dimension.margin5,
     fontWeight: 'normal',
+  },
+  withoutborderPicker:{
+   position:"relative" ,
+   paddingTop:Dimension.padding8
+  },
+  withoutBGPickerStyle:{},
+  withoutBGiconWrapper:{
+    position:"absolute",
+    width: Dimension.width24,
+    height: Dimension.height24,
+    right:-Dimension.padding18,
+    top:Dimension.padding6
   },
 });
 export default DropDown;

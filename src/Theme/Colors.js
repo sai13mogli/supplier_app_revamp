@@ -34,6 +34,7 @@ const Colors = {
   grayShade9: '#F7F7FA',
   grayShade10: '#EBEBEB',
   grayShade11: '#E8E8E8',
+  grayShade12:"#F0F0F0",
 
   headerTxtColor: '#3C3C3C',
   blackColor: '#000',
@@ -41,6 +42,12 @@ const Colors = {
   modalBorder: '#CECECE',
   NudgeColor1: '#FFCEB4',
   WeakPasswordColor: '#F28314',
+  pickupLight:'#EBF2FF',
+  oneShipTxt:"#6923D9",
+  oneShipLight:'#F3EBFF',
+  VmiLight:"#EFFFD5",
+  VmiTxt:"#689512",
+
 };
 
 export default Colors;

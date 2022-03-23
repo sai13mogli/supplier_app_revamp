@@ -18,6 +18,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
 import {Icon} from 'react-native-elements';
+import styles from './style';
+import CustomeIcon from "../../component/common/CustomeIcon"
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -157,21 +159,18 @@ const OrdersScreen = props => {
       <ScrollView
         horizontal={true}
         style={{
-          padding: Dimension.padding12,
+          padding: Dimension.padding10,
           flexDirection: 'row',
-          backgroundColor: '#e7e7e7',
+          backgroundColor: colors.grayShade7,
         }}>
         {TABS[selectedType].map((tab, tabIndex) => (
           <TouchableOpacity
             onPress={() => changeTab(tab)}
-            style={{
-              padding: 8,
-              marginRight: 12,
-              borderRadius: 4,
-              backgroundColor: selectedTab == tab.key ? '#000' : '#fff',
-            }}
+            style={selectedTab == tab.key ? styles.selectedTabCss
+              :styles.Unselectedtabcss}
             key={tabIndex}>
-            <Text style={{color: selectedTab == tab.key ? '#fff' : '#000'}}>
+            <Text style={selectedTab == tab.key ? styles.selectedTabTxt
+              :styles.UnselectedtabTxt}>
               {tab.label} ({tabData.get(tab.key)})
             </Text>
           </TouchableOpacity>
@@ -219,7 +218,7 @@ const OrdersScreen = props => {
   };
 
   return (
-    <View style={{flex: 1,}}>
+    <View style={{flex: 1,backgroundColor:colors.grayShade7}}>
       {/* <CustomButton
         title={'Open Notifications'}
         buttonColor={'dodgerblue'}
@@ -243,6 +242,7 @@ const OrdersScreen = props => {
       ) : (
         <>
         <View style={{flexDirection:"row",justifyContent:"space-between",padding:15}}>
+        
         <DropDown
             title={''}
             label={''}
@@ -253,11 +253,15 @@ const OrdersScreen = props => {
             }}
             items={OPTIONS}
             enabled={true}
-            isFrom={'orders'}
+            isFromOrders={true}
           />
           <TouchableOpacity
-            onPress={() => props.navigation.navigate('Notification')}>
-            <Icon name="notifications" size={26}></Icon>
+            onPress={() => props.navigation.navigate('Notification')} style={styles.notifocationBtn}>
+            <CustomeIcon
+            name={'notification'}
+            size={Dimension.font22}
+            color={colors.FontColor}
+          />
           </TouchableOpacity>
         </View>
          
