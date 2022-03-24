@@ -18,7 +18,7 @@ import {acceptOrder, getpoChallan, rejectOrder} from '../services/orders';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const deviceWidth = Dimensions.get('window').width;
 const Ordercard = props => {
   const {
@@ -304,13 +304,8 @@ const Ordercard = props => {
           <TouchableOpacity
             disabled={acceptLoader}
             onPress={onAccept}
-            style={{
-              width: 100,
-              height: 100,
-              marginTop: 25,
-              backgroundColor: '#000',
-            }}>
-            <Text style={{color: 'red', fontSize: 12}}>ACCEPT</Text>
+            style={styles.acceptCtabtn}>
+            <Text style={styles.acceptCtaTxt}>ACCEPT</Text>
             {acceptLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
@@ -319,13 +314,8 @@ const Ordercard = props => {
           <TouchableOpacity
             disabled={poLoader}
             onPress={() => getPOInvoice(true, '')}
-            style={{
-              width: 100,
-              height: 100,
-              marginTop: 25,
-              backgroundColor: 'red',
-            }}>
-            <Text style={{color: '#000', fontSize: 12}}>DOWNLOAD PO</Text>
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
             {poLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
@@ -334,13 +324,8 @@ const Ordercard = props => {
           <TouchableOpacity
             disabled={rejectLoader}
             onPress={onReject}
-            style={{
-              width: 100,
-              height: 100,
-              marginTop: 25,
-              backgroundColor: 'red',
-            }}>
-            <Text style={{color: '#000', fontSize: 12}}>{cta}</Text>
+            style={styles.rejectCtabtn}>
+            <Text style={styles.rejectCtaTxt}>{cta}</Text>
             {rejectLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
@@ -349,13 +334,8 @@ const Ordercard = props => {
           <TouchableOpacity
             disabled={invoiceLoader}
             onPress={() => getPOInvoice(false, url)}
-            style={{
-              width: 100,
-              height: 100,
-              marginTop: 25,
-              backgroundColor: 'red',
-            }}>
-            <Text style={{color: '#000', fontSize: 12}}>DOWNLOAD Invoice</Text>
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>DOWNLOAD Invoice</Text>
             {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
@@ -392,6 +372,7 @@ const Ordercard = props => {
   const renderOrderDetails = fromModal => {
     return (
       <>
+      <View style={styles.orderCardwrapInner}>
         <View style={styles.leftpart}>
           <Image
             source={{
@@ -439,7 +420,7 @@ const Ordercard = props => {
             </>
           ) : null}
           <View style={{flexDirection: 'row'}}>
-            <View>
+            <View style={{marginRight:Dimension.margin20}}> 
               <Text style={styles.TitleLightTxt}>
                 PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
               </Text>
@@ -472,7 +453,7 @@ const Ordercard = props => {
               </Text>
             </View>
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row',marginTop:Dimension.margin10}}>
             <Text style={styles.GstWrapTxt}>{orderTypeString}</Text>
             <Text style={styles.shipmentModeWrap}>
               {shipmentMode == 2
@@ -486,14 +467,32 @@ const Ordercard = props => {
               {shipmentModeString}
             </Text>
           </View>
-          {renderPartialCTAs(invoiceUrl)}
-          {actionCTA && actionCTA.length > 2 ? (
-            <Text onPress={toggleMoreCTAs} style={styles.readMoretxt}>
-              {showMoreCTA ? 'Dots' : 'Close'}
-            </Text>
-          ) : null}
-          {!showMoreCTA ? renderFurtherCTAs(invoiceUrl) : null}
+         
         </View>
+        
+      </View>
+      <View style={{flexDirection:"row",flex:1,marginTop:Dimension.margin15}}>
+          <View style={{flex:9,flexDirection:"row",flexWrap:"wrap",}}>
+          {renderPartialCTAs(invoiceUrl)}
+          {!showMoreCTA ? renderFurtherCTAs(invoiceUrl) : null}
+          </View>
+          <View style={{flex:1}}>
+          {actionCTA && actionCTA.length > 2 ? (
+            // <Text onPress={toggleMoreCTAs} style={styles.readMoretxt}>
+            //   {showMoreCTA ? 'Dots' : 'Close'}
+            // </Text>
+            <TouchableOpacity onPress={toggleMoreCTAs} style={styles.showMoreCta}>
+          <Icon name={showMoreCTA ? 'dots-horizontal' : 'close'}
+          color={Colors.FontColor}
+          size={Dimension.font20} ></Icon>
+            </TouchableOpacity>
+            
+          ) : null}
+          </View>
+      </View>
+      
+         
+         
       </>
     );
   };
@@ -529,6 +528,7 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font10,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
+    marginBottom:Dimension.margin5
   },
   TitleBoldTxt: {
     fontSize: Dimension.font10,
@@ -544,6 +544,8 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
+    marginBottom:Dimension.margin10,
+    marginTop:Dimension.margin5
   },
   readMoretxt: {
     fontSize: Dimension.font12,
@@ -564,9 +566,9 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding4,
     paddingHorizontal: Dimension.padding10,
     fontSize: Dimension.font10,
-    color: Colors.BrandColor,
+    color: Colors.oneShipTxt,
     fontFamily: Dimension.CustomMediumFont,
-    backgroundColor: Colors.LightBrandColor,
+    backgroundColor: Colors.oneShipLight,
     borderRadius: 2,
     marginRight: Dimension.margin5,
   },
@@ -574,9 +576,9 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding4,
     paddingHorizontal: Dimension.padding10,
     fontSize: Dimension.font10,
-    color: Colors.BrandColor,
+    color: Colors.ApproveStateColor,
     fontFamily: Dimension.CustomMediumFont,
-    backgroundColor: Colors.LightBrandColor,
+    backgroundColor: Colors.pickupLight,
     borderRadius: 2,
     marginRight: Dimension.margin5,
   },
@@ -584,9 +586,9 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding4,
     paddingHorizontal: Dimension.padding10,
     fontSize: Dimension.font10,
-    color: Colors.BrandColor,
+    color: Colors.VmiTxt,
     fontFamily: Dimension.CustomMediumFont,
-    backgroundColor: Colors.LightBrandColor,
+    backgroundColor: Colors.VmiLight,
     borderRadius: 2,
     marginRight: Dimension.margin5,
   },
@@ -599,14 +601,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding12,
     paddingVertical: Dimension.padding12,
     flex: 1,
+   
+    marginHorizontal:Dimension.margin5
+  },
+  orderCardwrapInner:{
     flexDirection: 'row',
+    flex: 1,
   },
   leftpart: {
     flex: 2,
     marginRight: Dimension.margin12,
   },
   rightPart: {
-    flex: 7,
+    flex: 8,
   },
   imgStyle: {
     borderRadius: 4,
@@ -642,5 +649,48 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingTop: Dimension.padding10,
   },
+  acceptCtabtn:{
+    flex:5,
+    backgroundColor:Colors.BrandColor,
+    borderRadius:4,
+    paddingVertical:Dimension.padding8,
+    justifyContent:"center",
+    alignItems:"center",
+    marginRight:Dimension.margin10
+  },
+  acceptCtaTxt:{
+    fontFamily:Dimension.CustomSemiBoldFont,
+    color:Colors.WhiteColor,
+    fontSize:Dimension.font12
+  },
+  rejectCtabtn:{
+    flex:5,
+    backgroundColor:Colors.grayShade12,
+    borderRadius:4,
+    paddingVertical:Dimension.padding8,
+    justifyContent:"center",
+    alignItems:"center",
+    
+  },
+  rejectCtaTxt:{
+    fontFamily:Dimension.CustomSemiBoldFont,
+    color:Colors.FontColor,
+    fontSize:Dimension.font12
+  },
+  DownloadPoBtn:{
+    flex:1,
+    backgroundColor:Colors.grayShade12,
+    borderRadius:4,
+    paddingVertical:Dimension.padding8,
+    justifyContent:"center",
+    alignItems:"center",
+    
+    flexBasis:"100%",
+    marginTop:Dimension.margin10
+  },
+  showMoreCta:{
+    marginLeft:Dimension.margin10,
+    paddingVertical:Dimension.padding6
+  }
 });
 export default Ordercard;

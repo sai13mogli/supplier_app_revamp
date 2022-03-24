@@ -1,3 +1,4 @@
+import {createRef} from 'react';
 import HomeScreen from '../containers/Home';
 import ProfileScreen from '../containers/Profile';
 import OrdersScreen from '../containers/Orders';
@@ -88,11 +89,17 @@ export const TOP_BRANDS_SCREENS = [
 export const ADDRESSES_TAB_SCREENS = [
   {
     name: 'Billing',
+    key:'billing',
     component: Billing,
+    ref: createRef(),
+    idx: 0,
   },
   {
-    name: 'PickedUp',
+    name: 'PickUp',
+    key:'pickup',
     component: PickedUp,
+    ref: createRef(),
+    idx: 1
   },
 ];
 
@@ -163,6 +170,10 @@ export const APP_STACK_SCREENS = [
   {
     name: 'Brands',
     component: BrandScreen,
+  },
+  {
+    name: 'Billing',
+    component: Billing,
   },
   {
     name: 'Notification',

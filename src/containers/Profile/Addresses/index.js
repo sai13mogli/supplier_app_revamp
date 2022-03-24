@@ -5,6 +5,7 @@ import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { ADDRESSES_TAB_SCREENS } from '../../../constants';
+import Tabs from '../../../component/common/Tabs'
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -33,7 +34,8 @@ const Addresses = props => {
         navigation={props.navigation}
         showText={'Addresses'}
         rightIconName={'business-details'}></Header>
-      <Tab.Navigator
+        <Tabs data={ADDRESSES_TAB_SCREENS.map(_ => ({..._}))} navigation={props.navigation}/>
+      {/* <Tab.Navigator
         screenOptions={({ route, ...rest }) => ({
           headerShown: false,
           tabBarIcon: ({ focused, color }) =>
@@ -50,7 +52,7 @@ const Addresses = props => {
             component={prop => <screen.component {...prop} />}
           />
         ))}
-      </Tab.Navigator>
+      </Tab.Navigator> */}
     </>
   );
 };
