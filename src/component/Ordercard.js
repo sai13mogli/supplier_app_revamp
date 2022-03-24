@@ -19,7 +19,11 @@ import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import RejectModal from '../component/RejectModal';
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+
 const deviceWidth = Dimensions.get('window').width;
+
 const Ordercard = props => {
   const {
     msn,
@@ -53,13 +57,36 @@ const Ordercard = props => {
   const [invoiceLoader, setInvoiceLoader] = useState(false);
   const [rejectLoader, setRejectLoader] = useState(false);
   const [showMoreCTA, setShowMoreCTA] = useState(false);
-
+  const [rejectModal, setRejectModal] = useState(false);
+  const [displayCalendar, setDisplayCalendar] = useState(false);
+  const [day, setDay] = useState({
+    dateString: '2022-03-24',
+    day: 24,
+    month: 3,
+    timestamp: 1648166400000,
+    year: 2022,
+  });
   useEffect(() => {
     fetchImage();
     if (actionCTA && actionCTA.length > 2) {
       setShowMoreCTA(true);
     }
+    setPickupDate();
   }, []);
+
+  const setPickupDate = () => {
+    let minDate = getMinDate();
+    let [year, month, day] = minDate.split('-');
+    let timestamp = new Date(minDate).getTime();
+    console.log('year hai dost', year, month, day, timestamp);
+    setDay({
+      dateString: minDate,
+      day: day,
+      month: month,
+      timestamp: timestamp,
+      year: year,
+    });
+  };
 
   const fetchImage = async () => {
     const {data} = await getImageUrl(msn);
@@ -115,7 +142,7 @@ const Ordercard = props => {
       let payload = {
         supplierId: await AsyncStorage.getItem('userId'),
         itemId: `${itemId}`,
-        pickupDate: `24-3-2022`,
+        pickupDate: day.dateString,
       };
       // getTime(pickupDate, true)
       console.log(payload.pickupDate);
@@ -134,6 +161,7 @@ const Ordercard = props => {
         setAcceptLoader(false);
       } else {
         setAcceptLoader(false);
+        setDisplayCalendar(false);
         Toast.show({
           type: 'error',
           text2: data.message,
@@ -144,6 +172,7 @@ const Ordercard = props => {
     } catch (error) {
       console.log(error);
       setAcceptLoader(false);
+      setDisplayCalendar(false);
       Toast.show({
         type: 'error',
         text2: 'Something went wrong',
@@ -254,58 +283,25 @@ const Ordercard = props => {
     return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
   };
 
-  //rejectOrder
-  const onReject = async () => {
-    try {
-      setRejectLoader(true);
-      let payload = {
-        supplierId: await AsyncStorage.getItem('userId'),
-        itemId: `${itemId}`,
-        remark: 'Material is not ready',
-      };
-      const {data} = await rejectOrder(payload);
-      if (data && data.success) {
-        fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
-          pickupFromDate: '',
-          pickupToDate: '',
-          poFromDate: '',
-          poToDate: '',
-          orderType: [],
-          deliveryType: [],
-          orderRefs: [],
-        });
-        fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
-        setRejectLoader(false);
-      } else {
-        setRejectLoader(false);
-        Toast.show({
-          type: 'error',
-          text2: data.message,
-          visibilityTime: 2000,
-          autoHide: true,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      setRejectLoader(false);
-      Toast.show({
-        type: 'error',
-        text2: 'Something went wrong',
-        visibilityTime: 2000,
-        autoHide: true,
-      });
-    }
-  };
-
-  const renderCTAs = (cta, url) => {
+  const renderCTAs = (cta, url, fromCTA) => {
     return (
       <>
-        {cta == 'ACCEPT' ? (
+        {cta == 'REJECT' ? (
+          <TouchableOpacity
+            disabled={rejectLoader}
+            onPress={() => setRejectModal(true)}
+            style={styles.rejectCtabtn}>
+            <Text style={styles.rejectCtaTxt}>{cta}</Text>
+            {rejectLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'ACCEPT' ? (
           <TouchableOpacity
             disabled={acceptLoader}
-            onPress={onAccept}
+            onPress={() => setDisplayCalendar(true)}
             style={styles.acceptCtabtn}>
-            <Text style={styles.acceptCtaTxt}>ACCEPT</Text>
+            <Text style={styles.acceptCtaTxt}>{cta}</Text>
             {acceptLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
@@ -317,16 +313,6 @@ const Ordercard = props => {
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
             {poLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
-            )}
-          </TouchableOpacity>
-        ) : cta == 'REJECT' ? (
-          <TouchableOpacity
-            disabled={rejectLoader}
-            onPress={onReject}
-            style={styles.rejectCtabtn}>
-            <Text style={styles.rejectCtaTxt}>{cta}</Text>
-            {rejectLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
@@ -343,20 +329,21 @@ const Ordercard = props => {
         ) : null}
       </>
     );
+    // }
   };
 
-  const renderPartialCTAs = url => {
+  const renderPartialCTAs = (url, fromCTA) => {
     return (actionCTA || []).map((_, i) => {
       if (i < 2) {
-        return renderCTAs(_, url);
+        return renderCTAs(_, url, fromCTA);
       }
     });
   };
 
-  const renderFurtherCTAs = url => {
+  const renderFurtherCTAs = (url, fromCTA) => {
     return (actionCTA || []).map((_, i) => {
       if (i > 1) {
-        return renderCTAs(_, url);
+        return renderCTAs(_, url, fromCTA);
       }
     });
   };
@@ -369,157 +356,271 @@ const Ordercard = props => {
     setIsOrderVisible(!isOrderVisible);
   };
 
-  const renderOrderDetails = fromModal => {
+  const renderOrderDetails = (fromModal, fromCTA) => {
     return (
       <>
-      <View style={styles.orderCardwrapInner}>
-        <View style={styles.leftpart}>
-          <Image
-            source={{
-              uri:
-                orderImage ||
-                'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
-            }}
-            style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
-          />
-          {!fromModal ? (
-            <View style={styles.quantityTxt}>
-              <Text style={styles.TitleLightTxt}>
-                Qty - <Text style={styles.TitleBoldTxt}>{quantity}</Text>
-              </Text>
-            </View>
-          ) : null}
-        </View>
-        <View style={styles.rightPart}>
-          <Text
-            style={[
-              fromModal ? {color: '#000'} : {color: Colors.BrandColor},
-              styles.msnName,
-            ]}>
-            {msn}
-          </Text>
-          {!fromModal ? (
+        <View style={styles.orderCardwrapInner}>
+          <View style={styles.leftpart}>
+            <Image
+              source={{
+                uri:
+                  orderImage ||
+                  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+              }}
+              style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
+            />
+            {!fromModal ? (
+              <View style={styles.quantityTxt}>
+                <Text style={styles.TitleLightTxt}>
+                  Qty - <Text style={styles.TitleBoldTxt}>{quantity}</Text>
+                </Text>
+              </View>
+            ) : null}
+          </View>
+          <View style={styles.rightPart}>
             <Text
-              onTextLayout={onTextLayout}
-              numberOfLines={showMoreTxt ? undefined : 1}
-              style={styles.productName}>
-              {productName}
+              style={[
+                fromModal ? {color: '#000'} : {color: Colors.BrandColor},
+                styles.msnName,
+              ]}>
+              {msn}
             </Text>
-          ) : (
-            <Text style={styles.productName}>{productName}</Text>
-          )}
-          {lengthMore && !fromModal ? (
-            <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
-              {showMoreTxt ? 'Read less' : 'Read more'}
-            </Text>
-          ) : null}
-          {fromModal ? (
-            <>
-              <Text style={{color: '#000'}}> ₹{Math.floor(totalAmount)}</Text>
-              <Text style={{color: '#000'}}>{taxPercentage}%</Text>
-            </>
-          ) : null}
-          <View style={{flexDirection: 'row'}}>
-            <View style={{marginRight:Dimension.margin20}}> 
-              <Text style={styles.TitleLightTxt}>
-                PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
+            {!fromModal ? (
+              <Text
+                onTextLayout={onTextLayout}
+                numberOfLines={showMoreTxt ? undefined : 1}
+                style={styles.productName}>
+                {productName}
               </Text>
-              <Text style={styles.TitleLightTxt}>
-                PO Date -{' '}
-                <Text style={styles.TitleBoldTxt}>
-                  {getTime(createdAt, false)}
+            ) : (
+              <Text style={styles.productName}>{productName}</Text>
+            )}
+            {lengthMore && !fromModal ? (
+              <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
+                {showMoreTxt ? 'Read less' : 'Read more'}
+              </Text>
+            ) : null}
+            {fromModal ? (
+              <>
+                <Text style={{color: '#000'}}> ₹{Math.floor(totalAmount)}</Text>
+                <Text style={{color: '#000'}}>{taxPercentage}%</Text>
+              </>
+            ) : null}
+            <View style={{flexDirection: 'row'}}>
+              <View style={{marginRight: Dimension.margin20}}>
+                <Text style={styles.TitleLightTxt}>
+                  PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
                 </Text>
-              </Text>
-              <Text style={styles.TitleLightTxt}>
-                PO Item ID - <Text style={styles.TitleBoldTxt}>{itemRef}</Text>
-              </Text>
-            </View>
+                <Text style={styles.TitleLightTxt}>
+                  PO Date -{' '}
+                  <Text style={styles.TitleBoldTxt}>
+                    {getTime(createdAt, false)}
+                  </Text>
+                </Text>
+                <Text style={styles.TitleLightTxt}>
+                  PO Item ID -{' '}
+                  <Text style={styles.TitleBoldTxt}>{itemRef}</Text>
+                </Text>
+              </View>
 
-            <View>
-              <Text style={styles.TitleLightTxt}>
-                TP/Unit -{' '}
-                <Text style={styles.TitleBoldTxt}>
-                  ₹{Math.floor(transferPrice)}
+              <View>
+                <Text style={styles.TitleLightTxt}>
+                  TP/Unit -{' '}
+                  <Text style={styles.TitleBoldTxt}>
+                    ₹{Math.floor(transferPrice)}
+                  </Text>
                 </Text>
-              </Text>
-              <Text style={styles.TitleLightTxt}>
-                Product HSN - <Text style={styles.TitleBoldTxt}>{hsn}</Text>
-              </Text>
-              <Text style={styles.TitleLightTxt}>
-                Date -{' '}
-                <Text style={styles.TitleBoldTxt}>
-                  {getTime(pickupDate, false)}
+                <Text style={styles.TitleLightTxt}>
+                  Product HSN - <Text style={styles.TitleBoldTxt}>{hsn}</Text>
                 </Text>
+                <Text style={styles.TitleLightTxt}>
+                  Date -{' '}
+                  <Text style={styles.TitleBoldTxt}>
+                    {getTime(pickupDate, false)}
+                  </Text>
+                </Text>
+              </View>
+            </View>
+            <View style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
+              <Text style={styles.GstWrapTxt}>{orderTypeString}</Text>
+              <Text style={styles.shipmentModeWrap}>
+                {shipmentMode == 2
+                  ? 'Dropship'
+                  : shipmentMode == 3
+                  ? 'Door Delivery'
+                  : 'Oneship'}
+              </Text>
+              {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
+              <Text style={styles.shipmentModeStringWrap}>
+                {shipmentModeString}
               </Text>
             </View>
           </View>
-          <View style={{flexDirection: 'row',marginTop:Dimension.margin10}}>
-            <Text style={styles.GstWrapTxt}>{orderTypeString}</Text>
-            <Text style={styles.shipmentModeWrap}>
-              {shipmentMode == 2
-                ? 'Dropship'
-                : shipmentMode == 3
-                ? 'Door Delivery'
-                : 'Oneship'}
-            </Text>
-            {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
-            <Text style={styles.shipmentModeStringWrap}>
-              {shipmentModeString}
-            </Text>
-          </View>
-         
         </View>
-        
-      </View>
-      <View style={{flexDirection:"row",flex:1,marginTop:Dimension.margin15}}>
-          <View style={{flex:9,flexDirection:"row",flexWrap:"wrap",}}>
-          {renderPartialCTAs(invoiceUrl)}
-          {!showMoreCTA ? renderFurtherCTAs(invoiceUrl) : null}
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+            marginTop: Dimension.margin15,
+          }}>
+          <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
+            {renderPartialCTAs(invoiceUrl, fromCTA)}
+            {!showMoreCTA ? renderFurtherCTAs(invoiceUrl, fromCTA) : null}
           </View>
-          <View style={{flex:1}}>
-          {actionCTA && actionCTA.length > 2 ? (
-            // <Text onPress={toggleMoreCTAs} style={styles.readMoretxt}>
-            //   {showMoreCTA ? 'Dots' : 'Close'}
-            // </Text>
-            <TouchableOpacity onPress={toggleMoreCTAs} style={styles.showMoreCta}>
-          <Icon name={showMoreCTA ? 'dots-horizontal' : 'close'}
-          color={Colors.FontColor}
-          size={Dimension.font20} ></Icon>
-            </TouchableOpacity>
-            
-          ) : null}
+          <View style={{flex: 1}}>
+            {actionCTA && actionCTA.length > 2 ? (
+              // <Text onPress={toggleMoreCTAs} style={styles.readMoretxt}>
+              //   {showMoreCTA ? 'Dots' : 'Close'}
+              // </Text>
+              <TouchableOpacity
+                onPress={toggleMoreCTAs}
+                style={styles.showMoreCta}>
+                <Icon
+                  name={showMoreCTA ? 'dots-horizontal' : 'close'}
+                  color={Colors.FontColor}
+                  size={Dimension.font20}></Icon>
+              </TouchableOpacity>
+            ) : null}
           </View>
-      </View>
-      
-         
-         
+        </View>
       </>
     );
   };
 
+  const markedDay = {[day.dateString]: {selected: true, marked: true}};
+  const getMinDate = () => {
+    let today = new Date();
+    let mutateMonth;
+    if (today.getMonth() + 1 < 10) {
+      mutateMonth = `0${today.getMonth() + 1}`;
+    } else {
+      mutateMonth = today.getMonth() + 1;
+    }
+    let date = today.getFullYear() + '-' + mutateMonth + '-' + today.getDate();
+    return date;
+  };
+
+  const getMaxDate = () => {
+    let today = new Date();
+    let mutatedate = Number(today.getDate()) + 2;
+    let date =
+      today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + mutatedate;
+
+    return date;
+  };
+
   return (
-    <TouchableOpacity style={styles.orderCardwrap} onPress={toggleOrder}>
-      {renderOrderDetails(false)}
-      {isOrderVisible && (
+    <>
+      <TouchableOpacity style={styles.orderCardwrap} onPress={toggleOrder}>
+        {renderOrderDetails(false, '')}
+        {isOrderVisible && (
+          <Modal
+            overlayPointerEvents={'auto'}
+            isVisible={isOrderVisible}
+            onTouchOutside={() => {
+              setIsOrderVisible(false);
+            }}
+            onDismiss={() => {
+              setIsOrderVisible(false);
+            }}
+            coverScreen={true}
+            style={{padding: 0, margin: 0}}
+            deviceWidth={deviceWidth}
+            hasBackdrop={true}
+            onBackdropPress={() => setIsOrderVisible(false)}
+            onBackButtonPress={() => setIsOrderVisible(false)}>
+            <View style={styles.modalContainer}>
+              {renderOrderDetails(true, '')}
+            </View>
+          </Modal>
+        )}
+        {rejectModal && (
+          <RejectModal
+            rejectModal={rejectModal}
+            setRejectModal={setRejectModal}
+            selectedTab={selectedTab}
+            itemId={itemId}
+            fetchOrdersFunc={fetchOrdersFunc}
+            fetchTabCountFunc={fetchTabCountFunc}
+            msn={msn}
+            quantity={quantity}
+            orderRef={orderRef}
+            itemRef={itemRef}
+            createdAt={createdAt}
+            transferPrice={transferPrice}
+            hsn={hsn}
+            pickupDate={pickupDate}
+            productName={productName}
+            orderTypeString={orderTypeString}
+            shipmentMode={shipmentMode}
+            isVmi={isVmi}
+            shipmentModeString={shipmentModeString}
+            actionCTA={actionCTA}
+            taxPercentage={taxPercentage}
+            totalAmount={totalAmount}
+            invoiceUrl={invoiceUrl}
+            orderImage={orderImage}
+          />
+        )}
+      </TouchableOpacity>
+      {displayCalendar && (
         <Modal
           overlayPointerEvents={'auto'}
-          isVisible={isOrderVisible}
+          isVisible={displayCalendar}
           onTouchOutside={() => {
-            setIsOrderVisible(false);
+            setDisplayCalendar(false);
           }}
           onDismiss={() => {
-            setIsOrderVisible(false);
+            setDisplayCalendar(false);
           }}
           coverScreen={true}
-          style={{padding: 0, margin: 0}}
+          style={{padding: 0, margin: 0, backgroundColor: '#fff'}}
           deviceWidth={deviceWidth}
           hasBackdrop={true}
-          onBackdropPress={() => setIsOrderVisible(false)}
-          onBackButtonPress={() => setIsOrderVisible(false)}>
-          <View style={styles.modalContainer}>{renderOrderDetails(true)}</View>
+          onBackdropPress={() => setDisplayCalendar(false)}
+          onBackButtonPress={() => setDisplayCalendar(false)}>
+          <View style={{flex: 1}}>
+            <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+              Do you wish to change the Pickup Date
+            </Text>
+            <Calendar
+              minDate={getMinDate()}
+              maxDate={getMaxDate()}
+              onDayPress={day => {
+                setDay(day);
+              }}
+              markedDates={markedDay}
+              theme={{
+                selectedDayBackgroundColor: 'red',
+                arrowColor: 'orange',
+                textDayFontSize: 16,
+                textMonthFontSize: 16,
+                textDayHeaderFontSize: 16,
+              }}
+            />
+
+            <TouchableOpacity onPress={() => setDisplayCalendar(false)}>
+              <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+                CANCEL
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{backgroundColor: 'red'}}
+              onPress={onAccept}>
+              <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+                ACCEPT
+              </Text>
+              {acceptLoader && (
+                <ActivityIndicator
+                  color={'#fff'}
+                  style={{alignSelf: 'center'}}
+                />
+              )}
+            </TouchableOpacity>
+          </View>
         </Modal>
       )}
-    </TouchableOpacity>
+    </>
   );
 };
 
@@ -528,7 +629,7 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font10,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-    marginBottom:Dimension.margin5
+    marginBottom: Dimension.margin5,
   },
   TitleBoldTxt: {
     fontSize: Dimension.font10,
@@ -544,8 +645,8 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-    marginBottom:Dimension.margin10,
-    marginTop:Dimension.margin5
+    marginBottom: Dimension.margin10,
+    marginTop: Dimension.margin5,
   },
   readMoretxt: {
     fontSize: Dimension.font12,
@@ -601,10 +702,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding12,
     paddingVertical: Dimension.padding12,
     flex: 1,
-   
-    marginHorizontal:Dimension.margin5
+
+    marginHorizontal: Dimension.margin5,
   },
-  orderCardwrapInner:{
+  orderCardwrapInner: {
     flexDirection: 'row',
     flex: 1,
   },
@@ -649,48 +750,47 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingTop: Dimension.padding10,
   },
-  acceptCtabtn:{
-    flex:5,
-    backgroundColor:Colors.BrandColor,
-    borderRadius:4,
-    paddingVertical:Dimension.padding8,
-    justifyContent:"center",
-    alignItems:"center",
-    marginRight:Dimension.margin10
+  acceptCtabtn: {
+    flex: 5,
+    backgroundColor: Colors.BrandColor,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Dimension.margin10,
   },
-  acceptCtaTxt:{
-    fontFamily:Dimension.CustomSemiBoldFont,
-    color:Colors.WhiteColor,
-    fontSize:Dimension.font12
+  acceptCtaTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    color: Colors.WhiteColor,
+    fontSize: Dimension.font12,
   },
-  rejectCtabtn:{
-    flex:5,
-    backgroundColor:Colors.grayShade12,
-    borderRadius:4,
-    paddingVertical:Dimension.padding8,
-    justifyContent:"center",
-    alignItems:"center",
-    
+  rejectCtabtn: {
+    flex: 5,
+    backgroundColor: Colors.grayShade12,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  rejectCtaTxt:{
-    fontFamily:Dimension.CustomSemiBoldFont,
-    color:Colors.FontColor,
-    fontSize:Dimension.font12
+  rejectCtaTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    color: Colors.FontColor,
+    fontSize: Dimension.font12,
   },
-  DownloadPoBtn:{
-    flex:1,
-    backgroundColor:Colors.grayShade12,
-    borderRadius:4,
-    paddingVertical:Dimension.padding8,
-    justifyContent:"center",
-    alignItems:"center",
-    
-    flexBasis:"100%",
-    marginTop:Dimension.margin10
+  DownloadPoBtn: {
+    flex: 1,
+    backgroundColor: Colors.grayShade12,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding8,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    flexBasis: '100%',
+    marginTop: Dimension.margin10,
   },
-  showMoreCta:{
-    marginLeft:Dimension.margin10,
-    paddingVertical:Dimension.padding6
-  }
+  showMoreCta: {
+    marginLeft: Dimension.margin10,
+    paddingVertical: Dimension.padding6,
+  },
 });
 export default Ordercard;
