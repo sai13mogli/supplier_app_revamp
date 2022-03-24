@@ -77,16 +77,18 @@ const OrdersScreen = props => {
   };
 
   useEffect(() => {
-    fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
-      pickupFromDate: '',
-      pickupToDate: '',
-      poFromDate: '',
-      poToDate: '',
-      orderType: [],
-      deliveryType: [],
-      orderRefs: [],
-    });
-    fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
+    if (OrderStatus !== STATE_STATUS.FETCHED) {
+      fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+        pickupFromDate: '',
+        pickupToDate: '',
+        poFromDate: '',
+        poToDate: '',
+        orderType: [],
+        deliveryType: [],
+        orderRefs: [],
+      });
+      fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
+    }
   }, []);
 
   const fetchOrdersFunc = (

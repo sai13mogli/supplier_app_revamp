@@ -115,8 +115,9 @@ const Ordercard = props => {
       let payload = {
         supplierId: await AsyncStorage.getItem('userId'),
         itemId: `${itemId}`,
-        pickupDate: getTime(pickupDate, true),
+        pickupDate: `24-3-2022`,
       };
+      // getTime(pickupDate, true)
       console.log(payload.pickupDate);
       const {data} = await acceptOrder(payload);
       if (data && data.success) {
