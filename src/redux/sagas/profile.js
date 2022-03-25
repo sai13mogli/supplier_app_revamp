@@ -118,7 +118,7 @@ function* fetchUpdateBillingAddress({ payload: { formData } }) {
       yield put(failedFetchUpdateBillingAddress(error));
     } else {
       yield put(fetchedUpdateBillingAddress(formData, data.data));
-      yield put(fetchedAddressDetails(data.data));
+      // yield put(fetchedAddressDetails(data.data));
     }
   } catch (error) {
     yield put(failedFetchUpdateBillingAddress(error));

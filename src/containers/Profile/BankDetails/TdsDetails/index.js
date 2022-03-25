@@ -50,9 +50,6 @@ const TdsDetails = () => {
       checked: true,
     },
   ]);
-
-  console.log('Aakash====>', tdsInfoDetails);
-
   const _updateSections = activeSections => {
     setTdsInfoList(activeSections);
   };

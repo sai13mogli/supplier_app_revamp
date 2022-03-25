@@ -18,12 +18,14 @@ const EditAddress = props => {
     const businessDetails = useSelector(state => state.profileReducer.businessDetails.data || {});
     const addressesDetailsStatus = useSelector(props => props?.route?.params?.bankDetails?.status || STATE_STATUS.FETCHING);
     const [loading, setLoading] = useState(false);
-    const [isSelected, setSelection] = useState(true);
+    const [isSelected, setSelection] = useState((props?.route?.params?.addressesDetails || {})?.default);
     const [editID, setEditID] = useState(props?.route?.params?.editID || '');
     const [phone, setPhone] = useState((props?.route?.params?.addressesDetails || {})?.phone);
     const [address1, setaddress1] = useState((props?.route?.params?.addressesDetails || {})?.address1);
     const [address2, setaddress2] = useState((props?.route?.params?.addressesDetails || {})?.address2);
-    const [countryName, setcountryName] = useState((props?.route?.params?.addressesDetails || {})?.countryName);
+    const [country, setcountry] = useState(
+        (businessDetails.address || {}).country,
+    );
     const [pincode, setpincode] = useState((props?.route?.params?.addressesDetails || {})?.pincode);
     const [state, setstate] = useState((businessDetails?.address || {})?.state);
     const [city, setcity] = useState((businessDetails?.address || {})?.city);
@@ -36,7 +38,6 @@ const EditAddress = props => {
     const [pincodeError, setpincodeError] = useState(false);
     const [stateError, setstateError] = useState(false);
     const [cityError, setcityError] = useState(false);
-    // console.log("PramasData===>", props?.route?.params);
     const dispatch = useDispatch();
     const FORM_FIELDS = new OrderedMap({
         phone: {
@@ -82,7 +83,7 @@ const EditAddress = props => {
             placeholder: 'Country',
             errorMessage: 'Select a country',
             showError: countryNameError,
-            selectedValue: countryName,
+            selectedValue: country,
             onValueChange: text => setcountry(text),
             component: DropDown,
             disabled: props.route.params && props.route.params.disabled,
@@ -120,7 +121,7 @@ const EditAddress = props => {
             onValueChange: text => setstate(text),
             component: DropDown,
             items: states,
-            // enabled: true,
+            enabled: true,
             disabled: props.route.params && props.route.params.disabled,
         },
         city: {
@@ -134,7 +135,7 @@ const EditAddress = props => {
             onValueChange: text => setcity(text),
             component: DropDown,
             items: cities,
-            // enabled: true,
+            enabled: true,
             disabled: props.route.params && props.route.params.disabled,
         },
     });
@@ -195,11 +196,11 @@ const EditAddress = props => {
         if (
             phone &&
             phone.length &&
+            phone.length == 10 &&
             address1 &&
             address1.length &&
             address2 &&
             address2.length &&
-            // countryName &&
             pincode &&
             pincode.length &&
             state &&
@@ -215,29 +216,30 @@ const EditAddress = props => {
                     phone: phone,
                     address1: address1,
                     address2: address2,
-                    country: null,
+                    country: country,
                     pincode: pincode,
                     state: state,
                     city: city,
-                    default: true,
+                    default: isSelected,
                     businessType: '',
                 };
+                console.log("Data2====>", data);
                 dispatch(fetchUpdateBillingAddress(data));
             } else {
                 const data = {
-                    id: editID,
                     type: 3,
                     phonePrefix: +971,
                     phone: phone,
                     address1: address1,
                     address2: address2,
-                    country: 214,
+                    country: country,
                     pincode: pincode,
                     state: state,
                     city: city,
-                    default: true,
+                    default: isSelected,
                     businessType: '',
                 };
+                console.log("Data====>", data);
                 dispatch(fetchUpdateBillingAddress(data));
             }
 

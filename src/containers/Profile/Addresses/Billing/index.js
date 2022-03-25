@@ -1,6 +1,5 @@
 import React, { useEffect, useState, } from 'react';
 import { Text, View, FlatList, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-
 import colors from "../../../../Theme/Colors"
 import { useSelector, useDispatch } from 'react-redux';
 import Dimension from "../../../../Theme/Dimension";
@@ -15,9 +14,7 @@ const Billing = (props) => {
   const [loading, setLoading] = useState(false);
   const profileData = useSelector(state => state.profileReducer.data || {});
   const addressesData = useSelector(state => state.profileReducer.addressesDetails.data || {});
-  console.log('====================================');
   console.log("Aakash====>", addressesData);
-  console.log('====================================');
   const renderItems = ({ item }) => (
     <View style={{ flex: 1, }}>
       <View style={styles.wrap}>
@@ -89,9 +86,11 @@ const Billing = (props) => {
         </View>
 
         <FlatList
-          data={addressesData}
+          data={addressesData == undefined || null ? [] : addressesData}
           renderItem={renderItems}
+          extraData={addressesData}
           keyExtractor={(item, index) => index.toString()}
+        // keyExtractor={(item, index) => `${index}_item`}
         />
       </ScrollView>
       <View style={styles.bottombtnWrap}>
