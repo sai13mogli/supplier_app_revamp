@@ -32,29 +32,9 @@ const DropDownModal = props => {
     console.log(value);
     props.onSelect(value);
   };
-
-  return (
-    <Modal
-      overlayPointerEvents={'auto'}
-      isVisible={props.visible}
-      onTouchOutside={props.closeModal}
-      onDismiss={props.closeModal}
-      coverScreen={true}
-      onBackButtonPress={props.closeModal}
-      style={{padding: 0, margin: 0}}
-      deviceWidth={deviceWidth}
-      hasBackdrop={true}>
-      <View style={styles.modalContainer}>
-        <View style={styles.topbdr}></View>
-        <View style={styles.ModalheadingWrapper}>
-          <Text style={styles.ModalHeading}>{props.title}</Text>
-          <CustomeIcon
-            name={'close'}
-            size={Dimension.font22}
-            color={Colors.FontColor}
-            onPress={props.closeModal}></CustomeIcon>
-        </View>
-
+  if (props.fromRejectModal) {
+    return (
+      <View>
         <View style={styles.MidWrapper}>
           <DotCheckbox
             data={items}
@@ -63,8 +43,41 @@ const DropDownModal = props => {
             formfilterModal={true}
           />
         </View>
+      </View>
+    );
+  } else {
+    return (
+      <Modal
+        overlayPointerEvents={'auto'}
+        isVisible={props.visible}
+        onTouchOutside={props.closeModal}
+        onDismiss={props.closeModal}
+        coverScreen={true}
+        onBackButtonPress={props.closeModal}
+        style={{padding: 0, margin: 0}}
+        deviceWidth={deviceWidth}
+        hasBackdrop={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.topbdr}></View>
+          <View style={styles.ModalheadingWrapper}>
+            <Text style={styles.ModalHeading}>{props.title}</Text>
+            <CustomeIcon
+              name={'close'}
+              size={Dimension.font22}
+              color={Colors.FontColor}
+              onPress={props.closeModal}></CustomeIcon>
+          </View>
 
-        {/* {filtersTypeData.map((item, index) => (
+          <View style={styles.MidWrapper}>
+            <DotCheckbox
+              data={items}
+              onCheck={getFilterValue}
+              value={props.selectedValue}
+              formfilterModal={true}
+            />
+          </View>
+
+          {/* {filtersTypeData.map((item, index) => (
                 <TouchableOpacity
                   onPress={() => props.setActiveFilterType(item.key)}
                   style={[
@@ -84,9 +97,10 @@ const DropDownModal = props => {
                 </TouchableOpacity>
               ))}
               {renderRight()} */}
-      </View>
-    </Modal>
-  );
+        </View>
+      </Modal>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

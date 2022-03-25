@@ -43,17 +43,17 @@ const TicketsList = props => {
     //   fetchTicketListing(1, '');
     //   // dispatch(fetchTickets(1, 0, 0, ''));
     // }
-    // if (ticketsStatus !== STATE_STATUS.FETCHED) {
-
-    // }
 
     //fetch tickets commented!!!
-    fetchTicketListing(1, '');
     setInitLoader(false);
+    if (ticketsStatus !== STATE_STATUS.FETCHED) {
+      fetchTicketListing(1, '');
+    }
   }, []);
+  // && !initLoader
 
   useEffect(() => {
-    if (ticketsStatus == STATE_STATUS.FETCHED && loader && !initLoader) {
+    if (ticketsStatus == STATE_STATUS.FETCHED && loader) {
       setLoader(false);
       setActiveFilterType(filtersTypeData[0].key);
     }

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -6,16 +6,20 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 import {STATE_STATUS} from '../../redux/constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchOrders, fetchTabCount} from '../../redux/actions/orders';
+import {getImageUrl} from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
-// import CustomeIcon from '../../component/common/CustomeIcon';
-// import CustomButton from '../../component/common/Button';
+import Ordercard from '../../component/Ordercard';
+import {Icon} from 'react-native-elements';
+import styles from './style';
+import CustomeIcon from "../../component/common/CustomeIcon"
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -31,9 +35,16 @@ const OrdersScreen = props => {
   const OrderData = useSelector(state =>
     state.ordersReducer.getIn(['orders', 'data']),
   );
+  const maxPage = useSelector(state =>
+    state.ordersReducer.getIn(['orders', 'maxPage']),
+  );
+  const pageIndex = useSelector(state =>
+    state.ordersReducer.getIn(['orders', 'page']),
+  );
 
   const [selectedType, setSelectedType] = useState('Open_Orders');
   const [selectedTab, setSelectedTab] = useState('PENDING_ACCEPTANCE');
+  const onEndReachedCalledDuringMomentum = useRef(true);
 
   const OPTIONS = [
     {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
@@ -67,18 +78,20 @@ const OrdersScreen = props => {
     ],
   };
 
-  // useEffect(() => {
-  //   fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
-  //     pickupFromDate: '',
-  //     pickupToDate: '',
-  //     poFromDate: '',
-  //     poToDate: '',
-  //     orderType: [],
-  //     deliveryType: [],
-  //     orderRefs: [],
-  //   });
-  //   fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
-  // }, []);
+  useEffect(() => {
+    if (OrderStatus !== STATE_STATUS.FETCHED) {
+      fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+        pickupFromDate: '',
+        pickupToDate: '',
+        poFromDate: '',
+        poToDate: '',
+        orderType: [],
+        deliveryType: [],
+        orderRefs: [],
+      });
+      fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
+    }
+  }, []);
 
   const fetchOrdersFunc = (
     page,
@@ -104,16 +117,29 @@ const OrdersScreen = props => {
 
   const renderItem = ({item, index}) => {
     return (
-      <View
-        style={{
-          margin: 8,
-          padding: 12,
-          borderRadius: 4,
-          backgroundColor: '#fff',
-        }}>
-        <Text style={{color: '#000'}}>{item.productMsn}</Text>
-        <Text style={{color: '#000'}}>{item.productName}</Text>
-      </View>
+      <Ordercard
+        msn={item.productMsn}
+        quantity={item.quantity}
+        orderRef={item.orderRef}
+        itemRef={item.itemRef}
+        createdAt={item.createdAt}
+        transferPrice={item.transferPrice}
+        hsn={item.productHsn}
+        pickupDate={item.pickupDate}
+        productName={item.productName}
+        orderTypeString={item.orderTypeString}
+        shipmentMode={item.shipmentMode}
+        isVmi={item.isVmi}
+        shipmentModeString={item.shipmentModeString}
+        actionCTA={item.actionCTA}
+        taxPercentage={item.taxPercentage}
+        totalAmount={item.totalAmount}
+        fetchOrdersFunc={fetchOrdersFunc}
+        selectedTab={selectedTab}
+        fetchTabCountFunc={fetchTabCountFunc}
+        itemId={item.itemId}
+        invoiceUrl={item.invoiceUrl}
+      />
     );
   };
 
@@ -135,21 +161,18 @@ const OrdersScreen = props => {
       <ScrollView
         horizontal={true}
         style={{
-          padding: Dimension.padding12,
+          padding: Dimension.padding10,
           flexDirection: 'row',
-          backgroundColor: '#e7e7e7',
+          backgroundColor: colors.grayShade7,
         }}>
         {TABS[selectedType].map((tab, tabIndex) => (
           <TouchableOpacity
             onPress={() => changeTab(tab)}
-            style={{
-              padding: 8,
-              marginRight: 12,
-              borderRadius: 4,
-              backgroundColor: selectedTab == tab.key ? '#000' : '#fff',
-            }}
+            style={selectedTab == tab.key ? styles.selectedTabCss
+              :styles.Unselectedtabcss}
             key={tabIndex}>
-            <Text style={{color: selectedTab == tab.key ? '#fff' : '#000'}}>
+            <Text style={selectedTab == tab.key ? styles.selectedTabTxt
+              :styles.UnselectedtabTxt}>
               {tab.label} ({tabData.get(tab.key)})
             </Text>
           </TouchableOpacity>
@@ -178,8 +201,26 @@ const OrdersScreen = props => {
     return null;
   };
 
+  const endReachedFetchListing = () => {
+    if (
+      OrderStatus === STATE_STATUS.FETCHED &&
+      OrderStatus !== STATE_STATUS.FETCHING &&
+      pageIndex + 1 < maxPage
+    ) {
+      fetchOrdersFunc(pageIndex + 1, '', selectedTab, 'ONESHIP', {
+        pickupFromDate: '',
+        pickupToDate: '',
+        poFromDate: '',
+        poToDate: '',
+        orderType: [],
+        deliveryType: [],
+        orderRefs: [],
+      });
+    }
+  };
+
   return (
-    <View style={{flex: 1, paddingTop: 80}}>
+    <View style={{flex: 1,backgroundColor:colors.grayShade7}}>
       {/* <CustomButton
         title={'Open Notifications'}
         buttonColor={'dodgerblue'}
@@ -202,7 +243,9 @@ const OrdersScreen = props => {
         <ActivityIndicator style={{alignSelf: 'center', margin: 12}} />
       ) : (
         <>
-          <DropDown
+        <View style={{flexDirection:"row",justifyContent:"space-between",padding:15}}>
+        
+        <DropDown
             title={''}
             label={''}
             selectedValue={selectedType}
@@ -212,7 +255,18 @@ const OrdersScreen = props => {
             }}
             items={OPTIONS}
             enabled={true}
+            isFromOrders={true}
           />
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('Notification')} style={styles.notifocationBtn}>
+            <CustomeIcon
+            name={'notification'}
+            size={Dimension.font22}
+            color={colors.FontColor}
+          />
+          </TouchableOpacity>
+        </View>
+         
           <FlatList
             data={OrderData.toArray()}
             stickyHeaderIndices={[0]}
@@ -221,6 +275,21 @@ const OrdersScreen = props => {
             keyExtractor={(item, index) => `${index}-item`}
             ListHeaderComponent={renderHeaderComponent}
             ListFooterComponent={renderFooterComponent}
+            onEndReachedThreshold={0.9}
+            style={{paddingBottom: 380}}
+            contentContainerStyle={{paddingBottom: 380}}
+            removeClippedSubviews={true}
+            maxToRenderPerBatch={10}
+            onEndReached={({distanceFromEnd}) => {
+              if (!onEndReachedCalledDuringMomentum.current) {
+                endReachedFetchListing();
+                onEndReachedCalledDuringMomentum.current = true;
+              }
+            }}
+            onMomentumScrollBegin={() => {
+              onEndReachedCalledDuringMomentum.current = false;
+            }}
+            showsVerticalScrollIndicator={false}
           />
         </>
       )}

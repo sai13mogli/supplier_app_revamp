@@ -197,7 +197,7 @@ const Tabs = props => {
         renderItem={({item}) => {
           return (
             <View style={{width, height}}>
-              <item.component {...item} />
+              <item.component {...item}  navigation={props.navigation}/>
             </View>
           );
         }}
@@ -206,6 +206,7 @@ const Tabs = props => {
         scrollX={scrollX}
         data={props.data}
         onItemPress={onItemPress}
+        
       />
     </View>
     // <>

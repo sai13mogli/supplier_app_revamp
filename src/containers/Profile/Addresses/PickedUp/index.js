@@ -12,6 +12,18 @@ const PickedUp = (props) => {
 
   const profileData = useSelector(state => state.profileReducer.data || {});
   const addressesData = useSelector(state => state.profileReducer.addressesDetails.data || {});
+  const filterById = (obj) => {
+    if (obj.type == 4) {
+      return true
+    }
+    return false;
+  }
+  console.log(addressesData)
+  var PickupAddressData = addressesData.filter(filterById);
+  var sortedData = PickupAddressData.sort(function (x) {
+    return (x.default == 'true') ? 0 : x ? -1 : 1;
+  });
+
   const renderItems = ({ item }) => (
     <View style={{ flex: 1, }}>
       <View style={styles.wrap}>
@@ -66,7 +78,7 @@ const PickedUp = (props) => {
       <ScrollView style={styles.ContainerCss}>
         <View style={styles.TopWrap}>
           <Text style={styles.Pageheading}>
-            02 Pickup Addresses
+            {PickupAddressData.length} Pickup Addresses
           </Text>
           <TouchableOpacity
             onPress={() =>
@@ -83,7 +95,7 @@ const PickedUp = (props) => {
         </View>
 
         <FlatList
-          data={addressesData}
+          data={PickupAddressData}
           renderItem={renderItems}
           keyExtractor={(item, index) => index.toString()}
         />
