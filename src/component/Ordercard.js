@@ -20,7 +20,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import RejectModal from '../component/RejectModal';
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import AcceptModal from './AcceptModal';
 
 const deviceWidth = Dimensions.get('window').width;

@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   View,
   Image,
+  TextInput,
+  BackHandler,
+  Keyboard,
 } from 'react-native';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
@@ -19,7 +22,7 @@ import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
 import {Icon} from 'react-native-elements';
 import styles from './style';
-import CustomeIcon from "../../component/common/CustomeIcon"
+import CustomeIcon from '../../component/common/CustomeIcon';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -45,6 +48,8 @@ const OrdersScreen = props => {
   const [selectedType, setSelectedType] = useState('Open_Orders');
   const [selectedTab, setSelectedTab] = useState('PENDING_ACCEPTANCE');
   const onEndReachedCalledDuringMomentum = useRef(true);
+  const [inputValue, setInputValue] = useState('');
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   const OPTIONS = [
     {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
@@ -79,6 +84,21 @@ const OrdersScreen = props => {
   };
 
   useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        console.log('keyboardshow hai dost');
+        setKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        console.log('keyboardhide hai dost');
+        setKeyboardVisible(false);
+      },
+    );
+
     if (OrderStatus !== STATE_STATUS.FETCHED) {
       fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
         pickupFromDate: '',
@@ -91,6 +111,10 @@ const OrdersScreen = props => {
       });
       fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
     }
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
   }, []);
 
   const fetchOrdersFunc = (
@@ -168,11 +192,18 @@ const OrdersScreen = props => {
         {TABS[selectedType].map((tab, tabIndex) => (
           <TouchableOpacity
             onPress={() => changeTab(tab)}
-            style={selectedTab == tab.key ? styles.selectedTabCss
-              :styles.Unselectedtabcss}
+            style={
+              selectedTab == tab.key
+                ? styles.selectedTabCss
+                : styles.Unselectedtabcss
+            }
             key={tabIndex}>
-            <Text style={selectedTab == tab.key ? styles.selectedTabTxt
-              :styles.UnselectedtabTxt}>
+            <Text
+              style={
+                selectedTab == tab.key
+                  ? styles.selectedTabTxt
+                  : styles.UnselectedtabTxt
+              }>
               {tab.label} ({tabData.get(tab.key)})
             </Text>
           </TouchableOpacity>
@@ -219,8 +250,28 @@ const OrdersScreen = props => {
     }
   };
 
+  const onSearchText = text => {
+    setInputValue(text);
+  };
+
+  const onSubmitSearch = () => {
+    fetchOrdersFunc(0, inputValue, selectedTab, 'ONESHIP', {
+      pickupFromDate: '',
+      pickupToDate: '',
+      poFromDate: '',
+      poToDate: '',
+      orderType: [],
+      deliveryType: [],
+      orderRefs: [],
+    });
+  };
+
+  // const handleKeyDown = e => {
+  //   console.log(e, e && e.nativeEvent && e.nativeEvent.key);
+  // };
+
   return (
-    <View style={{flex: 1,backgroundColor:colors.grayShade7}}>
+    <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
       {/* <CustomButton
         title={'Open Notifications'}
         buttonColor={'dodgerblue'}
@@ -243,30 +294,35 @@ const OrdersScreen = props => {
         <ActivityIndicator style={{alignSelf: 'center', margin: 12}} />
       ) : (
         <>
-        <View style={{flexDirection:"row",justifyContent:"space-between",padding:15}}>
-        
-        <DropDown
-            title={''}
-            label={''}
-            selectedValue={selectedType}
-            onValueChange={text => {
-              setSelectedType(text);
-              changeTab(TABS[text][0]);
-            }}
-            items={OPTIONS}
-            enabled={true}
-            isFromOrders={true}
-          />
-          <TouchableOpacity
-            onPress={() => props.navigation.navigate('Notification')} style={styles.notifocationBtn}>
-            <CustomeIcon
-            name={'notification'}
-            size={Dimension.font22}
-            color={colors.FontColor}
-          />
-          </TouchableOpacity>
-        </View>
-         
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              padding: 15,
+            }}>
+            <DropDown
+              title={''}
+              label={''}
+              selectedValue={selectedType}
+              onValueChange={text => {
+                setSelectedType(text);
+                changeTab(TABS[text][0]);
+              }}
+              items={OPTIONS}
+              enabled={true}
+              isFromOrders={true}
+            />
+            <TouchableOpacity
+              onPress={() => props.navigation.navigate('Notification')}
+              style={styles.notifocationBtn}>
+              <CustomeIcon
+                name={'notification'}
+                size={Dimension.font22}
+                color={colors.FontColor}
+              />
+            </TouchableOpacity>
+          </View>
+
           <FlatList
             data={OrderData.toArray()}
             stickyHeaderIndices={[0]}
@@ -291,6 +347,42 @@ const OrdersScreen = props => {
             }}
             showsVerticalScrollIndicator={false}
           />
+          <ScrollView>
+            <TextInput
+              // autoFocus={true}
+              // style={styles.inputField}
+              // onKeyPress={e => {
+              //   console.log('hehhe', e.nativeEvent.key);
+              // }}
+              blurOnSubmit={true}
+              style={{color: '#000'}}
+              placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
+              placeholderTextColor={'#888'}
+              selectionColor={'#888'}
+              returnKeyType={'search'}
+              onChangeText={onSearchText}
+              onFocus={() => console.log('onFocus!!')}
+              // ref={searchInput}
+              value={inputValue}
+              onSubmitEditing={event => {
+                if (inputValue && inputValue.length > 1) {
+                  onSubmitSearch();
+                }
+              }}
+            />
+            {!isKeyboardVisible ? (
+              <TouchableOpacity style={{width: 40, height: 50}}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 'bold',
+                    color: '#000',
+                  }}>
+                  Filters
+                </Text>
+              </TouchableOpacity>
+            ) : null}
+          </ScrollView>
         </>
       )}
     </View>
