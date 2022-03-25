@@ -21,6 +21,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import RejectModal from '../component/RejectModal';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import AcceptModal from './AcceptModal';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -52,41 +53,19 @@ const Ordercard = props => {
   const [showMoreTxt, setShowMoreTxt] = useState(false);
   const [lengthMore, setLengthMore] = useState(false);
   const [isOrderVisible, setIsOrderVisible] = useState(false);
-  const [acceptLoader, setAcceptLoader] = useState(false);
   const [poLoader, setPoLoader] = useState(false);
   const [invoiceLoader, setInvoiceLoader] = useState(false);
   const [rejectLoader, setRejectLoader] = useState(false);
   const [showMoreCTA, setShowMoreCTA] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
   const [displayCalendar, setDisplayCalendar] = useState(false);
-  const [day, setDay] = useState({
-    dateString: '2022-03-24',
-    day: 24,
-    month: 3,
-    timestamp: 1648166400000,
-    year: 2022,
-  });
+
   useEffect(() => {
     fetchImage();
     if (actionCTA && actionCTA.length > 2) {
       setShowMoreCTA(true);
     }
-    setPickupDate();
   }, []);
-
-  const setPickupDate = () => {
-    let minDate = getMinDate();
-    let [year, month, day] = minDate.split('-');
-    let timestamp = new Date(minDate).getTime();
-    console.log('year hai dost', year, month, day, timestamp);
-    setDay({
-      dateString: minDate,
-      day: day,
-      month: month,
-      timestamp: timestamp,
-      year: year,
-    });
-  };
 
   const fetchImage = async () => {
     const {data} = await getImageUrl(msn);
@@ -133,53 +112,6 @@ const Ordercard = props => {
 
   const toggleShowMoreTxt = () => {
     setShowMoreTxt(!showMoreTxt);
-  };
-
-  //acceptOrder
-  const onAccept = async () => {
-    try {
-      setAcceptLoader(true);
-      let payload = {
-        supplierId: await AsyncStorage.getItem('userId'),
-        itemId: `${itemId}`,
-        pickupDate: day.dateString,
-      };
-      // getTime(pickupDate, true)
-      console.log(payload.pickupDate);
-      const {data} = await acceptOrder(payload);
-      if (data && data.success) {
-        fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
-          pickupFromDate: '',
-          pickupToDate: '',
-          poFromDate: '',
-          poToDate: '',
-          orderType: [],
-          deliveryType: [],
-          orderRefs: [],
-        });
-        fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
-        setAcceptLoader(false);
-      } else {
-        setAcceptLoader(false);
-        setDisplayCalendar(false);
-        Toast.show({
-          type: 'error',
-          text2: data.message,
-          visibilityTime: 2000,
-          autoHide: true,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      setAcceptLoader(false);
-      setDisplayCalendar(false);
-      Toast.show({
-        type: 'error',
-        text2: 'Something went wrong',
-        visibilityTime: 2000,
-        autoHide: true,
-      });
-    }
   };
 
   const getPOInvoice = (fromPO, invoiceUrl) => {
@@ -298,13 +230,13 @@ const Ordercard = props => {
           </TouchableOpacity>
         ) : cta == 'ACCEPT' ? (
           <TouchableOpacity
-            disabled={acceptLoader}
+            // disabled={acceptLoader}
             onPress={() => setDisplayCalendar(true)}
             style={styles.acceptCtabtn}>
             <Text style={styles.acceptCtaTxt}>{cta}</Text>
-            {acceptLoader && (
+            {/* {acceptLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
-            )}
+            )} */}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_PO_EMS' ? (
           <TouchableOpacity
@@ -487,28 +419,6 @@ const Ordercard = props => {
     );
   };
 
-  const markedDay = {[day.dateString]: {selected: true, marked: true}};
-  const getMinDate = () => {
-    let today = new Date();
-    let mutateMonth;
-    if (today.getMonth() + 1 < 10) {
-      mutateMonth = `0${today.getMonth() + 1}`;
-    } else {
-      mutateMonth = today.getMonth() + 1;
-    }
-    let date = today.getFullYear() + '-' + mutateMonth + '-' + today.getDate();
-    return date;
-  };
-
-  const getMaxDate = () => {
-    let today = new Date();
-    let mutatedate = Number(today.getDate()) + 2;
-    let date =
-      today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + mutatedate;
-
-    return date;
-  };
-
   return (
     <>
       <TouchableOpacity style={styles.orderCardwrap} onPress={toggleOrder}>
@@ -564,61 +474,14 @@ const Ordercard = props => {
         )}
       </TouchableOpacity>
       {displayCalendar && (
-        <Modal
-          overlayPointerEvents={'auto'}
-          isVisible={displayCalendar}
-          onTouchOutside={() => {
-            setDisplayCalendar(false);
-          }}
-          onDismiss={() => {
-            setDisplayCalendar(false);
-          }}
-          coverScreen={true}
-          style={{padding: 0, margin: 0, backgroundColor: '#fff'}}
-          deviceWidth={deviceWidth}
-          hasBackdrop={true}
-          onBackdropPress={() => setDisplayCalendar(false)}
-          onBackButtonPress={() => setDisplayCalendar(false)}>
-          <View style={{flex: 1}}>
-            <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
-              Do you wish to change the Pickup Date
-            </Text>
-            <Calendar
-              minDate={getMinDate()}
-              maxDate={getMaxDate()}
-              onDayPress={day => {
-                setDay(day);
-              }}
-              markedDates={markedDay}
-              theme={{
-                selectedDayBackgroundColor: 'red',
-                arrowColor: 'orange',
-                textDayFontSize: 16,
-                textMonthFontSize: 16,
-                textDayHeaderFontSize: 16,
-              }}
-            />
-
-            <TouchableOpacity onPress={() => setDisplayCalendar(false)}>
-              <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
-                CANCEL
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{backgroundColor: 'red'}}
-              onPress={onAccept}>
-              <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
-                ACCEPT
-              </Text>
-              {acceptLoader && (
-                <ActivityIndicator
-                  color={'#fff'}
-                  style={{alignSelf: 'center'}}
-                />
-              )}
-            </TouchableOpacity>
-          </View>
-        </Modal>
+        <AcceptModal
+          selectedTab={selectedTab}
+          fetchOrdersFunc={fetchOrdersFunc}
+          fetchTabCountFunc={fetchTabCountFunc}
+          itemId={itemId}
+          displayCalendar={displayCalendar}
+          setDisplayCalendar={setDisplayCalendar}
+        />
       )}
     </>
   );
