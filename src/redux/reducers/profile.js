@@ -109,6 +109,34 @@ export const profileReducer = (state = initialState, action) => {
           error: error,
         },
       };
+    //========================================================== TDS Detail
+    case PROFILE_ACTIONS.FETCH_UPDATE_TDS_DETAILS:
+      return {
+        ...state,
+        tdsInfoDetails: {
+          ...state.tdsInfoDetails,
+          status: STATE_STATUS.UPDATING,
+        },
+      };
+    case PROFILE_ACTIONS.FETCHED_UPDATE_TDS_DETAILS:
+      return {
+        ...state,
+        tdsInfoDetails: {
+          ...state.tdsInfoDetails,
+          status: STATE_STATUS.UPDATED,
+          data: payload.data,
+        },
+      };
+    case PROFILE_ACTIONS.FAILED_FETCH_UPDATE_TDS_DETAILS:
+      return {
+        ...state,
+        tdsInfoDetails: {
+          ...state.tdsInfoDetails,
+          status: STATE_STATUS.FAILED_UPDATE,
+          error: error,
+        },
+      };
+    //========================================================== TDS Detail
     case PROFILE_ACTIONS.FETCH_ADDRESSES:
       return {
         ...state,
@@ -139,6 +167,38 @@ export const profileReducer = (state = initialState, action) => {
           error: error,
         },
       };
+    //===================================================== 
+    case PROFILE_ACTIONS.FETCH_DELETE_ADDRESSES:
+      return {
+        ...state,
+        addressesDetails: {
+          ...state.addressesDetails,
+          status: STATE_STATUS.FETCHING,
+          data: {},
+          error: null,
+        },
+      };
+    case PROFILE_ACTIONS.FETCHED_DELETE_ADDRESSES:
+      return {
+        ...state,
+        addressesDetails: {
+          ...state.addressesDetails,
+          status: STATE_STATUS.FETCHED,
+          data: payload.data,
+          error: null,
+        },
+      };
+    case PROFILE_ACTIONS.FAILED_FETCH_DELETE_ADDRESSES:
+      return {
+        ...state,
+        addressesDetails: {
+          ...state.addressesDetails,
+          status: STATE_STATUS.FAILED_FETCH,
+          data: {},
+          error: error,
+        },
+      };
+    //===================================================== 
     case PROFILE_ACTIONS.FETCH_UPDATE_BILLING_ADDRESS:
       return {
         ...state,

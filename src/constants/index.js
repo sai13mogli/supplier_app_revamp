@@ -1,4 +1,4 @@
-import {createRef} from 'react';
+import { createRef } from 'react';
 import HomeScreen from '../containers/Home';
 import ProfileScreen from '../containers/Profile';
 import OrdersScreen from '../containers/Orders';
@@ -28,7 +28,7 @@ import NewTicket from '../containers/Support/NewTicket';
 import Error from '../containers/Auth/Login/Error';
 import Conversation from '../containers/Support/Conversation';
 import EditAddress from '../containers/Profile/Addresses/EditAddress';
-import AddBankAccount from '../containers/Profile/BankDetails/Accounts/AddBankAccount';
+import EditBankAccount from '../containers/Profile/BankDetails/Accounts/EditBankAccount';
 
 
 export const BOTTOM_TAB_SCREENS = [
@@ -89,14 +89,14 @@ export const TOP_BRANDS_SCREENS = [
 export const ADDRESSES_TAB_SCREENS = [
   {
     name: 'Billing',
-    key:'billing',
+    key: 'billing',
     component: Billing,
     ref: createRef(),
     idx: 0,
   },
   {
     name: 'PickUp',
-    key:'pickup',
+    key: 'pickup',
     component: PickedUp,
     ref: createRef(),
     idx: 1
@@ -156,8 +156,8 @@ export const APP_STACK_SCREENS = [
     component: EditAddress,
   },
   {
-    name: 'AddBankAccount',
-    component: AddBankAccount,
+    name: 'EditBankAccount',
+    component: EditBankAccount,
   },
   {
     name: 'BankDetails',

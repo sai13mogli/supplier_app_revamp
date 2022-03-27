@@ -429,7 +429,6 @@ const BusinessDetailsScreen = props => {
           city: city,
         },
       };
-      console.log("BussinessData====>", data);
       dispatch(fetchUpdateBusinessDetails(data));
     } else {
       // onTanBlur();
@@ -443,20 +442,6 @@ const BusinessDetailsScreen = props => {
     }
   };
 
-  // const initializeCounter = () => {
-  //   setTimer(60);
-  //   setResendOtp(true);
-  //   interval = setInterval(() => {
-  //     setTimer(timer => {
-  //       if (timer > 0) {
-  //         return timer - 1;
-  //       } else {
-  //         clearInterval(interval);
-  //         return 0;
-  //       }
-  //     });
-  //   }, 1000);
-  // };
 
   const initializeCounter = type => {
     if (type == 6) {

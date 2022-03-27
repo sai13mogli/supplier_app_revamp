@@ -39,6 +39,7 @@ const EditAddress = props => {
     const [stateError, setstateError] = useState(false);
     const [cityError, setcityError] = useState(false);
     const dispatch = useDispatch();
+
     const FORM_FIELDS = new OrderedMap({
         phone: {
             title: 'Phone',
@@ -223,9 +224,9 @@ const EditAddress = props => {
                     default: isSelected,
                     businessType: '',
                 };
-                console.log("Data2====>", data);
                 dispatch(fetchUpdateBillingAddress(data));
-            } else {
+            }
+            else {
                 const data = {
                     type: 3,
                     phonePrefix: +971,
@@ -239,7 +240,6 @@ const EditAddress = props => {
                     default: isSelected,
                     businessType: '',
                 };
-                console.log("Data====>", data);
                 dispatch(fetchUpdateBillingAddress(data));
             }
 

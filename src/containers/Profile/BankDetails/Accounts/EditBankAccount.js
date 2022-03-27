@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { OrderedMap } from 'immutable';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View, Text } from 'react-native';
 import FloatingLabelInputField from '../../../../component/common/FloatingInput';
 import Header from '../../../../component/common/Header';
 import DropDown from '../../../../component/common/DropDown';
@@ -8,23 +8,24 @@ import CustomButton from '../../../../component/common/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import Dimension from '../../../../Theme/Dimension';
 import colors from '../../../../Theme/Colors';
+import { getIfscCodeDetails } from '../../../../services/profile';
 import { STATE_STATUS } from '../../../../redux/constants';
 import { fetchUpdateBankDetails } from '../../../../redux/actions/profile';
 
 const ifscCodeRegex = '^[A-Za-z]{4}[a-zA-Z0-9]{7}$'
 
-const AddBankAccount = props => {
+const EditBankAccount = props => {
 
     const bankDetails = useSelector(state => (state.profileReducer.bankDetails.data || {}));
     const bankDetailsStatus = useSelector(state => (state.profileReducer.bankDetails.status || STATE_STATUS.FETCHING));
     const [loading, setLoading] = useState(false);
-    const [isSelected, setSelection] = useState(true);
-    const [accountHolderName, setAccountHolderName] = useState('');
-    const [accountNumber, setAccountNumber] = useState('');
-    const [ifscCode, setIfscCode] = useState('');
-    const [branch, setBranch] = useState('');
-    const [accountType, setAccountType] = useState('');
-    const [bankName, setBankName] = useState('');
+    const [editID, setEditID] = useState(bankDetails.id || '');
+    const [accountHolderName, setAccountHolderName] = useState(bankDetails.accountHolderName);
+    const [accountNumber, setAccountNumber] = useState(bankDetails.accountNumber);
+    const [ifscCode, setIfscCode] = useState(bankDetails.ifscCode);
+    const [branch, setBranch] = useState(bankDetails.branch);
+    const [accountType, setAccountType] = useState(bankDetails.accountType);
+    const [bankName, setBankName] = useState(bankDetails.bankName);
     const [accountHolderNameError, setaccountHolderNameError] = useState(false);
     const [accountNumberError, setaccountNumberError] = useState(false);
     const [ifscCodeError, setifscCodeError] = useState(false);
@@ -32,8 +33,7 @@ const AddBankAccount = props => {
     const [accountTypeError, setaccountTypeError] = useState(false);
     const [bankNameError, setbankNameError] = useState(false);
 
-
-
+    // console.log("BankData====>", props.route);
 
     const dispatch = useDispatch();
     const FORM_FIELDS = new OrderedMap({
@@ -41,7 +41,7 @@ const AddBankAccount = props => {
             title: 'Account Holder Name',
             isImp: true,
             label: 'Account Holder Name',
-            placeholder: 'Account Holder Name',
+            placeholder: '',
             errorMessage: 'Enter valid account holder name',
             showError: accountHolderNameError,
             value: accountHolderName,
@@ -53,7 +53,7 @@ const AddBankAccount = props => {
             title: 'Account Number',
             isImp: true,
             label: 'Account Number',
-            placeholder: 'Account Number',
+            placeholder: '',
             errorMessage: 'Enter valid account number',
             showError: accountNumberError,
             value: accountNumber,
@@ -65,7 +65,7 @@ const AddBankAccount = props => {
             title: 'IFSC',
             isImp: true,
             label: 'IFSC',
-            placeholder: 'IFSC code',
+            placeholder: '',
             errorMessage: 'Enter valid ifsc code',
             showError: ifscCodeError,
             value: ifscCode,
@@ -77,7 +77,7 @@ const AddBankAccount = props => {
             title: 'Branch',
             isImp: true,
             label: 'Branch',
-            placeholder: 'Branch',
+            placeholder: '',
             errorMessage: 'Enter valid branch name',
             showError: branchError,
             value: branch,
@@ -131,7 +131,6 @@ const AddBankAccount = props => {
             props.navigation.goBack();
         }
     }, [bankDetailsStatus]);
-
 
     const onHolderNameBlur = () => {
         if (accountHolderName && accountHolderName.length) {
@@ -208,7 +207,7 @@ const AddBankAccount = props => {
                 id: '',
                 accountHolderName: accountHolderName,
                 accountNumber: accountNumber,
-                accountType: '1',
+                accountType: accountType,
                 ifscCode: ifscCode,
                 branch: branch,
                 bankName: bankName,
@@ -235,9 +234,15 @@ const AddBankAccount = props => {
             <Header
                 showBack
                 navigation={props.navigation}
-                showText={'Add Bank'}
+                showText={editID ? 'Edit Bank Account' : 'Add Bank Account'}
                 rightIconName={'business-details'}>
             </Header>
+            <View style={styles.TopWrap}>
+                <Text style={styles.Pageheading}>
+                    01 Account
+                </Text>
+
+            </View>
             <View style={{ flex: 1 }}>
                 <ScrollView style={styles.ContainerCss}>
                     {FORM_FIELDS.map((field, fieldKey) => (
@@ -269,7 +274,18 @@ const AddBankAccount = props => {
 const styles = StyleSheet.create({
     ContainerCss: {
         backgroundColor: colors.WhiteColor,
-        paddingHorizontal: Dimension.padding15
+        paddingHorizontal: Dimension.padding15,
+        marginTop: 10,
+    },
+    Pageheading: {
+        fontSize: Dimension.font14,
+        color: colors.FontColor,
+        fontFamily: Dimension.CustomMediumFont,
+    },
+    TopWrap: {
+        marginLeft: Dimension.margin20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     bottombtnWrap: {
         padding: Dimension.padding15,
@@ -281,4 +297,4 @@ const styles = StyleSheet.create({
 
 // Exampe for CustomButton Component
 
-export default AddBankAccount;
+export default EditBankAccount;

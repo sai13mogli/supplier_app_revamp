@@ -18,11 +18,13 @@ const PickedUp = (props) => {
     }
     return false;
   }
+
+
   console.log(addressesData)
   var PickupAddressData = addressesData.filter(filterById);
-  var sortedData = PickupAddressData.sort(function (x) {
-    return (x.default == 'true') ? 0 : x ? -1 : 1;
-  });
+  // var sortedData = PickupAddressData.sort(function (x) {
+  //   return (x.default == 'true') ? 0 : x ? -1 : 1;
+  // });
 
   const renderItems = ({ item }) => (
     <View style={{ flex: 1, }}>

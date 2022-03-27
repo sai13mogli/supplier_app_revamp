@@ -2,9 +2,13 @@ import React, { useEffect, useState, } from 'react';
 import { Text, View, FlatList, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import colors from "../../../../Theme/Colors"
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native'
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
+import { fetchDeleteAddresses, fetchAddressDetails } from '../../../../redux/actions/profile';
+import { STATE_STATUS } from '../../../../redux/constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './styles';
 
 
@@ -12,7 +16,11 @@ const Billing = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const profileData = useSelector(state => state.profileReducer.data || {});
+  const addressesDetailsStatus = useSelector(state => (state.profileReducer.addressesDetails.status || STATE_STATUS.FETCHING));
   const addressesData = useSelector(state => state.profileReducer.addressesDetails.data || {});
+  const { navigate } = useNavigation()
+  const navigation = useNavigation()
+  const dispatch = useDispatch();
 
   const filterById = (obj) => {
     if (obj.type == 3) {
@@ -20,12 +28,28 @@ const Billing = (props) => {
     }
     return false;
   }
-  console.log(addressesData)
+
   var BillingAddressData = addressesData.filter(filterById);
-  var sortedData = BillingAddressData.sort(function (x) {
-    return (x.default == 'true') ? 0 : x ? -1 : 1;
+
+  useEffect(() => {
+    if (loading && addressesDetailsStatus == STATE_STATUS.UPDATED) {
+      alert("hi", addressesDetailsStatus == STATE_STATUS.UPDATED)
+
+      dispatch(fetchAddressDetails());
+    }
   });
-  console.log(sortedData)
+
+  // var sortedData = BillingAddressData.sort(function (x) {
+  //   return (x.default == 'true') ? 0 : x ? -1 : 1;
+  // });
+
+  const removeAddresses = async (item) => {
+    const data = {
+      supplierId: await AsyncStorage.getItem('userId'),
+      id: item.id
+    }
+    dispatch(fetchDeleteAddresses(data));
+  }
   const renderItems = ({ item }) => (
     <View style={{ flex: 1, }}>
       <View style={styles.wrap}>
@@ -43,7 +67,7 @@ const Billing = (props) => {
             <CustomButton
               title={"REMOVE"}
               buttonColor={colors.WhiteColor}
-              // onPress={navigateToAddresses}
+              onPress={() => removeAddresses(item)}
               TextColor={colors.FontColor}
               borderColor={colors.grayShade1}
               TextFontSize={Dimension.font14}
@@ -97,8 +121,8 @@ const Billing = (props) => {
         <FlatList
           data={BillingAddressData}
           renderItem={renderItems}
-          extraData={addressesData}
           keyExtractor={(item, index) => index.toString()}
+        // keyExtractor={(item, index) => `${index}_item`}
         />
       </ScrollView>
       <View style={styles.bottombtnWrap}>

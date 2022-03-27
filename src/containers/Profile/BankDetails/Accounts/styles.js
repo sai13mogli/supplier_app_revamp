@@ -21,7 +21,9 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font14,
     color: Colors.BrandColor,
     fontFamily: Dimension.CustomMediumFont,
-    marginLeft: Dimension.margin5
+    marginLeft: Dimension.margin5,
+    alignSelf: 'center',
+    marginTop: Dimension.margin1
   },
   TopWrap: {
     flexDirection: 'row',
@@ -35,6 +37,7 @@ const styles = StyleSheet.create({
   },
   pendingBox: {
     borderWidth: 1,
+    marginTop: 20,
     padding: Dimension.padding0,
     borderRadius: 4,
     borderColor: Colors.eyeIcon,
@@ -56,6 +59,7 @@ const styles = StyleSheet.create({
   },
   pendingWrap: {
     marginBottom: 10,
+    flexDirection: 'row',
     borderRadius: 4,
     backgroundColor: Colors.grayShade1,
     borderColor: Colors.eyeIcon,
