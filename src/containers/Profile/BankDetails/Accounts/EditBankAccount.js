@@ -33,7 +33,6 @@ const EditBankAccount = props => {
     const [accountTypeError, setaccountTypeError] = useState(false);
     const [bankNameError, setbankNameError] = useState(false);
 
-    // console.log("BankData====>", props.route);
 
     const dispatch = useDispatch();
     const FORM_FIELDS = new OrderedMap({

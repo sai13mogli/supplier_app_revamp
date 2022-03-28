@@ -26,8 +26,8 @@ export const filtersData = {
 
 export const EditTdsData = {
   type: [
-    { key: 0, title: 'Yes' },
-    { key: 1, title: 'No' },
-    { key: 2, title: 'NA' },
+    { key: 1, title: 'Yes' },
+    { key: 0, title: 'No' },
+    { key: '', title: '-' },
   ],
 };
