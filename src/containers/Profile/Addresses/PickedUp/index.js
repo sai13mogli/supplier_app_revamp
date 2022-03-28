@@ -1,7 +1,7 @@
 import React, { useEffect, useState, } from 'react';
 import { Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import colors from "../../../../Theme/Colors"
-import { useSelector, } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchDeleteAddresses } from '../../../../redux/actions/profile';
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
@@ -14,6 +14,8 @@ const PickedUp = (props) => {
   const addressesResponse = useSelector(state => state.profileReducer.addressesDetails || []);
   const [pickedUp, setPickedUp] = useState("PickedUp")
   const addressesData = addressesResponse?.data
+  const dispatch = useDispatch();
+
   const filterById = (obj) => {
     if (obj.type == 4) {
       return true
@@ -24,11 +26,11 @@ const PickedUp = (props) => {
   let PickupAddressData = addressesData.filter(filterById);
   const removeAddresses = async (item) => {
     const data = {
-      id: item.id,
-      type: 4
+      id: item.id
     }
     dispatch(fetchDeleteAddresses(data));
   }
+
   const renderItems = ({ item }) => (
     <View style={{ flex: 1, }}>
       <View style={styles.wrap}>
