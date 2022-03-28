@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import colors from '../../../../Theme/Colors';
 import { useSelector, useDispatch } from 'react-redux';
 import Accordion from 'react-native-collapsible/Accordion';
@@ -9,18 +9,30 @@ import CustomeIcon from '../../../../component/common/CustomeIcon';
 import AddressesModal from '../../../../component/common/AddressesModal';
 import { fetchUpdateTDSDetails } from '../../../../redux/actions/profile';
 import styles from './styles';
-import Checkbox from '../../../../component/common/Checkbox/index';
+import { CheckBox } from 'react-native-elements';
 import DotCheckbox from '../../../../component/common/Checkbox';
-import { EditTdsData } from '../../../../redux/constants/support';
 
 const TdsDetails = (props) => {
   const tdsInfoDetails = useSelector(
     state => state.profileReducer.tdsInfoDetails.data || [],
   );
-  console.log("Dtaill====>", tdsInfoDetails);
   const [tdsInfoList, setTdsInfoList] = React.useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [isSelected, setSelection] = useState(false);
+  const [isYes, setIsYes] = useState(false);
+  const [isNo, setIsNo] = useState(false);
+  const [isNA, setIsNA] = useState(false);
+  const [isYesITR, setIsYesITR] = useState(false);
+  const [isNoITR, setIsNoITR] = useState(false);
+  const [isNAITR, setIsNAITR] = useState(false);
+  const [isYesTds, setIsYesTds] = useState(false);
+  const [isNoTds, setIsNoTds] = useState(false);
+  const [isNATds, setIsNATds] = useState(false);
+  const [isYesTcs, setIsYesTcs] = useState(false);
+  const [isNoTcs, setIsNoTcs] = useState(false);
+  const [isNATcs, setIsNATcs] = useState(false);
+  const [isYesTurn, setIsYesTurn] = useState(false);
+  const [isNoTurn, setIsNoTurn] = useState(false);
+  const [isNATurn, setIsNATurn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [editId, seteditId] = useState(false);
   const [section, setSectionList] = React.useState([]);
@@ -31,6 +43,86 @@ const TdsDetails = (props) => {
   const _updateSections = activeSections => {
     setTdsInfoList(activeSections);
   };
+
+  const OnYes = () => {
+    setIsYes(true)
+    setIsNo(false)
+    setIsNA(false)
+  }
+  const OnNo = () => {
+    setIsYes(false)
+    setIsNo(true)
+    setIsNA(false)
+  }
+  const OnNA = () => {
+    setIsYes(false)
+    setIsNo(false)
+    setIsNA(true)
+  }
+
+  const OnYesITR = () => {
+    setIsYesITR(true)
+    setIsNoITR(false)
+    setIsNAITR(false)
+  }
+  const OnNoITR = () => {
+    setIsYesITR(false)
+    setIsNoITR(true)
+    setIsNAITR(false)
+  }
+  const OnNAITR = () => {
+    setIsYesITR(false)
+    setIsNoITR(false)
+    setIsNAITR(true)
+  }
+
+  const OnYesTds = () => {
+    setIsYesTds(true)
+    setIsNoTds(false)
+    setIsNATds(false)
+  }
+  const OnNoTds = () => {
+    setIsYesTds(false)
+    setIsNoTds(true)
+    setIsNATds(false)
+  }
+  const OnNATds = () => {
+    setIsYesTds(false)
+    setIsNoTds(false)
+    setIsNATds(true)
+  }
+
+  const OnYesTcs = () => {
+    setIsYesTcs(true)
+    setIsNoTcs(false)
+    setIsNATcs(false)
+  }
+  const OnNoTcs = () => {
+    setIsYesTcs(false)
+    setIsNoTcs(true)
+    setIsNATcs(false)
+  }
+  const OnNATcs = () => {
+    setIsYesTcs(false)
+    setIsNoTcs(false)
+    setIsNATcs(true)
+  }
+
+  const OnYesTurn = () => {
+    setIsYesTurn(true)
+    setIsNoTurn(false)
+    setIsNATurn(false)
+  }
+  const OnNoTurn = () => {
+    setIsYesTurn(false)
+    setIsNoTurn(true)
+    setIsNATurn(false)
+  }
+  const OnNATurn = () => {
+    setIsYesTurn(false)
+    setIsNoTurn(false)
+    setIsNATurn(true)
+  }
 
   const _renderHeader = section => {
     global.year = section.financialyear
@@ -61,6 +153,7 @@ const TdsDetails = (props) => {
   };
 
   const myFilterList = (section) => {
+    console.log("Sction====>", section);
     return (
       <ScrollView
         style={{ marginBottom: 0 }}
@@ -71,22 +164,43 @@ const TdsDetails = (props) => {
           TDS filed for AY {section.financialyear}
         </Text>
         <View style={{ flexDirection: 'row' }}>
-          <Checkbox
-            checked={section.financialYearTurnover == 1 ? true : false}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.lastYearItr == 0 ? isYes == false : section.lastYearItr == 1 ? isYes == true :
+              section.lastYearItr == "NA" ? isYes == true : isYes == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnYes}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"Yes"}
           />
-          <Checkbox
-            checked={section.financialYearTurnover == 1 ? true : false}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.lastYearItr == 0 ? isNo == false : section.lastYearItr == 1 ? isNo == true :
+              section.lastYearItr == "NA" ? isNo == true : isNo == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnNo}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"No"}
           />
-          <DotCheckbox
-            // data={"ok"}
-            // onCheck={getFilterValue}
-            // value={props.typeFilter}
-            formfilterModal={true}
+          <CheckBox
+            checked={section.lastYearItr == 0 ? isNA == false : section.lastYearItr == 1 ? isNA == true :
+              section.lastYearItr == "NA" ? isNA == true : isNA == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnNA}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
+            title={"NA"}
           />
+
 
         </View>
 
@@ -94,19 +208,40 @@ const TdsDetails = (props) => {
           ITR filed for AV  {section.financialyear}
         </Text>
         <View style={{ flexDirection: 'row' }}>
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.lastToLastYearItr == 0 ? isYesITR == false : section.lastToLastYearItr == 1 ? isYesITR == true :
+              section.lastToLastYearItr == "NA" ? isYesITR == true : isYesITR == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnYesITR}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"Yes"}
           />
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.lastToLastYearItr == 0 ? isNoITR == false : section.lastToLastYearItr == 1 ? isNoITR == true :
+              section.lastToLastYearItr == "NA" ? isNoITR == true : isNoITR == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnNoITR}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"No"}
           />
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.lastToLastYearItr == 0 ? isNAITR == false : section.lastToLastYearItr == 1 ? isNAITR == true :
+              section.lastToLastYearItr == "NA" ? isNAITR == true : isNAITR == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnNAITR}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"NA"}
           />
 
@@ -116,19 +251,40 @@ const TdsDetails = (props) => {
           Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.financialyear}
         </Text>
         <View style={{ flexDirection: 'row' }}>
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.lastYearTdsTcs == 0 ? isYesTds == false : section.lastYearTdsTcs == 1 ? isYesTds == true :
+              section.lastYearTdsTcs == "NA" ? isYesTds == true : isYesTds == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnYesTds}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"Yes"}
           />
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.lastYearTdsTcs == 0 ? isNoTds == false : section.lastYearTdsTcs == 1 ? isNoTds == true :
+              section.lastYearTdsTcs == "NA" ? isNoTds == true : isNoTds == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnNoTds}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"No"}
           />
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.lastYearTdsTcs == 0 ? isNATds == false : section.lastYearTdsTcs == 1 ? isNATds == true :
+              section.lastYearTdsTcs == "NA" ? isNATds == true : isNATds == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnNATds}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"NA"}
           />
 
@@ -138,19 +294,40 @@ const TdsDetails = (props) => {
           Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.financialyear}
         </Text>
         <View style={{ flexDirection: 'row' }}>
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.lastToLastYearTdsTcs == 0 ? isYesTcs == false : section.lastToLastYearTdsTcs == 1 ? isYesTcs == true :
+              section.lastToLastYearTdsTcs == "NA" ? isYesTcs == true : isYesTcs == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnYesTcs}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"Yes"}
           />
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.lastToLastYearTdsTcs == 0 ? isNoTcs == false : section.lastToLastYearTdsTcs == 1 ? isNoTcs == true :
+              section.lastToLastYearTdsTcs == "NA" ? isNoTcs == true : isNoTcs == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnNoTcs}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"No"}
           />
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.lastToLastYearTdsTcs == 0 ? isNATcs == false : section.lastToLastYearTdsTcs == 1 ? isNATcs == true :
+              section.lastToLastYearTdsTcs == "NA" ? isNATcs == true : isNATcs == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnNATcs}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"NA"}
           />
 
@@ -159,40 +336,45 @@ const TdsDetails = (props) => {
           Turnover in financial year {section.financialyear} was exceeding 10 crores
         </Text>
         <View style={{ flexDirection: 'row' }}>
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.financialYearTurnover == 0 ? isYesTurn == false : section.financialYearTurnover == 1 ? isYesTurn == true :
+              section.financialYearTurnover == "NA" ? isYesTurn == true : isYesTurn == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnYesTurn}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"Yes"}
           />
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.financialYearTurnover == 0 ? isNoTurn == false : section.financialYearTurnover == 1 ? isNoTurn == true :
+              section.financialYearTurnover == "NA" ? isNoTurn == true : isYesTurn == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnNoTurn}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"No"}
           />
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+          <CheckBox
+            checked={section.financialYearTurnover == 0 ? isNATurn == false : section.financialYearTurnover == 1 ? isNATurn == true :
+              section.financialYearTurnover == "NA" ? isNATurn == true : isNATurn == false}
+            size={Dimension.font20}
+            fontFamily={Dimension.CustomMediumFont}
+            containerStyle={styles.checkboxContainer}
+            onPress={OnNATurn}
+            checkedColor={'red'}
+            checkedIcon={"dot-circle-o"}
+            uncheckedIcon={'circle-o'}
             title={"NA"}
           />
 
         </View>
-        {/* <Text>hi</Text> */}
-        {/* <View style={styles.RightInnerPart}>
-          <DotCheckbox
-            data={filtersData && filtersData[props.activeFilterType]}
-            onCheck={getFilterValue}
-            value={props.typeFilter}
-            formfilterModal={true}
-          />
-        </View>
-        <DotCheckbox
-          checked={isSelected}
-          onPress={() => setSelection(!isSelected)}
-        />
-        <DotCheckbox
-          checked={isSelected}
-          onPress={() => setSelection(!isSelected)}
-        /> */}
+
       </ScrollView>
     );
   };
@@ -225,45 +407,45 @@ const TdsDetails = (props) => {
         <View style={styles.sectionView}>
           <View style={styles.wrap}>
             <Text style={styles.text}>
-              TDS filed for AY {section.previousFinancialYear}
+              TDS filed for AY {section.financialyear}
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.lastYearItr == 1 ? 'Yes' : 'No'}
+              {section.lastYearItr == 1 ? 'Yes' : section.lastYearItr == 0 ? "No" : section.lastYearItr == undefined || null || "" ? "NA" : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 50 }]}>
             <Text style={styles.text}>
-              ITR filed for AV {section.previousFinancialYear}
+              ITR filed for AV {section.financialyear}
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.lastToLastYearItr == 1 ? 'Yes' : 'No'}
+              {section.lastToLastYearItr == 1 ? 'Yes' : section.lastToLastYearItr == 0 ? 'No' : section.lastToLastYearItr == undefined || null || "" ? "NA" : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 40 }]}>
             <Text style={styles.text}>
               Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
-              {section.previousFinancialYear}
+              {section.financialyear}
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.lastYearTdsTcs == 1 ? 'Yes' : 'No'}
+              {section.lastYearTdsTcs == 1 ? 'Yes' : section.lastYearTdsTcs == 0 ? 'No' : section.lastYearTdsTcs == undefined || null || "" ? "NA" : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 30 }]}>
             <Text style={styles.text}>
               Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
-              {section.previousFinancialYear}
+              {section.financialyear}
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.lastToLastYearTdsTcs == 1 ? 'Yes' : 'No'}
+              {section.lastToLastYearTdsTcs == 1 ? 'Yes' : section.lastToLastYearTdsTcs == 0 ? 'No' : section.lastToLastYearTdsTcs == undefined || null || "" ? "NA" : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 20 }]}>
             <Text style={styles.text}>
-              Turnover in financial year {section.previousFinancialYear} was
+              Turnover in financial year {section.financialyear} was
               exceeding 10 crores
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.financialYearTurnover == 1 ? 'Yes' : 'No'}
+              {section.financialYearTurnover == 1 ? 'Yes' : section.financialYearTurnover == 0 ? 'No' : section.financialYearTurnover == undefined || null || "" ? "NA" : null}
             </Text>
           </View>
         </View>
@@ -271,18 +453,19 @@ const TdsDetails = (props) => {
     );
   };
 
-  const onSubmit = () => {
+  const onSubmit = (section) => {
     let data = {
-      id: 19,
+      id: section.id,
       panNumber: "AAJCP7293G",
       financialyear: "2022-23",
       previousFinancialYear: "2021-22",
-      financialYearTurnover: 0,
-      lastYearItr: 0,
-      lastToLastYearItr: 0,
-      lastYearTdsTcs: 0,
-      lastToLastYearTdsTcs: 0
+      financialYearTurnover: isYesTurn ? 1 : isNoTurn ? 0 : isNATurn ? "" : null,
+      lastYearItr: isYes ? 1 : isNo ? 0 : isNA ? "" : null,
+      lastToLastYearItr: isYesITR ? 1 : isNoITR ? 0 : isNAITR ? "" : null,
+      lastYearTdsTcs: isYesTds ? 1 : isNoTds ? 0 : isNATds ? "" : null,
+      lastToLastYearTdsTcs: isYesTcs ? 1 : isNoTcs ? 0 : isNATcs ? "" : null,
     }
+    console.log("Data====>", data);
     dispatch(fetchUpdateTDSDetails(data));
   };
 
@@ -303,23 +486,12 @@ const TdsDetails = (props) => {
           )}
         />
       </ScrollView>
-      {/* <View style={styles.bottombtnWrap}>
-        <CustomButton
-          buttonColor={colors.BrandColor}
-          borderColor={colors.BrandColor}
-          TextColor={colors.WhiteColor}
-          TextFontSize={Dimension.font16}
-          title={'Next'}
-          loading={loading}
-          onPress={onSubmit}
-        />
-      </View> */}
       <AddressesModal
         visible={modalVisible}
         filterListData={myFilterList(section)}
         transparent={true}
         onClose={() => setModalVisible(true)}
-        onPress={() => { setModalVisible(!modalVisible), onSubmit() }}
+        onPress={() => { setModalVisible(!modalVisible), onSubmit(section) }}
       />
     </View>
   );
