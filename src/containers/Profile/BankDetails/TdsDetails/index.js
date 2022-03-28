@@ -166,7 +166,7 @@ const TdsDetails = (props) => {
         <View style={{ flexDirection: 'row' }}>
           <CheckBox
             checked={section.lastYearItr == 0 ? isYes == false : section.lastYearItr == 1 ? isYes == true :
-              section.lastYearItr == "NA" ? isYes == true : isYes == false}
+              section.lastYearItr == "" ? isYes == true : isYes == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -178,7 +178,7 @@ const TdsDetails = (props) => {
           />
           <CheckBox
             checked={section.lastYearItr == 0 ? isNo == false : section.lastYearItr == 1 ? isNo == true :
-              section.lastYearItr == "NA" ? isNo == true : isNo == false}
+              section.lastYearItr == "" ? isNo == true : isNo == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -190,7 +190,7 @@ const TdsDetails = (props) => {
           />
           <CheckBox
             checked={section.lastYearItr == 0 ? isNA == false : section.lastYearItr == 1 ? isNA == true :
-              section.lastYearItr == "NA" ? isNA == true : isNA == false}
+              section.lastYearItr == "" ? isNA == true : isNA == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -210,7 +210,7 @@ const TdsDetails = (props) => {
         <View style={{ flexDirection: 'row' }}>
           <CheckBox
             checked={section.lastToLastYearItr == 0 ? isYesITR == false : section.lastToLastYearItr == 1 ? isYesITR == true :
-              section.lastToLastYearItr == "NA" ? isYesITR == true : isYesITR == false}
+              section.lastToLastYearItr == "" ? isYesITR == true : isYesITR == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -222,7 +222,7 @@ const TdsDetails = (props) => {
           />
           <CheckBox
             checked={section.lastToLastYearItr == 0 ? isNoITR == false : section.lastToLastYearItr == 1 ? isNoITR == true :
-              section.lastToLastYearItr == "NA" ? isNoITR == true : isNoITR == false}
+              section.lastToLastYearItr == "" ? isNoITR == true : isNoITR == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -234,7 +234,7 @@ const TdsDetails = (props) => {
           />
           <CheckBox
             checked={section.lastToLastYearItr == 0 ? isNAITR == false : section.lastToLastYearItr == 1 ? isNAITR == true :
-              section.lastToLastYearItr == "NA" ? isNAITR == true : isNAITR == false}
+              section.lastToLastYearItr == "" ? isNAITR == true : isNAITR == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -253,7 +253,7 @@ const TdsDetails = (props) => {
         <View style={{ flexDirection: 'row' }}>
           <CheckBox
             checked={section.lastYearTdsTcs == 0 ? isYesTds == false : section.lastYearTdsTcs == 1 ? isYesTds == true :
-              section.lastYearTdsTcs == "NA" ? isYesTds == true : isYesTds == false}
+              section.lastYearTdsTcs == "" ? isYesTds == true : isYesTds == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -265,7 +265,7 @@ const TdsDetails = (props) => {
           />
           <CheckBox
             checked={section.lastYearTdsTcs == 0 ? isNoTds == false : section.lastYearTdsTcs == 1 ? isNoTds == true :
-              section.lastYearTdsTcs == "NA" ? isNoTds == true : isNoTds == false}
+              section.lastYearTdsTcs == "" ? isNoTds == true : isNoTds == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -277,7 +277,7 @@ const TdsDetails = (props) => {
           />
           <CheckBox
             checked={section.lastYearTdsTcs == 0 ? isNATds == false : section.lastYearTdsTcs == 1 ? isNATds == true :
-              section.lastYearTdsTcs == "NA" ? isNATds == true : isNATds == false}
+              section.lastYearTdsTcs == "" ? isNATds == true : isNATds == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -296,7 +296,7 @@ const TdsDetails = (props) => {
         <View style={{ flexDirection: 'row' }}>
           <CheckBox
             checked={section.lastToLastYearTdsTcs == 0 ? isYesTcs == false : section.lastToLastYearTdsTcs == 1 ? isYesTcs == true :
-              section.lastToLastYearTdsTcs == "NA" ? isYesTcs == true : isYesTcs == false}
+              section.lastToLastYearTdsTcs == "" ? isYesTcs == true : isYesTcs == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -308,7 +308,7 @@ const TdsDetails = (props) => {
           />
           <CheckBox
             checked={section.lastToLastYearTdsTcs == 0 ? isNoTcs == false : section.lastToLastYearTdsTcs == 1 ? isNoTcs == true :
-              section.lastToLastYearTdsTcs == "NA" ? isNoTcs == true : isNoTcs == false}
+              section.lastToLastYearTdsTcs == "" ? isNoTcs == true : isNoTcs == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -320,7 +320,7 @@ const TdsDetails = (props) => {
           />
           <CheckBox
             checked={section.lastToLastYearTdsTcs == 0 ? isNATcs == false : section.lastToLastYearTdsTcs == 1 ? isNATcs == true :
-              section.lastToLastYearTdsTcs == "NA" ? isNATcs == true : isNATcs == false}
+              section.lastToLastYearTdsTcs == "" ? isNATcs == true : isNATcs == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -338,7 +338,7 @@ const TdsDetails = (props) => {
         <View style={{ flexDirection: 'row' }}>
           <CheckBox
             checked={section.financialYearTurnover == 0 ? isYesTurn == false : section.financialYearTurnover == 1 ? isYesTurn == true :
-              section.financialYearTurnover == "NA" ? isYesTurn == true : isYesTurn == false}
+              section.financialYearTurnover == "" ? isYesTurn == true : isYesTurn == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -350,7 +350,7 @@ const TdsDetails = (props) => {
           />
           <CheckBox
             checked={section.financialYearTurnover == 0 ? isNoTurn == false : section.financialYearTurnover == 1 ? isNoTurn == true :
-              section.financialYearTurnover == "NA" ? isNoTurn == true : isYesTurn == false}
+              section.financialYearTurnover == "" ? isNoTurn == true : isYesTurn == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -362,7 +362,7 @@ const TdsDetails = (props) => {
           />
           <CheckBox
             checked={section.financialYearTurnover == 0 ? isNATurn == false : section.financialYearTurnover == 1 ? isNATurn == true :
-              section.financialYearTurnover == "NA" ? isNATurn == true : isNATurn == false}
+              section.financialYearTurnover == "" ? isNATurn == true : isNATurn == false}
             size={Dimension.font20}
             fontFamily={Dimension.CustomMediumFont}
             containerStyle={styles.checkboxContainer}
@@ -410,7 +410,7 @@ const TdsDetails = (props) => {
               TDS filed for AY {section.financialyear}
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.lastYearItr == 1 ? 'Yes' : section.lastYearItr == 0 ? "No" : section.lastYearItr == undefined || null || "" ? "NA" : null}
+              {section.lastYearItr == 1 ? 'Yes' : section.lastYearItr == 0 ? "No" : section.lastYearItr == undefined || null || "" ? "-" : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 50 }]}>
@@ -418,7 +418,7 @@ const TdsDetails = (props) => {
               ITR filed for AV {section.financialyear}
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.lastToLastYearItr == 1 ? 'Yes' : section.lastToLastYearItr == 0 ? 'No' : section.lastToLastYearItr == undefined || null || "" ? "NA" : null}
+              {section.lastToLastYearItr == 1 ? 'Yes' : section.lastToLastYearItr == 0 ? 'No' : section.lastToLastYearItr == undefined || null || "" ? "-" : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 40 }]}>
@@ -427,7 +427,7 @@ const TdsDetails = (props) => {
               {section.financialyear}
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.lastYearTdsTcs == 1 ? 'Yes' : section.lastYearTdsTcs == 0 ? 'No' : section.lastYearTdsTcs == undefined || null || "" ? "NA" : null}
+              {section.lastYearTdsTcs == 1 ? 'Yes' : section.lastYearTdsTcs == 0 ? 'No' : section.lastYearTdsTcs == undefined || null || "" ? "-" : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 30 }]}>
@@ -436,7 +436,7 @@ const TdsDetails = (props) => {
               {section.financialyear}
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.lastToLastYearTdsTcs == 1 ? 'Yes' : section.lastToLastYearTdsTcs == 0 ? 'No' : section.lastToLastYearTdsTcs == undefined || null || "" ? "NA" : null}
+              {section.lastToLastYearTdsTcs == 1 ? 'Yes' : section.lastToLastYearTdsTcs == 0 ? 'No' : section.lastToLastYearTdsTcs == undefined || null || "" ? "-" : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 20 }]}>
@@ -445,7 +445,7 @@ const TdsDetails = (props) => {
               exceeding 10 crores
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.financialYearTurnover == 1 ? 'Yes' : section.financialYearTurnover == 0 ? 'No' : section.financialYearTurnover == undefined || null || "" ? "NA" : null}
+              {section.financialYearTurnover == 1 ? 'Yes' : section.financialYearTurnover == 0 ? 'No' : section.financialYearTurnover == undefined || null || "" ? "-" : null}
             </Text>
           </View>
         </View>
@@ -459,11 +459,11 @@ const TdsDetails = (props) => {
       panNumber: "AAJCP7293G",
       financialyear: "2022-23",
       previousFinancialYear: "2021-22",
-      financialYearTurnover: isYesTurn ? 1 : isNoTurn ? 0 : isNATurn ? "" : null,
+      financialYearTurnover: isYesTurn ? 1 : isNoTurn ? 0 : isNATurn == "" ? "" : null,
       lastYearItr: isYes ? 1 : isNo ? 0 : isNA ? "" : null,
-      lastToLastYearItr: isYesITR ? 1 : isNoITR ? 0 : isNAITR ? "" : null,
-      lastYearTdsTcs: isYesTds ? 1 : isNoTds ? 0 : isNATds ? "" : null,
-      lastToLastYearTdsTcs: isYesTcs ? 1 : isNoTcs ? 0 : isNATcs ? "" : null,
+      lastToLastYearItr: isYesITR ? 1 : isNoITR ? 0 : isNAITR == "" ? "" : null,
+      lastYearTdsTcs: isYesTds ? 1 : isNoTds ? 0 : isNATds == "" ? "" : null,
+      lastToLastYearTdsTcs: isYesTcs ? 1 : isNoTcs ? 0 : isNATcs == "" ? "" : null,
     }
     console.log("Data====>", data);
     dispatch(fetchUpdateTDSDetails(data));
