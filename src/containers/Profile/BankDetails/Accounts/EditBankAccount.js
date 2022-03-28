@@ -54,6 +54,8 @@ const EditBankAccount = props => {
             label: 'Account Number',
             placeholder: '',
             errorMessage: 'Enter valid account number',
+            maxLength: 18,
+            keyboardType: 'number-pad',
             showError: accountNumberError,
             value: accountNumber,
             onBlur: () => onAccountNumberBlur(),

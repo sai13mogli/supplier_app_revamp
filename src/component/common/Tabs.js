@@ -20,7 +20,7 @@ import {
 import colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const Tabs = props => {
   const [activetab, setActiveTab] = useState(props.data[0].key);
@@ -73,7 +73,7 @@ const Tabs = props => {
   //   );
   // };
 
-  const OneTab = forwardRef(({item, onItemPress}, ref) => {
+  const OneTab = forwardRef(({ item, onItemPress }, ref) => {
     return (
       <TouchableOpacity
         onPress={onItemPress}
@@ -92,7 +92,7 @@ const Tabs = props => {
     );
   });
 
-  const CustomTabs = ({data, scrollX, onItemPress}) => {
+  const CustomTabs = ({ data, scrollX, onItemPress }) => {
     // const [measures, setMeasures] = useState([]);
     const containerRef = useRef();
     // useEffect(() => {
@@ -157,11 +157,8 @@ const Tabs = props => {
     });
   });
 
-  const onViewableItemsChanged = useCallback(({viewableItems, changed}) => {
+  const onViewableItemsChanged = useCallback(({ viewableItems, changed }) => {
     setActiveTab(viewableItems[0].key);
-
-    // console.log('Visible items are', viewableItems);
-    // console.log('Changed in this iteration', changed);
   }, []);
 
   const viewabilityConfig = {
@@ -170,7 +167,6 @@ const Tabs = props => {
 
   return (
     <View style={styles.container}>
-      {/* <CustomTabs scrollX={scrollX} data={props.data} /> */}
       <Animated.FlatList
         ref={flatListRef}
         data={props.data}
@@ -180,24 +176,15 @@ const Tabs = props => {
         pagingEnabled
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
-        // onViewableItemsChanged={onViewableItemsChanged}
-        // viewabilityConfig={{itemVisiblePercentThreshold: 50}}
-        // onScrollEndDrag={onItemPress}
-        // onScrollEndDrag={() => {
-        //   onItemPress();
-        // }}
-        // onScroll={() => {
-        //   console.log('key change');
-        // }}
         onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {x: scrollX}}}],
-          {useNativeDriver: false},
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: false },
         )}
         bounces={false}
-        renderItem={({item}) => {
+        renderItem={({ item }) => {
           return (
-            <View style={{width, height}}>
-              <item.component {...item}  navigation={props.navigation}/>
+            <View style={{ width, height }}>
+              <item.component {...item} navigation={props.navigation} />
             </View>
           );
         }}
@@ -206,7 +193,7 @@ const Tabs = props => {
         scrollX={scrollX}
         data={props.data}
         onItemPress={onItemPress}
-        
+
       />
     </View>
     // <>
@@ -259,7 +246,7 @@ const styles = StyleSheet.create({
   },
   activeTab: {
     backgroundColor: '#fff',
-   // paddingVertical: 12,
+    // paddingVertical: 12,
     width: '50%',
     borderBottomColor: colors.BrandColor,
     borderBottomWidth: 3,
@@ -269,7 +256,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.WhiteColor,
     borderBottomWidth: 3,
     width: '50%',
-   // paddingVertical: 12,
+    // paddingVertical: 12,
   },
   activeTabText: {
     alignSelf: 'center',

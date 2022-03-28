@@ -112,19 +112,6 @@ const PickedUp = (props) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </ScrollView>
-      {/* <View style={styles.bottombtnWrap}>
-
-
-        <CustomButton
-          title={'Submit'}
-          buttonColor={colors.BrandColor}
-
-          // onPress={navigateToAddresses}
-          TextColor={colors.WhiteColor}
-          borderColor={colors.WhiteColor}
-          TextFontSize={Dimension.font16}
-        />
-      </View> */}
     </View>
 
   );

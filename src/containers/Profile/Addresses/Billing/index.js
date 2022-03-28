@@ -110,22 +110,8 @@ const Billing = (props) => {
           data={BillingAddressData}
           renderItem={renderItems}
           keyExtractor={(item, index) => index.toString()}
-        // keyExtractor={(item, index) => `${index}_item`}
         />
       </ScrollView>
-      {/* <View style={styles.bottombtnWrap}>
-        <CustomButton
-          buttonColor={colors.BrandColor}
-          borderColor={colors.BrandColor}
-          TextColor={colors.WhiteColor}
-          TextFontSize={Dimension.font16}
-          title={'NEXT'}
-          loading={loading}
-        //  onPress={onSubmit}
-        />
-
-
-      </View> */}
     </View>
 
   );
