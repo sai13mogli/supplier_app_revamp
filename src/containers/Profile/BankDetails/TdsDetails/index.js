@@ -153,226 +153,231 @@ const TdsDetails = (props) => {
   };
 
   const myFilterList = (section) => {
-    console.log("Sction====>", section);
     return (
       <ScrollView
         style={{ marginBottom: 0 }}
         showsVerticalScrollIndicator={false}>
-        <View style={styles.Separater} />
+        {/* <View style={styles.Separater} /> */}
+        <View style={styles.verticalWrapper}>
+          <Text style={styles.radioText}>
+            TDS filed for AY {section.financialyear}
+          </Text>
+          <View style={{ flexDirection: 'row' }}>
+            <CheckBox
+              checked={section.lastYearItr == 0 ? isYes == false : section.lastYearItr == 1 ? isYes == true :
+                section.lastYearItr == "" ? isYes == true : isYes == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnYes}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"Yes"}
+            />
+            <CheckBox
+              checked={section.lastYearItr == 0 ? isNo == false : section.lastYearItr == 1 ? isNo == true :
+                section.lastYearItr == "" ? isNo == true : isNo == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnNo}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"No"}
+            />
+            <CheckBox
+              checked={section.lastYearItr == 0 ? isNA == false : section.lastYearItr == 1 ? isNA == true :
+                section.lastYearItr == "" ? isNA == true : isNA == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnNA}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"NA"}
+            />
 
-        <Text style={styles.radioText}>
-          TDS filed for AY {section.financialyear}
-        </Text>
-        <View style={{ flexDirection: 'row' }}>
-          <CheckBox
-            checked={section.lastYearItr == 0 ? isYes == false : section.lastYearItr == 1 ? isYes == true :
-              section.lastYearItr == "" ? isYes == true : isYes == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnYes}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"Yes"}
-          />
-          <CheckBox
-            checked={section.lastYearItr == 0 ? isNo == false : section.lastYearItr == 1 ? isNo == true :
-              section.lastYearItr == "" ? isNo == true : isNo == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnNo}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"No"}
-          />
-          <CheckBox
-            checked={section.lastYearItr == 0 ? isNA == false : section.lastYearItr == 1 ? isNA == true :
-              section.lastYearItr == "" ? isNA == true : isNA == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnNA}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"NA"}
-          />
 
-
+          </View>
         </View>
+        <View style={styles.verticalWrapper}>
+          <Text style={styles.radioText}>
+            ITR filed for AV  {section.financialyear}
+          </Text>
+          <View style={{ flexDirection: 'row' }}>
+            <CheckBox
+              checked={section.lastToLastYearItr == 0 ? isYesITR == false : section.lastToLastYearItr == 1 ? isYesITR == true :
+                section.lastToLastYearItr == "" ? isYesITR == true : isYesITR == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnYesITR}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"Yes"}
+            />
+            <CheckBox
+              checked={section.lastToLastYearItr == 0 ? isNoITR == false : section.lastToLastYearItr == 1 ? isNoITR == true :
+                section.lastToLastYearItr == "" ? isNoITR == true : isNoITR == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnNoITR}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"No"}
+            />
+            <CheckBox
+              checked={section.lastToLastYearItr == 0 ? isNAITR == false : section.lastToLastYearItr == 1 ? isNAITR == true :
+                section.lastToLastYearItr == "" ? isNAITR == true : isNAITR == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnNAITR}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"NA"}
+            />
 
-        <Text style={styles.radioText}>
-          ITR filed for AV  {section.financialyear}
-        </Text>
-        <View style={{ flexDirection: 'row' }}>
-          <CheckBox
-            checked={section.lastToLastYearItr == 0 ? isYesITR == false : section.lastToLastYearItr == 1 ? isYesITR == true :
-              section.lastToLastYearItr == "" ? isYesITR == true : isYesITR == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnYesITR}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"Yes"}
-          />
-          <CheckBox
-            checked={section.lastToLastYearItr == 0 ? isNoITR == false : section.lastToLastYearItr == 1 ? isNoITR == true :
-              section.lastToLastYearItr == "" ? isNoITR == true : isNoITR == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnNoITR}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"No"}
-          />
-          <CheckBox
-            checked={section.lastToLastYearItr == 0 ? isNAITR == false : section.lastToLastYearItr == 1 ? isNAITR == true :
-              section.lastToLastYearItr == "" ? isNAITR == true : isNAITR == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnNAITR}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"NA"}
-          />
-
+          </View>
         </View>
+        <View style={styles.verticalWrapper}>
+          <Text style={styles.radioText}>
+            Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.financialyear}
+          </Text>
+          <View style={{ flexDirection: 'row' }}>
+            <CheckBox
+              checked={section.lastYearTdsTcs == 0 ? isYesTds == false : section.lastYearTdsTcs == 1 ? isYesTds == true :
+                section.lastYearTdsTcs == "" ? isYesTds == true : isYesTds == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnYesTds}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"Yes"}
+            />
+            <CheckBox
+              checked={section.lastYearTdsTcs == 0 ? isNoTds == false : section.lastYearTdsTcs == 1 ? isNoTds == true :
+                section.lastYearTdsTcs == "" ? isNoTds == true : isNoTds == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnNoTds}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"No"}
+            />
+            <CheckBox
+              checked={section.lastYearTdsTcs == 0 ? isNATds == false : section.lastYearTdsTcs == 1 ? isNATds == true :
+                section.lastYearTdsTcs == "" ? isNATds == true : isNATds == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnNATds}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"NA"}
+            />
 
-        <Text style={styles.radioText}>
-          Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.financialyear}
-        </Text>
-        <View style={{ flexDirection: 'row' }}>
-          <CheckBox
-            checked={section.lastYearTdsTcs == 0 ? isYesTds == false : section.lastYearTdsTcs == 1 ? isYesTds == true :
-              section.lastYearTdsTcs == "" ? isYesTds == true : isYesTds == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnYesTds}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"Yes"}
-          />
-          <CheckBox
-            checked={section.lastYearTdsTcs == 0 ? isNoTds == false : section.lastYearTdsTcs == 1 ? isNoTds == true :
-              section.lastYearTdsTcs == "" ? isNoTds == true : isNoTds == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnNoTds}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"No"}
-          />
-          <CheckBox
-            checked={section.lastYearTdsTcs == 0 ? isNATds == false : section.lastYearTdsTcs == 1 ? isNATds == true :
-              section.lastYearTdsTcs == "" ? isNATds == true : isNATds == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnNATds}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"NA"}
-          />
-
+          </View>
         </View>
+        <View style={styles.verticalWrapper}>
+          <Text numberOfLines={2} style={styles.radioText}>
+            Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.financialyear}
+          </Text>
+          <View style={{ flexDirection: 'row' }}>
+            <CheckBox
+              checked={section.lastToLastYearTdsTcs == 0 ? isYesTcs == false : section.lastToLastYearTdsTcs == 1 ? isYesTcs == true :
+                section.lastToLastYearTdsTcs == "" ? isYesTcs == true : isYesTcs == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnYesTcs}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"Yes"}
+            />
+            <CheckBox
+              checked={section.lastToLastYearTdsTcs == 0 ? isNoTcs == false : section.lastToLastYearTdsTcs == 1 ? isNoTcs == true :
+                section.lastToLastYearTdsTcs == "" ? isNoTcs == true : isNoTcs == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnNoTcs}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"No"}
+            />
+            <CheckBox
+              checked={section.lastToLastYearTdsTcs == 0 ? isNATcs == false : section.lastToLastYearTdsTcs == 1 ? isNATcs == true :
+                section.lastToLastYearTdsTcs == "" ? isNATcs == true : isNATcs == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnNATcs}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"NA"}
+            />
 
-        <Text numberOfLines={2} style={styles.radioText}>
-          Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.financialyear}
-        </Text>
-        <View style={{ flexDirection: 'row' }}>
-          <CheckBox
-            checked={section.lastToLastYearTdsTcs == 0 ? isYesTcs == false : section.lastToLastYearTdsTcs == 1 ? isYesTcs == true :
-              section.lastToLastYearTdsTcs == "" ? isYesTcs == true : isYesTcs == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnYesTcs}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"Yes"}
-          />
-          <CheckBox
-            checked={section.lastToLastYearTdsTcs == 0 ? isNoTcs == false : section.lastToLastYearTdsTcs == 1 ? isNoTcs == true :
-              section.lastToLastYearTdsTcs == "" ? isNoTcs == true : isNoTcs == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnNoTcs}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"No"}
-          />
-          <CheckBox
-            checked={section.lastToLastYearTdsTcs == 0 ? isNATcs == false : section.lastToLastYearTdsTcs == 1 ? isNATcs == true :
-              section.lastToLastYearTdsTcs == "" ? isNATcs == true : isNATcs == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnNATcs}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"NA"}
-          />
-
+          </View>
         </View>
-        <Text style={styles.radioText}>
-          Turnover in financial year {section.financialyear} was exceeding 10 crores
-        </Text>
-        <View style={{ flexDirection: 'row' }}>
-          <CheckBox
-            checked={section.financialYearTurnover == 0 ? isYesTurn == false : section.financialYearTurnover == 1 ? isYesTurn == true :
-              section.financialYearTurnover == "" ? isYesTurn == true : isYesTurn == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnYesTurn}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"Yes"}
-          />
-          <CheckBox
-            checked={section.financialYearTurnover == 0 ? isNoTurn == false : section.financialYearTurnover == 1 ? isNoTurn == true :
-              section.financialYearTurnover == "" ? isNoTurn == true : isYesTurn == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnNoTurn}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"No"}
-          />
-          <CheckBox
-            checked={section.financialYearTurnover == 0 ? isNATurn == false : section.financialYearTurnover == 1 ? isNATurn == true :
-              section.financialYearTurnover == "" ? isNATurn == true : isNATurn == false}
-            size={Dimension.font20}
-            fontFamily={Dimension.CustomMediumFont}
-            containerStyle={styles.checkboxContainer}
-            onPress={OnNATurn}
-            checkedColor={'red'}
-            checkedIcon={"dot-circle-o"}
-            uncheckedIcon={'circle-o'}
-            title={"NA"}
-          />
+        <View style={styles.verticalWrapper}>
+          <Text style={styles.radioText}>
+            Turnover in financial year {section.financialyear} was exceeding 10 crores
+          </Text>
+          <View style={{ flexDirection: 'row' }}>
+            <CheckBox
+              checked={section.financialYearTurnover == 0 ? isYesTurn == false : section.financialYearTurnover == 1 ? isYesTurn == true :
+                section.financialYearTurnover == "" ? isYesTurn == true : isYesTurn == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnYesTurn}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"Yes"}
+            />
+            <CheckBox
+              checked={section.financialYearTurnover == 0 ? isNoTurn == false : section.financialYearTurnover == 1 ? isNoTurn == true :
+                section.financialYearTurnover == "" ? isNoTurn == true : isYesTurn == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnNoTurn}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"No"}
+            />
+            <CheckBox
+              checked={section.financialYearTurnover == 0 ? isNATurn == false : section.financialYearTurnover == 1 ? isNATurn == true :
+                section.financialYearTurnover == "" ? isNATurn == true : isNATurn == false}
+              size={Dimension.font20}
+              fontFamily={Dimension.CustomMediumFont}
+              containerStyle={styles.checkboxContainer}
+              onPress={OnNATurn}
+              checkedColor={'red'}
+              checkedIcon={"dot-circle-o"}
+              uncheckedIcon={'circle-o'}
+              title={"NA"}
+            />
 
+          </View>
         </View>
 
       </ScrollView>
@@ -487,6 +492,7 @@ const TdsDetails = (props) => {
         />
       </ScrollView>
       <AddressesModal
+        header={section.financialyear}
         visible={modalVisible}
         filterListData={myFilterList(section)}
         transparent={true}
