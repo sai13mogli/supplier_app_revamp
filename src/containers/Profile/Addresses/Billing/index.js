@@ -2,7 +2,6 @@ import React, { useEffect, useState, } from 'react';
 import { Text, View, FlatList, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import colors from "../../../../Theme/Colors"
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigation } from '@react-navigation/native'
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
