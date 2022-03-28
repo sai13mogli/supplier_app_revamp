@@ -1,8 +1,8 @@
 import React, { useEffect, useState, } from 'react';
 import { Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import colors from "../../../../Theme/Colors"
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchAddressDetails } from '../../../../redux/actions/profile';
+import { useSelector, } from 'react-redux';
+import { fetchDeleteAddresses } from '../../../../redux/actions/profile';
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
@@ -11,21 +11,22 @@ import styles from './styles';
 const PickedUp = (props) => {
 
   const profileData = useSelector(state => state.profileReducer.data || {});
-  const addressesData = useSelector(state => state.profileReducer.addressesDetails.data || {});
+  const addressesResponse = useSelector(state => state.profileReducer.addressesDetails || []);
+  const addressesData = addressesResponse?.data
   const filterById = (obj) => {
-    if (obj.type==4) 
-    {
+    if (obj.type == 4) {
       return true
-    } 
+    }
     return false;
   }
-  console.log(addressesData)
-  var PickupAddressData=addressesData.filter(filterById);
-  var sortedData = PickupAddressData.sort(function(x) {
-    return (x.default == 'true') ? 0 : x ? -1 : 1;
-  });
-console.log(sortedData)
 
+  let PickupAddressData = addressesData.filter(filterById);
+  const removeAddresses = async (item) => {
+    const data = {
+      id: item.id
+    }
+    dispatch(fetchDeleteAddresses(data));
+  }
   const renderItems = ({ item }) => (
     <View style={{ flex: 1, }}>
       <View style={styles.wrap}>
@@ -39,17 +40,21 @@ console.log(sortedData)
         <Text style={styles.AddressTxt}>{item.address1} ,{item.address2},{item.city}</Text>
         <Text style={styles.AddressTxt}>{item.state},{item.pincode}</Text>
         <View style={styles.buttonWrap}>
-          <View style={{ marginRight: 15, flex: 1 }}>
-            <CustomButton
-              title={"REMOVE"}
-              buttonColor={colors.WhiteColor}
-              TextColor={colors.FontColor}
-              borderColor={colors.grayShade1}
-              TextFontSize={Dimension.font14}
-            >
+          {
+            item.isDefault ? null :
+              <View style={{ marginRight: 15, flex: 1 }}>
+                <CustomButton
+                  title={"REMOVE"}
+                  onPress={() => removeAddresses(item)}
+                  buttonColor={colors.WhiteColor}
+                  TextColor={colors.FontColor}
+                  borderColor={colors.grayShade1}
+                  TextFontSize={Dimension.font14}
+                >
 
-            </CustomButton>
-          </View>
+                </CustomButton>
+              </View>
+          }
           <View style={{ flex: 1 }}>
             <CustomButton
               title={"EDIT"}
@@ -102,7 +107,7 @@ console.log(sortedData)
           keyExtractor={(item, index) => index.toString()}
         />
       </ScrollView>
-      <View style={styles.bottombtnWrap}>
+      {/* <View style={styles.bottombtnWrap}>
 
 
         <CustomButton
@@ -114,7 +119,7 @@ console.log(sortedData)
           borderColor={colors.WhiteColor}
           TextFontSize={Dimension.font16}
         />
-      </View>
+      </View> */}
     </View>
 
   );

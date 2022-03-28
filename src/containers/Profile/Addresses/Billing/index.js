@@ -1,11 +1,12 @@
 import React, { useEffect, useState, } from 'react';
 import { Text, View, FlatList, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-
 import colors from "../../../../Theme/Colors"
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native'
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
+import { fetchDeleteAddresses } from '../../../../redux/actions/profile';
 import styles from './styles';
 
 
@@ -13,21 +14,27 @@ const Billing = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const profileData = useSelector(state => state.profileReducer.data || {});
-  const addressesData = useSelector(state => state.profileReducer.addressesDetails.data || {});
+  const addressesResponse = useSelector(state => state.profileReducer.addressesDetails || []);
+  const addressesData = addressesResponse?.data
+  const dispatch = useDispatch();
 
   const filterById = (obj) => {
-    if (obj.type==3) 
-    {
+    if (obj.type == 3) {
       return true
-    } 
+    }
     return false;
   }
-  console.log(addressesData)
-  var BillingAddressData=addressesData.filter(filterById);
-  var sortedData = BillingAddressData.sort(function(x) {
-    return (x.default == 'true') ? 0 : x ? -1 : 1;
-  });
-console.log(sortedData)
+
+
+
+  let BillingAddressData = addressesData.filter(filterById);
+
+  const removeAddresses = async (item) => {
+    const data = {
+      id: item.id
+    }
+    dispatch(fetchDeleteAddresses(data));
+  }
   const renderItems = ({ item }) => (
     <View style={{ flex: 1, }}>
       <View style={styles.wrap}>
@@ -41,18 +48,22 @@ console.log(sortedData)
         <Text style={styles.AddressTxt}>{item.address1},{item.address2},{item.city}</Text>
         <Text style={styles.AddressTxt}>{item.state},{item.pincode}</Text>
         <View style={styles.buttonWrap}>
-          <View style={{ marginRight: 15, flex: 1 }}>
-            <CustomButton
-              title={"REMOVE"}
-              buttonColor={colors.WhiteColor}
-              // onPress={navigateToAddresses}
-              TextColor={colors.FontColor}
-              borderColor={colors.grayShade1}
-              TextFontSize={Dimension.font14}
-            >
+          {
+            item.isDefault ? null :
+              <View style={{ marginRight: 15, flex: 1 }}>
+                <CustomButton
+                  title={"REMOVE"}
+                  buttonColor={colors.WhiteColor}
+                  onPress={() => removeAddresses(item)}
+                  TextColor={colors.FontColor}
+                  borderColor={colors.grayShade1}
+                  TextFontSize={Dimension.font14}
+                >
 
-            </CustomButton>
-          </View>
+                </CustomButton>
+              </View>
+          }
+
           <View style={{ flex: 1 }}>
             <CustomButton
               title={"EDIT"}
@@ -84,7 +95,7 @@ console.log(sortedData)
             {BillingAddressData.length} Billing Address
           </Text>
           <TouchableOpacity
-             onPress={() => props.navigation.navigate('EditAddress')}
+            onPress={() => props.navigation.navigate('EditAddress')}
           >
             <View style={{ flexDirection: "row" }}>
               <CustomeIcon name={'add-circle'} size={Dimension.font18} color={colors.BrandColor} />
@@ -100,9 +111,10 @@ console.log(sortedData)
           data={BillingAddressData}
           renderItem={renderItems}
           keyExtractor={(item, index) => index.toString()}
+        // keyExtractor={(item, index) => `${index}_item`}
         />
       </ScrollView>
-      <View style={styles.bottombtnWrap}>
+      {/* <View style={styles.bottombtnWrap}>
         <CustomButton
           buttonColor={colors.BrandColor}
           borderColor={colors.BrandColor}
@@ -114,7 +126,7 @@ console.log(sortedData)
         />
 
 
-      </View>
+      </View> */}
     </View>
 
   );

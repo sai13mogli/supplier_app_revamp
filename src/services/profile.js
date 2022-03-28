@@ -18,6 +18,14 @@ export const setBusinessDetails = async data =>
     },
   });
 
+export const setUpdateTDSDetails = async data =>
+  axios.post(`${BASE_URL}profile/updateTdsInfo`, data, {
+    headers: {
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
+
 export const getProfile = async () =>
   axios.get(`${BASE_URL}profile/profileInfo`, {
     headers: {
@@ -60,6 +68,14 @@ export const getTdsInfoDetails = async () =>
 
 export const setBankDetails = async data =>
   axios.post(`${BASE_URL}profile/updateBankAccount`, data, {
+    headers: {
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
+
+export const setDeleteAddress = async data =>
+  axios.post(`${BASE_URL}profile/deleteAddress?id=${data.id}`, data, {
     headers: {
       userId: await AsyncStorage.getItem('userId'),
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,

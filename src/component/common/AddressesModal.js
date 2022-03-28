@@ -20,10 +20,6 @@ const AddressesModal = props => {
     transparent,
   } = props;
 
-
-
-
-
   return (
     <View style={styles.container}>
       <Modal
@@ -49,7 +45,7 @@ const AddressesModal = props => {
               backgroundColor: 'white',
             }}>
             <View style={styles.crossView}>
-              <Text style={styles.AddressType}>Edit View (2020-2021)</Text>
+              <Text style={styles.AddressType}>Year {global.year}</Text>
 
               <TouchableOpacity
                 onPress={onPress}
@@ -59,26 +55,9 @@ const AddressesModal = props => {
             </View>
             <ScrollView style={styles.ContainerCss}>
               <View style={styles.sectionView}>
-                <Text>TDS filed for AY </Text>
-                <Text>ITR filed for AV </Text>
-                <Text>Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY</Text>
-                <Text>Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY</Text>
-                <Text>Turnover in financial year</Text>
-                <DotCheckbox
-                  checked={isSelected}
-                  onPress={() => setSelection(!isSelected)}
-                />
-                {/* <Text>
-                  {props.data}
-                </Text> */}
                 <Text>
                   {props.filterListData}
                 </Text>
-                {/* <FlatList
-                  renderItem={props.renderContent}
-                  data={props.filterListData}
-                /> */}
-
               </View>
             </ScrollView>
           </View>
@@ -90,7 +69,7 @@ const AddressesModal = props => {
               TextFontSize={Dimension.font16}
               title={'Next'}
               loading={loading}
-            // onPress={onSubmit}
+              onPress={onPress}
             />
           </View>
         </View>

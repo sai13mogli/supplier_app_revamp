@@ -1,23 +1,23 @@
-import React, {useState, useEffect} from 'react';
-import {Text, View, FlatList, ScrollView} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import Checkbox from '../../component/common/Checkbox/index';
 import MultiSelect from '../../component/common/MultiSelect/index';
 import styles from './style';
 import colors from '../../Theme/Colors';
 
-const DashboardScreen = () => {
+const DashboardScreen = (props) => {
   const [searchText, setSearchText] = useState('');
   const [isSelected, setSelection] = useState(false);
   const [text, setText] = useState('');
 
   const [data, setData] = useState([
-    {id: '1', lable: 'First item', checked: false},
-    {id: '2', lable: 'Second item', checked: false},
-    {id: '3', lable: 'Third item', checked: false},
-    {id: '4', lable: 'Fourth item', checked: false},
-    {id: '5', lable: 'Fifth item', checked: false},
-    {id: '6', lable: 'Sixth item', checked: false},
-    {id: '7', lable: 'Seventh item', checked: false},
+    { id: '1', lable: 'First item', checked: false },
+    { id: '2', lable: 'Second item', checked: false },
+    { id: '3', lable: 'Third item', checked: false },
+    { id: '4', lable: 'Fourth item', checked: false },
+    { id: '5', lable: 'Fifth item', checked: false },
+    { id: '6', lable: 'Sixth item', checked: false },
+    { id: '7', lable: 'Seventh item', checked: false },
   ]);
 
   const onSearch = str => {
@@ -47,10 +47,15 @@ const DashboardScreen = () => {
   };
 
   return (
-    <View style={{flex: 1}}>
-      <Text style={{fontSize: 16, fontWeight: 'bold', color: '#000'}}>
+    <View style={{ flex: 1 }}>
+      <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000' }}>
         DashboardScreen
       </Text>
+      <TouchableOpacity
+        onPress={() => props.navigation.navigate('More')}
+      >
+        <Text style={{ marginTop: 20 }}>Profile Layout</Text>
+      </TouchableOpacity>
       {/* <MultiSelect
         value={searchText}
         onChangeText={(searchText)=>onSearchData(searchText)}
