@@ -75,7 +75,7 @@ export const setBankDetails = async data =>
   });
 
 export const setDeleteAddress = async data =>
-  axios.post(`${BASE_URL}profile/deleteAddress`, data, {
+  axios.post(`${BASE_URL}profile/deleteAddress?id=${data.id}`, data, {
     headers: {
       userId: await AsyncStorage.getItem('userId'),
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,

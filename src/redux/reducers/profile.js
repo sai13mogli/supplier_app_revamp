@@ -11,7 +11,7 @@ const initialState = {
   },
   addressesDetails: {
     status: STATE_STATUS.UNFETCHED,
-    data: {},
+    data: [],
     error: null,
   },
   bankDetails: {
@@ -124,7 +124,7 @@ export const profileReducer = (state = initialState, action) => {
         tdsInfoDetails: {
           ...state.tdsInfoDetails,
           status: STATE_STATUS.UPDATED,
-          data: payload.data,
+          // data: payload.data,
         },
       };
     case PROFILE_ACTIONS.FAILED_FETCH_UPDATE_TDS_DETAILS:
@@ -143,7 +143,7 @@ export const profileReducer = (state = initialState, action) => {
         addressesDetails: {
           ...state.addressesDetails,
           status: STATE_STATUS.FETCHING,
-          data: {},
+          data: [],
           error: null,
         },
       };
@@ -163,7 +163,7 @@ export const profileReducer = (state = initialState, action) => {
         addressesDetails: {
           ...state.addressesDetails,
           status: STATE_STATUS.FAILED_FETCH,
-          data: {},
+          data: [],
           error: error,
         },
       };
@@ -174,7 +174,7 @@ export const profileReducer = (state = initialState, action) => {
         addressesDetails: {
           ...state.addressesDetails,
           status: STATE_STATUS.FETCHING,
-          data: {},
+          data: [],
           error: null,
         },
       };
@@ -184,7 +184,7 @@ export const profileReducer = (state = initialState, action) => {
         addressesDetails: {
           ...state.addressesDetails,
           status: STATE_STATUS.FETCHED,
-          data: payload.data,
+          // data: payload.data,
           error: null,
         },
       };
@@ -213,7 +213,6 @@ export const profileReducer = (state = initialState, action) => {
         addressesDetails: {
           ...state.addressesDetails,
           status: STATE_STATUS.UPDATED,
-          data: payload.data,
         },
       };
     case PROFILE_ACTIONS.FAILED_FETCH_UPDATE_BILLING_ADDRESS:
@@ -261,7 +260,7 @@ export const profileReducer = (state = initialState, action) => {
         tdsInfoDetails: {
           ...state.tdsInfoDetails,
           status: STATE_STATUS.FETCHING,
-          data: {},
+          data: [],
           error: null,
         },
       };
@@ -281,7 +280,7 @@ export const profileReducer = (state = initialState, action) => {
         tdsInfoDetails: {
           ...state.tdsInfoDetails,
           status: STATE_STATUS.FAILED_FETCH,
-          data: {},
+          data: [],
           error: error,
         },
       };

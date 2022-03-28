@@ -10,22 +10,20 @@ import Checkbox from '../../../component/common/Checkbox/index';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
 import { STATE_STATUS } from '../../../redux/constants';
-import { fetchUpdateBillingAddress } from '../../../redux/actions/profile';
+import { fetchUpdateBillingAddress, fetchAddressDetails } from '../../../redux/actions/profile';
 import { getPincodeDetails } from '../../../services/profile';
 
 const EditAddress = props => {
 
     const businessDetails = useSelector(state => state.profileReducer.businessDetails.data || {});
-    const addressesDetailsStatus = useSelector(props => props?.route?.params?.bankDetails?.status || STATE_STATUS.FETCHING);
+    const addressesDetailsStatus = useSelector(state => state.profileReducer.addressesDetails.status || STATE_STATUS.FETCHING);
     const [loading, setLoading] = useState(false);
     const [isSelected, setSelection] = useState((props?.route?.params?.addressesDetails || {})?.default);
     const [editID, setEditID] = useState(props?.route?.params?.editID || '');
     const [phone, setPhone] = useState((props?.route?.params?.addressesDetails || {})?.phone);
     const [address1, setaddress1] = useState((props?.route?.params?.addressesDetails || {})?.address1);
     const [address2, setaddress2] = useState((props?.route?.params?.addressesDetails || {})?.address2);
-    const [country, setcountry] = useState(
-        (businessDetails.address || {}).country,
-    );
+    const [country, setcountry] = useState((businessDetails.address || {}).country);
     const [pincode, setpincode] = useState((props?.route?.params?.addressesDetails || {})?.pincode);
     const [state, setstate] = useState((businessDetails?.address || {})?.state);
     const [city, setcity] = useState((businessDetails?.address || {})?.city);
@@ -159,19 +157,20 @@ const EditAddress = props => {
     };
 
     useEffect(() => {
-        if (loading && addressesDetailsStatus == STATE_STATUS.UPDATED) {
+        if (loading && addressesDetailsStatus == STATE_STATUS.FETCHED) {
             setLoading(false);
             props.navigation.goBack();
         }
     }, [addressesDetailsStatus]);
 
     const onPhoneBlur = () => {
-        if (phone && phone.length) {
+        if (phone && phone.length == 10) {
             setphoneError(false);
         } else {
             setphoneError(true);
         }
     };
+
 
     const onAddressLine1Blur = () => {
         if (address1 && address1.length) {
@@ -224,6 +223,7 @@ const EditAddress = props => {
                     default: isSelected,
                     businessType: '',
                 };
+                console.log("Data===>", data);
                 dispatch(fetchUpdateBillingAddress(data));
             }
             else {

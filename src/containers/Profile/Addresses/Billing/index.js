@@ -6,9 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
-import { fetchDeleteAddresses, fetchAddressDetails } from '../../../../redux/actions/profile';
-import { STATE_STATUS } from '../../../../redux/constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchDeleteAddresses } from '../../../../redux/actions/profile';
 import styles from './styles';
 
 
@@ -16,10 +14,8 @@ const Billing = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const profileData = useSelector(state => state.profileReducer.data || {});
-  const addressesDetailsStatus = useSelector(state => (state.profileReducer.addressesDetails.status || STATE_STATUS.FETCHING));
-  const addressesData = useSelector(state => state.profileReducer.addressesDetails.data || {});
-  const { navigate } = useNavigation()
-  const navigation = useNavigation()
+  const addressesResponse = useSelector(state => state.profileReducer.addressesDetails || []);
+  const addressesData = addressesResponse?.data
   const dispatch = useDispatch();
 
   const filterById = (obj) => {
@@ -29,23 +25,12 @@ const Billing = (props) => {
     return false;
   }
 
-  var BillingAddressData = addressesData.filter(filterById);
 
-  useEffect(() => {
-    if (loading && addressesDetailsStatus == STATE_STATUS.UPDATED) {
-      alert("hi", addressesDetailsStatus == STATE_STATUS.UPDATED)
 
-      dispatch(fetchAddressDetails());
-    }
-  });
-
-  // var sortedData = BillingAddressData.sort(function (x) {
-  //   return (x.default == 'true') ? 0 : x ? -1 : 1;
-  // });
+  let BillingAddressData = addressesData.filter(filterById);
 
   const removeAddresses = async (item) => {
     const data = {
-      supplierId: await AsyncStorage.getItem('userId'),
       id: item.id
     }
     dispatch(fetchDeleteAddresses(data));
@@ -63,18 +48,22 @@ const Billing = (props) => {
         <Text style={styles.AddressTxt}>{item.address1},{item.address2},{item.city}</Text>
         <Text style={styles.AddressTxt}>{item.state},{item.pincode}</Text>
         <View style={styles.buttonWrap}>
-          <View style={{ marginRight: 15, flex: 1 }}>
-            <CustomButton
-              title={"REMOVE"}
-              buttonColor={colors.WhiteColor}
-              onPress={() => removeAddresses(item)}
-              TextColor={colors.FontColor}
-              borderColor={colors.grayShade1}
-              TextFontSize={Dimension.font14}
-            >
+          {
+            item.isDefault ? null :
+              <View style={{ marginRight: 15, flex: 1 }}>
+                <CustomButton
+                  title={"REMOVE"}
+                  buttonColor={colors.WhiteColor}
+                  onPress={() => removeAddresses(item)}
+                  TextColor={colors.FontColor}
+                  borderColor={colors.grayShade1}
+                  TextFontSize={Dimension.font14}
+                >
 
-            </CustomButton>
-          </View>
+                </CustomButton>
+              </View>
+          }
+
           <View style={{ flex: 1 }}>
             <CustomButton
               title={"EDIT"}
@@ -125,7 +114,7 @@ const Billing = (props) => {
         // keyExtractor={(item, index) => `${index}_item`}
         />
       </ScrollView>
-      <View style={styles.bottombtnWrap}>
+      {/* <View style={styles.bottombtnWrap}>
         <CustomButton
           buttonColor={colors.BrandColor}
           borderColor={colors.BrandColor}
@@ -137,7 +126,7 @@ const Billing = (props) => {
         />
 
 
-      </View>
+      </View> */}
     </View>
 
   );

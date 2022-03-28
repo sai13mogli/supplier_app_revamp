@@ -4,6 +4,7 @@ import ProfileScreen from '../containers/Profile';
 import OrdersScreen from '../containers/Orders';
 import DashboardScreen from '../containers/Dashboard';
 import SupportScreen from '../containers/Support';
+import MoreScreen from '../containers/More';
 import DocumentsScreen from '../containers/Profile/Documents';
 import BusinessDetails from '../containers/Profile/BusinessDetails';
 import Addresses from '../containers/Profile/Addresses';
@@ -156,6 +157,10 @@ export const APP_STACK_SCREENS = [
     component: EditAddress,
   },
   {
+    name: 'More',
+    component: MoreScreen,
+  },
+  {
     name: 'EditBankAccount',
     component: EditBankAccount,
   },
@@ -228,5 +233,50 @@ export const PROFILE_TABS = new OrderedMap({
     icon: 'single-product-upload',
     progress: 7,
     activity: 5,
+  },
+});
+
+export const MORE_TABS = new OrderedMap({
+  profile: {
+    route: 'Profile',
+    title: 'Profile',
+    icon: 'business-details',
+    progress: 2,
+    activity: 1,
+  },
+  settings: {
+    route: 'Settings',
+    title: 'Settings',
+    icon: 'category--brand',
+    progress: 3,
+    activity: 2,
+  },
+  faqs: {
+    route: 'FAQs',
+    title: 'FAQs',
+    icon: 'address',
+    progress: 4,
+    activity: 3,
+  },
+  abou_us: {
+    route: 'AboutUs',
+    title: 'About Us',
+    icon: 'bank-details',
+    progress: 5,
+    activity: 4,
+  },
+  privacy_policy: {
+    route: 'PrivacyPolicy',
+    title: 'Privacy Policy',
+    icon: 'single-product-upload',
+    progress: 7,
+    activity: 5,
+  },
+  contact_us: {
+    route: 'ContactUs',
+    title: 'Contact Us',
+    icon: 'bank-details',
+    progress: 5,
+    activity: 4,
   },
 });
