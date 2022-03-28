@@ -333,7 +333,7 @@ const OrdersScreen = props => {
             style={{ paddingBottom: 380 }}
             contentContainerStyle={{ paddingBottom: 380 }}
             removeClippedSubviews={true}
-            maxToRenderPerBatch={10}
+            maxToRenderPerBatch={5}
             onEndReached={({ distanceFromEnd }) => {
               if (!onEndReachedCalledDuringMomentum.current) {
                 endReachedFetchListing();
@@ -344,14 +344,10 @@ const OrdersScreen = props => {
               onEndReachedCalledDuringMomentum.current = false;
             }}
             showsVerticalScrollIndicator={false}
+            initialNumToRender={5}
           />
           <ScrollView>
             <TextInput
-              // autoFocus={true}
-              // style={styles.inputField}
-              // onKeyPress={e => {
-              //   console.log('hehhe', e.nativeEvent.key);
-              // }}
               blurOnSubmit={true}
               style={{ color: '#000' }}
               placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
@@ -360,7 +356,6 @@ const OrdersScreen = props => {
               returnKeyType={'search'}
               onChangeText={onSearchText}
               onFocus={() => console.log('onFocus!!')}
-              // ref={searchInput}
               value={inputValue}
               onSubmitEditing={event => {
                 if (inputValue && inputValue.length > 1) {
