@@ -51,6 +51,8 @@ const EditAddress = props => {
             errorMessage: 'Enter valid phone number',
             showError: phoneError,
             value: phone,
+            maxLength: 10,
+            keyboardType: 'number-pad',
             onBlur: () => onPhoneBlur(),
             onChangeText: text => setPhone(text),
             component: FloatingLabelInputField,
@@ -227,7 +229,6 @@ const EditAddress = props => {
                     default: isSelected,
                     businessType: '',
                 };
-                console.log("Aakash====>", data);
                 dispatch(fetchUpdateBillingAddress(data));
             }
             else {

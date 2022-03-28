@@ -93,7 +93,6 @@ function* fetchCategoriesBrands() {
     if (error) {
       yield put(failedFetchCategoriesBrands(error));
     } else {
-      console.log('categoriesbrandsDatabbhhhhhhhh', data.data);
       yield put(fetchedCategoriesBrands(data.data));
     }
   } catch (error) {

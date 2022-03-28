@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback, useRef} from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -13,14 +13,14 @@ import {
 } from 'react-native';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
-import {STATE_STATUS} from '../../redux/constants';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchOrders, fetchTabCount} from '../../redux/actions/orders';
-import {getImageUrl} from '../../services/orders';
+import { STATE_STATUS } from '../../redux/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOrders, fetchTabCount } from '../../redux/actions/orders';
+import { getImageUrl } from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
 
@@ -52,7 +52,7 @@ const OrdersScreen = props => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   const OPTIONS = [
-    {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
+    { label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders' },
     {
       label: 'Fulfilled Orders',
       key: 'Fulfilled_Orders',
@@ -67,19 +67,19 @@ const OrdersScreen = props => {
 
   const TABS = {
     Open_Orders: [
-      {label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE'},
-      {label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP'},
-      {label: 'Pickup', key: 'PICKUP'},
-      {label: 'Upload Invoice', key: 'UPLOAD_INVOICE'},
-      {label: 'Packed', key: 'PACKED'},
-      {label: 'Shipment', key: 'SHIPMENT'},
-      {label: 'Mark Shipped', key: 'MARK_SHIPPED'},
+      { label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE' },
+      { label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP' },
+      { label: 'Pickup', key: 'PICKUP' },
+      { label: 'Upload Invoice', key: 'UPLOAD_INVOICE' },
+      { label: 'Packed', key: 'PACKED' },
+      { label: 'Shipment', key: 'SHIPMENT' },
+      { label: 'Mark Shipped', key: 'MARK_SHIPPED' },
     ],
-    Fulfilled_Orders: [{label: 'Fulfilled', key: 'FULFILLED'}],
+    Fulfilled_Orders: [{ label: 'Fulfilled', key: 'FULFILLED' }],
     Cancelled_Returned: [
-      {label: 'Return Pending', key: 'RETURN_PENDING'},
-      {label: 'Return Done', key: 'RETURN_DONE'},
-      {label: 'Cancelled', key: 'CANCELLED'},
+      { label: 'Return Pending', key: 'RETURN_PENDING' },
+      { label: 'Return Done', key: 'RETURN_DONE' },
+      { label: 'Cancelled', key: 'CANCELLED' },
     ],
   };
 
@@ -87,14 +87,12 @@ const OrdersScreen = props => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
-        console.log('keyboardshow hai dost');
         setKeyboardVisible(true);
       },
     );
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => {
-        console.log('keyboardhide hai dost');
         setKeyboardVisible(false);
       },
     );
@@ -139,7 +137,7 @@ const OrdersScreen = props => {
     );
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <Ordercard
         msn={item.productMsn}
@@ -214,7 +212,7 @@ const OrdersScreen = props => {
 
   const renderFooterComponent = () => {
     if (OrderStatus == STATE_STATUS.FETCHING) {
-      return <ActivityIndicator style={{alignSelf: 'center', margin: 12}} />;
+      return <ActivityIndicator style={{ alignSelf: 'center', margin: 12 }} />;
     }
     return null;
   };
@@ -222,8 +220,8 @@ const OrdersScreen = props => {
   const renderListEmptyComponent = () => {
     if (OrderData.size == 0 && OrderStatus == STATE_STATUS.FETCHED) {
       return (
-        <View style={{padding: 20}}>
-          <Text style={{color: '#000', alignSelf: 'center'}}>
+        <View style={{ padding: 20 }}>
+          <Text style={{ color: '#000', alignSelf: 'center' }}>
             No Data Available
           </Text>
         </View>
@@ -271,7 +269,7 @@ const OrdersScreen = props => {
   // };
 
   return (
-    <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
+    <View style={{ flex: 1, backgroundColor: colors.grayShade7 }}>
       {/* <CustomButton
         title={'Open Notifications'}
         buttonColor={'dodgerblue'}
@@ -291,7 +289,7 @@ const OrdersScreen = props => {
         borderColor={colors.WhiteColor}
       /> */}
       {tabStatus == STATE_STATUS.FETCHING ? (
-        <ActivityIndicator style={{alignSelf: 'center', margin: 12}} />
+        <ActivityIndicator style={{ alignSelf: 'center', margin: 12 }} />
       ) : (
         <>
           <View
@@ -332,11 +330,11 @@ const OrdersScreen = props => {
             ListHeaderComponent={renderHeaderComponent}
             ListFooterComponent={renderFooterComponent}
             onEndReachedThreshold={0.9}
-            style={{paddingBottom: 380}}
-            contentContainerStyle={{paddingBottom: 380}}
+            style={{ paddingBottom: 380 }}
+            contentContainerStyle={{ paddingBottom: 380 }}
             removeClippedSubviews={true}
             maxToRenderPerBatch={10}
-            onEndReached={({distanceFromEnd}) => {
+            onEndReached={({ distanceFromEnd }) => {
               if (!onEndReachedCalledDuringMomentum.current) {
                 endReachedFetchListing();
                 onEndReachedCalledDuringMomentum.current = true;
@@ -355,7 +353,7 @@ const OrdersScreen = props => {
               //   console.log('hehhe', e.nativeEvent.key);
               // }}
               blurOnSubmit={true}
-              style={{color: '#000'}}
+              style={{ color: '#000' }}
               placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
               placeholderTextColor={'#888'}
               selectionColor={'#888'}
@@ -371,7 +369,7 @@ const OrdersScreen = props => {
               }}
             />
             {!isKeyboardVisible ? (
-              <TouchableOpacity style={{width: 40, height: 50}}>
+              <TouchableOpacity style={{ width: 40, height: 50 }}>
                 <Text
                   style={{
                     fontSize: 12,
