@@ -13,6 +13,7 @@ import styles from './styles';
 const Billing = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [billing, setBilling] = useState("Billing")
   const profileData = useSelector(state => state.profileReducer.data || {});
   const addressesResponse = useSelector(state => state.profileReducer.addressesDetails || []);
   const addressesData = addressesResponse?.data
@@ -24,7 +25,6 @@ const Billing = (props) => {
     }
     return false;
   }
-
 
 
   let BillingAddressData = addressesData.filter(filterById);
@@ -95,7 +95,7 @@ const Billing = (props) => {
             {BillingAddressData.length} Billing Address
           </Text>
           <TouchableOpacity
-            onPress={() => props.navigation.navigate('EditAddress')}
+            onPress={() => props.navigation.navigate('EditAddress', { tabState: billing })}
           >
             <View style={{ flexDirection: "row" }}>
               <CustomeIcon name={'add-circle'} size={Dimension.font18} color={colors.BrandColor} />
