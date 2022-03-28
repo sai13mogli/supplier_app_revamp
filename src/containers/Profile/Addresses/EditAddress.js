@@ -215,7 +215,7 @@ const EditAddress = props => {
             if (editID) {
                 const data = {
                     id: editID,
-                    type: 3,
+                    type: tabState?.route?.params?.tabState == "Billing" ? 3 : 4,
                     phonePrefix: +971,
                     phone: phone,
                     address1: address1,
@@ -227,6 +227,7 @@ const EditAddress = props => {
                     default: isSelected,
                     businessType: '',
                 };
+                console.log("Aakash====>", data);
                 dispatch(fetchUpdateBillingAddress(data));
             }
             else {
