@@ -240,7 +240,7 @@ const EditAddress = props => {
                     country: country,
                     pincode: pincode,
                     state: state,
-                    city: cities,
+                    city: city,
                     default: isSelected,
                     businessType: '',
                 };

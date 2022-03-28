@@ -24,7 +24,8 @@ const PickedUp = (props) => {
   let PickupAddressData = addressesData.filter(filterById);
   const removeAddresses = async (item) => {
     const data = {
-      id: item.id
+      id: item.id,
+      type: 4
     }
     dispatch(fetchDeleteAddresses(data));
   }
