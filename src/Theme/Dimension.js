@@ -1,6 +1,6 @@
-import {Dimensions, Platform, PixelRatio} from 'react-native';
+import { Dimensions, Platform, PixelRatio } from 'react-native';
 
-const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 // based on iphone 5s's scale
 const scale = SCREEN_WIDTH / 320;
@@ -182,7 +182,7 @@ const Dimension = {
   padding110: normalize(110),
   padding140: normalize(140),
 
-  
+
   width50: normalize(50),
   width55: normalize(55),
 
@@ -223,6 +223,10 @@ const Dimension = {
   width245: normalize(245),
   width250: normalize(250),
   width330: normalize(330),
+  width260: normalize(260),
+  width270: normalize(270),
+  width280: normalize(280),
+  width290: normalize(290),
   width300: normalize(300),
   width22: normalize(24),
   width24: normalize(20),
@@ -247,7 +251,7 @@ const Dimension = {
   width74: normalize(74),
   width150: normalize(150),
 
- 
+
   borderwidth1: 1,
   borderRadius3: normalize(3),
   SCREEN_WIDTH,

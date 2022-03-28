@@ -45,7 +45,7 @@ const AddressesModal = props => {
               backgroundColor: 'white',
             }}>
             <View style={styles.crossView}>
-              <Text style={styles.AddressType}>Year {global.year}</Text>
+              <Text style={styles.AddressType}>Year {props.header}</Text>
 
               <TouchableOpacity
                 onPress={onPress}
@@ -58,6 +58,7 @@ const AddressesModal = props => {
                 <Text>
                   {props.filterListData}
                 </Text>
+
               </View>
             </ScrollView>
           </View>
@@ -109,6 +110,7 @@ const styles = StyleSheet.create({
   sectionView: {
     borderColor: 'grey',
     borderRadius: 5,
+    paddingVertical: 0,
     borderWidth: 0.9
   },
   crossView: {
@@ -117,8 +119,8 @@ const styles = StyleSheet.create({
   },
   ContainerCss: {
     backgroundColor: colors.WhiteColor,
-    paddingHorizontal: Dimension.padding15,
-    paddingVertical: Dimension.padding35
+    paddingHorizontal: Dimension.padding5,
+    paddingVertical: Dimension.padding25
   },
   AddressType: {
     color: 'black',

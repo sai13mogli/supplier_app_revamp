@@ -55,6 +55,21 @@ const styles = StyleSheet.create({
     borderColor: Colors.WhiteColor,
     width: 'auto',
   },
+  radioText: {
+    fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+    marginLeft: Dimension.margin11,
+    width: Dimension.width280
+  },
+  verticalWrapper: {
+    paddingVertical: Dimension.padding5
+  },
+  Separater: {
+    height: 0.8,
+    backgroundColor: '#e0e0e0',
+    marginTop: 5,
+  },
   addresses: {
     top: 15,
     left: 10,
