@@ -39,7 +39,7 @@ const EditAddress = props => {
     const [tabState, setTabState] = useState((props))
     const dispatch = useDispatch();
 
-    console.log("Deata=====>", tabState?.route?.params?.tabState);
+
 
 
     const FORM_FIELDS = new OrderedMap({
@@ -227,7 +227,6 @@ const EditAddress = props => {
                     default: isSelected,
                     businessType: '',
                 };
-
                 dispatch(fetchUpdateBillingAddress(data));
             }
             else {
@@ -240,7 +239,7 @@ const EditAddress = props => {
                     country: country,
                     pincode: pincode,
                     state: state,
-                    city: city,
+                    city: cities,
                     default: isSelected,
                     businessType: '',
                 };

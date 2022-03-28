@@ -184,7 +184,6 @@ export const profileReducer = (state = initialState, action) => {
         addressesDetails: {
           ...state.addressesDetails,
           status: STATE_STATUS.FETCHED,
-          // data: payload.data,
           error: null,
         },
       };

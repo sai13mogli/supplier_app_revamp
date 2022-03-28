@@ -1,17 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Modal, ScrollView, FlatList } from "react-native";
+import { useSelector, useDispatch } from 'react-redux';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import Dimension from "../../Theme/Dimension";
 import colors from "../../Theme/Colors"
 import DotCheckbox from './Checkbox';
-
+import { useNavigation } from '@react-navigation/native'
 import CustomButton from '../common/Button';
 import { filtersTypeData, filtersData } from '../../redux/constants/support';
 
-const AddressesModal = props => {
-
+const TDSEditModal = props => {
+  const tdsInfoDetails = useSelector(
+    state => state.profileReducer.tdsInfoDetails.data || [],
+  );
   const [loading, setLoading] = useState(false);
   const [isSelected, setSelection] = useState(false);
+  const { navigate } = useNavigation()
+  const navigation = useNavigation()
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("tdsInfoDetails===>", tdsInfoDetails);
+    // setLastYearItr(tdsInfoDetails.financialYearTurnover)
+  }, []);
+
   const {
     onPress,
     onClose,
@@ -46,21 +58,77 @@ const AddressesModal = props => {
             }}>
             <View style={styles.crossView}>
               <Text style={styles.AddressType}>Year {props.header}</Text>
-
               <TouchableOpacity
                 onPress={onPress}
               >
                 <CustomeIcon name={'right-tick-line'} color={colors.SuccessStateColor} size={Dimension.font20}></CustomeIcon>
               </TouchableOpacity>
             </View>
-            <ScrollView style={styles.ContainerCss}>
+            {/* <ScrollView style={styles.ContainerCss}>
+
+
+              <ScrollView
+                style={{ marginBottom: 0 }}
+                showsVerticalScrollIndicator={false}>
+
+                <View style={styles.verticalWrapper}>
+                  <Text style={styles.radioText}>
+                    TDS filed for AY {section.financialyear}
+                  </Text>
+                  <View style={{ flexDirection: 'row' }}>
+                    <DotCheckbox
+                      data={EditTdsData && EditTdsData.type}
+                      onCheck={getDotcheck}
+                      value={lastYearItr}
+
+                    />
+                  </View>
+                </View>
+                <View style={styles.verticalWrapper}>
+                  <Text style={styles.radioText}>
+                    ITR filed for AV  {section.financialyear}
+                  </Text>
+                  <View style={{ flexDirection: 'row' }}>
+                  </View>
+                </View>
+                <View style={styles.verticalWrapper}>
+                  <Text style={styles.radioText}>
+                    Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.financialyear}
+                  </Text>
+                  <View style={{ flexDirection: 'row' }}>
+
+
+                  </View>
+                </View>
+                <View style={styles.verticalWrapper}>
+                  <Text numberOfLines={2} style={styles.radioText}>
+                    Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.financialyear}
+                  </Text>
+                  <View style={{ flexDirection: 'row' }}>
+
+
+                  </View>
+                </View>
+                <View style={styles.verticalWrapper}>
+                  <Text style={styles.radioText}>
+                    Turnover in financial year {section.financialyear} was exceeding 10 crores
+                  </Text>
+                  <View style={{ flexDirection: 'row' }}>
+
+
+                  </View>
+                </View>
+
+              </ScrollView>
+              );
+
               <View style={styles.sectionView}>
                 <Text>
                   {props.filterListData}
                 </Text>
 
               </View>
-            </ScrollView>
+            </ScrollView> */}
           </View>
           <View style={styles.bottombtnWrap}>
             <CustomButton
@@ -130,6 +198,6 @@ const styles = StyleSheet.create({
 
 });
 
-export default AddressesModal;
+export default TDSEditModal;
 
 /* Created By Aakash  -------*/
