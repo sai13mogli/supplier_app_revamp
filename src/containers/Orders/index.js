@@ -87,14 +87,12 @@ const OrdersScreen = props => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
-        console.log('keyboardshow hai dost');
         setKeyboardVisible(true);
       },
     );
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => {
-        console.log('keyboardhide hai dost');
         setKeyboardVisible(false);
       },
     );
@@ -335,7 +333,7 @@ const OrdersScreen = props => {
             style={{paddingBottom: 380}}
             contentContainerStyle={{paddingBottom: 380}}
             removeClippedSubviews={true}
-            maxToRenderPerBatch={10}
+            maxToRenderPerBatch={5}
             onEndReached={({distanceFromEnd}) => {
               if (!onEndReachedCalledDuringMomentum.current) {
                 endReachedFetchListing();
@@ -346,6 +344,7 @@ const OrdersScreen = props => {
               onEndReachedCalledDuringMomentum.current = false;
             }}
             showsVerticalScrollIndicator={false}
+            initialNumToRender={5}
           />
           <ScrollView>
             <TextInput

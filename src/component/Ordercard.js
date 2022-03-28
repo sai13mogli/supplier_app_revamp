@@ -655,4 +655,4 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding6,
   },
 });
-export default Ordercard;
+export default React.memo(Ordercard);
