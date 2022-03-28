@@ -12,6 +12,7 @@ const PickedUp = (props) => {
 
   const profileData = useSelector(state => state.profileReducer.data || {});
   const addressesResponse = useSelector(state => state.profileReducer.addressesDetails || []);
+  const [pickedUp, setPickedUp] = useState("PickedUp")
   const addressesData = addressesResponse?.data
   const filterById = (obj) => {
     if (obj.type == 4) {
@@ -90,6 +91,7 @@ const PickedUp = (props) => {
           <TouchableOpacity
             onPress={() =>
               props.navigation.navigate('EditAddress',
+                { tabState: pickedUp }
               )
             }
           >

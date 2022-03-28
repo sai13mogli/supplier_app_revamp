@@ -36,7 +36,11 @@ const EditAddress = props => {
     const [pincodeError, setpincodeError] = useState(false);
     const [stateError, setstateError] = useState(false);
     const [cityError, setcityError] = useState(false);
+    const [tabState, setTabState] = useState((props))
     const dispatch = useDispatch();
+
+    console.log("Deata=====>", tabState?.route?.params?.tabState);
+
 
     const FORM_FIELDS = new OrderedMap({
         phone: {
@@ -223,12 +227,12 @@ const EditAddress = props => {
                     default: isSelected,
                     businessType: '',
                 };
-                console.log("Data===>", data);
+
                 dispatch(fetchUpdateBillingAddress(data));
             }
             else {
                 const data = {
-                    type: 3,
+                    type: tabState?.route?.params?.tabState == "Billing" ? 3 : 4,
                     phonePrefix: +971,
                     phone: phone,
                     address1: address1,
