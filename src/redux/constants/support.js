@@ -28,6 +28,6 @@ export const EditTdsData = {
   type: [
     { key: 1, title: 'Yes' },
     { key: 0, title: 'No' },
-    { key: '', title: '-' },
+    { key: 2, title: 'NA' },
   ],
 };
