@@ -23,6 +23,7 @@ import Ordercard from '../../component/Ordercard';
 import {Icon} from 'react-native-elements';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
+import OrdersFilterModal from '../../component/OrdersFilterModal';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -45,11 +46,25 @@ const OrdersScreen = props => {
     state.ordersReducer.getIn(['orders', 'page']),
   );
 
+  const paramsAppliedFilters = useSelector(state =>
+    state.ordersReducer.getIn(['orders', 'filters']),
+  );
+
   const [selectedType, setSelectedType] = useState('Open_Orders');
   const [selectedTab, setSelectedTab] = useState('PENDING_ACCEPTANCE');
   const onEndReachedCalledDuringMomentum = useRef(true);
   const [inputValue, setInputValue] = useState('');
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const [ordersfiltersModal, setOrdersFiltersModal] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('orderRefs');
+  const [appliedFilter, setAppliedFilter] = useState(
+    paramsAppliedFilters || {},
+  );
+  const [initialFilter, setInitialFilter] = useState('orderRefs');
+  const [pickupFromDate, setPickupFromDate] = useState('');
+  const [pickupToDate, setPickupToDate] = useState('');
+  const [poFromDate, setPoFromDate] = useState('');
+  const [poToDate, setPoToDate] = useState('');
 
   const OPTIONS = [
     {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
@@ -178,6 +193,27 @@ const OrdersScreen = props => {
     });
   };
 
+  //selectedFilter
+  const selectFilter = term => {
+    let currentFilters = {...appliedFilter};
+    if (
+      currentFilters[initialFilter] &&
+      currentFilters[initialFilter].includes(term)
+    ) {
+      currentFilters[initialFilter] = currentFilters[initialFilter].filter(
+        _ => _ != term,
+      );
+    } else {
+      if (currentFilters[initialFilter]) {
+        currentFilters[initialFilter].push(term);
+      } else {
+        currentFilters[initialFilter] = [];
+        currentFilters[initialFilter].push(term);
+      }
+    }
+    setAppliedFilter(currentFilters);
+  };
+
   const renderHeaderComponent = () => {
     return (
       <ScrollView
@@ -262,6 +298,35 @@ const OrdersScreen = props => {
       deliveryType: [],
       orderRefs: [],
     });
+  };
+
+  //applied filters api hit
+  const applyFilters = () => {
+    setOrdersFiltersModal(false);
+    fetchOrdersFunc(0, inputValue, selectedTab, 'ONESHIP', {
+      pickupFromDate: pickupFromDate,
+      pickupToDate: pickupToDate,
+      poFromDate: poFromDate,
+      poToDate: poToDate,
+      orderType: appliedFilter['orderType'],
+      deliveryType: appliedFilter['deliveryType'],
+      orderRefs: appliedFilter['orderRefs'],
+    });
+  };
+
+  //reset filters api hit
+  const resetFilters = () => {
+    fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+      pickupFromDate: '',
+      pickupToDate: '',
+      poFromDate: '',
+      poToDate: '',
+      orderType: [],
+      deliveryType: [],
+      orderRefs: [],
+    });
+    setAppliedFilter({});
+    setOrdersFiltersModal(false);
   };
 
   // const handleKeyDown = e => {
@@ -370,7 +435,9 @@ const OrdersScreen = props => {
               }}
             />
             {!isKeyboardVisible ? (
-              <TouchableOpacity style={{width: 40, height: 50}}>
+              <TouchableOpacity
+                style={{width: 40, height: 50}}
+                onPress={() => setOrdersFiltersModal(true)}>
                 <Text
                   style={{
                     fontSize: 12,
@@ -382,6 +449,30 @@ const OrdersScreen = props => {
               </TouchableOpacity>
             ) : null}
           </ScrollView>
+          {ordersfiltersModal && (
+            <OrdersFilterModal
+              ordersfiltersModal={ordersfiltersModal}
+              setOrdersFiltersModal={setOrdersFiltersModal}
+              activeFilter={activeFilter}
+              setActiveFilter={setActiveFilter}
+              selectedTab={selectedTab}
+              appliedFilter={appliedFilter}
+              setAppliedFilter={setAppliedFilter}
+              initialFilter={initialFilter}
+              setInitialFilter={setInitialFilter}
+              selectFilter={selectFilter}
+              applyFilters={applyFilters}
+              pickupFromDate={pickupFromDate || appliedFilter['pickupFromDate']}
+              pickupToDate={pickupToDate || appliedFilter['pickupToDate']}
+              setPickupFromDate={setPickupFromDate}
+              setPickupToDate={setPickupToDate}
+              poFromDate={poFromDate || appliedFilter['poFromDate']}
+              poToDate={poToDate || appliedFilter['poToDate']}
+              setPoFromDate={setPoFromDate}
+              setPoToDate={setPoToDate}
+              resetFilters={resetFilters}
+            />
+          )}
         </>
       )}
     </View>

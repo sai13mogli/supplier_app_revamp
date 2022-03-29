@@ -3,13 +3,15 @@ import {put, call, fork, takeEvery} from 'redux-saga/effects';
 // constants
 import {ORDERS_ACTIONS} from '../constants/orders';
 // api call
-import {getOrders, getTabCount} from '../../services/orders';
+import {getOrders, getTabCount, getTabItemCount} from '../../services/orders';
 // actions
 import {
   fetchedOrders,
   failedFetchOrders,
   fetchedTabCount,
   failedFetchTabCount,
+  failedFetchPO,
+  fetchedPOs,
 } from '../actions/orders';
 
 function* fetchOrder({
@@ -25,7 +27,6 @@ function* fetchOrder({
       filters,
     );
     if (error) {
-      console.log(error, 'ifError');
       yield put(failedFetchOrders(error));
     } else {
       yield put(fetchedOrders(page, data.data));
@@ -49,7 +50,27 @@ function* fetchTabCounts({payload: {filters}}) {
   }
 }
 
+function* fetchPOIds({payload: {onlineShipmentMode, supplierId, tabRef}}) {
+  try {
+    const {data, error} = yield call(
+      getTabItemCount,
+      onlineShipmentMode,
+      supplierId,
+      tabRef,
+    );
+    if (error) {
+      yield put(failedFetchPO(error));
+    } else {
+      console.log('po data hai dost', data);
+      yield put(fetchedPOs(data.data));
+    }
+  } catch (error) {
+    yield put(failedFetchPO(error));
+  }
+}
+
 export default fork(function* () {
   yield takeEvery(ORDERS_ACTIONS.FETCH_ORDERS, fetchOrder);
   yield takeEvery(ORDERS_ACTIONS.FETCH_TAB_COUNT, fetchTabCounts);
+  yield takeEvery(ORDERS_ACTIONS.FETCH_PO, fetchPOIds);
 });

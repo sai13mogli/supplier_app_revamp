@@ -7,7 +7,7 @@ export const getOrders = async (
   search,
   orderStage,
   onlineShipmentMode,
-  filters,
+  filter,
 ) =>
   axios.post(
     `${BASE_URL}searchapi/order/list`,
@@ -18,7 +18,7 @@ export const getOrders = async (
       pageSize: 20,
       orderStage,
       onlineShipmentMode,
-      filters,
+      filter,
     },
     {
       headers: {
@@ -76,6 +76,21 @@ export const rejectOrder = async body =>
     `${BASE_URL}api/order/reject`,
     {
       ...body,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
+export const getTabItemCount = async (onlineShipmentMode, supplierId, tabRef) =>
+  axios.post(
+    `${BASE_URL}searchapi/order/tabItemCount`,
+    {
+      onlineShipmentMode,
+      supplierId,
+      tabRef,
     },
     {
       headers: {
