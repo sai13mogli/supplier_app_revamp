@@ -5,8 +5,8 @@ import {OrderedMap} from 'immutable';
 const initialState = {
   status: STATE_STATUS.UNFETCHED,
   data: [],
-  maxPage: 1,
-  page: 1,
+  maxPage: 0,
+  page: 0,
 };
 
 const getTime = (time, ind) => {
@@ -51,7 +51,7 @@ export const notificationsReducer = (state = initialState, action) => {
   const {type, payload, error} = action;
   switch (type) {
     case NOTIFICATIONS_ACTIONS.FETCH_NOTIFICATIONS:
-      if (payload.page == 1) {
+      if (payload.page == 0) {
         return {
           data: [],
           page: payload.page,
@@ -65,10 +65,17 @@ export const notificationsReducer = (state = initialState, action) => {
         };
       }
     case NOTIFICATIONS_ACTIONS.FETCHED_NOTIFICATIONS:
+      let prevData = [];
+      if (payload.page != 0) {
+        state.data.map(_ => {
+          prevData = [...prevData, ..._.data];
+        });
+      }
       let newData =
-        payload.page == 1
+        payload.page == 0
           ? payload.data.dataList
-          : [...state.data, ...payload.data.dataList];
+          : [...prevData, ...payload.data.dataList];
+
       let groupedObj = {};
       newData = newData.map(_ => {
         if (_.id) {
@@ -92,7 +99,7 @@ export const notificationsReducer = (state = initialState, action) => {
         title: getTime(_[0].createdAt),
         data: _,
       }));
-      if (payload.page == 1) {
+      if (payload.page == 0) {
         return {
           ...state,
           maxPage: payload.data.totalPages,
@@ -117,8 +124,8 @@ export const notificationsReducer = (state = initialState, action) => {
       return {
         status: STATE_STATUS.UNFETCHED,
         data: [],
-        maxPage: 1,
-        page: 1,
+        maxPage: 0,
+        page: 0,
       };
     default:
       return state;

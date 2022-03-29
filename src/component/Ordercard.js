@@ -257,6 +257,36 @@ const Ordercard = props => {
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
+        ) : cta == 'MAP_INVOICE' ? (
+          <TouchableOpacity
+            disabled={invoiceLoader}
+            // onPress={() => getPOInvoice(false, url)}
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
+            {invoiceLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY' ? (
+          <TouchableOpacity
+            disabled={invoiceLoader}
+            // onPress={() => getPOInvoice(false, url)}
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>MARK OUT FOR DELIVERY</Text>
+            {invoiceLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'VIEW_TREE_MODAL' ? (
+          <TouchableOpacity
+            disabled={invoiceLoader}
+            // onPress={() => getPOInvoice(false, url)}
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>VIEW SPLIT HISTORY</Text>
+            {invoiceLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
         ) : null}
       </>
     );

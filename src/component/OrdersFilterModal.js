@@ -267,9 +267,6 @@ const OrdersFilterModal = props => {
         {['poDate', 'pickupDate'].includes(activeFilter)
           ? renderComponent()
           : renderRight()}
-        {/* <View style={styles.bottomAction}>
-         
-        </View> */}
         <View style={styles.bottomAction}>
           <TouchableOpacity
             onPress={() => applyFilters()}

@@ -33,11 +33,11 @@ const NotificationScreen = props => {
     state => state.notificationsReducer.status || STATE_STATUS.FETCHING,
   );
   const notificationsMaxpage = useSelector(
-    state => state.notificationsReducer.maxPage || 1,
+    state => state.notificationsReducer.maxPage || 0,
   );
 
   const notificationsPage = useSelector(
-    state => state.notificationsReducer.page || 1,
+    state => state.notificationsReducer.page || 0,
   );
 
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ const NotificationScreen = props => {
   const [selectedOrder, setSelectedOrder] = useState({});
 
   useEffect(() => {
-    dispatch(fetchNotifications(1));
+    dispatch(fetchNotifications(0));
   }, []);
 
   useEffect(() => {

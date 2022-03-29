@@ -52,6 +52,7 @@ export const fetchUpdateBusinessDetails = formData => {
 };
 
 export const fetchedUpdateBusinessDetails = (formData, data) => {
+
   return {
     type: PROFILE_ACTIONS.FETCHED_UPDATE_BUSINESS_DETAILS,
     payload: {
@@ -67,6 +68,33 @@ export const failedFetchUpdateBusinessDetails = error => {
     error,
   };
 };
+
+//=================================================================
+export const fetchUpdateTDSDetails = formData => {
+  return {
+    type: PROFILE_ACTIONS.FETCH_UPDATE_TDS_DETAILS,
+    payload: { formData },
+  };
+};
+
+export const fetchedUpdateTDSDetails = (formData, data) => {
+
+  return {
+    type: PROFILE_ACTIONS.FETCHED_UPDATE_TDS_DETAILS,
+    payload: {
+      formData,
+      data,
+    },
+  };
+};
+
+export const failedFetchUpdateTDSDetails = error => {
+  return {
+    type: PROFILE_ACTIONS.FAILED_FETCH_UPDATE_TDS_DETAILS,
+    error,
+  };
+};
+//====================================================================
 
 export const fetchAddressDetails = () => {
   return {
@@ -86,6 +114,30 @@ export const fetchedAddressDetails = data => {
 export const failedFetchAddressDetails = error => {
   return {
     type: PROFILE_ACTIONS.FAILED_FETCH_ADDRESSES,
+    error,
+  };
+};
+
+export const fetchDeleteAddresses = formData => {
+  return {
+    type: PROFILE_ACTIONS.FETCH_DELETE_ADDRESSES,
+    payload: { formData },
+  };
+};
+
+export const fetchedDeleteAddresses = (formData, data) => {
+  return {
+    type: PROFILE_ACTIONS.FETCHED_DELETE_ADDRESSES,
+    payload: {
+      formData,
+      data,
+    },
+  };
+};
+
+export const failedFetchDeleteAddresses = error => {
+  return {
+    type: PROFILE_ACTIONS.FAILED_FETCH_DELETE_ADDRESSES,
     error,
   };
 };
