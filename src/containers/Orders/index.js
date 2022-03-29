@@ -20,7 +20,7 @@ import {getImageUrl, acceptBulk} from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
@@ -68,6 +68,7 @@ const OrdersScreen = props => {
   const [poToDate, setPoToDate] = useState('');
   const [bulkItemIds, setBulkItemIds] = useState([]);
   const [bulkAcceptLoader, setBulkAcceptLoader] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
 
   const OPTIONS = [
     {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
@@ -234,6 +235,27 @@ const OrdersScreen = props => {
       }
     }
     setBulkItemIds(currentItemIds);
+  };
+
+  // useEffect(() => {
+  //   console.log(selectAll);
+  //   let currentItemIds;
+  //   if (selectAll) {
+  //     currentItemIds = (OrderData || []).map((_, i) => _.itemId);
+  //     console.log(currentItemIds);
+  //   }
+  //   setBulkItemIds(currentItemIds);
+  // }, [selectAll]);
+
+  const bulkSelect = () => {
+    // setSelectAll(!selectAll);
+    console.log(selectAll);
+
+    // if (selectAll) {
+    //   currentItemIds = [...currentItemIds, bulkItemIds];
+    // } else {
+    //   currentItemIds = [];
+    // }
   };
 
   const renderHeaderComponent = () => {
@@ -525,6 +547,11 @@ const OrdersScreen = props => {
           )}
           {bulkItemIds && bulkItemIds.length ? (
             <TouchableOpacity
+              // onPress={bulkSelect}
+              onPress={() => {
+                setSelectAll(!selectAll);
+                // bulkSelect();
+              }}
               style={{
                 borderWidth: 1,
                 borderColor: 'rgba(0,0,0,0.2)',
@@ -539,18 +566,18 @@ const OrdersScreen = props => {
                 borderRadius: 100,
               }}>
               <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
-                Select All
+                Select All({bulkItemIds.length})
               </Text>
-              {/* <MaterialCommunityIcon
-                name={
-                  bulkItemIds.includes(itemId)
-                    ? 'checkbox-marked'
-                    : 'checkbox-blank-outline'
-                }
-                onPress={() => selectItemId(itemId)}
+              <MaterialCommunityIcon
+                name={selectAll ? 'checkbox-marked' : 'checkbox-blank-outline'}
+                // onPress={bulkSelect}
+                onPress={() => {
+                  setSelectAll(!selectAll);
+                  // bulkSelect();
+                }}
                 size={20}
-                color={bulkItemIds.includes(itemId) ? 'blue' : '#000'}
-              /> */}
+                color={selectAll ? 'blue' : '#000'}
+              />
             </TouchableOpacity>
           ) : null}
           {bulkItemIds && bulkItemIds.length ? (

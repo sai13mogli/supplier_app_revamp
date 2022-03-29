@@ -334,13 +334,13 @@ const Ordercard = props => {
           {!fromModal && selectedTab == 'PENDING_ACCEPTANCE' ? (
             <MaterialCommunityIcon
               name={
-                bulkItemIds.includes(itemId)
+                (bulkItemIds || []).includes(itemId)
                   ? 'checkbox-marked'
                   : 'checkbox-blank-outline'
               }
               onPress={() => selectItemId(itemId)}
               size={20}
-              color={bulkItemIds.includes(itemId) ? 'blue' : '#000'}
+              color={(bulkItemIds || []).includes(itemId) ? 'blue' : '#000'}
             />
           ) : null}
           <View style={[fromModal ? styles.LeftpartModal : styles.leftpart]}>
