@@ -98,3 +98,16 @@ export const getTabItemCount = async (onlineShipmentMode, supplierId, tabRef) =>
       },
     },
   );
+
+export const acceptBulk = async payload =>
+  axios.post(
+    `${BASE_URL}api/order/acceptBulk`,
+    {
+      ...payload,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );

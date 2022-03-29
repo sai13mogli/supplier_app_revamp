@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -13,17 +13,18 @@ import {
 } from 'react-native';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
-import { STATE_STATUS } from '../../redux/constants';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrders, fetchTabCount } from '../../redux/actions/orders';
-import { getImageUrl } from '../../services/orders';
+import {STATE_STATUS} from '../../redux/constants';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchOrders, fetchTabCount} from '../../redux/actions/orders';
+import {getImageUrl, acceptBulk} from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
-import { Icon } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
+import Toast from 'react-native-toast-message';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -65,9 +66,11 @@ const OrdersScreen = props => {
   const [pickupToDate, setPickupToDate] = useState('');
   const [poFromDate, setPoFromDate] = useState('');
   const [poToDate, setPoToDate] = useState('');
+  const [bulkItemIds, setBulkItemIds] = useState([]);
+  const [bulkAcceptLoader, setBulkAcceptLoader] = useState(false);
 
   const OPTIONS = [
-    { label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders' },
+    {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
     {
       label: 'Fulfilled Orders',
       key: 'Fulfilled_Orders',
@@ -82,19 +85,19 @@ const OrdersScreen = props => {
 
   const TABS = {
     Open_Orders: [
-      { label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE' },
-      { label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP' },
-      { label: 'Pickup', key: 'PICKUP' },
-      { label: 'Upload Invoice', key: 'UPLOAD_INVOICE' },
-      { label: 'Packed', key: 'PACKED' },
-      { label: 'Shipment', key: 'SHIPMENT' },
-      { label: 'Mark Shipped', key: 'MARK_SHIPPED' },
+      {label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE'},
+      {label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP'},
+      {label: 'Pickup', key: 'PICKUP'},
+      {label: 'Upload Invoice', key: 'UPLOAD_INVOICE'},
+      {label: 'Packed', key: 'PACKED'},
+      {label: 'Shipment', key: 'SHIPMENT'},
+      {label: 'Mark Shipped', key: 'MARK_SHIPPED'},
     ],
-    Fulfilled_Orders: [{ label: 'Fulfilled', key: 'FULFILLED' }],
+    Fulfilled_Orders: [{label: 'Fulfilled', key: 'FULFILLED'}],
     Cancelled_Returned: [
-      { label: 'Return Pending', key: 'RETURN_PENDING' },
-      { label: 'Return Done', key: 'RETURN_DONE' },
-      { label: 'Cancelled', key: 'CANCELLED' },
+      {label: 'Return Pending', key: 'RETURN_PENDING'},
+      {label: 'Return Done', key: 'RETURN_DONE'},
+      {label: 'Cancelled', key: 'CANCELLED'},
     ],
   };
 
@@ -152,7 +155,7 @@ const OrdersScreen = props => {
     );
   };
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     return (
       <Ordercard
         msn={item.productMsn}
@@ -176,6 +179,9 @@ const OrdersScreen = props => {
         fetchTabCountFunc={fetchTabCountFunc}
         itemId={item.itemId}
         invoiceUrl={item.invoiceUrl}
+        bulkItemIds={bulkItemIds}
+        setBulkItemIds={setBulkItemIds}
+        selectItemId={selectItemId}
       />
     );
   };
@@ -214,6 +220,22 @@ const OrdersScreen = props => {
     setAppliedFilter(currentFilters);
   };
 
+  //select Item Id
+  const selectItemId = itemId => {
+    let currentItemIds = [...bulkItemIds];
+    if (currentItemIds.includes(itemId)) {
+      currentItemIds = currentItemIds.filter(_ => _ != itemId);
+    } else {
+      if (currentItemIds) {
+        currentItemIds.push(itemId);
+      } else {
+        currentItemIds = [];
+        currentItemIds.push(itemId);
+      }
+    }
+    setBulkItemIds(currentItemIds);
+  };
+
   const renderHeaderComponent = () => {
     return (
       <ScrollView
@@ -248,7 +270,7 @@ const OrdersScreen = props => {
 
   const renderFooterComponent = () => {
     if (OrderStatus == STATE_STATUS.FETCHING) {
-      return <ActivityIndicator style={{ alignSelf: 'center', margin: 12 }} />;
+      return <ActivityIndicator style={{alignSelf: 'center', margin: 12}} />;
     }
     return null;
   };
@@ -256,8 +278,8 @@ const OrdersScreen = props => {
   const renderListEmptyComponent = () => {
     if (OrderData.size == 0 && OrderStatus == STATE_STATUS.FETCHED) {
       return (
-        <View style={{ padding: 20 }}>
-          <Text style={{ color: '#000', alignSelf: 'center' }}>
+        <View style={{padding: 20}}>
+          <Text style={{color: '#000', alignSelf: 'center'}}>
             No Data Available
           </Text>
         </View>
@@ -329,12 +351,46 @@ const OrdersScreen = props => {
     setOrdersFiltersModal(false);
   };
 
+  const onBulkAccept = async () => {
+    try {
+      setBulkAcceptLoader(true);
+      const {data} = await acceptBulk({
+        supplierId: await AsyncStorage.getItem('userId'),
+        itemIds: bulkItemIds,
+      });
+      if (data && data.success) {
+        setBulkAcceptLoader(false);
+        setBulkItemIds([]);
+        fetchOrdersFunc(0, inputValue, selectedTab, 'ONESHIP', {
+          pickupFromDate: pickupFromDate || '',
+          pickupToDate: pickupToDate || '',
+          poFromDate: poFromDate || '',
+          poToDate: poToDate || '',
+          orderType: appliedFilter['orderType'] || [],
+          deliveryType: appliedFilter['deliveryType'] || [],
+          orderRefs: appliedFilter['orderRefs'] || [],
+        });
+      } else {
+        setBulkAcceptLoader(false);
+        Toast.show({
+          type: 'success',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      setBulkAcceptLoader(false);
+      console.log(error);
+    }
+  };
+
   // const handleKeyDown = e => {
   //   console.log(e, e && e.nativeEvent && e.nativeEvent.key);
   // };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.grayShade7 }}>
+    <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
       {/* <CustomButton
         title={'Open Notifications'}
         buttonColor={'dodgerblue'}
@@ -354,7 +410,7 @@ const OrdersScreen = props => {
         borderColor={colors.WhiteColor}
       /> */}
       {tabStatus == STATE_STATUS.FETCHING ? (
-        <ActivityIndicator style={{ alignSelf: 'center', margin: 12 }} />
+        <ActivityIndicator style={{alignSelf: 'center', margin: 12}} />
       ) : (
         <>
           <View
@@ -395,11 +451,11 @@ const OrdersScreen = props => {
             ListHeaderComponent={renderHeaderComponent}
             ListFooterComponent={renderFooterComponent}
             onEndReachedThreshold={0.9}
-            style={{ paddingBottom: 380 }}
-            contentContainerStyle={{ paddingBottom: 380 }}
+            style={{paddingBottom: 380}}
+            contentContainerStyle={{paddingBottom: 380}}
             removeClippedSubviews={true}
             maxToRenderPerBatch={5}
-            onEndReached={({ distanceFromEnd }) => {
+            onEndReached={({distanceFromEnd}) => {
               if (!onEndReachedCalledDuringMomentum.current) {
                 endReachedFetchListing();
                 onEndReachedCalledDuringMomentum.current = true;
@@ -414,7 +470,7 @@ const OrdersScreen = props => {
           <ScrollView>
             <TextInput
               blurOnSubmit={true}
-              style={{ color: '#000' }}
+              style={{color: '#000'}}
               placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
               placeholderTextColor={'#888'}
               selectionColor={'#888'}
@@ -467,6 +523,67 @@ const OrdersScreen = props => {
               resetFilters={resetFilters}
             />
           )}
+          {bulkItemIds && bulkItemIds.length ? (
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderColor: 'rgba(0,0,0,0.2)',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 200,
+                position: 'absolute',
+                bottom: 10,
+                right: 10,
+                height: 70,
+                backgroundColor: '#fff',
+                borderRadius: 100,
+              }}>
+              <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+                Select All
+              </Text>
+              {/* <MaterialCommunityIcon
+                name={
+                  bulkItemIds.includes(itemId)
+                    ? 'checkbox-marked'
+                    : 'checkbox-blank-outline'
+                }
+                onPress={() => selectItemId(itemId)}
+                size={20}
+                color={bulkItemIds.includes(itemId) ? 'blue' : '#000'}
+              /> */}
+            </TouchableOpacity>
+          ) : null}
+          {bulkItemIds && bulkItemIds.length ? (
+            <View style={{marginTop: 50}}>
+              <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+                Selcted
+              </Text>
+              <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+                {bulkItemIds && bulkItemIds.length < 10
+                  ? `0${bulkItemIds.length}`
+                  : bulkItemIds.length}
+              </Text>
+              <TouchableOpacity
+                onPress={onBulkAccept}
+                style={{backgroundColor: 'red', width: 200, height: 50}}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 'bold',
+                    color: '#fff',
+                  }}>
+                  BULK ACCEPT
+                </Text>
+                {bulkAcceptLoader && (
+                  <ActivityIndicator
+                    size={'small'}
+                    color={'white'}
+                    style={{marginRight: 4}}
+                  />
+                )}
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </>
       )}
     </View>

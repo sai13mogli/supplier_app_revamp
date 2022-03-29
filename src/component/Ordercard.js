@@ -19,6 +19,7 @@ import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import RejectModal from '../component/RejectModal';
 import AcceptModal from './AcceptModal';
@@ -48,6 +49,9 @@ const Ordercard = props => {
     selectedTab,
     fetchTabCountFunc,
     invoiceUrl,
+    bulkItemIds,
+    setBulkItemIds,
+    selectItemId,
   } = props;
   const [orderImage, setOrderImage] = useState(null);
   const [showMoreTxt, setShowMoreTxt] = useState(false);
@@ -321,13 +325,25 @@ const Ordercard = props => {
   const renderOrderDetails = (fromModal, fromCTA) => {
     return (
       <>
-        <View 
-         style={[fromModal ? styles.orderCardwrapInnerModal : styles.orderCardwrapInner]}
-        >
-          <View 
-            style={[fromModal ? styles.LeftpartModal : styles.leftpart]}
-          >
-             
+        <View
+          style={[
+            fromModal
+              ? styles.orderCardwrapInnerModal
+              : styles.orderCardwrapInner,
+          ]}>
+          {!fromModal && selectedTab == 'PENDING_ACCEPTANCE' ? (
+            <MaterialCommunityIcon
+              name={
+                bulkItemIds.includes(itemId)
+                  ? 'checkbox-marked'
+                  : 'checkbox-blank-outline'
+              }
+              onPress={() => selectItemId(itemId)}
+              size={20}
+              color={bulkItemIds.includes(itemId) ? 'blue' : '#000'}
+            />
+          ) : null}
+          <View style={[fromModal ? styles.LeftpartModal : styles.leftpart]}>
             <Image
               // source={{
               //   uri:
@@ -337,6 +353,7 @@ const Ordercard = props => {
               source={require('../assets/images/Prd.png')}
               style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
             />
+
             {!fromModal ? (
               <View style={styles.quantityTxt}>
                 <Text style={styles.TitleLightTxt}>
@@ -348,7 +365,9 @@ const Ordercard = props => {
           <View style={styles.rightPart}>
             <Text
               style={[
-                fromModal ? {color: Colors.FontColor} : {color: Colors.BrandColor},
+                fromModal
+                  ? {color: Colors.FontColor}
+                  : {color: Colors.BrandColor},
                 styles.msnName,
               ]}>
               {msn}
@@ -364,15 +383,21 @@ const Ordercard = props => {
               <Text style={styles.productName}>{productName}</Text>
             )}
             {lengthMore && !fromModal ? (
-              
               <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
                 {showMoreTxt ? 'Read less' : 'Read more'}
               </Text>
-              
             ) : null}
             {fromModal ? (
-              <View style={{flexDirection:"row",marginBottom:Dimension.margin20}}>
-                <Text style={styles.TotalamounTxt}> <Text style={styles.rupeeSign}>₹ </Text>{Math.floor(totalAmount)}</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginBottom: Dimension.margin20,
+                }}>
+                <Text style={styles.TotalamounTxt}>
+                  {' '}
+                  <Text style={styles.rupeeSign}>₹ </Text>
+                  {Math.floor(totalAmount)}
+                </Text>
                 <Text style={styles.taxpercentageTxt}>{taxPercentage}%</Text>
               </View>
             ) : null}
@@ -428,16 +453,18 @@ const Ordercard = props => {
           </View>
         </View>
         <View
-          style={fromModal ?{
-            flexDirection: 'row',
-            flex: 1,
-            marginTop: Dimension.margin30,
-            padding:Dimension.padding15,
-            borderTopColor:Colors.grayShade1,
-            borderTopWidth:1
-          }:{  flexDirection: 'row',
-          flex: 1,
-          marginTop: Dimension.margin15,}}>
+          style={
+            fromModal
+              ? {
+                  flexDirection: 'row',
+                  flex: 1,
+                  marginTop: Dimension.margin30,
+                  padding: Dimension.padding15,
+                  borderTopColor: Colors.grayShade1,
+                  borderTopWidth: 1,
+                }
+              : {flexDirection: 'row', flex: 1, marginTop: Dimension.margin15}
+          }>
           <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
             {renderPartialCTAs(invoiceUrl, fromCTA)}
             {!showMoreCTA ? renderFurtherCTAs(invoiceUrl, fromCTA) : null}
@@ -483,17 +510,14 @@ const Ordercard = props => {
             onBackdropPress={() => setIsOrderVisible(false)}
             onBackButtonPress={() => setIsOrderVisible(false)}>
             <View style={styles.modalContainer}>
-            <View style={styles.topbdr}></View>
+              <View style={styles.topbdr}></View>
               <View style={styles.ModalheadingWrapper}>
-         
-          <CustomeIcon
-            name={'close'}
-            size={Dimension.font22}
-            color={Colors.FontColor}
-            onPress={() => setIsOrderVisible(false)}>
-
-            </CustomeIcon>
-        </View>
+                <CustomeIcon
+                  name={'close'}
+                  size={Dimension.font22}
+                  color={Colors.FontColor}
+                  onPress={() => setIsOrderVisible(false)}></CustomeIcon>
+              </View>
               {renderOrderDetails(true, '')}
             </View>
           </Modal>
@@ -641,14 +665,14 @@ const styles = StyleSheet.create({
     height: Dimension.height50,
     //alignSelf:'center'
   },
- 
+
   imgStyleModal: {
     borderRadius: 4,
     backgroundColor: Colors.WhiteColor,
     padding: 2,
     width: 250,
     height: 250,
-    alignSelf:'center'
+    alignSelf: 'center',
   },
   quantityTxt: {
     alignSelf: 'center',
@@ -710,25 +734,24 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
   },
-  LeftpartModal:{flex:1,},
-  orderCardwrapInnerModal:{paddingHorizontal:Dimension.padding15},
-  rupeeSign:{
-    fontFamily:Dimension.CustomRobotoBold,
-    fontSize:Dimension.font12,
-    color:Colors.FontColor,
-    marginRight:Dimension.margin5
+  LeftpartModal: {flex: 1},
+  orderCardwrapInnerModal: {paddingHorizontal: Dimension.padding15},
+  rupeeSign: {
+    fontFamily: Dimension.CustomRobotoBold,
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    marginRight: Dimension.margin5,
   },
-  TotalamounTxt:{
-    fontFamily:Dimension.CustomSemiBoldFont,
-    fontSize:Dimension.font12,
-    color:Colors.FontColor,
-   
+  TotalamounTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
   },
-  taxpercentageTxt:{
-    fontFamily:Dimension.CustomSemiBoldFont,
-    fontSize:Dimension.font12,
-    color:Colors.greenShade,
-    marginLeft:Dimension.margin5
+  taxpercentageTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    fontSize: Dimension.font12,
+    color: Colors.greenShade,
+    marginLeft: Dimension.margin5,
   },
   topbdr: {
     alignSelf: 'center',
