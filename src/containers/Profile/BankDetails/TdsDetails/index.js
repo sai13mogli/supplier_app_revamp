@@ -1,63 +1,66 @@
-import React, {useEffect, useState} from 'react';
-import {Text, View, FlatList, ScrollView, TouchableOpacity} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import colors from '../../../../Theme/Colors';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Accordion from 'react-native-collapsible/Accordion';
 import Dimension from '../../../../Theme/Dimension';
-import CustomButton from '../../../../component/common/Button';
+import { useNavigation } from '@react-navigation/native'
 import CustomeIcon from '../../../../component/common/CustomeIcon';
-import AddressesModal from '../../../../component/common/AddressesModal';
+import TDSEditModal from '../../../../component/common/TDSEditModal';
+import { fetchUpdateTDSDetails } from '../../../../redux/actions/profile';
 import styles from './styles';
-import Checkbox from '../../../../component/common/Checkbox/index';
+import { CheckBox } from 'react-native-elements';
+import DotCheckbox from '../../../../component/common/Checkbox';
+import { EditTdsData } from '../../../../redux/constants/support';
 
-const TdsDetails = () => {
+const TdsDetails = (props) => {
   const tdsInfoDetails = useSelector(
-    state => state.profileReducer.tdsInfoDetails.data || {},
+    state => state.profileReducer.tdsInfoDetails.data || [],
   );
-  const [tdsInfoList, setTdsInfoList] = React.useState([]);
+  const [tdsInfoList, setTdsInfoList] = useState([]);
+  const [lastYearItr, setLastYearItr] = useState(undefined);
   const [modalVisible, setModalVisible] = useState(false);
-  const [isSelected, setSelection] = useState(false);
-  const [inputText, setInputText] = useState();
-  const [loading, setLoading] = useState(false);
-  const [editId, seteditId] = useState(false);
-  const [filterListData, setFilterListData] = useState([
-    {
-      label: 'ITR filed for AV',
-      checked: true,
-    },
-    {
-      label: 'Pending Clarification (1)',
-      checked: true,
-    },
-    {
-      label: 'Accepted (1)',
-      checked: true,
-    },
-    {
-      label: 'Material Being Procured (1)',
-      checked: true,
-    },
-    {
-      label: 'QC Done - Ready to Ship (1)',
-      checked: true,
-    },
-    {
-      label: 'QC is in Progress (1)',
-      checked: true,
-    },
-    {
-      label: 'Other',
-      checked: true,
-    },
-  ]);
+  const [isYes, setIsYes] = useState(false);
+  const [isNo, setIsNo] = useState(false);
+  const [isNA, setIsNA] = useState(false);
+  const [section, setSectionList] = React.useState([]);
+  const { navigate } = useNavigation()
+  const navigation = useNavigation()
+  const dispatch = useDispatch();
 
-  console.log('Aakash====>', tdsInfoDetails);
+  console.log("tdsInfoDetails===>", tdsInfoDetails);
 
   const _updateSections = activeSections => {
     setTdsInfoList(activeSections);
   };
 
+  const OnYes = () => {
+    setIsYes(true)
+    setIsNo(false)
+    setIsNA(false)
+  }
+  const OnNo = () => {
+    setIsYes(false)
+    setIsNo(true)
+    setIsNA(false)
+  }
+  const OnNA = () => {
+    setIsYes(false)
+    setIsNo(false)
+    setIsNA(true)
+  }
+  const getDotcheck = (value) => {
+
+    setLastYearItr(value)
+
+  }
+
+
+
+
+
   const _renderHeader = section => {
+    global.year = section.financialyear
     const index = tdsInfoDetails.findIndex(
       i => i.tdsInfoDetails_id === section.tdsInfoDetails_id,
     );
@@ -71,8 +74,8 @@ const TdsDetails = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <Text style={{fontSize: 16, fontWeight: '600'}}>
-          {section.financialyear}
+        <Text style={{ fontSize: 16, fontWeight: '600' }}>
+          Year {section.financialyear}
         </Text>
         <CustomeIcon
           type="FontAwesome"
@@ -84,48 +87,12 @@ const TdsDetails = () => {
     );
   };
 
-  const myFilterList = (item, index) => {
-    console.log('Dataee===>', item);
-    return (
-      <ScrollView
-        style={{marginBottom: 0}}
-        showsVerticalScrollIndicator={false}>
-        <View style={styles.Separater} />
 
-        {/* <Text style={styles.radioText}>
-          {item?.label}
-        </Text> */}
-        <Checkbox
-          checked={isSelected}
-          onPress={() => setSelection(!isSelected)}
-        />
-        {/* <Text>hi</Text> */}
-        {/* <View style={styles.RightInnerPart}>
-          <DotCheckbox
-            data={filtersData && filtersData[props.activeFilterType]}
-            onCheck={getFilterValue}
-            value={props.typeFilter}
-            formfilterModal={true}
-          />
-        </View>
-        <DotCheckbox
-          checked={isSelected}
-          onPress={() => setSelection(!isSelected)}
-        />
-        <DotCheckbox
-          checked={isSelected}
-          onPress={() => setSelection(!isSelected)}
-        /> */}
-      </ScrollView>
-    );
-  };
 
   const onPresEdit = section => {
-    // console.log("xsxxgcsgd====>", section.id);
     setModalVisible(true);
     setModalVisible(!modalVisible);
-    setInputText(section);
-    seteditId(section.id);
+    setSectionList(section)
   };
 
   const _renderContent = section => {
@@ -148,45 +115,45 @@ const TdsDetails = () => {
         <View style={styles.sectionView}>
           <View style={styles.wrap}>
             <Text style={styles.text}>
-              TDS filed for AY {section.previousFinancialYear}
+              TDS filed for AY {section.financialyear}
             </Text>
-            <Text style={{fontSize: 16}}>
-              {section.lastYearItr == 1 ? 'Yes' : 'No'}
+            <Text style={{ fontSize: 16 }}>
+              {section.lastYearItr == 1 ? 'Yes' : section.lastYearItr == 0 ? "No" : section.lastYearItr == undefined || null || "" ? "-" : null}
             </Text>
           </View>
-          <View style={[styles.wrap, {bottom: 50}]}>
+          <View style={[styles.wrap, { bottom: 50 }]}>
             <Text style={styles.text}>
-              ITR filed for AV {section.previousFinancialYear}
+              ITR filed for AV {section.financialyear}
             </Text>
-            <Text style={{fontSize: 16}}>
-              {section.lastToLastYearItr == 1 ? 'Yes' : 'No'}
-            </Text>
-          </View>
-          <View style={[styles.wrap, {bottom: 40}]}>
-            <Text style={styles.text}>
-              Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
-              {section.previousFinancialYear}
-            </Text>
-            <Text style={{fontSize: 16}}>
-              {section.lastYearTdsTcs == 1 ? 'Yes' : 'No'}
+            <Text style={{ fontSize: 16 }}>
+              {section.lastToLastYearItr == 1 ? 'Yes' : section.lastToLastYearItr == 0 ? 'No' : section.lastToLastYearItr == undefined || null || "" ? "-" : null}
             </Text>
           </View>
-          <View style={[styles.wrap, {bottom: 30}]}>
+          <View style={[styles.wrap, { bottom: 40 }]}>
             <Text style={styles.text}>
               Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
-              {section.previousFinancialYear}
+              {section.financialyear}
             </Text>
-            <Text style={{fontSize: 16}}>
-              {section.lastToLastYearTdsTcs == 1 ? 'Yes' : 'No'}
+            <Text style={{ fontSize: 16 }}>
+              {section.lastYearTdsTcs == 1 ? 'Yes' : section.lastYearTdsTcs == 0 ? 'No' : section.lastYearTdsTcs == undefined || null || "" ? "-" : null}
             </Text>
           </View>
-          <View style={[styles.wrap, {bottom: 20}]}>
+          <View style={[styles.wrap, { bottom: 30 }]}>
             <Text style={styles.text}>
-              Turnover in financial year {section.previousFinancialYear} was
+              Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
+              {section.financialyear}
+            </Text>
+            <Text style={{ fontSize: 16 }}>
+              {section.lastToLastYearTdsTcs == 1 ? 'Yes' : section.lastToLastYearTdsTcs == 0 ? 'No' : section.lastToLastYearTdsTcs == undefined || null || "" ? "-" : null}
+            </Text>
+          </View>
+          <View style={[styles.wrap, { bottom: 20 }]}>
+            <Text style={styles.text}>
+              Turnover in financial year {section.financialyear} was
               exceeding 10 crores
             </Text>
-            <Text style={{fontSize: 16}}>
-              {section.financialYearTurnover == 1 ? 'Yes' : 'No'}
+            <Text style={{ fontSize: 16 }}>
+              {section.financialYearTurnover == 1 ? 'Yes' : section.financialYearTurnover == 0 ? 'No' : section.financialYearTurnover == undefined || null || "" ? "-" : null}
             </Text>
           </View>
         </View>
@@ -194,12 +161,27 @@ const TdsDetails = () => {
     );
   };
 
+  const onSubmit = (section) => {
+    let data = {
+      id: section.id,
+      panNumber: "AAJCP7293G",
+      financialyear: "2022-23",
+      previousFinancialYear: "2021-22",
+      financialYearTurnover: 0,
+      lastYearItr: 0,
+      lastToLastYearItr: 0,
+      lastYearTdsTcs: 0,
+      lastToLastYearTdsTcs: 0,
+    }
+    dispatch(fetchUpdateTDSDetails(data));
+  };
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <ScrollView indicatorStyle="white" style={styles.ContainerCss}>
         <Accordion
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingBottom: 80}}
+          contentContainerStyle={{ paddingBottom: 80 }}
           sections={tdsInfoDetails || []}
           activeSections={tdsInfoList}
           renderHeader={_renderHeader}
@@ -207,28 +189,17 @@ const TdsDetails = () => {
           onChange={_updateSections}
           touchableComponent={TouchableOpacity}
           renderFooter={() => (
-            <View style={{height: 10, backgroundColor: '#E0E0E0'}}></View>
+            <View style={{ height: 10, backgroundColor: '#E0E0E0' }}></View>
           )}
         />
       </ScrollView>
-      <View style={styles.bottombtnWrap}>
-        <CustomButton
-          buttonColor={colors.BrandColor}
-          borderColor={colors.BrandColor}
-          TextColor={colors.WhiteColor}
-          TextFontSize={Dimension.font16}
-          title={'Next'}
-          loading={loading}
-          // onPress={onSubmit}
-        />
-      </View>
-      <AddressesModal
+      <TDSEditModal
+        header={section.financialyear}
         visible={modalVisible}
-        // data={section}
-        // filterListData={console.log('Section===>', section)}
+        filterListData={section}
         transparent={true}
         onClose={() => setModalVisible(true)}
-        onPress={() => setModalVisible(!modalVisible)}
+        onPress={() => { setModalVisible(!modalVisible), onSubmit(section) }}
       />
     </View>
   );

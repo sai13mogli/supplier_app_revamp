@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback, useRef} from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -13,16 +13,17 @@ import {
 } from 'react-native';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
-import {STATE_STATUS} from '../../redux/constants';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchOrders, fetchTabCount} from '../../redux/actions/orders';
-import {getImageUrl} from '../../services/orders';
+import { STATE_STATUS } from '../../redux/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOrders, fetchTabCount } from '../../redux/actions/orders';
+import { getImageUrl } from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
+import OrdersFilterModal from '../../component/OrdersFilterModal';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -45,14 +46,28 @@ const OrdersScreen = props => {
     state.ordersReducer.getIn(['orders', 'page']),
   );
 
+  const paramsAppliedFilters = useSelector(state =>
+    state.ordersReducer.getIn(['orders', 'filters']),
+  );
+
   const [selectedType, setSelectedType] = useState('Open_Orders');
   const [selectedTab, setSelectedTab] = useState('PENDING_ACCEPTANCE');
   const onEndReachedCalledDuringMomentum = useRef(true);
   const [inputValue, setInputValue] = useState('');
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const [ordersfiltersModal, setOrdersFiltersModal] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('orderRefs');
+  const [appliedFilter, setAppliedFilter] = useState(
+    paramsAppliedFilters || {},
+  );
+  const [initialFilter, setInitialFilter] = useState('orderRefs');
+  const [pickupFromDate, setPickupFromDate] = useState('');
+  const [pickupToDate, setPickupToDate] = useState('');
+  const [poFromDate, setPoFromDate] = useState('');
+  const [poToDate, setPoToDate] = useState('');
 
   const OPTIONS = [
-    {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
+    { label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders' },
     {
       label: 'Fulfilled Orders',
       key: 'Fulfilled_Orders',
@@ -67,19 +82,19 @@ const OrdersScreen = props => {
 
   const TABS = {
     Open_Orders: [
-      {label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE'},
-      {label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP'},
-      {label: 'Pickup', key: 'PICKUP'},
-      {label: 'Upload Invoice', key: 'UPLOAD_INVOICE'},
-      {label: 'Packed', key: 'PACKED'},
-      {label: 'Shipment', key: 'SHIPMENT'},
-      {label: 'Mark Shipped', key: 'MARK_SHIPPED'},
+      { label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE' },
+      { label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP' },
+      { label: 'Pickup', key: 'PICKUP' },
+      { label: 'Upload Invoice', key: 'UPLOAD_INVOICE' },
+      { label: 'Packed', key: 'PACKED' },
+      { label: 'Shipment', key: 'SHIPMENT' },
+      { label: 'Mark Shipped', key: 'MARK_SHIPPED' },
     ],
-    Fulfilled_Orders: [{label: 'Fulfilled', key: 'FULFILLED'}],
+    Fulfilled_Orders: [{ label: 'Fulfilled', key: 'FULFILLED' }],
     Cancelled_Returned: [
-      {label: 'Return Pending', key: 'RETURN_PENDING'},
-      {label: 'Return Done', key: 'RETURN_DONE'},
-      {label: 'Cancelled', key: 'CANCELLED'},
+      { label: 'Return Pending', key: 'RETURN_PENDING' },
+      { label: 'Return Done', key: 'RETURN_DONE' },
+      { label: 'Cancelled', key: 'CANCELLED' },
     ],
   };
 
@@ -87,14 +102,12 @@ const OrdersScreen = props => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
-        console.log('keyboardshow hai dost');
         setKeyboardVisible(true);
       },
     );
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => {
-        console.log('keyboardhide hai dost');
         setKeyboardVisible(false);
       },
     );
@@ -139,7 +152,7 @@ const OrdersScreen = props => {
     );
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <Ordercard
         msn={item.productMsn}
@@ -180,6 +193,27 @@ const OrdersScreen = props => {
     });
   };
 
+  //selectedFilter
+  const selectFilter = term => {
+    let currentFilters = {...appliedFilter};
+    if (
+      currentFilters[initialFilter] &&
+      currentFilters[initialFilter].includes(term)
+    ) {
+      currentFilters[initialFilter] = currentFilters[initialFilter].filter(
+        _ => _ != term,
+      );
+    } else {
+      if (currentFilters[initialFilter]) {
+        currentFilters[initialFilter].push(term);
+      } else {
+        currentFilters[initialFilter] = [];
+        currentFilters[initialFilter].push(term);
+      }
+    }
+    setAppliedFilter(currentFilters);
+  };
+
   const renderHeaderComponent = () => {
     return (
       <ScrollView
@@ -214,7 +248,7 @@ const OrdersScreen = props => {
 
   const renderFooterComponent = () => {
     if (OrderStatus == STATE_STATUS.FETCHING) {
-      return <ActivityIndicator style={{alignSelf: 'center', margin: 12}} />;
+      return <ActivityIndicator style={{ alignSelf: 'center', margin: 12 }} />;
     }
     return null;
   };
@@ -222,8 +256,8 @@ const OrdersScreen = props => {
   const renderListEmptyComponent = () => {
     if (OrderData.size == 0 && OrderStatus == STATE_STATUS.FETCHED) {
       return (
-        <View style={{padding: 20}}>
-          <Text style={{color: '#000', alignSelf: 'center'}}>
+        <View style={{ padding: 20 }}>
+          <Text style={{ color: '#000', alignSelf: 'center' }}>
             No Data Available
           </Text>
         </View>
@@ -266,12 +300,41 @@ const OrdersScreen = props => {
     });
   };
 
+  //applied filters api hit
+  const applyFilters = () => {
+    setOrdersFiltersModal(false);
+    fetchOrdersFunc(0, inputValue, selectedTab, 'ONESHIP', {
+      pickupFromDate: pickupFromDate,
+      pickupToDate: pickupToDate,
+      poFromDate: poFromDate,
+      poToDate: poToDate,
+      orderType: appliedFilter['orderType'],
+      deliveryType: appliedFilter['deliveryType'],
+      orderRefs: appliedFilter['orderRefs'],
+    });
+  };
+
+  //reset filters api hit
+  const resetFilters = () => {
+    fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+      pickupFromDate: '',
+      pickupToDate: '',
+      poFromDate: '',
+      poToDate: '',
+      orderType: [],
+      deliveryType: [],
+      orderRefs: [],
+    });
+    setAppliedFilter({});
+    setOrdersFiltersModal(false);
+  };
+
   // const handleKeyDown = e => {
   //   console.log(e, e && e.nativeEvent && e.nativeEvent.key);
   // };
 
   return (
-    <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
+    <View style={{ flex: 1, backgroundColor: colors.grayShade7 }}>
       {/* <CustomButton
         title={'Open Notifications'}
         buttonColor={'dodgerblue'}
@@ -291,7 +354,7 @@ const OrdersScreen = props => {
         borderColor={colors.WhiteColor}
       /> */}
       {tabStatus == STATE_STATUS.FETCHING ? (
-        <ActivityIndicator style={{alignSelf: 'center', margin: 12}} />
+        <ActivityIndicator style={{ alignSelf: 'center', margin: 12 }} />
       ) : (
         <>
           <View
@@ -332,11 +395,11 @@ const OrdersScreen = props => {
             ListHeaderComponent={renderHeaderComponent}
             ListFooterComponent={renderFooterComponent}
             onEndReachedThreshold={0.9}
-            style={{paddingBottom: 380}}
-            contentContainerStyle={{paddingBottom: 380}}
+            style={{ paddingBottom: 380 }}
+            contentContainerStyle={{ paddingBottom: 380 }}
             removeClippedSubviews={true}
-            maxToRenderPerBatch={10}
-            onEndReached={({distanceFromEnd}) => {
+            maxToRenderPerBatch={5}
+            onEndReached={({ distanceFromEnd }) => {
               if (!onEndReachedCalledDuringMomentum.current) {
                 endReachedFetchListing();
                 onEndReachedCalledDuringMomentum.current = true;
@@ -346,23 +409,18 @@ const OrdersScreen = props => {
               onEndReachedCalledDuringMomentum.current = false;
             }}
             showsVerticalScrollIndicator={false}
+            initialNumToRender={5}
           />
           <ScrollView>
             <TextInput
-              // autoFocus={true}
-              // style={styles.inputField}
-              // onKeyPress={e => {
-              //   console.log('hehhe', e.nativeEvent.key);
-              // }}
               blurOnSubmit={true}
-              style={{color: '#000'}}
+              style={{ color: '#000' }}
               placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
               placeholderTextColor={'#888'}
               selectionColor={'#888'}
               returnKeyType={'search'}
               onChangeText={onSearchText}
               onFocus={() => console.log('onFocus!!')}
-              // ref={searchInput}
               value={inputValue}
               onSubmitEditing={event => {
                 if (inputValue && inputValue.length > 1) {
@@ -371,7 +429,9 @@ const OrdersScreen = props => {
               }}
             />
             {!isKeyboardVisible ? (
-              <TouchableOpacity style={{width: 40, height: 50}}>
+              <TouchableOpacity
+                style={{width: 40, height: 50}}
+                onPress={() => setOrdersFiltersModal(true)}>
                 <Text
                   style={{
                     fontSize: 12,
@@ -383,6 +443,30 @@ const OrdersScreen = props => {
               </TouchableOpacity>
             ) : null}
           </ScrollView>
+          {ordersfiltersModal && (
+            <OrdersFilterModal
+              ordersfiltersModal={ordersfiltersModal}
+              setOrdersFiltersModal={setOrdersFiltersModal}
+              activeFilter={activeFilter}
+              setActiveFilter={setActiveFilter}
+              selectedTab={selectedTab}
+              appliedFilter={appliedFilter}
+              setAppliedFilter={setAppliedFilter}
+              initialFilter={initialFilter}
+              setInitialFilter={setInitialFilter}
+              selectFilter={selectFilter}
+              applyFilters={applyFilters}
+              pickupFromDate={pickupFromDate || appliedFilter['pickupFromDate']}
+              pickupToDate={pickupToDate || appliedFilter['pickupToDate']}
+              setPickupFromDate={setPickupFromDate}
+              setPickupToDate={setPickupToDate}
+              poFromDate={poFromDate || appliedFilter['poFromDate']}
+              poToDate={poToDate || appliedFilter['poToDate']}
+              setPoFromDate={setPoFromDate}
+              setPoToDate={setPoToDate}
+              resetFilters={resetFilters}
+            />
+          )}
         </>
       )}
     </View>

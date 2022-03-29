@@ -1,9 +1,10 @@
-import {createRef} from 'react';
+import { createRef } from 'react';
 import HomeScreen from '../containers/Home';
 import ProfileScreen from '../containers/Profile';
 import OrdersScreen from '../containers/Orders';
 import DashboardScreen from '../containers/Dashboard';
 import SupportScreen from '../containers/Support';
+import MoreScreen from '../containers/More';
 import DocumentsScreen from '../containers/Profile/Documents';
 import BusinessDetails from '../containers/Profile/BusinessDetails';
 import Addresses from '../containers/Profile/Addresses';
@@ -28,7 +29,7 @@ import NewTicket from '../containers/Support/NewTicket';
 import Error from '../containers/Auth/Login/Error';
 import Conversation from '../containers/Support/Conversation';
 import EditAddress from '../containers/Profile/Addresses/EditAddress';
-import AddBankAccount from '../containers/Profile/BankDetails/Accounts/AddBankAccount';
+import EditBankAccount from '../containers/Profile/BankDetails/Accounts/EditBankAccount';
 
 
 export const BOTTOM_TAB_SCREENS = [
@@ -89,14 +90,14 @@ export const TOP_BRANDS_SCREENS = [
 export const ADDRESSES_TAB_SCREENS = [
   {
     name: 'Billing',
-    key:'billing',
+    key: 'billing',
     component: Billing,
     ref: createRef(),
     idx: 0,
   },
   {
     name: 'PickUp',
-    key:'pickup',
+    key: 'pickup',
     component: PickedUp,
     ref: createRef(),
     idx: 1
@@ -156,8 +157,12 @@ export const APP_STACK_SCREENS = [
     component: EditAddress,
   },
   {
-    name: 'AddBankAccount',
-    component: AddBankAccount,
+    name: 'More',
+    component: MoreScreen,
+  },
+  {
+    name: 'EditBankAccount',
+    component: EditBankAccount,
   },
   {
     name: 'BankDetails',
@@ -228,5 +233,50 @@ export const PROFILE_TABS = new OrderedMap({
     icon: 'single-product-upload',
     progress: 7,
     activity: 5,
+  },
+});
+
+export const MORE_TABS = new OrderedMap({
+  profile: {
+    route: 'Profile',
+    title: 'Profile',
+    icon: 'business-details',
+    progress: 2,
+    activity: 1,
+  },
+  settings: {
+    route: 'Settings',
+    title: 'Settings',
+    icon: 'category--brand',
+    progress: 3,
+    activity: 2,
+  },
+  faqs: {
+    route: 'FAQs',
+    title: 'FAQs',
+    icon: 'address',
+    progress: 4,
+    activity: 3,
+  },
+  abou_us: {
+    route: 'AboutUs',
+    title: 'About Us',
+    icon: 'bank-details',
+    progress: 5,
+    activity: 4,
+  },
+  privacy_policy: {
+    route: 'PrivacyPolicy',
+    title: 'Privacy Policy',
+    icon: 'single-product-upload',
+    progress: 7,
+    activity: 5,
+  },
+  contact_us: {
+    route: 'ContactUs',
+    title: 'Contact Us',
+    icon: 'bank-details',
+    progress: 5,
+    activity: 4,
   },
 });

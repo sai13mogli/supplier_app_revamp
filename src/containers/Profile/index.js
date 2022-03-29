@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -9,8 +9,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Header from '../../component/common/Header';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchBusinessDetails,
   fetchProfile,
@@ -19,21 +19,21 @@ import {
   fetchAddressDetails,
   logout,
 } from '../../redux/actions/profile';
-import {fetchCategoriesBrands} from '../../redux/actions/categorybrand';
+import { fetchCategoriesBrands } from '../../redux/actions/categorybrand';
 
 import Progress from 'react-native-progress/Bar';
-import {OrderedMap} from 'immutable';
-import {PROFILE_TABS} from '../../constants';
+import { OrderedMap } from 'immutable';
+import { PROFILE_TABS } from '../../constants';
 import styles from './style';
 import CustomButton from '../../component/common/Button';
 import Colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomeIcon from '../../component/common/CustomeIcon';
-import {STATE_STATUS} from '../../redux/constants';
+import { STATE_STATUS } from '../../redux/constants';
 
 const ProfileScreen = props => {
-  const {navigate} = useNavigation();
+  const { navigate } = useNavigation();
   const dispatch = useDispatch();
   const profileStatus = useSelector(
     state => (state.profileReducer || {}).status || STATE_STATUS.UNFETCHED,
@@ -94,11 +94,11 @@ const ProfileScreen = props => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Header showText={'My Profile'} />
       {profileStatus == STATE_STATUS.FETCHING ? (
         <ActivityIndicator
-          style={{alignSelf: 'center', margin: Dimension.margin12}}
+          style={{ alignSelf: 'center', margin: Dimension.margin12 }}
           size={'small'}
           color={Colors.BrandColor}
         />
@@ -141,7 +141,7 @@ const ProfileScreen = props => {
                     {(profileData.userInfo || {}).email}
                   </Text>
                 </View>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <CustomeIcon
                     name={
                       profileData?.phoneVerified
@@ -157,7 +157,7 @@ const ProfileScreen = props => {
               </View>
             </View>
             <View style={styles.UserEmailVerfyWrap}>
-              <View style={{flex: 6, marginRight: Dimension.margin10}}>
+              <View style={{ flex: 6, marginRight: Dimension.margin10 }}>
                 <Text style={styles.UserEmailVerfyBoldTxt}>
                   A verification link has been sent on your email.
                 </Text>
@@ -165,7 +165,7 @@ const ProfileScreen = props => {
                   Link is active for 24 hours only.
                 </Text>
               </View>
-              <View style={{flex: 3}}>
+              <View style={{ flex: 3 }}>
                 <CustomButton
                   title={'OPEN MAIL'}
                   onPress={() => Linking.openURL('mailto:')}
@@ -206,7 +206,7 @@ const ProfileScreen = props => {
                 key={tabIndex}
                 onPress={() => isActive(tabIndex, tab.route, tab)}
                 style={styles.profileTabWrap}>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <View
                     style={[
                       styles.IconWrap,
@@ -228,7 +228,7 @@ const ProfileScreen = props => {
                   <View>
                     <Text style={styles.tabTitle}>{tab.title}</Text>
 
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                       {isCompleted(tab.progress) ? (
                         <>
                           <CustomeIcon
@@ -252,24 +252,6 @@ const ProfileScreen = props => {
                       : Colors.BrandColor
                   }
                   size={Dimension.font18}></CustomeIcon>
-
-                {/* <View>
-              
-            onPress={() => props.navigation.navigate('CategoryBrand')}>
-            <Text style={{color: isCompleted(tab.progress) ? 'green' : 'red'}}>
-              {tab.icon}
-            </Text>
-            <View>
-              <Text style={{color: '#000'}}>{tab.title}</Text>
-              <Text
-                style={{color: isCompleted(tab.progress) ? 'green' : 'red'}}>
-                {tab.icon}
-              </Text>
-            </View>
-            <Text style={{color: isCompleted(tab.progress) ? 'green' : 'red'}}>
-              {' '}
-              {'>'}{' '}
-            </Text> */}
               </TouchableOpacity>
             )).toList()}
           </View>
@@ -284,13 +266,6 @@ const ProfileScreen = props => {
           </View>
         </ScrollView>
       )}
-      {/* <CustomButton
-          title={'LOGOUT'}
-          buttonColor={Colors.grayShade1}
-          onPress={onLogout}
-          TextColor={Colors.FontColor}
-          borderColor={Colors.eyeIcon}
-        /> */}
     </View>
   );
 };
