@@ -6,58 +6,25 @@ import Accordion from 'react-native-collapsible/Accordion';
 import Dimension from '../../../../Theme/Dimension';
 import { useNavigation } from '@react-navigation/native'
 import CustomeIcon from '../../../../component/common/CustomeIcon';
-import TDSEditModal from '../../../../component/common/TDSEditModal';
 import { fetchUpdateTDSDetails } from '../../../../redux/actions/profile';
 import styles from './styles';
-import { CheckBox } from 'react-native-elements';
 import DotCheckbox from '../../../../component/common/Checkbox';
-import { EditTdsData } from '../../../../redux/constants/support';
-
+import TDSEditModal from '../../../../component/common/TDSEditModal';
 const TdsDetails = (props) => {
   const tdsInfoDetails = useSelector(
     state => state.profileReducer.tdsInfoDetails.data || [],
   );
   const [tdsInfoList, setTdsInfoList] = useState([]);
-  const [lastYearItr, setLastYearItr] = useState(undefined);
   const [modalVisible, setModalVisible] = useState(false);
-  const [isYes, setIsYes] = useState(false);
-  const [isNo, setIsNo] = useState(false);
-  const [isNA, setIsNA] = useState(false);
-  const [section, setSectionList] = React.useState([]);
+  const [section, setSectionList] = useState([]);
   const { navigate } = useNavigation()
   const navigation = useNavigation()
   const dispatch = useDispatch();
 
-  console.log("tdsInfoDetails===>", tdsInfoDetails);
 
   const _updateSections = activeSections => {
     setTdsInfoList(activeSections);
   };
-
-  const OnYes = () => {
-    setIsYes(true)
-    setIsNo(false)
-    setIsNA(false)
-  }
-  const OnNo = () => {
-    setIsYes(false)
-    setIsNo(true)
-    setIsNA(false)
-  }
-  const OnNA = () => {
-    setIsYes(false)
-    setIsNo(false)
-    setIsNA(true)
-  }
-  const getDotcheck = (value) => {
-
-    setLastYearItr(value)
-
-  }
-
-
-
-
 
   const _renderHeader = section => {
     global.year = section.financialyear
@@ -87,8 +54,6 @@ const TdsDetails = (props) => {
     );
   };
 
-
-
   const onPresEdit = section => {
     setModalVisible(true);
     setModalVisible(!modalVisible);
@@ -96,6 +61,7 @@ const TdsDetails = (props) => {
   };
 
   const _renderContent = section => {
+    console.log("Section====>", section);
     return (
       <View>
         <TouchableOpacity
@@ -118,7 +84,9 @@ const TdsDetails = (props) => {
               TDS filed for AY {section.financialyear}
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.lastYearItr == 1 ? 'Yes' : section.lastYearItr == 0 ? "No" : section.lastYearItr == undefined || null || "" ? "-" : null}
+              {section.lastYearItr == 1 ? 'Yes' :
+                section.lastYearItr == 0 ? "No" :
+                  section.lastYearItr == "" ? "-" : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 50 }]}>
@@ -126,7 +94,10 @@ const TdsDetails = (props) => {
               ITR filed for AV {section.financialyear}
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.lastToLastYearItr == 1 ? 'Yes' : section.lastToLastYearItr == 0 ? 'No' : section.lastToLastYearItr == undefined || null || "" ? "-" : null}
+              {section.lastToLastYearItr == 1 ? 'Yes'
+                : section.lastToLastYearItr == 0 ? 'No'
+                  : section.lastToLastYearItr == "" ? "-"
+                    : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 40 }]}>
@@ -135,7 +106,10 @@ const TdsDetails = (props) => {
               {section.financialyear}
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.lastYearTdsTcs == 1 ? 'Yes' : section.lastYearTdsTcs == 0 ? 'No' : section.lastYearTdsTcs == undefined || null || "" ? "-" : null}
+              {section.lastYearTdsTcs == 1 ? 'Yes' :
+                section.lastYearTdsTcs == 0 ? 'No' :
+                  section.lastYearTdsTcs == "" ? "-"
+                    : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 30 }]}>
@@ -144,7 +118,10 @@ const TdsDetails = (props) => {
               {section.financialyear}
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.lastToLastYearTdsTcs == 1 ? 'Yes' : section.lastToLastYearTdsTcs == 0 ? 'No' : section.lastToLastYearTdsTcs == undefined || null || "" ? "-" : null}
+              {section.lastToLastYearTdsTcs == 1 ? 'Yes'
+                : section.lastToLastYearTdsTcs == 0 ? 'No' :
+                  section.lastToLastYearTdsTcs == "" ? "-"
+                    : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 20 }]}>
@@ -153,7 +130,10 @@ const TdsDetails = (props) => {
               exceeding 10 crores
             </Text>
             <Text style={{ fontSize: 16 }}>
-              {section.financialYearTurnover == 1 ? 'Yes' : section.financialYearTurnover == 0 ? 'No' : section.financialYearTurnover == undefined || null || "" ? "-" : null}
+              {section.financialYearTurnover == 1 ? 'Yes'
+                : section.financialYearTurnover == 0 ? 'No'
+                  : section.financialYearTurnover == "" ? "-"
+                    : null}
             </Text>
           </View>
         </View>
@@ -161,19 +141,10 @@ const TdsDetails = (props) => {
     );
   };
 
-  const onSubmit = (section) => {
-    let data = {
-      id: section.id,
-      panNumber: "AAJCP7293G",
-      financialyear: "2022-23",
-      previousFinancialYear: "2021-22",
-      financialYearTurnover: 0,
-      lastYearItr: 0,
-      lastToLastYearItr: 0,
-      lastYearTdsTcs: 0,
-      lastToLastYearTdsTcs: 0,
-    }
-    dispatch(fetchUpdateTDSDetails(data));
+  const onPressNext = (value) => {
+    setModalVisible(false)
+    console.log("logger====>", value);
+    dispatch(fetchUpdateTDSDetails(value));
   };
 
   return (
@@ -193,14 +164,22 @@ const TdsDetails = (props) => {
           )}
         />
       </ScrollView>
-      <TDSEditModal
+      {modalVisible && <TDSEditModal
         header={section.financialyear}
+        panNumber={section.panNumber}
+        previousFinYear={section.previousFinancialYear}
+        editId={section.id}
+        lastYearItr={section.lastYearItr}
+        lastToLastYearItr={section.lastToLastYearItr}
+        lastYearTdsTcs={section.lastYearTdsTcs}
+        lastToLastYearTdsTcs={section.lastToLastYearTdsTcs}
+        financialYearTurnover={section.financialYearTurnover}
         visible={modalVisible}
-        filterListData={section}
         transparent={true}
+        onPressNext={onPressNext}
         onClose={() => setModalVisible(true)}
-        onPress={() => { setModalVisible(!modalVisible), onSubmit(section) }}
-      />
+        onPress={() => { setModalVisible(!modalVisible) }}
+      />}
     </View>
   );
 };

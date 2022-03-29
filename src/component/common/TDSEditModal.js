@@ -8,27 +8,51 @@ import DotCheckbox from './Checkbox';
 import { useNavigation } from '@react-navigation/native'
 import CustomButton from '../common/Button';
 import { filtersTypeData, filtersData } from '../../redux/constants/support';
+import { EditTdsData } from '../../redux/constants/support';
+
 
 const TDSEditModal = props => {
-  const tdsInfoDetails = useSelector(
-    state => state.profileReducer.tdsInfoDetails.data || [],
-  );
+  const tdsInfoDetails = useSelector(state => state.profileReducer.tdsInfoDetails.data || []);
+  const tdsInfoData = tdsInfoDetails
+  const [lastYearItr, setLastYearItr] = useState(undefined);
+  const [lastToLastYearItr, setLastToLastYearItr] = useState("");
+  const [lastYearTdsTcs, setLastYearTdsTcs] = useState("");
+  const [lastToLastYearTdsTcs, setLastToLastYearTdsTcs] = useState("");
+  const [financialYearTurnover, setFinancialYearTurnover] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isSelected, setSelection] = useState(false);
   const { navigate } = useNavigation()
   const navigation = useNavigation()
   const dispatch = useDispatch();
 
+  // let data = tdsInfoData.map((i) => (item))
+
+  const getlastItr = (value) => {
+    setLastYearItr(value)
+  }
+  const getlastYearTds = (value) => {
+    setLastYearTdsTcs(value)
+  }
+  const getlastToLastYearItr = (value) => {
+    setLastToLastYearItr(value)
+  }
+  const getlastToLastYearTdsTcs = (value) => {
+    setLastToLastYearTdsTcs(value)
+  }
+  const getFinancialYearTurnover = (value) => {
+    setFinancialYearTurnover(value)
+  }
+
   useEffect(() => {
-    console.log("tdsInfoDetails===>", tdsInfoDetails);
-    // setLastYearItr(tdsInfoDetails.financialYearTurnover)
+    setLastYearItr(props.lastYearItr)
+    setLastToLastYearItr(props.lastToLastYearItr)
+    setLastYearTdsTcs(props.lastYearTdsTcs)
+    setLastToLastYearTdsTcs(props.lastToLastYearTdsTcs)
+    setFinancialYearTurnover(props.financialYearTurnover)
   }, []);
 
   const {
     onPress,
     onClose,
-    visible,
-    dataList,
     transparent,
   } = props;
 
@@ -64,72 +88,79 @@ const TDSEditModal = props => {
                 <CustomeIcon name={'right-tick-line'} color={colors.SuccessStateColor} size={Dimension.font20}></CustomeIcon>
               </TouchableOpacity>
             </View>
-            {/* <ScrollView style={styles.ContainerCss}>
-
-
-              <ScrollView
-                style={{ marginBottom: 0 }}
-                showsVerticalScrollIndicator={false}>
-
+            <ScrollView style={styles.ContainerCss}>
+              <View style={styles.sectionView}>
                 <View style={styles.verticalWrapper}>
                   <Text style={styles.radioText}>
-                    TDS filed for AY {section.financialyear}
+                    TDS filed for AY {props.header}
                   </Text>
                   <View style={{ flexDirection: 'row' }}>
                     <DotCheckbox
                       data={EditTdsData && EditTdsData.type}
-                      onCheck={getDotcheck}
+                      onCheck={getlastItr}
                       value={lastYearItr}
-
                     />
                   </View>
                 </View>
                 <View style={styles.verticalWrapper}>
                   <Text style={styles.radioText}>
-                    ITR filed for AV  {section.financialyear}
+                    ITR filed for AV  {props.header}
                   </Text>
                   <View style={{ flexDirection: 'row' }}>
+                    <DotCheckbox
+                      data={EditTdsData && EditTdsData.type}
+                      onCheck={getlastToLastYearItr}
+                      value={lastToLastYearItr}
+                    />
                   </View>
                 </View>
                 <View style={styles.verticalWrapper}>
                   <Text style={styles.radioText}>
-                    Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.financialyear}
+                    Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {props.header}
                   </Text>
                   <View style={{ flexDirection: 'row' }}>
-
-
+                    <DotCheckbox
+                      data={EditTdsData && EditTdsData.type}
+                      onCheck={getlastYearTds}
+                      value={lastYearTdsTcs}
+                    />
                   </View>
                 </View>
                 <View style={styles.verticalWrapper}>
                   <Text numberOfLines={2} style={styles.radioText}>
-                    Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {section.financialyear}
+                    Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY {props.header}
                   </Text>
                   <View style={{ flexDirection: 'row' }}>
-
-
+                    <DotCheckbox
+                      data={EditTdsData && EditTdsData.type}
+                      onCheck={getlastToLastYearTdsTcs}
+                      value={lastToLastYearTdsTcs}
+                    />
                   </View>
                 </View>
                 <View style={styles.verticalWrapper}>
                   <Text style={styles.radioText}>
-                    Turnover in financial year {section.financialyear} was exceeding 10 crores
+                    Turnover in financial year {props.header} was exceeding 10 crores
                   </Text>
                   <View style={{ flexDirection: 'row' }}>
-
-
+                    <DotCheckbox
+                      data={EditTdsData && EditTdsData.type}
+                      onCheck={getFinancialYearTurnover}
+                      value={financialYearTurnover}
+                    />
                   </View>
                 </View>
-
-              </ScrollView>
-              );
-
-              <View style={styles.sectionView}>
-                <Text>
-                  {props.filterListData}
-                </Text>
-
               </View>
-            </ScrollView> */}
+
+            </ScrollView>
           </View>
+
+
+          {/* <Text>
+              {props.filterListData}
+            </Text> */}
+
+
           <View style={styles.bottombtnWrap}>
             <CustomButton
               buttonColor={colors.BrandColor}
@@ -138,7 +169,20 @@ const TDSEditModal = props => {
               TextFontSize={Dimension.font16}
               title={'Next'}
               loading={loading}
-              onPress={onPress}
+              onPress={() => {
+                console.log("Logrsssate=====>", financialYearTurnover, lastToLastYearItr, lastYearItr, lastToLastYearTdsTcs);
+                props.onPressNext({
+                  id: props.editId,
+                  panNumber: props.panNumber,
+                  previousFinancialYear: props.previousFinYear,
+                  financialyear: props.header,
+                  financialYearTurnover: financialYearTurnover,
+                  lastYearItr: lastYearItr,
+                  lastToLastYearItr: lastToLastYearItr,
+                  lastYearTdsTcs: lastYearTdsTcs,
+                  lastToLastYearTdsTcs: lastToLastYearTdsTcs,
+                })
+              }}
             />
           </View>
         </View>
@@ -190,6 +234,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding5,
     paddingVertical: Dimension.padding25
   },
+  verticalWrapper: {
+    paddingVertical: Dimension.padding5
+  },
+  radioText: {
+    fontSize: Dimension.font14,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+    marginLeft: Dimension.margin11,
+    width: Dimension.width280
+  },
+  Separater: {
+    height: 0.8,
+    backgroundColor: '#e0e0e0',
+    marginTop: 5,
+  },
   AddressType: {
     color: 'black',
     fontSize: Dimension.font18,
@@ -200,4 +259,3 @@ const styles = StyleSheet.create({
 
 export default TDSEditModal;
 
-/* Created By Aakash  -------*/
