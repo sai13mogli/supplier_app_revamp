@@ -10,7 +10,6 @@ import { fetchUpdateTDSDetails } from '../../../../redux/actions/profile';
 import styles from './styles';
 import DotCheckbox from '../../../../component/common/Checkbox';
 import TDSEditModal from '../../../../component/common/TDSEditModal';
-
 const TdsDetails = (props) => {
   const tdsInfoDetails = useSelector(
     state => state.profileReducer.tdsInfoDetails.data || [],
@@ -62,7 +61,7 @@ const TdsDetails = (props) => {
   };
 
   const _renderContent = section => {
-    console.log("AScga====>", section.lastYearItr);
+    console.log("Section====>", section);
     return (
       <View>
         <TouchableOpacity
@@ -87,7 +86,7 @@ const TdsDetails = (props) => {
             <Text style={{ fontSize: 16 }}>
               {section.lastYearItr == 1 ? 'Yes' :
                 section.lastYearItr == 0 ? "No" :
-                  section.lastYearItr == undefined || null || "" ? "-" : null}
+                  section.lastYearItr == "" ? "-" : null}
             </Text>
           </View>
           <View style={[styles.wrap, { bottom: 50 }]}>
@@ -97,7 +96,7 @@ const TdsDetails = (props) => {
             <Text style={{ fontSize: 16 }}>
               {section.lastToLastYearItr == 1 ? 'Yes'
                 : section.lastToLastYearItr == 0 ? 'No'
-                  : section.lastToLastYearItr == undefined || null || "" ? "-"
+                  : section.lastToLastYearItr == "" ? "-"
                     : null}
             </Text>
           </View>
@@ -109,7 +108,7 @@ const TdsDetails = (props) => {
             <Text style={{ fontSize: 16 }}>
               {section.lastYearTdsTcs == 1 ? 'Yes' :
                 section.lastYearTdsTcs == 0 ? 'No' :
-                  section.lastYearTdsTcs == undefined || null || "" ? "-"
+                  section.lastYearTdsTcs == "" ? "-"
                     : null}
             </Text>
           </View>
@@ -121,7 +120,7 @@ const TdsDetails = (props) => {
             <Text style={{ fontSize: 16 }}>
               {section.lastToLastYearTdsTcs == 1 ? 'Yes'
                 : section.lastToLastYearTdsTcs == 0 ? 'No' :
-                  section.lastToLastYearTdsTcs == undefined || null || "" ? "-"
+                  section.lastToLastYearTdsTcs == "" ? "-"
                     : null}
             </Text>
           </View>
@@ -133,7 +132,7 @@ const TdsDetails = (props) => {
             <Text style={{ fontSize: 16 }}>
               {section.financialYearTurnover == 1 ? 'Yes'
                 : section.financialYearTurnover == 0 ? 'No'
-                  : section.financialYearTurnover == undefined || null || "" ? "-"
+                  : section.financialYearTurnover == "" ? "-"
                     : null}
             </Text>
           </View>
@@ -142,20 +141,10 @@ const TdsDetails = (props) => {
     );
   };
 
-  const onPressNext = () => {
-    let data = {
-      id: radioStates.id,
-      panNumber: "AAJCP7293G",
-      financialyear: "2022-23",
-      previousFinancialYear: "2021-22",
-      financialYearTurnover: radioStates.financialYearTurnover,
-      lastYearItr: radioStates.lastYearItr,
-      lastToLastYearItr: radioStates.lastToLastYearItr,
-      lastYearTdsTcs: radioStates.lastYearTdsTcs,
-      lastToLastYearTdsTcs: radioStates.lastToLastYearTdsTcs,
-    }
-    console.log("fsasa=====>", global.states);
-    dispatch(fetchUpdateTDSDetails(data));
+  const onPressNext = (value) => {
+    setModalVisible(false)
+    console.log("logger====>", value);
+    dispatch(fetchUpdateTDSDetails(value));
   };
 
   return (
@@ -175,9 +164,11 @@ const TdsDetails = (props) => {
           )}
         />
       </ScrollView>
-      <TDSEditModal
+      {modalVisible && <TDSEditModal
         header={section.financialyear}
-        Id={section.id}
+        panNumber={section.panNumber}
+        previousFinYear={section.previousFinancialYear}
+        editId={section.id}
         lastYearItr={section.lastYearItr}
         lastToLastYearItr={section.lastToLastYearItr}
         lastYearTdsTcs={section.lastYearTdsTcs}
@@ -185,9 +176,10 @@ const TdsDetails = (props) => {
         financialYearTurnover={section.financialYearTurnover}
         visible={modalVisible}
         transparent={true}
+        onPressNext={onPressNext}
         onClose={() => setModalVisible(true)}
-        onPressNext={(value) => { setModalVisible(!modalVisible), onPressNext() }}
-      />
+        onPress={() => { setModalVisible(!modalVisible) }}
+      />}
     </View>
   );
 };
