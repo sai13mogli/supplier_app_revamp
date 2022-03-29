@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {rejectOrder} from '../services/orders';
 import Toast from 'react-native-toast-message';
 import DropDown from '../component/common/DropDown';
+import CustomeIcon from './common/CustomeIcon';
 
 const deviceWidth = Dimensions.get('window').width;
 const RejectModal = props => {
@@ -146,15 +147,16 @@ const RejectModal = props => {
   const renderOrderDetails = () => {
     return (
       <>
-        <View style={styles.orderCardwrapInner}>
-          <View style={styles.leftpart}>
+        <View style={styles.orderCardwrapInnerModal}>
+          <View style={styles.LeftpartModal}>
             <Image
-              source={{
-                uri:
-                  orderImage ||
-                  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
-              }}
-              style={styles.imgStyle}
+              // source={{
+              //   uri:
+              //     orderImage ||
+              //     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+              // }}
+              source={require('../assets/images/Prd.png')}
+              style={styles.imgStyleModal}
             />
             <View style={styles.quantityTxt}>
               <Text style={styles.TitleLightTxt}>
@@ -177,10 +179,10 @@ const RejectModal = props => {
                 {showMoreTxt ? 'Read less' : 'Read more'}
               </Text>
             ) : null}
-            <>
-              <Text style={{color: '#000'}}> ₹{Math.floor(totalAmount)}</Text>
-              <Text style={{color: '#000'}}>{taxPercentage}%</Text>
-            </>
+            <View style={{flexDirection:"row",marginBottom:Dimension.margin20}}>
+              <Text style={styles.TotalamounTxt}> <Text style={styles.rupeeSign}>₹ </Text>{Math.floor(totalAmount)}</Text>
+              <Text style={styles.taxpercentageTxt}>{taxPercentage}%</Text>
+            </View>
             <View style={{flexDirection: 'row'}}>
               <View style={{marginRight: Dimension.margin20}}>
                 <Text style={styles.TitleLightTxt}>
@@ -228,12 +230,7 @@ const RejectModal = props => {
             </View>
           </View>
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            flex: 1,
-            marginTop: Dimension.margin15,
-          }}></View>
+        
       </>
     );
   };
@@ -255,7 +252,19 @@ const RejectModal = props => {
       onBackdropPress={() => setRejectModal(false)}
       onBackButtonPress={() => setRejectModal(false)}>
       <View style={styles.modalContainer}>
+      <View style={styles.topbdr}></View>
+              <View style={styles.ModalheadingWrapper}>
+         
+          <CustomeIcon
+            name={'close'}
+            size={Dimension.font22}
+            color={Colors.FontColor}
+            onPress={() => setIsOrderVisible(false)}>
+
+            </CustomeIcon>
+        </View>
         {renderOrderDetails()}
+        <View style={{paddingHorizontal:Dimension.padding15,paddingVertical:Dimension.padding10}}>
         <DropDown
           title={'Specify Reason'}
           label={'Specify Reason'}
@@ -267,27 +276,18 @@ const RejectModal = props => {
           enabled={true}
           fromRejectModal={true}
         />
+        </View>
         <View
-          style={{
-            flex: 9,
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            marginBottom: 10,
-          }}>
+          style={styles.btnWrap}>
           <TouchableOpacity
-            style={{backgroundColor: 'red', width: 100, height: 50}}
+            style={styles.cancelBtn}
             onPress={() => setRejectModal(false)}>
-            <Text style={{fontSize: 12, fontWeight: 'bold'}}>CANCEL</Text>
+            <Text style={styles.canceltxt}>CANCEL</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{
-              backgroundColor: 'red',
-              width: 100,
-              height: 50,
-              marginLeft: 20,
-            }}
+            style={styles.rejectCtabtn}
             onPress={onReject}>
-            <Text style={{color: '#000', fontSize: 12, fontWeight: 'bold'}}>
+            <Text style={styles.rejectCtaTxt}>
               REJECT
             </Text>
             {rejectLoader && (
@@ -396,26 +396,29 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: Colors.WhiteColor,
     padding: 2,
-    height: Dimension.width50,
+    width: Dimension.width50,
     height: Dimension.height50,
     //alignSelf:'center'
   },
+ 
   imgStyleModal: {
     borderRadius: 4,
     backgroundColor: Colors.WhiteColor,
     padding: 2,
-    height: Dimension.width100,
-    height: Dimension.height100,
-    //alignSelf:'center'
+    width: 250,
+    height: 250,
+    alignSelf:'center'
   },
   quantityTxt: {
-    alignSelf: 'center',
+    alignSelf: 'flex-start',
     backgroundColor: '#E2E2E2',
     borderRadius: 2,
-    marginTop: Dimension.margin8,
-    width: '100%',
+    //marginTop: Dimension.margin8,
+    //width: '100%',
     alignItems: 'center',
-    paddingVertical: Dimension.padding5,
+    paddingHorizontal: Dimension.padding5,
+    justifyContent:"center",
+    paddingTop:Dimension.padding5
   },
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
@@ -442,13 +445,28 @@ const styles = StyleSheet.create({
   },
   rejectCtabtn: {
     flex: 5,
-    backgroundColor: Colors.grayShade12,
+    backgroundColor: Colors.BrandColor,
     borderRadius: 4,
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
   rejectCtaTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    color: Colors.WhiteColor,
+    fontSize: Dimension.font12,
+  },
+  cancelBtn: {
+    flex: 5,
+    backgroundColor: Colors.WhiteColor,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+  },
+  canceltxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
     color: Colors.FontColor,
     fontSize: Dimension.font12,
@@ -467,6 +485,45 @@ const styles = StyleSheet.create({
   showMoreCta: {
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
+  },
+  LeftpartModal:{flex:1,},
+  orderCardwrapInnerModal:{paddingHorizontal:Dimension.padding15},
+  rupeeSign:{
+    fontFamily:Dimension.CustomRobotoBold,
+    fontSize:Dimension.font12,
+    color:Colors.FontColor,
+    marginRight:Dimension.margin5
+  },
+  TotalamounTxt:{
+    fontFamily:Dimension.CustomSemiBoldFont,
+    fontSize:Dimension.font12,
+    color:Colors.FontColor,
+   
+  },
+  taxpercentageTxt:{
+    fontFamily:Dimension.CustomSemiBoldFont,
+    fontSize:Dimension.font12,
+    color:Colors.greenShade,
+    marginLeft:Dimension.margin5
+  },
+  topbdr: {
+    alignSelf: 'center',
+    height: 3,
+    backgroundColor: Colors.modalBorder,
+    borderRadius: 2,
+    width: Dimension.width70,
+  },
+  ModalheadingWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: Dimension.padding15,
+  },
+  btnWrap:{
+    flex:1,
+    flexDirection:"row",
+    padding:Dimension.padding15,
+    borderTopWidth:1,
+    borderTopColor:Colors.grayShade1
   },
 });
 

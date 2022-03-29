@@ -19,6 +19,7 @@ import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import RejectModal from '../component/RejectModal';
 import AcceptModal from './AcceptModal';
 
@@ -290,14 +291,20 @@ const Ordercard = props => {
   const renderOrderDetails = (fromModal, fromCTA) => {
     return (
       <>
-        <View style={styles.orderCardwrapInner}>
-          <View style={styles.leftpart}>
+        <View 
+         style={[fromModal ? styles.orderCardwrapInnerModal : styles.orderCardwrapInner]}
+        >
+          <View 
+            style={[fromModal ? styles.LeftpartModal : styles.leftpart]}
+          >
+             
             <Image
-              source={{
-                uri:
-                  orderImage ||
-                  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
-              }}
+              // source={{
+              //   uri:
+              //     orderImage ||
+              //     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+              // }}
+              source={require('../assets/images/Prd.png')}
               style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
             />
             {!fromModal ? (
@@ -311,7 +318,7 @@ const Ordercard = props => {
           <View style={styles.rightPart}>
             <Text
               style={[
-                fromModal ? {color: '#000'} : {color: Colors.BrandColor},
+                fromModal ? {color: Colors.FontColor} : {color: Colors.BrandColor},
                 styles.msnName,
               ]}>
               {msn}
@@ -327,15 +334,17 @@ const Ordercard = props => {
               <Text style={styles.productName}>{productName}</Text>
             )}
             {lengthMore && !fromModal ? (
+              
               <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
                 {showMoreTxt ? 'Read less' : 'Read more'}
               </Text>
+              
             ) : null}
             {fromModal ? (
-              <>
-                <Text style={{color: '#000'}}> ₹{Math.floor(totalAmount)}</Text>
-                <Text style={{color: '#000'}}>{taxPercentage}%</Text>
-              </>
+              <View style={{flexDirection:"row",marginBottom:Dimension.margin20}}>
+                <Text style={styles.TotalamounTxt}> <Text style={styles.rupeeSign}>₹ </Text>{Math.floor(totalAmount)}</Text>
+                <Text style={styles.taxpercentageTxt}>{taxPercentage}%</Text>
+              </View>
             ) : null}
             <View style={{flexDirection: 'row'}}>
               <View style={{marginRight: Dimension.margin20}}>
@@ -389,11 +398,16 @@ const Ordercard = props => {
           </View>
         </View>
         <View
-          style={{
+          style={fromModal ?{
             flexDirection: 'row',
             flex: 1,
-            marginTop: Dimension.margin15,
-          }}>
+            marginTop: Dimension.margin30,
+            padding:Dimension.padding15,
+            borderTopColor:Colors.grayShade1,
+            borderTopWidth:1
+          }:{  flexDirection: 'row',
+          flex: 1,
+          marginTop: Dimension.margin15,}}>
           <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
             {renderPartialCTAs(invoiceUrl, fromCTA)}
             {!showMoreCTA ? renderFurtherCTAs(invoiceUrl, fromCTA) : null}
@@ -439,6 +453,17 @@ const Ordercard = props => {
             onBackdropPress={() => setIsOrderVisible(false)}
             onBackButtonPress={() => setIsOrderVisible(false)}>
             <View style={styles.modalContainer}>
+            <View style={styles.topbdr}></View>
+              <View style={styles.ModalheadingWrapper}>
+         
+          <CustomeIcon
+            name={'close'}
+            size={Dimension.font22}
+            color={Colors.FontColor}
+            onPress={() => setIsOrderVisible(false)}>
+
+            </CustomeIcon>
+        </View>
               {renderOrderDetails(true, '')}
             </View>
           </Modal>
@@ -582,17 +607,18 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: Colors.WhiteColor,
     padding: 2,
-    height: Dimension.width50,
+    width: Dimension.width50,
     height: Dimension.height50,
     //alignSelf:'center'
   },
+ 
   imgStyleModal: {
     borderRadius: 4,
     backgroundColor: Colors.WhiteColor,
     padding: 2,
-    height: Dimension.width100,
-    height: Dimension.height100,
-    //alignSelf:'center'
+    width: 250,
+    height: 250,
+    alignSelf:'center'
   },
   quantityTxt: {
     alignSelf: 'center',
@@ -653,6 +679,38 @@ const styles = StyleSheet.create({
   showMoreCta: {
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
+  },
+  LeftpartModal:{flex:1,},
+  orderCardwrapInnerModal:{paddingHorizontal:Dimension.padding15},
+  rupeeSign:{
+    fontFamily:Dimension.CustomRobotoBold,
+    fontSize:Dimension.font12,
+    color:Colors.FontColor,
+    marginRight:Dimension.margin5
+  },
+  TotalamounTxt:{
+    fontFamily:Dimension.CustomSemiBoldFont,
+    fontSize:Dimension.font12,
+    color:Colors.FontColor,
+   
+  },
+  taxpercentageTxt:{
+    fontFamily:Dimension.CustomSemiBoldFont,
+    fontSize:Dimension.font12,
+    color:Colors.greenShade,
+    marginLeft:Dimension.margin5
+  },
+  topbdr: {
+    alignSelf: 'center',
+    height: 3,
+    backgroundColor: Colors.modalBorder,
+    borderRadius: 2,
+    width: Dimension.width70,
+  },
+  ModalheadingWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: Dimension.padding15,
   },
 });
 export default Ordercard;

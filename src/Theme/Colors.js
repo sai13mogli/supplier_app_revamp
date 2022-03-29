@@ -47,6 +47,7 @@ const Colors = {
   oneShipLight:'#F3EBFF',
   VmiLight:"#EFFFD5",
   VmiTxt:"#689512",
+  greenShade:"#52950F",
 
 };
 
