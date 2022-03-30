@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  ImageBackground
 } from 'react-native';
 import React, {useState, useCallback} from 'react';
 import Modal from 'react-native-modal';
@@ -59,15 +60,18 @@ const Productcard = props => {
     <>
       <View style={styles.orderCardwrapInnerModal}>
         <View style={styles.LeftpartModal}>
-          <Image
-            // source={{
-            //   uri:
-            //     orderImage ||
-            //     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
-            // }}
-            source={require('../assets/images/Prd.png')}
-            style={styles.imgStyleModal}
-          />
+          <ImageBackground
+           source={require('../assets/images/rectanglebg.png')}
+           style={{width:62,height:62,padding:2}}
+          >
+        <Image
+           
+           source={require('../assets/images/Prd.png')}
+           style={styles.imgStyleModal}
+         />
+            
+          </ImageBackground>
+          
           <View style={styles.quantityTxt}>
             <Text style={styles.TitleLightTxt}>
               Qty - <Text style={styles.TitleBoldTxt}>{quantity}</Text>
@@ -85,12 +89,14 @@ const Productcard = props => {
             {productName}
           </Text>
           {lengthMore ? (
-            <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
+            <Text 
+            //onPress={toggleShowMoreTxt} 
+            style={styles.readMoretxt}>
               {showMoreTxt ? 'Read less' : 'Read more'}
             </Text>
           ) : null}
           <View
-            style={{flexDirection: 'row', marginBottom: Dimension.margin20}}>
+            style={{flexDirection: 'row', marginBottom: Dimension.margin5,}}>
             <Text style={styles.TotalamounTxt}>
               {' '}
               <Text style={styles.rupeeSign}>₹ </Text>
@@ -222,24 +228,38 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: Colors.WhiteColor,
     padding: 2,
-    width: 250,
-    height: 250,
-    alignSelf: 'center',
+    width: 58,
+    height: 58,
+    //alignSelf:'center'
   },
   quantityTxt: {
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
     backgroundColor: '#E2E2E2',
     borderRadius: 2,
-    //marginTop: Dimension.margin8,
-    //width: '100%',
+    marginTop: Dimension.margin8,
+    width: '100%',
     alignItems: 'center',
-    paddingHorizontal: Dimension.padding5,
-    justifyContent: 'center',
-    paddingTop: Dimension.padding5,
+    paddingVertical: Dimension.padding5,
   },
 
-  LeftpartModal: {flex: 1},
-  orderCardwrapInnerModal: {paddingHorizontal: Dimension.padding15},
+  LeftpartModal: {
+    flex: 2,
+    marginRight: Dimension.margin12,
+ 
+  },
+  rightPart: {
+    flex: 8,
+ 
+  },
+  orderCardwrapInnerModal: {
+    padding: Dimension.padding12,
+    flexDirection: 'row',
+    flex: 1,
+    borderWidth:1,
+    borderColor:Colors.BoxBorderColor,
+    borderRadius:8,
+    
+  },
   rupeeSign: {
     fontFamily: Dimension.CustomRobotoBold,
     fontSize: Dimension.font12,

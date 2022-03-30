@@ -160,6 +160,7 @@ const RejectModal = props => {
       onBackButtonPress={() => setRejectModal(false)}>
       <View style={styles.modalContainer}>
         <View style={styles.topbdr}></View>
+        
         <View style={styles.ModalheadingWrapper}>
           <CustomeIcon
             name={'close'}
@@ -167,10 +168,13 @@ const RejectModal = props => {
             color={Colors.FontColor}
             onPress={() => setRejectModal(false)}></CustomeIcon>
         </View>
+        <View style={{ paddingHorizontal:Dimension.padding15}}>
+
+       
         {renderOrderDetails()}
         <View
           style={{
-            paddingHorizontal: Dimension.padding15,
+            
             paddingVertical: Dimension.padding10,
           }}>
           <DropDown
@@ -184,6 +188,7 @@ const RejectModal = props => {
             enabled={true}
             fromRejectModal={true}
           />
+        </View>
         </View>
         <View style={styles.btnWrap}>
           <TouchableOpacity
@@ -199,6 +204,7 @@ const RejectModal = props => {
           </TouchableOpacity>
         </View>
       </View>
+      
     </Modal>
   );
 };
@@ -331,6 +337,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     paddingTop: Dimension.padding10,
+   
   },
   acceptCtabtn: {
     flex: 5,
