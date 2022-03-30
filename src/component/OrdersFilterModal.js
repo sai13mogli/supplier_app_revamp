@@ -21,6 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {STATE_STATUS} from '../redux/constants';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomeDatePicker from '../component/common/Datepicker/index';
+import CustomeIcon from './common/CustomeIcon';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -88,10 +89,29 @@ const OrdersFilterModal = props => {
 
       return (
         <View style={{width: deviceWidth, height: deviceHeight}}>
+         
           <ScrollView>
             {poIds.map((_, i) => (
-              <TouchableOpacity onPress={() => selectFilter(_)}>
-                <MaterialCommunityIcon
+              <TouchableOpacity onPress={() => selectFilter(_)} style={styles.checkboxWrap}>
+               <CustomeIcon
+                  name={
+                    appliedFilter[initialFilter] &&
+                    appliedFilter[initialFilter].includes(_)
+                      ? 'checkbox-tick'
+                      : 'checkbox-blank'
+                  }
+                  color={
+                    appliedFilter[initialFilter] &&
+                    appliedFilter[initialFilter].includes(_)
+                      ? Colors.BrandColor
+                      : Colors.blackColor
+                  }
+                  size={Dimension.font22}
+                  >
+
+                  </CustomeIcon>
+              
+                {/* <MaterialCommunityIcon
                   name={
                     appliedFilter[initialFilter] &&
                     appliedFilter[initialFilter].includes(_)
@@ -105,8 +125,8 @@ const OrdersFilterModal = props => {
                       ? 'blue'
                       : '#000'
                   }
-                />
-                <Text style={{color: '#fff', fontSize: 12, fontWeight: 'bold'}}>
+                /> */}
+                <Text style={styles.checkBoxTitle}>
                   {_} (
                   {poData.get(_) == '1'
                     ? `${poData.get(_)} item`
@@ -124,8 +144,25 @@ const OrdersFilterModal = props => {
           <ScrollView>
             <>
               {orderfiltersData[activeFilter].map((_, i) => (
-                <TouchableOpacity onPress={() => selectFilter(_.key)}>
-                  <MaterialCommunityIcon
+                <TouchableOpacity onPress={() => selectFilter(_.key)} style={styles.checkboxWrap}>
+                  <CustomeIcon
+                  name={
+                    appliedFilter[initialFilter] &&
+                    appliedFilter[initialFilter].includes(_.key)
+                      ? 'checkbox-tick'
+                      : 'checkbox-blank'
+                  }
+                  color={
+                    appliedFilter[initialFilter] &&
+                    appliedFilter[initialFilter].includes(_.key)
+                      ? Colors.BrandColor
+                      : Colors.blackColor
+                  }
+                  size={Dimension.font22}
+                  >
+
+                  </CustomeIcon>
+                  {/* <MaterialCommunityIcon
                     name={
                       appliedFilter[initialFilter] &&
                       appliedFilter[initialFilter].includes(_.key)
@@ -139,9 +176,9 @@ const OrdersFilterModal = props => {
                         ? 'blue'
                         : '#000'
                     }
-                  />
+                  /> */}
                   <Text
-                    style={{color: '#fff', fontSize: 12, fontWeight: 'bold'}}>
+                    style={styles.checkBoxTitle}>
                     {_.title}
                   </Text>
                 </TouchableOpacity>
@@ -243,7 +280,17 @@ const OrdersFilterModal = props => {
       onBackdropPress={() => setOrdersFiltersModal(false)}
       onBackButtonPress={() => setOrdersFiltersModal(false)}>
       <View style={{height: deviceHeight, width: deviceWidth}}>
-        {orderFiltersTypeData.map((item, index) => (
+      <View style={styles.headerWrap}>
+          <CustomeIcon
+                name={'arrow-back'}
+                size={Dimension.font22}
+                color={Colors.FontColor}
+              />
+              <Text style={styles.headerTxt}>Filter</Text>
+          </View>
+          <View style={styles.MidWrapper}>
+          <View style={styles.leftPart}>
+          {orderFiltersTypeData.map((item, index) => (
           <TouchableOpacity
             onPress={() => {
               setActiveFilter(item.key);
@@ -264,9 +311,15 @@ const OrdersFilterModal = props => {
             </Text>
           </TouchableOpacity>
         ))}
-        {['poDate', 'pickupDate'].includes(activeFilter)
+          </View>
+          <View style={styles.rightPart}>
+          {['poDate', 'pickupDate'].includes(activeFilter)
           ? renderComponent()
           : renderRight()}
+          </View>
+        </View>
+        
+     
         <View style={styles.bottomAction}>
           <TouchableOpacity
             onPress={() => applyFilters()}
@@ -285,23 +338,37 @@ const OrdersFilterModal = props => {
 };
 
 const styles = StyleSheet.create({
+  headerWrap:{
+    flexDirection:"row",
+    backgroundColor:"#fff",
+    paddingTop:Dimension.padding20,
+    paddingHorizontal:Dimension.padding10,
+    paddingBottom:Dimension.padding10
+  },
+  headerTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+    marginLeft:Dimension.margin10,
+
+  },
   activeBackground: {
     backgroundColor: Colors.LightBrandColor,
-    // paddingVertical: Dimension.padding15,
-    // paddingHorizontal: Dimension.padding20,
+     paddingVertical: Dimension.padding15,
+    paddingHorizontal: Dimension.padding20,
   },
   inactiveBackground: {
     backgroundColor: '#fff',
-    // paddingVertical: Dimension.padding15,
-    // paddingHorizontal: Dimension.padding20,
+     paddingVertical: Dimension.padding15,
+     paddingHorizontal: Dimension.padding20,
   },
   LeftInActiveTxt: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomMediumFont,
   },
   LeftActiveTxt: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     color: Colors.BrandColor,
     fontFamily: Dimension.CustomMediumFont,
   },
@@ -326,6 +393,50 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font14,
     fontFamily: Dimension.CustomBoldFont,
     alignSelf: 'center',
+  },
+  ModalBottomBtnWrap: {
+    borderTopWidth: 1,
+    borderTopColor: Colors.grayShade2,
+    padding: Dimension.padding15,
+    backgroundColor: Colors.WhiteColor,
+  },
+
+  MidWrapper: {
+    flexDirection: "row",
+    borderTopColor: Colors.grayShade2,
+    borderTopWidth: 1,
+   backgroundColor:"#fff"
+
+  },
+  leftPart: {
+    flex: 3,
+    borderRightColor: Colors.grayShade2,
+    borderRightWidth: 1, 
+  backgroundColor:"#fff",
+  paddingTop:Dimension.padding20
+  },
+  rightPart: {
+    flex: 7,
+    //alignItems:"flex-start"
+    paddingTop:Dimension.padding25
+  },
+  RightInnerPart: {
+    paddingLeft: Dimension.padding30,
+    marginBottom: Dimension.padding30
+  },
+
+  checkBoxTitle:{
+    color: Colors.blackColor,
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    marginLeft:Dimension.margin10,
+    marginTop:Dimension.margin4
+  },
+  checkboxWrap:{
+    flexDirection:"row",
+    marginVertical:Dimension.padding10,
+    marginHorizontal:Dimension.margin25,
+
   },
 });
 

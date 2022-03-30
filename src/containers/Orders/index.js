@@ -278,8 +278,13 @@ const OrdersScreen = props => {
   const renderListEmptyComponent = () => {
     if (OrderData.size == 0 && OrderStatus == STATE_STATUS.FETCHED) {
       return (
-        <View style={{padding: 20}}>
-          <Text style={{color: '#000', alignSelf: 'center'}}>
+        <View style={styles.emptyWrap}>
+          <Image
+            
+              source={require('../../assets/images/emptyOrders.png')}
+              style={{width:300,height:200}}
+            />
+          <Text style={styles.emptyTxt}>
             No Data Available
           </Text>
         </View>
@@ -467,8 +472,28 @@ const OrdersScreen = props => {
             showsVerticalScrollIndicator={false}
             initialNumToRender={5}
           />
-          <ScrollView>
+          <View style={styles.footerSearchWrap}>
+           <View style={styles.searchWrapper}>
             <TextInput
+              placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
+              returnKeyType={'search'}
+              onChangeText={onSearchText}
+              onFocus={() => console.log('onFocus!!')}
+              value={inputValue}
+              onSubmitEditing={event => {
+                if (inputValue && inputValue.length > 1) {
+                  onSubmitSearch();
+                }
+              }}
+              blurOnSubmit={true}
+              
+              style={styles.SearchInputCss}>
+
+            </TextInput>
+            <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+            
+            </View>
+            {/* <TextInput
               blurOnSubmit={true}
               style={{color: '#000'}}
               placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
@@ -483,22 +508,21 @@ const OrdersScreen = props => {
                   onSubmitSearch();
                 }
               }}
-            />
+            /> */}
             {!isKeyboardVisible ? (
+              <View style={styles.filterBtnWrap}>
               <TouchableOpacity
-                style={{width: 40, height: 50}}
+                style={styles.filterBtn}
                 onPress={() => setOrdersFiltersModal(true)}>
                 <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                    color: '#000',
-                  }}>
+                  style={styles.filtertxt}>
                   Filters
                 </Text>
+                <CustomeIcon name={'filter-line'} style={styles.filterIcon}></CustomeIcon>
               </TouchableOpacity>
+              </View>
             ) : null}
-          </ScrollView>
+          </View>
           {ordersfiltersModal && (
             <OrdersFilterModal
               ordersfiltersModal={ordersfiltersModal}
