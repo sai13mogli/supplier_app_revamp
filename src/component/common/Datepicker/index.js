@@ -60,8 +60,11 @@ const CustomeDatePicker = props => {
 
   return (
     <>
-      <Text style={styles.labelStyle}>{label}</Text>
-      {isImp ? <Text style={{color: 'red'}}>*</Text> : null}
+    <View style={{flexDirection:"row"}}>
+    <Text style={styles.labelStyle}>{label}</Text>
+      {isImp ? <Text style={styles.starIcon}>*</Text> : null}
+    </View>
+     
       <View>
         <TouchableOpacity
           style={styles.inputContainerStyle}

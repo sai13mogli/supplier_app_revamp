@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  Image
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Modal from 'react-native-modal';
@@ -22,6 +23,7 @@ import {STATE_STATUS} from '../redux/constants';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomeDatePicker from '../component/common/Datepicker/index';
 import CustomeIcon from './common/CustomeIcon';
+import { Tooltip, } from 'react-native-elements';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -184,9 +186,28 @@ const OrdersFilterModal = props => {
                 </TouchableOpacity>
               ))}
               {activeFilter == 'deliveryType' ? (
-                <Text style={{fontSize: 12, fontWeight: 'bold', color: '#fff'}}>
-                  What is Delivery Type
-                </Text>
+                <View style={{flexDirection:"row",marginHorizontal:Dimension.padding20,marginTop:Dimension.margin50,flex:1}}>
+                  <Text style={styles.deliveryTypeTxt}>
+                  What is Delivery Type 
+                  </Text>
+                 <View style={{flex:.5,alignItems:"flex-end"}}>
+                  <Tooltip
+            backgroundColor={"#000"}
+            popover={
+              <Text>Tooltip info goes here too. Find tooltip everywhere</Text>
+            }
+            containerStyle={{ width: 200, height: 60 }}
+          >
+            
+            <Image
+            
+            source={require('../assets/images/tooltipIcon.png')}
+            style={{width:24,height:24}}
+          />
+          </Tooltip>
+          </View>
+                </View>
+                
               ) : null}
             </>
           </ScrollView>
@@ -213,7 +234,7 @@ const OrdersFilterModal = props => {
 
   const renderComponent = () => {
     return (
-      <>
+      <View style={styles.DateWrapper}> 
         <CustomeDatePicker
           title={'From Date'}
           isImp={true}
@@ -236,7 +257,7 @@ const OrdersFilterModal = props => {
           }
           activeFilter={activeFilter}
         />
-      </>
+      </View>
     );
   };
 
@@ -321,16 +342,17 @@ const OrdersFilterModal = props => {
         
      
         <View style={styles.bottomAction}>
+        <TouchableOpacity
+            onPress={() => resetFilters()}
+            style={styles.cancelBtn}>
+            <Text style={styles.canceltxt}>RESET</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => applyFilters()}
-            style={styles.filterTouch}>
-            <Text style={styles.filterText}>APPLY FILTERS</Text>
+            style={styles.acceptCtabtn}>
+            <Text style={styles.acceptCtaTxt}>APPLY FILTERS</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => resetFilters()}
-            style={styles.filterTouch}>
-            <Text style={styles.filterText}>RESET</Text>
-          </TouchableOpacity>
+          
         </View>
       </View>
     </Modal>
@@ -373,39 +395,27 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
   },
   bottomAction: {
-    backgroundColor: '#EFEFF4',
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
-    padding: Dimension.padding5,
-    flexDirection: 'row',
-  },
-  filterTouch: {
-    backgroundColor: 'red',
-    borderRadius: Dimension.borderRadius4,
-    height: 60,
-    width: 200,
-    justifyContent: 'center',
-    margin: 10,
-  },
-  filterText: {
-    color: '#fff',
-    fontSize: Dimension.font14,
-    fontFamily: Dimension.CustomBoldFont,
-    alignSelf: 'center',
-  },
-  ModalBottomBtnWrap: {
     borderTopWidth: 1,
     borderTopColor: Colors.grayShade2,
     padding: Dimension.padding15,
     backgroundColor: Colors.WhiteColor,
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
+    
+    flexDirection: 'row',
+  },
+  
+  ModalBottomBtnWrap: {
+   
   },
 
   MidWrapper: {
     flexDirection: "row",
     borderTopColor: Colors.grayShade2,
     borderTopWidth: 1,
-   backgroundColor:"#fff"
+   backgroundColor:"#fff",
+   height:deviceHeight
 
   },
   leftPart: {
@@ -413,17 +423,16 @@ const styles = StyleSheet.create({
     borderRightColor: Colors.grayShade2,
     borderRightWidth: 1, 
   backgroundColor:"#fff",
-  paddingTop:Dimension.padding20
+  paddingTop:Dimension.padding20,
+  height: deviceHeight,
   },
   rightPart: {
     flex: 7,
     //alignItems:"flex-start"
-    paddingTop:Dimension.padding25
+    paddingTop:Dimension.padding25,
+    height: deviceHeight,
   },
-  RightInnerPart: {
-    paddingLeft: Dimension.padding30,
-    marginBottom: Dimension.padding30
-  },
+  
 
   checkBoxTitle:{
     color: Colors.blackColor,
@@ -437,6 +446,57 @@ const styles = StyleSheet.create({
     marginVertical:Dimension.padding10,
     marginHorizontal:Dimension.margin25,
 
+  },
+  DateWrapper:{
+paddingHorizontal:Dimension.padding15
+  },
+  deliveryTypeTxt:{
+    color: Colors.FontColor,
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    
+  }, 
+  acceptCtabtn: {
+    flex: 5,
+    backgroundColor: Colors.BrandColor,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Dimension.margin10,
+  },
+  acceptCtaTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    color: Colors.WhiteColor,
+    fontSize: Dimension.font16,
+  },
+  rejectCtabtn: {
+    flex: 5,
+    backgroundColor: Colors.BrandColor,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+  },
+  rejectCtaTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    color: Colors.WhiteColor,
+    fontSize: Dimension.font16,
+  },
+  cancelBtn: {
+    flex: 5,
+    backgroundColor: Colors.WhiteColor,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+  },
+  canceltxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    color: Colors.FontColor,
+    fontSize: Dimension.font16,
   },
 });
 

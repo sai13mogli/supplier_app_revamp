@@ -117,7 +117,24 @@ const styles = StyleSheet.create({
     color: Colors.FontColor,
     fontFamily: Dimension.CustomMediumFont,
   },
-
+  selectAllBtn:{
+   
+    borderRadius: 50,
+    backgroundColor:Colors.FontColor,
+    paddingVertical:Dimension.padding8,
+    paddingHorizontal:Dimension.padding15,
+    alignSelf:'center',
+    flexDirection:"row"
+  },
+  selectBtnTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.WhiteColor,
+    marginLeft:Dimension.margin5,
+    fontFamily:Dimension.CustomMediumFont
+  },
+  bulkItemfooter:{
+    backgroundColo:"#fff"
+  },
 });
 
 export default styles;

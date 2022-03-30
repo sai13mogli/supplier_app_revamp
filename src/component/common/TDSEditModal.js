@@ -14,7 +14,7 @@ import { EditTdsData } from '../../redux/constants/support';
 const TDSEditModal = props => {
   const tdsInfoDetails = useSelector(state => state.profileReducer.tdsInfoDetails.data || []);
   const tdsInfoData = tdsInfoDetails
-  const [lastYearItr, setLastYearItr] = useState("");
+  const [lastYearItr, setLastYearItr] = useState(undefined);
   const [lastToLastYearItr, setLastToLastYearItr] = useState("");
   const [lastYearTdsTcs, setLastYearTdsTcs] = useState("");
   const [lastToLastYearTdsTcs, setLastToLastYearTdsTcs] = useState("");
@@ -42,14 +42,13 @@ const TDSEditModal = props => {
     setFinancialYearTurnover(value)
   }
 
-  // useEffect(() => {
-  //   console.log("props===>", props.lastYearITR);
-  //   setLastYearItr(props.lastYearItr)
-  //   setLastToLastYearItr(props.lastToLastYearItr)
-  //   setLastYearTdsTcs(props.lastYearTdsTcs)
-  //   setLastToLastYearTdsTcs(props.lastToLastYearTdsTcs)
-  //   setFinancialYearTurnover(props.financialYearTurnover)
-  // }, []);
+  useEffect(() => {
+    setLastYearItr(props.lastYearItr)
+    setLastToLastYearItr(props.lastToLastYearItr)
+    setLastYearTdsTcs(props.lastYearTdsTcs)
+    setLastToLastYearTdsTcs(props.lastToLastYearTdsTcs)
+    setFinancialYearTurnover(props.financialYearTurnover)
+  }, []);
 
   const {
     onPress,
@@ -99,7 +98,7 @@ const TDSEditModal = props => {
                     <DotCheckbox
                       data={EditTdsData && EditTdsData.type}
                       onCheck={getlastItr}
-                      value={props.lastYearITR}
+                      value={lastYearItr}
                     />
                   </View>
                 </View>
@@ -111,7 +110,7 @@ const TDSEditModal = props => {
                     <DotCheckbox
                       data={EditTdsData && EditTdsData.type}
                       onCheck={getlastToLastYearItr}
-                      value={props.lastToLastYearItr}
+                      value={lastToLastYearItr}
                     />
                   </View>
                 </View>
@@ -170,14 +169,20 @@ const TDSEditModal = props => {
               TextFontSize={Dimension.font16}
               title={'Next'}
               loading={loading}
-              onPress={() => props.onPressNext({
-                id: props.Id,
-                lastYearITR: lastYearItr,
-                lastToLastYearITR: lastToLastYearItr,
-                lastYearTDS: lastToLastYearItr,
-                lastToLastYearTDS: lastToLastYearTdsTcs,
-                lastYearFinacialTurnOver: financialYearTurnover
-              })}
+              onPress={() => {
+                console.log("Logrsssate=====>", financialYearTurnover, lastToLastYearItr, lastYearItr, lastToLastYearTdsTcs);
+                props.onPressNext({
+                  id: props.editId,
+                  panNumber: props.panNumber,
+                  previousFinancialYear: props.previousFinYear,
+                  financialyear: props.header,
+                  financialYearTurnover: financialYearTurnover,
+                  lastYearItr: lastYearItr,
+                  lastToLastYearItr: lastToLastYearItr,
+                  lastYearTdsTcs: lastYearTdsTcs,
+                  lastToLastYearTdsTcs: lastToLastYearTdsTcs,
+                })
+              }}
             />
           </View>
         </View>
