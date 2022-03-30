@@ -63,6 +63,7 @@ const Ordercard = props => {
   const [showMoreCTA, setShowMoreCTA] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
   const [displayCalendar, setDisplayCalendar] = useState(false);
+  const [addViewModal, setAddViewModal] = useState(false);
 
   useEffect(() => {
     fetchImage();
@@ -238,9 +239,6 @@ const Ordercard = props => {
             onPress={() => setDisplayCalendar(true)}
             style={styles.acceptCtabtn}>
             <Text style={styles.acceptCtaTxt}>{cta}</Text>
-            {/* {acceptLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
-            )} */}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_PO_EMS' ? (
           <TouchableOpacity
@@ -265,7 +263,6 @@ const Ordercard = props => {
         ) : cta == 'MAP_INVOICE' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            // onPress={() => getPOInvoice(false, url)}
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
             {invoiceLoader && (
@@ -275,7 +272,6 @@ const Ordercard = props => {
         ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            // onPress={() => getPOInvoice(false, url)}
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>MARK OUT FOR DELIVERY</Text>
             {invoiceLoader && (
@@ -285,12 +281,23 @@ const Ordercard = props => {
         ) : cta == 'VIEW_TREE_MODAL' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            // onPress={() => getPOInvoice(false, url)}
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>VIEW SPLIT HISTORY</Text>
             {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
+          </TouchableOpacity>
+        ) : cta == 'ADD_SERIAL_NUMBER' ? (
+          <TouchableOpacity
+            style={styles.DownloadPoBtn}
+            onPress={() => setAddViewModal(true)}>
+            <Text style={styles.rejectCtaTxt}>ADD SERIAL NUMBER</Text>
+          </TouchableOpacity>
+        ) : cta == 'VIEW_SERIAL_NUMBER' ? (
+          <TouchableOpacity
+            style={styles.DownloadPoBtn}
+            onPress={() => setAddViewModal(true)}>
+            <Text style={styles.rejectCtaTxt}>VIEW SERIAL NUMBER</Text>
           </TouchableOpacity>
         ) : null}
       </>
