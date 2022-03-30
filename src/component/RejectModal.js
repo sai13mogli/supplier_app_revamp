@@ -16,6 +16,7 @@ import {rejectOrder} from '../services/orders';
 import Toast from 'react-native-toast-message';
 import DropDown from '../component/common/DropDown';
 import CustomeIcon from './common/CustomeIcon';
+import Productcard from './Productcard';
 
 const deviceWidth = Dimensions.get('window').width;
 const RejectModal = props => {
@@ -44,8 +45,6 @@ const RejectModal = props => {
     itemId,
   } = props;
   const [rejectLoader, setRejectLoader] = useState(false);
-  const [showMoreTxt, setShowMoreTxt] = useState(false);
-  const [lengthMore, setLengthMore] = useState(false);
   const [reason, setReason] = useState('Material is not ready');
   const Reasons = [
     {
@@ -121,117 +120,25 @@ const RejectModal = props => {
     }
   };
 
-  const onTextLayout = useCallback(e => {
-    setLengthMore(e.nativeEvent.lines.length > 1);
-  }, []);
-
-  const getTime = time => {
-    let months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    let date = new Date(Number(time));
-    return `${months[date.getMonth()]} ${date.getDate()},${date.getFullYear()}`;
-  };
-
   const renderOrderDetails = () => {
     return (
-      <>
-        <View style={styles.orderCardwrapInnerModal}>
-          <View style={styles.LeftpartModal}>
-            <Image
-              // source={{
-              //   uri:
-              //     orderImage ||
-              //     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
-              // }}
-              source={require('../assets/images/Prd.png')}
-              style={styles.imgStyleModal}
-            />
-            <View style={styles.quantityTxt}>
-              <Text style={styles.TitleLightTxt}>
-                Qty - <Text style={styles.TitleBoldTxt}>{quantity}</Text>
-              </Text>
-            </View>
-          </View>
-          <View style={styles.rightPart}>
-            <Text style={[{color: Colors.BrandColor}, styles.msnName]}>
-              {msn}
-            </Text>
-            <Text
-              onTextLayout={onTextLayout}
-              numberOfLines={showMoreTxt ? undefined : 1}
-              style={styles.productName}>
-              {productName}
-            </Text>
-            {lengthMore ? (
-              <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
-                {showMoreTxt ? 'Read less' : 'Read more'}
-              </Text>
-            ) : null}
-            <View style={{flexDirection:"row",marginBottom:Dimension.margin20}}>
-              <Text style={styles.TotalamounTxt}> <Text style={styles.rupeeSign}>₹ </Text>{Math.floor(totalAmount)}</Text>
-              <Text style={styles.taxpercentageTxt}>{taxPercentage}%</Text>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{marginRight: Dimension.margin20}}>
-                <Text style={styles.TitleLightTxt}>
-                  PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
-                </Text>
-                <Text style={styles.TitleLightTxt}>
-                  PO Date -{' '}
-                  <Text style={styles.TitleBoldTxt}>{getTime(createdAt)}</Text>
-                </Text>
-                <Text style={styles.TitleLightTxt}>
-                  PO Item ID -{' '}
-                  <Text style={styles.TitleBoldTxt}>{itemRef}</Text>
-                </Text>
-              </View>
-
-              <View>
-                <Text style={styles.TitleLightTxt}>
-                  TP/Unit -{' '}
-                  <Text style={styles.TitleBoldTxt}>
-                    ₹{Math.floor(transferPrice)}
-                  </Text>
-                </Text>
-                <Text style={styles.TitleLightTxt}>
-                  Product HSN - <Text style={styles.TitleBoldTxt}>{hsn}</Text>
-                </Text>
-                <Text style={styles.TitleLightTxt}>
-                  Date -{' '}
-                  <Text style={styles.TitleBoldTxt}>{getTime(pickupDate)}</Text>
-                </Text>
-              </View>
-            </View>
-            <View style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
-              <Text style={styles.GstWrapTxt}>{orderTypeString}</Text>
-              <Text style={styles.shipmentModeWrap}>
-                {shipmentMode == 2
-                  ? 'Dropship'
-                  : shipmentMode == 3
-                  ? 'Door Delivery'
-                  : 'Oneship'}
-              </Text>
-              {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
-              <Text style={styles.shipmentModeStringWrap}>
-                {shipmentModeString}
-              </Text>
-            </View>
-          </View>
-        </View>
-        
-      </>
+      <Productcard
+        quantity={quantity}
+        productName={productName}
+        totalAmount={totalAmount}
+        orderRef={orderRef}
+        createdAt={createdAt}
+        itemRef={itemRef}
+        transferPrice={transferPrice}
+        hsn={hsn}
+        pickupDate={pickupDate}
+        orderTypeString={orderTypeString}
+        shipmentMode={shipmentMode}
+        isVmi={isVmi}
+        shipmentModeString={shipmentModeString}
+        taxPercentage={taxPercentage}
+        msn={msn}
+      />
     );
   };
 
@@ -252,44 +159,40 @@ const RejectModal = props => {
       onBackdropPress={() => setRejectModal(false)}
       onBackButtonPress={() => setRejectModal(false)}>
       <View style={styles.modalContainer}>
-      <View style={styles.topbdr}></View>
-              <View style={styles.ModalheadingWrapper}>
-         
+        <View style={styles.topbdr}></View>
+        <View style={styles.ModalheadingWrapper}>
           <CustomeIcon
             name={'close'}
             size={Dimension.font22}
             color={Colors.FontColor}
-            onPress={() => setIsOrderVisible(false)}>
-
-            </CustomeIcon>
+            onPress={() => setRejectModal(false)}></CustomeIcon>
         </View>
         {renderOrderDetails()}
-        <View style={{paddingHorizontal:Dimension.padding15,paddingVertical:Dimension.padding10}}>
-        <DropDown
-          title={'Specify Reason'}
-          label={'Specify Reason'}
-          selectedValue={reason}
-          onValueChange={text => {
-            setReason(text);
-          }}
-          items={Reasons}
-          enabled={true}
-          fromRejectModal={true}
-        />
-        </View>
         <View
-          style={styles.btnWrap}>
+          style={{
+            paddingHorizontal: Dimension.padding15,
+            paddingVertical: Dimension.padding10,
+          }}>
+          <DropDown
+            title={'Specify Reason'}
+            label={'Specify Reason'}
+            selectedValue={reason}
+            onValueChange={text => {
+              setReason(text);
+            }}
+            items={Reasons}
+            enabled={true}
+            fromRejectModal={true}
+          />
+        </View>
+        <View style={styles.btnWrap}>
           <TouchableOpacity
             style={styles.cancelBtn}
             onPress={() => setRejectModal(false)}>
             <Text style={styles.canceltxt}>CANCEL</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.rejectCtabtn}
-            onPress={onReject}>
-            <Text style={styles.rejectCtaTxt}>
-              REJECT
-            </Text>
+          <TouchableOpacity style={styles.rejectCtabtn} onPress={onReject}>
+            <Text style={styles.rejectCtaTxt}>REJECT</Text>
             {rejectLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
@@ -400,14 +303,14 @@ const styles = StyleSheet.create({
     height: Dimension.height50,
     //alignSelf:'center'
   },
- 
+
   imgStyleModal: {
     borderRadius: 4,
     backgroundColor: Colors.WhiteColor,
     padding: 2,
     width: 250,
     height: 250,
-    alignSelf:'center'
+    alignSelf: 'center',
   },
   quantityTxt: {
     alignSelf: 'flex-start',
@@ -417,8 +320,8 @@ const styles = StyleSheet.create({
     //width: '100%',
     alignItems: 'center',
     paddingHorizontal: Dimension.padding5,
-    justifyContent:"center",
-    paddingTop:Dimension.padding5
+    justifyContent: 'center',
+    paddingTop: Dimension.padding5,
   },
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
@@ -450,7 +353,6 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   rejectCtaTxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
@@ -464,7 +366,6 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   canceltxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
@@ -486,25 +387,24 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
   },
-  LeftpartModal:{flex:1,},
-  orderCardwrapInnerModal:{paddingHorizontal:Dimension.padding15},
-  rupeeSign:{
-    fontFamily:Dimension.CustomRobotoBold,
-    fontSize:Dimension.font12,
-    color:Colors.FontColor,
-    marginRight:Dimension.margin5
+  LeftpartModal: {flex: 1},
+  orderCardwrapInnerModal: {paddingHorizontal: Dimension.padding15},
+  rupeeSign: {
+    fontFamily: Dimension.CustomRobotoBold,
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    marginRight: Dimension.margin5,
   },
-  TotalamounTxt:{
-    fontFamily:Dimension.CustomSemiBoldFont,
-    fontSize:Dimension.font12,
-    color:Colors.FontColor,
-   
+  TotalamounTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
   },
-  taxpercentageTxt:{
-    fontFamily:Dimension.CustomSemiBoldFont,
-    fontSize:Dimension.font12,
-    color:Colors.greenShade,
-    marginLeft:Dimension.margin5
+  taxpercentageTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    fontSize: Dimension.font12,
+    color: Colors.greenShade,
+    marginLeft: Dimension.margin5,
   },
   topbdr: {
     alignSelf: 'center',
@@ -518,12 +418,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     padding: Dimension.padding15,
   },
-  btnWrap:{
-    flex:1,
-    flexDirection:"row",
-    padding:Dimension.padding15,
-    borderTopWidth:1,
-    borderTopColor:Colors.grayShade1
+  btnWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: Dimension.padding15,
+    borderTopWidth: 1,
+    borderTopColor: Colors.grayShade1,
   },
 });
 

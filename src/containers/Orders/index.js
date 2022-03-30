@@ -237,26 +237,15 @@ const OrdersScreen = props => {
     setBulkItemIds(currentItemIds);
   };
 
-  // useEffect(() => {
-  //   console.log(selectAll);
-  //   let currentItemIds;
-  //   if (selectAll) {
-  //     currentItemIds = (OrderData || []).map((_, i) => _.itemId);
-  //     console.log(currentItemIds);
-  //   }
-  //   setBulkItemIds(currentItemIds);
-  // }, [selectAll]);
-
-  const bulkSelect = () => {
-    // setSelectAll(!selectAll);
-    console.log(selectAll);
-
-    // if (selectAll) {
-    //   currentItemIds = [...currentItemIds, bulkItemIds];
-    // } else {
-    //   currentItemIds = [];
-    // }
-  };
+  useEffect(() => {
+    let currentItemIds = [];
+    if (selectAll) {
+      currentItemIds = ([...OrderData] || []).map((_, i) => _.itemId);
+      setBulkItemIds([...currentItemIds]);
+    } else {
+      setBulkItemIds([]);
+    }
+  }, [selectAll]);
 
   const renderHeaderComponent = () => {
     return (
@@ -547,10 +536,8 @@ const OrdersScreen = props => {
           )}
           {bulkItemIds && bulkItemIds.length ? (
             <TouchableOpacity
-              // onPress={bulkSelect}
               onPress={() => {
                 setSelectAll(!selectAll);
-                // bulkSelect();
               }}
               style={{
                 borderWidth: 1,
@@ -570,10 +557,8 @@ const OrdersScreen = props => {
               </Text>
               <MaterialCommunityIcon
                 name={selectAll ? 'checkbox-marked' : 'checkbox-blank-outline'}
-                // onPress={bulkSelect}
                 onPress={() => {
                   setSelectAll(!selectAll);
-                  // bulkSelect();
                 }}
                 size={20}
                 color={selectAll ? 'blue' : '#000'}
