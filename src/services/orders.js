@@ -83,3 +83,46 @@ export const rejectOrder = async body =>
       },
     },
   );
+
+export const markOutForOrderApi = async (supplierId, itemId) =>
+  axios.post(
+    `${BASE_URL}api/order/acceptDoorDelivery`,
+    {
+      supplierId,
+      itemId,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
+export const getSplitHistory = async (supplierId, orderRef, orderItemRef) =>
+  axios.post(
+    `${BASE_URL}api/order/itemInfo`,
+    {
+      supplierId,
+      orderRef,
+      orderItemRef,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
+export const getLspDetail = async (supplierId, itemId) =>
+  axios.post(
+    `${BASE_URL}api/order/oms/itemInfo`,
+    {
+      supplierId,
+      itemList: [itemId],
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );

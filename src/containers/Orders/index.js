@@ -145,6 +145,7 @@ const OrdersScreen = props => {
         orderRef={item.orderRef}
         itemRef={item.itemRef}
         createdAt={item.createdAt}
+        supplierId={item.supplierId}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         pickupDate={item.pickupDate}
