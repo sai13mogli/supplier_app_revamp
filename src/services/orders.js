@@ -137,3 +137,16 @@ export const addSerialNumber = async payload =>
       },
     },
   );
+
+export const splitItem = async payload =>
+  axios.post(
+    `${BASE_URL}api/order/oms/splitItem`,
+    {
+      ...payload,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
