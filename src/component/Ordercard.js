@@ -19,11 +19,14 @@ import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import RejectModal from '../component/RejectModal';
 import MarkOutForDeliveryModal from '../component/MarkOutForDeliveryModal';
 import ViewLSPModal from '../component/ViewLSPModal';
 import SplitHistoryModal from '../component/SplitHistoryModal';
 import AcceptModal from './AcceptModal';
+import AddView from './AddView';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -51,6 +54,9 @@ const Ordercard = props => {
     selectedTab,
     fetchTabCountFunc,
     invoiceUrl,
+    bulkItemIds,
+    setBulkItemIds,
+    selectItemId,
   } = props;
   const [orderImage, setOrderImage] = useState(null);
   const [showLspDetails, setShowLspDetails] = useState(null);
@@ -65,6 +71,7 @@ const Ordercard = props => {
   const [showMoreCTA, setShowMoreCTA] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
   const [displayCalendar, setDisplayCalendar] = useState(false);
+  const [addViewModal, setAddViewModal] = useState(false);
 
   useEffect(() => {
     fetchImage();
@@ -240,9 +247,6 @@ const Ordercard = props => {
             onPress={() => setDisplayCalendar(true)}
             style={styles.acceptCtabtn}>
             <Text style={styles.acceptCtaTxt}>{cta}</Text>
-            {/* {acceptLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
-            )} */}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_PO_EMS' ? (
           <TouchableOpacity
@@ -267,7 +271,6 @@ const Ordercard = props => {
         ) : cta == 'MAP_INVOICE' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            // onPress={() => getPOInvoice(false, url)}
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
             {invoiceLoader && (
@@ -313,6 +316,18 @@ const Ordercard = props => {
             {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
+          </TouchableOpacity>
+        ) : cta == 'ADD_SERIAL_NUMBER' ? (
+          <TouchableOpacity
+            style={styles.DownloadPoBtn}
+            onPress={() => setAddViewModal(true)}>
+            <Text style={styles.rejectCtaTxt}>ADD SERIAL NUMBER</Text>
+          </TouchableOpacity>
+        ) : cta == 'VIEW_SERIAL_NUMBER' ? (
+          <TouchableOpacity
+            style={styles.DownloadPoBtn}
+            onPress={() => setAddViewModal(true)}>
+            <Text style={styles.rejectCtaTxt}>VIEW SERIAL NUMBER</Text>
           </TouchableOpacity>
         ) : null}
       </>
@@ -366,16 +381,35 @@ const Ordercard = props => {
   const renderOrderDetails = (fromModal, fromCTA) => {
     return (
       <>
-        <View style={styles.orderCardwrapInner}>
-          <View style={styles.leftpart}>
+        <View
+          style={[
+            fromModal
+              ? styles.orderCardwrapInnerModal
+              : styles.orderCardwrapInner,
+          ]}>
+          {!fromModal && selectedTab == 'PENDING_ACCEPTANCE' ? (
+            <MaterialCommunityIcon
+              name={
+                (bulkItemIds || []).includes(itemId)
+                  ? 'checkbox-marked'
+                  : 'checkbox-blank-outline'
+              }
+              onPress={() => selectItemId(itemId)}
+              size={20}
+              color={(bulkItemIds || []).includes(itemId) ? 'blue' : '#000'}
+            />
+          ) : null}
+          <View style={[fromModal ? styles.LeftpartModal : styles.leftpart]}>
             <Image
-              source={{
-                uri:
-                  orderImage ||
-                  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
-              }}
+              // source={{
+              //   uri:
+              //     orderImage ||
+              //     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+              // }}
+              source={require('../assets/images/Prd.png')}
               style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
             />
+
             {!fromModal ? (
               <View style={styles.quantityTxt}>
                 <Text style={styles.TitleLightTxt}>
@@ -387,7 +421,9 @@ const Ordercard = props => {
           <View style={styles.rightPart}>
             <Text
               style={[
-                fromModal ? {color: '#000'} : {color: Colors.BrandColor},
+                fromModal
+                  ? {color: Colors.FontColor}
+                  : {color: Colors.BrandColor},
                 styles.msnName,
               ]}>
               {msn}
@@ -408,10 +444,18 @@ const Ordercard = props => {
               </Text>
             ) : null}
             {fromModal ? (
-              <>
-                <Text style={{color: '#000'}}> ₹{Math.floor(totalAmount)}</Text>
-                <Text style={{color: '#000'}}>{taxPercentage}%</Text>
-              </>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginBottom: Dimension.margin20,
+                }}>
+                <Text style={styles.TotalamounTxt}>
+                  {' '}
+                  <Text style={styles.rupeeSign}>₹ </Text>
+                  {Math.floor(totalAmount)}
+                </Text>
+                <Text style={styles.taxpercentageTxt}>{taxPercentage}%</Text>
+              </View>
             ) : null}
             <View style={{flexDirection: 'row'}}>
               <View style={{marginRight: Dimension.margin20}}>
@@ -465,11 +509,18 @@ const Ordercard = props => {
           </View>
         </View>
         <View
-          style={{
-            flexDirection: 'row',
-            flex: 1,
-            marginTop: Dimension.margin15,
-          }}>
+          style={
+            fromModal
+              ? {
+                  flexDirection: 'row',
+                  flex: 1,
+                  marginTop: Dimension.margin30,
+                  padding: Dimension.padding15,
+                  borderTopColor: Colors.grayShade1,
+                  borderTopWidth: 1,
+                }
+              : {flexDirection: 'row', flex: 1, marginTop: Dimension.margin15}
+          }>
           <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
             {renderPartialCTAs(invoiceUrl, fromCTA)}
             {!showMoreCTA ? renderFurtherCTAs(invoiceUrl, fromCTA) : null}
@@ -515,6 +566,14 @@ const Ordercard = props => {
             onBackdropPress={() => setIsOrderVisible(false)}
             onBackButtonPress={() => setIsOrderVisible(false)}>
             <View style={styles.modalContainer}>
+              <View style={styles.topbdr}></View>
+              <View style={styles.ModalheadingWrapper}>
+                <CustomeIcon
+                  name={'close'}
+                  size={Dimension.font22}
+                  color={Colors.FontColor}
+                  onPress={() => setIsOrderVisible(false)}></CustomeIcon>
+              </View>
               {renderOrderDetails(true, '')}
             </View>
           </Modal>
@@ -577,6 +636,34 @@ const Ordercard = props => {
           itemId={itemId}
           displayCalendar={displayCalendar}
           setDisplayCalendar={setDisplayCalendar}
+        />
+      )}
+      {addViewModal && (
+        <AddView
+          addViewModal={addViewModal}
+          setAddViewModal={setAddViewModal}
+          selectedTab={selectedTab}
+          itemId={itemId}
+          fetchOrdersFunc={fetchOrdersFunc}
+          fetchTabCountFunc={fetchTabCountFunc}
+          msn={msn}
+          quantity={quantity}
+          orderRef={orderRef}
+          itemRef={itemRef}
+          createdAt={createdAt}
+          transferPrice={transferPrice}
+          hsn={hsn}
+          pickupDate={pickupDate}
+          productName={productName}
+          orderTypeString={orderTypeString}
+          shipmentMode={shipmentMode}
+          isVmi={isVmi}
+          shipmentModeString={shipmentModeString}
+          actionCTA={actionCTA}
+          taxPercentage={taxPercentage}
+          totalAmount={totalAmount}
+          invoiceUrl={invoiceUrl}
+          orderImage={orderImage}
         />
       )}
     </>
@@ -679,17 +766,18 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: Colors.WhiteColor,
     padding: 2,
-    height: Dimension.width50,
+    width: Dimension.width50,
     height: Dimension.height50,
     //alignSelf:'center'
   },
+
   imgStyleModal: {
     borderRadius: 4,
     backgroundColor: Colors.WhiteColor,
     padding: 2,
-    height: Dimension.width100,
-    height: Dimension.height100,
-    //alignSelf:'center'
+    width: 250,
+    height: 250,
+    alignSelf: 'center',
   },
   quantityTxt: {
     alignSelf: 'center',
@@ -750,6 +838,37 @@ const styles = StyleSheet.create({
   showMoreCta: {
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
+  },
+  LeftpartModal: {flex: 1},
+  orderCardwrapInnerModal: {paddingHorizontal: Dimension.padding15},
+  rupeeSign: {
+    fontFamily: Dimension.CustomRobotoBold,
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    marginRight: Dimension.margin5,
+  },
+  TotalamounTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+  },
+  taxpercentageTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    fontSize: Dimension.font12,
+    color: Colors.greenShade,
+    marginLeft: Dimension.margin5,
+  },
+  topbdr: {
+    alignSelf: 'center',
+    height: 3,
+    backgroundColor: Colors.modalBorder,
+    borderRadius: 2,
+    width: Dimension.width70,
+  },
+  ModalheadingWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: Dimension.padding15,
   },
 });
 export default React.memo(Ordercard);

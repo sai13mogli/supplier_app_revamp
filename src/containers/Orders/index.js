@@ -16,13 +16,15 @@ import colors from '../../Theme/Colors';
 import {STATE_STATUS} from '../../redux/constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchOrders, fetchTabCount} from '../../redux/actions/orders';
-import {getImageUrl} from '../../services/orders';
+import {getImageUrl, acceptBulk} from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
-import {Icon} from 'react-native-elements';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
+import OrdersFilterModal from '../../component/OrdersFilterModal';
+import Toast from 'react-native-toast-message';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -45,11 +47,28 @@ const OrdersScreen = props => {
     state.ordersReducer.getIn(['orders', 'page']),
   );
 
+  const paramsAppliedFilters = useSelector(state =>
+    state.ordersReducer.getIn(['orders', 'filters']),
+  );
+
   const [selectedType, setSelectedType] = useState('Open_Orders');
   const [selectedTab, setSelectedTab] = useState('PENDING_ACCEPTANCE');
   const onEndReachedCalledDuringMomentum = useRef(true);
   const [inputValue, setInputValue] = useState('');
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const [ordersfiltersModal, setOrdersFiltersModal] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('orderRefs');
+  const [appliedFilter, setAppliedFilter] = useState(
+    paramsAppliedFilters || {},
+  );
+  const [initialFilter, setInitialFilter] = useState('orderRefs');
+  const [pickupFromDate, setPickupFromDate] = useState('');
+  const [pickupToDate, setPickupToDate] = useState('');
+  const [poFromDate, setPoFromDate] = useState('');
+  const [poToDate, setPoToDate] = useState('');
+  const [bulkItemIds, setBulkItemIds] = useState([]);
+  const [bulkAcceptLoader, setBulkAcceptLoader] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
 
   const OPTIONS = [
     {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
@@ -162,6 +181,9 @@ const OrdersScreen = props => {
         fetchTabCountFunc={fetchTabCountFunc}
         itemId={item.itemId}
         invoiceUrl={item.invoiceUrl}
+        bulkItemIds={bulkItemIds}
+        setBulkItemIds={setBulkItemIds}
+        selectItemId={selectItemId}
       />
     );
   };
@@ -178,6 +200,53 @@ const OrdersScreen = props => {
       orderRefs: [],
     });
   };
+
+  //selectedFilter
+  const selectFilter = term => {
+    let currentFilters = {...appliedFilter};
+    if (
+      currentFilters[initialFilter] &&
+      currentFilters[initialFilter].includes(term)
+    ) {
+      currentFilters[initialFilter] = currentFilters[initialFilter].filter(
+        _ => _ != term,
+      );
+    } else {
+      if (currentFilters[initialFilter]) {
+        currentFilters[initialFilter].push(term);
+      } else {
+        currentFilters[initialFilter] = [];
+        currentFilters[initialFilter].push(term);
+      }
+    }
+    setAppliedFilter(currentFilters);
+  };
+
+  //select Item Id
+  const selectItemId = itemId => {
+    let currentItemIds = [...bulkItemIds];
+    if (currentItemIds.includes(itemId)) {
+      currentItemIds = currentItemIds.filter(_ => _ != itemId);
+    } else {
+      if (currentItemIds) {
+        currentItemIds.push(itemId);
+      } else {
+        currentItemIds = [];
+        currentItemIds.push(itemId);
+      }
+    }
+    setBulkItemIds(currentItemIds);
+  };
+
+  useEffect(() => {
+    let currentItemIds = [];
+    if (selectAll) {
+      currentItemIds = ([...OrderData] || []).map((_, i) => _.itemId);
+      setBulkItemIds([...currentItemIds]);
+    } else {
+      setBulkItemIds([]);
+    }
+  }, [selectAll]);
 
   const renderHeaderComponent = () => {
     return (
@@ -221,8 +290,13 @@ const OrdersScreen = props => {
   const renderListEmptyComponent = () => {
     if (OrderData.size == 0 && OrderStatus == STATE_STATUS.FETCHED) {
       return (
-        <View style={{padding: 20}}>
-          <Text style={{color: '#000', alignSelf: 'center'}}>
+        <View style={styles.emptyWrap}>
+          <Image
+            
+              source={require('../../assets/images/emptyOrders.png')}
+              style={{width:300,height:200}}
+            />
+          <Text style={styles.emptyTxt}>
             No Data Available
           </Text>
         </View>
@@ -263,6 +337,69 @@ const OrdersScreen = props => {
       deliveryType: [],
       orderRefs: [],
     });
+  };
+
+  //applied filters api hit
+  const applyFilters = () => {
+    setOrdersFiltersModal(false);
+    fetchOrdersFunc(0, inputValue, selectedTab, 'ONESHIP', {
+      pickupFromDate: pickupFromDate,
+      pickupToDate: pickupToDate,
+      poFromDate: poFromDate,
+      poToDate: poToDate,
+      orderType: appliedFilter['orderType'],
+      deliveryType: appliedFilter['deliveryType'],
+      orderRefs: appliedFilter['orderRefs'],
+    });
+  };
+
+  //reset filters api hit
+  const resetFilters = () => {
+    fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+      pickupFromDate: '',
+      pickupToDate: '',
+      poFromDate: '',
+      poToDate: '',
+      orderType: [],
+      deliveryType: [],
+      orderRefs: [],
+    });
+    setAppliedFilter({});
+    setOrdersFiltersModal(false);
+  };
+
+  const onBulkAccept = async () => {
+    try {
+      setBulkAcceptLoader(true);
+      const {data} = await acceptBulk({
+        supplierId: await AsyncStorage.getItem('userId'),
+        itemIds: bulkItemIds,
+      });
+      if (data && data.success) {
+        setBulkAcceptLoader(false);
+        setBulkItemIds([]);
+        fetchOrdersFunc(0, inputValue, selectedTab, 'ONESHIP', {
+          pickupFromDate: pickupFromDate || '',
+          pickupToDate: pickupToDate || '',
+          poFromDate: poFromDate || '',
+          poToDate: poToDate || '',
+          orderType: appliedFilter['orderType'] || [],
+          deliveryType: appliedFilter['deliveryType'] || [],
+          orderRefs: appliedFilter['orderRefs'] || [],
+        });
+      } else {
+        setBulkAcceptLoader(false);
+        Toast.show({
+          type: 'success',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      setBulkAcceptLoader(false);
+      console.log(error);
+    }
   };
 
   // const handleKeyDown = e => {
@@ -347,13 +484,28 @@ const OrdersScreen = props => {
             showsVerticalScrollIndicator={false}
             initialNumToRender={5}
           />
-          <ScrollView>
+          <View style={styles.footerSearchWrap}>
+           <View style={styles.searchWrapper}>
             <TextInput
-              // autoFocus={true}
-              // style={styles.inputField}
-              // onKeyPress={e => {
-              //   console.log('hehhe', e.nativeEvent.key);
-              // }}
+              placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
+              returnKeyType={'search'}
+              onChangeText={onSearchText}
+              onFocus={() => console.log('onFocus!!')}
+              value={inputValue}
+              onSubmitEditing={event => {
+                if (inputValue && inputValue.length > 1) {
+                  onSubmitSearch();
+                }
+              }}
+              blurOnSubmit={true}
+              
+              style={styles.SearchInputCss}>
+
+            </TextInput>
+            <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+            
+            </View>
+            {/* <TextInput
               blurOnSubmit={true}
               style={{color: '#000'}}
               placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
@@ -362,27 +514,118 @@ const OrdersScreen = props => {
               returnKeyType={'search'}
               onChangeText={onSearchText}
               onFocus={() => console.log('onFocus!!')}
-              // ref={searchInput}
               value={inputValue}
               onSubmitEditing={event => {
                 if (inputValue && inputValue.length > 1) {
                   onSubmitSearch();
                 }
               }}
-            />
+            /> */}
             {!isKeyboardVisible ? (
-              <TouchableOpacity style={{width: 40, height: 50}}>
+              <View style={styles.filterBtnWrap}>
+              <TouchableOpacity
+                style={styles.filterBtn}
+                onPress={() => setOrdersFiltersModal(true)}>
+                <Text
+                  style={styles.filtertxt}>
+                  Filters
+                </Text>
+                <CustomeIcon name={'filter-line'} style={styles.filterIcon}></CustomeIcon>
+              </TouchableOpacity>
+              </View>
+            ) : null}
+          </View>
+          {ordersfiltersModal && (
+            <OrdersFilterModal
+              ordersfiltersModal={ordersfiltersModal}
+              setOrdersFiltersModal={setOrdersFiltersModal}
+              activeFilter={activeFilter}
+              setActiveFilter={setActiveFilter}
+              selectedTab={selectedTab}
+              appliedFilter={appliedFilter}
+              setAppliedFilter={setAppliedFilter}
+              initialFilter={initialFilter}
+              setInitialFilter={setInitialFilter}
+              selectFilter={selectFilter}
+              applyFilters={applyFilters}
+              pickupFromDate={pickupFromDate || appliedFilter['pickupFromDate']}
+              pickupToDate={pickupToDate || appliedFilter['pickupToDate']}
+              setPickupFromDate={setPickupFromDate}
+              setPickupToDate={setPickupToDate}
+              poFromDate={poFromDate || appliedFilter['poFromDate']}
+              poToDate={poToDate || appliedFilter['poToDate']}
+              setPoFromDate={setPoFromDate}
+              setPoToDate={setPoToDate}
+              resetFilters={resetFilters}
+            />
+          )}
+          {bulkItemIds && bulkItemIds.length ? (
+            <TouchableOpacity
+              onPress={() => {
+                setSelectAll(!selectAll);
+              }}
+              style={styles.selectAllBtn}>
+              <Text style={styles.selectBtnTxt}>
+                Select All({bulkItemIds.length})
+              </Text>
+              <CustomeIcon
+                  name={
+                    selectAll ? 'checkbox-tick'
+                      : 'checkbox-blank'
+                  }
+                  color={"#fff"}
+                  size={Dimension.font22}
+                  onPress={() => {
+                    setSelectAll(!selectAll);
+                    // bulkSelect();
+                  }}
+                  >
+
+                  </CustomeIcon>
+              {/* <MaterialCommunityIcon
+                name={selectAll ? 'checkbox-marked' : 'checkbox-blank-outline'}
+                onPress={() => {
+                  setSelectAll(!selectAll);
+                }}
+                size={20}
+                color={selectAll ? 'blue' : '#000'}
+              /> */}
+            </TouchableOpacity>
+          ) : null}
+          {bulkItemIds && bulkItemIds.length ? (
+            <View style={styles.bulkItemfooter}>
+              <View>
+              <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+                Selcted
+              </Text>
+              <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+                {bulkItemIds && bulkItemIds.length < 10
+                  ? `0${bulkItemIds.length}`
+                  : bulkItemIds.length}
+              </Text>
+              </View>
+              
+              <TouchableOpacity
+                onPress={onBulkAccept}
+                style={{backgroundColor: 'red', width: 200, height: 50}}>
                 <Text
                   style={{
                     fontSize: 12,
                     fontWeight: 'bold',
-                    color: '#000',
+                    color: '#fff',
                   }}>
-                  Filters
+                  BULK ACCEPT
                 </Text>
+                {bulkAcceptLoader && (
+                  <ActivityIndicator
+                    size={'small'}
+                    color={'white'}
+                    style={{marginRight: 4}}
+                  />
+                )}
               </TouchableOpacity>
-            ) : null}
-          </ScrollView>
+            </View>
+          ) : null}
         </>
       )}
     </View>

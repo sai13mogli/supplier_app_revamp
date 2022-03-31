@@ -7,22 +7,20 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import Modal from 'react-native-modal';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {rejectOrder} from '../services/orders';
-import Toast from 'react-native-toast-message';
-import DropDown from '../component/common/DropDown';
-import CustomeIcon from './common/CustomeIcon';
 import Productcard from './Productcard';
-
+import CustomeIcon from './common/CustomeIcon';
+import FloatingLabelInputField from './common/FloatingInput';
+import {viewSerialNumber, addSerialNumber} from '../services/orders';
 const deviceWidth = Dimensions.get('window').width;
-const RejectModal = props => {
+const AddView = props => {
   const {
-    rejectModal,
-    setRejectModal,
+    addViewModal,
+    setAddViewModal,
     selectedTab,
     msn,
     quantity,
@@ -44,79 +42,56 @@ const RejectModal = props => {
     orderImage,
     itemId,
   } = props;
-  const [rejectLoader, setRejectLoader] = useState(false);
-  const [reason, setReason] = useState('Material is not ready');
-  const Reasons = [
-    {
-      id: 1,
-      label: 'Material is not ready',
-      value: 'Material is not ready',
-    },
-    {
-      id: 2,
-      label: 'Payment Issue',
-      value: 'Payment Issue',
-    },
-    {
-      id: 3,
-      label: 'MOQ Issue',
-      value: 'MOQ Issue',
-    },
-    {
-      id: 4,
-      label: 'Rate Issue',
-      value: 'Rate Issue',
-    },
-    {
-      id: 5,
-      label: 'Other',
-      value: 'Other',
-    },
-  ];
+  const [serialNumber, setSerialNumber] = useState('');
+  const [serialNumberError, setSerialNumberError] = useState('');
+  const [serialNumberList, setSerialNumberList] = useState([]);
+  const [submitLoader, setSubmitLoader] = useState(false);
 
-  //rejectOrder
-  const onReject = async () => {
+  useEffect(() => {
+    fetchSerialNumber();
+  }, []);
+
+  const fetchSerialNumber = async () => {
     try {
-      setRejectLoader(true);
-      let payload = {
+      const {data} = await viewSerialNumber({
         supplierId: await AsyncStorage.getItem('userId'),
-        itemId: `${itemId}`,
-        remark: reason || 'Material is not ready',
-      };
-      const {data} = await rejectOrder(payload);
+        itemId: itemId,
+      });
       if (data && data.success) {
-        fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
-          pickupFromDate: '',
-          pickupToDate: '',
-          poFromDate: '',
-          poToDate: '',
-          orderType: [],
-          deliveryType: [],
-          orderRefs: [],
-        });
-        fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
-        setRejectLoader(false);
-        setRejectModal(false);
+        setSerialNumber(
+          data.serialNumberList[data.serialNumberList.length - 1],
+        );
+        setSerialNumberList(data.serialNumberList);
       } else {
-        setRejectLoader(false);
-        setRejectModal(false);
-        Toast.show({
-          type: 'error',
-          text2: data.message,
-          visibilityTime: 2000,
-          autoHide: true,
-        });
+        setSerialNumberError(data.message);
       }
     } catch (error) {
       console.log(error);
-      setRejectLoader(false);
-      setRejectModal(false);
-      Toast.show({
-        type: 'error',
-        text2: 'Something went wrong',
-        visibilityTime: 2000,
-        autoHide: true,
+    }
+  };
+
+  const onSubmit = async () => {
+    try {
+      setSubmitLoader(true);
+      const {data} = await addSerialNumber({
+        supplierId: await AsyncStorage.getItem('userId'),
+        itemId: itemId,
+        serialNumberList: [...serialNumberList],
       });
+      if (data && data.success) {
+        setSubmitLoader(false);
+        setSerialNumber(
+          data.serialNumberList[data.serialNumberList.length - 1],
+        );
+        setSerialNumberList(data.serialNumberList);
+        setAddViewModal(false);
+      } else {
+        setSubmitLoader(false);
+        setSerialNumberError(data.message);
+      }
+    } catch (error) {
+      setSubmitLoader(false);
+      console.log(error);
     }
   };
 
@@ -145,19 +120,19 @@ const RejectModal = props => {
   return (
     <Modal
       overlayPointerEvents={'auto'}
-      isVisible={rejectModal}
+      isVisible={addViewModal}
       onTouchOutside={() => {
-        setRejectModal(false);
+        setAddViewModal(false);
       }}
       onDismiss={() => {
-        setRejectModal(false);
+        setAddViewModal(false);
       }}
       coverScreen={true}
       style={{padding: 0, margin: 0}}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
-      onBackdropPress={() => setRejectModal(false)}
-      onBackButtonPress={() => setRejectModal(false)}>
+      onBackdropPress={() => setAddViewModal(false)}
+      onBackButtonPress={() => setAddViewModal(false)}>
       <View style={styles.modalContainer}>
         <View style={styles.topbdr}></View>
 
@@ -166,36 +141,37 @@ const RejectModal = props => {
             name={'close'}
             size={Dimension.font22}
             color={Colors.FontColor}
-            onPress={() => setRejectModal(false)}></CustomeIcon>
+            onPress={() => setAddViewModal(false)}></CustomeIcon>
         </View>
+        <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+          Add Serial Number
+        </Text>
         <View style={{paddingHorizontal: Dimension.padding15}}>
           {renderOrderDetails()}
-          <View
-            style={{
-              paddingVertical: Dimension.padding10,
-            }}>
-            <DropDown
-              title={'Specify Reason'}
-              label={'Specify Reason'}
-              selectedValue={reason}
-              onValueChange={text => {
-                setReason(text);
-              }}
-              items={Reasons}
-              enabled={true}
-              fromRejectModal={true}
-            />
-          </View>
         </View>
+        <FloatingLabelInputField
+          title={'Add Serial Number'}
+          label={'Add Serial Number'}
+          isImp={true}
+          value={serialNumber}
+          onChangeText={text => setSerialNumber(text)}
+          errorMessage={serialNumberError}
+          placeholder={'Add Serial Number'}
+          showError={serialNumberError}
+          //   onBlur={() => onPasswordBlur()}
+          //   secureTextEntry={isSecure}
+          //   extraView={() => getExtraView()}
+        />
+
         <View style={styles.btnWrap}>
           <TouchableOpacity
             style={styles.cancelBtn}
-            onPress={() => setRejectModal(false)}>
+            onPress={() => setAddViewModal(false)}>
             <Text style={styles.canceltxt}>CANCEL</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.rejectCtabtn} onPress={onReject}>
-            <Text style={styles.rejectCtaTxt}>REJECT</Text>
-            {rejectLoader && (
+          <TouchableOpacity style={styles.rejectCtabtn} onPress={onSubmit}>
+            <Text style={styles.rejectCtaTxt}>SUBMIT</Text>
+            {submitLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
@@ -204,7 +180,6 @@ const RejectModal = props => {
     </Modal>
   );
 };
-
 const styles = StyleSheet.create({
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
@@ -263,4 +238,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RejectModal;
+export default AddView;

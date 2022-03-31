@@ -60,3 +60,30 @@ export const failedFetchTabCount = error => {
     error,
   };
 };
+
+export const fetchPOs = ({supplierId, tabRef}) => {
+  return {
+    type: ORDERS_ACTIONS.FETCH_PO,
+    payload: {
+      onlineShipmentMode: '',
+      supplierId,
+      tabRef,
+    },
+  };
+};
+
+export const fetchedPOs = data => {
+  return {
+    type: ORDERS_ACTIONS.FETCHED_PO,
+    payload: {
+      data,
+    },
+  };
+};
+
+export const failedFetchPO = error => {
+  return {
+    type: ORDERS_ACTIONS.FAILED_FETCH_PO,
+    error,
+  };
+};

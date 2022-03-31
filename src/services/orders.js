@@ -7,7 +7,7 @@ export const getOrders = async (
   search,
   orderStage,
   onlineShipmentMode,
-  filters,
+  filter,
 ) =>
   axios.post(
     `${BASE_URL}searchapi/order/list`,
@@ -18,7 +18,7 @@ export const getOrders = async (
       pageSize: 20,
       orderStage,
       onlineShipmentMode,
-      filters,
+      filter,
     },
     {
       headers: {
@@ -97,6 +97,20 @@ export const markOutForOrderApi = async (supplierId, itemId) =>
       },
     },
   );
+export const getTabItemCount = async (onlineShipmentMode, supplierId, tabRef) =>
+  axios.post(
+    `${BASE_URL}searchapi/order/tabItemCount`,
+    {
+      onlineShipmentMode,
+      supplierId,
+      tabRef,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
 
 export const getSplitHistory = async (supplierId, orderRef, orderItemRef) =>
   axios.post(
@@ -112,6 +126,18 @@ export const getSplitHistory = async (supplierId, orderRef, orderItemRef) =>
       },
     },
   );
+export const acceptBulk = async payload =>
+  axios.post(
+    `${BASE_URL}api/order/acceptBulk`,
+    {
+      ...payload,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
 
 export const getLspDetail = async (supplierId, itemId) =>
   axios.post(
@@ -119,6 +145,32 @@ export const getLspDetail = async (supplierId, itemId) =>
     {
       supplierId,
       itemList: [itemId],
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
+export const viewSerialNumber = async payload =>
+  axios.post(
+    `${BASE_URL}api/order/oms/getSerialNumber`,
+    {
+      ...payload,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
+export const addSerialNumber = async payload =>
+  axios.post(
+    `${BASE_URL}api/order/oms/addSerialNumber`,
+    {
+      ...payload,
     },
     {
       headers: {

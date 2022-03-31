@@ -36,6 +36,11 @@ const styles = StyleSheet.create({
     marginBottom: Dimension.margin5,
     fontWeight: 'normal',
   },
+  starIcon:{
+    fontSize: Dimension.font10,
+    color: colors.BrandColor,
+    fontFamily: Dimension.CustomMediumFont,
+  },
   inputStyle: {
     fontSize: Dimension.font14,
     color: colors.FontColor,

@@ -13,15 +13,23 @@ import {
   getBankDetails,
   getTdsInfoDetails,
   setBankDetails,
+  setDeleteAddress,
+  setUpdateTDSDetails
 } from '../../services/profile';
 // actions
 import {
+  fetchAddressDetails,
+  fetchTdsInfoDetails,
   fetchedBusinessDetails,
   failedFetchBusinessDetails,
   fetchedUpdateBusinessDetails,
   failedFetchUpdateBusinessDetails,
+  fetchedUpdateTDSDetails,
+  failedFetchUpdateTDSDetails,
   failedFetchAddressDetails,
   fetchedAddressDetails,
+  failedFetchDeleteAddresses,
+  fetchedDeleteAddresses,
   failedFetchBankDetails,
   fetchedBankDetails,
   fetchedProfile,
@@ -67,6 +75,20 @@ function* fetchUpdateBusinessDetails({ payload: { formData } }) {
   }
 }
 
+function* fetchUpdateTDSDetails({ payload: { formData } }) {
+  try {
+    const { data, error } = yield call(setUpdateTDSDetails, formData);
+    if (error) {
+      yield put(failedFetchUpdateTDSDetails(error));
+    } else {
+      yield put(fetchedUpdateTDSDetails(formData, data));
+      yield put(fetchTdsInfoDetails());
+    }
+  } catch (error) {
+    yield put(failedFetchUpdateTDSDetails(error));
+  }
+}
+
 function* fetchUpdateBankDetails({ payload: { formData } }) {
   try {
     const { data, error } = yield call(setBankDetails, formData);
@@ -98,7 +120,7 @@ function* fetchUserProfile({ }) {
   }
 }
 
-function* fetchAddressDetails() {
+function* fetchAddressDetail() {
   try {
     const { data, error } = yield call(getAddressesDetails);
     if (error) {
@@ -111,14 +133,30 @@ function* fetchAddressDetails() {
   }
 }
 
+function* fetchDeleteAddresses({ payload: { formData } }) {
+
+  try {
+    const { data, error } = yield call(setDeleteAddress, formData);
+    if (error) {
+      yield put(failedFetchDeleteAddresses(error));
+    } else {
+      yield put(fetchedDeleteAddresses(formData, data.data));
+      yield put(fetchAddressDetails());
+    }
+  } catch (error) {
+    yield put(failedFetchDeleteAddresses(error));
+  }
+}
+
 function* fetchUpdateBillingAddress({ payload: { formData } }) {
   try {
     const { data, error } = yield call(setUpdateBillingAddress, formData);
     if (error) {
       yield put(failedFetchUpdateBillingAddress(error));
-    } else {
+    }
+    else {
       yield put(fetchedUpdateBillingAddress(formData, data.data));
-      yield put(fetchedAddressDetails(data.data));
+      yield put(fetchAddressDetails());
     }
   } catch (error) {
     yield put(failedFetchUpdateBillingAddress(error));
@@ -138,7 +176,7 @@ function* fetchBankDetails() {
   }
 }
 
-function* fetchTdsInfoDetails() {
+function* fetchTdsInfoDetail() {
   try {
     const { data, error } = yield call(getTdsInfoDetails);
     if (error) {
@@ -154,10 +192,13 @@ function* fetchTdsInfoDetails() {
 export default fork(function* () {
   yield takeEvery(PROFILE_ACTIONS.FETCH_PROFILE, fetchUserProfile);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS, fetchBusinessDetails);
-  yield takeEvery(PROFILE_ACTIONS.FETCH_ADDRESSES, fetchAddressDetails);
+  yield takeEvery(PROFILE_ACTIONS.FETCH_DELETE_ADDRESSES, fetchDeleteAddresses);
+  yield takeEvery(PROFILE_ACTIONS.FETCH_ADDRESSES, fetchAddressDetail);
   yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BILLING_ADDRESS, fetchUpdateBillingAddress);
   yield takeEvery(PROFILE_ACTIONS.FETCH_BANK_DETAILS, fetchBankDetails);
   yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS, fetchUpdateBusinessDetails);
-  yield takeEvery(PROFILE_ACTIONS.FETCH_TDS_INFO_DETAILS, fetchTdsInfoDetails);
+  yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_TDS_DETAILS, fetchUpdateTDSDetails);
+  yield takeEvery(PROFILE_ACTIONS.FETCH_TDS_INFO_DETAILS, fetchTdsInfoDetail);
   yield takeEvery(PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS, fetchUpdateBankDetails);
+
 });

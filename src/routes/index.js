@@ -16,6 +16,7 @@ import {
   AUTH_STACK_SCREENS,
   BOTTOM_TAB_SCREENS,
 } from '../constants/index';
+import {useDispatch, useSelector} from 'react-redux';
 
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
