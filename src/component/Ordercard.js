@@ -25,6 +25,7 @@ import RejectModal from '../component/RejectModal';
 import MarkOutForDeliveryModal from '../component/MarkOutForDeliveryModal';
 import ViewLSPModal from '../component/ViewLSPModal';
 import SplitHistoryModal from '../component/SplitHistoryModal';
+import ProofOfDeliveryModal from '../component/ProofOfDeliveryModal';
 import AcceptModal from './AcceptModal';
 import AddView from './AddView';
 
@@ -57,6 +58,7 @@ const Ordercard = props => {
     bulkItemIds,
     setBulkItemIds,
     selectItemId,
+    shipmentType,
   } = props;
   const [orderImage, setOrderImage] = useState(null);
   const [showLspDetails, setShowLspDetails] = useState(null);
@@ -70,6 +72,7 @@ const Ordercard = props => {
   const [viewSplitHistory, setViewSplitHistory] = useState(false);
   const [showMoreCTA, setShowMoreCTA] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
+  const [proofOfDelivery, setProofOfDelivery] = useState(false);
   const [displayCalendar, setDisplayCalendar] = useState(false);
   const [addViewModal, setAddViewModal] = useState(false);
 
@@ -290,7 +293,7 @@ const Ordercard = props => {
         ) : cta == 'VIEW_TREE_MODAL' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            onPress={() => setShowLspDetails(true)}
+            onPress={() => setViewSplitHistory(true)}
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>VIEW SPLIT HISTORY</Text>
             {invoiceLoader && (
@@ -329,6 +332,16 @@ const Ordercard = props => {
             onPress={() => setAddViewModal(true)}>
             <Text style={styles.rejectCtaTxt}>VIEW SERIAL NUMBER</Text>
           </TouchableOpacity>
+        ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY_WITH_POD' ? (
+          <TouchableOpacity
+            disabled={invoiceLoader}
+            onPress={() => setProofOfDelivery(true)}
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>PROOF OF DELIVERY</Text>
+            {invoiceLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
         ) : null}
       </>
     );
@@ -364,7 +377,7 @@ const Ordercard = props => {
     const {data} = await markOutForOrderApi(supplierId, itemId);
     console.log(data);
     if (data.success) {
-      fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+      fetchOrdersFunc(0, '', selectedTab, shipmentType, {
         pickupFromDate: '',
         pickupToDate: '',
         poFromDate: '',
@@ -373,9 +386,22 @@ const Ordercard = props => {
         deliveryType: [],
         orderRefs: [],
       });
-      fetchTabCountFunc(selectedTab, 'ONESHIP');
+      fetchTabCountFunc(selectedTab, shipmentType);
     }
     setMarkForDelivery(false);
+  };
+
+  const onProofOfDeliveryDone = () => {
+    fetchOrdersFunc(0, '', selectedTab, shipmentType, {
+      pickupFromDate: '',
+      pickupToDate: '',
+      poFromDate: '',
+      poToDate: '',
+      orderType: [],
+      deliveryType: [],
+      orderRefs: [],
+    });
+    fetchTabCountFunc(selectedTab, shipmentType);
   };
 
   const renderOrderDetails = (fromModal, fromCTA) => {
@@ -499,7 +525,7 @@ const Ordercard = props => {
                   ? 'Dropship'
                   : shipmentMode == 3
                   ? 'Door Delivery'
-                  : 'Oneship'}
+                  : shipmentType}
               </Text>
               {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
               <Text style={styles.shipmentModeStringWrap}>
@@ -592,6 +618,14 @@ const Ordercard = props => {
             isVisible={viewSplitHistory}
           />
         )}
+        {proofOfDelivery && (
+          <ProofOfDeliveryModal
+            {...props}
+            setModal={setProofOfDelivery}
+            onProofOfDeliveryDone={onProofOfDeliveryDone}
+            isVisible={proofOfDelivery}
+          />
+        )}
         {showLspDetails && (
           <ViewLSPModal
             {...props}
@@ -604,6 +638,7 @@ const Ordercard = props => {
             rejectModal={rejectModal}
             setRejectModal={setRejectModal}
             selectedTab={selectedTab}
+            shipmentType={shipmentType}
             itemId={itemId}
             fetchOrdersFunc={fetchOrdersFunc}
             fetchTabCountFunc={fetchTabCountFunc}
@@ -634,6 +669,7 @@ const Ordercard = props => {
           fetchOrdersFunc={fetchOrdersFunc}
           fetchTabCountFunc={fetchTabCountFunc}
           itemId={itemId}
+          shipmentType={shipmentType}
           displayCalendar={displayCalendar}
           setDisplayCalendar={setDisplayCalendar}
         />

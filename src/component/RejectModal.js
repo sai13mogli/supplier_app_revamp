@@ -39,6 +39,7 @@ const RejectModal = props => {
     shipmentModeString,
     actionCTA,
     taxPercentage,
+    shipmentType,
     totalAmount,
     invoiceUrl,
     orderImage,
@@ -85,7 +86,7 @@ const RejectModal = props => {
       };
       const {data} = await rejectOrder(payload);
       if (data && data.success) {
-        fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+        fetchOrdersFunc(0, '', selectedTab, shipmentType, {
           pickupFromDate: '',
           pickupToDate: '',
           poFromDate: '',
@@ -94,7 +95,7 @@ const RejectModal = props => {
           deliveryType: [],
           orderRefs: [],
         });
-        fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
+        fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
         setRejectLoader(false);
         setRejectModal(false);
       } else {

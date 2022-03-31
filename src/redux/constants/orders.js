@@ -10,6 +10,8 @@ export const ORDERS_ACTIONS = {
   FETCH_PO: 'FETCH_PO',
   FETCHED_PO: 'FETCHED_PO',
   FAILED_FETCH_PO: 'FAILED_FETCH_PO',
+
+  SET_SHIPMENT_TYPE: 'SET_SHIPMENT_TYPE',
 };
 
 export const orderFiltersTypeData = [
