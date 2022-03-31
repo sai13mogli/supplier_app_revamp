@@ -1,16 +1,22 @@
 import React, {useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ActivityIndicator, Image, ImageBackground, View} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {setShipmentType} from '../../../redux/actions/orders';
 
 const SplashScreen = props => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     checkAuthState();
   }, []);
 
   const checkAuthState = async () => {
     const token = await AsyncStorage.getItem('token');
+    const onlineShipmentMode = await AsyncStorage.getItem('onlineShipmentMode');
     console.log(token, props);
-    if (token) {
+    if (token && onlineShipmentMode) {
+      dispatch(setShipmentType(onlineShipmentMode));
       props.route.params.setIsLoggedIn(true);
     } else {
       props.navigation.navigate('Login');

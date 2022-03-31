@@ -84,6 +84,19 @@ export const rejectOrder = async body =>
     },
   );
 
+export const markOutForOrderApi = async (supplierId, itemId) =>
+  axios.post(
+    `${BASE_URL}api/order/acceptDoorDelivery`,
+    {
+      supplierId,
+      itemId,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
 export const getTabItemCount = async (onlineShipmentMode, supplierId, tabRef) =>
   axios.post(
     `${BASE_URL}searchapi/order/tabItemCount`,
@@ -99,11 +112,39 @@ export const getTabItemCount = async (onlineShipmentMode, supplierId, tabRef) =>
     },
   );
 
+export const getSplitHistory = async (supplierId, orderRef, orderItemRef) =>
+  axios.post(
+    `${BASE_URL}api/order/itemInfo`,
+    {
+      supplierId,
+      orderRef,
+      orderItemRef,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
 export const acceptBulk = async payload =>
   axios.post(
     `${BASE_URL}api/order/acceptBulk`,
     {
       ...payload,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
+export const getLspDetail = async (supplierId, itemId) =>
+  axios.post(
+    `${BASE_URL}api/order/oms/itemInfo`,
+    {
+      supplierId,
+      itemList: [itemId],
     },
     {
       headers: {

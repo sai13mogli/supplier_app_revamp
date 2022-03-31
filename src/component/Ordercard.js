@@ -9,7 +9,7 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
-import {getImageUrl} from '../services/orders';
+import {getImageUrl, markOutForOrderApi} from '../services/orders';
 import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
@@ -22,6 +22,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import RejectModal from '../component/RejectModal';
+import MarkOutForDeliveryModal from '../component/MarkOutForDeliveryModal';
+import ViewLSPModal from '../component/ViewLSPModal';
+import SplitHistoryModal from '../component/SplitHistoryModal';
+import ProofOfDeliveryModal from '../component/ProofOfDeliveryModal';
 import AcceptModal from './AcceptModal';
 import AddView from './AddView';
 import SplitQuantityModal from './SplitQuantityModal';
@@ -48,22 +52,28 @@ const Ordercard = props => {
     totalAmount,
     itemId,
     fetchOrdersFunc,
+    supplierId,
     selectedTab,
     fetchTabCountFunc,
     invoiceUrl,
     bulkItemIds,
     setBulkItemIds,
     selectItemId,
+    shipmentType,
   } = props;
   const [orderImage, setOrderImage] = useState(null);
+  const [showLspDetails, setShowLspDetails] = useState(null);
   const [showMoreTxt, setShowMoreTxt] = useState(false);
   const [lengthMore, setLengthMore] = useState(false);
   const [isOrderVisible, setIsOrderVisible] = useState(false);
   const [poLoader, setPoLoader] = useState(false);
   const [invoiceLoader, setInvoiceLoader] = useState(false);
   const [rejectLoader, setRejectLoader] = useState(false);
+  const [markForDelivery, setMarkForDelivery] = useState(false);
+  const [viewSplitHistory, setViewSplitHistory] = useState(false);
   const [showMoreCTA, setShowMoreCTA] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
+  const [proofOfDelivery, setProofOfDelivery] = useState(false);
   const [displayCalendar, setDisplayCalendar] = useState(false);
   const [addViewModal, setAddViewModal] = useState(false);
   const [splitQuantityModal, setSplitQuantityModal] = useState(false);
@@ -275,6 +285,7 @@ const Ordercard = props => {
         ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
+            onPress={() => setMarkForDelivery(true)}
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>MARK OUT FOR DELIVERY</Text>
             {invoiceLoader && (
@@ -284,8 +295,29 @@ const Ordercard = props => {
         ) : cta == 'VIEW_TREE_MODAL' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
+            onPress={() => setViewSplitHistory(true)}
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>VIEW SPLIT HISTORY</Text>
+            {invoiceLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'VIEW_SHIPPED_DETAILS' ? (
+          <TouchableOpacity
+            disabled={invoiceLoader}
+            onPress={() => setShowLspDetails(true)}
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>VIEW LSP DETAILS</Text>
+            {invoiceLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'PACK_ORDER' ? (
+          <TouchableOpacity
+            disabled={invoiceLoader}
+            onPress={() => setShowLspDetails(true)}
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>PACK NOW</Text>
             {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
@@ -307,6 +339,16 @@ const Ordercard = props => {
             style={styles.DownloadPoBtn}
             onPress={() => setSplitQuantityModal(true)}>
             <Text style={styles.rejectCtaTxt}>SPLIT QUANTITY</Text>
+          </TouchableOpacity>
+        ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY_WITH_POD' ? (
+          <TouchableOpacity
+            disabled={invoiceLoader}
+            onPress={() => setProofOfDelivery(true)}
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>PROOF OF DELIVERY</Text>
+            {invoiceLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
           </TouchableOpacity>
         ) : null}
       </>
@@ -336,6 +378,38 @@ const Ordercard = props => {
 
   const toggleOrder = () => {
     setIsOrderVisible(!isOrderVisible);
+  };
+
+  const onMarkForDelivery = async () => {
+    // console.log(itemId, supplierId);
+    const {data} = await markOutForOrderApi(supplierId, itemId);
+    console.log(data);
+    if (data.success) {
+      fetchOrdersFunc(0, '', selectedTab, shipmentType, {
+        pickupFromDate: '',
+        pickupToDate: '',
+        poFromDate: '',
+        poToDate: '',
+        orderType: [],
+        deliveryType: [],
+        orderRefs: [],
+      });
+      fetchTabCountFunc(selectedTab, shipmentType);
+    }
+    setMarkForDelivery(false);
+  };
+
+  const onProofOfDeliveryDone = () => {
+    fetchOrdersFunc(0, '', selectedTab, shipmentType, {
+      pickupFromDate: '',
+      pickupToDate: '',
+      poFromDate: '',
+      poToDate: '',
+      orderType: [],
+      deliveryType: [],
+      orderRefs: [],
+    });
+    fetchTabCountFunc(selectedTab, shipmentType);
   };
 
   const renderOrderDetails = (fromModal, fromCTA) => {
@@ -459,7 +533,7 @@ const Ordercard = props => {
                   ? 'Dropship'
                   : shipmentMode == 3
                   ? 'Door Delivery'
-                  : 'Oneship'}
+                  : shipmentType}
               </Text>
               {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
               <Text style={styles.shipmentModeStringWrap}>
@@ -538,11 +612,41 @@ const Ordercard = props => {
             </View>
           </Modal>
         )}
+        {markForDelivery && (
+          <MarkOutForDeliveryModal
+            setModal={setMarkForDelivery}
+            isVisible={markForDelivery}
+            onMarkForDelivery={onMarkForDelivery}
+          />
+        )}
+        {viewSplitHistory && (
+          <SplitHistoryModal
+            {...props}
+            setModal={setViewSplitHistory}
+            isVisible={viewSplitHistory}
+          />
+        )}
+        {proofOfDelivery && (
+          <ProofOfDeliveryModal
+            {...props}
+            setModal={setProofOfDelivery}
+            onProofOfDeliveryDone={onProofOfDeliveryDone}
+            isVisible={proofOfDelivery}
+          />
+        )}
+        {showLspDetails && (
+          <ViewLSPModal
+            {...props}
+            setModal={setShowLspDetails}
+            isVisible={showLspDetails}
+          />
+        )}
         {rejectModal && (
           <RejectModal
             rejectModal={rejectModal}
             setRejectModal={setRejectModal}
             selectedTab={selectedTab}
+            shipmentType={shipmentType}
             itemId={itemId}
             fetchOrdersFunc={fetchOrdersFunc}
             fetchTabCountFunc={fetchTabCountFunc}
@@ -573,6 +677,7 @@ const Ordercard = props => {
           fetchOrdersFunc={fetchOrdersFunc}
           fetchTabCountFunc={fetchTabCountFunc}
           itemId={itemId}
+          shipmentType={shipmentType}
           displayCalendar={displayCalendar}
           setDisplayCalendar={setDisplayCalendar}
         />
