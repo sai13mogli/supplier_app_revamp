@@ -160,7 +160,7 @@ const RejectModal = props => {
       onBackButtonPress={() => setRejectModal(false)}>
       <View style={styles.modalContainer}>
         <View style={styles.topbdr}></View>
-        
+
         <View style={styles.ModalheadingWrapper}>
           <CustomeIcon
             name={'close'}
@@ -168,27 +168,24 @@ const RejectModal = props => {
             color={Colors.FontColor}
             onPress={() => setRejectModal(false)}></CustomeIcon>
         </View>
-        <View style={{ paddingHorizontal:Dimension.padding15}}>
-
-       
-        {renderOrderDetails()}
-        <View
-          style={{
-            
-            paddingVertical: Dimension.padding10,
-          }}>
-          <DropDown
-            title={'Specify Reason'}
-            label={'Specify Reason'}
-            selectedValue={reason}
-            onValueChange={text => {
-              setReason(text);
-            }}
-            items={Reasons}
-            enabled={true}
-            fromRejectModal={true}
-          />
-        </View>
+        <View style={{paddingHorizontal: Dimension.padding15}}>
+          {renderOrderDetails()}
+          <View
+            style={{
+              paddingVertical: Dimension.padding10,
+            }}>
+            <DropDown
+              title={'Specify Reason'}
+              label={'Specify Reason'}
+              selectedValue={reason}
+              onValueChange={text => {
+                setReason(text);
+              }}
+              items={Reasons}
+              enabled={true}
+              fromRejectModal={true}
+            />
+          </View>
         </View>
         <View style={styles.btnWrap}>
           <TouchableOpacity
@@ -204,131 +201,11 @@ const RejectModal = props => {
           </TouchableOpacity>
         </View>
       </View>
-      
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  TitleLightTxt: {
-    fontSize: Dimension.font10,
-    color: Colors.FontColor,
-    fontFamily: Dimension.CustomRegularFont,
-    marginBottom: Dimension.margin5,
-  },
-  TitleBoldTxt: {
-    fontSize: Dimension.font10,
-    color: Colors.FontColor,
-    fontFamily: Dimension.CustomBoldFont,
-  },
-  msnName: {
-    fontSize: Dimension.font12,
-    // color: Colors.BrandColor,
-    fontFamily: Dimension.CustomSemiBoldFont,
-  },
-  productName: {
-    fontSize: Dimension.font12,
-    color: Colors.FontColor,
-    fontFamily: Dimension.CustomRegularFont,
-    marginBottom: Dimension.margin10,
-    marginTop: Dimension.margin5,
-  },
-  readMoretxt: {
-    fontSize: Dimension.font12,
-    color: Colors.BrandColor,
-    fontFamily: Dimension.CustomMediumFont,
-  },
-  GstWrapTxt: {
-    paddingVertical: Dimension.padding4,
-    paddingHorizontal: Dimension.padding10,
-    fontSize: Dimension.font10,
-    color: Colors.BrandColor,
-    fontFamily: Dimension.CustomMediumFont,
-    backgroundColor: Colors.LightBrandColor,
-    borderRadius: 2,
-    marginRight: Dimension.margin5,
-  },
-  shipmentModeWrap: {
-    paddingVertical: Dimension.padding4,
-    paddingHorizontal: Dimension.padding10,
-    fontSize: Dimension.font10,
-    color: Colors.oneShipTxt,
-    fontFamily: Dimension.CustomMediumFont,
-    backgroundColor: Colors.oneShipLight,
-    borderRadius: 2,
-    marginRight: Dimension.margin5,
-  },
-  shipmentModeStringWrap: {
-    paddingVertical: Dimension.padding4,
-    paddingHorizontal: Dimension.padding10,
-    fontSize: Dimension.font10,
-    color: Colors.ApproveStateColor,
-    fontFamily: Dimension.CustomMediumFont,
-    backgroundColor: Colors.pickupLight,
-    borderRadius: 2,
-    marginRight: Dimension.margin5,
-  },
-  VMIWrap: {
-    paddingVertical: Dimension.padding4,
-    paddingHorizontal: Dimension.padding10,
-    fontSize: Dimension.font10,
-    color: Colors.VmiTxt,
-    fontFamily: Dimension.CustomMediumFont,
-    backgroundColor: Colors.VmiLight,
-    borderRadius: 2,
-    marginRight: Dimension.margin5,
-  },
-  orderCardwrap: {
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: Colors.BoxBorderColor,
-    backgroundColor: Colors.WhiteColor,
-    marginBottom: Dimension.margin8,
-    paddingHorizontal: Dimension.padding12,
-    paddingVertical: Dimension.padding12,
-    flex: 1,
-
-    marginHorizontal: Dimension.margin5,
-  },
-  orderCardwrapInner: {
-    flexDirection: 'row',
-    flex: 1,
-  },
-  leftpart: {
-    flex: 2,
-    marginRight: Dimension.margin12,
-  },
-  rightPart: {
-    flex: 8,
-  },
-  imgStyle: {
-    borderRadius: 4,
-    backgroundColor: Colors.WhiteColor,
-    padding: 2,
-    width: Dimension.width50,
-    height: Dimension.height50,
-    //alignSelf:'center'
-  },
-
-  imgStyleModal: {
-    borderRadius: 4,
-    backgroundColor: Colors.WhiteColor,
-    padding: 2,
-    width: 250,
-    height: 250,
-    alignSelf: 'center',
-  },
-  quantityTxt: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#E2E2E2',
-    borderRadius: 2,
-    //marginTop: Dimension.margin8,
-    //width: '100%',
-    alignItems: 'center',
-    paddingHorizontal: Dimension.padding5,
-    justifyContent: 'center',
-    paddingTop: Dimension.padding5,
-  },
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
@@ -337,22 +214,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     paddingTop: Dimension.padding10,
-   
   },
-  acceptCtabtn: {
-    flex: 5,
-    backgroundColor: Colors.BrandColor,
-    borderRadius: 4,
-    paddingVertical: Dimension.padding8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: Dimension.margin10,
-  },
-  acceptCtaTxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
-    color: Colors.WhiteColor,
-    fontSize: Dimension.font12,
-  },
+
   rejectCtabtn: {
     flex: 5,
     backgroundColor: Colors.BrandColor,
@@ -378,40 +241,6 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomSemiBoldFont,
     color: Colors.FontColor,
     fontSize: Dimension.font12,
-  },
-  DownloadPoBtn: {
-    flex: 1,
-    backgroundColor: Colors.grayShade12,
-    borderRadius: 4,
-    paddingVertical: Dimension.padding8,
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    flexBasis: '100%',
-    marginTop: Dimension.margin10,
-  },
-  showMoreCta: {
-    marginLeft: Dimension.margin10,
-    paddingVertical: Dimension.padding6,
-  },
-  LeftpartModal: {flex: 1},
-  orderCardwrapInnerModal: {paddingHorizontal: Dimension.padding15},
-  rupeeSign: {
-    fontFamily: Dimension.CustomRobotoBold,
-    fontSize: Dimension.font12,
-    color: Colors.FontColor,
-    marginRight: Dimension.margin5,
-  },
-  TotalamounTxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
-    fontSize: Dimension.font12,
-    color: Colors.FontColor,
-  },
-  taxpercentageTxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
-    fontSize: Dimension.font12,
-    color: Colors.greenShade,
-    marginLeft: Dimension.margin5,
   },
   topbdr: {
     alignSelf: 'center',

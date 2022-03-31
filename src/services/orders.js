@@ -111,3 +111,29 @@ export const acceptBulk = async payload =>
       },
     },
   );
+
+export const viewSerialNumber = async payload =>
+  axios.post(
+    `${BASE_URL}api/order/oms/getSerialNumber`,
+    {
+      ...payload,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
+export const addSerialNumber = async payload =>
+  axios.post(
+    `${BASE_URL}api/order/oms/addSerialNumber`,
+    {
+      ...payload,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
