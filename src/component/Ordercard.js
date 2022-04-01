@@ -20,7 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import PackNowModal from '../component/PackNowModal';
 import RejectModal from '../component/RejectModal';
 import MarkOutForDeliveryModal from '../component/MarkOutForDeliveryModal';
 import ViewLSPModal from '../component/ViewLSPModal';
@@ -74,6 +74,7 @@ const Ordercard = props => {
   const [rejectModal, setRejectModal] = useState(false);
   const [proofOfDelivery, setProofOfDelivery] = useState(false);
   const [displayCalendar, setDisplayCalendar] = useState(false);
+  const [packNow, setPackNow] = useState(false);
   const [addViewModal, setAddViewModal] = useState(false);
 
   useEffect(() => {
@@ -128,6 +129,19 @@ const Ordercard = props => {
 
   const toggleShowMoreTxt = () => {
     setShowMoreTxt(!showMoreTxt);
+  };
+
+  const onPackNowSuccess = () => {
+    fetchOrdersFunc(0, '', selectedTab, shipmentType, {
+      pickupFromDate: '',
+      pickupToDate: '',
+      poFromDate: '',
+      poToDate: '',
+      orderType: [],
+      deliveryType: [],
+      orderRefs: [],
+    });
+    fetchTabCountFunc(selectedTab, shipmentType);
   };
 
   const getPOInvoice = (fromPO, invoiceUrl) => {
@@ -313,7 +327,7 @@ const Ordercard = props => {
         ) : cta == 'PACK_ORDER' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            onPress={() => setShowLspDetails(true)}
+            onPress={() => setPackNow(true)}
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>PACK NOW</Text>
             {invoiceLoader && (
@@ -631,6 +645,14 @@ const Ordercard = props => {
             {...props}
             setModal={setShowLspDetails}
             isVisible={showLspDetails}
+          />
+        )}
+        {packNow && (
+          <PackNowModal
+            onPackNowSuccess={onPackNowSuccess}
+            {...props}
+            setModal={setPackNow}
+            isVisible={packNow}
           />
         )}
         {rejectModal && (

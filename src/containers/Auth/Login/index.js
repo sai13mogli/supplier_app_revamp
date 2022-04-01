@@ -25,6 +25,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 import {useDispatch} from 'react-redux';
 import {setShipmentType} from '../../../redux/actions/orders';
+import {setMasterAction} from '../../../redux/actions/master';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const phoneRegex = '^[1-9][0-9]{9}$';
@@ -100,6 +101,8 @@ const LoginScreen = props => {
       data.data.onlineShipmentMode,
     );
     dispatch(setShipmentType(data.data.onlineShipmentMode));
+    console.log(props.route.params.setIsLoggedIn);
+    dispatch(setMasterAction(props.route.params.setIsLoggedIn));
     props.route.params.setIsLoggedIn(true);
   };
 
