@@ -87,3 +87,12 @@ export const failedFetchPO = error => {
     error,
   };
 };
+
+export const setShipmentType = shipmentType => {
+  return {
+    type: ORDERS_ACTIONS.SET_SHIPMENT_TYPE,
+    payload: {
+      shipmentType,
+    },
+  };
+};

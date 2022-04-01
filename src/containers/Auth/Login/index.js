@@ -23,12 +23,17 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import {useDispatch} from 'react-redux';
+import {setShipmentType} from '../../../redux/actions/orders';
+import {setMasterAction} from '../../../redux/actions/master';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const phoneRegex = '^[1-9][0-9]{9}$';
 //
 
 const LoginScreen = props => {
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('partsbigboss@gmail.com');
   const [password, setPassword] = useState('default123');
@@ -93,8 +98,11 @@ const LoginScreen = props => {
     await AsyncStorage.setItem('userId', JSON.stringify(data.data.userId));
     await AsyncStorage.setItem(
       'onlineShipmentMode',
-      JSON.stringify(data.data.onlineShipmentMode),
+      data.data.onlineShipmentMode,
     );
+    dispatch(setShipmentType(data.data.onlineShipmentMode));
+    console.log(props.route.params.setIsLoggedIn);
+    dispatch(setMasterAction(props.route.params.setIsLoggedIn));
     props.route.params.setIsLoggedIn(true);
   };
 

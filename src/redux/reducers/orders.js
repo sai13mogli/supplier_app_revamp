@@ -4,6 +4,7 @@ import {PROFILE_ACTIONS} from '../constants/profile';
 import {ORDERS_ACTIONS} from '../constants/orders';
 
 const initialState = new OrderedMap({
+  shipmentType: '',
   orders: new OrderedMap({
     error: null,
     status: STATE_STATUS.UNFETCHED,
@@ -39,6 +40,8 @@ const initialState = new OrderedMap({
 export const ordersReducer = (state = initialState, action) => {
   const {type, payload, error} = action;
   switch (type) {
+    case ORDERS_ACTIONS.SET_SHIPMENT_TYPE:
+      return state.setIn(['shipmentType'], payload.shipmentType);
     case ORDERS_ACTIONS.FETCH_ORDERS:
       if (payload.page == 0) {
         return state

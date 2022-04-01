@@ -46,6 +46,9 @@ const OrdersScreen = props => {
   const pageIndex = useSelector(state =>
     state.ordersReducer.getIn(['orders', 'page']),
   );
+  const shipmentType = useSelector(state =>
+    state.ordersReducer.getIn(['shipmentType']),
+  );
 
   const paramsAppliedFilters = useSelector(state =>
     state.ordersReducer.getIn(['orders', 'filters']),
@@ -117,7 +120,7 @@ const OrdersScreen = props => {
     );
 
     if (OrderStatus !== STATE_STATUS.FETCHED) {
-      fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+      fetchOrdersFunc(0, '', selectedTab, shipmentType, {
         pickupFromDate: '',
         pickupToDate: '',
         poFromDate: '',
@@ -126,7 +129,7 @@ const OrdersScreen = props => {
         deliveryType: [],
         orderRefs: [],
       });
-      fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
+      fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
     }
     return () => {
       keyboardDidHideListener.remove();
@@ -161,9 +164,11 @@ const OrdersScreen = props => {
       <Ordercard
         msn={item.productMsn}
         quantity={item.quantity}
+        shipmentType={shipmentType}
         orderRef={item.orderRef}
         itemRef={item.itemRef}
         createdAt={item.createdAt}
+        supplierId={item.supplierId}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         pickupDate={item.pickupDate}
@@ -189,7 +194,7 @@ const OrdersScreen = props => {
 
   const changeTab = val => {
     setSelectedTab(val.key);
-    fetchOrdersFunc(0, '', val.key, 'ONESHIP', {
+    fetchOrdersFunc(0, '', val.key, shipmentType, {
       pickupFromDate: '',
       pickupToDate: '',
       poFromDate: '',
@@ -291,13 +296,10 @@ const OrdersScreen = props => {
       return (
         <View style={styles.emptyWrap}>
           <Image
-            
-              source={require('../../assets/images/emptyOrders.png')}
-              style={{width:300,height:200}}
-            />
-          <Text style={styles.emptyTxt}>
-            No Data Available
-          </Text>
+            source={require('../../assets/images/emptyOrders.png')}
+            style={{width: 300, height: 200}}
+          />
+          <Text style={styles.emptyTxt}>No Data Available</Text>
         </View>
       );
     }
@@ -310,7 +312,7 @@ const OrdersScreen = props => {
       OrderStatus !== STATE_STATUS.FETCHING &&
       pageIndex + 1 < maxPage
     ) {
-      fetchOrdersFunc(pageIndex + 1, '', selectedTab, 'ONESHIP', {
+      fetchOrdersFunc(pageIndex + 1, '', selectedTab, shipmentType, {
         pickupFromDate: '',
         pickupToDate: '',
         poFromDate: '',
@@ -327,7 +329,7 @@ const OrdersScreen = props => {
   };
 
   const onSubmitSearch = () => {
-    fetchOrdersFunc(0, inputValue, selectedTab, 'ONESHIP', {
+    fetchOrdersFunc(0, inputValue, selectedTab, shipmentType, {
       pickupFromDate: '',
       pickupToDate: '',
       poFromDate: '',
@@ -341,7 +343,7 @@ const OrdersScreen = props => {
   //applied filters api hit
   const applyFilters = () => {
     setOrdersFiltersModal(false);
-    fetchOrdersFunc(0, inputValue, selectedTab, 'ONESHIP', {
+    fetchOrdersFunc(0, inputValue, selectedTab, shipmentType, {
       pickupFromDate: pickupFromDate,
       pickupToDate: pickupToDate,
       poFromDate: poFromDate,
@@ -354,7 +356,7 @@ const OrdersScreen = props => {
 
   //reset filters api hit
   const resetFilters = () => {
-    fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+    fetchOrdersFunc(0, '', selectedTab, shipmentType, {
       pickupFromDate: '',
       pickupToDate: '',
       poFromDate: '',
@@ -377,7 +379,7 @@ const OrdersScreen = props => {
       if (data && data.success) {
         setBulkAcceptLoader(false);
         setBulkItemIds([]);
-        fetchOrdersFunc(0, inputValue, selectedTab, 'ONESHIP', {
+        fetchOrdersFunc(0, inputValue, selectedTab, shipmentType, {
           pickupFromDate: pickupFromDate || '',
           pickupToDate: pickupToDate || '',
           poFromDate: poFromDate || '',
@@ -512,25 +514,23 @@ const OrdersScreen = props => {
 
           
           <View style={styles.footerSearchWrap}>
-           <View style={styles.searchWrapper}>
-            <TextInput
-              placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
-              returnKeyType={'search'}
-              onChangeText={onSearchText}
-              onFocus={() => console.log('onFocus!!')}
-              value={inputValue}
-              onSubmitEditing={event => {
-                if (inputValue && inputValue.length > 1) {
-                  onSubmitSearch();
-                }
-              }}
-              blurOnSubmit={true}
-              
-              style={styles.SearchInputCss}>
-
-            </TextInput>
-            <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
-            
+            <View style={styles.searchWrapper}>
+              <TextInput
+                placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
+                returnKeyType={'search'}
+                onChangeText={onSearchText}
+                onFocus={() => console.log('onFocus!!')}
+                value={inputValue}
+                onSubmitEditing={event => {
+                  if (inputValue && inputValue.length > 1) {
+                    onSubmitSearch();
+                  }
+                }}
+                blurOnSubmit={true}
+                style={styles.SearchInputCss}></TextInput>
+              <CustomeIcon
+                name={'search'}
+                style={styles.seacrhIcon}></CustomeIcon>
             </View>
             {/* <TextInput
               blurOnSubmit={true}
@@ -550,18 +550,42 @@ const OrdersScreen = props => {
             /> */}
             {!isKeyboardVisible ? (
               <View style={styles.filterBtnWrap}>
-              <TouchableOpacity
-                style={styles.filterBtn}
-                onPress={() => setOrdersFiltersModal(true)}>
-                <Text
-                  style={styles.filtertxt}>
-                  Filters
-                </Text>
-                <CustomeIcon name={'filter-line'} style={styles.filterIcon}></CustomeIcon>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.filterBtn}
+                  onPress={() => setOrdersFiltersModal(true)}>
+                  <Text style={styles.filtertxt}>Filters</Text>
+                  <CustomeIcon
+                    name={'filter-line'}
+                    style={styles.filterIcon}></CustomeIcon>
+                </TouchableOpacity>
               </View>
             ) : null}
           </View>
+          {ordersfiltersModal && (
+            <OrdersFilterModal
+              shipmentType={shipmentType}
+              ordersfiltersModal={ordersfiltersModal}
+              setOrdersFiltersModal={setOrdersFiltersModal}
+              activeFilter={activeFilter}
+              setActiveFilter={setActiveFilter}
+              selectedTab={selectedTab}
+              appliedFilter={appliedFilter}
+              setAppliedFilter={setAppliedFilter}
+              initialFilter={initialFilter}
+              setInitialFilter={setInitialFilter}
+              selectFilter={selectFilter}
+              applyFilters={applyFilters}
+              pickupFromDate={pickupFromDate || appliedFilter['pickupFromDate']}
+              pickupToDate={pickupToDate || appliedFilter['pickupToDate']}
+              setPickupFromDate={setPickupFromDate}
+              setPickupToDate={setPickupToDate}
+              poFromDate={poFromDate || appliedFilter['poFromDate']}
+              poToDate={poToDate || appliedFilter['poToDate']}
+              setPoFromDate={setPoFromDate}
+              setPoToDate={setPoToDate}
+              resetFilters={resetFilters}
+            />
+          )}
           {bulkItemIds && bulkItemIds.length ? (
             <TouchableOpacity
               onPress={() => {
@@ -607,7 +631,7 @@ const OrdersScreen = props => {
                   : bulkItemIds.length}
               </Text>
               </View>
-              
+
               <TouchableOpacity
                 onPress={onBulkAccept}
                 style={styles.BulkAcceptbtn}>

@@ -4,7 +4,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Modal from 'react-native-modal';
@@ -24,6 +24,7 @@ const AcceptModal = props => {
     fetchTabCountFunc,
     itemId,
     displayCalendar,
+    shipmentType,
     setDisplayCalendar,
   } = props;
   const [day, setDay] = useState({
@@ -65,7 +66,7 @@ const AcceptModal = props => {
       console.log(payload.pickupDate);
       const {data} = await acceptOrder(payload);
       if (data && data.success) {
-        fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+        fetchOrdersFunc(0, '', selectedTab, shipmentType, {
           pickupFromDate: '',
           pickupToDate: '',
           poFromDate: '',
@@ -74,7 +75,7 @@ const AcceptModal = props => {
           deliveryType: [],
           orderRefs: [],
         });
-        fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
+        fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
         setAcceptLoader(false);
       } else {
         setAcceptLoader(false);
@@ -137,25 +138,22 @@ const AcceptModal = props => {
       hasBackdrop={true}
       onBackdropPress={() => setDisplayCalendar(false)}
       onBackButtonPress={() => setDisplayCalendar(false)}>
-       <View style={styles.modalContainer}>
-      <View style={styles.topbdr}></View>
-              <View style={styles.ModalheadingWrapper}>
-        
-         <Text style={styles.ModalHeading}>
-          Do you wish to change the Pickup Date
-        </Text>
-        
+      <View style={styles.modalContainer}>
+        <View style={styles.topbdr}></View>
+        <View style={styles.ModalheadingWrapper}>
+          <Text style={styles.ModalHeading}>
+            Do you wish to change the Pickup Date
+          </Text>
+
           <CustomeIcon
             name={'close'}
             size={Dimension.font22}
             color={Colors.FontColor}
             onPress={() => {
               setDisplayCalendar(false);
-            }}>
-
-            </CustomeIcon>
+            }}></CustomeIcon>
         </View>
-        
+
         <Calendar
           minDate={getMinDate()}
           maxDate={getMaxDate()}
@@ -164,7 +162,6 @@ const AcceptModal = props => {
           }}
           markingType={'custom'}
           markedDates={markedDay}
-          
           theme={{
             selectedDayBackgroundColor: Colors.BrandColor,
             arrowColor: Colors.BrandColor,
@@ -176,20 +173,18 @@ const AcceptModal = props => {
             textDayHeaderFontFamily: Dimension.CustomMediumFont,
           }}
         />
-<View style={styles.btnWrap}>
-        <TouchableOpacity onPress={() => setDisplayCalendar(false)} style={styles.cancelBtn}>
-          <Text style={styles.canceltxt}>
-            CANCEL
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.rejectCtabtn} onPress={onAccept}>
-          <Text style={styles.rejectCtaTxt}>
-            ACCEPT
-          </Text>
-          {acceptLoader && (
-            <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
-          )}
-        </TouchableOpacity>
+        <View style={styles.btnWrap}>
+          <TouchableOpacity
+            onPress={() => setDisplayCalendar(false)}
+            style={styles.cancelBtn}>
+            <Text style={styles.canceltxt}>CANCEL</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.rejectCtabtn} onPress={onAccept}>
+            <Text style={styles.rejectCtaTxt}>ACCEPT</Text>
+            {acceptLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -197,8 +192,6 @@ const AcceptModal = props => {
 };
 
 const styles = StyleSheet.create({
-  
- 
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
@@ -208,7 +201,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingTop: Dimension.padding10,
   },
- 
+
   rejectCtabtn: {
     flex: 5,
     backgroundColor: Colors.BrandColor,
@@ -216,7 +209,6 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   rejectCtaTxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
@@ -230,7 +222,6 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   canceltxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
@@ -255,12 +246,12 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomSemiBoldFont,
     marginBottom: Dimension.margin5,
   },
-  btnWrap:{
-    flex:1,
-    flexDirection:"row",
-    padding:Dimension.padding15,
-    borderTopWidth:1,
-    borderTopColor:Colors.grayShade1
+  btnWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: Dimension.padding15,
+    borderTopWidth: 1,
+    borderTopColor: Colors.grayShade1,
   },
 });
 export default AcceptModal;

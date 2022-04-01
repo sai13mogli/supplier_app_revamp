@@ -17,6 +17,7 @@ import {
   BOTTOM_TAB_SCREENS,
 } from '../constants/index';
 import {useDispatch, useSelector} from 'react-redux';
+import Toast from 'react-native-toast-message';
 
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -159,6 +160,7 @@ const Routes = props => {
           </>
         )}
       </AppStack.Navigator>
+      <Toast ref={ref => Toast.setRef(ref)} />
     </NavigationContainer>
   );
 };
