@@ -179,6 +179,19 @@ export const addSerialNumber = async payload =>
     },
   );
 
+export const getPackNow = async data =>
+  axios.post(
+    `${BASE_URL}api/order/oms/markPacked`,
+    {
+      ...data,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
 export const splitItem = async payload =>
   axios.post(
     `${BASE_URL}api/order/oms/splitItem`,

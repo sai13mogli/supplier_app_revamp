@@ -5,6 +5,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { TOP_TAB_SCREENS } from '../../../constants';
 import Dimension from '../../../Theme/Dimension';
 
+import Colors from '../../../Theme/Colors';
 const Tab = createMaterialTopTabNavigator();
 
 const BankDetails = props => {
@@ -32,7 +33,7 @@ const BankDetails = props => {
         showBack
         navigation={props.navigation}
         showText={'Bank Details'}
-        rightIconName={'business-details'}></Header>
+        rightIconName={'bank-details'}></Header>
       <Tab.Navigator
         screenOptions={({ route, ...rest }) => ({
           headerShown: false,
@@ -40,8 +41,11 @@ const BankDetails = props => {
             tabBarIcon(focused, color, route, rest),
           lazy: false,
           safeAreaInsets: { bottom: 0 },
+          //tabBarStyle: { borderBottomColor:"#000" },
         })}
-        tabBarOptions={tabBarOptions}>
+        tabBarOptions={tabBarOptions}
+        
+        >
         {TOP_TAB_SCREENS.map((screen, key) => (
           <Tab.Screen
             key={key}
@@ -60,10 +64,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   tabText: {
-    fontSize: Dimension.font15,
-    height: 60,
+    fontSize: Dimension.font14,
+   // height: 60,
     width: '100%',
-    fontFamily: Dimension.CustomRobotoBold,
+    fontFamily: Dimension.CustomMediumFont,
     marginTop: 0,
   },
   iconAlignment: {
@@ -72,8 +76,8 @@ const styles = StyleSheet.create({
   },
 });
 const tabBarOptions = {
-  activeTintColor: '#D9232D',
-  inactiveTintColor: '#C4C4C4',
+  activeTintColor: Colors.BrandColor,
+  inactiveTintColor: Colors.FontColor,
   showLabel: false,
   lazy: false,
   style: styles.tabBar,

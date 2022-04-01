@@ -10,6 +10,8 @@ import { fetchUpdateTDSDetails } from '../../../../redux/actions/profile';
 import styles from './styles';
 import DotCheckbox from '../../../../component/common/Checkbox';
 import TDSEditModal from '../../../../component/common/TDSEditModal';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const TdsDetails = (props) => {
   const tdsInfoDetails = useSelector(
     state => state.profileReducer.tdsInfoDetails.data || [],
@@ -31,24 +33,32 @@ const TdsDetails = (props) => {
     const index = tdsInfoDetails.findIndex(
       i => i.tdsInfoDetails_id === section.tdsInfoDetails_id,
     );
-    const iconName = index === tdsInfoList[0] ? 'angle-up' : 'angle-down';
+    const iconName = index === tdsInfoList[0] ? 'chevron-up' : 'chevron-down';
+    const showEdit = index === tdsInfoList[0] ? true : false;
 
     return (
       <View
-        style={{
-          margin: 10,
-          paddingVertical: 10,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}>
-        <Text style={{ fontSize: 16, fontWeight: '600' }}>
+        style={styles.AccordianHeaderWrap}>
+        <Text style={styles.AccordianheadingTxt}>
           Year {section.financialyear}
         </Text>
-        <CustomeIcon
-          type="FontAwesome"
+        { showEdit == true ?
+        <TouchableOpacity
+          style={styles.iconStyle}
+          onPress={() => {
+            onPresEdit(section);
+          }}>
+           <CustomeIcon name={'edit-box'} size={Dimension.font16} color={colors.BrandColor} />
+                <Text style={styles.addnewtxt}>
+                  Edit
+                </Text>
+        </TouchableOpacity>
+        :null}
+        <MaterialCommunityIcon
+         
           name={iconName}
-          size={Dimension.font18}
-          color={colors.BrandColor}
+          size={Dimension.font22}
+          color={colors.FontColor}
         />
       </View>
     );
@@ -63,73 +73,61 @@ const TdsDetails = (props) => {
   const _renderContent = section => {
     console.log("Section====>", section);
     return (
-      <View>
-        <TouchableOpacity
-          style={styles.iconStyle}
-          onPress={() => {
-            onPresEdit(section);
-          }}>
-          <CustomeIcon
-            type="FontAwesome"
-            name={'add-circle'}
-            size={Dimension.font18}
-            color={colors.BrandColor}
-          />
-          <Text style={styles.edit}>Edit</Text>
-        </TouchableOpacity>
+      <View style={{}}>
+       
 
         <View style={styles.sectionView}>
           <View style={styles.wrap}>
-            <Text style={styles.text}>
+            <Text style={styles.HeadinngInnerTxt}>
               TDS filed for AY {section.financialyear}
             </Text>
-            <Text style={{ fontSize: 16 }}>
+            <Text style={ styles.yesNotxt}>
               {section.lastYearItr == 1 ? 'Yes' :
                 section.lastYearItr == 0 ? "No" :
                   section.lastYearItr == "" ? "-" : null}
             </Text>
           </View>
-          <View style={[styles.wrap, { bottom: 50 }]}>
-            <Text style={styles.text}>
+          <View style={styles.wrap}>
+          <Text style={styles.HeadinngInnerTxt}>
               ITR filed for AV {section.financialyear}
             </Text>
-            <Text style={{ fontSize: 16 }}>
+            <Text style={ styles.yesNotxt}>
               {section.lastToLastYearItr == 1 ? 'Yes'
                 : section.lastToLastYearItr == 0 ? 'No'
                   : section.lastToLastYearItr == "" ? "-"
                     : null}
             </Text>
           </View>
-          <View style={[styles.wrap, { bottom: 40 }]}>
-            <Text style={styles.text}>
+          <View style={styles.wrap}>
+            <Text style={styles.HeadinngInnerTxt}>
               Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
               {section.financialyear}
             </Text>
-            <Text style={{ fontSize: 16 }}>
+            <Text style={ styles.yesNotxt}>
               {section.lastYearTdsTcs == 1 ? 'Yes' :
                 section.lastYearTdsTcs == 0 ? 'No' :
                   section.lastYearTdsTcs == "" ? "-"
                     : null}
             </Text>
           </View>
-          <View style={[styles.wrap, { bottom: 30 }]}>
-            <Text style={styles.text}>
+          <View style={styles.wrap}>
+            <Text style={styles.HeadinngInnerTxt}>
               Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
               {section.financialyear}
             </Text>
-            <Text style={{ fontSize: 16 }}>
+            <Text style={ styles.yesNotxt}>
               {section.lastToLastYearTdsTcs == 1 ? 'Yes'
                 : section.lastToLastYearTdsTcs == 0 ? 'No' :
                   section.lastToLastYearTdsTcs == "" ? "-"
                     : null}
             </Text>
           </View>
-          <View style={[styles.wrap, { bottom: 20 }]}>
-            <Text style={styles.text}>
+          <View style={[styles.wrap,{borderBottomWidth:0}]}>
+            <Text style={styles.HeadinngInnerTxt}>
               Turnover in financial year {section.financialyear} was
               exceeding 10 crores
             </Text>
-            <Text style={{ fontSize: 16 }}>
+            <Text style={ styles.yesNotxt}>
               {section.financialYearTurnover == 1 ? 'Yes'
                 : section.financialYearTurnover == 0 ? 'No'
                   : section.financialYearTurnover == "" ? "-"
@@ -152,15 +150,16 @@ const TdsDetails = (props) => {
       <ScrollView indicatorStyle="white" style={styles.ContainerCss}>
         <Accordion
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 80 }}
+          contentContainerStyle={{ paddingBottom: 80,position:"relative"}}
           sections={tdsInfoDetails || []}
           activeSections={tdsInfoList}
           renderHeader={_renderHeader}
           renderContent={_renderContent}
           onChange={_updateSections}
           touchableComponent={TouchableOpacity}
+          //style={{borderWidth:1,borderColor:"#000"}}
           renderFooter={() => (
-            <View style={{ height: 10, backgroundColor: '#E0E0E0' }}></View>
+            <View style={{ height: 1, backgroundColor: colors.BoxBorderColor,marginVertical:Dimension.padding10 }}></View>
           )}
         />
       </ScrollView>

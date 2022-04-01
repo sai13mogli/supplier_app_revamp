@@ -15,6 +15,7 @@ import CustomeIcon from '../../../component/common/CustomeIcon';
 import CreatePasswordModal from '../../../component/common/CreatePasswordModal';
 import {useDispatch} from 'react-redux';
 import {setShipmentType} from '../../../redux/actions/orders';
+import {setMasterAction} from '../../../redux/actions/master';
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
 
@@ -141,6 +142,7 @@ const SignUpEndScreen = props => {
       data.data.onlineShipmentMode,
     );
     dispatch(setShipmentType(data.data.onlineShipmentMode));
+    dispatch(setMasterAction(props.route.params.setIsLoggedIn));
     setShowCreatePass(true);
   };
 

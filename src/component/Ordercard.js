@@ -20,7 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import PackNowModal from '../component/PackNowModal';
 import RejectModal from '../component/RejectModal';
 import MarkOutForDeliveryModal from '../component/MarkOutForDeliveryModal';
 import ViewLSPModal from '../component/ViewLSPModal';
@@ -75,6 +75,7 @@ const Ordercard = props => {
   const [rejectModal, setRejectModal] = useState(false);
   const [proofOfDelivery, setProofOfDelivery] = useState(false);
   const [displayCalendar, setDisplayCalendar] = useState(false);
+  const [packNow, setPackNow] = useState(false);
   const [addViewModal, setAddViewModal] = useState(false);
   const [splitQuantityModal, setSplitQuantityModal] = useState(false);
 
@@ -130,6 +131,19 @@ const Ordercard = props => {
 
   const toggleShowMoreTxt = () => {
     setShowMoreTxt(!showMoreTxt);
+  };
+
+  const onPackNowSuccess = () => {
+    fetchOrdersFunc(0, '', selectedTab, shipmentType, {
+      pickupFromDate: '',
+      pickupToDate: '',
+      poFromDate: '',
+      poToDate: '',
+      orderType: [],
+      deliveryType: [],
+      orderRefs: [],
+    });
+    fetchTabCountFunc(selectedTab, shipmentType);
   };
 
   const getPOInvoice = (fromPO, invoiceUrl) => {
@@ -315,7 +329,7 @@ const Ordercard = props => {
         ) : cta == 'PACK_ORDER' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            onPress={() => setShowLspDetails(true)}
+            onPress={() => setPackNow(true)}
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>PACK NOW</Text>
             {invoiceLoader && (
@@ -422,16 +436,20 @@ const Ordercard = props => {
               : styles.orderCardwrapInner,
           ]}>
           {!fromModal && selectedTab == 'PENDING_ACCEPTANCE' ? (
-            <MaterialCommunityIcon
-              name={
-                (bulkItemIds || []).includes(itemId)
-                  ? 'checkbox-marked'
-                  : 'checkbox-blank-outline'
-              }
-              onPress={() => selectItemId(itemId)}
-              size={20}
-              color={(bulkItemIds || []).includes(itemId) ? 'blue' : '#000'}
-            />
+            
+            <CustomeIcon
+                  name={
+                    (bulkItemIds || []).includes(itemId) ? 'checkbox-tick'
+                      : 'checkbox-blank'
+                  }
+                  color={(bulkItemIds || []).includes(itemId) ? Colors.BrandColor : Colors.FontColor}
+                  size={Dimension.font22}
+                  onPress={() => selectItemId(itemId)}
+                  style={{position:'absolute',right:0,zIndex:9999}}
+                  
+                  >
+
+                  </CustomeIcon>
           ) : null}
           <View style={[fromModal ? styles.LeftpartModal : styles.leftpart]}>
             <Image
@@ -639,6 +657,14 @@ const Ordercard = props => {
             {...props}
             setModal={setShowLspDetails}
             isVisible={showLspDetails}
+          />
+        )}
+        {packNow && (
+          <PackNowModal
+            onPackNowSuccess={onPackNowSuccess}
+            {...props}
+            setModal={setPackNow}
+            isVisible={packNow}
           />
         )}
         {rejectModal && (

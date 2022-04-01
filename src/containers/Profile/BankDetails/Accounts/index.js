@@ -16,7 +16,7 @@ const Accounts = (props) => {
       <ScrollView style={styles.ContainerCss}>
         <View style={styles.pendingBox}>
           <View style={styles.pendingWrap}>
-            <Text style={styles.Pendingtxt}>Pending For Approval</Text>
+            <Text style={styles.Pendingtxt}>Bank Account Details Provided To Moglix</Text>
             <TouchableOpacity onPress={() => {
               props.navigation.navigate('EditBankAccount',
                 {
@@ -24,8 +24,8 @@ const Accounts = (props) => {
                   // addressesDetails: item
                 })
             }}>
-              <View style={{ flexDirection: "row", marginLeft: 120 }}>
-                <CustomeIcon name={'add-circle'} size={Dimension.font18} color={colors.BrandColor} />
+              <View style={{ flexDirection: "row",}}>
+                <CustomeIcon name={'edit-box'} size={Dimension.font16} color={colors.BrandColor} />
                 <Text style={styles.addnewtxt}>
                   Edit
                 </Text>
@@ -33,24 +33,24 @@ const Accounts = (props) => {
             </TouchableOpacity>
 
           </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginHorizontal: -50 }}>
-            <View style={styles.textWrap}>
-              <Text style={styles.Detailtxt}>
+          <View style={{ flexDirection: 'row',paddingHorizontal:Dimension.padding15}}>
+            <View style={styles.HeadingWrap}>
+              <Text style={styles.DetailHeading}>
                 Name
               </Text>
-              <Text style={styles.Detailtxt}>
+              <Text style={styles.DetailHeading}>
                 Account No
               </Text>
-              <Text style={styles.Detailtxt}>
+              <Text style={styles.DetailHeading}>
                 Account Type
               </Text>
-              <Text style={styles.Detailtxt}>
+              <Text style={styles.DetailHeading}>
                 IFSC
               </Text>
-              <Text style={styles.Detailtxt}>
+              <Text style={styles.DetailHeading}>
                 Bank name
               </Text>
-              <Text style={styles.Detailtxt}>
+              <Text style={styles.DetailHeading}>
                 Branch
               </Text>
               {/* <Text style={styles.Detailtxt}>

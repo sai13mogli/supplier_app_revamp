@@ -15,15 +15,16 @@ const styles = StyleSheet.create({
   },
   ContainerCss: {
     backgroundColor: Colors.WhiteColor,
-    paddingHorizontal: Dimension.padding15
+    padding: Dimension.padding15
   },
   addnewtxt: {
     fontSize: Dimension.font14,
     color: Colors.BrandColor,
-    fontFamily: Dimension.CustomMediumFont,
+    fontFamily: Dimension.CustomSemiBoldFont,
     marginLeft: Dimension.margin5,
     alignSelf: 'center',
-    marginTop: Dimension.margin1
+    marginTop: Dimension.margin1,
+    textTransform:"uppercase"
   },
   TopWrap: {
     flexDirection: 'row',
@@ -36,33 +37,44 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
   },
   pendingBox: {
-    borderWidth: 1,
-    marginTop: 20,
-    padding: Dimension.padding0,
-    borderRadius: 4,
-    borderColor: Colors.eyeIcon,
+    borderWidth: .5,
+   // marginTop: 20,
+   borderRadius: 4,
+    borderColor: Colors.grayShade14,
   },
-  textWrap: {
+  HeadingWrap: {
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    marginRight:Dimension.margin15
   },
   Detailtxt: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
-    fontFamily: Dimension.CustomMediumFont,
+    fontFamily: Dimension.CustomRegularFont,
+    marginBottom:Dimension.margin3
   },
-  Pendingtxt: {
+  DetailHeading:{
     fontSize: Dimension.font14,
     color: Colors.FontColor,
-    marginLeft: Dimension.margin12,
     fontFamily: Dimension.CustomMediumFont,
+    marginBottom:Dimension.margin3
+  },
+  Pendingtxt: {
+    fontSize: Dimension.font12,
+    color: Colors.blackColor,
+    fontFamily: Dimension.CustomMediumFont,
+
   },
   pendingWrap: {
-    marginBottom: 10,
+    marginBottom: Dimension.margin10,
     flexDirection: 'row',
-    borderRadius: 4,
-    backgroundColor: Colors.grayShade1,
-    borderColor: Colors.eyeIcon,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    backgroundColor: Colors.grayShade12,
+   
+    justifyContent:"space-between",
+    paddingVertical:Dimension.padding8,
+    paddingHorizontal:Dimension.padding15
   },
   bottombtnWrap: {
     padding: Dimension.padding15,

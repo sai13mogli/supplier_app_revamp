@@ -236,7 +236,7 @@ const EditBankAccount = props => {
                 showBack
                 navigation={props.navigation}
                 showText={editID ? 'Edit Bank Account' : 'Add Bank Account'}
-                rightIconName={'business-details'}>
+                rightIconName={'bank-details'}>
             </Header>
             <View style={styles.TopWrap}>
                 <Text style={styles.Pageheading}>

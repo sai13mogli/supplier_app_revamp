@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     alignContent:"center"
   },
   searchWrapper: {
-    marginBottom: Dimension.margin20,
+    marginBottom: Dimension.margin5,
     position: 'relative',
     backgroundColor:"#fff",
     flex:8
@@ -124,16 +124,57 @@ const styles = StyleSheet.create({
     paddingVertical:Dimension.padding8,
     paddingHorizontal:Dimension.padding15,
     alignSelf:'center',
-    flexDirection:"row"
+    flexDirection:"row",
+    position:"absolute",
+    bottom:Dimension.height130,
   },
   selectBtnTxt:{
     fontSize: Dimension.font14,
     color: Colors.WhiteColor,
-    marginLeft:Dimension.margin5,
-    fontFamily:Dimension.CustomMediumFont
+    fontFamily:Dimension.CustomMediumFont,
+    marginRight:Dimension.margin8
   },
   bulkItemfooter:{
-    backgroundColo:"#fff"
+    backgroundColo:"#fff",
+    flexDirection:"row",
+    padding:Dimension.padding15
+  },
+  CountWrap:{
+    flex:1,
+  },
+  BulkAcceptbtn:{
+    backgroundColor:Colors.BrandColor,
+    flex:1,
+    borderRadius:4,
+    paddingVertical:Dimension.padding12,
+    alignItems:"center"
+
+  },
+  BulkAcceptTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.WhiteColor,
+    fontFamily:Dimension.CustomMediumFont,
+   
+
+  },
+  selectedtxt:{
+    fontSize: Dimension.font10,
+    color: Colors.FontColor,
+    fontFamily:Dimension.CustomRegularFont,
+    
+  },
+  Counttxt:{
+    fontSize: Dimension.font18,
+    color: Colors.eyeIcon,
+    fontFamily:Dimension.CustomSemiBoldFont,
+    marginTop:Dimension.margin5,
+  },
+  footerWrap:{
+    backgroundColor:"#fff",
+    paddingTop:Dimension.padding10,
+    borderTopLeftRadius:10,
+    borderTopRightadius:10,
+
   },
 });
 

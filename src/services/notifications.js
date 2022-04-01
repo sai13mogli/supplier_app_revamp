@@ -15,57 +15,38 @@ export const getNotifications = async currentPage =>
     },
   );
 
-
 export const markNotificatioReadById = async id =>
-axios.get(
-  `${BASE_URL}api/notification/markRead?id=${id}`,
-  {
+  axios.get(`${BASE_URL}api/notification/markRead?id=${id}`, {
     // params: {customerid: userId, orderid: orderId},
     headers: {
       userId: await AsyncStorage.getItem('userId'),
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
-  },
-);
-
-
+  });
 
 export const deleteNotificationById = async id =>
-axios.get(
-  `${BASE_URL}api/notification/delete?id=${id}`,
-  {
+  axios.get(`${BASE_URL}api/notification/delete?id=${id}`, {
     // params: {customerid: userId, orderid: orderId},
     headers: {
       userId: await AsyncStorage.getItem('userId'),
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
-  },
-);
-
-
+  });
 
 export const markBulkNotificationRead = async () =>
-axios.get(
-  `${BASE_URL}api/notification/markReadBulk`,
-  {
+  axios.get(`${BASE_URL}api/notification/markReadBulk`, {
     // params: {customerid: userId, orderid: orderId},
     headers: {
       userId: await AsyncStorage.getItem('userId'),
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
-  },
-);
-
-
+  });
 
 export const deleteBulkNotification = async () =>
-axios.get(
-  `${BASE_URL}api/notification/deleteBulk`,
-  {
+  axios.get(`${BASE_URL}api/notification/deleteBulk`, {
     // params: {customerid: userId, orderid: orderId},
     headers: {
       userId: await AsyncStorage.getItem('userId'),
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
-  },
-);
+  });
