@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Button,
@@ -16,6 +16,8 @@ import CustomeIcon from '../CustomeIcon';
 import styles from './styles';
 
 const CustomeDatePicker = props => {
+  const {onChange, onPress, display, label, title, isImp, value, activeFilter} =
+    props;
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -41,6 +43,12 @@ const CustomeDatePicker = props => {
     }
   };
 
+  useEffect(() => {
+    if (activeFilter) {
+      setText(value);
+    }
+  }, [activeFilter]);
+
   const showMode = currentMode => {
     setShow(true);
     setMode(currentMode);
@@ -50,17 +58,18 @@ const CustomeDatePicker = props => {
     showMode('date');
   };
 
-  const {onChange, onPress, display, label, title, isImp} = props;
-
   return (
     <>
-      <Text style={styles.labelStyle}>{label}</Text>
-      {isImp ? <Text style={{color: 'red'}}>*</Text> : null}
+    <View style={{flexDirection:"row"}}>
+    <Text style={styles.labelStyle}>{label}</Text>
+      {isImp ? <Text style={styles.starIcon}>*</Text> : null}
+    </View>
+     
       <View>
         <TouchableOpacity
           style={styles.inputContainerStyle}
           onPress={showDatepicker}>
-          <Text style={styles.placeholderCss}>{text}</Text>
+          <Text style={styles.placeholderCss}>{text || 'Select Date'}</Text>
           <CustomeIcon
             name={'calendar'}
             size={Dimension.font20}

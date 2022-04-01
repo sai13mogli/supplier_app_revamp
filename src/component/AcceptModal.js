@@ -4,6 +4,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
+  StyleSheet,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Modal from 'react-native-modal';
@@ -11,7 +12,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {acceptOrder} from '../services/orders';
 import Toast from 'react-native-toast-message';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import Colors from '../Theme/Colors';
+import Dimension from '../Theme/Dimension';
 const deviceWidth = Dimensions.get('window').width;
+import CustomeIcon from './common/CustomeIcon';
 
 const AcceptModal = props => {
   const {
@@ -20,6 +24,7 @@ const AcceptModal = props => {
     fetchTabCountFunc,
     itemId,
     displayCalendar,
+    shipmentType,
     setDisplayCalendar,
   } = props;
   const [day, setDay] = useState({
@@ -61,7 +66,7 @@ const AcceptModal = props => {
       console.log(payload.pickupDate);
       const {data} = await acceptOrder(payload);
       if (data && data.success) {
-        fetchOrdersFunc(0, '', selectedTab, 'ONESHIP', {
+        fetchOrdersFunc(0, '', selectedTab, shipmentType, {
           pickupFromDate: '',
           pickupToDate: '',
           poFromDate: '',
@@ -70,7 +75,7 @@ const AcceptModal = props => {
           deliveryType: [],
           orderRefs: [],
         });
-        fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
+        fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
         setAcceptLoader(false);
       } else {
         setAcceptLoader(false);
@@ -128,47 +133,125 @@ const AcceptModal = props => {
         setDisplayCalendar(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 0, backgroundColor: '#fff'}}
+      style={{padding: 0, margin: 0}}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
       onBackdropPress={() => setDisplayCalendar(false)}
       onBackButtonPress={() => setDisplayCalendar(false)}>
-      <View style={{flex: 1}}>
-        <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
-          Do you wish to change the Pickup Date
-        </Text>
+      <View style={styles.modalContainer}>
+        <View style={styles.topbdr}></View>
+        <View style={styles.ModalheadingWrapper}>
+          <Text style={styles.ModalHeading}>
+            Do you wish to change the Pickup Date
+          </Text>
+
+          <CustomeIcon
+            name={'close'}
+            size={Dimension.font22}
+            color={Colors.FontColor}
+            onPress={() => {
+              setDisplayCalendar(false);
+            }}></CustomeIcon>
+        </View>
+
         <Calendar
           minDate={getMinDate()}
           maxDate={getMaxDate()}
           onDayPress={day => {
             setDay(day);
           }}
+          markingType={'custom'}
           markedDates={markedDay}
           theme={{
-            selectedDayBackgroundColor: 'red',
-            arrowColor: 'orange',
-            textDayFontSize: 16,
-            textMonthFontSize: 16,
-            textDayHeaderFontSize: 16,
+            selectedDayBackgroundColor: Colors.BrandColor,
+            arrowColor: Colors.BrandColor,
+            textDayFontSize: Dimension.font14,
+            textMonthFontSize: Dimension.font14,
+            textDayHeaderFontSize: Dimension.font14,
+            textDayFontFamily: Dimension.CustomMediumFont,
+            textMonthFontFamily: Dimension.CustomMediumFont,
+            textDayHeaderFontFamily: Dimension.CustomMediumFont,
           }}
         />
-
-        <TouchableOpacity onPress={() => setDisplayCalendar(false)}>
-          <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
-            CANCEL
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{backgroundColor: 'red'}} onPress={onAccept}>
-          <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
-            ACCEPT
-          </Text>
-          {acceptLoader && (
-            <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
-          )}
-        </TouchableOpacity>
+        <View style={styles.btnWrap}>
+          <TouchableOpacity
+            onPress={() => setDisplayCalendar(false)}
+            style={styles.cancelBtn}>
+            <Text style={styles.canceltxt}>CANCEL</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.rejectCtabtn} onPress={onAccept}>
+            <Text style={styles.rejectCtaTxt}>ACCEPT</Text>
+            {acceptLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
     </Modal>
   );
 };
 
+const styles = StyleSheet.create({
+  modalContainer: {
+    backgroundColor: Colors.WhiteColor,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    width: '100%',
+    position: 'absolute',
+    bottom: 0,
+    paddingTop: Dimension.padding10,
+  },
+
+  rejectCtabtn: {
+    flex: 5,
+    backgroundColor: Colors.BrandColor,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rejectCtaTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    color: Colors.WhiteColor,
+    fontSize: Dimension.font12,
+  },
+  cancelBtn: {
+    flex: 5,
+    backgroundColor: Colors.WhiteColor,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  canceltxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    color: Colors.FontColor,
+    fontSize: Dimension.font12,
+  },
+  topbdr: {
+    alignSelf: 'center',
+    height: 3,
+    backgroundColor: Colors.modalBorder,
+    borderRadius: 2,
+    width: Dimension.width70,
+  },
+  ModalheadingWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: Dimension.padding15,
+  },
+  ModalHeading: {
+    fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+    marginBottom: Dimension.margin5,
+  },
+  btnWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: Dimension.padding15,
+    borderTopWidth: 1,
+    borderTopColor: Colors.grayShade1,
+  },
+});
 export default AcceptModal;

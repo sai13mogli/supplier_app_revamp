@@ -4,6 +4,7 @@ import {PROFILE_ACTIONS} from '../constants/profile';
 import {ORDERS_ACTIONS} from '../constants/orders';
 
 const initialState = new OrderedMap({
+  shipmentType: '',
   orders: new OrderedMap({
     error: null,
     status: STATE_STATUS.UNFETCHED,
@@ -26,11 +27,21 @@ const initialState = new OrderedMap({
     },
     data: new OrderedMap({}),
   }),
+  tabItemCounts: new OrderedMap({
+    status: STATE_STATUS.UNFETCHED,
+    error: null,
+    supplierId: '',
+    tabRef: '',
+    onlineShipmentMode: '',
+    data: new OrderedMap({}),
+  }),
 });
 
 export const ordersReducer = (state = initialState, action) => {
   const {type, payload, error} = action;
   switch (type) {
+    case ORDERS_ACTIONS.SET_SHIPMENT_TYPE:
+      return state.setIn(['shipmentType'], payload.shipmentType);
     case ORDERS_ACTIONS.FETCH_ORDERS:
       if (payload.page == 0) {
         return state
@@ -54,6 +65,7 @@ export const ordersReducer = (state = initialState, action) => {
             ['orders', 'maxPage'],
             payload.data.totalRecords / payload.data.size,
           )
+          .setIn(['orders', 'filters'], payload.filters)
           .setIn(['orders', 'page'], payload.data.currentPage);
         // .setIn(['orders', 'totalRecords'], payload.data.totalRecords);
       }
@@ -66,6 +78,7 @@ export const ordersReducer = (state = initialState, action) => {
             payload.data.totalRecords / payload.data.size,
           )
           // .setIn(['orders', 'totalRecords', payload.data.totalRecords])
+          .setIn(['orders', 'filters'], payload.filters)
           .setIn(['orders', 'page'], payload.data.currentPage)
       );
     case ORDERS_ACTIONS.FAILED_FETCH_ORDERS:
@@ -86,6 +99,25 @@ export const ordersReducer = (state = initialState, action) => {
       return state
         .setIn(['tabCounts', 'error'], error)
         .setIn(['tabCounts', 'status'], STATE_STATUS.FAILED_FETCH);
+
+    case ORDERS_ACTIONS.FETCH_PO:
+      return state
+        .setIn(['tabItemCounts', 'status'], STATE_STATUS.FETCHING)
+        .setIn(['tabItemCounts', 'data'], new OrderedMap({}))
+        .setIn(['tabItemCounts', 'supplierId'], payload.supplierId)
+        .setIn(['tabItemCounts', 'tabRef'], payload.tabRef)
+        .setIn(
+          ['tabItemCounts', 'onlineShipmentMode'],
+          payload.onlineShipmentMode,
+        );
+    case ORDERS_ACTIONS.FETCHED_PO:
+      return state
+        .setIn(['tabItemCounts', 'status'], STATE_STATUS.FETCHED)
+        .setIn(['tabItemCounts', 'data'], new OrderedMap(payload.data));
+    case ORDERS_ACTIONS.FAILED_FETCH_PO:
+      return state
+        .setIn(['tabItemCounts', 'error'], error)
+        .setIn(['tabItemCounts', 'status'], STATE_STATUS.FAILED_FETCH);
 
     case PROFILE_ACTIONS.LOGOUT:
       return initialState;

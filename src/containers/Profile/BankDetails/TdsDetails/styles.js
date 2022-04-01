@@ -1,23 +1,46 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../../Theme/Colors';
 import Dimension from '../../../../Theme/Dimension';
+import { DebugInstructions } from 'react-native/Libraries/NewAppScreen';
 
 const styles = StyleSheet.create({
   wrap: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 20,
-    bottom: 60,
-    paddingVertical: 10
+    paddingVertical: Dimension.padding10,
+    borderBottomColor:Colors.grayShade3,
+    borderBottomWidth:1
   },
   sectionView: {
-    paddingVertical: 80,
-    borderColor: 'grey',
-    borderRadius: 12,
-    borderWidth: 0.9
+    //paddingVertical: 80,
+    borderColor: Colors.grayShade14,
+    borderRadius: 4,
+    borderWidth: 1
   },
-  text: {
-    fontSize: 16
+  HeadinngInnerTxt:{
+    fontFamily:Dimension.CustomMediumFont,
+    fontSize:Dimension.font12,
+    color:Colors.FontColor,
+    marginHorizontal:Dimension.margin10,
+    borderRightColor:Colors.grayShade3,
+    borderRightWidth:1,
+    flex:8  
+  },
+  yesNotxt:{
+    fontFamily:Dimension.CustomMediumFont,
+    fontSize:Dimension.font12,
+    color:Colors.FontColor,
+    marginHorizontal:Dimension.margin10,
+    flex:1
+  },
+  addnewtxt: {
+    fontSize: Dimension.font14,
+    color: Colors.BrandColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+    marginLeft: Dimension.margin5,
+    alignSelf: 'center',
+    marginTop: Dimension.margin1,
+    textTransform:"uppercase"
   },
   bottombtnWrap: {
     padding: Dimension.padding15,
@@ -36,9 +59,10 @@ const styles = StyleSheet.create({
   iconStyle: {
     flexDirection: 'row',
     alignSelf: 'flex-end',
-    justifyContent: 'center',
-    //  alignItems:'flex-end',
-    right: 20,
+    position:"absolute",
+    right: 30,
+    top:15,
+   zIndex:999
   },
   edit: {
     fontSize: Dimension.font16,
@@ -82,6 +106,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.BrandColor,
     marginHorizontal: Dimension.margin10,
   },
+  AccordianHeaderWrap:{
+ 
+  paddingVertical: Dimension.padding10,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  },
+  AccordianheadingTxt:{
+    color:Colors.FontColor,
+    fontSize:Dimension.font14,
+    fontFamily:Dimension.CustomBoldFont
+  },
+
 });
 
 export default styles;

@@ -35,6 +35,8 @@ const Colors = {
   grayShade10: '#EBEBEB',
   grayShade11: '#E8E8E8',
   grayShade12:"#F0F0F0",
+  grayShade13:"#E2E2E2",
+  grayShade14:"#BFBFBF",
 
   headerTxtColor: '#3C3C3C',
   blackColor: '#000',
@@ -47,6 +49,7 @@ const Colors = {
   oneShipLight:'#F3EBFF',
   VmiLight:"#EFFFD5",
   VmiTxt:"#689512",
+  greenShade:"#52950F",
 
 };
 

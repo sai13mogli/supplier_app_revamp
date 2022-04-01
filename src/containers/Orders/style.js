@@ -52,6 +52,130 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomRegularFont,
     fontSize: Dimension.font12,
   },
+  emptyTxt:{
+    fontFamily: Dimension.CustomBoldFont,
+    fontSize: Dimension.font18,
+    color: Colors.FontColor,
+    paddingVertical:Dimension.padding30
+  },
+  emptyWrap:{
+    alignContent:"center"
+  },
+  searchWrapper: {
+    marginBottom: Dimension.margin5,
+    position: 'relative',
+    backgroundColor:"#fff",
+    flex:8
+  },
+
+  SearchInputCss: {
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: Colors.BoxBorderColor,
+    paddingHorizontal: Dimension.padding10,
+    paddingVertical: Dimension.padding8,
+    borderRadius:4,
+    height:Dimension.margin35,
+  },
+  seacrhIcon: {
+    position: 'absolute',
+    top: Dimension.padding10,
+    right: Dimension.padding10,
+    fontSize: Dimension.font18,
+    color: Colors.FontColor,
+  },
+  footerSearchWrap:{
+    flexDirection:"row",
+    paddingHorizontal:Dimension.padding10,
+    //flex:1
+  },
+  filterBtnWrap:{
+    flex:2,
+    marginLeft:Dimension.margin5,
+    alignItems:"center"
+  },
+  filterBtn:{
+    flexDirection:"row",
+    borderWidth:1,
+    borderColor:Colors.FontColor,
+    borderRadius:4,
+    backgroundColo:Colors.grayShade13,
+    paddingHorizontal: Dimension.padding10,
+    paddingVertical: Dimension.padding10,
+    height:Dimension.height35
+  },
+  filterIcon:{
+    fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    marginLeft:Dimension.margin5
+  },
+  filtertxt:{
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+  },
+  selectAllBtn:{
+   
+    borderRadius: 50,
+    backgroundColor:Colors.FontColor,
+    paddingVertical:Dimension.padding8,
+    paddingHorizontal:Dimension.padding15,
+    alignSelf:'center',
+    flexDirection:"row",
+    position:"absolute",
+    bottom:Dimension.height130,
+  },
+  selectBtnTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.WhiteColor,
+    fontFamily:Dimension.CustomMediumFont,
+    marginRight:Dimension.margin8
+  },
+  bulkItemfooter:{
+    backgroundColo:"#fff",
+    flexDirection:"row",
+    padding:Dimension.padding15
+  },
+  CountWrap:{
+    flex:1,
+  },
+  BulkAcceptbtn:{
+    backgroundColor:Colors.BrandColor,
+    flex:1,
+    borderRadius:4,
+    paddingVertical:Dimension.padding12,
+    alignItems:"center"
+
+  },
+  BulkAcceptTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.WhiteColor,
+    fontFamily:Dimension.CustomMediumFont,
+   
+
+  },
+  selectedtxt:{
+    fontSize: Dimension.font10,
+    color: Colors.FontColor,
+    fontFamily:Dimension.CustomRegularFont,
+    
+  },
+  Counttxt:{
+    fontSize: Dimension.font18,
+    color: Colors.eyeIcon,
+    fontFamily:Dimension.CustomSemiBoldFont,
+    marginTop:Dimension.margin5,
+  },
+  footerWrap:{
+    backgroundColor:"#fff",
+    paddingTop:Dimension.padding10,
+    borderTopLeftRadius:10,
+    borderTopRightadius:10,
+
+  },
 });
 
 export default styles;

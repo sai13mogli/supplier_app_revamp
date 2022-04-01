@@ -4,6 +4,7 @@ import {categorybrandReducer} from './categorybrand';
 import {notificationsReducer} from './notifications';
 import {supportReducer} from './support';
 import {ordersReducer} from './orders';
+import {masterReducer} from './master';
 import {combineReducers} from 'redux';
 
 const rootReducer = combineReducers({
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   notificationsReducer,
   supportReducer,
   ordersReducer,
+  masterReducer,
 });
 
 export default rootReducer;
