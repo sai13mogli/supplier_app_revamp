@@ -72,22 +72,30 @@ const TDSEditModal = props => {
             backgroundColor: '#0000004D',
           }}>
           <View
-            style={{
-              height: '60%',
-              marginTop: 'auto',
-              borderTopLeftRadius: 15,
-              borderTopRightRadius: 15,
-              padding: 10,
-              backgroundColor: 'white',
-            }}>
-            <View style={styles.crossView}>
+            style={styles.modalContainer}>
+            {/* <View style={styles.crossView}>
               <Text style={styles.AddressType}>Year {props.header}</Text>
               <TouchableOpacity
                 onPress={onPress}
               >
                 <CustomeIcon name={'right-tick-line'} color={colors.SuccessStateColor} size={Dimension.font20}></CustomeIcon>
               </TouchableOpacity>
-            </View>
+            </View> */}
+            <View style={styles.ModalheadingWrapper}>
+          <Text style={styles.ModalHeading}>Year {props.header}</Text>
+          <TouchableOpacity
+                onPress={onPress}
+              >
+          <CustomeIcon
+            name={'close'}
+            size={Dimension.font22}
+            color={colors.FontColor}
+            //onPress={onClose}
+            >
+              
+            </CustomeIcon>
+            </TouchableOpacity>
+        </View>
             <ScrollView style={styles.ContainerCss}>
               <View style={styles.sectionView}>
                 <View style={styles.verticalWrapper}>
@@ -138,7 +146,7 @@ const TDSEditModal = props => {
                     />
                   </View>
                 </View>
-                <View style={styles.verticalWrapper}>
+                <View style={[styles.verticalWrapper,{borderBottomWidth:0}]}>
                   <Text style={styles.radioText}>
                     Turnover in financial year {props.header} was exceeding 10 crores
                   </Text>
@@ -196,64 +204,62 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
   },
-  RightInnerPart: {
-    paddingLeft: Dimension.padding30,
-    marginBottom: Dimension.padding30
+  modalContainer: {
+    backgroundColor: colors.WhiteColor,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    width: '100%',
+    marginTop: 'auto',
+    paddingTop: Dimension.padding10,
   },
-  Separater: {
-    height: 0.8,
-    backgroundColor: '#e0e0e0',
-    marginTop: 5,
+  sectionView: {
+    borderColor: colors.grayShade14,
+    borderWidth: 1,
+    borderRadius:4,
+    marginHorizontal:Dimension.margin15,
+    
   },
   radioText: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomMediumFont,
+    marginBottom:Dimension.margin5
   },
-  warp: {
-    flexDirection: 'row'
-  },
+ 
   bottombtnWrap: {
     padding: Dimension.padding15,
     borderTopColor: colors.grayShade2,
     borderTopWidth: 1,
     backgroundColor: colors.WhiteColor
   },
-  sectionView: {
-    borderColor: 'grey',
-    borderRadius: 5,
-    paddingVertical: 0,
-    borderWidth: 0.9
-  },
-  crossView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
+ 
+
   ContainerCss: {
     backgroundColor: colors.WhiteColor,
     paddingHorizontal: Dimension.padding5,
-    paddingVertical: Dimension.padding25
+    paddingVertical: Dimension.padding20
   },
   verticalWrapper: {
-    paddingVertical: Dimension.padding5
+  paddingHorizontal:Dimension.padding15,
+  paddingVertical:Dimension.padding10,
+  borderBottomWidth:1,
+  borderBottomColor:colors.grayShade9
+
+
   },
-  radioText: {
-    fontSize: Dimension.font14,
+ 
+ 
+  ModalheadingWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: Dimension.padding15,
+  },
+  ModalHeading: {
+    fontSize: Dimension.font16,
     color: colors.FontColor,
-    fontFamily: Dimension.CustomMediumFont,
-    marginLeft: Dimension.margin11,
-    width: Dimension.width280
+    fontFamily: Dimension.CustomSemiBoldFont,
+    marginBottom: Dimension.margin5,
   },
-  Separater: {
-    height: 0.8,
-    backgroundColor: '#e0e0e0',
-    marginTop: 5,
-  },
-  AddressType: {
-    color: 'black',
-    fontSize: Dimension.font18,
-    fontFamily: Dimension.CustomRobotoBold
-  }
 
 });
 

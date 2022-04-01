@@ -483,6 +483,34 @@ const OrdersScreen = props => {
             showsVerticalScrollIndicator={false}
             initialNumToRender={5}
           />
+          
+          {ordersfiltersModal && (
+            <OrdersFilterModal
+              ordersfiltersModal={ordersfiltersModal}
+              setOrdersFiltersModal={setOrdersFiltersModal}
+              activeFilter={activeFilter}
+              setActiveFilter={setActiveFilter}
+              selectedTab={selectedTab}
+              appliedFilter={appliedFilter}
+              setAppliedFilter={setAppliedFilter}
+              initialFilter={initialFilter}
+              setInitialFilter={setInitialFilter}
+              selectFilter={selectFilter}
+              applyFilters={applyFilters}
+              pickupFromDate={pickupFromDate || appliedFilter['pickupFromDate']}
+              pickupToDate={pickupToDate || appliedFilter['pickupToDate']}
+              setPickupFromDate={setPickupFromDate}
+              setPickupToDate={setPickupToDate}
+              poFromDate={poFromDate || appliedFilter['poFromDate']}
+              poToDate={poToDate || appliedFilter['poToDate']}
+              setPoFromDate={setPoFromDate}
+              setPoToDate={setPoToDate}
+              resetFilters={resetFilters}
+            />
+          )}
+          <View style={styles.footerWrap}> 
+
+          
           <View style={styles.footerSearchWrap}>
            <View style={styles.searchWrapper}>
             <TextInput
@@ -534,30 +562,6 @@ const OrdersScreen = props => {
               </View>
             ) : null}
           </View>
-          {ordersfiltersModal && (
-            <OrdersFilterModal
-              ordersfiltersModal={ordersfiltersModal}
-              setOrdersFiltersModal={setOrdersFiltersModal}
-              activeFilter={activeFilter}
-              setActiveFilter={setActiveFilter}
-              selectedTab={selectedTab}
-              appliedFilter={appliedFilter}
-              setAppliedFilter={setAppliedFilter}
-              initialFilter={initialFilter}
-              setInitialFilter={setInitialFilter}
-              selectFilter={selectFilter}
-              applyFilters={applyFilters}
-              pickupFromDate={pickupFromDate || appliedFilter['pickupFromDate']}
-              pickupToDate={pickupToDate || appliedFilter['pickupToDate']}
-              setPickupFromDate={setPickupFromDate}
-              setPickupToDate={setPickupToDate}
-              poFromDate={poFromDate || appliedFilter['poFromDate']}
-              poToDate={poToDate || appliedFilter['poToDate']}
-              setPoFromDate={setPoFromDate}
-              setPoToDate={setPoToDate}
-              resetFilters={resetFilters}
-            />
-          )}
           {bulkItemIds && bulkItemIds.length ? (
             <TouchableOpacity
               onPress={() => {
@@ -565,7 +569,7 @@ const OrdersScreen = props => {
               }}
               style={styles.selectAllBtn}>
               <Text style={styles.selectBtnTxt}>
-                Select All({bulkItemIds.length})
+                Select All ({bulkItemIds.length})
               </Text>
               <CustomeIcon
                   name={
@@ -573,7 +577,7 @@ const OrdersScreen = props => {
                       : 'checkbox-blank'
                   }
                   color={"#fff"}
-                  size={Dimension.font22}
+                  size={Dimension.font18}
                   onPress={() => {
                     setSelectAll(!selectAll);
                     // bulkSelect();
@@ -590,14 +594,14 @@ const OrdersScreen = props => {
                 color={selectAll ? 'blue' : '#000'}
               /> */}
             </TouchableOpacity>
-          ) : null}
+          ) : null} 
           {bulkItemIds && bulkItemIds.length ? (
             <View style={styles.bulkItemfooter}>
-              <View>
-              <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+              <View style={styles.CountWrap}>
+              <Text style={styles.selectedtxt}>
                 Selcted
               </Text>
-              <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+              <Text style={styles.Counttxt}>
                 {bulkItemIds && bulkItemIds.length < 10
                   ? `0${bulkItemIds.length}`
                   : bulkItemIds.length}
@@ -606,13 +610,9 @@ const OrdersScreen = props => {
               
               <TouchableOpacity
                 onPress={onBulkAccept}
-                style={{backgroundColor: 'red', width: 200, height: 50}}>
+                style={styles.BulkAcceptbtn}>
                 <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                    color: '#fff',
-                  }}>
+                  style={styles.BulkAcceptTxt}>
                   BULK ACCEPT
                 </Text>
                 {bulkAcceptLoader && (
@@ -624,7 +624,8 @@ const OrdersScreen = props => {
                 )}
               </TouchableOpacity>
             </View>
-          ) : null}
+           ) : null} 
+           </View>
         </>
       )}
     </View>
