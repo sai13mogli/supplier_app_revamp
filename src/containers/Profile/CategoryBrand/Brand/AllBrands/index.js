@@ -26,6 +26,7 @@ import CustomeIcon from '../../../../../component/common/CustomeIcon';
 import Dimension from '../../../../../Theme/Dimension';
 import Colors from '../../../../../Theme/Colors';
 import MultiSelect from '../../../../../component/common/MultiSelect/index';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AllBrandsScreen = props => {
   const allbrands = useSelector(
@@ -57,13 +58,19 @@ const AllBrandsScreen = props => {
     state => ((state.categorybrandReducer || {}).allBrands || {}).maxPage || 91,
   );
 
-  const addedBrand = useSelector(
-    state => (state.categorybrandReducer || {}).brandsAdded || [],
+  const userBrands = useSelector(
+    state => (state.categorybrandReducer || {}).userBrands || [],
   );
 
   const payloadParams = useSelector(
     state =>
       ((state.categorybrandReducer || {}).allBrands || {}).params || ['0-9'],
+  );
+
+  const businessNature = useSelector(
+    state =>
+      (((state.profileReducer || {}).businessDetails || {}).data || {})
+        .businessNature,
   );
 
   // const [alphabet, setAlphabet] = useState([]);
@@ -72,12 +79,14 @@ const AllBrandsScreen = props => {
   const [loader, setLoader] = useState(true);
   const [initLoader, setInitLoader] = useState(true);
   const onEndReachedCalledDuringMomentum = useRef(true);
+  const [supplierId, setSupplierId] = useState('');
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     fetchListingData(64);
     setInitLoader(false);
+    fetchSupplierId();
   }, []);
 
   useEffect(() => {
@@ -85,6 +94,11 @@ const AllBrandsScreen = props => {
       setLoader(false);
     }
   }, [allBrandsStatus]);
+
+  const fetchSupplierId = async () => {
+    let supplierId = await AsyncStorage.getItem('userId');
+    setSupplierId(supplierId);
+  };
 
   //action dispatch for saga and service
   const fetchListingData = (pageNo, search) => {
@@ -196,6 +210,7 @@ const AllBrandsScreen = props => {
 
   const listEmptyComponent = () => {
     if (inputValue && inputValue != '') {
+      // let supplierId = await AsyncStorage.getItem('userId');
       return (
         <View style={styles.NoBrandWrap}>
           <Text style={styles.NoDataTxt}>No Brand Found</Text>
@@ -203,10 +218,16 @@ const AllBrandsScreen = props => {
             onPress={() =>
               dispatch(
                 addBrand({
+                  supplierId: supplierId,
+                  brandCode: inputValue,
+                  fileKey: '',
+                  businessNature: businessNature,
+                  expiryDate: '',
+                  isDeleted: '2',
+                  isRaiseRequest: 'true',
+                  brandListingUrl: '',
                   name: inputValue,
-                  requested: true,
-                  isNewBrand: true,
-                  isDeleted: 2,
+                  isDocumentRequired: 1,
                 }),
               )
             }>
@@ -232,7 +253,7 @@ const AllBrandsScreen = props => {
               placeholder={'Search'}
               placeholderTextColor={Colors.eyeIcon}
               blurOnSubmit={true}
-              selectedValues={addedBrand}
+              selectedValues={userBrands}
               data={allbrands}
               onChangeDataChoosed={data => {
                 // console.log('data', data);

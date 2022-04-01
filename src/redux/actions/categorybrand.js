@@ -124,11 +124,11 @@ export const addBrandData = obj => {
   };
 };
 
-export const updateBrandData = obj => {
+export const updateBrandData = arr => {
   return {
     type: CATEGORY_BRAND_ACTIONS.UPDATE_BRAND_DATA,
     payload: {
-      obj,
+      arr,
     },
   };
 };

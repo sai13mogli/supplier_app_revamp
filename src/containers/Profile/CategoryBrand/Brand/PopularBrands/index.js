@@ -25,6 +25,7 @@ import CustomeIcon from '../../../../../component/common/CustomeIcon';
 import {getAllCategories} from '../../../../../services/auth';
 import Colors from '../../../../../Theme/Colors';
 import MultiSelect from '../../../../../component/common/MultiSelect/index';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PopularBrandsScreen = props => {
   const brands = useSelector(
@@ -38,8 +39,8 @@ const PopularBrandsScreen = props => {
       STATE_STATUS.UNFETCHED,
   );
 
-  const addedBrand = useSelector(
-    state => (state.categorybrandReducer || {}).brandsAdded || [],
+  const userBrands = useSelector(
+    state => (state.categorybrandReducer || {}).userBrands || [],
   );
 
   const popularCategories = useSelector(
@@ -58,15 +59,21 @@ const PopularBrandsScreen = props => {
       [],
   );
 
-  const categoriesBrandsStatus = useSelector(
+  const businessNature = useSelector(
     state =>
-      (state.categorybrandReducer || {}).categoriesbrandsStatus ||
-      STATE_STATUS.UNFETCHED,
+      (((state.profileReducer || {}).businessDetails || {}).data || {})
+        .businessNature,
   );
 
-  const confirmbrands = useSelector(
-    state => (state.categorybrandReducer || {}).confirmedbrands || [],
-  );
+  // const categoriesBrandsStatus = useSelector(
+  //   state =>
+  //     (state.categorybrandReducer || {}).categoriesbrandsStatus ||
+  //     STATE_STATUS.UNFETCHED,
+  // );
+
+  // const confirmbrands = useSelector(
+  //   state => (state.categorybrandReducer || {}).confirmedbrands || [],
+  // );
 
   const [categories, setCategories] = useState([]);
 
@@ -81,10 +88,10 @@ const PopularBrandsScreen = props => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(categoriesBrandsStatus == STATE_STATUS.FETCHED, 'status');
-    dispatch(addMultipleBrands([...confirmbrands]));
-  }, [categoriesBrandsStatus]);
+  // useEffect(() => {
+  //   console.log(categoriesBrandsStatus == STATE_STATUS.FETCHED, 'status');
+  //   dispatch(addMultipleBrands([...confirmbrands]));
+  // }, [categoriesBrandsStatus]);
 
   const getCategories = async () => {
     const {data} = await getAllCategories();
@@ -116,10 +123,6 @@ const PopularBrandsScreen = props => {
   }, [popularCategories]);
 
   useEffect(() => {
-    console.log('addedbrands', addedBrand, brands, brands[activeId]);
-  });
-
-  useEffect(() => {
     if (brandsStatus == STATE_STATUS.FETCHED) {
       let currId = popularCategories && popularCategories[0];
       setActiveId(currId && currId.categoryCode);
@@ -141,13 +144,20 @@ const PopularBrandsScreen = props => {
     ));
   };
 
-  const updatePopularBrand = item => {
-    let brandObj = (addedBrand || []).find(_ => _.brandCode == item.code);
-    console.log(brandObj);
-    if (brandObj && brandObj.id) {
-      dispatch(removeBrand(item));
+  const updatePopularBrand = async item => {
+    console.log(item);
+    let currbrand = {
+      ...item,
+      supplierId: await AsyncStorage.getItem('userId'),
+      businessNature: businessNature,
+      isDocumentRequired: item.isDocumentRequired,
+    };
+    let brandObj = (userBrands || []).find(_ => _.brandCode == currbrand.code);
+    console.log(brandObj, 'brandObj');
+    if (brandObj && brandObj.brandCode) {
+      dispatch(removeBrand(currbrand));
     } else {
-      dispatch(addBrand(item));
+      dispatch(addBrand(currbrand));
     }
   };
 
@@ -160,7 +170,7 @@ const PopularBrandsScreen = props => {
             .map((item, i) => (
               <Checkbox
                 checked={
-                  (addedBrand || []).find(
+                  (userBrands || []).find(
                     _ => (_.brandCode || _.code) == item.code,
                   )
                     ? true

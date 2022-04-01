@@ -1,6 +1,7 @@
 import {STATE_STATUS} from '../constants/index';
 import {CATEGORY_BRAND_ACTIONS} from '../constants/categorybrand';
 import {PROFILE_ACTIONS} from '../constants/profile';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
   popularBrands: {
@@ -13,10 +14,7 @@ const initialState = {
     alphabetNo: [],
     maxPage: 91,
   },
-
-  brandsAdded: [],
   categories: [],
-  brandsData: [],
   popularcategories: {
     data: [],
     status: STATE_STATUS.UNFETCHED,
@@ -24,6 +22,7 @@ const initialState = {
   selectcategories: [],
   confirmedbrands: [],
   categoriesbrandsStatus: STATE_STATUS.UNFETCHED,
+  userBrands: [],
 
   // brandsStatus: STATE_STATUS.UNFETCHED,
 
@@ -161,62 +160,67 @@ export const categorybrandReducer = (state = initialState, action) => {
       };
 
     case CATEGORY_BRAND_ACTIONS.ADD_BRAND:
-      if (state && state.brandsAdded) {
-        console.log('currbrand', state && state.brandsAdded);
-        let currbrand = (state && state.brandsAdded).find(
-          _ => _.name == payload.obj.name,
-        );
-        if (currbrand && currbrand.name) {
-          return {
-            ...state,
-            brandsAdded: [
-              ...state.brandsAdded.filter(
-                _ => (_.brandCode || _.code) !== payload.obj.code,
-              ),
-            ],
-          };
-        } else {
-          console.log('addbrand', payload.obj);
-          return {
-            ...state,
-            brandsAdded: [...state.brandsAdded, payload.obj],
-          };
-        }
-      }
+      let currbrand = {...payload.obj};
+      currbrand = {
+        supplierId: payload.obj.supplierId,
+        brandCode: payload.obj.code || payload.obj.brandCode,
+        fileKey: payload.obj.fileKey || '',
+        businessNature: `${payload.obj.businessNature}`,
+        expiryDate: payload.obj.expiryDate ? `${payload.obj.expiryDate}` : '',
+        isDeleted: payload.obj.isDeleted ? `${payload.obj.isDeleted}` : '0',
+        isRaiseRequest: payload.obj.isRaiseRequest
+          ? `${payload.obj.isRaiseRequest}`
+          : 'false',
+        brandListingUrl: payload.obj.brandListingUrl || '',
+        brandName: payload.obj.name || '',
+        isDocumentRequired: payload.obj.isDocumentRequired,
+      };
       return {
         ...state,
-        brandsAdded: [payload.obj],
+        userBrands: [...state.userBrands, currbrand],
       };
 
     case CATEGORY_BRAND_ACTIONS.REMOVE_BRAND:
-      console.log(state && state.brandsAdded, payload.obj);
-      if (state && state.brandsAdded) {
+      if (state && state.userBrands) {
+        let currbrand = {...payload.obj};
+        currbrand = {
+          supplierId: payload.obj.supplierId,
+          brandCode: payload.obj.code || payload.obj.brandCode,
+          fileKey: payload.obj.fileKey || '',
+          businessNature: `${payload.obj.businessNature}`,
+          expiryDate: payload.obj.expiryDate || '',
+          isDeleted: `${payload.obj.isDeleted}` || '0',
+          isRaiseRequest: `${payload.obj.isRaiseRequest}` || 'false',
+          brandListingUrl: payload.obj.brandListingUrl || '',
+          brandName: payload.obj.name || '',
+          isDocumentRequired: payload.obj.isDocumentRequired,
+        };
         return {
           ...state,
-          brandsAdded: [
-            ...state.brandsAdded.filter(_ => _.id !== payload.obj.id),
+          userBrands: [
+            ...state.userBrands.filter(
+              _ => _.brandCode !== currbrand.brandCode,
+            ),
           ],
         };
       }
 
     case CATEGORY_BRAND_ACTIONS.ADD_MULTIPLE_BRANDS:
-      // if (state && state.brandsAdded) {
-      //   console.log('currbrand', state && state.brandsAdded);
-      //   let currbrand = (state && state.brandsAdded).find(
-      //     _ => _.name == payload.obj.name,
-      //   );
-      //   if (currbrand && currbrand.name) {
-      //     console.log('curr brand is already added', currbrand);
-      //   } else {
-      //     return {
-      //       ...state,
-      //       brandsAdded: [...state.brandsAdded, payload.obj],
-      //     };
-      //   }
-      // }
+      let currbrands = [...payload.data];
+      currbrands = (currbrands || []).map((_, i) => ({
+        supplierId: `${_.supplierId}`,
+        brandCode: `${_.brandCode}`,
+        fileKey: `${_.fileKey}`,
+        businessNature: `${_.businessNature}`,
+        expiryDate: _.expiryDate ? `${_.expiryDate}` : '',
+        isDeleted: `${_.isDeleted}` || '0',
+        isRaiseRequest: `${_.isRaiseRequest}` || 'false',
+        brandListingUrl: `${_.brandListingUrl}` || '',
+        brandName: _.brandName || '',
+      }));
       return {
         ...state,
-        brandsAdded: payload.data,
+        userBrands: [...currbrands],
       };
 
     case CATEGORY_BRAND_ACTIONS.ADD_CATEGORY:
@@ -241,45 +245,11 @@ export const categorybrandReducer = (state = initialState, action) => {
         };
       }
 
-    case CATEGORY_BRAND_ACTIONS.ADD_BRAND_DATA:
-      if (state && state.brandsData) {
-        return {
-          ...state,
-          brandsData: [...state.brandsData, payload.obj],
-        };
-      }
+    case CATEGORY_BRAND_ACTIONS.UPDATE_BRAND_DATA:
       return {
         ...state,
-        categories: [payload.obj],
+        userBrands: [...payload.arr],
       };
-
-    case CATEGORY_BRAND_ACTIONS.UPDATE_BRAND_DATA:
-      if (state && state.brandsData) {
-        let currObj = ([...state.brandsData] || []).find(
-          _ => _.brandCode == payload.obj.brandCode,
-        );
-        let updateObj = {
-          ...currObj,
-          ...payload.obj,
-        };
-
-        let updateBrandsData = ([...state.brandsData] || []).filter(
-          _ => _.brandCode !== payload.obj.brandCode,
-        );
-
-        return {
-          ...state,
-          brandsData: [...updateBrandsData, updateObj],
-        };
-      }
-
-    case CATEGORY_BRAND_ACTIONS.REMOVE_RAISED_BRANDS:
-      if (state && state.brandsData) {
-        return {
-          ...state,
-          brandsData: payload.data,
-        };
-      }
 
     case CATEGORY_BRAND_ACTIONS.SET_POPULAR_CATEGORIES:
       return {
@@ -334,9 +304,7 @@ export const categorybrandReducer = (state = initialState, action) => {
           maxPage: 91,
         },
 
-        brandsAdded: [],
         categories: [],
-        brandsData: [],
         popularcategories: {
           data: [],
           status: STATE_STATUS.UNFETCHED,
