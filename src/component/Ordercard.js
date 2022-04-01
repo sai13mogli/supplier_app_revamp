@@ -28,6 +28,7 @@ import SplitHistoryModal from '../component/SplitHistoryModal';
 import ProofOfDeliveryModal from '../component/ProofOfDeliveryModal';
 import AcceptModal from './AcceptModal';
 import AddView from './AddView';
+import SplitQuantityModal from './SplitQuantityModal';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -76,6 +77,7 @@ const Ordercard = props => {
   const [displayCalendar, setDisplayCalendar] = useState(false);
   const [packNow, setPackNow] = useState(false);
   const [addViewModal, setAddViewModal] = useState(false);
+  const [splitQuantityModal, setSplitQuantityModal] = useState(false);
 
   useEffect(() => {
     fetchImage();
@@ -345,6 +347,12 @@ const Ordercard = props => {
             style={styles.DownloadPoBtn}
             onPress={() => setAddViewModal(true)}>
             <Text style={styles.rejectCtaTxt}>VIEW SERIAL NUMBER</Text>
+          </TouchableOpacity>
+        ) : cta == 'SPLIT_QUANTITY' ? (
+          <TouchableOpacity
+            style={styles.DownloadPoBtn}
+            onPress={() => setSplitQuantityModal(true)}>
+            <Text style={styles.rejectCtaTxt}>SPLIT QUANTITY</Text>
           </TouchableOpacity>
         ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY_WITH_POD' ? (
           <TouchableOpacity
@@ -700,6 +708,35 @@ const Ordercard = props => {
         <AddView
           addViewModal={addViewModal}
           setAddViewModal={setAddViewModal}
+          selectedTab={selectedTab}
+          itemId={itemId}
+          fetchOrdersFunc={fetchOrdersFunc}
+          fetchTabCountFunc={fetchTabCountFunc}
+          msn={msn}
+          quantity={quantity}
+          orderRef={orderRef}
+          itemRef={itemRef}
+          createdAt={createdAt}
+          transferPrice={transferPrice}
+          hsn={hsn}
+          pickupDate={pickupDate}
+          productName={productName}
+          orderTypeString={orderTypeString}
+          shipmentMode={shipmentMode}
+          isVmi={isVmi}
+          shipmentModeString={shipmentModeString}
+          actionCTA={actionCTA}
+          taxPercentage={taxPercentage}
+          totalAmount={totalAmount}
+          invoiceUrl={invoiceUrl}
+          orderImage={orderImage}
+        />
+      )}
+
+      {splitQuantityModal && (
+        <SplitQuantityModal
+          splitQuantityModal={splitQuantityModal}
+          setSplitQuantityModal={setSplitQuantityModal}
           selectedTab={selectedTab}
           itemId={itemId}
           fetchOrdersFunc={fetchOrdersFunc}
