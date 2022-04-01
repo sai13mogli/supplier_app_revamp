@@ -154,13 +154,6 @@ const TDSEditModal = props => {
 
             </ScrollView>
           </View>
-
-
-          {/* <Text>
-              {props.filterListData}
-            </Text> */}
-
-
           <View style={styles.bottombtnWrap}>
             <CustomButton
               buttonColor={colors.BrandColor}
@@ -170,7 +163,6 @@ const TDSEditModal = props => {
               title={'Next'}
               loading={loading}
               onPress={() => {
-                console.log("Logrsssate=====>", financialYearTurnover, lastToLastYearItr, lastYearItr, lastToLastYearTdsTcs);
                 props.onPressNext({
                   id: props.editId,
                   panNumber: props.panNumber,
