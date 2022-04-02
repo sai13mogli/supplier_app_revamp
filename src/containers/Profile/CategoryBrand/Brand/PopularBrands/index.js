@@ -14,17 +14,11 @@ import {
   fetchBrandsByCategory,
   addBrand,
   removeBrand,
-  setPopularCategories,
-  addMultipleBrands,
 } from '../../../../../redux/actions/categorybrand';
-import {CATEGORIES} from '../../../../../redux/constants/categorybrand';
 import {STATE_STATUS} from '../../../../../redux/constants';
 import styles from './style';
 import Checkbox from '../../../../../component/common/Checkbox/index';
 import CustomeIcon from '../../../../../component/common/CustomeIcon';
-import {getAllCategories} from '../../../../../services/auth';
-import Colors from '../../../../../Theme/Colors';
-import MultiSelect from '../../../../../component/common/MultiSelect/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PopularBrandsScreen = props => {
@@ -43,20 +37,8 @@ const PopularBrandsScreen = props => {
     state => (state.categorybrandReducer || {}).userBrands || [],
   );
 
-  const popularCategories = useSelector(
-    state =>
-      ((state.categorybrandReducer || {}).popularcategories || {}).data || [],
-  );
-  const popularCategoriesStatus = useSelector(
-    state =>
-      ((state.categorybrandReducer || {}).popularcategories || {}).status ||
-      STATE_STATUS.UNFETCHED,
-  );
-
-  const signupCategories = useSelector(
-    state =>
-      ((state.profileReducer || {}).categoryBrandDetails || {}).categories ||
-      [],
+  const selectedCategories = useSelector(
+    state => (state.categorybrandReducer || {}).selectedcategories || [],
   );
 
   const businessNature = useSelector(
@@ -64,81 +46,43 @@ const PopularBrandsScreen = props => {
       (((state.profileReducer || {}).businessDetails || {}).data || {})
         .businessNature,
   );
-
-  // const categoriesBrandsStatus = useSelector(
-  //   state =>
-  //     (state.categorybrandReducer || {}).categoriesbrandsStatus ||
-  //     STATE_STATUS.UNFETCHED,
-  // );
-
-  // const confirmbrands = useSelector(
-  //   state => (state.categorybrandReducer || {}).confirmedbrands || [],
-  // );
-
-  const [categories, setCategories] = useState([]);
-
   const [activeId, setActiveId] = useState('');
   const [inputValue, setInputValue] = useState('');
-
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (popularCategoriesStatus !== STATE_STATUS.FETCHED) {
-      getCategories();
-    }
-  }, []);
-
-  // useEffect(() => {
-  //   console.log(categoriesBrandsStatus == STATE_STATUS.FETCHED, 'status');
-  //   dispatch(addMultipleBrands([...confirmbrands]));
-  // }, [categoriesBrandsStatus]);
-
-  const getCategories = async () => {
-    const {data} = await getAllCategories();
-    if (data.success) {
-      let categoryIds = ([...signupCategories] || []).map(_ => _.categoryCode);
-      let filteredCategories = (data.data || []).filter((_, i) =>
-        categoryIds.includes(_.categoryCode),
-      );
-      dispatch(setPopularCategories(filteredCategories));
-    }
-  };
 
   useEffect(() => {
     if (
       brandsStatus !== STATE_STATUS.FETCHED &&
-      popularCategories &&
-      popularCategories.length
+      selectedCategories &&
+      selectedCategories.length
     ) {
-      let categoryIds = (popularCategories || []).map((_, i) => _.categoryCode);
-      console.log('categoryIds', categoryIds, popularCategories);
+      console.log('selectedCategories mcmcmcmmc', selectedCategories);
+      let categoryIds = (selectedCategories || []).map(_ => _.id);
       let payloadObj = {
         categoryCodes: [...categoryIds],
       };
-
+      console.log('categoryCodes', payloadObj);
       dispatch(fetchBrandsByCategory(payloadObj));
-      // let currId = popularCategories && popularCategories[0];
-      // setActiveId(currId && currId.categoryCode);
     }
-  }, [popularCategories]);
+  }, [selectedCategories]);
 
   useEffect(() => {
     if (brandsStatus == STATE_STATUS.FETCHED) {
-      let currId = popularCategories && popularCategories[0];
-      setActiveId(currId && currId.categoryCode);
+      let currId = selectedCategories && selectedCategories[0];
+      setActiveId(currId && currId.id);
     }
   }, [brandsStatus]);
 
   const renderLeft = () => {
-    return (popularCategories || []).map((_, key) => (
-      <TouchableOpacity onPress={() => setActiveId(_ && _.categoryCode)}>
+    return (selectedCategories || []).map((_, key) => (
+      <TouchableOpacity onPress={() => setActiveId(_ && _.id)}>
         <View
           style={[
-            _ && _.categoryCode == activeId
+            _ && _.id == activeId
               ? styles.activeBackground
               : styles.inactiveBackground,
           ]}>
-          <Text style={styles.categoryText}>{_.categoryName}</Text>
+          <Text style={styles.categoryText}>{_.label}</Text>
         </View>
       </TouchableOpacity>
     ));

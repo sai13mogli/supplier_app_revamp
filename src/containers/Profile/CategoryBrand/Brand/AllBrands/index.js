@@ -14,7 +14,6 @@ import {
   fetchBrandSearchResult,
   fetchBrandSearchResultByAlphabet,
   addBrand,
-  addBrandData,
 } from '../../../../../redux/actions/categorybrand';
 import {STATE_STATUS} from '../../../../../redux/constants';
 import {ALPHABETS} from '../../../../../redux/constants/categorybrand';

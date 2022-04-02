@@ -12,7 +12,6 @@ import MultiSelect from '../../../../component/common/MultiSelect';
 import {TOP_BRANDS_SCREENS} from '../../../../constants';
 import Tabs from '../../../../component/common/Tabs';
 import Header from '../../../../component/common/Header';
-import {confirmBrands} from '../../../../redux/actions/categorybrand';
 const deviceWidth = Dimensions.get('window').width;
 
 const TABS = [
@@ -33,9 +32,6 @@ const TABS = [
 ];
 
 const BrandScreen = props => {
-  const confirmbrands = useSelector(
-    state => (state.categorybrandReducer || {}).confirmedbrands || [],
-  );
   const userBrands = useSelector(
     state => (state.categorybrandReducer || {}).userBrands || [],
   );
@@ -44,18 +40,6 @@ const BrandScreen = props => {
   const dispatch = useDispatch();
 
   const onConfirm = () => {
-    // let mutatebrands = [...userBrands];
-    // mutatebrands = mutatebrands.map((_, i) => ({
-    //   ..._,
-    //   submitted: true,
-    //   isNewBrand: true,
-    // }));
-    // let statebrandsIds = ([...confirmbrands] || []).map((_, i) => _.brandCode);
-    // let brands = ([...mutatebrands] || []).filter(
-    //   _ => ![...statebrandsIds].includes(_.code || _.brandCode),
-    // );
-    // console.log('brands', mutatebrands, statebrandsIds, brands);
-    // dispatch(confirmBrands(brands));
     props.navigation.navigate('CategoryBrand');
   };
 

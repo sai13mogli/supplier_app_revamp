@@ -14,19 +14,10 @@ const initialState = {
     alphabetNo: [],
     maxPage: 91,
   },
-  categories: [],
-  popularcategories: {
-    data: [],
-    status: STATE_STATUS.UNFETCHED,
-  },
-  selectcategories: [],
-  confirmedbrands: [],
+  selectedcategories: [],
   categoriesbrandsStatus: STATE_STATUS.UNFETCHED,
   userBrands: [],
-
-  // brandsStatus: STATE_STATUS.UNFETCHED,
-
-  // brands: {},
+  userCategories: [],
 };
 
 export const categorybrandReducer = (state = initialState, action) => {
@@ -223,24 +214,32 @@ export const categorybrandReducer = (state = initialState, action) => {
         userBrands: [...currbrands],
       };
 
+    case CATEGORY_BRAND_ACTIONS.ADD_MULTIPLE_CATEGORIES:
+      let currcategories = [...payload.data];
+      currcategories = (currcategories || []).map((_, i) => _.categoryCode);
+      return {
+        ...state,
+        userCategories: [...currcategories],
+      };
+
     case CATEGORY_BRAND_ACTIONS.ADD_CATEGORY:
-      if (state && state.categories) {
+      if (state && state.selectedcategories) {
         return {
           ...state,
-          categories: [...state.categories, payload.obj],
+          selectedcategories: [...state.selectedcategories, payload.obj],
         };
       }
       return {
         ...state,
-        categories: [payload.obj],
+        selectedcategories: [payload.obj],
       };
 
     case CATEGORY_BRAND_ACTIONS.REMOVE_CATEGORY:
-      if (state && state.categories) {
+      if (state && state.selectedcategories) {
         return {
           ...state,
-          categories: [
-            ...state.categories.filter(_ => _.id !== payload.obj.id),
+          selectedcategories: [
+            ...state.selectedcategories.filter(_ => _.id !== payload.obj.id),
           ],
         };
       }
@@ -251,27 +250,15 @@ export const categorybrandReducer = (state = initialState, action) => {
         userBrands: [...payload.arr],
       };
 
-    case CATEGORY_BRAND_ACTIONS.SET_POPULAR_CATEGORIES:
-      return {
-        ...state,
-        popularcategories: {
-          ...state.popularcategories,
-          data: [...payload.data],
-          status: STATE_STATUS.FETCHED,
-        },
-      };
-
     case CATEGORY_BRAND_ACTIONS.SET_SELECT_CATEGORIES:
       return {
         ...state,
-        selectcategories: [...payload.data],
+        selectedcategories: [...payload.data],
       };
 
     case CATEGORY_BRAND_ACTIONS.FETCHED_CATEGORIES_BRANDS:
       return {
         ...state,
-        initialcategories: [...(payload.data.categories || [])],
-        confirmedbrands: [...(payload.data.brands || [])],
         categoriesbrandsStatus: STATE_STATUS.FETCHED,
       };
 
@@ -279,16 +266,6 @@ export const categorybrandReducer = (state = initialState, action) => {
       return {
         ...state,
         categories: [...payload.data],
-      };
-
-    case CATEGORY_BRAND_ACTIONS.CONFRIM_BRANDS:
-      // if (state && state.confirmedbrands && state.confirmedbrands.length) {
-      //   let brandIds = ([...payload.data] || []).map;
-      // }
-
-      return {
-        ...state,
-        confirmedbrands: [...state.confirmedbrands, ...payload.data],
       };
 
     case PROFILE_ACTIONS.LOGOUT:
@@ -309,7 +286,7 @@ export const categorybrandReducer = (state = initialState, action) => {
           data: [],
           status: STATE_STATUS.UNFETCHED,
         },
-        selectcategories: [],
+        selectedcategories: [],
       };
 
     default:

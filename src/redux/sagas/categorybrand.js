@@ -20,6 +20,7 @@ import {
   fetchedCategoriesBrands,
   failedFetchCategoriesBrands,
   addMultipleBrands,
+  addMultipleCategories,
 } from '../actions/categorybrand';
 //
 
@@ -89,6 +90,9 @@ function* fetchCategoriesBrands() {
       yield put(failedFetchCategoriesBrands(error));
     } else {
       yield put(fetchedCategoriesBrands(data.data));
+      yield put(
+        addMultipleCategories(data && data.data && data.data.categories),
+      );
       yield put(addMultipleBrands(data && data.data && data.data.brands));
     }
   } catch (error) {

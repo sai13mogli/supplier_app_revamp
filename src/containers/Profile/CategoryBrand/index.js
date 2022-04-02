@@ -27,14 +27,9 @@ import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL, STATE_STATUS} from '../../../redux/constants/index';
 import {
-  addBrandData,
-  addBrand,
-  setSelectCategories,
-  emptyCategories,
-  setCategories,
+  setSelectedCategories,
   updateBrandData,
   fetchCategoriesBrands,
-  removeRaisedBrands,
 } from '../../../redux/actions/categorybrand';
 import {addOrUpdateCategoryAndBrand} from '../../../services/categorybrand';
 import {getAllCategories} from '../../../services/auth';
@@ -59,7 +54,11 @@ const CategoryBrandScreen = props => {
   );
 
   const selectedCategories = useSelector(
-    state => (state.categorybrandReducer || {}).selectcategories || [],
+    state => (state.categorybrandReducer || {}).selectedcategories || [],
+  );
+
+  const userCategories = useSelector(
+    state => (state.categorybrandReducer || {}).userCategories || [],
   );
 
   const supplierId = useSelector(
@@ -103,11 +102,9 @@ const CategoryBrandScreen = props => {
       fromAddCategory: true,
       extraView: true,
       value: selectedCategories,
-      // || categories.label
       onPress: () =>
         props.navigation.navigate('Category', {
           fetchCategoryfromApi: true,
-          //   setcategoryCode: setcategoryCode,
           initialCategories: selectedCategories,
         }),
     },
@@ -217,10 +214,6 @@ const CategoryBrandScreen = props => {
   }, []);
 
   useEffect(() => {
-    console.log(categoriesBrandsStatus == STATE_STATUS.FETCHED, 'status');
-  }, [categoriesBrandsStatus]);
-
-  useEffect(() => {
     if (
       brandCertificate &&
       brandCertificate.key == 'brandCertificate' &&
@@ -231,23 +224,22 @@ const CategoryBrandScreen = props => {
   }, [brandCertificate]);
 
   useEffect(() => {
-    if (initialSelectedCategories && initialSelectedCategories.length) {
+    if (userCategories && userCategories.length) {
       filterSelectedArr();
     }
-  }, [initialSelectedCategories]);
+  }, [userCategories]);
 
   const filterSelectedArr = async () => {
     const {data} = await getAllCategories();
-
+    console.log('bc data', data.data);
     let arr = [];
     (data.data || []).forEach(ele => {
-      initialSelectedCategories.forEach(e => {
-        if (ele.categoryCode == e.categoryCode) {
-          arr.push({...e, categoryName: ele.categoryName});
+      (userCategories || []).forEach(e => {
+        if (ele.categoryCode == e) {
+          arr.push({categoryCode: e, categoryName: ele.categoryName});
         }
       });
     });
-
     let mutateArr = arr.map(_ => ({
       label: _.categoryName,
       checked: true,
@@ -255,8 +247,8 @@ const CategoryBrandScreen = props => {
       value: _.categoryCode,
     }));
 
-    dispatch(setSelectCategories(mutateArr));
-    dispatch(setCategories(mutateArr));
+    dispatch(setSelectedCategories(mutateArr));
+    // dispatch(setCategories(mutateArr));
   };
 
   const uploadDocu = async data => {
