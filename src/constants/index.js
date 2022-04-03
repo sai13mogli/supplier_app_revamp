@@ -1,4 +1,4 @@
-import { createRef } from 'react';
+import {createRef} from 'react';
 import HomeScreen from '../containers/Home';
 import ProfileScreen from '../containers/Profile';
 import OrdersScreen from '../containers/Orders';
@@ -17,7 +17,7 @@ import CategoryBrand from '../containers/Profile/CategoryBrand';
 import SelectCategoryScreen from '../containers/Auth/SelectCategory';
 import NotificationScreen from '../containers/Notification';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
-import { OrderedMap } from 'immutable';
+import {OrderedMap} from 'immutable';
 import Accounts from '../containers/Profile/BankDetails/Accounts';
 import TdsDetails from '../containers/Profile/BankDetails/TdsDetails';
 import PickedUp from '../containers/Profile/Addresses/PickedUp';
@@ -31,25 +31,12 @@ import Conversation from '../containers/Support/Conversation';
 import EditAddress from '../containers/Profile/Addresses/EditAddress';
 import EditBankAccount from '../containers/Profile/BankDetails/Accounts/EditBankAccount';
 
-
 export const BOTTOM_TAB_SCREENS = [
-  //   {
-  //     name: 'Home',
-  //     component: HomeScreen,
-  //     // activeIcon: 'home',
-  //     // inactiveIcon: 'home',
-  //   },
   {
     name: 'Orders',
     component: OrdersScreen,
     // activeIcon: 'categories',
     // inactiveIcon: 'categories',
-  },
-  {
-    name: 'Dashboard',
-    component: DashboardScreen,
-    // activeIcon: 'brand_store',
-    // inactiveIcon: 'brand_store',
   },
   {
     name: 'Support',
@@ -58,10 +45,14 @@ export const BOTTOM_TAB_SCREENS = [
     // inactiveIcon: 'orders',
   },
   {
-    name: 'Profile',
-    component: ProfileScreen,
-    // activeIcon: 'profile',
-    // inactiveIcon: 'profile',
+    name: 'Notification',
+    component: NotificationScreen,
+  },
+  {
+    name: 'More',
+    component: MoreScreen,
+    // activeIcon: 'orders',
+    // inactiveIcon: 'orders',
   },
 ];
 
@@ -100,7 +91,7 @@ export const ADDRESSES_TAB_SCREENS = [
     key: 'pickup',
     component: PickedUp,
     ref: createRef(),
-    idx: 1
+    idx: 1,
   },
 ];
 
@@ -236,47 +227,38 @@ export const PROFILE_TABS = new OrderedMap({
   },
 });
 
-export const MORE_TABS = new OrderedMap({
-  profile: {
+export const MORE_TABS = [
+  {
     route: 'Profile',
     title: 'Profile',
     icon: 'business-details',
-    progress: 2,
-    activity: 1,
   },
-  settings: {
+  {
     route: 'Settings',
     title: 'Settings',
     icon: 'category--brand',
-    progress: 3,
-    activity: 2,
   },
-  faqs: {
+  {
     route: 'FAQs',
     title: 'FAQs',
     icon: 'address',
-    progress: 4,
-    activity: 3,
   },
-  abou_us: {
-    route: 'AboutUs',
+];
+
+export const PRIVACY_TABS = [
+  {
+    route: 'About',
     title: 'About Us',
-    icon: 'bank-details',
-    progress: 5,
-    activity: 4,
+    icon: 'business-details',
   },
-  privacy_policy: {
-    route: 'PrivacyPolicy',
-    title: 'Privacy Policy',
-    icon: 'single-product-upload',
-    progress: 7,
-    activity: 5,
+  {
+    route: 'Settings',
+    title: 'Settings',
+    icon: 'category--brand',
   },
-  contact_us: {
-    route: 'ContactUs',
-    title: 'Contact Us',
-    icon: 'bank-details',
-    progress: 5,
-    activity: 4,
+  {
+    route: 'FAQs',
+    title: 'FAQs',
+    icon: 'address',
   },
-});
+];
