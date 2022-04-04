@@ -18,7 +18,7 @@ const deviceWidth = Dimensions.get('window').width;
 const ViewLSPModal = props => {
   const [orderImage, setOrderImage] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [history, setHistory] = useState(false);
+  const [history, setHistory] = useState({records: []});
   const [showMoreTxt, setShowMoreTxt] = useState(false);
   const [lengthMore, setLengthMore] = useState(false);
 
@@ -70,6 +70,7 @@ const ViewLSPModal = props => {
     const {data} = await getLspDetail(supplierId, itemId);
     if (data.success) {
       setHistory(data.data);
+      console.log(data);
       setLoading(false);
     }
   };
@@ -210,14 +211,16 @@ const ViewLSPModal = props => {
           </>
         )}
         <View>
-          {/* {history.children.map((_, k) => (
+          {((history || {}).records || []).map((_, k) => (
             <View key={k} style={styles.ctaContainer}>
-              <Text style={{color: '#000'}}>PO ITem ID - {_.itemId}</Text>
               <Text style={{color: '#000'}}>
-                {_.itemQty}Qty. | {_.itemStatus}
+                Shipper Name - {_.shipmentMode}
               </Text>
+              <Text style={{color: '#000'}}>Manifest ID - {_.shipperId}</Text>
+              <Text style={{color: '#000'}}>No. of packets - {_.quantity}</Text>
+              <Text style={{color: '#000'}}>AWB - {_.awbNumber}</Text>
             </View>
-          ))} */}
+          ))}
         </View>
       </View>
     </Modal>
@@ -393,9 +396,7 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding6,
   },
   ctaContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
   },
 });
 

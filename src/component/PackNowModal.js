@@ -350,7 +350,26 @@ const PackNowModal = props => {
           )).toList()}
         </ScrollView>
         <CustomButton
-          title="Mark Delivered"
+          title="Reset"
+          buttonColor={Colors.WhiteColor}
+          borderColor={Colors.WhiteColor}
+          TextColor={Colors.blackColor}
+          TextFontSize={Dimension.font16}
+          onPress={() => {
+            setNoOfPackets('');
+            setNoOfPacketsError(false);
+            setWeight('');
+            setWeightError(false);
+            setHeight('');
+            setHeightError(false);
+            setLength('');
+            setLengthError(false);
+            setWidth('');
+            setWidthError(false);
+          }}
+        />
+        <CustomButton
+          title="Pack Now"
           loading={loading}
           disabled={loading}
           buttonColor={Colors.BrandColor}
