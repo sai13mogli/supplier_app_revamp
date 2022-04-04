@@ -191,15 +191,16 @@ const SplitQuantityModal = props => {
         <View style={styles.topbdr}></View>
 
         <View style={styles.ModalheadingWrapper}>
+        <Text style={styles.ModalHeading}>
+          Split Quantity
+        </Text>
           <CustomeIcon
             name={'close'}
             size={Dimension.font22}
             color={Colors.FontColor}
             onPress={() => setSplitQuantityModal(false)}></CustomeIcon>
         </View>
-        <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
-          Split Quantity
-        </Text>
+        
         <View style={{paddingHorizontal: Dimension.padding15}}>
           {renderOrderDetails()}
         </View>
@@ -317,6 +318,12 @@ const styles = StyleSheet.create({
     padding: Dimension.padding15,
     borderTopWidth: 1,
     borderTopColor: Colors.grayShade1,
+  },
+  ModalHeading: {
+    fontSize: Dimension.font16,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+    marginBottom: Dimension.margin5,
   },
 });
 
