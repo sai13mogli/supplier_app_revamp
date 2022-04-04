@@ -1,10 +1,12 @@
-import { createRef } from 'react';
+import {createRef} from 'react';
+import {Linking} from 'react-native';
 import HomeScreen from '../containers/Home';
 import ProfileScreen from '../containers/Profile';
 import OrdersScreen from '../containers/Orders';
 import DashboardScreen from '../containers/Dashboard';
 import SupportScreen from '../containers/Support';
 import MoreScreen from '../containers/More';
+import SettingsScreen from '../containers/Settings';
 import DocumentsScreen from '../containers/Profile/Documents';
 import BusinessDetails from '../containers/Profile/BusinessDetails';
 import Addresses from '../containers/Profile/Addresses';
@@ -17,7 +19,7 @@ import CategoryBrand from '../containers/Profile/CategoryBrand';
 import SelectCategoryScreen from '../containers/Auth/SelectCategory';
 import NotificationScreen from '../containers/Notification';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
-import { OrderedMap } from 'immutable';
+import {OrderedMap} from 'immutable';
 import Accounts from '../containers/Profile/BankDetails/Accounts';
 import TdsDetails from '../containers/Profile/BankDetails/TdsDetails';
 import PickedUp from '../containers/Profile/Addresses/PickedUp';
@@ -31,25 +33,12 @@ import Conversation from '../containers/Support/Conversation';
 import EditAddress from '../containers/Profile/Addresses/EditAddress';
 import EditBankAccount from '../containers/Profile/BankDetails/Accounts/EditBankAccount';
 
-
 export const BOTTOM_TAB_SCREENS = [
-  //   {
-  //     name: 'Home',
-  //     component: HomeScreen,
-  //     // activeIcon: 'home',
-  //     // inactiveIcon: 'home',
-  //   },
   {
     name: 'Orders',
     component: OrdersScreen,
     // activeIcon: 'categories',
     // inactiveIcon: 'categories',
-  },
-  {
-    name: 'Dashboard',
-    component: DashboardScreen,
-    // activeIcon: 'brand_store',
-    // inactiveIcon: 'brand_store',
   },
   {
     name: 'Support',
@@ -58,10 +47,14 @@ export const BOTTOM_TAB_SCREENS = [
     // inactiveIcon: 'orders',
   },
   {
-    name: 'Profile',
-    component: ProfileScreen,
-    // activeIcon: 'profile',
-    // inactiveIcon: 'profile',
+    name: 'Notification',
+    component: NotificationScreen,
+  },
+  {
+    name: 'More',
+    component: MoreScreen,
+    // activeIcon: 'orders',
+    // inactiveIcon: 'orders',
   },
 ];
 
@@ -100,7 +93,7 @@ export const ADDRESSES_TAB_SCREENS = [
     key: 'pickup',
     component: PickedUp,
     ref: createRef(),
-    idx: 1
+    idx: 1,
   },
 ];
 
@@ -139,6 +132,10 @@ export const APP_STACK_SCREENS = [
   {
     name: 'Profile',
     component: ProfileScreen,
+  },
+  {
+    name: 'Settings',
+    component: SettingsScreen,
   },
   {
     name: 'Documents',
@@ -236,47 +233,52 @@ export const PROFILE_TABS = new OrderedMap({
   },
 });
 
-export const MORE_TABS = new OrderedMap({
-  profile: {
+export const MORE_TABS = [
+  {
     route: 'Profile',
     title: 'Profile',
     icon: 'business-details',
-    progress: 2,
-    activity: 1,
   },
-  settings: {
+  {
     route: 'Settings',
     title: 'Settings',
     icon: 'category--brand',
-    progress: 3,
-    activity: 2,
   },
-  faqs: {
-    route: 'FAQs',
+  {
+    route: '',
+    onPress: () => {
+      Linking.openURL('https://suppliercentralqa.moglilabs.com/#faq');
+    },
     title: 'FAQs',
     icon: 'address',
-    progress: 4,
-    activity: 3,
   },
-  abou_us: {
-    route: 'AboutUs',
+];
+
+export const PRIVACY_TABS = [
+  {
+    route: '',
+    onPress: () => {
+      Linking.openURL('https://suppliercentralqa.moglilabs.com/#home');
+    },
     title: 'About Us',
-    icon: 'bank-details',
-    progress: 5,
-    activity: 4,
+    icon: 'business-details',
   },
-  privacy_policy: {
-    route: 'PrivacyPolicy',
+  {
+    route: '',
+    onPress: () => {
+      Linking.openURL(
+        'https://suppliercentralqa.moglilabs.com/files/privacy.pdf',
+      );
+    },
     title: 'Privacy Policy',
-    icon: 'single-product-upload',
-    progress: 7,
-    activity: 5,
+    icon: 'category--brand',
   },
-  contact_us: {
-    route: 'ContactUs',
+  {
+    route: '',
+    onPress: () => {
+      Linking.openURL('https://suppliercentralqa.moglilabs.com/');
+    },
     title: 'Contact Us',
-    icon: 'bank-details',
-    progress: 5,
-    activity: 4,
+    icon: 'address',
   },
-});
+];

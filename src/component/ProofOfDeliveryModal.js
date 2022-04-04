@@ -20,7 +20,8 @@ import CustomButton from '../component/common/Button';
 import RNFetchBlob from 'rn-fetch-blob';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../redux/constants';
-
+import Productcard from './Productcard';
+import CustomeIcon from './common/CustomeIcon';
 const deviceWidth = Dimensions.get('window').width;
 
 const ProofOfDeliveryModal = props => {
@@ -158,7 +159,27 @@ const ProofOfDeliveryModal = props => {
     }
     return `${months[date.getMonth()]} ${date.getDate()},${date.getFullYear()}`;
   };
-
+  const renderOrderDetails = () => {
+    return (
+      <Productcard
+        quantity={quantity}
+        productName={productName}
+        totalAmount={totalAmount}
+        orderRef={orderRef}
+        createdAt={createdAt}
+        itemRef={itemRef}
+        transferPrice={transferPrice}
+        hsn={hsn}
+        pickupDate={pickupDate}
+        orderTypeString={orderTypeString}
+        shipmentMode={shipmentMode}
+        isVmi={isVmi}
+        shipmentModeString={shipmentModeString}
+        taxPercentage={taxPercentage}
+        msn={msn}
+      />
+    );
+  };
   const onMarkDelivered = async () => {
     setLoading(true);
     let token = `Bearer ${await AsyncStorage.getItem('token')}`;
@@ -215,80 +236,25 @@ const ProofOfDeliveryModal = props => {
       onBackdropPress={() => setModal(false)}
       onBackButtonPress={() => setModal(false)}>
       <View style={styles.modalContainer}>
-        <>
-          <Text style={{color: '#000'}}>PROOF OF DELIVERY</Text>
-          <View style={styles.orderCardwrapInner}>
-            <View style={styles.leftpart}>
-              <Image
-                source={{
-                  uri:
-                    orderImage ||
-                    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+      <View style={styles.topbdr}></View>
+      <View style={styles.closeIconWrap}>
+          <CustomeIcon
+                name={'close'}
+                size={Dimension.font22}
+                color={Colors.FontColor}
+                onPress={() => {
+                  setModal(false);
                 }}
-                style={[styles.imgStyleModal]}
               />
-            </View>
-            <View style={styles.rightPart}>
-              <Text style={[{color: '#000'}, styles.msnName]}>{msn}</Text>
-
-              <Text style={styles.productName}>{productName}</Text>
-
-              <>
-                <Text style={{color: '#000'}}> ₹{Math.floor(totalAmount)}</Text>
-                <Text style={{color: '#000'}}>{taxPercentage}%</Text>
-              </>
-              <View style={{flexDirection: 'row'}}>
-                <View style={{marginRight: Dimension.margin20}}>
-                  <Text style={styles.TitleLightTxt}>
-                    PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
-                  </Text>
-                  <Text style={styles.TitleLightTxt}>
-                    PO Date -{' '}
-                    <Text style={styles.TitleBoldTxt}>
-                      {getTime(createdAt, false)}
-                    </Text>
-                  </Text>
-                  <Text style={styles.TitleLightTxt}>
-                    PO Item ID -{' '}
-                    <Text style={styles.TitleBoldTxt}>{itemRef}</Text>
-                  </Text>
-                </View>
-
-                <View>
-                  <Text style={styles.TitleLightTxt}>
-                    TP/Unit -{' '}
-                    <Text style={styles.TitleBoldTxt}>
-                      ₹{Math.floor(transferPrice)}
-                    </Text>
-                  </Text>
-                  <Text style={styles.TitleLightTxt}>
-                    Product HSN - <Text style={styles.TitleBoldTxt}>{hsn}</Text>
-                  </Text>
-                  <Text style={styles.TitleLightTxt}>
-                    Date -{' '}
-                    <Text style={styles.TitleBoldTxt}>
-                      {getTime(pickupDate, false)}
-                    </Text>
-                  </Text>
-                </View>
-              </View>
-              <View
-                style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
-                <Text style={styles.GstWrapTxt}>{orderTypeString}</Text>
-                <Text style={styles.shipmentModeWrap}>
-                  {shipmentMode == 2
-                    ? 'Dropship'
-                    : shipmentMode == 3
-                    ? 'Door Delivery'
-                    : 'Oneship'}
-                </Text>
-                {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
-                <Text style={styles.shipmentModeStringWrap}>
-                  {shipmentModeString}
-                </Text>
-              </View>
-            </View>
           </View>
+          <View style={styles.headerTxtWrap}>
+              <Text style={styles.headerTxt}>PROOF OF DELIVERY</Text>
+           </View>
+        <>
+         
+          <View style={{paddingHorizontal: Dimension.padding15}}>
+          {renderOrderDetails()}
+        </View>
         </>
 
         <View style={{flexDirection: 'column'}}>

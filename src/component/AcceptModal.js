@@ -100,7 +100,15 @@ const AcceptModal = props => {
     }
   };
 
-  const markedDay = {[day.dateString]: {selected: true, marked: true}};
+  const markedDay = {[day.dateString]: {selected: true, marked: true,customStyles: {
+    container: {
+      backgroundColor: 'green'
+    },
+    text: {
+      color: 'black',
+      fontWeight: 'bold'
+    }
+  }}};
   const getMinDate = () => {
     let today = new Date();
     let mutateMonth;
@@ -162,6 +170,7 @@ const AcceptModal = props => {
           }}
           markingType={'custom'}
           markedDates={markedDay}
+          currentDate={'2022-04-04'}
           theme={{
             selectedDayBackgroundColor: Colors.BrandColor,
             arrowColor: Colors.BrandColor,

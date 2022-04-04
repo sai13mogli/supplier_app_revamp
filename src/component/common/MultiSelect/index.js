@@ -22,6 +22,7 @@ import {
   addCategory,
   removeCategory,
 } from '../../../redux/actions/categorybrand';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MultiSelect = props => {
   const [choosedList, setChoosedList] = useState([]);
@@ -30,11 +31,15 @@ const MultiSelect = props => {
   const {navigate} = useNavigation();
   const navigation = useNavigation();
   const [search, setSearch] = useState([]);
+  const businessNature = useSelector(
+    state =>
+      (((state.profileReducer || {}).businessDetails || {}).data || {})
+        .businessNature,
+  );
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('props', props && props.selectedValues);
     setData();
   }, []);
 
@@ -87,62 +92,80 @@ const MultiSelect = props => {
     setData();
   }, [props.data]);
 
-  // useEffect(() => {
-  //   if (dataList) {
-  //     let dataListNow = dataList;
-  //     dataListNow.map(item => {
-  //       item.checked = false;
-  //     });
-  //     setCustomeList(dataListNow);
-  //   }
-  // }, [dataList]);
-
-  const onPressItem = (id, allBrands) => {
+  const onPressItem = async (id, allBrands) => {
     let customeListNow = [...customeList];
-    console.log(id, customeListNow);
     for (const item in customeListNow) {
-      if (customeListNow[item].id === id) {
-        if (customeListNow[item].checked === false) {
-          customeListNow[item].checked = true;
-          let itemChoosed = customeListNow[item];
-          if (allBrands) {
-            dispatch(addBrand(customeListNow[item]));
-          }
-          if (props.fromCategory) {
-            dispatch(addCategory(customeListNow[item]));
-          }
+      if (allBrands) {
+        if (
+          customeListNow[item].code === id ||
+          customeListNow[item].brandCode === id
+        ) {
+          if (customeListNow[item].checked === false) {
+            customeListNow[item].checked = true;
+            let itemChoosed = customeListNow[item];
+            if (allBrands) {
+              let brandObj = {
+                ...customeListNow[item],
+                supplierId: await AsyncStorage.getItem('userId'),
+                businessNature: businessNature,
+                isDocumentRequired: customeListNow[item].isDocumentRequired,
+              };
+              dispatch(addBrand(brandObj));
+            }
+            if (props.fromCategory) {
+              dispatch(addCategory(customeListNow[item]));
+            }
 
-          setChoosedList([...choosedList, itemChoosed]);
-        } else {
-          customeListNow[item].checked = false;
-          let choosedListNow = [...choosedList].filter(item => item.id !== id);
-          if (allBrands) {
-            dispatch(removeBrand(customeListNow[item]));
+            setChoosedList([...choosedList, itemChoosed]);
+          } else {
+            customeListNow[item].checked = false;
+            let choosedListNow = [...choosedList].filter(
+              item => item.id !== id,
+            );
+            if (allBrands) {
+              let brandObj = {
+                ...customeListNow[item],
+                supplierId: await AsyncStorage.getItem('userId'),
+                businessNature: businessNature,
+                isDocumentRequired: customeListNow[item].isDocumentRequired,
+              };
+              dispatch(removeBrand(brandObj));
+            }
+            if (props.fromCategory) {
+              dispatch(removeCategory(customeListNow[item]));
+            }
+            setChoosedList([...choosedListNow]);
           }
-          if (props.fromCategory) {
-            dispatch(removeCategory(customeListNow[item]));
+        }
+      } else {
+        if (customeListNow[item].id === id) {
+          if (customeListNow[item].checked === false) {
+            customeListNow[item].checked = true;
+            let itemChoosed = customeListNow[item];
+
+            if (props.fromCategory) {
+              dispatch(addCategory(customeListNow[item]));
+            }
+            setChoosedList([...choosedList, itemChoosed]);
+          } else {
+            customeListNow[item].checked = false;
+            let choosedListNow = [...choosedList].filter(
+              item => item.id !== id,
+            );
+            if (props.fromCategory) {
+              dispatch(removeCategory(customeListNow[item]));
+            }
+            setChoosedList([...choosedListNow]);
           }
-          setChoosedList([...choosedListNow]);
         }
       }
     }
     setCustomeList(customeListNow);
   };
 
-  // const onSearch = async () => {
-  //   var dataListNow = search
-  //   if ((customeList = search)) {
-  //     setChoosedList([dataListNow])
-  //   }
-  // }
-
   useEffect(() => {
     props.onChangeDataChoosed(choosedList);
   }, [choosedList]);
-
-  // useEffect(()=>{
-  //   props.onSearchData(choosedList)
-  // },[choosedList])
 
   const renderItem = ({item}) => {
     return (
@@ -150,7 +173,7 @@ const MultiSelect = props => {
         <TouchableOpacity
           onPress={() =>
             onPressItem(
-              item.value || item.id,
+              item.value || item.code || item.brandCode || item.id,
               props.fromAllBrands,
               props.fromCategory,
             )
@@ -180,13 +203,10 @@ const MultiSelect = props => {
             placeholder={placeholder}
             style={styles.SearchInputCss}></TextInput>
           <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
-          {/* <CustomeIcon name={'close'} style={styles.CloseIcon}></CustomeIcon>
-           */}
         </View>
       ) : null}
 
       <FlatList
-        // keyExtractor={(item, index) => item.toString()}
         keyExtractor={(item, index) => index.toString()}
         extraData={props.extraData}
         data={customeList}

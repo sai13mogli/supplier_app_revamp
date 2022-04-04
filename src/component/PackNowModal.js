@@ -16,8 +16,11 @@ import Dimension from '../Theme/Dimension';
 import {OrderedMap} from 'immutable';
 import CustomButton from '../component/common/Button';
 import FloatingLabelInputField from './common/FloatingInput';
-
+import CustomeIcon from './common/CustomeIcon';
+import Productcard from './Productcard';
 const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
+
 
 const PackNowModal = props => {
   const [orderImage, setOrderImage] = useState(null);
@@ -98,7 +101,7 @@ const PackNowModal = props => {
       showError: weightError,
       keyboardType: 'number-pad',
       onBlur: () => onweightBlur(),
-      extraView: () => <Text style={{color: '#000'}}>Kg</Text>,
+      extraView: () => <View style={{flexDirection:"row"}}><Text style={styles.InputRighttxt}>Kg</Text><CustomeIcon name={'arrow-drop-down-line'} color={Colors.FontColor} size={Dimension.font16}></CustomeIcon></View>,
     },
     height: {
       title: 'Height',
@@ -111,7 +114,7 @@ const PackNowModal = props => {
       showError: heightError,
       keyboardType: 'number-pad',
       onBlur: () => onheightBlur(),
-      extraView: () => <Text style={{color: '#000'}}>cm</Text>,
+      extraView: () => <View style={{flexDirection:"row"}}><Text style={styles.InputRighttxt}>Cm</Text><CustomeIcon name={'arrow-drop-down-line'} color={Colors.FontColor} size={Dimension.font16}></CustomeIcon></View>,
     },
     length: {
       title: 'Length',
@@ -140,7 +143,27 @@ const PackNowModal = props => {
       //   extraView: () => getExtraView(),
     },
   });
-
+  const renderOrderDetails = () => {
+    return (
+      <Productcard
+        quantity={quantity}
+        productName={productName}
+        totalAmount={totalAmount}
+        orderRef={orderRef}
+        createdAt={createdAt}
+        itemRef={itemRef}
+        transferPrice={transferPrice}
+        hsn={hsn}
+        pickupDate={pickupDate}
+        orderTypeString={orderTypeString}
+        shipmentMode={shipmentMode}
+        isVmi={isVmi}
+        shipmentModeString={shipmentModeString}
+        taxPercentage={taxPercentage}
+        msn={msn}
+      />
+    );
+  };
   const {
     isVisible,
     setModal,
@@ -262,95 +285,71 @@ const PackNowModal = props => {
         setModal(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 0}}
+      style={{padding: 0, margin: 'auto',width:'100%',height:"100%"}}
       deviceWidth={deviceWidth}
+      deviceHeight={deviceHeight}
+
+      //height={'80%'}
       hasBackdrop={true}
       onBackdropPress={() => setModal(false)}
       onBackButtonPress={() => setModal(false)}>
+        
       <View style={styles.modalContainer}>
-        <>
-          <Text style={{color: '#000'}}>Pack Order</Text>
-          <View style={styles.orderCardwrapInner}>
-            <View style={styles.leftpart}>
-              <Image
-                source={{
-                  uri:
-                    orderImage ||
-                    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+     
+      <View style={styles.topbdr}></View>
+      <View style={styles.closeIconWrap}>
+          <CustomeIcon
+                name={'close'}
+                size={Dimension.font22}
+                color={Colors.FontColor}
+                onPress={() => {
+                  setModal(false);
                 }}
-                style={[styles.imgStyleModal]}
               />
-            </View>
-            <View style={styles.rightPart}>
-              <Text style={[{color: '#000'}, styles.msnName]}>{msn}</Text>
-
-              <Text style={styles.productName}>{productName}</Text>
-
-              <>
-                <Text style={{color: '#000'}}> ₹{Math.floor(totalAmount)}</Text>
-                <Text style={{color: '#000'}}>{taxPercentage}%</Text>
-              </>
-              <View style={{flexDirection: 'row'}}>
-                <View style={{marginRight: Dimension.margin20}}>
-                  <Text style={styles.TitleLightTxt}>
-                    PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
-                  </Text>
-                  <Text style={styles.TitleLightTxt}>
-                    PO Date -{' '}
-                    <Text style={styles.TitleBoldTxt}>
-                      {getTime(createdAt, false)}
-                    </Text>
-                  </Text>
-                  <Text style={styles.TitleLightTxt}>
-                    PO Item ID -{' '}
-                    <Text style={styles.TitleBoldTxt}>{itemRef}</Text>
-                  </Text>
-                </View>
-
-                <View>
-                  <Text style={styles.TitleLightTxt}>
-                    TP/Unit -{' '}
-                    <Text style={styles.TitleBoldTxt}>
-                      ₹{Math.floor(transferPrice)}
-                    </Text>
-                  </Text>
-                  <Text style={styles.TitleLightTxt}>
-                    Product HSN - <Text style={styles.TitleBoldTxt}>{hsn}</Text>
-                  </Text>
-                  <Text style={styles.TitleLightTxt}>
-                    Date -{' '}
-                    <Text style={styles.TitleBoldTxt}>
-                      {getTime(pickupDate, false)}
-                    </Text>
-                  </Text>
-                </View>
-              </View>
-              <View
-                style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
-                <Text style={styles.GstWrapTxt}>{orderTypeString}</Text>
-                <Text style={styles.shipmentModeWrap}>
-                  {shipmentMode == 2
-                    ? 'Dropship'
-                    : shipmentMode == 3
-                    ? 'Door Delivery'
-                    : 'Oneship'}
-                </Text>
-                {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
-                <Text style={styles.shipmentModeStringWrap}>
-                  {shipmentModeString}
-                </Text>
-              </View>
-            </View>
           </View>
+          <View style={styles.headerTxtWrap}>
+              <Text style={styles.headerTxt}>Pack Order</Text>
+           </View>
+           <ScrollView>
+        <>
+        
+        <View style={{paddingHorizontal: Dimension.padding15}}>
+          {renderOrderDetails()}
+        </View>
+          
         </>
 
-        <ScrollView style={{flexDirection: 'column'}}>
+        <View style={styles.BottomDataWrap}>
           {FORM_FIELDS.map((_, key) => (
             <_.component key={key} {..._} />
           )).toList()}
+        </View>
         </ScrollView>
-        <CustomButton
-          title="Mark Delivered"
+        <View style={styles.bottomAction}>
+          <View style={{flex:1}}>
+          <CustomButton
+          title="RESET"
+          buttonColor={Colors.WhiteColor}
+          borderColor={Colors.WhiteColor}
+          TextColor={Colors.blackColor}
+          TextFontSize={Dimension.font16}
+          onPress={() => {
+            setNoOfPackets('');
+            setNoOfPacketsError(false);
+            setWeight('');
+            setWeightError(false);
+            setHeight('');
+            setHeightError(false);
+            setLength('');
+            setLengthError(false);
+            setWidth('');
+            setWidthError(false);
+          }}
+        />
+          </View>
+          <View style={{flex:1}}>
+          <CustomButton
+          title="PACK NOW"
           loading={loading}
           disabled={loading}
           buttonColor={Colors.BrandColor}
@@ -359,128 +358,18 @@ const PackNowModal = props => {
           TextFontSize={Dimension.font16}
           onPress={() => onPackNow()}
         />
+          </View>
+        </View>
+       
+       
       </View>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  TitleLightTxt: {
-    fontSize: Dimension.font10,
-    color: Colors.FontColor,
-    fontFamily: Dimension.CustomRegularFont,
-    marginBottom: Dimension.margin5,
-  },
-  TitleBoldTxt: {
-    fontSize: Dimension.font10,
-    color: Colors.FontColor,
-    fontFamily: Dimension.CustomBoldFont,
-  },
-  msnName: {
-    fontSize: Dimension.font12,
-    // color: Colors.BrandColor,
-    fontFamily: Dimension.CustomSemiBoldFont,
-  },
-  productName: {
-    fontSize: Dimension.font12,
-    color: Colors.FontColor,
-    fontFamily: Dimension.CustomRegularFont,
-    marginBottom: Dimension.margin10,
-    marginTop: Dimension.margin5,
-  },
-  readMoretxt: {
-    fontSize: Dimension.font12,
-    color: Colors.BrandColor,
-    fontFamily: Dimension.CustomMediumFont,
-  },
-  GstWrapTxt: {
-    paddingVertical: Dimension.padding4,
-    paddingHorizontal: Dimension.padding10,
-    fontSize: Dimension.font10,
-    color: Colors.BrandColor,
-    fontFamily: Dimension.CustomMediumFont,
-    backgroundColor: Colors.LightBrandColor,
-    borderRadius: 2,
-    marginRight: Dimension.margin5,
-  },
-  shipmentModeWrap: {
-    paddingVertical: Dimension.padding4,
-    paddingHorizontal: Dimension.padding10,
-    fontSize: Dimension.font10,
-    color: Colors.oneShipTxt,
-    fontFamily: Dimension.CustomMediumFont,
-    backgroundColor: Colors.oneShipLight,
-    borderRadius: 2,
-    marginRight: Dimension.margin5,
-  },
-  shipmentModeStringWrap: {
-    paddingVertical: Dimension.padding4,
-    paddingHorizontal: Dimension.padding10,
-    fontSize: Dimension.font10,
-    color: Colors.ApproveStateColor,
-    fontFamily: Dimension.CustomMediumFont,
-    backgroundColor: Colors.pickupLight,
-    borderRadius: 2,
-    marginRight: Dimension.margin5,
-  },
-  VMIWrap: {
-    paddingVertical: Dimension.padding4,
-    paddingHorizontal: Dimension.padding10,
-    fontSize: Dimension.font10,
-    color: Colors.VmiTxt,
-    fontFamily: Dimension.CustomMediumFont,
-    backgroundColor: Colors.VmiLight,
-    borderRadius: 2,
-    marginRight: Dimension.margin5,
-  },
-  orderCardwrap: {
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: Colors.BoxBorderColor,
-    backgroundColor: Colors.WhiteColor,
-    marginBottom: Dimension.margin8,
-    paddingHorizontal: Dimension.padding12,
-    paddingVertical: Dimension.padding12,
-    flex: 1,
-
-    marginHorizontal: Dimension.margin5,
-  },
-  orderCardwrapInner: {
-    flexDirection: 'row',
-    flex: 1,
-  },
-  leftpart: {
-    flex: 2,
-    marginRight: Dimension.margin12,
-  },
-  rightPart: {
-    flex: 8,
-  },
-  imgStyle: {
-    borderRadius: 4,
-    backgroundColor: Colors.WhiteColor,
-    padding: 2,
-    height: Dimension.width50,
-    height: Dimension.height50,
-    //alignSelf:'center'
-  },
-  imgStyleModal: {
-    borderRadius: 4,
-    backgroundColor: Colors.WhiteColor,
-    padding: 2,
-    height: Dimension.width100,
-    height: Dimension.height100,
-    //alignSelf:'center'
-  },
-  quantityTxt: {
-    alignSelf: 'center',
-    backgroundColor: '#E2E2E2',
-    borderRadius: 2,
-    marginTop: Dimension.margin8,
-    width: '100%',
-    alignItems: 'center',
-    paddingVertical: Dimension.padding5,
-  },
+   
+ 
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
@@ -489,53 +378,60 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     paddingTop: Dimension.padding10,
+    //marginTop: 'auto',
+    height:deviceHeight-100
   },
-  acceptCtabtn: {
-    flex: 5,
-    backgroundColor: Colors.BrandColor,
-    borderRadius: 4,
-    paddingVertical: Dimension.padding8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: Dimension.margin10,
+  topbdr: {
+    alignSelf: 'center',
+    height: 3,
+    backgroundColor: Colors.modalBorder,
+    borderRadius: 2,
+    width: Dimension.width70,
   },
-  acceptCtaTxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
-    color: Colors.WhiteColor,
-    fontSize: Dimension.font12,
+  closeIconWrap:{
+    alignItems:"flex-end",
+    paddingHorizontal:Dimension.padding15,
   },
-  rejectCtabtn: {
-    flex: 5,
-    backgroundColor: Colors.grayShade12,
-    borderRadius: 4,
-    paddingVertical: Dimension.padding8,
-    justifyContent: 'center',
-    alignItems: 'center',
+  headerTxtWrap:{
+    paddingHorizontal:Dimension.padding15,
+    marginBottom:Dimension.margin20
   },
-  rejectCtaTxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
-    color: Colors.FontColor,
-    fontSize: Dimension.font12,
-  },
-  DownloadPoBtn: {
-    flex: 1,
-    backgroundColor: Colors.grayShade12,
-    borderRadius: 4,
-    paddingVertical: Dimension.padding8,
-    justifyContent: 'center',
-    alignItems: 'center',
 
-    flexBasis: '100%',
-    marginTop: Dimension.margin10,
+  headerTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+   // marginLeft:Dimension.margin10,
+
   },
-  showMoreCta: {
-    marginLeft: Dimension.margin10,
-    paddingVertical: Dimension.padding6,
+ 
+  BottomDataWrap:{
+paddingVertical:Dimension.padding30,
+paddingHorizontal:Dimension.padding15,
+//maxHeight:200
+//flex:1
   },
-  ctaContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  BottomDataTitle:{
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+    marginBottom:Dimension.margin10,
+  },
+  InputRighttxt:{
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+  },
+
+  bottomAction: {
+    borderTopWidth: 1,
+    borderTopColor: Colors.grayShade2,
+    padding: Dimension.padding15,
+    backgroundColor: Colors.WhiteColor,
+    //position: 'absolute',
+    width: '100%',
+    //bottom: 0,
+     flexDirection: 'row',
   },
 });
 

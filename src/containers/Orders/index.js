@@ -131,6 +131,7 @@ const OrdersScreen = props => {
       });
       fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
     }
+
     return () => {
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
@@ -485,7 +486,7 @@ const OrdersScreen = props => {
             showsVerticalScrollIndicator={false}
             initialNumToRender={5}
           />
-          
+
           {ordersfiltersModal && (
             <OrdersFilterModal
               ordersfiltersModal={ordersfiltersModal}
@@ -510,29 +511,27 @@ const OrdersScreen = props => {
               resetFilters={resetFilters}
             />
           )}
-          <View style={styles.footerWrap}> 
-
-          
-          <View style={styles.footerSearchWrap}>
-            <View style={styles.searchWrapper}>
-              <TextInput
-                placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
-                returnKeyType={'search'}
-                onChangeText={onSearchText}
-                onFocus={() => console.log('onFocus!!')}
-                value={inputValue}
-                onSubmitEditing={event => {
-                  if (inputValue && inputValue.length > 1) {
-                    onSubmitSearch();
-                  }
-                }}
-                blurOnSubmit={true}
-                style={styles.SearchInputCss}></TextInput>
-              <CustomeIcon
-                name={'search'}
-                style={styles.seacrhIcon}></CustomeIcon>
-            </View>
-            {/* <TextInput
+          <View style={styles.footerWrap}>
+            <View style={styles.footerSearchWrap}>
+              <View style={styles.searchWrapper}>
+                <TextInput
+                  placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
+                  returnKeyType={'search'}
+                  onChangeText={onSearchText}
+                  onFocus={() => console.log('onFocus!!')}
+                  value={inputValue}
+                  onSubmitEditing={event => {
+                    if (inputValue && inputValue.length > 1) {
+                      onSubmitSearch();
+                    }
+                  }}
+                  blurOnSubmit={true}
+                  style={styles.SearchInputCss}></TextInput>
+                <CustomeIcon
+                  name={'search'}
+                  style={styles.seacrhIcon}></CustomeIcon>
+              </View>
+              {/* <TextInput
               blurOnSubmit={true}
               style={{color: '#000'}}
               placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
@@ -548,68 +547,64 @@ const OrdersScreen = props => {
                 }
               }}
             /> */}
-            {!isKeyboardVisible ? (
-              <View style={styles.filterBtnWrap}>
-                <TouchableOpacity
-                  style={styles.filterBtn}
-                  onPress={() => setOrdersFiltersModal(true)}>
-                  <Text style={styles.filtertxt}>Filters</Text>
-                  <CustomeIcon
-                    name={'filter-line'}
-                    style={styles.filterIcon}></CustomeIcon>
-                </TouchableOpacity>
-              </View>
-            ) : null}
-          </View>
-          {ordersfiltersModal && (
-            <OrdersFilterModal
-              shipmentType={shipmentType}
-              ordersfiltersModal={ordersfiltersModal}
-              setOrdersFiltersModal={setOrdersFiltersModal}
-              activeFilter={activeFilter}
-              setActiveFilter={setActiveFilter}
-              selectedTab={selectedTab}
-              appliedFilter={appliedFilter}
-              setAppliedFilter={setAppliedFilter}
-              initialFilter={initialFilter}
-              setInitialFilter={setInitialFilter}
-              selectFilter={selectFilter}
-              applyFilters={applyFilters}
-              pickupFromDate={pickupFromDate || appliedFilter['pickupFromDate']}
-              pickupToDate={pickupToDate || appliedFilter['pickupToDate']}
-              setPickupFromDate={setPickupFromDate}
-              setPickupToDate={setPickupToDate}
-              poFromDate={poFromDate || appliedFilter['poFromDate']}
-              poToDate={poToDate || appliedFilter['poToDate']}
-              setPoFromDate={setPoFromDate}
-              setPoToDate={setPoToDate}
-              resetFilters={resetFilters}
-            />
-          )}
-          {bulkItemIds && bulkItemIds.length ? (
-            <TouchableOpacity
-              onPress={() => {
-                setSelectAll(!selectAll);
-              }}
-              style={styles.selectAllBtn}>
-              <Text style={styles.selectBtnTxt}>
-                Select All ({bulkItemIds.length})
-              </Text>
-              <CustomeIcon
-                  name={
-                    selectAll ? 'checkbox-tick'
-                      : 'checkbox-blank'
-                  }
-                  color={"#fff"}
+              {!isKeyboardVisible ? (
+                <View style={styles.filterBtnWrap}>
+                  <TouchableOpacity
+                    style={styles.filterBtn}
+                    onPress={() => setOrdersFiltersModal(true)}>
+                    <Text style={styles.filtertxt}>Filters</Text>
+                    <CustomeIcon
+                      name={'filter-line'}
+                      style={styles.filterIcon}></CustomeIcon>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+            </View>
+            {ordersfiltersModal && (
+              <OrdersFilterModal
+                shipmentType={shipmentType}
+                ordersfiltersModal={ordersfiltersModal}
+                setOrdersFiltersModal={setOrdersFiltersModal}
+                activeFilter={activeFilter}
+                setActiveFilter={setActiveFilter}
+                selectedTab={selectedTab}
+                appliedFilter={appliedFilter}
+                setAppliedFilter={setAppliedFilter}
+                initialFilter={initialFilter}
+                setInitialFilter={setInitialFilter}
+                selectFilter={selectFilter}
+                applyFilters={applyFilters}
+                pickupFromDate={
+                  pickupFromDate || appliedFilter['pickupFromDate']
+                }
+                pickupToDate={pickupToDate || appliedFilter['pickupToDate']}
+                setPickupFromDate={setPickupFromDate}
+                setPickupToDate={setPickupToDate}
+                poFromDate={poFromDate || appliedFilter['poFromDate']}
+                poToDate={poToDate || appliedFilter['poToDate']}
+                setPoFromDate={setPoFromDate}
+                setPoToDate={setPoToDate}
+                resetFilters={resetFilters}
+              />
+            )}
+            {bulkItemIds && bulkItemIds.length ? (
+              <TouchableOpacity
+                onPress={() => {
+                  setSelectAll(!selectAll);
+                }}
+                style={styles.selectAllBtn}>
+                <Text style={styles.selectBtnTxt}>
+                  Select All ({bulkItemIds.length})
+                </Text>
+                <CustomeIcon
+                  name={selectAll ? 'checkbox-tick' : 'checkbox-blank'}
+                  color={'#fff'}
                   size={Dimension.font18}
                   onPress={() => {
                     setSelectAll(!selectAll);
                     // bulkSelect();
-                  }}
-                  >
-
-                  </CustomeIcon>
-              {/* <MaterialCommunityIcon
+                  }}></CustomeIcon>
+                {/* <MaterialCommunityIcon
                 name={selectAll ? 'checkbox-marked' : 'checkbox-blank-outline'}
                 onPress={() => {
                   setSelectAll(!selectAll);
@@ -617,39 +612,34 @@ const OrdersScreen = props => {
                 size={20}
                 color={selectAll ? 'blue' : '#000'}
               /> */}
-            </TouchableOpacity>
-          ) : null} 
-          {bulkItemIds && bulkItemIds.length ? (
-            <View style={styles.bulkItemfooter}>
-              <View style={styles.CountWrap}>
-              <Text style={styles.selectedtxt}>
-                Selcted
-              </Text>
-              <Text style={styles.Counttxt}>
-                {bulkItemIds && bulkItemIds.length < 10
-                  ? `0${bulkItemIds.length}`
-                  : bulkItemIds.length}
-              </Text>
-              </View>
-
-              <TouchableOpacity
-                onPress={onBulkAccept}
-                style={styles.BulkAcceptbtn}>
-                <Text
-                  style={styles.BulkAcceptTxt}>
-                  BULK ACCEPT
-                </Text>
-                {bulkAcceptLoader && (
-                  <ActivityIndicator
-                    size={'small'}
-                    color={'white'}
-                    style={{marginRight: 4}}
-                  />
-                )}
               </TouchableOpacity>
-            </View>
-           ) : null} 
-           </View>
+            ) : null}
+            {bulkItemIds && bulkItemIds.length ? (
+              <View style={styles.bulkItemfooter}>
+                <View style={styles.CountWrap}>
+                  <Text style={styles.selectedtxt}>Selcted</Text>
+                  <Text style={styles.Counttxt}>
+                    {bulkItemIds && bulkItemIds.length < 10
+                      ? `0${bulkItemIds.length}`
+                      : bulkItemIds.length}
+                  </Text>
+                </View>
+
+                <TouchableOpacity
+                  onPress={onBulkAccept}
+                  style={styles.BulkAcceptbtn}>
+                  <Text style={styles.BulkAcceptTxt}>BULK ACCEPT</Text>
+                  {bulkAcceptLoader && (
+                    <ActivityIndicator
+                      size={'small'}
+                      color={'white'}
+                      style={{marginRight: 4}}
+                    />
+                  )}
+                </TouchableOpacity>
+              </View>
+            ) : null}
+          </View>
         </>
       )}
     </View>
