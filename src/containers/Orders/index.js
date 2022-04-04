@@ -28,6 +28,12 @@ import Toast from 'react-native-toast-message';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
+
+  const profileStatus = useSelector(
+    state => (state.profileReducer || {}).status || STATE_STATUS.UNFETCHED,
+  );
+  const profileData = useSelector(state => state.profileReducer.data || {});
+
   const tabStatus = useSelector(state =>
     state.ordersReducer.getIn(['tabCounts', 'status']),
   );
@@ -293,7 +299,27 @@ const OrdersScreen = props => {
   };
 
   const renderListEmptyComponent = () => {
-    if (OrderData.size == 0 && OrderStatus == STATE_STATUS.FETCHED) {
+    if (
+      profileStatus == STATE_STATUS.FETCHED &&
+      profileData.verificationStatus < 10
+    ) {
+      return (
+        <View style={styles.emptyWrap}>
+          <Image
+            source={require('../../assets/images/pending_approval.png')}
+            style={{width: 300, height: 200}}
+          />
+          <Text style={styles.emptyTxt}>
+            Your profile is currently in approval pending stage Once approved
+            you will start receiving orders
+          </Text>
+        </View>
+      );
+    } else if (
+      profileStatus == STATE_STATUS.FETCHED &&
+      OrderData.size == 0 &&
+      OrderStatus == STATE_STATUS.FETCHED
+    ) {
       return (
         <View style={styles.emptyWrap}>
           <Image
