@@ -436,16 +436,20 @@ const Ordercard = props => {
               : styles.orderCardwrapInner,
           ]}>
           {!fromModal && selectedTab == 'PENDING_ACCEPTANCE' ? (
-            <MaterialCommunityIcon
-              name={
-                (bulkItemIds || []).includes(itemId)
-                  ? 'checkbox-marked'
-                  : 'checkbox-blank-outline'
-              }
-              onPress={() => selectItemId(itemId)}
-              size={20}
-              color={(bulkItemIds || []).includes(itemId) ? 'blue' : '#000'}
-            />
+            
+            <CustomeIcon
+                  name={
+                    (bulkItemIds || []).includes(itemId) ? 'checkbox-tick'
+                      : 'checkbox-blank'
+                  }
+                  color={(bulkItemIds || []).includes(itemId) ? Colors.BrandColor : Colors.FontColor}
+                  size={Dimension.font22}
+                  onPress={() => selectItemId(itemId)}
+                  style={{position:'absolute',right:0,zIndex:9999}}
+                  
+                  >
+
+                  </CustomeIcon>
           ) : null}
           <View style={[fromModal ? styles.LeftpartModal : styles.leftpart]}>
             <Image

@@ -16,7 +16,7 @@ import Header from '../../../../component/common/Header';
 import {
   addCategory,
   removeCategory,
-  setSelectCategories,
+  setSelectedCategories,
 } from '../../../../redux/actions/categorybrand';
 import styles from './style';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
@@ -25,20 +25,9 @@ import Checkbox from '../../../../component/common/Checkbox/index';
 const CategoryScreen = props => {
   const [inputValue, setInputValue] = useState('');
   const [categories, setCategories] = useState([]);
-  const [selectedValues, setSelectedValues] = useState([]);
 
   const selectedCategories = useSelector(
-    state =>
-      (((state.profileReducer || {}).categoryBrandDetails || {}).data || {})
-        .categories || [],
-  );
-
-  const stateCategories = useSelector(
-    state => (state.categorybrandReducer || {}).categories || [],
-  );
-
-  const selectcategories = useSelector(
-    state => (state.categorybrandReducer || {}).selectcategories || [],
+    state => (state.categorybrandReducer || {}).selectedcategories || [],
   );
 
   const dispatch = useDispatch();
@@ -52,7 +41,6 @@ const CategoryScreen = props => {
   const getCategories = async () => {
     const {data} = await getAllCategories();
     if (data.success) {
-      setSelectedValues(selectcategories);
       setCategories(
         data.data.map(_ => ({
           label: _.categoryName,
@@ -65,14 +53,6 @@ const CategoryScreen = props => {
   };
 
   const onSubmit = () => {
-    let mergeArr = [...stateCategories];
-
-    const categoryIds = mergeArr.map(o => o.id);
-    const filteredArr = mergeArr.filter(
-      ({id}, index) => !categoryIds.includes(id, index + 1),
-    );
-    
-    dispatch(setSelectCategories(filteredArr));
     props.navigation.goBack();
   };
 
@@ -95,16 +75,11 @@ const CategoryScreen = props => {
   };
 
   const updateCategory = item => {
-    let categoryObj = (stateCategories || []).find(_ => _.id == item.id);
-    if (categoryObj && categoryObj.id) {
-      let selectedCategories = [...selectedValues].filter(
-        _ => _.id !== categoryObj.id,
-      );
+    let currItem = ([...selectedCategories] || []).find(_ => _.id === item.id);
+    if (currItem) {
       dispatch(removeCategory(item));
-      setSelectedValues([...selectedCategories]);
     } else {
       dispatch(addCategory(item));
-      setSelectedValues([...selectedValues, item]);
     }
   };
 
@@ -117,7 +92,7 @@ const CategoryScreen = props => {
             .map((item, i) => (
               <Checkbox
                 checked={
-                  (selectedValues || []).find(_ => _.id == item.id)
+                  (selectedCategories || []).find(_ => _.id == item.id)
                     ? true
                     : false
                 }
@@ -163,12 +138,14 @@ const CategoryScreen = props => {
           </View>
           {renderRight()}
           <CustomButton
-            title={`SUBMIT (${selectedValues && selectedValues.length})`}
+            title={`SUBMIT (${
+              selectedCategories && selectedCategories.length
+            })`}
             onPress={onSubmit}
             buttonColor={
-              selectedValues.length ? Colors.BrandColor : 'dodgerblue'
+              selectedCategories.length ? Colors.BrandColor : 'dodgerblue'
             }
-            disabled={selectedValues.length ? false : true}
+            disabled={selectedCategories.length ? false : true}
             TextColor={Colors.WhiteColor}
             borderColor={Colors.WhiteColor}
           />

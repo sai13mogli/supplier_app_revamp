@@ -36,6 +36,7 @@ const Colors = {
   grayShade11: '#E8E8E8',
   grayShade12:"#F0F0F0",
   grayShade13:"#E2E2E2",
+  grayShade14:"#BFBFBF",
 
   headerTxtColor: '#3C3C3C',
   blackColor: '#000',
