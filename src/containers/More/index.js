@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Text, View, FlatList, ScrollView, TouchableOpacity} from 'react-native';
+import React, {useEffect} from 'react';
+import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import {MORE_TABS, PRIVACY_TABS} from '../../constants';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
@@ -20,6 +20,13 @@ import VersionCheck from 'react-native-version-check';
 
 const MoreScreen = props => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (profileStatus !== STATE_STATUS.FETCHED) {
+      dispatch(fetchProfile());
+    }
+  }, []);
+
   const profileStatus = useSelector(
     state => (state.profileReducer || {}).status || STATE_STATUS.UNFETCHED,
   );
@@ -67,42 +74,48 @@ const MoreScreen = props => {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <Text
-        style={{
-          marginTop: 40,
-          color: '#000',
-          fontSize: 12,
-          fontWeight: 'bold',
-        }}>
-        {userInfo.contactName}
-        {userInfo.phone} | {userInfo.email}
-      </Text>
-      <Text
-        style={{
-          marginTop: 10,
-          fontSize: 12,
-          fontWeight: 'bold',
-          color: '#000',
-        }}>
-        Moglix Supplier Since
-      </Text>
-      <Text
-        style={{
-          marginTop: 10,
-          fontSize: 12,
-          fontWeight: 'bold',
-          color: '#000',
-        }}>
-        {getTime(profileData.createdAt)}
-      </Text>
-      <View style={{marginTop: 20}}>
-        {MORE_TABS.map((tab, tabIndex) => (
-          <View>
-            <TouchableOpacity
-              key={tabIndex}
-              style={styles.profileTabWrap}
-              onPress={() => props.navigation.navigate(`${tab.route}`)}>
-              <View style={{flexDirection: 'row'}}>
+      <ScrollView>
+        <Text
+          style={{
+            marginTop: 40,
+            color: '#000',
+            fontSize: 12,
+            fontWeight: 'bold',
+          }}>
+          {userInfo.contactName}
+          {userInfo.phone} | {userInfo.email}
+        </Text>
+        <Text
+          style={{
+            marginTop: 10,
+            fontSize: 12,
+            fontWeight: 'bold',
+            color: '#000',
+          }}>
+          Moglix Supplier Since
+        </Text>
+        <Text
+          style={{
+            marginTop: 10,
+            fontSize: 12,
+            fontWeight: 'bold',
+            color: '#000',
+          }}>
+          {getTime(profileData.createdAt)}
+        </Text>
+        <View style={{marginTop: 20}}>
+          {MORE_TABS.map((tab, tabIndex) => (
+            <View>
+              <TouchableOpacity
+                key={tabIndex}
+                style={styles.profileTabWrap}
+                onPress={() =>
+                  tab.route
+                    ? props.navigation.navigate(`${tab.route}`, {
+                        setIsLoggedIn: props.setIsLoggedIn,
+                      })
+                    : tab.onPress()
+                }>
                 <View style={[styles.IconWrap]}>
                   <CustomeIcon
                     name={tab.icon}
@@ -112,62 +125,68 @@ const MoreScreen = props => {
                 <View>
                   <Text style={styles.tabTitle}>{tab.title}</Text>
                 </View>
-              </View>
 
-              <CustomeIcon
-                name={'arrow-forward'}
-                color={Colors.headerTxtColor}
-                size={Dimension.font18}></CustomeIcon>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </View>
+                <CustomeIcon
+                  name={'arrow-forward'}
+                  color={Colors.headerTxtColor}
+                  size={Dimension.font18}></CustomeIcon>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
 
-      <View style={{marginTop: 20}}>
-        {PRIVACY_TABS.map((tab, tabIndex) => (
-          <View>
-            <TouchableOpacity
-              key={tabIndex}
-              style={styles.profileTabWrap}
-              onPress={() => props.navigation.navigate(`${tab.route}`)}>
-              <View style={{flexDirection: 'row'}}>
-                <View style={[styles.IconWrap]}>
-                  <CustomeIcon
-                    name={tab.icon}
-                    color={Colors.headerTxtColor}
-                    size={Dimension.font14}></CustomeIcon>
+        <View style={{marginTop: 20}}>
+          {PRIVACY_TABS.map((tab, tabIndex) => (
+            <View>
+              <TouchableOpacity
+                key={tabIndex}
+                style={styles.profileTabWrap}
+                onPress={() =>
+                  tab.route
+                    ? props.navigation.navigate(`${tab.route}`, {
+                        setIsLoggedIn: props.setIsLoggedIn,
+                      })
+                    : tab.onPress()
+                }>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={[styles.IconWrap]}>
+                    <CustomeIcon
+                      name={tab.icon}
+                      color={Colors.headerTxtColor}
+                      size={Dimension.font14}></CustomeIcon>
+                  </View>
+                  <View>
+                    <Text style={styles.tabTitle}>{tab.title}</Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.tabTitle}>{tab.title}</Text>
-                </View>
-              </View>
 
-              <CustomeIcon
-                name={'arrow-forward'}
-                color={Colors.headerTxtColor}
-                size={Dimension.font18}></CustomeIcon>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </View>
+                <CustomeIcon
+                  name={'arrow-forward'}
+                  color={Colors.headerTxtColor}
+                  size={Dimension.font18}></CustomeIcon>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
 
-      <View style={styles.varsionWrap}>
-        <View style={{flexDirection: 'row'}}>
-          <CustomeIcon
-            name={'device-mobile'}
-            color={Colors.headerTxtColor}
-            size={Dimension.font18}></CustomeIcon>
+        <View style={styles.varsionWrap}>
+          <View style={{flexDirection: 'row'}}>
+            <CustomeIcon
+              name={'device-mobile'}
+              color={Colors.headerTxtColor}
+              size={Dimension.font18}></CustomeIcon>
 
-          <View
-            style={{flexDirection: 'column', marginTop: -Dimension.margin10}}>
-            <Text
-              style={[styles.versionText, {marginLeft: Dimension.margin10}]}>
-              App Version {VersionCheck.getCurrentVersion()}
-            </Text>
-            {/* <Text
+            <View
+              style={{flexDirection: 'column', marginTop: -Dimension.margin10}}>
+              <Text
+                style={[styles.versionText, {marginLeft: Dimension.margin10}]}>
+                App Version {VersionCheck.getCurrentVersion()}
+              </Text>
+              {/* <Text
               style={[styles.versionText, {marginLeft: Dimension.margin10}]}>
               Last updated on 12-02-19
             </Text> */}
+            </View>
           </View>
           {/* <Text
             numberOfLines={2}
@@ -178,7 +197,7 @@ const MoreScreen = props => {
             No Update Available
           </Text> */}
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
