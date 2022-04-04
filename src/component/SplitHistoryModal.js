@@ -18,7 +18,7 @@ const deviceWidth = Dimensions.get('window').width;
 const SplitHistoryModal = props => {
   const [orderImage, setOrderImage] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [history, setHistory] = useState(false);
+  const [history, setHistory] = useState({children: []});
   const [showMoreTxt, setShowMoreTxt] = useState(false);
   const [lengthMore, setLengthMore] = useState(false);
 
@@ -210,7 +210,7 @@ const SplitHistoryModal = props => {
         )}
         <Text style={{color: '#000'}}>Item Breakdow</Text>
         <View>
-          {history.children.map((_, k) => (
+          {((history || {}).children || []).map((_, k) => (
             <View key={k} style={styles.ctaContainer}>
               <Text style={{color: '#000'}}>PO ITem ID - {_.itemId}</Text>
               <Text style={{color: '#000'}}>
