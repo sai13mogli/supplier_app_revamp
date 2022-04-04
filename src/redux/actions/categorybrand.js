@@ -115,20 +115,11 @@ export const removeCategory = obj => {
   };
 };
 
-export const addBrandData = obj => {
-  return {
-    type: CATEGORY_BRAND_ACTIONS.ADD_BRAND_DATA,
-    payload: {
-      obj,
-    },
-  };
-};
-
-export const updateBrandData = obj => {
+export const updateBrandData = arr => {
   return {
     type: CATEGORY_BRAND_ACTIONS.UPDATE_BRAND_DATA,
     payload: {
-      obj,
+      arr,
     },
   };
 };
@@ -142,7 +133,7 @@ export const setPopularCategories = data => {
   };
 };
 
-export const setSelectCategories = data => {
+export const setSelectedCategories = data => {
   return {
     type: CATEGORY_BRAND_ACTIONS.SET_SELECT_CATEGORIES,
     payload: {
@@ -182,15 +173,6 @@ export const failedFetchCategoriesBrands = error => {
   };
 };
 
-export const confirmBrands = data => {
-  return {
-    type: CATEGORY_BRAND_ACTIONS.CONFRIM_BRANDS,
-    payload: {
-      data,
-    },
-  };
-};
-
 export const addMultipleBrands = data => {
   return {
     type: CATEGORY_BRAND_ACTIONS.ADD_MULTIPLE_BRANDS,
@@ -200,9 +182,9 @@ export const addMultipleBrands = data => {
   };
 };
 
-export const removeRaisedBrands = data => {
+export const addMultipleCategories = data => {
   return {
-    type: CATEGORY_BRAND_ACTIONS.REMOVE_RAISED_BRANDS,
+    type: CATEGORY_BRAND_ACTIONS.ADD_MULTIPLE_CATEGORIES,
     payload: {
       data,
     },

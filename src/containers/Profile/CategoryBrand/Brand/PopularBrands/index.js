@@ -14,17 +14,12 @@ import {
   fetchBrandsByCategory,
   addBrand,
   removeBrand,
-  setPopularCategories,
-  addMultipleBrands,
 } from '../../../../../redux/actions/categorybrand';
-import {CATEGORIES} from '../../../../../redux/constants/categorybrand';
 import {STATE_STATUS} from '../../../../../redux/constants';
 import styles from './style';
 import Checkbox from '../../../../../component/common/Checkbox/index';
 import CustomeIcon from '../../../../../component/common/CustomeIcon';
-import {getAllCategories} from '../../../../../services/auth';
-import Colors from '../../../../../Theme/Colors';
-import MultiSelect from '../../../../../component/common/MultiSelect/index';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PopularBrandsScreen = props => {
   const brands = useSelector(
@@ -38,116 +33,75 @@ const PopularBrandsScreen = props => {
       STATE_STATUS.UNFETCHED,
   );
 
-  const addedBrand = useSelector(
-    state => (state.categorybrandReducer || {}).brandsAdded || [],
+  const userBrands = useSelector(
+    state => (state.categorybrandReducer || {}).userBrands || [],
   );
 
-  const popularCategories = useSelector(
+  const selectedCategories = useSelector(
+    state => (state.categorybrandReducer || {}).selectedcategories || [],
+  );
+
+  const businessNature = useSelector(
     state =>
-      ((state.categorybrandReducer || {}).popularcategories || {}).data || [],
+      (((state.profileReducer || {}).businessDetails || {}).data || {})
+        .businessNature,
   );
-  const popularCategoriesStatus = useSelector(
-    state =>
-      ((state.categorybrandReducer || {}).popularcategories || {}).status ||
-      STATE_STATUS.UNFETCHED,
-  );
-
-  const signupCategories = useSelector(
-    state =>
-      ((state.profileReducer || {}).categoryBrandDetails || {}).categories ||
-      [],
-  );
-
-  const categoriesBrandsStatus = useSelector(
-    state =>
-      (state.categorybrandReducer || {}).categoriesbrandsStatus ||
-      STATE_STATUS.UNFETCHED,
-  );
-
-  const confirmbrands = useSelector(
-    state => (state.categorybrandReducer || {}).confirmedbrands || [],
-  );
-
-  const [categories, setCategories] = useState([]);
-
   const [activeId, setActiveId] = useState('');
   const [inputValue, setInputValue] = useState('');
-
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (popularCategoriesStatus !== STATE_STATUS.FETCHED) {
-      getCategories();
-    }
-  }, []);
-
-  useEffect(() => {
-    console.log(categoriesBrandsStatus == STATE_STATUS.FETCHED, 'status');
-    dispatch(addMultipleBrands([...confirmbrands]));
-  }, [categoriesBrandsStatus]);
-
-  const getCategories = async () => {
-    const {data} = await getAllCategories();
-    if (data.success) {
-      let categoryIds = ([...signupCategories] || []).map(_ => _.categoryCode);
-      let filteredCategories = (data.data || []).filter((_, i) =>
-        categoryIds.includes(_.categoryCode),
-      );
-      dispatch(setPopularCategories(filteredCategories));
-    }
-  };
 
   useEffect(() => {
     if (
       brandsStatus !== STATE_STATUS.FETCHED &&
-      popularCategories &&
-      popularCategories.length
+      selectedCategories &&
+      selectedCategories.length
     ) {
-      let categoryIds = (popularCategories || []).map((_, i) => _.categoryCode);
-      console.log('categoryIds', categoryIds, popularCategories);
+      console.log('selectedCategories mcmcmcmmc', selectedCategories);
+      let categoryIds = (selectedCategories || []).map(_ => _.id);
       let payloadObj = {
         categoryCodes: [...categoryIds],
       };
-
+      console.log('categoryCodes', payloadObj);
       dispatch(fetchBrandsByCategory(payloadObj));
-      // let currId = popularCategories && popularCategories[0];
-      // setActiveId(currId && currId.categoryCode);
     }
-  }, [popularCategories]);
-
-  useEffect(() => {
-    console.log('addedbrands', addedBrand, brands, brands[activeId]);
-  });
+  }, [selectedCategories]);
 
   useEffect(() => {
     if (brandsStatus == STATE_STATUS.FETCHED) {
-      let currId = popularCategories && popularCategories[0];
-      setActiveId(currId && currId.categoryCode);
+      let currId = selectedCategories && selectedCategories[0];
+      setActiveId(currId && currId.id);
     }
   }, [brandsStatus]);
 
   const renderLeft = () => {
-    return (popularCategories || []).map((_, key) => (
-      <TouchableOpacity onPress={() => setActiveId(_ && _.categoryCode)}>
+    return (selectedCategories || []).map((_, key) => (
+      <TouchableOpacity onPress={() => setActiveId(_ && _.id)}>
         <View
           style={[
-            _ && _.categoryCode == activeId
+            _ && _.id == activeId
               ? styles.activeBackground
               : styles.inactiveBackground,
           ]}>
-          <Text style={styles.categoryText}>{_.categoryName}</Text>
+          <Text style={styles.categoryText}>{_.label}</Text>
         </View>
       </TouchableOpacity>
     ));
   };
 
-  const updatePopularBrand = item => {
-    let brandObj = (addedBrand || []).find(_ => _.brandCode == item.code);
-    console.log(brandObj);
-    if (brandObj && brandObj.id) {
-      dispatch(removeBrand(item));
+  const updatePopularBrand = async item => {
+    console.log(item);
+    let currbrand = {
+      ...item,
+      supplierId: await AsyncStorage.getItem('userId'),
+      businessNature: businessNature,
+      isDocumentRequired: item.isDocumentRequired,
+    };
+    let brandObj = (userBrands || []).find(_ => _.brandCode == currbrand.code);
+    console.log(brandObj, 'brandObj');
+    if (brandObj && brandObj.brandCode) {
+      dispatch(removeBrand(currbrand));
     } else {
-      dispatch(addBrand(item));
+      dispatch(addBrand(currbrand));
     }
   };
 
@@ -160,7 +114,7 @@ const PopularBrandsScreen = props => {
             .map((item, i) => (
               <Checkbox
                 checked={
-                  (addedBrand || []).find(
+                  (userBrands || []).find(
                     _ => (_.brandCode || _.code) == item.code,
                   )
                     ? true
