@@ -25,9 +25,16 @@ import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
 import Toast from 'react-native-toast-message';
+import BulkActionsModal from '../../component/BulkActionsModal';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
+
+  const profileStatus = useSelector(
+    state => (state.profileReducer || {}).status || STATE_STATUS.UNFETCHED,
+  );
+  const profileData = useSelector(state => state.profileReducer.data || {});
+
   const tabStatus = useSelector(state =>
     state.ordersReducer.getIn(['tabCounts', 'status']),
   );
@@ -72,6 +79,7 @@ const OrdersScreen = props => {
   const [bulkItemIds, setBulkItemIds] = useState([]);
   const [bulkAcceptLoader, setBulkAcceptLoader] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
+  const [bulkActionsModal, setBulkActionsModal] = useState(false);
 
   const OPTIONS = [
     {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
@@ -189,6 +197,7 @@ const OrdersScreen = props => {
         bulkItemIds={bulkItemIds}
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
+        shipmentUrl={item.shipmentUrl}
       />
     );
   };
@@ -253,6 +262,13 @@ const OrdersScreen = props => {
     }
   }, [selectAll]);
 
+  useEffect(() => {
+    if (selectedTab == 'SHIPMENT' && bulkItemIds && bulkItemIds.length) {
+      console.log('bhk bulkActions', bulkItemIds.length);
+      setBulkActionsModal(true);
+    }
+  }, [bulkItemIds]);
+
   const renderHeaderComponent = () => {
     return (
       <ScrollView
@@ -293,7 +309,27 @@ const OrdersScreen = props => {
   };
 
   const renderListEmptyComponent = () => {
-    if (OrderData.size == 0 && OrderStatus == STATE_STATUS.FETCHED) {
+    if (
+      profileStatus == STATE_STATUS.FETCHED &&
+      profileData.verificationStatus < 10
+    ) {
+      return (
+        <View style={styles.emptyWrap}>
+          <Image
+            source={require('../../assets/images/pending_approval.png')}
+            style={{width: 300, height: 200}}
+          />
+          <Text style={styles.emptyTxt}>
+            Your profile is currently in approval pending stage Once approved
+            you will start receiving orders
+          </Text>
+        </View>
+      );
+    } else if (
+      profileStatus == STATE_STATUS.FETCHED &&
+      OrderData.size == 0 &&
+      OrderStatus == STATE_STATUS.FETCHED
+    ) {
       return (
         <View style={styles.emptyWrap}>
           <Image
@@ -614,7 +650,7 @@ const OrdersScreen = props => {
               /> */}
               </TouchableOpacity>
             ) : null}
-            {bulkItemIds && bulkItemIds.length ? (
+            {selectedTab !== 'SHIPMENT' && bulkItemIds && bulkItemIds.length ? (
               <View style={styles.bulkItemfooter}>
                 <View style={styles.CountWrap}>
                   <Text style={styles.selectedtxt}>Selcted</Text>
@@ -638,6 +674,19 @@ const OrdersScreen = props => {
                   )}
                 </TouchableOpacity>
               </View>
+            ) : null}
+
+            {selectedTab == 'SHIPMENT' &&
+            bulkItemIds &&
+            bulkItemIds.length &&
+            bulkActionsModal ? (
+              <BulkActionsModal
+                bulkActionsModal={bulkActionsModal}
+                setBulkActionsModal={setBulkActionsModal}
+                bulkItemIds={bulkItemIds}
+                selectedTab={selectedTab}
+                shipmentType={shipmentType}
+              />
             ) : null}
           </View>
         </>
