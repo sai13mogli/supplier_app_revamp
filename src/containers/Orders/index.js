@@ -25,6 +25,7 @@ import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
 import Toast from 'react-native-toast-message';
+import BulkActionsModal from '../../component/BulkActionsModal';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -78,6 +79,7 @@ const OrdersScreen = props => {
   const [bulkItemIds, setBulkItemIds] = useState([]);
   const [bulkAcceptLoader, setBulkAcceptLoader] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
+  const [bulkActionsModal, setBulkActionsModal] = useState(false);
 
   const OPTIONS = [
     {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
@@ -195,6 +197,7 @@ const OrdersScreen = props => {
         bulkItemIds={bulkItemIds}
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
+        shipmentUrl={item.shipmentUrl}
       />
     );
   };
@@ -258,6 +261,13 @@ const OrdersScreen = props => {
       setBulkItemIds([]);
     }
   }, [selectAll]);
+
+  useEffect(() => {
+    if (selectedTab == 'SHIPMENT' && bulkItemIds && bulkItemIds.length) {
+      console.log('bhk bulkActions', bulkItemIds.length);
+      setBulkActionsModal(true);
+    }
+  }, [bulkItemIds]);
 
   const renderHeaderComponent = () => {
     return (
@@ -640,7 +650,7 @@ const OrdersScreen = props => {
               /> */}
               </TouchableOpacity>
             ) : null}
-            {bulkItemIds && bulkItemIds.length ? (
+            {selectedTab !== 'SHIPMENT' && bulkItemIds && bulkItemIds.length ? (
               <View style={styles.bulkItemfooter}>
                 <View style={styles.CountWrap}>
                   <Text style={styles.selectedtxt}>Selcted</Text>
@@ -664,6 +674,19 @@ const OrdersScreen = props => {
                   )}
                 </TouchableOpacity>
               </View>
+            ) : null}
+
+            {selectedTab == 'SHIPMENT' &&
+            bulkItemIds &&
+            bulkItemIds.length &&
+            bulkActionsModal ? (
+              <BulkActionsModal
+                bulkActionsModal={bulkActionsModal}
+                setBulkActionsModal={setBulkActionsModal}
+                bulkItemIds={bulkItemIds}
+                selectedTab={selectedTab}
+                shipmentType={shipmentType}
+              />
             ) : null}
           </View>
         </>

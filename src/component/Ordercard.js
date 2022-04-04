@@ -14,7 +14,12 @@ import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
 import Modal from 'react-native-modal';
-import {acceptOrder, getpoChallan, rejectOrder} from '../services/orders';
+import {
+  acceptOrder,
+  getpoChallan,
+  rejectOrder,
+  createManifestApi,
+} from '../services/orders';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -60,6 +65,7 @@ const Ordercard = props => {
     setBulkItemIds,
     selectItemId,
     shipmentType,
+    shipmentUrl,
   } = props;
   const [orderImage, setOrderImage] = useState(null);
   const [showLspDetails, setShowLspDetails] = useState(null);
@@ -78,6 +84,8 @@ const Ordercard = props => {
   const [packNow, setPackNow] = useState(false);
   const [addViewModal, setAddViewModal] = useState(false);
   const [splitQuantityModal, setSplitQuantityModal] = useState(false);
+  const [manifestLoader, setManifestLoader] = useState(false);
+  const [shipmentLoader, setShipmentLoader] = useState(false);
 
   useEffect(() => {
     fetchImage();
@@ -167,6 +175,27 @@ const Ordercard = props => {
     }
   };
 
+  const getShipmentLabel = pdfUrl => {
+    if (Platform.OS == 'android') {
+      try {
+        PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        ).then(granted => {
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log('Storage Permission Granted.');
+            downloadShipmentLabel(pdfUrl);
+          } else {
+          }
+        });
+      } catch (err) {
+        //To handle permission related issue
+        console.warn(err);
+      }
+    } else {
+      downloadShipmentLabel(pdfUrl);
+    }
+  };
+
   const downloadPDF = async (isPO, pdfUrl) => {
     //Main function to download the image
     let date = new Date(); //To add the time suffix in filename
@@ -213,12 +242,12 @@ const Ordercard = props => {
         .then(res => {
           //Showing alert after successful downloading
           console.log('res -> ', JSON.stringify(res));
+          console.log('imageUrl', image_URL, isPO);
           if (isPO) {
             setPoLoader(false);
           } else {
             setInvoiceLoader(false);
           }
-
           Toast.show({
             type: 'success',
             text2: pdfUrl ? 'Invoice Downloaded' : 'PO Downloaded',
@@ -242,9 +271,107 @@ const Ordercard = props => {
     }
   };
 
+  const downloadShipmentLabel = async url => {
+    //Main function to download the image
+    let date = new Date(); //To add the time suffix in filename
+    try {
+      let image_URL = '';
+      //Image URL which we want to download
+      setShipmentLoader(true);
+      image_URL = url;
+      //Getting the extention of the file
+      let ext = getExtention(image_URL);
+      ext = '.' + ext[0];
+      //Get config and fs from RNFetchBlob
+      //config: To pass the downloading related options
+      //fs: To get the directory path in which we want our image to download
+      const {config, fs} = RNFetchBlob;
+      let PictureDir =
+        Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+      let options = {
+        fileCache: true,
+        addAndroidDownloads: {
+          //Related to the Android only
+          useDownloadManager: true,
+          notification: true,
+          path:
+            PictureDir +
+            '/PDF_' +
+            Math.floor(date.getTime() + date.getSeconds() / 2) +
+            ext,
+          description: 'PDF',
+        },
+      };
+      config(options)
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
+        .then(res => {
+          //Showing alert after successful downloading
+          console.log('res -> ', JSON.stringify(res));
+          console.log('imageUrl', image_URL);
+          setShipmentLoader(false);
+          Toast.show({
+            type: 'success',
+            text2: 'Shipment Label Downloaded',
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        });
+    } catch (error) {
+      console.log(error);
+      setShipmentLoader(false);
+      Toast.show({
+        type: 'success',
+        text2: 'Something went wrong',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    }
+  };
+
   const getExtention = filename => {
     //To get the file extension
     return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
+  };
+
+  const createManifest = async () => {
+    try {
+      setManifestLoader(true);
+      const {data} = await createManifestApi({
+        supplierId: await AsyncStorage.getItem('userId'),
+        itemList: [`${itemId}`],
+        source: 0,
+      });
+      if (data && data.success) {
+        setManifestLoader(false);
+        fetchOrdersFunc(0, '', selectedTab, shipmentType, {
+          pickupFromDate: '',
+          pickupToDate: '',
+          poFromDate: '',
+          poToDate: '',
+          orderType: [],
+          deliveryType: [],
+          orderRefs: [],
+        });
+        fetchTabCountFunc(selectedTab, shipmentType);
+        Toast.show({
+          type: 'success',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      } else {
+        setManifestLoader(false);
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      setManifestLoader(false);
+      console.log(error);
+    }
   };
 
   const renderCTAs = (cta, url, fromCTA) => {
@@ -332,9 +459,9 @@ const Ordercard = props => {
             onPress={() => setPackNow(true)}
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>PACK NOW</Text>
-            {invoiceLoader && (
+            {/* {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
-            )}
+            )} */}
           </TouchableOpacity>
         ) : cta == 'ADD_SERIAL_NUMBER' ? (
           <TouchableOpacity
@@ -361,6 +488,35 @@ const Ordercard = props => {
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>PROOF OF DELIVERY</Text>
             {invoiceLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'CREATE_MANIFEST_DISABLED' ? (
+          <>
+            <TouchableOpacity disabled={true} style={styles.DownloadPoBtn}>
+              <Text style={styles.rejectCtaTxt}>Create Manifest</Text>
+            </TouchableOpacity>
+            <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
+              Shipment lable not created
+            </Text>
+          </>
+        ) : cta == 'CREATE_MANIFEST' ? (
+          <TouchableOpacity
+            onPress={createManifest}
+            style={styles.DownloadPoBtn}
+            disabled={manifestLoader}>
+            <Text style={styles.rejectCtaTxt}>Create Manifest</Text>
+            {manifestLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'DOWNLOAD_SHIPMENT_LABEL' ? (
+          <TouchableOpacity
+            onPress={() => getShipmentLabel(shipmentUrl)}
+            style={styles.DownloadPoBtn}
+            disabled={manifestLoader}>
+            <Text style={styles.rejectCtaTxt}>Download Shipment Label</Text>
+            {manifestLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
@@ -435,21 +591,26 @@ const Ordercard = props => {
               ? styles.orderCardwrapInnerModal
               : styles.orderCardwrapInner,
           ]}>
-          {!fromModal && selectedTab == 'PENDING_ACCEPTANCE' ? (
-            
+          {!fromModal &&
+          (selectedTab == 'PENDING_ACCEPTANCE' || selectedTab == 'SHIPMENT') ? (
             <CustomeIcon
-                  name={
-                    (bulkItemIds || []).includes(itemId) ? 'checkbox-tick'
-                      : 'checkbox-blank'
-                  }
-                  color={(bulkItemIds || []).includes(itemId) ? Colors.BrandColor : Colors.FontColor}
-                  size={Dimension.font22}
-                  onPress={() => selectItemId(itemId)}
-                  style={{position:'absolute',right:0,zIndex:9999}}
-                  
-                  >
-
-                  </CustomeIcon>
+              name={
+                (bulkItemIds || []).includes(itemId)
+                  ? 'checkbox-tick'
+                  : 'checkbox-blank'
+              }
+              color={
+                (bulkItemIds || []).includes(itemId)
+                  ? Colors.BrandColor
+                  : Colors.FontColor
+              }
+              size={Dimension.font22}
+              onPress={() => selectItemId(itemId)}
+              style={{
+                position: 'absolute',
+                right: 0,
+                zIndex: 9999,
+              }}></CustomeIcon>
           ) : null}
           <View style={[fromModal ? styles.LeftpartModal : styles.leftpart]}>
             <Image

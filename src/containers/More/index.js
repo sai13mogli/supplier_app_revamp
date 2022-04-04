@@ -21,12 +21,6 @@ import VersionCheck from 'react-native-version-check';
 const MoreScreen = props => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (profileStatus !== STATE_STATUS.FETCHED) {
-      dispatch(fetchProfile());
-    }
-  }, []);
-
   const profileStatus = useSelector(
     state => (state.profileReducer || {}).status || STATE_STATUS.UNFETCHED,
   );
