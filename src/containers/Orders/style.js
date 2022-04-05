@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     maxWidth: Dimension.width100,
     marginRight: Dimension.margin10,
+    justifyContent: 'center',
   },
   selectedTabTxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
@@ -56,10 +57,19 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomBoldFont,
     fontSize: Dimension.font18,
     color: Colors.FontColor,
-    paddingVertical:Dimension.padding30
+    paddingVertical:Dimension.padding30,
+    //alignSelf:"center"
   },
   emptyWrap:{
-    alignContent:"center"
+    //alignContent:"center",
+    justifyContent:"center",
+    backgroundColor:"#fff",
+    alignItems:'center',
+    flex:1,
+    height:"100%",
+    textAlignVertical:"center",
+    marginTop:Dimension.margin60
+    
   },
   searchWrapper: {
     marginBottom: Dimension.margin5,
