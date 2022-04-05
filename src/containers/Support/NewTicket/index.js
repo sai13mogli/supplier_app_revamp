@@ -43,6 +43,27 @@ const NewTicket = props => {
     setSubCategoryList(data.data.map(_ => ({label: _.name, value: _.id})));
   };
 
+  useEffect(() => {
+    if (category) {
+      validateCategory();
+    }
+  }, [category]);
+  useEffect(() => {
+    if (subCategory) {
+      validateSubCategory();
+    }
+  }, [subCategory]);
+  useEffect(() => {
+    if (businessType) {
+      validateBusinessType();
+    }
+  }, [businessType]);
+  useEffect(() => {
+    if (explainQuery) {
+      validateExplainQuery();
+    }
+  }, [explainQuery]);
+
   const FORM_FIELDS = new OrderedMap({
     category: {
       label: 'Category',
@@ -249,6 +270,14 @@ const NewTicket = props => {
         />
       </ScrollView>
       <View style={styles.BottomWrap}>
+        <CustomButton
+          title={'CANCEL'}
+          buttonColor={Colors.WhiteColor}
+          onPress={() => props.navigation.goBack()}
+          TextColor={Colors.blackColor}
+          borderColor={Colors.WhiteColor}
+          TextFontSize={Dimension.font16}
+        />
         <CustomButton
           loading={loading}
           disabled={loading}
