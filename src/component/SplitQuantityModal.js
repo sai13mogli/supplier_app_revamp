@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  ScrollView
 } from 'react-native';
 import React, {useState, useCallback, useEffect, useRef} from 'react';
 import Dimension from '../Theme/Dimension';
@@ -18,6 +19,7 @@ import Productcard from './Productcard';
 import FloatingLabelInputField from './common/FloatingInput';
 import {splitItem} from '../services/orders';
 const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 const SplitQuantityModal = props => {
   const {
@@ -183,27 +185,33 @@ const SplitQuantityModal = props => {
       coverScreen={true}
       style={{padding: 0, margin: 0}}
       deviceWidth={deviceWidth}
+      deviceHeight={deviceHeight}
       hasBackdrop={true}
       onBackdropPress={() => false}
       onBackButtonPress={() => setSplitQuantityModal(false)}>
       {/* <Toast ref={modalToastRef} /> */}
       <View style={styles.modalContainer}>
-        <View style={styles.topbdr}></View>
-
-        <View style={styles.ModalheadingWrapper}>
-        <Text style={styles.ModalHeading}>
-          Split Quantity
-        </Text>
+      <View style={styles.topbdr}></View>
+      <View style={styles.closeIconWrap}>
           <CustomeIcon
-            name={'close'}
-            size={Dimension.font22}
-            color={Colors.FontColor}
-            onPress={() => setSplitQuantityModal(false)}></CustomeIcon>
-        </View>
-        
+                name={'close'}
+                size={Dimension.font22}
+                color={Colors.FontColor}
+                onPress={() => {
+                  setSplitQuantityModal(false);
+                }}
+              />  
+          </View>
+          <View style={styles.headerTxtWrap}>
+              <Text style={styles.headerTxt}>Split Quantity</Text>
+           </View>
+           <ScrollView>
         <View style={{paddingHorizontal: Dimension.padding15}}>
           {renderOrderDetails()}
         </View>
+        <View style={styles.BottomDataWrap}>
+
+        
         <FloatingLabelInputField
           title={'Split in portion'}
           label={'Split in portion'}
@@ -218,11 +226,13 @@ const SplitQuantityModal = props => {
           //   extraView={() => getExtraView()}
         />
         {renderSplitPortion()}
-        <View style={styles.btnWrap}>
+        </View>
+        </ScrollView>
+        <View style={styles.bottomAction}>
           <TouchableOpacity
-            style={styles.cancelBtn}
+            style={styles.ResetCtabtn}
             onPress={resetSplitQuantity}>
-            <Text style={styles.canceltxt}>RESET</Text>
+            <Text style={styles.ResetCtaTxt}>RESET</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={onSplit}
@@ -231,12 +241,12 @@ const SplitQuantityModal = props => {
                 ? styles.rejectCtabtn
                 : styles.disabledrejectCtabtn,
             ]}
-            disabled={splitQuantity == 0}>
+            disabled={splitQuantity == 0}>  
             <Text
               style={[
                 splitQuantity > 0
                   ? styles.rejectCtaTxt
-                  : styles.disabledrejectCtaTxt,
+                  : styles.ResetCtaTxt,
               ]}>
               SPLIT
             </Text>
@@ -251,6 +261,7 @@ const SplitQuantityModal = props => {
 };
 
 const styles = StyleSheet.create({
+  
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
@@ -259,46 +270,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     paddingTop: Dimension.padding10,
-  },
-
-  rejectCtabtn: {
-    flex: 5,
-    backgroundColor: Colors.BrandColor,
-    borderRadius: 4,
-    paddingVertical: Dimension.padding8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  disabledrejectCtabtn: {
-    flex: 5,
-    backgroundColor: 'gray',
-    borderRadius: 4,
-    paddingVertical: Dimension.padding8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  rejectCtaTxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
-    color: Colors.WhiteColor,
-    fontSize: Dimension.font12,
-  },
-  disabledrejectCtaTxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
-    color: '#000',
-    fontSize: Dimension.font12,
-  },
-  cancelBtn: {
-    flex: 5,
-    backgroundColor: Colors.WhiteColor,
-    borderRadius: 4,
-    paddingVertical: Dimension.padding8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  canceltxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
-    color: Colors.FontColor,
-    fontSize: Dimension.font12,
+    height:deviceHeight-100
   },
   topbdr: {
     alignSelf: 'center',
@@ -307,23 +279,75 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     width: Dimension.width70,
   },
-  ModalheadingWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    padding: Dimension.padding15,
+  closeIconWrap:{
+    alignItems:"flex-end",
+    paddingHorizontal:Dimension.padding15,
   },
-  btnWrap: {
-    flex: 1,
-    flexDirection: 'row',
-    padding: Dimension.padding15,
-    borderTopWidth: 1,
-    borderTopColor: Colors.grayShade1,
+  headerTxtWrap:{
+    paddingHorizontal:Dimension.padding15,
+    marginBottom:Dimension.margin20
   },
-  ModalHeading: {
-    fontSize: Dimension.font16,
+
+  headerTxt:{
+    fontSize: Dimension.font14,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
-    marginBottom: Dimension.margin5,
+   // marginLeft:Dimension.margin10,
+
+  },
+  showMoreCta: {
+    marginLeft: Dimension.margin10,
+    paddingVertical: Dimension.padding6,
+  },
+  
+  BottomDataWrap:{
+paddingVertical:Dimension.padding30,
+paddingHorizontal:Dimension.padding15
+  },
+  bottomAction: {
+    borderTopWidth: 1,
+    borderTopColor: Colors.grayShade2,
+    padding: Dimension.padding15,
+    backgroundColor: Colors.WhiteColor,
+    //position: 'absolute',
+    width: '100%',
+    //bottom: 0,
+     flexDirection: 'row',
+  },
+  ResetCtabtn: {
+    flex: 1,
+    backgroundColor: Colors.WhiteColor,
+    //borderRadius: 4,
+    paddingVertical: Dimension.padding12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  ResetCtaTxt: {
+    fontFamily: Dimension.CustomMediumFont,
+    color: Colors.FontColor,
+    fontSize: Dimension.font16,
+
+  },
+  rejectCtabtn:{
+    flex: 1,
+    backgroundColor: Colors.BrandColor,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rejectCtaTxt:{
+    fontFamily: Dimension.CustomMediumFont,
+    color: Colors.WhiteColor,
+    fontSize: Dimension.font16,
+  },
+  disabledrejectCtabtn:{
+    flex: 1,
+    backgroundColor: Colors.grayShade10,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
