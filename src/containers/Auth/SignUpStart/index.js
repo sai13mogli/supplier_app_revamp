@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   ScrollView,
+  Linking,
 } from 'react-native';
 import CustomButton from '../../../component/common/Button';
 import CustomeIcon from '../../../component/common/CustomeIcon';
@@ -20,6 +21,7 @@ import {
 import Colors from '../../../Theme/Colors';
 import styles from './style';
 import Dimension from '../../../Theme/Dimension';
+import Toast from 'react-native-toast-message';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -154,7 +156,7 @@ const SignUpStartScreen = props => {
       value: phone,
       onChangeText: text => setphone(text),
       component: FloatingLabelInputField,
-      errorMessage: 'Invalid phone',
+      errorMessage: 'Please enter 10 digit mobile number',
       showError: phoneError,
       keyboardType: 'number-pad',
       maxLength: 10,
@@ -164,12 +166,13 @@ const SignUpStartScreen = props => {
     },
     otp: {
       title: 'OTP',
+      disabled: otpVerified,
       label: 'OTP',
       isImp: true,
       value: otp,
       onChangeText: text => setotp(text),
       component: FloatingLabelInputField,
-      errorMessage: 'Invalid otp',
+      errorMessage: 'Please enter valid OTP',
       showError: otpError,
       secureTextEntry: true,
       maxLength: 6,
@@ -185,7 +188,7 @@ const SignUpStartScreen = props => {
       value: email,
       onChangeText: text => setemail(text),
       component: FloatingLabelInputField,
-      errorMessage: 'Invalid email',
+      errorMessage: 'Please enter valid email address',
       showError: emailError,
       onBlur: () => onEmailBlur(),
     },
@@ -196,7 +199,7 @@ const SignUpStartScreen = props => {
       value: contactName,
       onChangeText: text => setcontactName(text),
       component: FloatingLabelInputField,
-      errorMessage: 'Invalid contact name',
+      errorMessage: 'Please enter full name',
       showError: contactNameError,
       onBlur: () => onContactNameBlur(),
     },
@@ -211,6 +214,7 @@ const SignUpStartScreen = props => {
     //   rememberMe: true,
     //   country: '110',
     // });
+
     if (
       phone &&
       phone.length &&
@@ -244,6 +248,14 @@ const SignUpStartScreen = props => {
         alert(data.message);
       }
     } else {
+      if (!tAndCAccepted) {
+        Toast.show({
+          type: 'error',
+          text2: 'Kindly Accept Terms & Conditions',
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      }
       onPhoneBlur();
       onOtpBlur();
       onEmailBlur();
@@ -292,7 +304,28 @@ const SignUpStartScreen = props => {
             <Checkbox
               checked={tAndCAccepted}
               onPress={() => setTAndCAccepted(!tAndCAccepted)}
-              title={'I Accept The Terms and Conditions'}
+              title={
+                <Text
+                  style={{
+                    color: '#000',
+                    fontFamily: Dimension.CustomMediumFont,
+                    fontSize: Dimension.font12,
+                  }}>
+                  I Accept The{' '}
+                  <Text
+                    style={{
+                      color: Colors.BrandColor,
+                      textDecorationLine: 'underline',
+                    }}
+                    onPress={() =>
+                      Linking.openURL(
+                        'https://suppliercentralqa.moglilabs.com/files/termsofuse.pdf',
+                      )
+                    }>
+                    Terms and Conditions
+                  </Text>
+                </Text>
+              }
             />
             <Checkbox
               checked={sendWhatsapp}
