@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import {Text, View, ScrollView, TouchableOpacity,StatusBar,ImageBackground} from 'react-native';
 import {MORE_TABS, PRIVACY_TABS} from '../../constants';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
@@ -69,34 +69,44 @@ const MoreScreen = props => {
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView>
-        <Text
-          style={{
-            marginTop: 40,
-            color: '#000',
-            fontSize: 12,
-            fontWeight: 'bold',
-          }}>
-          {userInfo.contactName}
-          {userInfo.phone} | {userInfo.email}
-        </Text>
-        <Text
-          style={{
-            marginTop: 10,
-            fontSize: 12,
-            fontWeight: 'bold',
-            color: '#000',
-          }}>
-          Moglix Supplier Since
-        </Text>
-        <Text
-          style={{
-            marginTop: 10,
-            fontSize: 12,
-            fontWeight: 'bold',
-            color: '#000',
-          }}>
-          {getTime(profileData.createdAt)}
-        </Text>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle={"light-content"}
+      />
+      <ImageBackground
+        source={require('../../assets/images/MenuBG.png')}
+        resizeMode="cover" //style={{flex:1}}
+      ><Text
+      style={{
+        marginTop: 40,
+        color: '#000',
+        fontSize: 12,
+        fontWeight: 'bold',
+      }}>
+      {userInfo.contactName}
+      {userInfo.phone} | {userInfo.email}
+    </Text>
+    <Text
+      style={{
+        marginTop: 10,
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: '#000',
+      }}>
+      Moglix Supplier Since
+    </Text>
+    <Text
+      style={{
+        marginTop: 10,
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: '#000',
+      }}>
+      {getTime(profileData.createdAt)}
+    </Text>
+        </ImageBackground>
+        
         <View style={{marginTop: 20}}>
           {MORE_TABS.map((tab, tabIndex) => (
             <View>
