@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {LogBox, ScrollView, StyleSheet, Text} from 'react-native';
 import Routes from './src/routes';
 import store from './src/redux/store';
@@ -30,6 +30,8 @@ class App extends React.Component {
       progress.receivedBytes + ' of ' + progress.totalBytes + ' received.',
     );
   }
+
+ 
 
   render() {
     return (

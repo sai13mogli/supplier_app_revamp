@@ -89,6 +89,7 @@ const SplitHistoryModal = props => {
   };
   const fetchSplitHistory = async () => {
     const {data} = await getSplitHistory(supplierId, orderRef, itemRef);
+    console.log('OrdeRef====>', orderRef);
     if (data.success) {
       setHistory(data.data);
       setLoading(false);
@@ -190,19 +191,19 @@ const SplitHistoryModal = props => {
                 />
               </View>
               <View style={styles.rightPart}>
-                <Text style={[{color: '#000'}, styles.msnName]}>{msn}</Text>
+                <Text style={[{ color: '#000' }, styles.msnName]}>{msn}</Text>
 
                 <Text style={styles.productName}>{productName}</Text>
 
                 <>
-                  <Text style={{color: '#000'}}>
+                  <Text style={{ color: '#000' }}>
                     {' '}
                     ₹{Math.floor(totalAmount)}
                   </Text>
-                  <Text style={{color: '#000'}}>{taxPercentage}%</Text>
+                  <Text style={{ color: '#000' }}>{taxPercentage}%</Text>
                 </>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{marginRight: Dimension.margin20}}>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ marginRight: Dimension.margin20 }}>
                     <Text style={styles.TitleLightTxt}>
                       PO ID -{' '}
                       <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
@@ -239,14 +240,14 @@ const SplitHistoryModal = props => {
                   </View>
                 </View>
                 <View
-                  style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
+                  style={{ flexDirection: 'row', marginTop: Dimension.margin10 }}>
                   <Text style={styles.GstWrapTxt}>{orderTypeString}</Text>
                   <Text style={styles.shipmentModeWrap}>
                     {shipmentMode == 2
                       ? 'Dropship'
                       : shipmentMode == 3
-                      ? 'Door Delivery'
-                      : 'Oneship'}
+                        ? 'Door Delivery'
+                        : 'Oneship'}
                   </Text>
                   {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
                   <Text style={styles.shipmentModeStringWrap}>

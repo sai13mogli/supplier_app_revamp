@@ -28,13 +28,11 @@ const TdsDetails = (props) => {
     setTdsInfoList(activeSections);
   };
 
-  const _renderHeader = section => {
+  const _renderHeader = (section, _, isActive) => {
     global.year = section.financialyear
-    const index = tdsInfoDetails.findIndex(
-      i => i.tdsInfoDetails_id === section.tdsInfoDetails_id,
-    );
-    const iconName = index === tdsInfoList[0] ? 'chevron-up' : 'chevron-down';
-    const showEdit = index === tdsInfoList[0] ? true : false;
+
+    const iconName = isActive ? 'chevron-up' : 'chevron-down';
+    const showEdit = isActive ? true : false;
 
     return (
       <View
@@ -42,20 +40,20 @@ const TdsDetails = (props) => {
         <Text style={styles.AccordianheadingTxt}>
           Year {section.financialyear}
         </Text>
-        { showEdit == true ?
-        <TouchableOpacity
-          style={styles.iconStyle}
-          onPress={() => {
-            onPresEdit(section);
-          }}>
-           <CustomeIcon name={'edit-box'} size={Dimension.font16} color={colors.BrandColor} />
-                <Text style={styles.addnewtxt}>
-                  Edit
-                </Text>
-        </TouchableOpacity>
-        :null}
+        {showEdit == true ?
+          <TouchableOpacity
+            style={styles.iconStyle}
+            onPress={() => {
+              onPresEdit(section);
+            }}>
+            <CustomeIcon name={'edit-box'} size={Dimension.font16} color={colors.BrandColor} />
+            <Text style={styles.addnewtxt}>
+              Edit
+            </Text>
+          </TouchableOpacity>
+          : null}
         <MaterialCommunityIcon
-         
+
           name={iconName}
           size={Dimension.font22}
           color={colors.FontColor}
@@ -74,24 +72,24 @@ const TdsDetails = (props) => {
     console.log("Section====>", section);
     return (
       <View style={{}}>
-       
+
 
         <View style={styles.sectionView}>
           <View style={styles.wrap}>
             <Text style={styles.HeadinngInnerTxt}>
               TDS filed for AY {section.financialyear}
             </Text>
-            <Text style={ styles.yesNotxt}>
+            <Text style={styles.yesNotxt}>
               {section.lastYearItr == 1 ? 'Yes' :
                 section.lastYearItr == 0 ? "No" :
                   section.lastYearItr == "" ? "-" : null}
             </Text>
           </View>
           <View style={styles.wrap}>
-          <Text style={styles.HeadinngInnerTxt}>
+            <Text style={styles.HeadinngInnerTxt}>
               ITR filed for AV {section.financialyear}
             </Text>
-            <Text style={ styles.yesNotxt}>
+            <Text style={styles.yesNotxt}>
               {section.lastToLastYearItr == 1 ? 'Yes'
                 : section.lastToLastYearItr == 0 ? 'No'
                   : section.lastToLastYearItr == "" ? "-"
@@ -103,7 +101,7 @@ const TdsDetails = (props) => {
               Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
               {section.financialyear}
             </Text>
-            <Text style={ styles.yesNotxt}>
+            <Text style={styles.yesNotxt}>
               {section.lastYearTdsTcs == 1 ? 'Yes' :
                 section.lastYearTdsTcs == 0 ? 'No' :
                   section.lastYearTdsTcs == "" ? "-"
@@ -115,19 +113,19 @@ const TdsDetails = (props) => {
               Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
               {section.financialyear}
             </Text>
-            <Text style={ styles.yesNotxt}>
+            <Text style={styles.yesNotxt}>
               {section.lastToLastYearTdsTcs == 1 ? 'Yes'
                 : section.lastToLastYearTdsTcs == 0 ? 'No' :
                   section.lastToLastYearTdsTcs == "" ? "-"
                     : null}
             </Text>
           </View>
-          <View style={[styles.wrap,{borderBottomWidth:0}]}>
+          <View style={[styles.wrap, { borderBottomWidth: 0 }]}>
             <Text style={styles.HeadinngInnerTxt}>
               Turnover in financial year {section.financialyear} was
               exceeding 10 crores
             </Text>
-            <Text style={ styles.yesNotxt}>
+            <Text style={styles.yesNotxt}>
               {section.financialYearTurnover == 1 ? 'Yes'
                 : section.financialYearTurnover == 0 ? 'No'
                   : section.financialYearTurnover == "" ? "-"
@@ -150,7 +148,7 @@ const TdsDetails = (props) => {
       <ScrollView indicatorStyle="white" style={styles.ContainerCss}>
         <Accordion
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 80,position:"relative"}}
+          contentContainerStyle={{ paddingBottom: 80, position: "relative" }}
           sections={tdsInfoDetails || []}
           activeSections={tdsInfoList}
           renderHeader={_renderHeader}
@@ -159,7 +157,7 @@ const TdsDetails = (props) => {
           touchableComponent={TouchableOpacity}
           //style={{borderWidth:1,borderColor:"#000"}}
           renderFooter={() => (
-            <View style={{ height: 1, backgroundColor: colors.BoxBorderColor,marginVertical:Dimension.padding10 }}></View>
+            <View style={{ height: 1, backgroundColor: colors.BoxBorderColor, marginVertical: Dimension.padding10 }}></View>
           )}
         />
       </ScrollView>
@@ -176,7 +174,7 @@ const TdsDetails = (props) => {
         visible={modalVisible}
         transparent={true}
         onPressNext={onPressNext}
-        onClose={() => setModalVisible(true)}
+        // onClose={() => setModalVisible(true)}
         onPress={() => { setModalVisible(!modalVisible) }}
       />}
     </View>
