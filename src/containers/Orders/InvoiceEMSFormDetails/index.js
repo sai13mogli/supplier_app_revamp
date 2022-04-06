@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { OrderedMap } from 'immutable';
 import { NavigationActions, StackActions } from 'react-navigation';
+import RNFetchBlob from 'rn-fetch-blob';
 import { View, StyleSheet, Text, TouchableOpacity, Modal, ScrollView, FlatList } from "react-native";
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,7 +13,8 @@ import FileUpload from '../../../component/common/FileUpload';
 import ActionSheet, { SheetManager } from 'react-native-actions-sheet';
 import Header from '../../../component/common/Header';
 import CustomeDatePicker from '../../../component/common/Datepicker';
-import { uploadEMSInvoice } from '../../../services/orders';
+import { BASE_URL } from '../../../redux/constants';
+import Toast from 'react-native-toast-message';
 
 const InvoiceEMSFormDetailScreen = props => {
     const [loading, setLoading] = useState(false);
@@ -25,7 +27,7 @@ const InvoiceEMSFormDetailScreen = props => {
     const [invoiceNumberError, setInvoiceNumberError] = useState(false);
     const [invoiceDate, setInvoiceDate] = useState("");
     const [invoiceDateError, setInvoiceDateError] = useState(false);
-    const [totalAmount, setTotalAmount] = useState(props?.route?.params?.totalAmount);
+    const [invoiceAmount, setInvoiceAmount] = useState("");
     const [invoiceAmountError, setInvoiceAmountError] = useState(false);
     const [uploadInvoice, setUploadInvoice] = useState({});
     const [uploadInvoiceError, setuploadInvoiceError] = useState(false);
@@ -56,7 +58,6 @@ const InvoiceEMSFormDetailScreen = props => {
     const [fId, setFId] = useState(null);
     const [phoneErrorMsg, setPhoneErrorMsg] = useState('');
 
-    console.log("okss====>", props?.route?.params?.totalAmount);
 
     const Documents = new OrderedMap({
         upload_invoice: {
@@ -117,17 +118,17 @@ const InvoiceEMSFormDetailScreen = props => {
             onChange: invoiceDate => setInvoiceDate(invoiceDate),
             component: CustomeDatePicker,
         },
-        totalAmount: {
-            title: 'Total Amount',
+        invoiceAmount: {
+            title: 'Invoice Amount',
             isImp: true,
             label: 'Invoice Amount  (Exl. TCS/TDS)',
             placeholder: 'Invoice Amount',
             keyboardType: 'number-pad',
             errorMessage: 'Enter valid invoice amount',
             showError: invoiceAmountError,
-            value: totalAmount,
+            value: invoiceAmount,
             onBlur: () => onInvoiceAmountBlur(),
-            onChangeText: text => setTotalAmount(text),
+            onChangeText: text => setInvoiceAmount(text),
             component: FloatingLabelInputField,
         },
         ewayBillNumber: {
@@ -440,79 +441,134 @@ const InvoiceEMSFormDetailScreen = props => {
 
     const onsubmit = async () => {
         try {
-            let payload = {
-                invoiceFile: uploadInvoice.name,
-                ewayBillFile: uploadEwayBill.name,
-                dropshipInvoiceRequest: {
-                    supplierId: await AsyncStorage.getItem('userId'),
-                    invoiceNumber,
-                    invoiceDate,
-                    source: 0,
-                    ewayDate,
-                    warehouseId,
-                    orderRef,
-                    "itemLists": [{
-                        quantity,
-                        hsnPercentage: 18,
-                        itemRef,
-                        hsn: HSN
-                    }],
-                    igstApplicable: true,
-                    "frieght": {
-                        hsn,
-                        charge: "",
-                        tax,
-                        totalAmount: null,
-                        countryCode: 356,
-                        remarks: "",
-                        igst: null,
-                        cgst: 0,
-                        sgst: 0,
-                        vatAmount: 0
-                    },
-                    "loading": {
-                        hsn,
-                        charge: "",
-                        tax,
-                        totalAmount: null,
-                        countryCode: 356,
-                        remarks: "",
-                        igst: null,
-                        cgst: 0,
-                        sgst: 0,
-                        vatAmount: 0
-                    },
-                    "misc": {
-                        hsn,
-                        charge: "",
-                        tax,
-                        totalAmount: null,
-                        countryCode: 356,
-                        remarks: "",
-                        igst: null,
-                        cgst: 0,
-                        sgst: 0,
-                        vatAmount: 0
-                    }
-                }
-            };
-            // const { data } = await uploadEMSInvoice(payload);
-            // if (data.success) {
-            // const popAction = StackActions.pop(1);
-            // const resetAction = StackActions.reset({
-            //     index: 0,
-            //     actions: [NavigationActions.navigate({ routeName: 'OrdersScreen' })],
-            // });
-            props.navigation.goBack();
+            let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+            const url = `${BASE_URL}api/order/mapDropshipInvoice`;
+            setLoading(true);
+
+            let payload =
+            // {
+            //     "supplierId": "16167",
+            //     "invoiceNumber": "inv/12123",
+            //     "invoiceDate": "2022-04-01",
+            //     "source": 0,
+            //     "ewayDate": "2022-04-05",
+            //     "ewayNumber": "123456789123",
+            //     "warehouseId": "1",
+            //     "orderRef": "111427",
+            //     "itemLists": [{ "quantity": "3", "hsnPercentage": "5", "itemRef": "217928", "hsn": "6116990" }],
+            //     "igstApplicable": true,
+            //     "countryCode": "356",
+            //     "frieght": { "charge": "", "hsn": "", "tax": "", "totalAmount": null, "remarks": "", "countryCode": "356", "igst": null, "cgst": 0, "sgst": 0, "vatAmount": 0 },
+            //     "loading": { "charge": "", "hsn": "", "tax": "", "totalAmount": null, "countryCode": "356", "igst": null, "cgst": 0, "sgst": 0, "vatAmount": 0 },
+            //     "misc": { "charge": "", "hsn": "", "tax": "", "totalAmount": null, "countryCode": "356", "igst": null, "cgst": 0, "sgst": 0, "vatAmount": 0 },
+            //     "invoiceTotal": "9"
             // }
-        } catch (error) {
-            console.log(error);
-            Toast.show({
-                type: 'error',
-                text2: 'Something went wrong',
-                visibilityTime: 2000,
-                autoHide: true,
-            });
+
+            {
+                supplierId: await AsyncStorage.getItem('userId'),
+                invoiceNumber,
+                invoiceDate,
+                invoiceTotal: invoiceAmount,
+                source: 0,
+                ewayDate,
+                warehouseId,
+                orderRef,
+                "itemLists": [{
+                    quantity,
+                    hsnPercentage: 18,
+                    itemRef,
+                    hsn: HSN
+                }],
+                igstApplicable: true,
+                "frieght": {
+                    hsn,
+                    charge: "",
+                    tax,
+                    totalAmount: invoiceAmount,
+                    countryCode: 356,
+                    remarks: "",
+                    igst: null,
+                    cgst: 0,
+                    sgst: 0,
+                    vatAmount: 0
+                },
+                "loading": {
+                    hsn,
+                    charge: "",
+                    tax,
+                    totalAmount: null,
+                    countryCode: 356,
+                    remarks: "",
+                    igst: null,
+                    cgst: 0,
+                    sgst: 0,
+                    vatAmount: 0
+                },
+                "misc": {
+                    hsn,
+                    charge: "",
+                    tax,
+                    totalAmount: null,
+                    countryCode: 356,
+                    remarks: "",
+                    igst: null,
+                    cgst: 0,
+                    sgst: 0,
+                    vatAmount: 0
+                }
+
+            }
+
+            const response = await RNFetchBlob.fetch(
+                'POST',
+                url,
+                {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `${token}`,
+                },
+                [
+                    {
+                        name: "dropshipInvoiceRequest",
+                        data: JSON.stringify(payload),
+                        type: 'application/json',
+                    },
+                    {
+                        name: 'invoiceFile',
+                        filename: uploadInvoice.name,
+                        type: uploadInvoice.type,
+                        data: RNFetchBlob.wrap(uploadInvoice.uri),
+                    },
+                    {
+                        name: 'ewayBillFile',
+                        filename: uploadEwayBill.name,
+                        type: uploadEwayBill.type,
+                        data: RNFetchBlob.wrap(uploadEwayBill.uri),
+                    },
+                ],
+            );
+            const res = await response.json();
+            console.log("Error", res);
+            if (res.success) {
+                Toast.show({
+                    type: 'success',
+                    text2: res.message,
+                    visibilityTime: 2000,
+                    autoHide: true,
+                });
+                props.navigation.goBack();
+            } else if (res.success == false) {
+                Toast.show({
+                    type: 'success',
+                    text2: res.message,
+                    visibilityTime: 2000,
+                    autoHide: true,
+                });
+
+            }
+        }
+        catch (err) {
+            // console.log("Error", err);
+            setLoading(false);
         }
     };
 
