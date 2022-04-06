@@ -142,20 +142,20 @@ const SplitHistoryModal = props => {
       onBackdropPress={() => setModal(false)}
       onBackButtonPress={() => setModal(false)}>
       <View style={styles.modalContainer}>
-      <View style={styles.topbdr}></View>
-      <View style={styles.closeIconWrap}>
+        <View style={styles.topbdr}></View>
+        <View style={styles.closeIconWrap}>
           <CustomeIcon
-                name={'close'}
-                size={Dimension.font22}
-                color={Colors.FontColor}
-                onPress={() => {
-                  setModal(false);
-                }}
-              />
-          </View>
-          <View style={styles.headerTxtWrap}>
-              <Text style={styles.headerTxt}>Split History</Text>
-           </View>
+            name={'close'}
+            size={Dimension.font22}
+            color={Colors.FontColor}
+            onPress={() => {
+              setModal(false);
+            }}
+          />
+        </View>
+        <View style={styles.headerTxtWrap}>
+          <Text style={styles.headerTxt}>Split History</Text>
+        </View>
         {loading ? (
           <ActivityIndicator
             color={Colors.BrandColor}
@@ -164,10 +164,10 @@ const SplitHistoryModal = props => {
           />
         ) : (
           <>
-          <View style={{paddingHorizontal: Dimension.padding15}}>
-          {renderOrderDetails()}
-        </View>
-          {/* <View style={styles.topbdr}></View>
+            <View style={{paddingHorizontal: Dimension.padding15}}>
+              {renderOrderDetails()}
+            </View>
+            {/* <View style={styles.topbdr}></View>
           <View>
           <CustomeIcon
                 name={'arrow-back'}
@@ -255,35 +255,38 @@ const SplitHistoryModal = props => {
                 </View>
               </View>
             </View> */}
-
           </>
         )}
         <View style={styles.BottomDataWrap}>
-
-        
-        <Text style={styles.BottomDataTitle}>Item Breakdow</Text>
-        <View style={{flexDirection:"row"}}>
-          <View style={styles.leftStepsPart}>
-            <View style={styles.circle}></View>
-            <View style={styles.line}>
-
+          <Text style={styles.BottomDataTitle}>Item Breakdow</Text>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{paddingTop: Dimension.padding12}}>
+              {((history || {}).children || []).map((_, k) => (
+                <View style={styles.leftStepsPart}>
+                  <View style={styles.circle}></View>
+                  {history.children.length - 1 != k ? (
+                    <View style={styles.line}></View>
+                  ) : null}
+                </View>
+              ))}
             </View>
-            <View style={styles.circle}></View>
+            <View style={styles.rightStepsPart}>
+              {((history || {}).children || []).map((_, k) => (
+                //<View key={k} style={styles.RedItemWrap}>
+                <View
+                  key={k}
+                  style={k == 0 ? styles.RedItemWrap : styles.ItemWrap}>
+                  <Text style={styles.PoText}>
+                    PO ITem ID -{' '}
+                    <Text style={styles.PoBoldText}>{_.itemId}</Text>
+                  </Text>
+                  <Text style={styles.PoText}>
+                    {_.itemQty}Qty. | {_.itemStatus}
+                  </Text>
+                </View>
+              ))}
+            </View>
           </View>
-          <View style={styles.rightStepsPart}>
-
-          
-          {((history || {}).children || []).map((_, k) => (
-            //<View key={k} style={styles.RedItemWrap}>
-              <View key={k} style={styles.ItemWrap}> 
-              <Text style={styles.PoText}>PO ITem ID - <Text style={styles.PoBoldText}>{_.itemId}</Text></Text>
-              <Text style={styles.PoText}>
-                {_.itemQty}Qty. | {_.itemStatus}
-              </Text>
-            </View>
-          ))}
-        </View>
-        </View>
         </View>
       </View>
     </Modal>
@@ -291,8 +294,6 @@ const SplitHistoryModal = props => {
 };
 
 const styles = StyleSheet.create({
- 
- 
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
@@ -309,93 +310,90 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     width: Dimension.width70,
   },
-  closeIconWrap:{
-    alignItems:"flex-end",
-    paddingHorizontal:Dimension.padding15,
+  closeIconWrap: {
+    alignItems: 'flex-end',
+    paddingHorizontal: Dimension.padding15,
   },
-  headerTxtWrap:{
-    paddingHorizontal:Dimension.padding15,
-    marginBottom:Dimension.margin20
+  headerTxtWrap: {
+    paddingHorizontal: Dimension.padding15,
+    marginBottom: Dimension.margin20,
   },
 
-  headerTxt:{
+  headerTxt: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
-   // marginLeft:Dimension.margin10,
-
+    // marginLeft:Dimension.margin10,
   },
   showMoreCta: {
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
   },
-  
-  BottomDataWrap:{
-paddingVertical:Dimension.padding30,
-paddingHorizontal:Dimension.padding15
+
+  BottomDataWrap: {
+    paddingVertical: Dimension.padding30,
+    paddingHorizontal: Dimension.padding15,
   },
-  BottomDataTitle:{
+  BottomDataTitle: {
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
-    marginBottom:Dimension.margin10,
+    marginBottom: Dimension.margin10,
   },
   ItemWrap: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal:Dimension.padding20,
-    paddingVertical:Dimension.padding12,
-    borderRadius:4,
-    backgroundColor:Colors.WhiteColor,
-    borderWidth:1,
-    borderColor:Colors.BoxBorderColor,
-    marginBottom:Dimension.margin40
+    paddingHorizontal: Dimension.padding20,
+    paddingVertical: Dimension.padding12,
+    borderRadius: 4,
+    backgroundColor: Colors.WhiteColor,
+    borderWidth: 1,
+    borderColor: Colors.BoxBorderColor,
+    marginBottom: Dimension.margin40,
   },
-  RedItemWrap:{flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  paddingHorizontal:Dimension.padding20,
-  paddingVertical:Dimension.padding12,
-  borderRadius:4,
-  backgroundColor:Colors.LightBrandColor1,
-  borderWidth:1,
-  borderColor:Colors.LightBrandColor1,
-  marginBottom:Dimension.margin40
-
+  RedItemWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Dimension.padding20,
+    paddingVertical: Dimension.padding12,
+    borderRadius: 4,
+    backgroundColor: Colors.LightBrandColor1,
+    borderWidth: 1,
+    borderColor: Colors.LightBrandColor1,
+    marginBottom: Dimension.margin40,
   },
-  PoText:{
+  PoText: {
     fontSize: Dimension.font10,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
   },
-  PoBoldText:{
+  PoBoldText: {
     fontSize: Dimension.font10,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomBoldFont,
   },
-  leftStepsPart:{
-    marginRight:Dimension.margin10,
-    flex:1,
-    alignItems:"center",
-    paddingTop:Dimension.padding12
+  leftStepsPart: {
+    marginRight: Dimension.margin10,
+    alignItems: 'center',
   },
-  rightStepsPart:{
-    flex:9
+  rightStepsPart: {
+    flex: 9,
   },
-  circle:{
-    width:Dimension.width10,
-    height:Dimension.height10,
-    borderRadius:Dimension.height10,
-    backgroundColor:Colors.FontColor,
+  circle: {
+    width: Dimension.width10,
+    height: Dimension.height10,
+    borderRadius: Dimension.height10,
+    backgroundColor: Colors.FontColor,
   },
-  line:{
-  height:Dimension.height65,
-  borderRadius:1,
-  borderWidth:1,
-  width:1,
-  borderStyle:"dashed",
-  borderColor:Colors.grayShade14,
+  line: {
+    height: Dimension.height65,
+    borderRadius: 1,
+    borderWidth: 1,
+    width: 1,
+    borderStyle: 'dashed',
+    borderColor: Colors.grayShade14,
   },
 });
 
