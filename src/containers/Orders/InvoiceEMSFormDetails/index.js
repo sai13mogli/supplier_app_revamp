@@ -136,6 +136,7 @@ const InvoiceEMSFormDetailScreen = props => {
             isImp: true,
             label: 'E-way Bill Number',
             placeholder: 'E-way Bill Number',
+            errorMessage: 'Enter valid e-way Bill number *(12) digit',
             value: ewayBillNumber,
             showError: ewayBillNumberError,
             onBlur: () => onEwayBillNumberBlur(),
@@ -325,7 +326,7 @@ const InvoiceEMSFormDetailScreen = props => {
     };
 
     const onEwayBillNumberBlur = () => {
-        if (ewayBillNumber && ewayBillNumber.length) {
+        if (ewayBillNumber && ewayBillNumber.length && ewayBillNumber.length == 12) {
             setEwayBillNumberError(false);
         } else {
             setEwayBillNumberError(true);
@@ -443,81 +444,82 @@ const InvoiceEMSFormDetailScreen = props => {
         try {
             let token = `Bearer ${await AsyncStorage.getItem('token')}`;
             const url = `${BASE_URL}api/order/mapDropshipInvoice`;
-            setLoading(true);
+            // setLoading(true);
 
             let payload =
-            // {
-            //     "supplierId": "16167",
-            //     "invoiceNumber": "inv/12123",
-            //     "invoiceDate": "2022-04-01",
-            //     "source": 0,
-            //     "ewayDate": "2022-04-05",
-            //     "ewayNumber": "123456789123",
-            //     "warehouseId": "1",
-            //     "orderRef": "111427",
-            //     "itemLists": [{ "quantity": "3", "hsnPercentage": "5", "itemRef": "217928", "hsn": "6116990" }],
-            //     "igstApplicable": true,
-            //     "countryCode": "356",
-            //     "frieght": { "charge": "", "hsn": "", "tax": "", "totalAmount": null, "remarks": "", "countryCode": "356", "igst": null, "cgst": 0, "sgst": 0, "vatAmount": 0 },
-            //     "loading": { "charge": "", "hsn": "", "tax": "", "totalAmount": null, "countryCode": "356", "igst": null, "cgst": 0, "sgst": 0, "vatAmount": 0 },
-            //     "misc": { "charge": "", "hsn": "", "tax": "", "totalAmount": null, "countryCode": "356", "igst": null, "cgst": 0, "sgst": 0, "vatAmount": 0 },
-            //     "invoiceTotal": "9"
-            // }
-
             {
                 supplierId: await AsyncStorage.getItem('userId'),
-                invoiceNumber,
-                invoiceDate,
-                invoiceTotal: invoiceAmount,
+                invoiceNumber: invoiceNumber,
+                invoiceDate: invoiceDate,
                 source: 0,
-                ewayDate,
-                warehouseId,
-                orderRef,
-                "itemLists": [{
-                    quantity,
-                    hsnPercentage: 18,
-                    itemRef,
-                    hsn: HSN
-                }],
+                ewayDate: ewayDate,
+                ewayNumber: ewayBillNumber,
+                warehouseId: warehouseId,
+                orderRef: orderRef,
+                itemLists: [{ quantity: quantity, hsnPercentage: 18, itemRef: itemRef, hsn: HSN }],
                 igstApplicable: true,
-                "frieght": {
-                    hsn,
-                    charge: "",
-                    tax,
-                    totalAmount: invoiceAmount,
-                    countryCode: 356,
-                    remarks: "",
-                    igst: null,
-                    cgst: 0,
-                    sgst: 0,
-                    vatAmount: 0
-                },
-                "loading": {
-                    hsn,
-                    charge: "",
-                    tax,
-                    totalAmount: null,
-                    countryCode: 356,
-                    remarks: "",
-                    igst: null,
-                    cgst: 0,
-                    sgst: 0,
-                    vatAmount: 0
-                },
-                "misc": {
-                    hsn,
-                    charge: "",
-                    tax,
-                    totalAmount: null,
-                    countryCode: 356,
-                    remarks: "",
-                    igst: null,
-                    cgst: 0,
-                    sgst: 0,
-                    vatAmount: 0
-                }
-
+                countryCode: 356,
+                "frieght": { charge: "", hsn: "", tax: "", totalAmount: null, remarks: "", countryCode: 356, igst: null, cgst: 0, sgst: 0, vatAmount: 0 },
+                "loading": { charge: "", hsn: "", tax: "", totalAmount: null, countryCode: 356, igst: null, cgst: 0, sgst: 0, vatAmount: 0 },
+                "misc": { charge: "", hsn: "", tax: "", totalAmount: null, countryCode: 356, igst: null, cgst: 0, sgst: 0, vatAmount: 0 },
+                invoiceTotal: 580
             }
+
+            // {
+            //     supplierId: await AsyncStorage.getItem('userId'),
+            //     invoiceNumber,
+            //     invoiceDate,
+            //     invoiceTotal: invoiceAmount,
+            //     source: 0,
+            //     ewayDate,
+            //     warehouseId,
+            //     orderRef,
+            //     "itemLists": [{
+            //         quantity,
+            //         hsnPercentage: 18,
+            //         itemRef,
+            //         hsn: HSN
+            //     }],
+            //     igstApplicable: true,
+            //     "frieght": {
+            //         hsn,
+            //         charge: "",
+            //         tax,
+            //         totalAmount: invoiceAmount,
+            //         countryCode: 356,
+            //         remarks: "",
+            //         igst: null,
+            //         cgst: 0,
+            //         sgst: 0,
+            //         vatAmount: 0
+            //     },
+            //     "loading": {
+            //         hsn,
+            //         charge: "",
+            //         tax,
+            //         totalAmount: null,
+            //         countryCode: 356,
+            //         remarks: "",
+            //         igst: null,
+            //         cgst: 0,
+            //         sgst: 0,
+            //         vatAmount: 0
+            //     },
+            //     "misc": {
+            //         hsn,
+            //         charge: "",
+            //         tax,
+            //         totalAmount: null,
+            //         countryCode: 356,
+            //         remarks: "",
+            //         igst: null,
+            //         cgst: 0,
+            //         sgst: 0,
+            //         vatAmount: 0
+            //     }
+
+            // }
+            console.log("Payload====>", payload);
 
             const response = await RNFetchBlob.fetch(
                 'POST',
@@ -547,7 +549,7 @@ const InvoiceEMSFormDetailScreen = props => {
                 ],
             );
             const res = await response.json();
-            console.log("Error", res);
+            console.log("Respose====>", res, payload);
             if (res.success) {
                 Toast.show({
                     type: 'success',
@@ -557,11 +559,13 @@ const InvoiceEMSFormDetailScreen = props => {
                 });
                 props.navigation.goBack();
             } else if (res.success == false) {
+                setLoading(false);
                 Toast.show({
                     type: 'success',
                     text2: res.message,
                     visibilityTime: 2000,
                     autoHide: true,
+
                 });
 
             }
