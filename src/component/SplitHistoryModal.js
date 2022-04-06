@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Dimensions,
   View,
@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import {getImageUrl, getSplitHistory} from '../services/orders';
+import { getImageUrl, getSplitHistory } from '../services/orders';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 
@@ -49,7 +49,7 @@ const SplitHistoryModal = props => {
   }, []);
 
   const fetchImage = async () => {
-    const {data} = await getImageUrl(msn);
+    const { data } = await getImageUrl(msn);
     let imageUrl =
       'https://cdn.moglix.com/' +
       (data &&
@@ -66,7 +66,8 @@ const SplitHistoryModal = props => {
   };
 
   const fetchSplitHistory = async () => {
-    const {data} = await getSplitHistory(supplierId, orderRef, itemRef);
+    const { data } = await getSplitHistory(supplierId, orderRef, itemRef);
+    console.log("OrdeRef====>", orderRef);
     if (data.success) {
       setHistory(data.data);
       setLoading(false);
@@ -114,7 +115,7 @@ const SplitHistoryModal = props => {
         setModal(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 0}}
+      style={{ padding: 0, margin: 0 }}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
       onBackdropPress={() => setModal(false)}
@@ -124,11 +125,11 @@ const SplitHistoryModal = props => {
           <ActivityIndicator
             color={Colors.BrandColor}
             size={'small'}
-            style={{alignSelf: 'center'}}
+            style={{ alignSelf: 'center' }}
           />
         ) : (
           <>
-            <Text style={{color: '#000'}}>Split History</Text>
+            <Text style={{ color: '#000' }}>Split History</Text>
             <View style={styles.orderCardwrapInner}>
               <View style={styles.leftpart}>
                 <Image
@@ -141,19 +142,19 @@ const SplitHistoryModal = props => {
                 />
               </View>
               <View style={styles.rightPart}>
-                <Text style={[{color: '#000'}, styles.msnName]}>{msn}</Text>
+                <Text style={[{ color: '#000' }, styles.msnName]}>{msn}</Text>
 
                 <Text style={styles.productName}>{productName}</Text>
 
                 <>
-                  <Text style={{color: '#000'}}>
+                  <Text style={{ color: '#000' }}>
                     {' '}
                     ₹{Math.floor(totalAmount)}
                   </Text>
-                  <Text style={{color: '#000'}}>{taxPercentage}%</Text>
+                  <Text style={{ color: '#000' }}>{taxPercentage}%</Text>
                 </>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{marginRight: Dimension.margin20}}>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ marginRight: Dimension.margin20 }}>
                     <Text style={styles.TitleLightTxt}>
                       PO ID -{' '}
                       <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
@@ -190,14 +191,14 @@ const SplitHistoryModal = props => {
                   </View>
                 </View>
                 <View
-                  style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
+                  style={{ flexDirection: 'row', marginTop: Dimension.margin10 }}>
                   <Text style={styles.GstWrapTxt}>{orderTypeString}</Text>
                   <Text style={styles.shipmentModeWrap}>
                     {shipmentMode == 2
                       ? 'Dropship'
                       : shipmentMode == 3
-                      ? 'Door Delivery'
-                      : 'Oneship'}
+                        ? 'Door Delivery'
+                        : 'Oneship'}
                   </Text>
                   {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
                   <Text style={styles.shipmentModeStringWrap}>
@@ -208,12 +209,12 @@ const SplitHistoryModal = props => {
             </View>
           </>
         )}
-        <Text style={{color: '#000'}}>Item Breakdow</Text>
+        <Text style={{ color: '#000' }}>Item Breakdow</Text>
         <View>
           {history.children.map((_, k) => (
             <View key={k} style={styles.ctaContainer}>
-              <Text style={{color: '#000'}}>PO ITem ID - {_.itemId}</Text>
-              <Text style={{color: '#000'}}>
+              <Text style={{ color: '#000' }}>PO ITem ID - {_.itemId}</Text>
+              <Text style={{ color: '#000' }}>
                 {_.itemQty}Qty. | {_.itemStatus}
               </Text>
             </View>

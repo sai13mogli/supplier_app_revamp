@@ -8,18 +8,17 @@ import {
   ActivityIndicator,
   PermissionsAndroid,
 } from 'react-native';
-import React, {useState, useEffect, useCallback} from 'react';
-import {getImageUrl, markOutForOrderApi} from '../services/orders';
+import React, { useState, useEffect, useCallback } from 'react';
+import { getImageUrl, markOutForOrderApi } from '../services/orders';
 import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
 import Modal from 'react-native-modal';
-import {acceptOrder, getpoChallan, rejectOrder} from '../services/orders';
+import { acceptOrder, getpoChallan, rejectOrder } from '../services/orders';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PackNowModal from '../component/PackNowModal';
 import RejectModal from '../component/RejectModal';
 import MarkOutForDeliveryModal from '../component/MarkOutForDeliveryModal';
@@ -29,6 +28,7 @@ import ProofOfDeliveryModal from '../component/ProofOfDeliveryModal';
 import AcceptModal from './AcceptModal';
 import AddView from './AddView';
 import SplitQuantityModal from './SplitQuantityModal';
+import { useNavigation } from '@react-navigation/native'
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -60,7 +60,9 @@ const Ordercard = props => {
     setBulkItemIds,
     selectItemId,
     shipmentType,
+    warehouseId,
   } = props;
+
   const [orderImage, setOrderImage] = useState(null);
   const [showLspDetails, setShowLspDetails] = useState(null);
   const [showMoreTxt, setShowMoreTxt] = useState(false);
@@ -78,6 +80,9 @@ const Ordercard = props => {
   const [packNow, setPackNow] = useState(false);
   const [addViewModal, setAddViewModal] = useState(false);
   const [splitQuantityModal, setSplitQuantityModal] = useState(false);
+  const { navigate } = useNavigation()
+  const navigation = useNavigation()
+
 
   useEffect(() => {
     fetchImage();
@@ -87,7 +92,7 @@ const Ordercard = props => {
   }, []);
 
   const fetchImage = async () => {
-    const {data} = await getImageUrl(msn);
+    const { data } = await getImageUrl(msn);
     let imageUrl =
       'https://cdn.moglix.com/' +
       (data &&
@@ -175,7 +180,7 @@ const Ordercard = props => {
       let image_URL = '';
       if (isPO) {
         setPoLoader(true);
-        const {data} = await getpoChallan(orderRef);
+        const { data } = await getpoChallan(orderRef);
         if (data && data.success) {
           //Image URL which we want to download
           image_URL = data.responseMessage;
@@ -191,7 +196,7 @@ const Ordercard = props => {
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
       //fs: To get the directory path in which we want our image to download
-      const {config, fs} = RNFetchBlob;
+      const { config, fs } = RNFetchBlob;
       let PictureDir =
         Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
       let options = {
@@ -209,7 +214,7 @@ const Ordercard = props => {
         },
       };
       config(options)
-        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
+        .fetch('GET', image_URL, { 'Cache-Control': 'no-store' })
         .then(res => {
           //Showing alert after successful downloading
           console.log('res -> ', JSON.stringify(res));
@@ -246,6 +251,9 @@ const Ordercard = props => {
     //To get the file extension
     return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
   };
+  // const onUploadInvoice = () => {
+  //   { () => props.navigation.navigate("UploadInvoiceScreen") }
+  // }
 
   const renderCTAs = (cta, url, fromCTA) => {
     return (
@@ -257,7 +265,7 @@ const Ordercard = props => {
             style={styles.rejectCtabtn}>
             <Text style={styles.rejectCtaTxt}>{cta}</Text>
             {rejectLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
             )}
           </TouchableOpacity>
         ) : cta == 'ACCEPT' ? (
@@ -274,7 +282,20 @@ const Ordercard = props => {
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
             {poLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'MAP_PO_TO_INVOICE' ? (
+          <TouchableOpacity
+            disabled={poLoader}
+            onPress={() => navigation.navigate('UploadInvoiceOMS', {
+              orderRef, actionCTA,
+              itemRef
+            })}
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
+            {poLoader && (
+              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
             )}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_PO_OMS' ? (
@@ -284,87 +305,92 @@ const Ordercard = props => {
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD Invoice</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
             )}
           </TouchableOpacity>
         ) : cta == 'MAP_INVOICE' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
+            onPress={() => navigation.navigate('UploadInvoice', {
+              orderRef, actionCTA,
+              itemRef, warehouseId, hsn, quantity, totalAmount
+            })}
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
             )}
           </TouchableOpacity>
-        ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY' ? (
-          <TouchableOpacity
-            disabled={invoiceLoader}
-            onPress={() => setMarkForDelivery(true)}
-            style={styles.DownloadPoBtn}>
-            <Text style={styles.rejectCtaTxt}>MARK OUT FOR DELIVERY</Text>
-            {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
-            )}
-          </TouchableOpacity>
-        ) : cta == 'VIEW_TREE_MODAL' ? (
-          <TouchableOpacity
-            disabled={invoiceLoader}
-            onPress={() => setViewSplitHistory(true)}
-            style={styles.DownloadPoBtn}>
-            <Text style={styles.rejectCtaTxt}>VIEW SPLIT HISTORY</Text>
-            {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
-            )}
-          </TouchableOpacity>
-        ) : cta == 'VIEW_SHIPPED_DETAILS' ? (
-          <TouchableOpacity
-            disabled={invoiceLoader}
-            onPress={() => setShowLspDetails(true)}
-            style={styles.DownloadPoBtn}>
-            <Text style={styles.rejectCtaTxt}>VIEW LSP DETAILS</Text>
-            {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
-            )}
-          </TouchableOpacity>
-        ) : cta == 'PACK_ORDER' ? (
-          <TouchableOpacity
-            disabled={invoiceLoader}
-            onPress={() => setPackNow(true)}
-            style={styles.DownloadPoBtn}>
-            <Text style={styles.rejectCtaTxt}>PACK NOW</Text>
-            {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
-            )}
-          </TouchableOpacity>
-        ) : cta == 'ADD_SERIAL_NUMBER' ? (
-          <TouchableOpacity
-            style={styles.DownloadPoBtn}
-            onPress={() => setAddViewModal(true)}>
-            <Text style={styles.rejectCtaTxt}>ADD SERIAL NUMBER</Text>
-          </TouchableOpacity>
-        ) : cta == 'VIEW_SERIAL_NUMBER' ? (
-          <TouchableOpacity
-            style={styles.DownloadPoBtn}
-            onPress={() => setAddViewModal(true)}>
-            <Text style={styles.rejectCtaTxt}>VIEW SERIAL NUMBER</Text>
-          </TouchableOpacity>
-        ) : cta == 'SPLIT_QUANTITY' ? (
-          <TouchableOpacity
-            style={styles.DownloadPoBtn}
-            onPress={() => setSplitQuantityModal(true)}>
-            <Text style={styles.rejectCtaTxt}>SPLIT QUANTITY</Text>
-          </TouchableOpacity>
-        ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY_WITH_POD' ? (
-          <TouchableOpacity
-            disabled={invoiceLoader}
-            onPress={() => setProofOfDelivery(true)}
-            style={styles.DownloadPoBtn}>
-            <Text style={styles.rejectCtaTxt}>PROOF OF DELIVERY</Text>
-            {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
-            )}
-          </TouchableOpacity>
-        ) : null}
+        )
+          : cta == 'MARK_OUT_FOR_DOOR_DELIVERY' ? (
+            <TouchableOpacity
+              disabled={invoiceLoader}
+              onPress={() => setMarkForDelivery(true)}
+              style={styles.DownloadPoBtn}>
+              <Text style={styles.rejectCtaTxt}>MARK OUT FOR DELIVERY</Text>
+              {invoiceLoader && (
+                <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              )}
+            </TouchableOpacity>
+          ) : cta == 'VIEW_TREE_MODAL' ? (
+            <TouchableOpacity
+              disabled={invoiceLoader}
+              onPress={() => setViewSplitHistory(true)}
+              style={styles.DownloadPoBtn}>
+              <Text style={styles.rejectCtaTxt}>VIEW SPLIT HISTORY</Text>
+              {invoiceLoader && (
+                <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              )}
+            </TouchableOpacity>
+          ) : cta == 'VIEW_SHIPPED_DETAILS' ? (
+            <TouchableOpacity
+              disabled={invoiceLoader}
+              onPress={() => setShowLspDetails(true)}
+              style={styles.DownloadPoBtn}>
+              <Text style={styles.rejectCtaTxt}>VIEW LSP DETAILS</Text>
+              {invoiceLoader && (
+                <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              )}
+            </TouchableOpacity>
+          ) : cta == 'PACK_ORDER' ? (
+            <TouchableOpacity
+              disabled={invoiceLoader}
+              onPress={() => setPackNow(true)}
+              style={styles.DownloadPoBtn}>
+              <Text style={styles.rejectCtaTxt}>PACK NOW</Text>
+              {invoiceLoader && (
+                <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              )}
+            </TouchableOpacity>
+          ) : cta == 'ADD_SERIAL_NUMBER' ? (
+            <TouchableOpacity
+              style={styles.DownloadPoBtn}
+              onPress={() => setAddViewModal(true)}>
+              <Text style={styles.rejectCtaTxt}>ADD SERIAL NUMBER</Text>
+            </TouchableOpacity>
+          ) : cta == 'VIEW_SERIAL_NUMBER' ? (
+            <TouchableOpacity
+              style={styles.DownloadPoBtn}
+              onPress={() => setAddViewModal(true)}>
+              <Text style={styles.rejectCtaTxt}>VIEW SERIAL NUMBER</Text>
+            </TouchableOpacity>
+          ) : cta == 'SPLIT_QUANTITY' ? (
+            <TouchableOpacity
+              style={styles.DownloadPoBtn}
+              onPress={() => setSplitQuantityModal(true)}>
+              <Text style={styles.rejectCtaTxt}>SPLIT QUANTITY</Text>
+            </TouchableOpacity>
+          ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY_WITH_POD' ? (
+            <TouchableOpacity
+              disabled={invoiceLoader}
+              onPress={() => setProofOfDelivery(true)}
+              style={styles.DownloadPoBtn}>
+              <Text style={styles.rejectCtaTxt}>PROOF OF DELIVERY</Text>
+              {invoiceLoader && (
+                <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              )}
+            </TouchableOpacity>
+          ) : null}
       </>
     );
     // }
@@ -396,7 +422,7 @@ const Ordercard = props => {
 
   const onMarkForDelivery = async () => {
     // console.log(itemId, supplierId);
-    const {data} = await markOutForOrderApi(supplierId, itemId);
+    const { data } = await markOutForOrderApi(supplierId, itemId);
     console.log(data);
     if (data.success) {
       fetchOrdersFunc(0, '', selectedTab, shipmentType, {
@@ -436,20 +462,20 @@ const Ordercard = props => {
               : styles.orderCardwrapInner,
           ]}>
           {!fromModal && selectedTab == 'PENDING_ACCEPTANCE' ? (
-            
-            <CustomeIcon
-                  name={
-                    (bulkItemIds || []).includes(itemId) ? 'checkbox-tick'
-                      : 'checkbox-blank'
-                  }
-                  color={(bulkItemIds || []).includes(itemId) ? Colors.BrandColor : Colors.FontColor}
-                  size={Dimension.font22}
-                  onPress={() => selectItemId(itemId)}
-                  style={{position:'absolute',right:0,zIndex:9999}}
-                  
-                  >
 
-                  </CustomeIcon>
+            <CustomeIcon
+              name={
+                (bulkItemIds || []).includes(itemId) ? 'checkbox-tick'
+                  : 'checkbox-blank'
+              }
+              color={(bulkItemIds || []).includes(itemId) ? Colors.BrandColor : Colors.FontColor}
+              size={Dimension.font22}
+              onPress={() => selectItemId(itemId)}
+              style={{ position: 'absolute', right: 0, zIndex: 9999 }}
+
+            >
+
+            </CustomeIcon>
           ) : null}
           <View style={[fromModal ? styles.LeftpartModal : styles.leftpart]}>
             <Image
@@ -474,8 +500,8 @@ const Ordercard = props => {
             <Text
               style={[
                 fromModal
-                  ? {color: Colors.FontColor}
-                  : {color: Colors.BrandColor},
+                  ? { color: Colors.FontColor }
+                  : { color: Colors.BrandColor },
                 styles.msnName,
               ]}>
               {msn}
@@ -509,8 +535,8 @@ const Ordercard = props => {
                 <Text style={styles.taxpercentageTxt}>{taxPercentage}%</Text>
               </View>
             ) : null}
-            <View style={{flexDirection: 'row'}}>
-              <View style={{marginRight: Dimension.margin20}}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ marginRight: Dimension.margin20 }}>
                 <Text style={styles.TitleLightTxt}>
                   PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
                 </Text>
@@ -544,14 +570,14 @@ const Ordercard = props => {
                 </Text>
               </View>
             </View>
-            <View style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
+            <View style={{ flexDirection: 'row', marginTop: Dimension.margin10 }}>
               <Text style={styles.GstWrapTxt}>{orderTypeString}</Text>
               <Text style={styles.shipmentModeWrap}>
                 {shipmentMode == 2
                   ? 'Dropship'
                   : shipmentMode == 3
-                  ? 'Door Delivery'
-                  : shipmentType}
+                    ? 'Door Delivery'
+                    : shipmentType}
               </Text>
               {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
               <Text style={styles.shipmentModeStringWrap}>
@@ -564,20 +590,20 @@ const Ordercard = props => {
           style={
             fromModal
               ? {
-                  flexDirection: 'row',
-                  flex: 1,
-                  marginTop: Dimension.margin30,
-                  padding: Dimension.padding15,
-                  borderTopColor: Colors.grayShade1,
-                  borderTopWidth: 1,
-                }
-              : {flexDirection: 'row', flex: 1, marginTop: Dimension.margin15}
+                flexDirection: 'row',
+                flex: 1,
+                marginTop: Dimension.margin30,
+                padding: Dimension.padding15,
+                borderTopColor: Colors.grayShade1,
+                borderTopWidth: 1,
+              }
+              : { flexDirection: 'row', flex: 1, marginTop: Dimension.margin15 }
           }>
-          <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
+          <View style={{ flex: 9, flexDirection: 'row', flexWrap: 'wrap' }}>
             {renderPartialCTAs(invoiceUrl, fromCTA)}
             {!showMoreCTA ? renderFurtherCTAs(invoiceUrl, fromCTA) : null}
           </View>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             {actionCTA && actionCTA.length > 2 ? (
               // <Text onPress={toggleMoreCTAs} style={styles.readMoretxt}>
               //   {showMoreCTA ? 'Dots' : 'Close'}
@@ -612,7 +638,7 @@ const Ordercard = props => {
               setIsOrderVisible(false);
             }}
             coverScreen={true}
-            style={{padding: 0, margin: 0}}
+            style={{ padding: 0, margin: 0 }}
             deviceWidth={deviceWidth}
             hasBackdrop={true}
             onBackdropPress={() => setIsOrderVisible(false)}
@@ -938,8 +964,8 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
   },
-  LeftpartModal: {flex: 1},
-  orderCardwrapInnerModal: {paddingHorizontal: Dimension.padding15},
+  LeftpartModal: { flex: 1 },
+  orderCardwrapInnerModal: { paddingHorizontal: Dimension.padding15 },
   rupeeSign: {
     fontFamily: Dimension.CustomRobotoBold,
     fontSize: Dimension.font12,
