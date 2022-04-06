@@ -80,7 +80,7 @@ const MoreScreen = props => {
       ><Text
       style={{
         marginTop: 40,
-        color: '#000',
+        color: '#fff',
         fontSize: 12,
         fontWeight: 'bold',
       }}>
@@ -92,7 +92,7 @@ const MoreScreen = props => {
         marginTop: 10,
         fontSize: 12,
         fontWeight: 'bold',
-        color: '#000',
+        color: '#fff',
       }}>
       Moglix Supplier Since
     </Text>
@@ -101,7 +101,7 @@ const MoreScreen = props => {
         marginTop: 10,
         fontSize: 12,
         fontWeight: 'bold',
-        color: '#000',
+        color: '#fff',
       }}>
       {getTime(profileData.createdAt)}
     </Text>
