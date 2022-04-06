@@ -369,15 +369,6 @@ const UploadInvoiceOMSScreen = (props) => {
                     ListEmptyComponent={renderListEmptyComponent}
                     keyExtractor={(item, index) => `${index}-item`}
                     onEndReachedThreshold={0.9}
-                    onEndReached={({ distanceFromEnd }) => {
-                        if (!onEndReachedCalledDuringMomentum.current) {
-                            endReachedFetchListing();
-                            onEndReachedCalledDuringMomentum.current = true;
-                        }
-                    }}
-                    onMomentumScrollBegin={() => {
-                        onEndReachedCalledDuringMomentum.current = false;
-                    }}
                     showsVerticalScrollIndicator={false}
                 />
                 {FORM_FIELDS.map((field, fieldKey) => (

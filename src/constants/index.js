@@ -32,7 +32,7 @@ import Error from '../containers/Auth/Login/Error';
 import Conversation from '../containers/Support/Conversation';
 import EditAddress from '../containers/Profile/Addresses/EditAddress';
 import EditBankAccount from '../containers/Profile/BankDetails/Accounts/EditBankAccount';
-import UploadInvoiceScreen from '../containers/Orders/UploadInvoice';
+import UploadInvoiceScreen from '../containers/Orders/UploadInvoiceEMS';
 import UploadInvoiceOMSScreen from '../containers/Orders/UploadInvoiceOMS';
 import InvoiceEMSFormDetailScreen from '../containers/Orders/InvoiceEMSFormDetails';
 
@@ -197,7 +197,7 @@ export const APP_STACK_SCREENS = [
     component: Conversation,
   },
   {
-    name: 'UploadInvoice',
+    name: 'UploadInvoiceEMS',
     component: UploadInvoiceScreen,
   },
   {
