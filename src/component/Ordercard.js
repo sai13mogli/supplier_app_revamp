@@ -374,7 +374,7 @@ const Ordercard = props => {
     }
   };
 
-  const renderCTAs = (cta, url, fromCTA) => {
+  const renderCTAs = (cta, url, fromCTA, fromPartial) => {
     return (
       <>
         {cta == 'REJECT' ? (
@@ -398,7 +398,13 @@ const Ordercard = props => {
           <TouchableOpacity
             disabled={poLoader}
             onPress={() => getPOInvoice(true, '')}
-            style={styles.DownloadPoBtn}>
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
             {poLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
@@ -408,7 +414,13 @@ const Ordercard = props => {
           <TouchableOpacity
             disabled={invoiceLoader}
             onPress={() => getPOInvoice(false, url)}
-            style={styles.DownloadPoBtn}>
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD Invoice</Text>
             {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
@@ -417,7 +429,13 @@ const Ordercard = props => {
         ) : cta == 'MAP_INVOICE' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            style={styles.DownloadPoBtn}>
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
             {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
@@ -427,7 +445,13 @@ const Ordercard = props => {
           <TouchableOpacity
             disabled={invoiceLoader}
             onPress={() => setMarkForDelivery(true)}
-            style={styles.DownloadPoBtn}>
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
             <Text style={styles.rejectCtaTxt}>MARK OUT FOR DELIVERY</Text>
             {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
@@ -437,7 +461,13 @@ const Ordercard = props => {
           <TouchableOpacity
             disabled={invoiceLoader}
             onPress={() => setViewSplitHistory(true)}
-            style={styles.DownloadPoBtn}>
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
             <Text style={styles.rejectCtaTxt}>VIEW SPLIT HISTORY</Text>
             {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
@@ -447,7 +477,13 @@ const Ordercard = props => {
           <TouchableOpacity
             disabled={invoiceLoader}
             onPress={() => setShowLspDetails(true)}
-            style={styles.DownloadPoBtn}>
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
             <Text style={styles.rejectCtaTxt}>VIEW LSP DETAILS</Text>
             {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
@@ -457,7 +493,13 @@ const Ordercard = props => {
           <TouchableOpacity
             disabled={invoiceLoader}
             onPress={() => setPackNow(true)}
-            style={styles.DownloadPoBtn}>
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
             <Text style={styles.rejectCtaTxt}>PACK NOW</Text>
             {/* {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
@@ -465,19 +507,37 @@ const Ordercard = props => {
           </TouchableOpacity>
         ) : cta == 'ADD_SERIAL_NUMBER' ? (
           <TouchableOpacity
-            style={styles.DownloadPoBtn}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}
             onPress={() => setAddViewModal(true)}>
             <Text style={styles.rejectCtaTxt}>ADD SERIAL NUMBER</Text>
           </TouchableOpacity>
         ) : cta == 'VIEW_SERIAL_NUMBER' ? (
           <TouchableOpacity
-            style={styles.DownloadPoBtn}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}
             onPress={() => setAddViewModal(true)}>
             <Text style={styles.rejectCtaTxt}>VIEW SERIAL NUMBER</Text>
           </TouchableOpacity>
         ) : cta == 'SPLIT_QUANTITY' ? (
           <TouchableOpacity
-            style={styles.DownloadPoBtn}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}
             onPress={() => setSplitQuantityModal(true)}>
             <Text style={styles.rejectCtaTxt}>SPLIT QUANTITY</Text>
           </TouchableOpacity>
@@ -485,7 +545,13 @@ const Ordercard = props => {
           <TouchableOpacity
             disabled={invoiceLoader}
             onPress={() => setProofOfDelivery(true)}
-            style={styles.DownloadPoBtn}>
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
             <Text style={styles.rejectCtaTxt}>PROOF OF DELIVERY</Text>
             {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
@@ -493,7 +559,15 @@ const Ordercard = props => {
           </TouchableOpacity>
         ) : cta == 'CREATE_MANIFEST_DISABLED' ? (
           <>
-            <TouchableOpacity disabled={true} style={styles.DownloadPoBtn}>
+            <TouchableOpacity
+              disabled={true}
+              style={[
+                styles.DownloadPoBtn,
+                {
+                  flex: actionCTA.length > 1 ? 5 : 1,
+                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                },
+              ]}>
               <Text style={styles.rejectCtaTxt}>Create Manifest</Text>
             </TouchableOpacity>
             <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
@@ -503,7 +577,13 @@ const Ordercard = props => {
         ) : cta == 'CREATE_MANIFEST' ? (
           <TouchableOpacity
             onPress={createManifest}
-            style={styles.DownloadPoBtn}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}
             disabled={manifestLoader}>
             <Text style={styles.rejectCtaTxt}>Create Manifest</Text>
             {manifestLoader && (
@@ -513,7 +593,13 @@ const Ordercard = props => {
         ) : cta == 'DOWNLOAD_SHIPMENT_LABEL' ? (
           <TouchableOpacity
             onPress={() => getShipmentLabel(shipmentUrl)}
-            style={styles.DownloadPoBtn}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}
             disabled={manifestLoader}>
             <Text style={styles.rejectCtaTxt}>Download Shipment Label</Text>
             {manifestLoader && (
@@ -529,7 +615,7 @@ const Ordercard = props => {
   const renderPartialCTAs = (url, fromCTA) => {
     return (actionCTA || []).map((_, i) => {
       if (i < 2) {
-        return renderCTAs(_, url, fromCTA);
+        return renderCTAs(_, url, fromCTA, true);
       }
     });
   };
@@ -537,7 +623,7 @@ const Ordercard = props => {
   const renderFurtherCTAs = (url, fromCTA) => {
     return (actionCTA || []).map((_, i) => {
       if (i > 1) {
-        return renderCTAs(_, url, fromCTA);
+        return renderCTAs(_, url, fromCTA, true);
       }
     });
   };
