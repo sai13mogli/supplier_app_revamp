@@ -180,29 +180,34 @@ const TicketsList = props => {
     }
   };
 
-  const listEmptyComponent = () => (
-    <View style={styles.EmptyChatWrap}>
-      <Image
-        source={require('../../../assets/images/EmptyChat.png')}
-        style={{height: Dimension.height250, width: Dimension.width150}}
-      />
-      <Text style={styles.EmptyBoldTxt}>
-        Voila! You Have Not Raised Any Query Yet
-      </Text>
-      <Text style={styles.EmptyLightTxt}>
-        Click on below button as soon as you face any problem
-      </Text>
-      <TouchableOpacity
-        onPress={() => props.navigation.navigate('NewTicket')}
-        style={styles.NewTicktbtn}>
-        <CustomeIcon
-          name={'add-circle'}
-          color={colors.WhiteColor}
-          size={Dimension.font20}></CustomeIcon>
-        <Text style={styles.NewTicktbtnTxt}>Raise new Ticket</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  const listEmptyComponent = () => {
+    if (ticketsStatus == STATE_STATUS.FETCHED) {
+      return (
+        <View style={styles.EmptyChatWrap}>
+          <Image
+            source={require('../../../assets/images/EmptyChat.png')}
+            style={{height: Dimension.height250, width: Dimension.width150}}
+          />
+          <Text style={styles.EmptyBoldTxt}>
+            Voila! You Have Not Raised Any Query Yet
+          </Text>
+          <Text style={styles.EmptyLightTxt}>
+            Click on below button as soon as you face any problem
+          </Text>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('NewTicket')}
+            style={styles.NewTicktbtn}>
+            <CustomeIcon
+              name={'add-circle'}
+              color={colors.WhiteColor}
+              size={Dimension.font20}></CustomeIcon>
+            <Text style={styles.NewTicktbtnTxt}>Raise new Ticket</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    return null;
+  };
 
   const ticketListing = () => {
     return (

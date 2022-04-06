@@ -1,10 +1,12 @@
 import { createRef } from 'react';
+import { Linking } from 'react-native';
 import HomeScreen from '../containers/Home';
 import ProfileScreen from '../containers/Profile';
 import OrdersScreen from '../containers/Orders';
 import DashboardScreen from '../containers/Dashboard';
 import SupportScreen from '../containers/Support';
 import MoreScreen from '../containers/More';
+import SettingsScreen from '../containers/Settings';
 import DocumentsScreen from '../containers/Profile/Documents';
 import BusinessDetails from '../containers/Profile/BusinessDetails';
 import Addresses from '../containers/Profile/Addresses';
@@ -135,6 +137,10 @@ export const APP_STACK_SCREENS = [
     component: ProfileScreen,
   },
   {
+    name: 'Settings',
+    component: SettingsScreen,
+  },
+  {
     name: 'Documents',
     component: DocumentsScreen,
   },
@@ -255,7 +261,10 @@ export const MORE_TABS = [
     icon: 'category--brand',
   },
   {
-    route: 'FAQs',
+    route: '',
+    onPress: () => {
+      Linking.openURL('https://suppliercentralqa.moglilabs.com/#faq');
+    },
     title: 'FAQs',
     icon: 'address',
   },
@@ -263,18 +272,29 @@ export const MORE_TABS = [
 
 export const PRIVACY_TABS = [
   {
-    route: 'About',
+    route: '',
+    onPress: () => {
+      Linking.openURL('https://suppliercentralqa.moglilabs.com/#home');
+    },
     title: 'About Us',
     icon: 'business-details',
   },
   {
-    route: 'Settings',
-    title: 'Settings',
+    route: '',
+    onPress: () => {
+      Linking.openURL(
+        'https://suppliercentralqa.moglilabs.com/files/privacy.pdf',
+      );
+    },
+    title: 'Privacy Policy',
     icon: 'category--brand',
   },
   {
-    route: 'FAQs',
-    title: 'FAQs',
+    route: '',
+    onPress: () => {
+      Linking.openURL('https://suppliercentralqa.moglilabs.com/');
+    },
+    title: 'Contact Us',
     icon: 'address',
   },
 ];

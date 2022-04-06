@@ -25,9 +25,16 @@ import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
 import Toast from 'react-native-toast-message';
+import BulkActionsModal from '../../component/BulkActionsModal';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
+
+  const profileStatus = useSelector(
+    state => (state.profileReducer || {}).status || STATE_STATUS.UNFETCHED,
+  );
+  const profileData = useSelector(state => state.profileReducer.data || {});
+
   const tabStatus = useSelector(state =>
     state.ordersReducer.getIn(['tabCounts', 'status']),
   );
@@ -73,6 +80,7 @@ const OrdersScreen = props => {
   const [bulkItemIds, setBulkItemIds] = useState([]);
   const [bulkAcceptLoader, setBulkAcceptLoader] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
+  const [bulkActionsModal, setBulkActionsModal] = useState(false);
 
   const OPTIONS = [
     { label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders' },
@@ -132,6 +140,7 @@ const OrdersScreen = props => {
       });
       fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
     }
+
     return () => {
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
@@ -162,36 +171,35 @@ const OrdersScreen = props => {
 
   const renderItem = ({ item, index }) => {
     return (
-      <View>
-        <Ordercard
-          msn={item.productMsn}
-          quantity={item.quantity}
-          shipmentType={shipmentType}
-          orderRef={item.orderRef}
-          itemRef={item.itemRef}
-          createdAt={item.createdAt}
-          supplierId={item.supplierId}
-          transferPrice={item.transferPrice}
-          hsn={item.productHsn}
-          pickupDate={item.pickupDate}
-          productName={item.productName}
-          orderTypeString={item.orderTypeString}
-          shipmentMode={item.shipmentMode}
-          isVmi={item.isVmi}
-          shipmentModeString={item.shipmentModeString}
-          actionCTA={item.actionCTA}
-          taxPercentage={item.taxPercentage}
-          totalAmount={item.totalAmount}
-          fetchOrdersFunc={fetchOrdersFunc}
-          selectedTab={selectedTab}
-          fetchTabCountFunc={fetchTabCountFunc}
-          itemId={item.itemId}
-          invoiceUrl={item.invoiceUrl}
-          bulkItemIds={bulkItemIds}
-          setBulkItemIds={setBulkItemIds}
-          selectItemId={selectItemId}
-        />
-      </View>
+      <Ordercard
+        msn={item.productMsn}
+        quantity={item.quantity}
+        shipmentType={shipmentType}
+        orderRef={item.orderRef}
+        itemRef={item.itemRef}
+        createdAt={item.createdAt}
+        supplierId={item.supplierId}
+        transferPrice={item.transferPrice}
+        hsn={item.productHsn}
+        pickupDate={item.pickupDate}
+        productName={item.productName}
+        orderTypeString={item.orderTypeString}
+        shipmentMode={item.shipmentMode}
+        isVmi={item.isVmi}
+        shipmentModeString={item.shipmentModeString}
+        actionCTA={item.actionCTA}
+        taxPercentage={item.taxPercentage}
+        totalAmount={item.totalAmount}
+        fetchOrdersFunc={fetchOrdersFunc}
+        selectedTab={selectedTab}
+        fetchTabCountFunc={fetchTabCountFunc}
+        itemId={item.itemId}
+        invoiceUrl={item.invoiceUrl}
+        bulkItemIds={bulkItemIds}
+        setBulkItemIds={setBulkItemIds}
+        selectItemId={selectItemId}
+        shipmentUrl={item.shipmentUrl}
+      />
     );
   };
 
@@ -255,6 +263,13 @@ const OrdersScreen = props => {
     }
   }, [selectAll]);
 
+  useEffect(() => {
+    if (selectedTab == 'SHIPMENT' && bulkItemIds && bulkItemIds.length) {
+      console.log('bhk bulkActions', bulkItemIds.length);
+      setBulkActionsModal(true);
+    }
+  }, [bulkItemIds]);
+
   const renderHeaderComponent = () => {
     return (
       <ScrollView
@@ -295,7 +310,27 @@ const OrdersScreen = props => {
   };
 
   const renderListEmptyComponent = () => {
-    if (OrderData.size == 0 && OrderStatus == STATE_STATUS.FETCHED) {
+    if (
+      profileStatus == STATE_STATUS.FETCHED &&
+      profileData.verificationStatus < 10
+    ) {
+      return (
+        <View style={styles.emptyWrap}>
+          <Image
+            source={require('../../assets/images/pending_approval.png')}
+            style={{ width: 300, height: 200, }}
+          />
+          <Text style={styles.emptyTxt}>
+            Your profile is currently in approval pending stage Once approved
+            you will start receiving orders
+          </Text>
+        </View>
+      );
+    } else if (
+      profileStatus == STATE_STATUS.FETCHED &&
+      OrderData.size == 0 &&
+      OrderStatus == STATE_STATUS.FETCHED
+    ) {
       return (
         <View style={styles.emptyWrap}>
           <Image
@@ -473,7 +508,7 @@ const OrdersScreen = props => {
             ListFooterComponent={renderFooterComponent}
             onEndReachedThreshold={0.9}
             style={{ paddingBottom: 380 }}
-            contentContainerStyle={{ paddingBottom: 380 }}
+            contentContainerStyle={{ paddingBottom: 380, backgroundColor: '#fff' }}
             removeClippedSubviews={true}
             maxToRenderPerBatch={5}
             onEndReached={({ distanceFromEnd }) => {
@@ -514,8 +549,6 @@ const OrdersScreen = props => {
             />
           )}
           <View style={styles.footerWrap}>
-
-
             <View style={styles.footerSearchWrap}>
               <View style={styles.searchWrapper}>
                 <TextInput
@@ -564,55 +597,54 @@ const OrdersScreen = props => {
                 </View>
               ) : null}
             </View>
-            {ordersfiltersModal && (
-              <OrdersFilterModal
-                shipmentType={shipmentType}
-                ordersfiltersModal={ordersfiltersModal}
-                setOrdersFiltersModal={setOrdersFiltersModal}
-                activeFilter={activeFilter}
-                setActiveFilter={setActiveFilter}
-                selectedTab={selectedTab}
-                appliedFilter={appliedFilter}
-                setAppliedFilter={setAppliedFilter}
-                initialFilter={initialFilter}
-                setInitialFilter={setInitialFilter}
-                selectFilter={selectFilter}
-                applyFilters={applyFilters}
-                pickupFromDate={pickupFromDate || appliedFilter['pickupFromDate']}
-                pickupToDate={pickupToDate || appliedFilter['pickupToDate']}
-                setPickupFromDate={setPickupFromDate}
-                setPickupToDate={setPickupToDate}
-                poFromDate={poFromDate || appliedFilter['poFromDate']}
-                poToDate={poToDate || appliedFilter['poToDate']}
-                setPoFromDate={setPoFromDate}
-                setPoToDate={setPoToDate}
-                resetFilters={resetFilters}
-              />
-            )}
-            {bulkItemIds && bulkItemIds.length ? (
-              <TouchableOpacity
-                onPress={() => {
-                  setSelectAll(!selectAll);
-                }}
-                style={styles.selectAllBtn}>
-                <Text style={styles.selectBtnTxt}>
-                  Select All ({bulkItemIds.length})
-                </Text>
-                <CustomeIcon
-                  name={
-                    selectAll ? 'checkbox-tick'
-                      : 'checkbox-blank'
+            {
+              ordersfiltersModal && (
+                <OrdersFilterModal
+                  shipmentType={shipmentType}
+                  ordersfiltersModal={ordersfiltersModal}
+                  setOrdersFiltersModal={setOrdersFiltersModal}
+                  activeFilter={activeFilter}
+                  setActiveFilter={setActiveFilter}
+                  selectedTab={selectedTab}
+                  appliedFilter={appliedFilter}
+                  setAppliedFilter={setAppliedFilter}
+                  initialFilter={initialFilter}
+                  setInitialFilter={setInitialFilter}
+                  selectFilter={selectFilter}
+                  applyFilters={applyFilters}
+                  pickupFromDate={
+                    pickupFromDate || appliedFilter['pickupFromDate']
                   }
-                  color={"#fff"}
-                  size={Dimension.font18}
+                  pickupToDate={pickupToDate || appliedFilter['pickupToDate']}
+                  setPickupFromDate={setPickupFromDate}
+                  setPickupToDate={setPickupToDate}
+                  poFromDate={poFromDate || appliedFilter['poFromDate']}
+                  poToDate={poToDate || appliedFilter['poToDate']}
+                  setPoFromDate={setPoFromDate}
+                  setPoToDate={setPoToDate}
+                  resetFilters={resetFilters}
+                />
+              )
+            }
+            {
+              bulkItemIds && bulkItemIds.length ? (
+                <TouchableOpacity
                   onPress={() => {
                     setSelectAll(!selectAll);
-                    // bulkSelect();
                   }}
-                >
-
-                </CustomeIcon>
-                {/* <MaterialCommunityIcon
+                  style={styles.selectAllBtn}>
+                  <Text style={styles.selectBtnTxt}>
+                    Select All ({bulkItemIds.length})
+                  </Text>
+                  <CustomeIcon
+                    name={selectAll ? 'checkbox-tick' : 'checkbox-blank'}
+                    color={'#fff'}
+                    size={Dimension.font18}
+                    onPress={() => {
+                      setSelectAll(!selectAll);
+                      // bulkSelect();
+                    }}></CustomeIcon>
+                  {/* <MaterialCommunityIcon
                 name={selectAll ? 'checkbox-marked' : 'checkbox-blank-outline'}
                 onPress={() => {
                   setSelectAll(!selectAll);
@@ -620,14 +652,12 @@ const OrdersScreen = props => {
                 size={20}
                 color={selectAll ? 'blue' : '#000'}
               /> */}
-              </TouchableOpacity>
-            ) : null}
-            {bulkItemIds && bulkItemIds.length ? (
+                </TouchableOpacity >
+              ) : null}
+            {selectedTab !== 'SHIPMENT' && bulkItemIds && bulkItemIds.length ? (
               <View style={styles.bulkItemfooter}>
                 <View style={styles.CountWrap}>
-                  <Text style={styles.selectedtxt}>
-                    Selcted
-                  </Text>
+                  <Text style={styles.selectedtxt}>Selcted</Text>
                   <Text style={styles.Counttxt}>
                     {bulkItemIds && bulkItemIds.length < 10
                       ? `0${bulkItemIds.length}`
@@ -638,24 +668,37 @@ const OrdersScreen = props => {
                 <TouchableOpacity
                   onPress={onBulkAccept}
                   style={styles.BulkAcceptbtn}>
-                  <Text
-                    style={styles.BulkAcceptTxt}>
-                    BULK ACCEPT
-                  </Text>
-                  {bulkAcceptLoader && (
-                    <ActivityIndicator
-                      size={'small'}
-                      color={'white'}
-                      style={{ marginRight: 4 }}
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
+                  <Text style={styles.BulkAcceptTxt}>BULK ACCEPT</Text>
+                  {
+                    bulkAcceptLoader && (
+                      <ActivityIndicator
+                        size={'small'}
+                        color={'white'}
+                        style={{ marginRight: 4 }}
+                      />
+                    )
+                  }
+                </TouchableOpacity >
+              </View >
+            ) : null
+            }
+
+            {selectedTab == 'SHIPMENT' &&
+              bulkItemIds &&
+              bulkItemIds.length &&
+              bulkActionsModal ? (
+              <BulkActionsModal
+                bulkActionsModal={bulkActionsModal}
+                setBulkActionsModal={setBulkActionsModal}
+                bulkItemIds={bulkItemIds}
+                selectedTab={selectedTab}
+                shipmentType={shipmentType}
+              />
             ) : null}
-          </View>
+          </View >
         </>
       )}
-    </View>
+    </View >
   );
 };
 

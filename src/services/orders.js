@@ -261,3 +261,16 @@ export const splitItem = async payload =>
       },
     },
   );
+
+export const createManifestApi = async payload =>
+  axios.post(
+    `${BASE_URL}api/order/oms/createManifest`,
+    {
+      ...payload,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
