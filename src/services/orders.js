@@ -55,19 +55,19 @@ export const getInvoiceOMSDetails = async body =>
     },
   );
 
-export const uploadEMSInvoice = async body =>
-  axios.post(
-    `${BASE_URL}api/order/mapDropshipInvoice`,
-    {
-      ...body,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
-
-      },
-    },
-  );
+// export const uploadEMSInvoice = async body =>
+//   axios.post(
+//     `${BASE_URL}api/order/mapDropshipInvoice`,
+//     {
+//       ...body,
+//     },
+//     {
+//       headers: {
+//         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+//         'Content-Type': 'multipart/form-data;',
+//       },
+//     },
+//   );
 
 export const uploadOMSInvoice = async body =>
   axios.post(

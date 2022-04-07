@@ -69,6 +69,7 @@ const Ordercard = props => {
     warehouseId
   } = props;
 
+
   const [orderImage, setOrderImage] = useState(null);
   const [showLspDetails, setShowLspDetails] = useState(null);
   const [showMoreTxt, setShowMoreTxt] = useState(false);
@@ -449,7 +450,8 @@ const Ordercard = props => {
         ) : cta == 'MAP_INVOICE' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            onPress={() => navigation.navigate('UploadInvoice', {
+            onPress={() => navigation.navigate('UploadInvoiceEMS', {
+
               orderRef, actionCTA,
               itemRef, warehouseId, hsn, quantity, totalAmount
             })}

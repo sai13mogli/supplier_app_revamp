@@ -172,6 +172,7 @@ const OrdersScreen = props => {
   const renderItem = ({ item, index }) => {
     return (
       <Ordercard
+        warehouseId={item.warehouseId}
         msn={item.productMsn}
         quantity={item.quantity}
         shipmentType={shipmentType}

@@ -13,6 +13,10 @@ import Header from '../../../component/common/Header';
 import CustomeDatePicker from '../../../component/common/Datepicker';
 import { getInvoiceOMSDetails, uploadOMSInvoice } from '../../../services/orders';
 import styles from './style';
+import InvoiceOmsCard from '../../../component/InvoiceOmsCard';
+import { BASE_URL } from '../../../redux/constants';
+import RNFetchBlob from 'rn-fetch-blob';
+import Toast from 'react-native-toast-message';
 
 const UploadInvoiceOMSScreen = (props) => {
 
@@ -26,9 +30,8 @@ const UploadInvoiceOMSScreen = (props) => {
     const [poTotal, setPoTotal] = useState("");
     const [poTotalError, setpoTotalError] = useState(false);
     const [uploadDisabled, setUploadDisabled] = useState(false);
-
-
-
+    const [OmsUploadList, setOmsUploadList] = useState([]);
+    const [bulkItemIds, setBulkItemIds] = useState([]);
     const [fId, setFId] = useState(null);
     const [phoneErrorMsg, setPhoneErrorMsg] = useState('');
     const [actionCTA, setaAtionCTA] = useState(props?.route?.params?.actionCTA)
@@ -111,7 +114,6 @@ const UploadInvoiceOMSScreen = (props) => {
         if (EmsOmsFlag.includes("MAP_PO_TO_INVOICE")) {
             fetchInvoiceOMSDetails()
         }
-
     }, []);
 
     const onInvoiceNumberBlur = () => {
@@ -137,7 +139,6 @@ const UploadInvoiceOMSScreen = (props) => {
                 await SheetManager.hide('action_sheet');
                 uploadFromFileExp();
                 break;
-
             default:
                 await SheetManager.hide('action_sheet');
                 break;
@@ -166,10 +167,6 @@ const UploadInvoiceOMSScreen = (props) => {
         switch (fId) {
             case 'uploadInvoice':
                 setUploadInvoice(data);
-                break;
-            case 'uploadEwayBill':
-                setUploadEwayBill(data);
-
                 break;
             default:
                 break;
@@ -231,8 +228,9 @@ const UploadInvoiceOMSScreen = (props) => {
                 supplierId: await AsyncStorage.getItem('userId'),
             };
             const { data } = await getInvoiceOMSDetails(payload);
+            console.log("data===>", data);
             if (data.success) {
-                setInvoiceList(data?.data?.itemList);
+                setOmsUploadList(data?.data?.records);
                 setLoading(false);
             }
         } catch (error) {
@@ -241,71 +239,118 @@ const UploadInvoiceOMSScreen = (props) => {
         }
     };
 
-    // const renderItem = ({ item, index }) => {
-    //     return (
-    //         <InvoiceCard
-    //             msn={item.productMsn}
-    //             orderRef={item.orderRef}
-    //             productUom={item.productUom}
-    //             quantity={item.quantity}
-    //             transferPrice={item.transferPrice}
-    //             hsn={item.productHsn}
-    //             productName={item.productName}
-    //             totalAmount={item.orderInfo.totalAmount}
-    //             taxPercentage={item.taxPercentage}
-    //             itemId={item.itemId}
-    //             bulkItemIds={bulkItemIds}
-    //             setBulkItemIds={setBulkItemIds}
-    //             selectItemId={selectItemId}
-    //         />
-    //     );
-    // };
+    const selectItemId = itemId => {
+        let currentItemIds = [...bulkItemIds];
+        if (currentItemIds.includes(itemId)) {
+            currentItemIds = currentItemIds.filter(_ => _ != itemId);
+        } else {
+            if (currentItemIds) {
+                currentItemIds.push(itemId);
+            } else {
+                currentItemIds = [];
+                currentItemIds.push(itemId);
+            }
+        }
+        setBulkItemIds(currentItemIds);
+    };
 
-    // const renderListEmptyComponent = () => {
-    //     if (global.List == 0) {
-    //         return (
-    //             <View style={styles.emptyWrap}>
-    //                 <Image
-    //                     // source={require('../../assets/images/emptyOrders.png')}
-    //                     style={{ width: 300, height: 200 }}
-    //                 />
-    //                 <Text style={styles.emptyTxt}>No Data Available</Text>
-    //             </View>
-    //         );
-    //     }
-    //     return null;
-    // };
+    const renderItem = ({ item, index }) => {
+        let list = Object.values(item)?.[0]
+        return (
+            <InvoiceOmsCard
+                msn={list.product_msn}
+                quantity={list.quantity}
+                taxpercent={list.tax_percent}
+                podId={list.item_id}
+                totalPrice={list.item_total}
+                TpUnit={list.transfer_price}
+                productName={list.product_name}
+                bulkItemIds={bulkItemIds}
+                setBulkItemIds={setBulkItemIds}
+                selectItemId={selectItemId}
+
+            />
+        );
+    };
+
+    const renderListEmptyComponent = () => {
+        if (global.List == 0) {
+            return (
+                <View style={styles.emptyWrap}>
+                    <Image
+                        // source={require('../../assets/images/emptyOrders.png')}
+                        style={{ width: 300, height: 200 }}
+                    />
+                    <Text style={styles.emptyTxt}>No Data Available</Text>
+                </View>
+            );
+        }
+        return null;
+    };
 
     const onsubmit = async () => {
         try {
-            let payload = {
-                invoiceNumber: uploadInvoice.name,
-                supplierId: await AsyncStorage.getItem('userId'),
-                itemLists: 12,
-                invoiceDate,
-                file: uploadInvoice.name,
-                invoiceTotal: poTotal
+            let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+            const url = `${BASE_URL}api/order/oms/mapInvoice`;
+            const response = await RNFetchBlob.fetch(
+                'POST',
+                url,
+                {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `${token}`,
+                },
 
+                [{
+                    name: 'invoiceNumber',
+                    data: invoiceNumber,
+                },
+                {
+                    name: 'supplierId',
+                    data: await AsyncStorage.getItem('userId'),
+                },
+                {
+                    name: 'itemLists',
+                    data: 927211,
+                },
+                {
+                    name: 'invoiceTotal',
+                    data: supplierInvoiceTotal,
+                },
+                {
+                    name: 'invoiceDate',
+                    data: invoiceDate,
+                },
+                {
+                    name: 'file',
+                    filename: uploadInvoice.name,
+                    type: uploadInvoice.type,
+                    data: RNFetchBlob.wrap(uploadInvoice.uri),
+                }]
+            );
+            const res = await response.json();
+            if (res.success) {
+                Toast.show({
+                    type: 'success',
+                    text2: res.message,
+                    visibilityTime: 2000,
+                    autoHide: true,
+                });
+                props.navigation.goBack();
+            } else if (res.success == false) {
+                Toast.show({
+                    type: 'success',
+                    text2: res.message,
+                    visibilityTime: 2000,
+                    autoHide: true,
+                });
 
-            };
-            const { data } = await uploadOMSInvoice(payload);
-            // if (data.success) {
-            // const popAction = StackActions.pop(1);
-            // const resetAction = StackActions.reset({
-            //     index: 0,
-            //     actions: [NavigationActions.navigate({ routeName: 'OrdersScreen' })],
-            // });
-            props.navigation.goBack();
-            // }
-        } catch (error) {
-            console.log(error);
-            Toast.show({
-                type: 'error',
-                text2: 'Something went wrong',
-                visibilityTime: 2000,
-                autoHide: true,
-            });
+            }
         }
+        catch (err) {
+            console.log("Error", err);
+            setLoading(false);
+        }
+
     };
 
 
@@ -316,24 +361,16 @@ const UploadInvoiceOMSScreen = (props) => {
                 navigation={props.navigation}
                 showText={'Upload OMS Invoice'}
                 rightIconName={'business-details'} />
-            {/* <FlatList
-                data={invoiceList}
-                renderItem={renderItem}
-                ListEmptyComponent={renderListEmptyComponent}
-                keyExtractor={(item, index) => `${index}-item`}
-                onEndReachedThreshold={0.9}
-                onEndReached={({ distanceFromEnd }) => {
-                    if (!onEndReachedCalledDuringMomentum.current) {
-                        endReachedFetchListing();
-                        onEndReachedCalledDuringMomentum.current = true;
-                    }
-                }}
-                onMomentumScrollBegin={() => {
-                    onEndReachedCalledDuringMomentum.current = false;
-                }}
-                showsVerticalScrollIndicator={false}
-            /> */}
+
             <ScrollView style={styles.ContainerCss}>
+                <FlatList
+                    data={OmsUploadList}
+                    renderItem={renderItem}
+                    ListEmptyComponent={renderListEmptyComponent}
+                    keyExtractor={(item, index) => `${index}-item`}
+                    onEndReachedThreshold={0.9}
+                    showsVerticalScrollIndicator={false}
+                />
                 {FORM_FIELDS.map((field, fieldKey) => (
                     <field.component
                         {...field}
@@ -366,7 +403,7 @@ const UploadInvoiceOMSScreen = (props) => {
                         TextColor={colors.blackColor}
                         TextFontSize={Dimension.font16}
                         title={'CANCEL'}
-                        loading={loading}
+                    // loading={loading}
                     // onPress={onContinue}
                     />
                 </View>

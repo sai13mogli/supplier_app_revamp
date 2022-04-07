@@ -7,7 +7,6 @@ import {
     Dimensions,
     ActivityIndicator,
     PermissionsAndroid,
-    TextInput,
 } from 'react-native';
 import React, { useState, useEffect, useCallback } from 'react';
 import { getImageUrl, markOutForOrderApi } from '../services/orders';
@@ -15,7 +14,12 @@ import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
 import Modal from 'react-native-modal';
-import { acceptOrder, getpoChallan, rejectOrder } from '../services/orders';
+import {
+    acceptOrder,
+    getpoChallan,
+    rejectOrder,
+    createManifestApi,
+} from '../services/orders';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -33,198 +37,172 @@ import { useNavigation } from '@react-navigation/native'
 
 const deviceWidth = Dimensions.get('window').width;
 
-const InvoiceCard = props => {
+const InvoiceOmsCard = props => {
     const {
-        // quantity,
-        selectItemId,
-        productUom,
-        orderRef,
-        transferPrice,
-        hsn,
-        taxPercentage,
-        // totalAmount,
+        msn,
+        quantity,
+        totalPrice,
+        podId,
+        TpUnit,
         productName,
+        taxpercent,
+        actionCTA,
         itemId,
         bulkItemIds,
+        selectItemId,
+
+
     } = props;
 
-    const [quantity, setQuantity] = useState(props.quantity);
-    // const [productUom, setproductUom] = useState(props.productUom);
-    // const [orderRef, setorderRef] = useState(props.orderRef);
-    // const [transferPrice, settransferPrice] = useState(props.transferPrice);
-    // const [hsn, setHsn] = useState(props.hsn);
-    // const [taxPercentage, settaxPercentage] = useState(props.taxPercentage);
-    // const [productName, setproductName] = useState(props.productName);
-    const [totalAmount, settotalAmount] = useState(props.totalAmount);
-    const [totalPrice, setTotalPrice] = useState(0);
-    // const [itemId, setitemId] = useState(props.itemId);
-    // const [bulkItemIds, setbulkItemIds] = useState(props.bulkItemIds);
-    // const [selectItemId, setselectItemId] = useState(props.selectItemId);
+    const [orderImage, setOrderImage] = useState(null);
+    const [showMoreTxt, setShowMoreTxt] = useState(false);
+    const [lengthMore, setLengthMore] = useState(false);
 
-
-
+    const { navigate } = useNavigation();
+    const navigation = useNavigation();
 
     useEffect(() => {
+        fetchImage();
+        if (actionCTA && actionCTA.length > 2) {
+            setShowMoreCTA(true);
+        }
+    }, []);
 
-        settotalAmount(totalAmount)
-        calculatePrice()
+    const fetchImage = async () => {
+        const { data } = await getImageUrl(msn);
+        let imageUrl =
+            'https://cdn.moglix.com/' +
+            (data &&
+                data.productBO &&
+                data.productBO.productPartDetails &&
+                data.productBO.productPartDetails[msn] &&
+                data.productBO.productPartDetails[msn].images &&
+                data.productBO.productPartDetails[msn].images[0] &&
+                data.productBO.productPartDetails[msn].images[0].links.medium);
+        let validUrl = imageUrl.split('/');
+        if (!validUrl.includes('null')) {
+            setOrderImage(imageUrl);
+        }
+    };
 
-    })
+    const getTime = (time, acceptrejectOrder) => {
+        let months = [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sept',
+            'Oct',
+            'Nov',
+            'Dec',
+        ];
+        let date = new Date(Number(time));
+        if (acceptrejectOrder) {
+            return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+        }
+        return `${months[date.getMonth()]} ${date.getDate()},${date.getFullYear()}`;
+    };
 
-    const calculatePrice = () => {
 
-        const { taxPercentage, hsn, quantity, transferPrice } = props
-        let totalPrice = (transferPrice * quantity)
-        setTotalPrice(totalPrice)
 
-    }
+    const toggleShowMoreTxt = () => {
+        setShowMoreTxt(!showMoreTxt);
+    };
 
 
 
-    const renderOrderDetails = () => {
+    const renderOrderDetails = (fromModal, fromCTA) => {
         return (
             <>
-
-                <View style={[styles.orderCardwrapInner]}>
-
+                <View
+                    style={[styles.orderCardwrapInner]}>
                     <CustomeIcon
                         name={
-                            (bulkItemIds || []).includes(itemId) ? 'checkbox-tick'
+                            (bulkItemIds || []).includes(itemId)
+                                ? 'checkbox-tick'
                                 : 'checkbox-blank'
                         }
-                        color={(bulkItemIds || []).includes(itemId) ? Colors.BrandColor : Colors.FontColor}
+                        color={
+                            (bulkItemIds || []).includes(itemId)
+                                ? Colors.BrandColor
+                                : Colors.FontColor
+                        }
                         size={Dimension.font22}
                         onPress={() => selectItemId(itemId)}
-                        style={{ position: 'absolute', right: 0, zIndex: 9999 }}>
+                        style={{
+                            position: 'absolute',
+                            right: 0,
+                            zIndex: 9999,
+                        }}></CustomeIcon>
 
-                    </CustomeIcon>
+                    <View style={[styles.leftpart]}>
+                        <Image
+                            source={require('../assets/images/Prd.png')}
+                            style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
+                        />
+                        <View style={styles.quantityTxt}>
+                            <Text style={styles.TitleLightTxt}>
+                                Qty - <Text style={styles.TitleBoldTxt}>{quantity}</Text>
+                            </Text>
+                        </View>
+
+                    </View>
                     <View style={styles.rightPart}>
+                        <Text
+                            style={[{ color: Colors.BrandColor }, styles.msnName,
+                            ]}>
+                            {msn}
+                        </Text>
+
                         <Text style={styles.productName}>{productName}</Text>
+                        <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
+                            {showMoreTxt ? 'Read less' : 'Read more'}
+                        </Text>
+
+
                         <View style={{ flexDirection: 'row' }}>
-                            <View style={{}}>
+                            <View style={{ marginRight: Dimension.margin20 }}>
                                 <Text style={styles.TitleLightTxt}>
-                                    Moglix HSN- <Text style={styles.TitleBoldTxt}>{hsn}</Text>
+                                    PO ID - <Text style={styles.TitleBoldTxt}>{podId}</Text>
                                 </Text>
                                 <Text style={styles.TitleLightTxt}>
-                                    UOM -{' '}
+                                    Total Price -{' '}
                                     <Text style={styles.TitleBoldTxt}>
-                                        {productUom}
+                                        {Math.floor(totalPrice)}
                                     </Text>
                                 </Text>
+
                             </View>
 
-                            <View style={{ marginLeft: 30 }}>
-                                <Text style={styles.TitleLightTxt}>
-                                    Total Price - <Text style={styles.TitleBoldTxt}>{Math.floor(totalAmount)}</Text>
-                                </Text>
+                            <View>
                                 <Text style={styles.TitleLightTxt}>
                                     TP/Unit -{' '}
                                     <Text style={styles.TitleBoldTxt}>
-                                        ₹{Math.floor(transferPrice)}
+                                        ₹{Math.floor(TpUnit)}
                                     </Text>
                                 </Text>
+                                <Text style={styles.TitleLightTxt}>
+                                    Product HSN - <Text style={styles.TitleBoldTxt}>{taxpercent}</Text>
+                                </Text>
                             </View>
-
                         </View>
-                        <View style={styles.borderWrap}>
-                            <View style={styles.qtyView}>
-                                <Text style={styles.TitleLightTxt}>
-                                    HSN
-                                </Text>
-                                <TextInput style={styles.wrapInput}
-                                    keyboardType={'number-pad'}
-                                    editable={(bulkItemIds || []).includes(itemId) ? true : false}>
-                                    {hsn}
-                                </TextInput>
-                            </View>
-                            <View style={styles.qtyView}>
-                                <Text style={styles.TitleLightTxt}>
-                                    Qty
-                                </Text>
-                                <TextInput style={styles.wrapInput}
-                                    onFocus
-                                    keyboardType={'number-pad'}
-                                    editable={(bulkItemIds || []).includes(itemId) ? true : false}>
-                                    {quantity}
-                                </TextInput>
-                            </View>
-                            <View style={{ flexDirection: 'column', }}>
-                                <Text style={styles.TitleLightTxt}>
-                                    HSN Tax %
-                                </Text>
-                                <TextInput style={styles.wrapInput}
-                                    keyboardType={'number-pad'}
-                                    editable={(bulkItemIds || []).includes(itemId) ? true : false}>
-                                    {taxPercentage}
-                                </TextInput>
-                            </View>
 
-                        </View>
                     </View>
-                </View>
+                </View >
 
             </>
         );
     };
 
-    const renderOrderHeaderDetail = () => {
-        return (
-            <>
-                <View style={styles.headerView}>
-                    <Text style={[styles.TitleBoldTxt, { marginLeft: Dimension.margin10, fontSize: 10, marginTop: Dimension.margin13 }]}>
-                        PO ID - <Text style={[styles.TitleBoldTxt, { fontSize: 10 }]}>{orderRef}</Text>
-                    </Text>
-                    <Text style={[styles.TitleBoldTxt, { marginLeft: Dimension.margin10, fontSize: 10 }]}>
-                        Total Price - <Text style={[styles.TitleBoldTxt, { fontSize: 10 }]}>₹{Math.floor(totalAmount)}
-                            {"   "} (Price Including Tax- Excluding TDS-TCS)
-                        </Text>
-                    </Text>
-                </View>
-            </>
-        )
-    }
-
     return (
         <>
-
-
-            {renderOrderHeaderDetail()}
-
-            <View style={[styles.orderCardwrap, { marginTop: Dimension.margin20 }]}>
-
-                {renderOrderDetails()}
-                {/* {isOrderVisible && (
-                    <Modal
-                        overlayPointerEvents={'auto'}
-                        isVisible={isOrderVisible}
-                        onTouchOutside={() => {
-                            setIsOrderVisible(false);
-                        }}
-                        onDismiss={() => {
-                            setIsOrderVisible(false);
-                        }}
-                        coverScreen={true}
-                        style={{ padding: 0, margin: 0 }}
-                        deviceWidth={deviceWidth}
-                        hasBackdrop={true}
-                        onBackdropPress={() => setIsOrderVisible(false)}
-                        onBackButtonPress={() => setIsOrderVisible(false)}>
-                        <View style={styles.modalContainer}>
-                            <View style={styles.topbdr}></View>
-                            <View style={styles.ModalheadingWrapper}>
-                                <CustomeIcon
-                                    name={'close'}
-                                    size={Dimension.font22}
-                                    color={Colors.FontColor}
-                                    onPress={() => setIsOrderVisible(false)}></CustomeIcon>
-                            </View>
-                            {renderOrderDetails(true, '')}
-                        </View>
-                    </Modal>
-                )} */}
+            <View style={styles.orderCardwrap} >
+                {renderOrderDetails(false, '')}
             </View>
-
-
 
         </>
     );
@@ -241,27 +219,6 @@ const styles = StyleSheet.create({
         fontSize: Dimension.font10,
         color: Colors.FontColor,
         fontFamily: Dimension.CustomBoldFont,
-    },
-    qtyView: {
-        flexDirection: 'column',
-        marginLeft: -Dimension.margin32
-    },
-    headerView: {
-        backgroundColor: Colors.grayShade8,
-        borderRadius: 3,
-        height: 60
-    },
-    borderWrap: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginHorizontal: Dimension.margin30
-    },
-    wrapInput: {
-        height: 35,
-        width: 70,
-        borderColor: 'grey',
-        borderRadius: 4,
-        borderWidth: 0.9
     },
     msnName: {
         fontSize: Dimension.font12,
@@ -341,7 +298,7 @@ const styles = StyleSheet.create({
         marginRight: Dimension.margin12,
     },
     rightPart: {
-        flex: 1,
+        flex: 8,
     },
     imgStyle: {
         borderRadius: 4,
@@ -365,7 +322,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#E2E2E2',
         borderRadius: 2,
         marginTop: Dimension.margin8,
-        width: '100%',
+        width: '60%',
         alignItems: 'center',
         paddingVertical: Dimension.padding5,
     },
@@ -452,4 +409,4 @@ const styles = StyleSheet.create({
         padding: Dimension.padding15,
     },
 });
-export default InvoiceCard;
+export default InvoiceOmsCard;
