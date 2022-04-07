@@ -165,7 +165,7 @@ const MoreScreen = props => {
         <View style={styles.varsionWrap}>
           <View style={{ flexDirection: 'row' }}>
             <CustomeIcon
-              name={'arrow-right-line'}
+              name={'smartphone-line'}
               color={Colors.headerTxtColor}
               size={Dimension.font18}>
 
