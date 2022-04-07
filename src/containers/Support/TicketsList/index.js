@@ -35,6 +35,7 @@ const TicketsList = props => {
   const [typeFilter, setTypeFilter] = useState(0);
   const [timeFilter, setTimeFilter] = useState(180);
   const [inputValue, setInputValue] = useState('');
+  const [fromReset, setFromReset] = useState(false);
   const dispatch = useDispatch();
   const onEndReachedCalledDuringMomentum = useRef(true);
 
@@ -59,23 +60,32 @@ const TicketsList = props => {
     }
   }, [ticketsStatus]);
 
-  const fetchTicketListing = (pageNo, search) => {
+  const fetchTicketListing = (pageNo, search, fromReset) => {
     let fetchTicketListingObj = {
       page: pageNo,
-      days: timeFilter,
-      openOnly: typeFilter,
+      days: !fromReset ? timeFilter : 180,
+      openOnly: !fromReset ? typeFilter : 0,
       search: search,
     };
     dispatch(fetchTickets(fetchTicketListingObj));
   };
 
   //api hit for orderWay, orderBy, appliedFilter changes
-  useEffect(() => {
+  const applyFilters = () => {
     if (!loader) {
       setLoader(true);
+      setFiltersModal(false);
       fetchTicketListing(1, '');
     }
-  }, [typeFilter, timeFilter]);
+  };
+
+  const resetFilters = () => {
+    if (!loader) {
+      setLoader(true);
+      setFiltersModal(false);
+      fetchTicketListing(1, '', true);
+    }
+  };
 
   const debouncedSave = useRef(
     debounce(text => {
@@ -306,6 +316,10 @@ const TicketsList = props => {
           setTypeFilter={setTypeFilter}
           timeFilter={timeFilter}
           setTimeFilter={setTimeFilter}
+          applyFilters={applyFilters}
+          resetFilters={resetFilters}
+          fromReset={fromReset}
+          setFromReset={setFromReset}
         />
       )}
     </View>

@@ -13,6 +13,8 @@ import {BASE_URL} from '../../../redux/constants';
 import {getCategories, getSubCategories} from '../../../services/support';
 import AppHeader from '../../../component/common/Header';
 import Toast from 'react-native-toast-message';
+import {fetchTickets} from '../../../redux/actions/support';
+import {useDispatch} from 'react-redux';
 
 const NewTicket = props => {
   const [loading, setLoading] = useState(false);
@@ -28,6 +30,7 @@ const NewTicket = props => {
   const [subCategoryError, setsubCategoryError] = useState('');
   const [businessTypeError, setbusinessTypeError] = useState('');
   const [explainQueryError, setexplainQueryError] = useState('');
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchCategories();
@@ -241,10 +244,21 @@ const NewTicket = props => {
           visibilityTime: 2000,
           autoHide: true,
         });
+        fetchTicketListing(1, '');
         props.navigation.goBack();
       }
       setLoading(false);
     }
+  };
+
+  const fetchTicketListing = (pageNo, search) => {
+    let fetchTicketListingObj = {
+      page: pageNo,
+      days: 180,
+      openOnly: 0,
+      search: search,
+    };
+    dispatch(fetchTickets(fetchTicketListingObj));
   };
 
   return (

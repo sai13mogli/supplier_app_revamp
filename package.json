@@ -15,7 +15,7 @@
     "@react-native-community/datetimepicker": "^5.1.0",
     "@react-native-community/viewpager": "^5.0.11",
     "@react-native-google-signin/google-signin": "^7.0.4",
-    "@react-native-picker/picker": "^2.2.1",
+    "@react-native-picker/picker": "^2.4.0",
     "@react-navigation/bottom-tabs": "^6.1.0",
     "@react-navigation/material-top-tabs": "^6.1.1",
     "@react-navigation/native": "^6.0.7",

@@ -203,6 +203,7 @@ const OrdersScreen = props => {
   };
 
   const changeTab = val => {
+    setBulkItemIds([]);
     setSelectedTab(val.key);
     fetchOrdersFunc(0, '', val.key, shipmentType, {
       pickupFromDate: '',
@@ -317,7 +318,7 @@ const OrdersScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             source={require('../../assets/images/pending_approval.png')}
-            style={{width: 300, height: 200,}}
+            style={{width: 300, height: 200}}
           />
           <Text style={styles.emptyTxt}>
             Your profile is currently in approval pending stage Once approved
@@ -507,7 +508,10 @@ const OrdersScreen = props => {
             ListFooterComponent={renderFooterComponent}
             onEndReachedThreshold={0.9}
             style={{paddingBottom: 380}}
-            contentContainerStyle={{paddingBottom: 380,backgroundColor:'#fff'}}
+            contentContainerStyle={{
+              paddingBottom: 380,
+              backgroundColor: '#fff',
+            }}
             removeClippedSubviews={true}
             maxToRenderPerBatch={5}
             onEndReached={({distanceFromEnd}) => {

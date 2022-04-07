@@ -29,6 +29,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {fetchProfile} from '../../../redux/actions/profile';
 import Header from '../../../component/common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 const deviceWidth = Dimensions.get('window').width;
 
 const DocumentsScreen = props => {
@@ -1135,6 +1136,12 @@ const DocumentsScreen = props => {
         setSubmitLoader(false);
         setConfirmModal(false);
         dispatch(fetchProfile());
+        Toast.show({
+          type: 'success',
+          text2: data.message || 'Profile submitted successfully!',
+          visibilityTime: 2000,
+          autoHide: true,
+        });
         props.navigation.goBack();
       } else {
         setSubmitLoader(false);
