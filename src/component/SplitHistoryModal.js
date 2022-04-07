@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   Dimensions,
   View,
@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { getImageUrl, getSplitHistory } from '../services/orders';
+import {getImageUrl, getSplitHistory} from '../services/orders';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import CustomeIcon from './common/CustomeIcon';
@@ -19,7 +19,7 @@ const deviceWidth = Dimensions.get('window').width;
 const SplitHistoryModal = props => {
   const [orderImage, setOrderImage] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [history, setHistory] = useState({ children: [] });
+  const [history, setHistory] = useState({children: []});
   const [showMoreTxt, setShowMoreTxt] = useState(false);
   const [lengthMore, setLengthMore] = useState(false);
 
@@ -50,7 +50,7 @@ const SplitHistoryModal = props => {
   }, []);
 
   const fetchImage = async () => {
-    const { data } = await getImageUrl(msn);
+    const {data} = await getImageUrl(msn);
     let imageUrl =
       'https://cdn.moglix.com/' +
       (data &&
@@ -88,8 +88,8 @@ const SplitHistoryModal = props => {
     );
   };
   const fetchSplitHistory = async () => {
-    const { data } = await getSplitHistory(supplierId, orderRef, itemRef);
-    console.log("OrdeRef====>", orderRef);
+    const {data} = await getSplitHistory(supplierId, orderRef, itemRef);
+    console.log('OrdeRef====>', orderRef);
     if (data.success) {
       setHistory(data.data);
       setLoading(false);
@@ -137,7 +137,7 @@ const SplitHistoryModal = props => {
         setModal(false);
       }}
       coverScreen={true}
-      style={{ padding: 0, margin: 0 }}
+      style={{padding: 0, margin: 0}}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
       onBackdropPress={() => setModal(false)}
@@ -161,11 +161,11 @@ const SplitHistoryModal = props => {
           <ActivityIndicator
             color={Colors.BrandColor}
             size={'small'}
-            style={{ alignSelf: 'center' }}
+            style={{alignSelf: 'center'}}
           />
         ) : (
           <>
-            <View style={{ paddingHorizontal: Dimension.padding15 }}>
+            <View style={{paddingHorizontal: Dimension.padding15}}>
               {renderOrderDetails()}
             </View>
             {/* <View style={styles.topbdr}></View>
@@ -256,28 +256,31 @@ const SplitHistoryModal = props => {
                 </View>
               </View>
             </View> */}
-
           </>
         )}
         <View style={styles.BottomDataWrap}>
-
-
           <Text style={styles.BottomDataTitle}>Item Breakdow</Text>
-          <View style={{ flexDirection: "row" }}>
-            <View style={styles.leftStepsPart}>
-              <View style={styles.circle}></View>
-              <View style={styles.line}>
-
-              </View>
-              <View style={styles.circle}></View>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{paddingTop: Dimension.padding12}}>
+              {((history || {}).children || []).map((_, k) => (
+                <View style={styles.leftStepsPart}>
+                  <View style={styles.circle}></View>
+                  {history.children.length - 1 != k ? (
+                    <View style={styles.line}></View>
+                  ) : null}
+                </View>
+              ))}
             </View>
             <View style={styles.rightStepsPart}>
-
-
               {((history || {}).children || []).map((_, k) => (
                 //<View key={k} style={styles.RedItemWrap}>
-                <View key={k} style={styles.ItemWrap}>
-                  <Text style={styles.PoText}>PO ITem ID - <Text style={styles.PoBoldText}>{_.itemId}</Text></Text>
+                <View
+                  key={k}
+                  style={k == 0 ? styles.RedItemWrap : styles.ItemWrap}>
+                  <Text style={styles.PoText}>
+                    PO ITem ID -{' '}
+                    <Text style={styles.PoBoldText}>{_.itemId}</Text>
+                  </Text>
                   <Text style={styles.PoText}>
                     {_.itemQty}Qty. | {_.itemStatus}
                   </Text>
@@ -292,8 +295,6 @@ const SplitHistoryModal = props => {
 };
 
 const styles = StyleSheet.create({
-
-
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
@@ -311,12 +312,12 @@ const styles = StyleSheet.create({
     width: Dimension.width70,
   },
   closeIconWrap: {
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
     paddingHorizontal: Dimension.padding15,
   },
   headerTxtWrap: {
     paddingHorizontal: Dimension.padding15,
-    marginBottom: Dimension.margin20
+    marginBottom: Dimension.margin20,
   },
 
   headerTxt: {
@@ -324,7 +325,6 @@ const styles = StyleSheet.create({
     color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
     // marginLeft:Dimension.margin10,
-
   },
   showMoreCta: {
     marginLeft: Dimension.margin10,
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
 
   BottomDataWrap: {
     paddingVertical: Dimension.padding30,
-    paddingHorizontal: Dimension.padding15
+    paddingHorizontal: Dimension.padding15,
   },
   BottomDataTitle: {
     fontSize: Dimension.font12,
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WhiteColor,
     borderWidth: 1,
     borderColor: Colors.BoxBorderColor,
-    marginBottom: Dimension.margin40
+    marginBottom: Dimension.margin40,
   },
   RedItemWrap: {
     flexDirection: 'row',
@@ -363,8 +363,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.LightBrandColor1,
     borderWidth: 1,
     borderColor: Colors.LightBrandColor1,
-    marginBottom: Dimension.margin40
-
+    marginBottom: Dimension.margin40,
   },
   PoText: {
     fontSize: Dimension.font10,
@@ -378,12 +377,10 @@ const styles = StyleSheet.create({
   },
   leftStepsPart: {
     marginRight: Dimension.margin10,
-    flex: 1,
-    alignItems: "center",
-    paddingTop: Dimension.padding12
+    alignItems: 'center',
   },
   rightStepsPart: {
-    flex: 9
+    flex: 9,
   },
   circle: {
     width: Dimension.width10,
@@ -396,7 +393,7 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     borderWidth: 1,
     width: 1,
-    borderStyle: "dashed",
+    borderStyle: 'dashed',
     borderColor: Colors.grayShade14,
   },
 });

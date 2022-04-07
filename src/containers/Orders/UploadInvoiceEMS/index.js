@@ -7,7 +7,7 @@ import { getInvoiceEMSDetails, getInvoiceOMSDetails } from '../../../services/or
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import styles from './style';
-import InvoiceCard from '../../../component/InvoiceCard';
+import InvoiceEmsCard from '../../../component/InvoiceEmsCard';
 
 const UploadInvoiceScreen = (props) => {
 
@@ -72,7 +72,7 @@ const UploadInvoiceScreen = (props) => {
 
     const renderItem = ({ item, index }) => {
         return (
-            <InvoiceCard
+            <InvoiceEmsCard
                 msn={item.productMsn}
                 orderRef={item.orderRef}
                 productUom={item.productUom}
@@ -119,15 +119,6 @@ const UploadInvoiceScreen = (props) => {
                 ListEmptyComponent={renderListEmptyComponent}
                 keyExtractor={(item, index) => `${index}-item`}
                 onEndReachedThreshold={0.9}
-                onEndReached={({ distanceFromEnd }) => {
-                    if (!onEndReachedCalledDuringMomentum.current) {
-                        endReachedFetchListing();
-                        onEndReachedCalledDuringMomentum.current = true;
-                    }
-                }}
-                onMomentumScrollBegin={() => {
-                    onEndReachedCalledDuringMomentum.current = false;
-                }}
                 showsVerticalScrollIndicator={false}
             />
             <View>
