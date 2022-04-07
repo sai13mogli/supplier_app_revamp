@@ -89,9 +89,14 @@ const OrdersScreen = props => {
       value: 'Fulfilled_Orders',
     },
     {
-      label: 'Cancelled Orders/Returned Orders',
-      key: 'Cancelled_Returned',
-      value: 'Cancelled_Returned',
+      label: 'Cancelled Orders',
+      key: 'Cancelled',
+      value: 'Cancelled',
+    },
+    {
+      label: 'Returned Orders',
+      key: 'Returned',
+      value: 'Returned',
     },
   ];
 
@@ -106,10 +111,10 @@ const OrdersScreen = props => {
       {label: 'Mark Shipped', key: 'MARK_SHIPPED'},
     ],
     Fulfilled_Orders: [{label: 'Fulfilled', key: 'FULFILLED'}],
-    Cancelled_Returned: [
+    Cancelled: [{label: 'Cancelled', key: 'CANCELLED'}],
+    Returned: [
       {label: 'Return Pending', key: 'RETURN_PENDING'},
       {label: 'Return Done', key: 'RETURN_DONE'},
-      {label: 'Cancelled', key: 'CANCELLED'},
     ],
   };
 
@@ -171,6 +176,7 @@ const OrdersScreen = props => {
   const renderItem = ({item, index}) => {
     return (
       <Ordercard
+        warehouseId={item.warehouseId}
         msn={item.productMsn}
         quantity={item.quantity}
         shipmentType={shipmentType}

@@ -1,5 +1,5 @@
-import {createRef} from 'react';
-import {Linking} from 'react-native';
+import { createRef } from 'react';
+import { Linking } from 'react-native';
 import HomeScreen from '../containers/Home';
 import ProfileScreen from '../containers/Profile';
 import OrdersScreen from '../containers/Orders';
@@ -19,7 +19,7 @@ import CategoryBrand from '../containers/Profile/CategoryBrand';
 import SelectCategoryScreen from '../containers/Auth/SelectCategory';
 import NotificationScreen from '../containers/Notification';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
-import {OrderedMap} from 'immutable';
+import { OrderedMap } from 'immutable';
 import Accounts from '../containers/Profile/BankDetails/Accounts';
 import TdsDetails from '../containers/Profile/BankDetails/TdsDetails';
 import PickedUp from '../containers/Profile/Addresses/PickedUp';
@@ -32,6 +32,9 @@ import Error from '../containers/Auth/Login/Error';
 import Conversation from '../containers/Support/Conversation';
 import EditAddress from '../containers/Profile/Addresses/EditAddress';
 import EditBankAccount from '../containers/Profile/BankDetails/Accounts/EditBankAccount';
+import UploadInvoiceScreen from '../containers/Orders/UploadInvoiceEMS';
+import UploadInvoiceOMSScreen from '../containers/Orders/UploadInvoiceOMS';
+import InvoiceEMSFormDetailScreen from '../containers/Orders/InvoiceEMSFormDetails';
 
 export const BOTTOM_TAB_SCREENS = [
   {
@@ -193,6 +196,19 @@ export const APP_STACK_SCREENS = [
     name: 'Conversation',
     component: Conversation,
   },
+  {
+    name: 'UploadInvoiceEMS',
+    component: UploadInvoiceScreen,
+  },
+  {
+    name: 'InvoiceEMSFormDetails',
+    component: InvoiceEMSFormDetailScreen,
+  },
+  {
+    name: 'UploadInvoiceOMS',
+    component: UploadInvoiceOMSScreen,
+  },
+
 ];
 
 export const PROFILE_TABS = new OrderedMap({

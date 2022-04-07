@@ -24,7 +24,6 @@ import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PackNowModal from '../component/PackNowModal';
 import RejectModal from '../component/RejectModal';
 import MarkOutForDeliveryModal from '../component/MarkOutForDeliveryModal';
@@ -34,6 +33,7 @@ import ProofOfDeliveryModal from '../component/ProofOfDeliveryModal';
 import AcceptModal from './AcceptModal';
 import AddView from './AddView';
 import SplitQuantityModal from './SplitQuantityModal';
+import {useNavigation} from '@react-navigation/native';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -66,7 +66,10 @@ const Ordercard = props => {
     selectItemId,
     shipmentType,
     shipmentUrl,
+    warehouseId,
   } = props;
+
+  const [invoiceLoading, setInvoiceLoading] = useState(false);
   const [orderImage, setOrderImage] = useState(null);
   const [showLspDetails, setShowLspDetails] = useState(null);
   const [showMoreTxt, setShowMoreTxt] = useState(false);
@@ -86,6 +89,8 @@ const Ordercard = props => {
   const [splitQuantityModal, setSplitQuantityModal] = useState(false);
   const [manifestLoader, setManifestLoader] = useState(false);
   const [shipmentLoader, setShipmentLoader] = useState(false);
+  const {navigate} = useNavigation();
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchImage();
@@ -154,7 +159,7 @@ const Ordercard = props => {
     fetchTabCountFunc(selectedTab, shipmentType);
   };
 
-  const getPOInvoice = (fromPO, invoiceUrl) => {
+  const getPOInvoice = (fromPO, invoiceUrl, isInvoice) => {
     if (Platform.OS == 'android') {
       try {
         PermissionsAndroid.request(
@@ -162,7 +167,7 @@ const Ordercard = props => {
         ).then(granted => {
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
             console.log('Storage Permission Granted.');
-            downloadPDF(fromPO, invoiceUrl);
+            downloadPDF(fromPO, invoiceUrl, isInvoice);
           } else {
           }
         });
@@ -196,14 +201,19 @@ const Ordercard = props => {
     }
   };
 
-  const downloadPDF = async (isPO, pdfUrl) => {
+  const downloadPDF = async (isPO, pdfUrl, isInvoice) => {
     //Main function to download the image
     let date = new Date(); //To add the time suffix in filename
 
     try {
       let image_URL = '';
+      if (isInvoice) {
+        setInvoiceLoading(true);
+      }
       if (isPO) {
-        setPoLoader(true);
+        if (!isInvoice) {
+          setPoLoader(true);
+        }
         const {data} = await getpoChallan(orderRef);
         if (data && data.success) {
           //Image URL which we want to download
@@ -211,7 +221,9 @@ const Ordercard = props => {
         }
       } else {
         //Image URL which we want to download
-        setInvoiceLoader(true);
+        if (!isInvoice) {
+          setInvoiceLoader(true);
+        }
         image_URL = pdfUrl;
       }
       //Getting the extention of the file
@@ -243,6 +255,7 @@ const Ordercard = props => {
           //Showing alert after successful downloading
           console.log('res -> ', JSON.stringify(res));
           console.log('imageUrl', image_URL, isPO);
+          setInvoiceLoading(false);
           if (isPO) {
             setPoLoader(false);
           } else {
@@ -257,6 +270,7 @@ const Ordercard = props => {
         });
     } catch (error) {
       console.log(error);
+      setInvoiceLoading(false);
       if (isPO) {
         setPoLoader(false);
       } else {
@@ -332,6 +346,9 @@ const Ordercard = props => {
     //To get the file extension
     return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
   };
+  // const onUploadInvoice = () => {
+  //   { () => props.navigation.navigate("UploadInvoiceScreen") }
+  // }
 
   const createManifest = async () => {
     try {
@@ -394,6 +411,22 @@ const Ordercard = props => {
             style={styles.acceptCtabtn}>
             <Text style={styles.acceptCtaTxt}>{cta}</Text>
           </TouchableOpacity>
+        ) : cta == 'DOWNLOAD_INVOICE' ? (
+          <TouchableOpacity
+            disabled={invoiceLoading}
+            onPress={() => getPOInvoice(false, url, true)}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
+            <Text style={styles.rejectCtaTxt}>DOWNLOAD INVOICE</Text>
+            {invoiceLoading && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
         ) : cta == 'DOWNLOAD_PO_EMS' ? (
           <TouchableOpacity
             disabled={poLoader}
@@ -410,6 +443,22 @@ const Ordercard = props => {
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
+        ) : cta == 'MAP_PO_TO_INVOICE' ? (
+          <TouchableOpacity
+            disabled={poLoader}
+            onPress={() =>
+              navigation.navigate('UploadInvoiceOMS', {
+                orderRef,
+                actionCTA,
+                itemRef,
+              })
+            }
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
+            {poLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
         ) : cta == 'DOWNLOAD_PO_OMS' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
@@ -421,7 +470,7 @@ const Ordercard = props => {
                 flexBasis: actionCTA.length > 1 ? '50%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>DOWNLOAD Invoice</Text>
+            <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
             {invoiceLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
@@ -429,6 +478,17 @@ const Ordercard = props => {
         ) : cta == 'MAP_INVOICE' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
+            onPress={() =>
+              navigation.navigate('UploadInvoiceEMS', {
+                orderRef,
+                actionCTA,
+                itemRef,
+                warehouseId,
+                hsn,
+                quantity,
+                totalAmount,
+              })
+            }
             style={[
               styles.DownloadPoBtn,
               {
@@ -557,18 +617,71 @@ const Ordercard = props => {
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
-        ) : cta == 'CREATE_MANIFEST_DISABLED' ? (
+        ) : cta == 'MAP_PO_TO_INVOICE_DISABLED' ? (
           <>
             <TouchableOpacity
               disabled={true}
               style={[
-                styles.DownloadPoBtn,
+                styles.DownloadPoBtnDisabled,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
                   flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 },
               ]}>
-              <Text style={styles.rejectCtaTxt}>Create Manifest</Text>
+              <Text style={styles.rejectCtaTxtDisabled}>Map PO to Invoice</Text>
+            </TouchableOpacity>
+            {/* <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
+              Shipment lable not created
+            </Text> */}
+          </>
+        ) : cta == 'PACK_ORDER_DISABLED' ? (
+          <>
+            <TouchableOpacity
+              disabled={true}
+              style={[
+                styles.DownloadPoBtnDisabled,
+                {
+                  flex: actionCTA.length > 1 ? 5 : 1,
+                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                },
+              ]}>
+              <Text style={styles.rejectCtaTxtDisabled}>Pack Order</Text>
+            </TouchableOpacity>
+            {/* <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
+              Shipment lable not created
+            </Text> */}
+          </>
+        ) : cta == 'PACK_ORDER_INVOICE_DISABLED' ? (
+          <>
+            <TouchableOpacity
+              disabled={true}
+              style={[
+                styles.DownloadPoBtnDisabled,
+                {
+                  flex: actionCTA.length > 1 ? 5 : 1,
+                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                },
+              ]}>
+              <Text style={styles.rejectCtaTxtDisabled}>
+                Pack Order Invoice
+              </Text>
+            </TouchableOpacity>
+            {/* <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
+              Shipment lable not created
+            </Text> */}
+          </>
+        ) : cta == 'CREATE_MANIFEST_DISABLED' ? (
+          <>
+            <TouchableOpacity
+              disabled={true}
+              style={[
+                styles.DownloadPoBtnDisabled,
+                {
+                  flex: actionCTA.length > 1 ? 5 : 1,
+                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                },
+              ]}>
+              <Text style={styles.rejectCtaTxtDisabled}>Create Manifest</Text>
             </TouchableOpacity>
             <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
               Shipment lable not created
@@ -1170,9 +1283,35 @@ const styles = StyleSheet.create({
     color: Colors.FontColor,
     fontSize: Dimension.font12,
   },
+  rejectCtaTxtDisabled: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    color: Colors.eyeIcon,
+    fontSize: Dimension.font12,
+  },
   DownloadPoBtn: {
     flex: 1,
     backgroundColor: Colors.grayShade12,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding8,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    flexBasis: '100%',
+    marginTop: Dimension.margin10,
+  },
+  DownloadPoBtn: {
+    flex: 1,
+    backgroundColor: Colors.grayShade12,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexBasis: '100%',
+    marginTop: Dimension.margin10,
+  },
+  DownloadPoBtnDisabled: {
+    flex: 1,
+    backgroundColor: Colors.grayShade1,
     borderRadius: 4,
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
