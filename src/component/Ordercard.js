@@ -9,7 +9,7 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
-import {getImageUrl, markOutForOrderApi} from '../services/orders';
+import {getImageUrl, markOutForOrderApi, getItemInfo} from '../services/orders';
 import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
@@ -67,6 +67,7 @@ const Ordercard = props => {
     shipmentType,
     shipmentUrl,
     warehouseId,
+    podUrl,
   } = props;
 
   const [invoiceLoading, setInvoiceLoading] = useState(false);
@@ -89,6 +90,8 @@ const Ordercard = props => {
   const [splitQuantityModal, setSplitQuantityModal] = useState(false);
   const [manifestLoader, setManifestLoader] = useState(false);
   const [shipmentLoader, setShipmentLoader] = useState(false);
+  const [podLoader, setPodLoader] = useState(false);
+  const [debitLoader, setDebitLoader] = useState(false);
   const {navigate} = useNavigation();
   const navigation = useNavigation();
 
@@ -277,7 +280,7 @@ const Ordercard = props => {
         setInvoiceLoader(false);
       }
       Toast.show({
-        type: 'success',
+        type: 'error',
         text2: 'Something went wrong',
         visibilityTime: 2000,
         autoHide: true,
@@ -391,7 +394,189 @@ const Ordercard = props => {
     }
   };
 
-  const renderCTAs = (cta, url, fromCTA, fromPartial) => {
+  const getPodCopy = podcopyUrl => {
+    if (Platform.OS == 'android') {
+      try {
+        PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        ).then(granted => {
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log('Storage Permission Granted.');
+            downloadPodCopyUrl(podcopyUrl);
+          } else {
+          }
+        });
+      } catch (err) {
+        //To handle permission related issue
+        console.warn(err);
+      }
+    } else {
+      downloadPodCopyUrl(podcopyUrl);
+    }
+  };
+
+  const downloadPodCopyUrl = async url => {
+    //Main function to download the image
+    let date = new Date(); //To add the time suffix in filename
+    try {
+      let image_URL = '';
+      //Image URL which we want to download
+      setPodLoader(true);
+      image_URL = url;
+      //Getting the extention of the file
+      let ext = getExtention(image_URL);
+      console.log('ext', ext);
+      ext = '.' + ext[0];
+      //Get config and fs from RNFetchBlob
+      //config: To pass the downloading related options
+      //fs: To get the directory path in which we want our image to download
+      const {config, fs} = RNFetchBlob;
+      let PictureDir =
+        Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+      let options = {
+        fileCache: true,
+        addAndroidDownloads: {
+          //Related to the Android only
+          useDownloadManager: true,
+          notification: true,
+          path:
+            PictureDir +
+            '/PDF_' +
+            Math.floor(date.getTime() + date.getSeconds() / 2) +
+            ext,
+          description: 'PDF',
+        },
+      };
+      config(options)
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
+        .then(res => {
+          //Showing alert after successful downloading
+          console.log('res -> ', JSON.stringify(res));
+          console.log('imageUrl', image_URL);
+          setPodLoader(false);
+          Toast.show({
+            type: 'success',
+            text2: 'POD copy Downloaded',
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        });
+    } catch (error) {
+      console.log(error);
+      setPodLoader(false);
+      Toast.show({
+        type: 'error',
+        text2: 'Something went wrong',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    }
+  };
+
+  const getDebitNoteUrl = async () => {
+    try {
+      setDebitLoader(true);
+      const {data} = await getItemInfo(supplierId, `${itemRef}`);
+      if (data.success) {
+        getDebitNoteFn(
+          data &&
+            data.data &&
+            data.data.records &&
+            data.data.records[0] &&
+            data.data.records[0].dnUrl,
+        );
+      } else {
+        setDebitLoader(false);
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      setDebitLoader(false);
+    }
+  };
+
+  const getDebitNoteFn = dnUrl => {
+    if (Platform.OS == 'android') {
+      try {
+        PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        ).then(granted => {
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            downloadDnUrl(dnUrl);
+          } else {
+          }
+        });
+      } catch (err) {
+        //To handle permission related issue
+        console.warn(err);
+      }
+    } else {
+      downloadDnUrl(dnUrl);
+    }
+  };
+
+  const downloadDnUrl = async url => {
+    //Main function to download the image
+    let date = new Date(); //To add the time suffix in filename
+    try {
+      let image_URL = '';
+      //Image URL which we want to download
+      image_URL = url;
+      //Getting the extention of the file
+      let ext = getExtention(image_URL);
+      console.log('ext', ext);
+      ext = '.' + ext[0];
+      //Get config and fs from RNFetchBlob
+      //config: To pass the downloading related options
+      //fs: To get the directory path in which we want our image to download
+      const {config, fs} = RNFetchBlob;
+      let PictureDir =
+        Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+      let options = {
+        fileCache: true,
+        addAndroidDownloads: {
+          //Related to the Android only
+          useDownloadManager: true,
+          notification: true,
+          path:
+            PictureDir +
+            '/PDF_' +
+            Math.floor(date.getTime() + date.getSeconds() / 2) +
+            ext,
+          description: 'PDF',
+        },
+      };
+      config(options)
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
+        .then(res => {
+          //Showing alert after successful downloading
+          console.log('res -> ', JSON.stringify(res));
+          console.log('imageUrl', image_URL);
+          setDebitLoader(false);
+          Toast.show({
+            type: 'success',
+            text2: 'Debit Note Downloaded',
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        });
+    } catch (error) {
+      console.log(error);
+      setDebitLoader(false);
+      Toast.show({
+        type: 'error',
+        text2: 'Something went wrong',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    }
+  };
+
+  const renderCTAs = (cta, url, fromCTA, fromPartial, podcopy) => {
     return (
       <>
         {cta == 'REJECT' ? (
@@ -410,6 +595,20 @@ const Ordercard = props => {
             onPress={() => setDisplayCalendar(true)}
             style={styles.acceptCtabtn}>
             <Text style={styles.acceptCtaTxt}>{cta}</Text>
+          </TouchableOpacity>
+        ) : cta == 'OMS_PICKUP_DATE' ? (
+          <TouchableOpacity
+            // disabled={acceptLoader}
+            onPress={() => setDisplayCalendar(true)}
+            style={styles.acceptCtabtn}>
+            <Text style={styles.acceptCtaTxt}>RESCHEDULE PICKUP</Text>
+          </TouchableOpacity>
+        ) : cta == 'EMS_PICKUP_DATE' ? (
+          <TouchableOpacity
+            // disabled={acceptLoader}
+            onPress={() => setDisplayCalendar(true)}
+            style={styles.acceptCtabtn}>
+            <Text style={styles.acceptCtaTxt}>CHOOSE PICKUP</Text>
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_INVOICE' ? (
           <TouchableOpacity
@@ -492,6 +691,38 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
             {invoiceLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'DOWNLOAD_POD_COPY' ? (
+          <TouchableOpacity
+            disabled={podLoader}
+            onPress={() => getPodCopy(podcopy)}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
+            <Text style={styles.rejectCtaTxt}>DOWNLOAD POD COPY</Text>
+            {podLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'DOWNLOAD_DEBIT_NOTE' ? (
+          <TouchableOpacity
+            disabled={debitLoader}
+            onPress={() => getDebitNoteUrl()}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
+            <Text style={styles.rejectCtaTxt}>DOWNLOAD DEBIT NOTE</Text>
+            {debitLoader && (
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
@@ -762,18 +993,18 @@ const Ordercard = props => {
     // }
   };
 
-  const renderPartialCTAs = (url, fromCTA) => {
+  const renderPartialCTAs = (url, fromCTA, podUrl = '') => {
     return (actionCTA || []).map((_, i) => {
       if (i < 2) {
-        return renderCTAs(_, url, fromCTA, true);
+        return renderCTAs(_, url, fromCTA, true, podUrl);
       }
     });
   };
 
-  const renderFurtherCTAs = (url, fromCTA) => {
+  const renderFurtherCTAs = (url, fromCTA, podUrl = '') => {
     return (actionCTA || []).map((_, i) => {
       if (i > 1) {
-        return renderCTAs(_, url, fromCTA, true);
+        return renderCTAs(_, url, fromCTA, true, podUrl);
       }
     });
   };
@@ -971,8 +1202,10 @@ const Ordercard = props => {
               : {flexDirection: 'row', flex: 1, marginTop: Dimension.margin15}
           }>
           <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
-            {renderPartialCTAs(invoiceUrl, fromCTA)}
-            {!showMoreCTA ? renderFurtherCTAs(invoiceUrl, fromCTA) : null}
+            {renderPartialCTAs(invoiceUrl, fromCTA, podUrl)}
+            {!showMoreCTA
+              ? renderFurtherCTAs(invoiceUrl, fromCTA, podUrl)
+              : null}
           </View>
           <View style={{flex: 1}}>
             {actionCTA && actionCTA.length > 2 ? (
