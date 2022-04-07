@@ -15,21 +15,21 @@ export const ORDERS_ACTIONS = {
 };
 
 export const orderFiltersTypeData = [
-  {title: 'PO ID', key: 'orderRefs'},
-  {title: 'Pickup Date', key: 'pickupDate'},
-  {title: 'PO Date', key: 'poDate'},
-  {title: 'Order Type', key: 'orderType'},
-  {title: 'Delivery Type', key: 'deliveryType'},
+  { title: 'PO ID', key: 'orderRefs' },
+  { title: 'Pickup Date', key: 'pickupDate' },
+  { title: 'PO Date', key: 'poDate' },
+  { title: 'Order Type', key: 'orderType' },
+  { title: 'Delivery Type', key: 'deliveryType' },
 ];
 
 export const orderfiltersData = {
   orderType: [
-    {key: 'GST', title: 'GST'},
-    {key: 'RETAIL', title: 'Retail'},
+    { key: 'GST', title: 'GST' },
+    { key: 'RETAIL', title: 'Retail' },
   ],
   deliveryType: [
-    {key: 'ONE_SHIP', title: 'OneShip'},
-    {key: 'DROP_SHIP', title: 'DropShip'},
-    {key: 'DOOR_DELIVERY', title: 'Door Delivery'},
+    { key: 'ONE_SHIP', title: 'OneShip' },
+    { key: 'DROP_SHIP', title: 'DropShip' },
+    { key: 'DOOR_DELIVERY', title: 'Door Delivery' },
   ],
 };

@@ -1,7 +1,7 @@
-import {List, OrderedMap} from 'immutable';
-import {STATE_STATUS} from '../constants/index';
-import {PROFILE_ACTIONS} from '../constants/profile';
-import {ORDERS_ACTIONS} from '../constants/orders';
+import { List, OrderedMap } from 'immutable';
+import { STATE_STATUS } from '../constants/index';
+import { PROFILE_ACTIONS } from '../constants/profile';
+import { ORDERS_ACTIONS } from '../constants/orders';
 
 const initialState = new OrderedMap({
   shipmentType: '',
@@ -38,7 +38,7 @@ const initialState = new OrderedMap({
 });
 
 export const ordersReducer = (state = initialState, action) => {
-  const {type, payload, error} = action;
+  const { type, payload, error } = action;
   switch (type) {
     case ORDERS_ACTIONS.SET_SHIPMENT_TYPE:
       return state.setIn(['shipmentType'], payload.shipmentType);
