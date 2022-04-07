@@ -443,6 +443,26 @@ const Ordercard = props => {
               <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
+        ) : cta == 'REMAP_INVOICE' ? (
+          <TouchableOpacity
+            disabled={poLoader}
+            onPress={() =>
+              navigation.navigate('UploadInvoiceEMS', {
+                orderRef,
+                actionCTA,
+                itemRef,
+                warehouseId,
+                hsn,
+                quantity,
+                totalAmount,
+              })
+            }
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>REMAP INVOICE</Text>
+            {poLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
         ) : cta == 'MAP_PO_TO_INVOICE' ? (
           <TouchableOpacity
             disabled={poLoader}
@@ -633,6 +653,23 @@ const Ordercard = props => {
             {/* <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
               Shipment lable not created
             </Text> */}
+          </>
+        ) : cta == 'MAP_INVOICE_PENDING' ? (
+          <>
+            <TouchableOpacity
+              disabled={true}
+              style={[
+                styles.DownloadPoBtnDisabled,
+                {
+                  flex: actionCTA.length > 1 ? 5 : 1,
+                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                },
+              ]}>
+              <Text style={styles.rejectCtaTxtDisabled}>Upload Invoice</Text>
+            </TouchableOpacity>
+            <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
+              Invoice Approval pending
+            </Text>
           </>
         ) : cta == 'PACK_ORDER_DISABLED' ? (
           <>
