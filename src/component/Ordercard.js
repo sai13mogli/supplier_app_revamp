@@ -691,7 +691,7 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator color={Colors.FontColor} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_POD_COPY' ? (
@@ -765,7 +765,7 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>MARK OUT FOR DELIVERY</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator color={Colors.FontColor} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'VIEW_TREE_MODAL' ? (
@@ -781,7 +781,7 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>VIEW SPLIT HISTORY</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator color={Colors.FontColor} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'VIEW_SHIPPED_DETAILS' ? (
@@ -797,7 +797,7 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>VIEW LSP DETAILS</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator color={Colors.FontColor} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'PACK_ORDER' ? (
@@ -865,7 +865,7 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>PROOF OF DELIVERY</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator color={Colors.FontColor} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'MAP_PO_TO_INVOICE_DISABLED' ? (
@@ -951,9 +951,11 @@ const Ordercard = props => {
               ]}>
               <Text style={styles.rejectCtaTxtDisabled}>Create Manifest</Text>
             </TouchableOpacity>
-            <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
+            <Text style={styles.shipmentLbelTxt}>
               Shipment lable not created
             </Text>
+            
+            
           </>
         ) : cta == 'CREATE_MANIFEST' ? (
           <TouchableOpacity
@@ -1207,11 +1209,9 @@ const Ordercard = props => {
               ? renderFurtherCTAs(invoiceUrl, fromCTA, podUrl)
               : null}
           </View>
-          <View style={{flex: 1}}>
+          
             {actionCTA && actionCTA.length > 2 ? (
-              // <Text onPress={toggleMoreCTAs} style={styles.readMoretxt}>
-              //   {showMoreCTA ? 'Dots' : 'Close'}
-              // </Text>
+             <View style={{flex: 1}}>
               <TouchableOpacity
                 onPress={toggleMoreCTAs}
                 style={styles.showMoreCta}>
@@ -1220,8 +1220,9 @@ const Ordercard = props => {
                   color={Colors.FontColor}
                   size={Dimension.font20}></Icon>
               </TouchableOpacity>
+              </View>
             ) : null}
-          </View>
+          
         </View>
       </>
     );
@@ -1560,14 +1561,41 @@ const styles = StyleSheet.create({
   },
   DownloadPoBtn: {
     flex: 1,
-    backgroundColor: Colors.grayShade12,
+    backgroundColor: Colors.WhiteColor,
     borderRadius: 4,
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
-
-    flexBasis: '100%',
+    flexBasis: '50%',
     marginTop: Dimension.margin10,
+    borderColor:Colors.grayShade15,
+    borderWidth:1,
+    marginHorizontal:Dimension.margin5,
+    flexDirection:"row"
+  },
+  disabledbtn:{
+    flex: 1,
+    backgroundColor: Colors.grayshade16,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexBasis: '50%',
+    marginTop: Dimension.margin10,
+    borderColor:Colors.BoxBorderColor,
+    borderWidth:1,
+  },
+  disabledBtntxt:{
+    fontFamily: Dimension.CustomSemiBoldFont,
+    color: Colors.eyeIcon,
+    fontSize: Dimension.font12,
+  },
+  shipmentLbelTxt:{
+    fontFamily: Dimension.CustomMediumFont,
+    color: Colors.BlueShade,
+    fontSize: Dimension.font10,
+    flexBasis: '100%',
+    marginTop:Dimension.margin5
   },
   DownloadPoBtn: {
     flex: 1,
@@ -1581,14 +1609,15 @@ const styles = StyleSheet.create({
   },
   DownloadPoBtnDisabled: {
     flex: 1,
-    backgroundColor: Colors.grayShade1,
+    backgroundColor: Colors.grayshade16,
     borderRadius: 4,
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
-
     flexBasis: '100%',
     marginTop: Dimension.margin10,
+    borderColor:Colors.BoxBorderColor,
+    borderWidth:1,
   },
   showMoreCta: {
     marginLeft: Dimension.margin10,

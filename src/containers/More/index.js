@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
-import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import { MORE_TABS, PRIVACY_TABS } from '../../constants';
+import React, {useEffect} from 'react';
+import {Text, View, ScrollView, TouchableOpacity,StatusBar,ImageBackground} from 'react-native';
+import {MORE_TABS, PRIVACY_TABS} from '../../constants';
+
+
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import Dimension from '../../Theme/Dimension';
@@ -69,35 +71,32 @@ const MoreScreen = props => {
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <ScrollView>
-        <Text
-          style={{
-            marginTop: 40,
-            color: '#000',
-            fontSize: 12,
-            fontWeight: 'bold',
-          }}>
-          {userInfo.contactName}
-          {userInfo.phone} | {userInfo.email}
-        </Text>
-        <Text
-          style={{
-            marginTop: 10,
-            fontSize: 12,
-            fontWeight: 'bold',
-            color: '#000',
-          }}>
-          Moglix Supplier Since
-        </Text>
-        <Text
-          style={{
-            marginTop: 10,
-            fontSize: 12,
-            fontWeight: 'bold',
-            color: '#000',
-          }}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle={"light-content"}
+      />
+      <ImageBackground
+        source={require('../../assets/images/MenuBG.png')}
+        resizeMode="cover" //style={{flex:1}}
+      >
+        <View style={styles.topWrap}>
+
+        
+        <Text style={styles.userNameCss}>{userInfo.contactName} </Text>
+         <Text style={styles.UserEmail}> {userInfo.phone}  |  {userInfo.email}</Text>
+         <View style={{flexDirection:"row"}}>
+         <Text style={styles.companyName}> Moglix Supplier Since </Text>
+         <Text style={styles.dateTxt}>
           {getTime(profileData.createdAt)}
         </Text>
-        <View style={{ marginTop: 20 }}>
+         </View>
+        
+    
+    </View>
+        </ImageBackground>
+        
+        <View style={styles.profileTabWrapper}>
           {MORE_TABS.map((tab, tabIndex) => (
             <View>
               <TouchableOpacity
@@ -110,26 +109,26 @@ const MoreScreen = props => {
                     })
                     : tab.onPress()
                 }>
-                <View style={[styles.IconWrap]}>
+                <View style={{flexDirection:"row"}}>
                   <CustomeIcon
                     name={tab.icon}
                     color={Colors.headerTxtColor}
-                    size={Dimension.font14}></CustomeIcon>
-                </View>
-                <View>
+                    size={Dimension.font18}></CustomeIcon>
+                
+                
                   <Text style={styles.tabTitle}>{tab.title}</Text>
                 </View>
 
                 <CustomeIcon
-                  name={'arrow-forward'}
-                  color={Colors.headerTxtColor}
+                  name={'arrow-right-line'}
+                  color={Colors.blackColor}
                   size={Dimension.font18}></CustomeIcon>
               </TouchableOpacity>
             </View>
           ))}
         </View>
 
-        <View style={{ marginTop: 20 }}>
+        <View style={styles.profileTabWrapper}>
           {PRIVACY_TABS.map((tab, tabIndex) => (
             <View>
               <TouchableOpacity
@@ -143,20 +142,20 @@ const MoreScreen = props => {
                     : tab.onPress()
                 }>
                 <View style={{ flexDirection: 'row' }}>
-                  <View style={[styles.IconWrap]}>
+                 
                     <CustomeIcon
                       name={tab.icon}
                       color={Colors.headerTxtColor}
-                      size={Dimension.font14}></CustomeIcon>
-                  </View>
-                  <View>
+                      size={Dimension.font18}></CustomeIcon>
+                  
+                  
                     <Text style={styles.tabTitle}>{tab.title}</Text>
-                  </View>
+                  
                 </View>
 
                 <CustomeIcon
-                  name={'arrow-forward'}
-                  color={Colors.headerTxtColor}
+                  name={'arrow-right-line'}
+                  color={Colors.blackColor}
                   size={Dimension.font18}></CustomeIcon>
               </TouchableOpacity>
             </View>
@@ -166,15 +165,17 @@ const MoreScreen = props => {
         <View style={styles.varsionWrap}>
           <View style={{ flexDirection: 'row' }}>
             <CustomeIcon
-              name={'device-mobile'}
+              name={'smartphone-line'}
               color={Colors.headerTxtColor}
-              size={Dimension.font18}></CustomeIcon>
+              size={Dimension.font18}>
+
+              </CustomeIcon>
 
             <View
-              style={{ flexDirection: 'column', marginTop: -Dimension.margin10 }}>
+              style={{ flexDirection: 'column',}}>
               <Text
-                style={[styles.versionText, { marginLeft: Dimension.margin10 }]}>
-                App Version {VersionCheck.getCurrentVersion()}
+                style={[styles.versionText,]}>
+                App Version <Text  style={[styles.AppversionNumber,]}> {VersionCheck.getCurrentVersion()} </Text>
               </Text>
               {/* <Text
               style={[styles.versionText, {marginLeft: Dimension.margin10}]}>

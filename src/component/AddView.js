@@ -135,20 +135,25 @@ const AddView = props => {
       onBackButtonPress={() => setAddViewModal(false)}>
       <View style={styles.modalContainer}>
         <View style={styles.topbdr}></View>
-
-        <View style={styles.ModalheadingWrapper}>
+      <View style={styles.closeIconWrap}>
           <CustomeIcon
-            name={'close'}
-            size={Dimension.font22}
-            color={Colors.FontColor}
-            onPress={() => setAddViewModal(false)}></CustomeIcon>
-        </View>
-        <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
-          Add Serial Number
-        </Text>
+                name={'close'}
+                size={Dimension.font22}
+                color={Colors.FontColor}
+                onPress={() => {
+                  setAddViewModal(false);
+                }}
+              />  
+          </View>
+          <View style={styles.headerTxtWrap}>
+              <Text style={styles.headerTxt}>Add serial number</Text>
+           </View>
         <View style={{paddingHorizontal: Dimension.padding15}}>
           {renderOrderDetails()}
         </View>
+        <View style={styles.BottomDataWrap}>
+
+        
         <FloatingLabelInputField
           title={'Add Serial Number'}
           label={'Add Serial Number'}
@@ -162,7 +167,7 @@ const AddView = props => {
           //   secureTextEntry={isSecure}
           //   extraView={() => getExtraView()}
         />
-
+</View>
         <View style={styles.btnWrap}>
           <TouchableOpacity
             style={styles.cancelBtn}
@@ -189,7 +194,51 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     paddingTop: Dimension.padding10,
+   // height:deviceHeight-100
   },
+  topbdr: {
+    alignSelf: 'center',
+    height: 3,
+    backgroundColor: Colors.modalBorder,
+    borderRadius: 2,
+    width: Dimension.width70,
+  },
+  closeIconWrap:{
+    alignItems:"flex-end",
+    paddingHorizontal:Dimension.padding15,
+  },
+  headerTxtWrap:{
+    paddingHorizontal:Dimension.padding15,
+    marginBottom:Dimension.margin20
+  },
+
+  headerTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+   // marginLeft:Dimension.margin10,
+
+  },
+  showMoreCta: {
+    marginLeft: Dimension.margin10,
+    paddingVertical: Dimension.padding6,
+  },
+  
+  BottomDataWrap:{
+paddingVertical:Dimension.padding30,
+paddingHorizontal:Dimension.padding15
+  },
+  bottomAction: {
+    borderTopWidth: 1,
+    borderTopColor: Colors.grayShade2,
+    padding: Dimension.padding15,
+    backgroundColor: Colors.WhiteColor,
+    //position: 'absolute',
+    width: '100%',
+    //bottom: 0,
+     flexDirection: 'row',
+  },
+ 
 
   rejectCtabtn: {
     flex: 5,

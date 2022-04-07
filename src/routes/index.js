@@ -11,6 +11,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {navigationRef} from './RootNavigation';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Dimension from '../Theme/Dimension';
+import CustomeIcon from '../component/common/CustomeIcon';
 import {
   APP_STACK_SCREENS,
   AUTH_STACK_SCREENS,
@@ -55,12 +57,12 @@ const Routes = props => {
       screen => screen.name === route.name,
     );
     let tabName = currentScreen['name'];
-    //   let iconName = currentScreen[focused ? 'activeIcon' : 'inactiveIcon'];
-    return (
+      let iconName = currentScreen[focused ? 'activeIcon' : 'inactiveIcon'];
+    return (  
       <TouchableOpacity
         style={styles.iconAlignment}
         onPress={() => rest.navigation.navigate(route.name)}>
-        {/* <CustomeIcon name={iconName} size={26} color={color}></CustomeIcon> */}
+        <CustomeIcon name={iconName} size={Dimension.font16} color={color}></CustomeIcon>
         {/* {tabName == 'Profile' ? (
                 <ProfileTabIcon focused={focused} iconName={iconName} color={color} />
               ) : currentScreen.iconType ? (
@@ -68,7 +70,7 @@ const Routes = props => {
               ) : (
                 <Icon name={iconName} size={26} color={color} />
               )} */}
-        <Text style={[styles.tabText, {color: focused ? color : '#3c3c3c'}]}>
+        <Text style={[styles.tabText, {color: focused ? color : '#A2A2A2'}]}>
           {tabName}
         </Text>
       </TouchableOpacity>
@@ -170,9 +172,9 @@ const styles = StyleSheet.create({
   },
   //   IconDefaultColor: {color: colors.ExtralightGrayText},
   tabText: {
-    fontSize: 10,
-    // fontFamily: Dimension.CustomMediumFont,
-    marginTop: 4,
+    fontSize: Dimension.font10,
+    fontFamily: Dimension.CustomMediumFont,
+    marginTop: Dimension.margin4,
   },
   iconAlignment: {alignItems: 'center', alignSelf: 'center'},
 });

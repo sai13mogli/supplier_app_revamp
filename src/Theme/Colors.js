@@ -38,6 +38,8 @@ const Colors = {
   grayShade12:"#F0F0F0",
   grayShade13:"#E2E2E2",
   grayShade14:"#BFBFBF",
+  grayShade15:"#707070",
+  grayshade16:"#FAFAFA",
 
   headerTxtColor: '#3C3C3C',
   blackColor: '#000',
@@ -51,6 +53,7 @@ const Colors = {
   VmiLight:"#EFFFD5",
   VmiTxt:"#689512",
   greenShade:"#52950F",
+  BlueShade:"#007FFF"
 
 };
 

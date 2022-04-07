@@ -40,24 +40,26 @@ export const BOTTOM_TAB_SCREENS = [
   {
     name: 'Orders',
     component: OrdersScreen,
-    // activeIcon: 'categories',
-    // inactiveIcon: 'categories',
+    activeIcon: 'file-list-2-line',
+    inactiveIcon: 'file-list-2-line',
   },
   {
     name: 'Support',
     component: SupportScreen,
-    // activeIcon: 'orders',
-    // inactiveIcon: 'orders',
+    activeIcon: 'flag-2-line',
+    inactiveIcon: 'flag-2-line',
   },
   {
     name: 'Notification',
     component: NotificationScreen,
+    activeIcon: 'notification-3-line',
+    inactiveIcon: 'notification-3-line',
   },
   {
     name: 'More',
     component: MoreScreen,
-    // activeIcon: 'orders',
-    // inactiveIcon: 'orders',
+    activeIcon: 'list-unordered',
+    inactiveIcon: 'list-unordered',
   },
 ];
 
@@ -253,12 +255,12 @@ export const MORE_TABS = [
   {
     route: 'Profile',
     title: 'Profile',
-    icon: 'business-details',
+    icon: 'account-pin-box-line',
   },
   {
     route: 'Settings',
     title: 'Settings',
-    icon: 'category--brand',
+    icon: 'settings-3-line',
   },
   {
     route: '',
@@ -266,7 +268,7 @@ export const MORE_TABS = [
       Linking.openURL('https://suppliercentralqa.moglilabs.com/#faq');
     },
     title: 'FAQs',
-    icon: 'address',
+    icon: 'questionnaire-line',
   },
 ];
 
@@ -277,7 +279,7 @@ export const PRIVACY_TABS = [
       Linking.openURL('https://suppliercentralqa.moglilabs.com/#home');
     },
     title: 'About Us',
-    icon: 'business-details',
+    icon: 'team-line',
   },
   {
     route: '',
@@ -287,7 +289,7 @@ export const PRIVACY_TABS = [
       );
     },
     title: 'Privacy Policy',
-    icon: 'category--brand',
+    icon: 'file-user-line',
   },
   {
     route: '',
@@ -295,6 +297,6 @@ export const PRIVACY_TABS = [
       Linking.openURL('https://suppliercentralqa.moglilabs.com/');
     },
     title: 'Contact Us',
-    icon: 'address',
+    icon: 'customer-service-line',
   },
 ];
