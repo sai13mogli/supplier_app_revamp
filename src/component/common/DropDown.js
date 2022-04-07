@@ -54,7 +54,7 @@ const DropDown = props => {
               },
               styles.PickerItemStyle,
             ]}>
-            {getTitle() || placeholder}
+            {getTitle() || selectedValue || placeholder}
           </Text>
         </View>
 

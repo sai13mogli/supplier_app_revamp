@@ -34,6 +34,7 @@ import {
 import {addOrUpdateCategoryAndBrand} from '../../../services/categorybrand';
 import {getAllCategories} from '../../../services/auth';
 import {fetchProfile} from '../../../redux/actions/profile';
+import PickerDropDown from '../../../component/common/PickerDropDown';
 
 // import {uploadDocumentService} from '../../../services/documents';
 const deviceWidth = Dimensions.get('window').width;
@@ -113,8 +114,10 @@ const CategoryBrandScreen = props => {
       isImp: false,
       label: 'Brands require Authorised letter',
       placeholder: 'Select',
-      value: 'Select',
+      value: userBrands,
       extraView: true,
+      onPress: () => props.navigation.navigate('Brands'),
+      fromAddCategory: false,
     },
   });
 
@@ -135,11 +138,11 @@ const CategoryBrandScreen = props => {
     nature_of_business: {
       title: 'Nature of Business',
       isImp: true,
-      label: 'Nature of Business',
+      // label: 'Nature of Business',
       errorMessage: 'Enter valid nature of business',
       selectedValue: natureOfBusiness,
       onValueChange: text => setnatureOfBusiness(text),
-      component: DropDown,
+      component: PickerDropDown,
       enabled: true,
       items: [
         {
@@ -163,7 +166,6 @@ const CategoryBrandScreen = props => {
           value: 5,
         },
       ],
-      component: DropDown,
     },
     brand_certificate: {
       title: 'Brand / Trademark Cetificate',
@@ -344,7 +346,7 @@ const CategoryBrandScreen = props => {
     fromAddCategory,
     onPress,
   }) => {
-    return title == 'Category' ? (
+    return (
       <MultiSelectInput
         label={label}
         title={title}
@@ -353,24 +355,8 @@ const CategoryBrandScreen = props => {
         rightComponentText={'ADD'}
         onPress={onPress}
         isImp={true}
+        fromAddCategory={fromAddCategory}
       />
-    ) : (
-      <TouchableOpacity onPress={() => props.navigation.navigate('Brands')}>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.labelStyle}>{label}</Text>
-          <Text style={styles.starIcon}>*</Text>
-        </View>
-        <View style={styles.inputContainerStyle}>
-          <Text style={styles.placeholderCss}>Select</Text>
-          <TouchableOpacity onPress={() => props.navigation.navigate('Brands')}>
-            <CustomeIcon
-              name={'arrow-right-line'}
-              size={Dimension.font20}
-              color={colors.eyeIcon}
-            />
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
     );
   };
 

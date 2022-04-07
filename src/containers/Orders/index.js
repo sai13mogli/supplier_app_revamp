@@ -209,6 +209,7 @@ const OrdersScreen = props => {
   };
 
   const changeTab = val => {
+    setBulkItemIds([]);
     setSelectedTab(val.key);
     fetchOrdersFunc(0, '', val.key, shipmentType, {
       pickupFromDate: '',

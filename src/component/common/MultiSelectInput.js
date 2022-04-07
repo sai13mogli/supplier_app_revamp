@@ -2,15 +2,27 @@ import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import Colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
+import CustomeIcon from '../../component/common/CustomeIcon';
 
 const MultiSelectInput = props => {
+  const {
+    value,
+    placeHolder,
+    onPress,
+    isImp,
+    label,
+    rightComponentText,
+    rightComponent,
+    fromAddCategory,
+  } = props;
+
   const getText = selectedValue => {
     if (selectedValue.length == 1) {
-      return selectedValue[0].label;
+      return selectedValue[0].label || selectedValue[0].brandName;
     } else {
       return (
         <Text style={styles.inputStyle}>
-          {selectedValue[0].label}
+          {selectedValue[0].label || selectedValue[0].brandName}
           <Text style={styles.redInputTxt}>
             {' '}
             +{selectedValue.length - 1} more
@@ -20,40 +32,29 @@ const MultiSelectInput = props => {
     }
   };
 
-  const {
-    value,
-    placeHolder,
-    onPress,
-    isImp,
-    label,
-    rightComponentText,
-    rightComponent,
-    showError,
-    errorMessage,
-  } = props;
-
   return (
-    <>
-      <TouchableOpacity onPress={onPress}>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.labelStyle}>{label}</Text>
-          {isImp ? <Text style={styles.starIcon}>*</Text> : null}
-        </View>
-        <View style={styles.inputContainerStyle}>
-          <Text style={styles.inputStyle}>
-            {value && value.length ? getText(value) : placeHolder}
-          </Text>
-          {rightComponent ? (
-            rightComponent()
-          ) : (
-            <TouchableOpacity onPress={onPress} style={styles.addbtn}>
-              <Text style={styles.addBtnTxt}>{rightComponentText}</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      </TouchableOpacity>
-      {showError ? <Text style={styles.starIcon}>{errorMessage}</Text> : null}
-    </>
+    <TouchableOpacity onPress={onPress}>
+      <View style={{flexDirection: 'row'}}>
+        <Text style={styles.labelStyle}>{label}</Text>
+        {isImp ? <Text style={styles.starIcon}>*</Text> : null}
+      </View>
+      <View style={styles.inputContainerStyle}>
+        <Text style={styles.inputStyle}>
+          {value && value.length ? getText(value) : placeHolder}
+        </Text>
+        {!fromAddCategory ? (
+          <CustomeIcon
+            name={'arrow-right-line'}
+            size={Dimension.font20}
+            color={Colors.eyeIcon}
+          />
+        ) : (
+          <TouchableOpacity onPress={onPress} style={styles.addbtn}>
+            <Text style={styles.addBtnTxt}>{rightComponentText}</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    </TouchableOpacity>
   );
 };
 
