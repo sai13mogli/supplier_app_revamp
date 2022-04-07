@@ -310,11 +310,11 @@ const UploadInvoiceOMSScreen = (props) => {
                 },
                 {
                     name: 'itemLists',
-                    data: 927211,
+                    data: 927212,
                 },
                 {
                     name: 'invoiceTotal',
-                    data: supplierInvoiceTotal,
+                    data: 1000,
                 },
                 {
                     name: 'invoiceDate',
@@ -328,6 +328,7 @@ const UploadInvoiceOMSScreen = (props) => {
                 }]
             );
             const res = await response.json();
+            console.log("Response====>", res);
             if (res.success) {
                 Toast.show({
                     type: 'success',

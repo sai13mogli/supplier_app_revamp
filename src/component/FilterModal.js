@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Modal from 'react-native-modal';
-import { filtersTypeData, filtersData } from '../redux/constants/support';
+import {filtersTypeData, filtersData} from '../redux/constants/support';
 import {
   Text,
   View,
@@ -16,7 +16,7 @@ import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import DotCheckbox from './common/Checkbox';
 import CustomSlider from './CustomSlider';
-import CustomeIcon from './common/CustomeIcon'
+import CustomeIcon from './common/CustomeIcon';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -25,8 +25,6 @@ const FilterModal = props => {
   const [currentSlider, setCurrentSlider] = useState(0);
 
   const getFilterValue = value => {
-    console.log('value hai dost', value);
-    props.setFiltersModal(false);
     props.setTypeFilter(value);
   };
 
@@ -34,14 +32,13 @@ const FilterModal = props => {
     if (props.activeFilterType == 'type') {
       return (
         <View style={styles.RightInnerPart}>
-          <View style={{
-            marginTop: Dimension.margin10,
-            height: Dimension.height300,
-            //right: '30%',
-            // paddingVertical: Dimension.padding80,
-          }}>
-
-
+          <View
+            style={{
+              marginTop: Dimension.margin10,
+              height: Dimension.height300,
+              //right: '30%',
+              // paddingVertical: Dimension.padding80,
+            }}>
             <DotCheckbox
               data={filtersData && filtersData[props.activeFilterType]}
               onCheck={getFilterValue}
@@ -98,9 +95,14 @@ const FilterModal = props => {
       days = 7;
     }
     setCurrentSlider(days);
-    props.setFiltersModal(false);
     props.setTimeFilter(days);
   };
+
+  // const resetFilters = () => {
+  //   setTypeFilter(0);
+  //   setTimeFilter(180);
+  //   setFiltersModal(false);
+  // };
 
   return (
     <Modal
@@ -113,7 +115,7 @@ const FilterModal = props => {
         props.setFiltersModal(false);
       }}
       coverScreen={true}
-      style={{ padding: 0, margin: 0 }}
+      style={{padding: 0, margin: 0}}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
       onBackdropPress={() => props.setFiltersModal(false)}
@@ -130,7 +132,6 @@ const FilterModal = props => {
               props.setFiltersModal(false);
             }}></CustomeIcon>
         </View>
-
 
         <View style={styles.MidWrapper}>
           <View style={styles.leftPart}>
@@ -153,13 +154,29 @@ const FilterModal = props => {
               </TouchableOpacity>
             ))}
           </View>
-          <View style={styles.rightPart}>
-            {renderRight()}
-          </View>
+          <View style={styles.rightPart}>{renderRight()}</View>
         </View>
-
-
-
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            onPress={() => props.resetFilters()}
+            style={{backgroundColor: 'red', width: 100, height: 50}}>
+            <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+              RESET
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => props.applyFilters()}
+            style={{
+              backgroundColor: 'red',
+              width: 200,
+              height: 50,
+              marginLeft: 10,
+            }}>
+            <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+              APPLY
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </Modal>
   );
@@ -207,27 +224,24 @@ const styles = StyleSheet.create({
   },
 
   MidWrapper: {
-    flexDirection: "row",
+    flexDirection: 'row',
     borderTopColor: Colors.grayShade2,
     borderTopWidth: 1,
-
   },
   leftPart: {
     flex: 3,
     borderRightColor: Colors.grayShade2,
     borderRightWidth: 1,
-
-
   },
   activeBackground: {
     backgroundColor: Colors.LightBrandColor,
     paddingVertical: Dimension.padding15,
-    paddingHorizontal: Dimension.padding20
+    paddingHorizontal: Dimension.padding20,
   },
   inactiveBackground: {
     backgroundColor: '#fff',
     paddingVertical: Dimension.padding15,
-    paddingHorizontal: Dimension.padding20
+    paddingHorizontal: Dimension.padding20,
   },
   LeftInActiveTxt: {
     fontSize: Dimension.font14,
@@ -245,7 +259,7 @@ const styles = StyleSheet.create({
   },
   RightInnerPart: {
     paddingLeft: Dimension.padding30,
-    marginBottom: Dimension.padding30
+    marginBottom: Dimension.padding30,
   },
 });
 

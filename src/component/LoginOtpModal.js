@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, StyleSheet, Dimensions} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import {sendOtpForLogin, loginWithOtp} from '../services/auth';
 import {updateEmail, updatePhone} from '../services/profile';
@@ -10,17 +16,52 @@ import CustomeIcon from './common/CustomeIcon';
 import FloatingInput from './common/FloatingInput';
 
 const LoginOtpModal = props => {
+  let interval = {};
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [inputType, setInputType] = useState(true);
+  const [timer, setTimer] = useState(0);
+  const {email} = props;
 
   useEffect(() => {
     onSendOtp();
   }, []);
 
+  const initializeCounter = () => {
+    setTimer(60);
+    interval = setInterval(() => {
+      setTimer(timer => {
+        if (timer > 0) {
+          return timer - 1;
+        } else {
+          clearInterval(interval);
+          return 0;
+        }
+      });
+    }, 1000);
+  };
+
+  const getExtraView = () => {
+    if (email && email.length && email.length == 10 && timer >= 1) {
+      return (
+        <Text style={styles.sendOtptext}>
+          00:{String(timer).length > 1 ? String(timer) : `0${timer}`}
+        </Text>
+      );
+    } else {
+      return (
+        <TouchableOpacity onPress={onSendOtp} style={styles.setndOtpBtn}>
+          <Text style={styles.sendOtptext}>Resend OTP</Text>
+        </TouchableOpacity>
+      );
+    }
+  };
+
   const onSendOtp = async () => {
     if (!props.frombusinessDetails) {
+      initializeCounter();
       const {data} = await sendOtpForLogin(props.email);
       if (!data.success) {
         setIsVisible(true);
@@ -147,17 +188,19 @@ const LoginOtpModal = props => {
                 : setOtpError(false)
             }
             keyboardType={'number-pad'}
-            secureTextEntry={true}
+            secureTextEntry={inputType}
             label={'OTP'}
             title={'OTP'}
             isImp={true}
             extraView={() => (
               <CustomeIcon
+                onPress={() => setInputType(!inputType)}
                 name={'eye-open'}
-                color={Colors.eyeIcon}
+                color={inputType ? '#979797' : '#000'}
                 size={Dimension.font20}></CustomeIcon>
             )}
           />
+
           <View style={styles.buttonWrap}>
             <CustomButton
               loading={loading}
@@ -172,10 +215,7 @@ const LoginOtpModal = props => {
           </View>
 
           <Text style={styles.bottomTxt}>
-            Did not received your OTP ?{' '}
-            <Text onPress={onSendOtp} style={styles.requesttxt}>
-              Request new
-            </Text>
+            Did not received your OTP ? {getExtraView()}
           </Text>
         </View>
       </View>
@@ -246,6 +286,19 @@ const styles = StyleSheet.create({
     color: Colors.ApproveStateColor,
     fontFamily: Dimension.CustomMediumFont,
     marginLeft: Dimension.margin5,
+  },
+  setndOtpBtn: {
+    backgroundColor: Colors.LightBrandColor,
+    paddingVertical: Dimension.padding8,
+    paddingHorizontal: Dimension.padding10,
+    borderRadius: 2,
+
+    alignItems: 'center',
+  },
+  sendOtptext: {
+    fontSize: Dimension.font12,
+    color: Colors.BrandColor,
+    fontFamily: Dimension.CustomRegularFont,
   },
 });
 

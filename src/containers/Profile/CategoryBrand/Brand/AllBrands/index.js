@@ -26,6 +26,7 @@ import Dimension from '../../../../../Theme/Dimension';
 import Colors from '../../../../../Theme/Colors';
 import MultiSelect from '../../../../../component/common/MultiSelect/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 const AllBrandsScreen = props => {
   const allbrands = useSelector(
@@ -207,29 +208,46 @@ const AllBrandsScreen = props => {
     return null;
   };
 
+  const addbrandFn = () => {
+    let brandNames = (userBrands || []).map(_ => _.brandName);
+    if ((brandNames || []).includes(inputValue)) {
+      Toast.show({
+        type: 'error',
+        text2: 'Brand Request already exist!',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    } else {
+      dispatch(
+        addBrand({
+          supplierId: supplierId,
+          brandCode: inputValue,
+          fileKey: '',
+          businessNature: businessNature,
+          expiryDate: '',
+          isDeleted: '2',
+          isRaiseRequest: 'true',
+          brandListingUrl: '',
+          name: inputValue,
+          isDocumentRequired: 1,
+        }),
+      );
+      Toast.show({
+        type: 'success',
+        text2: 'Brand Request sent!',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    }
+  };
+
   const listEmptyComponent = () => {
     if (inputValue && inputValue != '') {
       // let supplierId = await AsyncStorage.getItem('userId');
       return (
         <View style={styles.NoBrandWrap}>
           <Text style={styles.NoDataTxt}>No Brand Found</Text>
-          <TouchableOpacity
-            onPress={() =>
-              dispatch(
-                addBrand({
-                  supplierId: supplierId,
-                  brandCode: inputValue,
-                  fileKey: '',
-                  businessNature: businessNature,
-                  expiryDate: '',
-                  isDeleted: '2',
-                  isRaiseRequest: 'true',
-                  brandListingUrl: '',
-                  name: inputValue,
-                  isDocumentRequired: 1,
-                }),
-              )
-            }>
+          <TouchableOpacity onPress={addbrandFn}>
             <Text style={styles.addBrandTxt}>Add Brand</Text>
           </TouchableOpacity>
         </View>

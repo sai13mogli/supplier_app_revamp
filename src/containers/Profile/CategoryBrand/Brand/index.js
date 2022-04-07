@@ -12,6 +12,7 @@ import MultiSelect from '../../../../component/common/MultiSelect';
 import {TOP_BRANDS_SCREENS} from '../../../../constants';
 import Tabs from '../../../../component/common/Tabs';
 import Header from '../../../../component/common/Header';
+import {addMultipleBrands} from '../../../../redux/actions/categorybrand';
 const deviceWidth = Dimensions.get('window').width;
 
 const TABS = [
@@ -40,6 +41,13 @@ const BrandScreen = props => {
   const dispatch = useDispatch();
 
   const onConfirm = () => {
+    props.navigation.navigate('CategoryBrand');
+  };
+
+  const onCancel = () => {
+    let currbrands = [...userBrands];
+    currbrands = (currbrands || []).filter(_ => _.isRaiseRequest == 'false');
+    dispatch(addMultipleBrands(currbrands));
     props.navigation.navigate('CategoryBrand');
   };
 
@@ -113,15 +121,20 @@ const BrandScreen = props => {
               Are you sure you want to create these
               <Text style={styles.redTxt}>
                 {' '}
-                {userBrands.length < 10
-                  ? `0${userBrands.length}`
-                  : userBrands.length}
+                {(userBrands || []).filter(_ => _.isRaiseRequest == 'true')
+                  .length < 10
+                  ? `0${
+                      (userBrands || []).filter(_ => _.isRaiseRequest == 'true')
+                        .length
+                    }`
+                  : (userBrands || []).filter(_ => _.isRaiseRequest == 'true')
+                      .length}
               </Text>{' '}
               brands
             </Text>
           </View>
           <MultiSelect
-            data={userBrands}
+            data={(userBrands || []).filter(_ => _.isRaiseRequest == 'true')}
             onChangeDataChoosed={data => {
               console.log(data);
             }}
@@ -137,9 +150,7 @@ const BrandScreen = props => {
                 borderColor={Colors.WhiteColor}
                 TextColor={Colors.FontColor}
                 TextFontSize={Dimension.font16}
-                onPress={() => {
-                  setModalVisible(false);
-                }}></CustomButton>
+                onPress={onCancel}></CustomButton>
             </View>
             <View style={{flex: 1}}>
               <CustomButton
