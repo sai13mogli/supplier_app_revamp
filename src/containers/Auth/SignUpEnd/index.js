@@ -1,5 +1,5 @@
 import {OrderedMap} from 'immutable';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, ScrollView, ImageBackground} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
@@ -63,7 +63,7 @@ const SignUpEndScreen = props => {
         }),
       component: MultiSelectInput,
       isImp: true,
-      errorMessage: 'Please select a category code',
+      errorMessage: 'Please select a category',
       showError: categoryCodeError,
     },
     gstin: {
@@ -80,7 +80,21 @@ const SignUpEndScreen = props => {
     },
   });
 
-  console.log(natureOfBusiness);
+  useEffect(() => {
+    if (natureOfBusiness) {
+      setnatureOfBusinessError(false);
+    } else {
+      setnatureOfBusinessError(true);
+    }
+  }, [natureOfBusiness]);
+
+  useEffect(() => {
+    if (categoryCode && categoryCode.length) {
+      setcategoryCodeError(false);
+    } else {
+      setcategoryCodeError(true);
+    }
+  }, [categoryCode]);
 
   const onGstinBlur = async () => {
     if (gstin && gstin.length >= 15 && gstin.match(gstinRegex)) {
@@ -126,7 +140,7 @@ const SignUpEndScreen = props => {
       } else {
         setcategoryCodeError(true);
       }
-      if (natureOfbusiness) {
+      if (natureOfBusiness) {
         setnatureOfBusinessError(false);
       } else {
         setnatureOfBusinessError(true);

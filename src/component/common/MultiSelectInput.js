@@ -28,27 +28,32 @@ const MultiSelectInput = props => {
     label,
     rightComponentText,
     rightComponent,
+    showError,
+    errorMessage,
   } = props;
 
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={{flexDirection: 'row'}}>
-        <Text style={styles.labelStyle}>{label}</Text>
-        {isImp ? <Text style={styles.starIcon}>*</Text> : null}
-      </View>
-      <View style={styles.inputContainerStyle}>
-        <Text style={styles.inputStyle}>
-          {value && value.length ? getText(value) : placeHolder}
-        </Text>
-        {rightComponent ? (
-          rightComponent()
-        ) : (
-          <TouchableOpacity onPress={onPress} style={styles.addbtn}>
-            <Text style={styles.addBtnTxt}>{rightComponentText}</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    </TouchableOpacity>
+    <>
+      <TouchableOpacity onPress={onPress}>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.labelStyle}>{label}</Text>
+          {isImp ? <Text style={styles.starIcon}>*</Text> : null}
+        </View>
+        <View style={styles.inputContainerStyle}>
+          <Text style={styles.inputStyle}>
+            {value && value.length ? getText(value) : placeHolder}
+          </Text>
+          {rightComponent ? (
+            rightComponent()
+          ) : (
+            <TouchableOpacity onPress={onPress} style={styles.addbtn}>
+              <Text style={styles.addBtnTxt}>{rightComponentText}</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </TouchableOpacity>
+      {showError ? <Text style={styles.starIcon}>{errorMessage}</Text> : null}
+    </>
   );
 };
 
