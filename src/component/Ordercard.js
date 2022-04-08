@@ -913,7 +913,7 @@ const Ordercard = props => {
               ]}>
               <Text style={styles.disabledBtntxt}>Upload Invoice</Text>
             </TouchableOpacity>
-            <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
+            <Text style={styles.shipmentLbelTxt}>
               Invoice Approval pending
             </Text>
           </>

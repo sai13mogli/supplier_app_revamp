@@ -312,7 +312,22 @@ const OrdersScreen = props => {
 
   const renderFooterComponent = () => {
     if (OrderStatus == STATE_STATUS.FETCHING) {
-      return <ActivityIndicator style={{alignSelf: 'center', margin: 12}} />;
+      return( <View
+      style={{
+          flex:1,
+         //backgroundColor:"#ccc",
+         justifyContent:"center",
+         alignContent:"center",
+         height:'100%',
+         padding:Dimension.padding20
+       }}>
+      <ActivityIndicator
+        //style={{alignSelf: 'center'}}
+        color={colors.BrandColor}
+        size={'large'}
+      />
+    </View>
+      )
     }
     return null;
   };
@@ -495,7 +510,7 @@ const OrdersScreen = props => {
               enabled={true}
               isFromOrders={true}
             />
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => props.navigation.navigate('Notification')}
               style={styles.notifocationBtn}>
               <CustomeIcon
@@ -503,7 +518,7 @@ const OrdersScreen = props => {
                 size={Dimension.font22}
                 color={colors.FontColor}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           <FlatList

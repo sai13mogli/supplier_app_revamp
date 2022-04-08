@@ -71,11 +71,11 @@ const MoreScreen = props => {
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <ScrollView>
-      <StatusBar
+      {/* <StatusBar
         translucent
         backgroundColor="transparent"
         barStyle={"light-content"}
-      />
+      /> */}
       <ImageBackground
         source={require('../../assets/images/MenuBG.png')}
         resizeMode="cover" //style={{flex:1}}
