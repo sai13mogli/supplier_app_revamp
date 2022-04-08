@@ -17,6 +17,7 @@ import Toast from 'react-native-toast-message';
 import DropDown from '../component/common/DropDown';
 import CustomeIcon from './common/CustomeIcon';
 import Productcard from './Productcard';
+import PickerDropDown from './common/PickerDropDown';
 
 const deviceWidth = Dimensions.get('window').width;
 const RejectModal = props => {
@@ -84,6 +85,8 @@ const RejectModal = props => {
         itemId: `${itemId}`,
         remark: reason || 'Material is not ready',
       };
+
+      console.log('reason', reason);
       const {data} = await rejectOrder(payload);
       if (data && data.success) {
         fetchOrdersFunc(0, '', selectedTab, shipmentType, {
@@ -175,16 +178,14 @@ const RejectModal = props => {
             style={{
               paddingVertical: Dimension.padding10,
             }}>
-            <DropDown
+            <PickerDropDown
+              items={Reasons}
+              enabled={true}
               title={'Specify Reason'}
-              label={'Specify Reason'}
-              selectedValue={reason}
               onValueChange={text => {
                 setReason(text);
               }}
-              items={Reasons}
-              enabled={true}
-              fromRejectModal={true}
+              value={reason}
             />
           </View>
         </View>

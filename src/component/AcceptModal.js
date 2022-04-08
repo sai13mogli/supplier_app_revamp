@@ -100,24 +100,36 @@ const AcceptModal = props => {
     }
   };
 
-  const markedDay = {[day.dateString]: {selected: true, marked: true,customStyles: {
-    container: {
-      backgroundColor: 'green'
+  const markedDay = {
+    [day.dateString]: {
+      selected: true,
+      marked: true,
+      customStyles: {
+        container: {
+          backgroundColor: 'red',
+        },
+        text: {
+          color: 'black',
+          fontWeight: 'bold',
+        },
+      },
     },
-    text: {
-      color: 'black',
-      fontWeight: 'bold'
-    }
-  }}};
+  };
   const getMinDate = () => {
     let today = new Date();
     let mutateMonth;
+
     if (today.getMonth() + 1 < 10) {
       mutateMonth = `0${today.getMonth() + 1}`;
     } else {
       mutateMonth = today.getMonth() + 1;
     }
-    let date = today.getFullYear() + '-' + mutateMonth + '-' + today.getDate();
+
+    let currdate =
+      Number(today.getDate()) < 10
+        ? `0${Number(today.getDate())}`
+        : `${Number(today.getDate())}`;
+    let date = today.getFullYear() + '-' + mutateMonth + '-' + currdate;
     return date;
   };
 
@@ -170,7 +182,7 @@ const AcceptModal = props => {
           }}
           markingType={'custom'}
           markedDates={markedDay}
-          currentDate={'2022-04-04'}
+          currentDate={getMinDate()}
           theme={{
             selectedDayBackgroundColor: Colors.BrandColor,
             arrowColor: Colors.BrandColor,
