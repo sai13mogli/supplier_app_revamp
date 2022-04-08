@@ -204,6 +204,7 @@ const OrdersScreen = props => {
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
         shipmentUrl={item.shipmentUrl}
+        podUrl={item.poUrl}
       />
     );
   };

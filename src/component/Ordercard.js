@@ -9,7 +9,7 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
-import {getImageUrl, markOutForOrderApi} from '../services/orders';
+import {getImageUrl, markOutForOrderApi, getItemInfo} from '../services/orders';
 import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
@@ -67,6 +67,7 @@ const Ordercard = props => {
     shipmentType,
     shipmentUrl,
     warehouseId,
+    podUrl,
   } = props;
 
   const [invoiceLoading, setInvoiceLoading] = useState(false);
@@ -89,6 +90,8 @@ const Ordercard = props => {
   const [splitQuantityModal, setSplitQuantityModal] = useState(false);
   const [manifestLoader, setManifestLoader] = useState(false);
   const [shipmentLoader, setShipmentLoader] = useState(false);
+  const [podLoader, setPodLoader] = useState(false);
+  const [debitLoader, setDebitLoader] = useState(false);
   const {navigate} = useNavigation();
   const navigation = useNavigation();
 
@@ -277,7 +280,7 @@ const Ordercard = props => {
         setInvoiceLoader(false);
       }
       Toast.show({
-        type: 'success',
+        type: 'error',
         text2: 'Something went wrong',
         visibilityTime: 2000,
         autoHide: true,
@@ -391,7 +394,189 @@ const Ordercard = props => {
     }
   };
 
-  const renderCTAs = (cta, url, fromCTA, fromPartial) => {
+  const getPodCopy = podcopyUrl => {
+    if (Platform.OS == 'android') {
+      try {
+        PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        ).then(granted => {
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log('Storage Permission Granted.');
+            downloadPodCopyUrl(podcopyUrl);
+          } else {
+          }
+        });
+      } catch (err) {
+        //To handle permission related issue
+        console.warn(err);
+      }
+    } else {
+      downloadPodCopyUrl(podcopyUrl);
+    }
+  };
+
+  const downloadPodCopyUrl = async url => {
+    //Main function to download the image
+    let date = new Date(); //To add the time suffix in filename
+    try {
+      let image_URL = '';
+      //Image URL which we want to download
+      setPodLoader(true);
+      image_URL = url;
+      //Getting the extention of the file
+      let ext = getExtention(image_URL);
+      console.log('ext', ext);
+      ext = '.' + ext[0];
+      //Get config and fs from RNFetchBlob
+      //config: To pass the downloading related options
+      //fs: To get the directory path in which we want our image to download
+      const {config, fs} = RNFetchBlob;
+      let PictureDir =
+        Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+      let options = {
+        fileCache: true,
+        addAndroidDownloads: {
+          //Related to the Android only
+          useDownloadManager: true,
+          notification: true,
+          path:
+            PictureDir +
+            '/PDF_' +
+            Math.floor(date.getTime() + date.getSeconds() / 2) +
+            ext,
+          description: 'PDF',
+        },
+      };
+      config(options)
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
+        .then(res => {
+          //Showing alert after successful downloading
+          console.log('res -> ', JSON.stringify(res));
+          console.log('imageUrl', image_URL);
+          setPodLoader(false);
+          Toast.show({
+            type: 'success',
+            text2: 'POD copy Downloaded',
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        });
+    } catch (error) {
+      console.log(error);
+      setPodLoader(false);
+      Toast.show({
+        type: 'error',
+        text2: 'Something went wrong',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    }
+  };
+
+  const getDebitNoteUrl = async () => {
+    try {
+      setDebitLoader(true);
+      const {data} = await getItemInfo(supplierId, `${itemRef}`);
+      if (data.success) {
+        getDebitNoteFn(
+          data &&
+            data.data &&
+            data.data.records &&
+            data.data.records[0] &&
+            data.data.records[0].dnUrl,
+        );
+      } else {
+        setDebitLoader(false);
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      setDebitLoader(false);
+    }
+  };
+
+  const getDebitNoteFn = dnUrl => {
+    if (Platform.OS == 'android') {
+      try {
+        PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        ).then(granted => {
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            downloadDnUrl(dnUrl);
+          } else {
+          }
+        });
+      } catch (err) {
+        //To handle permission related issue
+        console.warn(err);
+      }
+    } else {
+      downloadDnUrl(dnUrl);
+    }
+  };
+
+  const downloadDnUrl = async url => {
+    //Main function to download the image
+    let date = new Date(); //To add the time suffix in filename
+    try {
+      let image_URL = '';
+      //Image URL which we want to download
+      image_URL = url;
+      //Getting the extention of the file
+      let ext = getExtention(image_URL);
+      console.log('ext', ext);
+      ext = '.' + ext[0];
+      //Get config and fs from RNFetchBlob
+      //config: To pass the downloading related options
+      //fs: To get the directory path in which we want our image to download
+      const {config, fs} = RNFetchBlob;
+      let PictureDir =
+        Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+      let options = {
+        fileCache: true,
+        addAndroidDownloads: {
+          //Related to the Android only
+          useDownloadManager: true,
+          notification: true,
+          path:
+            PictureDir +
+            '/PDF_' +
+            Math.floor(date.getTime() + date.getSeconds() / 2) +
+            ext,
+          description: 'PDF',
+        },
+      };
+      config(options)
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
+        .then(res => {
+          //Showing alert after successful downloading
+          console.log('res -> ', JSON.stringify(res));
+          console.log('imageUrl', image_URL);
+          setDebitLoader(false);
+          Toast.show({
+            type: 'success',
+            text2: 'Debit Note Downloaded',
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        });
+    } catch (error) {
+      console.log(error);
+      setDebitLoader(false);
+      Toast.show({
+        type: 'error',
+        text2: 'Something went wrong',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    }
+  };
+
+  const renderCTAs = (cta, url, fromCTA, fromPartial, podcopy) => {
     return (
       <>
         {cta == 'REJECT' ? (
@@ -410,6 +595,20 @@ const Ordercard = props => {
             onPress={() => setDisplayCalendar(true)}
             style={styles.acceptCtabtn}>
             <Text style={styles.acceptCtaTxt}>{cta}</Text>
+          </TouchableOpacity>
+        ) : cta == 'OMS_PICKUP_DATE' ? (
+          <TouchableOpacity
+            // disabled={acceptLoader}
+            onPress={() => setDisplayCalendar(true)}
+            style={styles.acceptCtabtn}>
+            <Text style={styles.acceptCtaTxt}>RESCHEDULE PICKUP</Text>
+          </TouchableOpacity>
+        ) : cta == 'EMS_PICKUP_DATE' ? (
+          <TouchableOpacity
+            // disabled={acceptLoader}
+            onPress={() => setDisplayCalendar(true)}
+            style={styles.acceptCtabtn}>
+            <Text style={styles.acceptCtaTxt}>CHOOSE PICKUP</Text>
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_INVOICE' ? (
           <TouchableOpacity
@@ -492,7 +691,42 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={Colors.FontColor} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'DOWNLOAD_POD_COPY' ? (
+          <TouchableOpacity
+            disabled={podLoader}
+            onPress={() => getPodCopy(podcopy)}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
+            <Text style={styles.rejectCtaTxt}>DOWNLOAD POD COPY</Text>
+            {podLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'DOWNLOAD_DEBIT_NOTE' ? (
+          <TouchableOpacity
+            disabled={debitLoader}
+            onPress={() => getDebitNoteUrl()}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: actionCTA.length > 1 ? 5 : 1,
+                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+              },
+            ]}>
+            <Text style={styles.rejectCtaTxt}>DOWNLOAD DEBIT NOTE</Text>
+            {debitLoader && (
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'MAP_INVOICE' ? (
@@ -534,7 +768,10 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>MARK OUT FOR DELIVERY</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={Colors.FontColor} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : cta == 'VIEW_TREE_MODAL' ? (
@@ -550,7 +787,10 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>VIEW SPLIT HISTORY</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={Colors.FontColor} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : cta == 'VIEW_SHIPPED_DETAILS' ? (
@@ -566,7 +806,10 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>VIEW LSP DETAILS</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={Colors.FontColor} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : cta == 'PACK_ORDER' ? (
@@ -634,7 +877,10 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>PROOF OF DELIVERY</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={Colors.FontColor} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : cta == 'MAP_PO_TO_INVOICE_DISABLED' ? (
@@ -642,13 +888,13 @@ const Ordercard = props => {
             <TouchableOpacity
               disabled={true}
               style={[
-                styles.DownloadPoBtnDisabled,
+                styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
                   flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 },
               ]}>
-              <Text style={styles.rejectCtaTxtDisabled}>Map PO to Invoice</Text>
+              <Text style={styles.disabledBtntxt}>Map PO to Invoice</Text>
             </TouchableOpacity>
             {/* <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
               Shipment lable not created
@@ -659,15 +905,15 @@ const Ordercard = props => {
             <TouchableOpacity
               disabled={true}
               style={[
-                styles.DownloadPoBtnDisabled,
+                styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
                   flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 },
               ]}>
-              <Text style={styles.rejectCtaTxtDisabled}>Upload Invoice</Text>
+              <Text style={styles.disabledBtntxt}>Upload Invoice</Text>
             </TouchableOpacity>
-            <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
+            <Text style={styles.shipmentLbelTxt}>
               Invoice Approval pending
             </Text>
           </>
@@ -676,13 +922,13 @@ const Ordercard = props => {
             <TouchableOpacity
               disabled={true}
               style={[
-                styles.DownloadPoBtnDisabled,
+                styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
                   flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 },
               ]}>
-              <Text style={styles.rejectCtaTxtDisabled}>Pack Order</Text>
+              <Text style={styles.disabledBtntxt}>Pack Order</Text>
             </TouchableOpacity>
             {/* <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
               Shipment lable not created
@@ -693,15 +939,13 @@ const Ordercard = props => {
             <TouchableOpacity
               disabled={true}
               style={[
-                styles.DownloadPoBtnDisabled,
+                styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
                   flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 },
               ]}>
-              <Text style={styles.rejectCtaTxtDisabled}>
-                Pack Order Invoice
-              </Text>
+              <Text style={styles.disabledBtntxt}>Pack Order Invoice</Text>
             </TouchableOpacity>
             {/* <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
               Shipment lable not created
@@ -712,19 +956,17 @@ const Ordercard = props => {
             <TouchableOpacity
               disabled={true}
               style={[
-                styles.DownloadPoBtnDisabled,
+                styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
                   flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 },
               ]}>
-              <Text style={styles.rejectCtaTxtDisabled}>Create Manifest</Text>
+              <Text style={styles.disabledBtntxt}>Create Manifest</Text>
             </TouchableOpacity>
             <Text style={styles.shipmentLbelTxt}>
               Shipment lable not created
             </Text>
-            
-            
           </>
         ) : cta == 'CREATE_MANIFEST' ? (
           <TouchableOpacity
@@ -764,18 +1006,18 @@ const Ordercard = props => {
     // }
   };
 
-  const renderPartialCTAs = (url, fromCTA) => {
+  const renderPartialCTAs = (url, fromCTA, podUrl = '') => {
     return (actionCTA || []).map((_, i) => {
       if (i < 2) {
-        return renderCTAs(_, url, fromCTA, true);
+        return renderCTAs(_, url, fromCTA, true, podUrl);
       }
     });
   };
 
-  const renderFurtherCTAs = (url, fromCTA) => {
+  const renderFurtherCTAs = (url, fromCTA, podUrl = '') => {
     return (actionCTA || []).map((_, i) => {
       if (i > 1) {
-        return renderCTAs(_, url, fromCTA, true);
+        return renderCTAs(_, url, fromCTA, true, podUrl);
       }
     });
   };
@@ -973,12 +1215,14 @@ const Ordercard = props => {
               : {flexDirection: 'row', flex: 1, marginTop: Dimension.margin15}
           }>
           <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
-            {renderPartialCTAs(invoiceUrl, fromCTA)}
-            {!showMoreCTA ? renderFurtherCTAs(invoiceUrl, fromCTA) : null}
+            {renderPartialCTAs(invoiceUrl, fromCTA, podUrl)}
+            {!showMoreCTA
+              ? renderFurtherCTAs(invoiceUrl, fromCTA, podUrl)
+              : null}
           </View>
-          
-            {actionCTA && actionCTA.length > 2 ? (
-             <View style={{flex: 1}}>
+
+          {actionCTA && actionCTA.length > 2 ? (
+            <View style={{flex: 1}}>
               <TouchableOpacity
                 onPress={toggleMoreCTAs}
                 style={styles.showMoreCta}>
@@ -987,9 +1231,8 @@ const Ordercard = props => {
                   color={Colors.FontColor}
                   size={Dimension.font20}></Icon>
               </TouchableOpacity>
-              </View>
-            ) : null}
-          
+            </View>
+          ) : null}
         </View>
       </>
     );
@@ -1298,6 +1541,7 @@ const styles = StyleSheet.create({
     flex: 5,
     backgroundColor: Colors.BrandColor,
     borderRadius: 4,
+    flexBasis: '48%',
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -1312,6 +1556,7 @@ const styles = StyleSheet.create({
     flex: 5,
     backgroundColor: Colors.grayShade12,
     borderRadius: 4,
+    flexBasis: '48%',
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -1335,12 +1580,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexBasis: '50%',
     marginTop: Dimension.margin10,
-    borderColor:Colors.grayShade15,
-    borderWidth:1,
-    marginHorizontal:Dimension.margin5,
-    flexDirection:"row"
+    borderColor: Colors.grayShade15,
+    borderWidth: 1,
+    marginHorizontal: Dimension.margin5,
+    flexDirection: 'row',
   },
-  disabledbtn:{
+  disabledbtn: {
     flex: 1,
     backgroundColor: Colors.grayshade16,
     borderRadius: 4,
@@ -1349,31 +1594,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexBasis: '50%',
     marginTop: Dimension.margin10,
-    borderColor:Colors.BoxBorderColor,
-    borderWidth:1,
+    borderColor: Colors.BoxBorderColor,
+    borderWidth: 1,
   },
-  disabledBtntxt:{
+  disabledBtntxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
     color: Colors.eyeIcon,
     fontSize: Dimension.font12,
   },
-  shipmentLbelTxt:{
+  shipmentLbelTxt: {
     fontFamily: Dimension.CustomMediumFont,
     color: Colors.BlueShade,
     fontSize: Dimension.font10,
     flexBasis: '100%',
-    marginTop:Dimension.margin5
+    marginTop: Dimension.margin5,
   },
-  DownloadPoBtn: {
-    flex: 1,
-    backgroundColor: Colors.grayShade12,
-    borderRadius: 4,
-    paddingVertical: Dimension.padding8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexBasis: '100%',
-    marginTop: Dimension.margin10,
-  },
+  // DownloadPoBtn: {
+  //   flex: 1,
+  //   backgroundColor: Colors.grayShade12,
+  //   borderRadius: 4,
+  //   paddingVertical: Dimension.padding8,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   flexBasis: '100%',
+  //   marginTop: Dimension.margin10,
+  // },
   DownloadPoBtnDisabled: {
     flex: 1,
     backgroundColor: Colors.grayshade16,
@@ -1383,8 +1628,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexBasis: '100%',
     marginTop: Dimension.margin10,
-    borderColor:Colors.BoxBorderColor,
-    borderWidth:1,
+    borderColor: Colors.BoxBorderColor,
+    borderWidth: 1,
   },
   showMoreCta: {
     marginLeft: Dimension.margin10,

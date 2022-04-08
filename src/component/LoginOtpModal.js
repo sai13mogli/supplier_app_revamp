@@ -52,9 +52,9 @@ const LoginOtpModal = props => {
       );
     } else {
       return (
-        <TouchableOpacity onPress={onSendOtp} style={styles.setndOtpBtn}>
-          <Text style={styles.sendOtptext}>Resend OTP</Text>
-        </TouchableOpacity>
+       // <TouchableOpacity onPress={onSendOtp} style={styles.setndOtpBtn}>
+          <Text style={styles.sendOtptext} onPress={onSendOtp}>Resend OTP</Text>
+       // </TouchableOpacity>
       );
     }
   };
@@ -260,6 +260,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomRegularFont,
     marginBottom: Dimension.margin40,
     alignSelf: 'center',
+    marginHorizontal:Dimension.margin30
   },
   ModalFormWrap: {
     marginBottom: Dimension.margin20,
@@ -288,17 +289,18 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin5,
   },
   setndOtpBtn: {
-    backgroundColor: Colors.LightBrandColor,
-    paddingVertical: Dimension.padding8,
-    paddingHorizontal: Dimension.padding10,
-    borderRadius: 2,
+   // backgroundColor: Colors.LightBrandColor,
+   // paddingVertical: Dimension.padding8,
+   // paddingHorizontal: Dimension.padding10,
+   // borderRadius: 2,
 
-    alignItems: 'center',
+    //alignItems: 'center',
   },
   sendOtptext: {
-    fontSize: Dimension.font12,
+    fontSize: Dimension.font14,
     color: Colors.BrandColor,
-    fontFamily: Dimension.CustomRegularFont,
+    fontFamily: Dimension.CustomSemiBoldFont,
+    marginLeft: Dimension.margin5,
   },
 });
 

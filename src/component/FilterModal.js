@@ -156,23 +156,18 @@ const FilterModal = props => {
           </View>
           <View style={styles.rightPart}>{renderRight()}</View>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={styles.bottomAction}>
           <TouchableOpacity
             onPress={() => props.resetFilters()}
-            style={{backgroundColor: 'red', width: 100, height: 50}}>
-            <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+            style={styles.cancelBtn}>
+            <Text style={styles.canceltxt}>
               RESET
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => props.applyFilters()}
-            style={{
-              backgroundColor: 'red',
-              width: 200,
-              height: 50,
-              marginLeft: 10,
-            }}>
-            <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+            style={styles.rejectCtabtn}>
+            <Text style={styles.rejectCtaTxt}>
               APPLY
             </Text>
           </TouchableOpacity>
@@ -260,6 +255,44 @@ const styles = StyleSheet.create({
   RightInnerPart: {
     paddingLeft: Dimension.padding30,
     marginBottom: Dimension.padding30,
+  },
+  bottomAction: {
+    borderTopWidth: 1,
+    borderTopColor: Colors.grayShade2,
+    padding: Dimension.padding15,
+    backgroundColor: Colors.WhiteColor,
+   // position: 'absolute',
+    width: '100%',
+    bottom: 0,
+   flexDirection: 'row',
+  },
+  rejectCtabtn: {
+    flex: 5,
+    backgroundColor: Colors.BrandColor,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+  },
+  rejectCtaTxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    color: Colors.WhiteColor,
+    fontSize: Dimension.font16,
+  },
+  cancelBtn: {
+    flex: 5,
+    backgroundColor: Colors.WhiteColor,
+    borderRadius: 4,
+    paddingVertical: Dimension.padding12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+  },
+  canceltxt: {
+    fontFamily: Dimension.CustomSemiBoldFont,
+    color: Colors.FontColor,
+    fontSize: Dimension.font16,
   },
 });
 

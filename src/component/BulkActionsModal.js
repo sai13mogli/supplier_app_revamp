@@ -14,6 +14,7 @@ import Modal from 'react-native-modal';
 import Colors from '../Theme/Colors';
 import Toast from 'react-native-toast-message';
 import {createManifestApi} from '../services/orders';
+import CustomeIcon from './common/CustomeIcon';
 const deviceWidth = Dimensions.get('window').width;
 
 const BulkActionsModal = props => {
@@ -97,16 +98,37 @@ const BulkActionsModal = props => {
       onBackButtonPress={() => setBulkActionsModal(false)}>
       <View style={styles.modalContainer}>
         <View style={styles.topbdr}></View>
+        <View style={styles.closeIconWrap}>
+          <CustomeIcon
+                name={'close'}
+                size={Dimension.font22}
+                color={Colors.FontColor}
+                onPress={() => {
+                  setBulkActionsModal(false);
+                }}
+              />
+          </View>
+          <View style={styles.headerTxtWrap}>
+              <Text style={styles.headerTxt}>Bulk Actions</Text>
+           </View>
+           <View style={styles.midWrapper}>
+
+          
         <TouchableOpacity
           onPress={bulkCreateManifest}
-          style={{width: 200, height: 50, backgroundColor: 'red'}}>
-          <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+          >
+            <View style={styles.iconWrapper}>
+            <CustomeIcon name={'pencil-line'} color={Colors.blackColor} size={Dimension.font20}></CustomeIcon>
+            </View>
+           
+          <Text style={styles.btnTxt}>
             Create Manifest
           </Text>
           {bulkActionsLoader && (
-            <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+            <ActivityIndicator color={Colors.BrandColor} style={{alignSelf: 'center'}} />
           )}
         </TouchableOpacity>
+        </View>
       </View>
     </Modal>
   );
@@ -122,45 +144,27 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingTop: Dimension.padding10,
   },
+  iconWrapper:{
+    backgroundColor:Colors.grayShade1,
+    padding:Dimension.padding12,
+    borderRadius:4,
+    alignSelf:"center"
+  },
+  closeIconWrap:{
+    alignItems:"flex-end",
+    paddingHorizontal:Dimension.padding15,
+  },
+  headerTxtWrap:{
+    paddingHorizontal:Dimension.padding15,
+    marginBottom:Dimension.margin20
+  },
 
-  rejectCtabtn: {
-    flex: 5,
-    backgroundColor: Colors.BrandColor,
-    borderRadius: 4,
-    paddingVertical: Dimension.padding8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  disabledrejectCtabtn: {
-    flex: 5,
-    backgroundColor: 'gray',
-    borderRadius: 4,
-    paddingVertical: Dimension.padding8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  rejectCtaTxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
-    color: Colors.WhiteColor,
-    fontSize: Dimension.font12,
-  },
-  disabledrejectCtaTxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
-    color: '#000',
-    fontSize: Dimension.font12,
-  },
-  cancelBtn: {
-    flex: 5,
-    backgroundColor: Colors.WhiteColor,
-    borderRadius: 4,
-    paddingVertical: Dimension.padding8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  canceltxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
+  headerTxt:{
+    fontSize: Dimension.font14,
     color: Colors.FontColor,
-    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomSemiBoldFont,
+   // marginLeft:Dimension.margin10,
+
   },
   topbdr: {
     alignSelf: 'center',
@@ -169,17 +173,15 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     width: Dimension.width70,
   },
-  ModalheadingWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    padding: Dimension.padding15,
+  midWrapper:{
+marginVertical:Dimension.margin30
   },
-  btnWrap: {
-    flex: 1,
-    flexDirection: 'row',
-    padding: Dimension.padding15,
-    borderTopWidth: 1,
-    borderTopColor: Colors.grayShade1,
+  btnTxt:{
+fontSize:Dimension.font12,
+fontFamily:Dimension.CustomMediumFont,
+color:Colors.FontColor,
+alignSelf:"center",
+marginTop:Dimension.margin5
   },
 });
 

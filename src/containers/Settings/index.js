@@ -21,6 +21,30 @@ const SettingsScreen = props => {
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <AppHeader showText={'Settings'} navigation={props.navigation} showBack />
+      <View style={styles.bgWrapper}>
+        <Text style={styles.headingtxt}>SMS PREFERENCES</Text>
+        <View style={{flexDirection:"row",justifyContent:"space-between",marginVertical:Dimension.margin10,}}>
+        <Text style={styles.nrmtxt}>
+        Orders related SMS cannot be disabled as the are Critical to provide Services
+        </Text>
+        </View>
+      </View>
+      <View style={styles.bgWrapper}>
+        <Text style={styles.headingtxt}>NOTIFICATION SETTINGS</Text>
+        <View style={{flexDirection:"row",justifyContent:"space-between",marginVertical:Dimension.margin10,}}>
+        <Text style={styles.nrmtxt}>
+        Order Related in app Notifications
+        </Text>
+        <CustomeIcon
+                    name={'toggle-line'}
+                    color={Colors.headerTxtColor}
+                    size={Dimension.font18}></CustomeIcon>
+                    {/* <CustomeIcon
+                    name={'toggle-line'}
+                    color={Colors.headerTxtColor}
+                    size={Dimension.font18}></CustomeIcon> */}
+        </View>
+      </View>
       <View style={styles.logoutBtnWrap}>
         <TouchableOpacity onPress={onLogout} style={styles.logoutBtn}>
           <Text style={styles.logoutBtnTxt}>LOGOUT</Text>
@@ -36,9 +60,9 @@ const SettingsScreen = props => {
 
 const styles = StyleSheet.create({
   logoutBtnWrap: {
-    paddingHorizontal: Dimension.padding15,
+    paddingHorizontal: Dimension.padding20,
     paddingVertical: Dimension.paddng15,
-    backgroundColor: Colors.grayShade3,
+    backgroundColor: Colors.WhiteColor,
   },
   logoutBtn: {
     flexDirection: 'row',
@@ -46,12 +70,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Dimension.padding20,
     paddingVertical: Dimension.padding12,
-    borderWidth: 1,
-    borderColor: Colors.eyeIcon,
-    borderRadius: 8,
+   // borderWidth: 1,
+   // borderColor: Colors.eyeIcon,
+    borderRadius: 4,
+    backgroundColor:Colors.grayShade1
   },
   logoutBtnTxt: {
     fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+  },
+  bgWrapper:{
+    borderRadius: 4,
+    backgroundColor:Colors.grayShade1,
+    padding:Dimension.padding10,
+    marginHorizontal:Dimension.margin20,
+    marginBottom:Dimension.margin20
+  },
+  headingtxt:{
+    fontSize: Dimension.font12,
+    color: Colors.eyeIcon,
+    fontFamily: Dimension.CustomMediumFont,
+    marginBottom:Dimension.margin5
+  },
+  nrmtxt:{
+    
+    fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomMediumFont,
   },

@@ -148,9 +148,11 @@ const TicketsList = props => {
             {item.statusText}
           </Text>
           <Text style={styles.ticketIdTxt}>Ticket ID: {item.id}</Text>
+          {item.type ?
           <View style={styles.TicketTypeWrap}>
             <Text style={styles.tickettypetxt}>{item.type}</Text>
           </View>
+          :null}
         </View>
         <View style={styles.ticketBottomWrap}>
           <Text style={styles.ticketSubTxt}>{item.subject}</Text>
