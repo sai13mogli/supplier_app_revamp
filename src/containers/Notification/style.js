@@ -73,7 +73,7 @@ paddingVertical:Dimension.padding40
   ActioniconWrap:{
     width:Dimension.width30,
     height:Dimension.width30,
-    backgroundColor:Colors.LightBrandColor,
+    backgroundColor:Colors.LightBrandColor2,
     borderRadius:Dimension.width30,
     justifyContent:"center",
     alignItems:"center",

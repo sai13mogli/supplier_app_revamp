@@ -119,7 +119,7 @@ const NotificationScreen = props => {
             style={item.readStatus ? styles.iconWrap : styles.ActioniconWrap}>
             <CustomeIcon
               // name={'support-line'}
-              name={'orders-line'}
+              name={item.readStatus ? 'support-line' : 'orders-line'}
               size={Dimension.font20}
               //color={Colors.eyeIcon}
               color={item.readStatus ? Colors.eyeIcon : Colors.BrandColor}
@@ -299,15 +299,17 @@ const NotificationScreen = props => {
             notificationsStatus == STATE_STATUS.FETCHING ? (
               <View
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: Dimension.padding12,
-                }}>
+                    flex:1,
+                   //backgroundColor:"#ccc",
+                   justifyContent:"center",
+                   alignContent:"center",
+                   height:'100%',
+                   padding:Dimension.padding20
+                 }}>
                 <ActivityIndicator
-                  style={{alignSelf: 'center'}}
+                  //style={{alignSelf: 'center'}}
                   color={Colors.BrandColor}
-                  size={'small'}
+                  size={'large'}
                 />
               </View>
             ) : null

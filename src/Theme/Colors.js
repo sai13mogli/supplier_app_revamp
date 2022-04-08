@@ -16,6 +16,7 @@ const Colors = {
   BoxBorderColor: '#CFD2E2',
   LightBrandColor: '#FFF2F2',
   LightBrandColor1:'#FFEBEB',
+  LightBrandColor2:"#FFE5E5",
 
   //Secondary Color
 
