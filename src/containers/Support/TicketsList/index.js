@@ -90,7 +90,7 @@ const TicketsList = props => {
   const debouncedSave = useRef(
     debounce(text => {
       fetchTicketListing(1, text);
-    }, 300),
+    }, 800),
   ).current;
 
   const onSearchText = text => {
