@@ -68,6 +68,8 @@ const Ordercard = props => {
     shipmentUrl,
     warehouseId,
     podUrl,
+    selectItemData,
+    bulkDownloadItems,
   } = props;
 
   const [invoiceLoading, setInvoiceLoading] = useState(false);
@@ -913,9 +915,7 @@ const Ordercard = props => {
               ]}>
               <Text style={styles.disabledBtntxt}>Upload Invoice</Text>
             </TouchableOpacity>
-            <Text style={styles.shipmentLbelTxt}>
-              Invoice Approval pending
-            </Text>
+            <Text style={styles.shipmentLbelTxt}>Invoice Approval pending</Text>
           </>
         ) : cta == 'PACK_ORDER_DISABLED' ? (
           <>
@@ -1085,7 +1085,11 @@ const Ordercard = props => {
                   : Colors.FontColor
               }
               size={Dimension.font22}
-              onPress={() => selectItemId(itemId)}
+              onPress={() =>
+                selectedTab == 'SHIPMENT'
+                  ? selectItemData({itemId, shipmentUrl, invoiceUrl: podUrl})
+                  : selectItemId(itemId)
+              }
               style={{
                 position: 'absolute',
                 right: 0,
