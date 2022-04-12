@@ -1,11 +1,19 @@
-import React,{useEffect} from 'react';
-import {LogBox, ScrollView, StyleSheet, Text} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  LogBox,
+  ScrollView,
+  StyleSheet,
+  Text,
+  Platform,
+  Linking,
+} from 'react-native';
 import Routes from './src/routes';
 import store from './src/redux/store';
 import {Provider} from 'react-redux';
 import codePush from 'react-native-code-push';
 import Toast from 'react-native-toast-message';
 import Modal from 'react-native-modal';
+import * as RootNavigation from './src/generic/navigator';
 
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
@@ -31,7 +39,58 @@ class App extends React.Component {
     );
   }
 
- 
+  componentDidMount() {
+    let urlListener = {};
+    if (Platform.OS === 'android') {
+      urlListener = Linking.addEventListener(
+        'url',
+        this.getLinkingUrl.bind(this),
+      );
+    }
+    setTimeout(() => {
+      Linking.getInitialURL()
+        .then(url => {
+          if (url) {
+            this.handleOpenUrl({url: url});
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }, 1500);
+    return urlListener;
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this.handleOpenUrl);
+  }
+
+  getLinkingUrl(eventUrl) {
+    if (Platform.OS === 'android') {
+      this.handleOpenUrl(eventUrl);
+    }
+  }
+
+  handleOpenUrl(event) {
+    if (event) {
+      Linking.canOpenURL(event.url).then(supported => {
+        if (supported) {
+          console.log('linking hai!!', event.url);
+          let input = event.url;
+          if (
+            input.includes(
+              'https://www.suppliercentralqa.moglilabs.com/profile',
+            )
+          ) {
+            RootNavigation.navigate('Profile');
+          } else {
+            RootNavigation.navigate('Orders');
+          }
+          return;
+        }
+      });
+    }
+  }
 
   render() {
     return (
@@ -39,10 +98,6 @@ class App extends React.Component {
         <Provider store={store}>
           <Routes />
         </Provider>
-        {/* <Toast />
-        <Modal>
-          <Toast />
-        </Modal> */}
       </>
     );
   }

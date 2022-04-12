@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {navigationRef} from './RootNavigation';
+import {navigationRef} from '../generic/navigator';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Dimension from '../Theme/Dimension';
@@ -57,12 +57,15 @@ const Routes = props => {
       screen => screen.name === route.name,
     );
     let tabName = currentScreen['name'];
-      let iconName = currentScreen[focused ? 'activeIcon' : 'inactiveIcon'];
-    return (  
+    let iconName = currentScreen[focused ? 'activeIcon' : 'inactiveIcon'];
+    return (
       <TouchableOpacity
         style={styles.iconAlignment}
         onPress={() => rest.navigation.navigate(route.name)}>
-        <CustomeIcon name={iconName} size={Dimension.font16} color={color}></CustomeIcon>
+        <CustomeIcon
+          name={iconName}
+          size={Dimension.font16}
+          color={color}></CustomeIcon>
         {/* {tabName == 'Profile' ? (
                 <ProfileTabIcon focused={focused} iconName={iconName} color={color} />
               ) : currentScreen.iconType ? (
@@ -109,8 +112,55 @@ const Routes = props => {
     );
   };
 
+  const linking = {
+    prefixes: [
+      'https://www.suppliercentralqa.moglilabs.com',
+      'www.suppliercentralqa.moglilabs.com://',
+    ],
+    config: {
+      initialRouteName: 'HomeApp',
+      screens: {
+        HomeApp: {
+          screens: {
+            Orders: {
+              path: 'Orders',
+            },
+            Support: {
+              path: 'Support',
+            },
+            Notification: {
+              path: 'Notification',
+            },
+            More: {
+              path: 'More',
+            },
+          },
+        },
+      },
+    },
+  };
+
+  const fallbackComponent = () => (
+    <ActivityIndicator
+      size={'large'}
+      color={'red'}
+      style={{
+        backgroundColor: '#e7e7e7',
+        borderRadius: 8,
+        width: '100%',
+        marginHorizontal: 12,
+        marginBottom: 8,
+        paddingVertical: 50,
+        alignSelf: 'center',
+      }}
+    />
+  );
+
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer
+      ref={navigationRef}
+      linking={linking}
+      fallback={fallbackComponent}>
       <AppStack.Navigator
         screenOptions={{
           headerShown: false,
@@ -118,7 +168,7 @@ const Routes = props => {
         initialRouteName="Splash">
         {!isLoggedIn ? (
           <>
-            {AUTH_STACK_SCREENS.map((screen, key) => (
+            {(AUTH_STACK_SCREENS || []).map((screen, key) => (
               <AppStack.Screen
                 key={key}
                 name={screen.name}
@@ -145,7 +195,7 @@ const Routes = props => {
                 setIsLoggedIn,
               }}
             />
-            {APP_STACK_SCREENS.map((screen, key) => (
+            {(APP_STACK_SCREENS || []).map((screen, key) => (
               <AppStack.Screen
                 key={key}
                 name={screen.name}

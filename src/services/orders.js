@@ -285,3 +285,15 @@ export const createManifestApi = async payload =>
       },
     },
   );
+
+export const bulkDownloadApi = async payload =>
+  axios.post(
+    `http://apigatewayqa.moglix.com/api/order/oms/bulkDownload`,
+    [...payload],
+
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );

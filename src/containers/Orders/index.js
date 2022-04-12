@@ -80,6 +80,7 @@ const OrdersScreen = props => {
   const [bulkAcceptLoader, setBulkAcceptLoader] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [bulkActionsModal, setBulkActionsModal] = useState(false);
+  const [bulkDownloadItems, setBulkDownloadItems] = useState([]);
 
   const OPTIONS = [
     { label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders' },
@@ -205,6 +206,7 @@ const OrdersScreen = props => {
         selectItemId={selectItemId}
         shipmentUrl={item.shipmentUrl}
         podUrl={item.poUrl}
+        selectItemData={selectItemData}
       />
     );
   };
@@ -261,6 +263,31 @@ const OrdersScreen = props => {
     setBulkItemIds(currentItemIds);
   };
 
+  //select Item Data
+  const selectItemData = itemObj => {
+    console.log('itemdata hai mc', itemObj);
+    let currentBulkDownloadItems = [...bulkDownloadItems];
+    let currItemIds = [...bulkItemIds];
+    if (currItemIds.includes(itemObj.itemId)) {
+      currentBulkDownloadItems = currentBulkDownloadItems.filter(
+        _ => _.itemId != itemObj.itemId,
+      );
+      currItemIds = currItemIds.filter(_ => _ != itemObj.itemId);
+    } else {
+      if (currentBulkDownloadItems) {
+        currentBulkDownloadItems.push(itemObj);
+        currItemIds.push(itemObj.itemId);
+      } else {
+        currentBulkDownloadItems = [];
+        currentBulkDownloadItems.push(itemObj);
+        currItemIds.push(itemObj.itemId);
+      }
+    }
+    console.log(currentBulkDownloadItems, 'mc data hai', currItemIds);
+    setBulkDownloadItems(currentBulkDownloadItems);
+    setBulkItemIds(currItemIds);
+  };
+
   useEffect(() => {
     let currentItemIds = [];
     if (selectAll) {
@@ -277,6 +304,22 @@ const OrdersScreen = props => {
       setBulkActionsModal(true);
     }
   }, [bulkItemIds]);
+
+  // const selectItemId = itemId => {
+
+  //   let currentItemIds = [...bulkItemIds];
+  //   if (currentItemIds.includes(itemId)) {
+  //     currentItemIds = currentItemIds.filter(_ => _ != itemId);
+  //   } else {
+  //     if (currentItemIds) {
+  //       currentItemIds.push(itemId);
+  //     } else {
+  //       currentItemIds = [];
+  //       currentItemIds.push(itemId);
+  //     }
+  //   }
+  //   setBulkItemIds(currentItemIds);
+  // };
 
   const renderHeaderComponent = () => {
     return (
@@ -312,22 +355,23 @@ const OrdersScreen = props => {
 
   const renderFooterComponent = () => {
     if (OrderStatus == STATE_STATUS.FETCHING) {
-      return (<View
-        style={{
-          flex: 1,
-          //backgroundColor:"#ccc",
-          justifyContent: "center",
-          alignContent: "center",
-          height: '100%',
-          padding: Dimension.padding20
-        }}>
-        <ActivityIndicator
-          //style={{alignSelf: 'center'}}
-          color={colors.BrandColor}
-          size={'large'}
-        />
-      </View>
-      )
+      return (
+        <View
+          style={{
+            flex: 1,
+            //backgroundColor:"#ccc",
+            justifyContent: 'center',
+            alignContent: 'center',
+            height: '100%',
+            padding: Dimension.padding20,
+          }}>
+          <ActivityIndicator
+            //style={{alignSelf: 'center'}}
+            color={colors.BrandColor}
+            size={'large'}
+          />
+        </View>
+      );
     }
     return null;
   };
@@ -713,6 +757,7 @@ const OrdersScreen = props => {
                 bulkItemIds={bulkItemIds}
                 selectedTab={selectedTab}
                 shipmentType={shipmentType}
+                bulkDownloadItems={bulkDownloadItems}
               />
             ) : null}
           </View>
