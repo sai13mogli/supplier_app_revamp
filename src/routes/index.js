@@ -168,7 +168,7 @@ const Routes = props => {
         initialRouteName="Splash">
         {!isLoggedIn ? (
           <>
-            {AUTH_STACK_SCREENS.map((screen, key) => (
+            {(AUTH_STACK_SCREENS || []).map((screen, key) => (
               <AppStack.Screen
                 key={key}
                 name={screen.name}
@@ -195,7 +195,7 @@ const Routes = props => {
                 setIsLoggedIn,
               }}
             />
-            {APP_STACK_SCREENS.map((screen, key) => (
+            {(APP_STACK_SCREENS || []).map((screen, key) => (
               <AppStack.Screen
                 key={key}
                 name={screen.name}

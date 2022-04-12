@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  PermissionsAndroid,
 } from 'react-native';
 import React, {useState, useCallback, useEffect, useRef} from 'react';
 import Dimension from '../Theme/Dimension';
@@ -19,6 +20,8 @@ const deviceWidth = Dimensions.get('window').width;
 import {config, fs} from '';
 import RNFetchBlob from 'rn-fetch-blob';
 import {BASE_URL} from '../redux/constants';
+import {WebView} from 'react-native-webview';
+// import Base64Downloader from 'react-base64-downloader';
 
 const BulkActionsModal = props => {
   const {
@@ -34,6 +37,22 @@ const BulkActionsModal = props => {
   const [bulkActionsLoader, setBulkAcceptLoader] = useState(false);
   const [shipmentLoader, setShipmentLoader] = useState(false);
   const [invoiceLoader, setInvoiceLoader] = useState(false);
+  const [isWebView, setIsWebView] = useState(false);
+  const [base64, setBase64] = useState('');
+  let webview = useRef();
+
+  // const downloadZip = data => {
+  //   console.log(data, 'data hai dost');
+  //   let fp = `console.log(window)
+  //     const a = document.createElement('a');
+  //      a.href = ${base64}
+  //     // the filename you want
+  //     a.download = 'supplier_files.zip';
+  //     document.body.appendChild(a);
+  //     a.click();`;
+  //   webview.current.injectJavaScript(fp);
+  // };
+
   const bulkCreateManifest = async () => {
     try {
       setBulkAcceptLoader(true);
@@ -100,56 +119,131 @@ const BulkActionsModal = props => {
   //   }
   // };
 
+  // const downloadFile = async downloadType => {
+  //   try {
+  //     const {fs} = RNFetchBlob;
+  //     let currbulkItems = [...bulkDownloadItems];
+  //     currbulkItems = (currbulkItems || []).map(_ => ({
+  //       itemId: _.itemId,
+  //       downloadType: downloadType,
+  //       url: downloadType == 'shipment' ? _.invoiceUrl : _.invoiceUrl,
+  //     }));
+
+  //     const downloads = fs.dirs.DownloadDir;
+
+  //     RNFetchBlob.config({
+  //       fileCache: true,
+  //       path: downloads + '/' + 'supplier' + '.zip',
+  //       useDownloadManager: true,
+  //       notification: true,
+  //     })
+  //       .fetch(
+  //         'POST',
+  //         `${BASE_URL}api/order/oms/bulkDownload`,
+  //         {
+  //           Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+  //         },
+  //         JSON.stringify([...currbulkItems]),
+  //       )
+  //       .then(res => {
+  //         console.log('res', res);
+  //         return res.base64();
+  //       })
+  //       .then(resp => {
+  //         console.log('resp hai boss', resp);
+  //       });
+
+  //     // return config({
+  //     //   // add this option that makes response data to be stored as a file,
+  //     //   // this is much more performant.
+  //     //   fileCache: true,
+  //     //   addAndroidDownloads: {
+
+  //     //     path: ,
+  //     //   },
+  //     // }).fetch(
+  //     //   'POST',
+  //     //   ``,
+  //     //   ,
+  //     // );
+  //   } catch (error) {
+  //     console.log('error hai dost', error);
+  //   }
+  // };
+
   const downloadFile = async downloadType => {
-    try {
-      const {fs} = RNFetchBlob;
-      let currbulkItems = [...bulkDownloadItems];
-      currbulkItems = (currbulkItems || []).map(_ => ({
-        itemId: _.itemId,
-        downloadType: downloadType,
-        url: downloadType == 'shipment' ? _.invoiceUrl : _.invoiceUrl,
-      }));
+    const {config, fs} = RNFetchBlob;
+    let currbulkItems = [...bulkDownloadItems];
 
-      const downloads = fs.dirs.DownloadDir;
+    currbulkItems = (currbulkItems || []).map(_ => ({
+      itemId: _.itemId,
+      downloadType: downloadType,
+      url:
+        downloadType == 'shipment'
+          ? 'https://doc.moglix.com/p/pdf/gst/invoice-engine/qa/a7c661b4-f712-37eb-a57b-72cc64407645GST_Invoice-10_MS16691042206350.pdf'
+          : 'https://doc.moglix.com/p/pdf/gst/invoice-engine/qa/a7c661b4-f712-37eb-a57b-72cc64407645GST_Invoice-10_MS16691042206350.pdf',
+    }));
+    console.log('payload', [...currbulkItems]);
+    let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+    var myrequest = new XMLHttpRequest();
+    myrequest.onreadystatechange = e => {
+      if (myrequest.readyState !== 4) {
+        return;
+      }
 
-      RNFetchBlob.config({
-        fileCache: true,
-        path: downloads + '/' + 'supplier' + '.zip',
-        useDownloadManager: true,
-        notification: true,
-      })
-        .fetch(
-          'POST',
-          `${BASE_URL}api/order/oms/bulkDownload`,
-          {
-            Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
-          },
-          JSON.stringify([...currbulkItems]),
-        )
-        .then(res => {
-          console.log('res', res);
-          return res.base64();
-        })
-        .then(resp => {
-          console.log('resp hai boss', resp);
-        });
+      if (myrequest.status === 200) {
+      } else {
+        console.warn('error');
+      }
+    };
 
-      // return config({
-      //   // add this option that makes response data to be stored as a file,
-      //   // this is much more performant.
-      //   fileCache: true,
-      //   addAndroidDownloads: {
+    // myrequest.setRequestHeader('Authorization', token);
+    myrequest.responseType = 'blob';
+    // myrequest.send();
+    myrequest.onload = e => {
+      var response = myrequest.response;
+      console.log('responseOnLoad', response);
+      var mimetype = myrequest.getResponseHeader('Content-Type');
+      var fields = mimetype.split(';');
+      var name = fields[0];
+      // var isPdf = false;
+      // if (name == 'application/pdf') {
+      //   isPdf = true;¸
+      // }
+      if (response) {
+        // setLoader(false);
+        // alert('success', JSON.stringify(response));
+        const fileReaderInstance = new FileReader();
+        fileReaderInstance.readAsDataURL(response);
+        fileReaderInstance.onload = async () => {
+          var fileUrl = fileReaderInstance.result;
+          console.log('fileUrl', fileUrl);
+          setBase64(fileUrl);
+          setIsWebView(true);
+          // const dirToSave = fs.dirs.PictureDir;
+          // let fLocation = dirToSave + '/' + 'supplier_files.zip';
+          // const granted = await PermissionsAndroid.request(
+          //   PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          // );
+          // console.log('granted hai ki nahi', granted);
+          // RNFetchBlob.fs.writeFile(
+          //   fLocation,
+          //   RNFetchBlob.base64.encode(fileUrl),
+          //   'base64',
+          // );
+        };
+      } else {
+        alert('error', JSON.stringify(response));
+      }
+    };
 
-      //     path: ,
-      //   },
-      // }).fetch(
-      //   'POST',
-      //   ``,
-      //   ,
-      // );
-    } catch (error) {
-      console.log('error hai dost', error);
-    }
+    myrequest.open(
+      'POST',
+      `http://apigatewayqa.moglix.com/api/order/oms/bulkDownload`,
+    );
+    myrequest.setRequestHeader('Content-Type', 'application/json');
+    myrequest.setRequestHeader('Authorization', token);
+    myrequest.send(JSON.stringify([...currbulkItems]));
   };
 
   return (
@@ -234,7 +328,24 @@ const BulkActionsModal = props => {
           </TouchableOpacity>
         </View>
       </View>
+      {/* {isWebView && (
+        <Base64Downloader
+          base64={base64}
+          downloadName="1x1_red_pixel"
+          style={{color: 'orange'}}
+          onDownloadSuccess={() => console.log('File download initiated')}
+          onDownloadError={() =>
+            console.warn('Download failed to start')
+          }></Base64Downloader>
+      )} */}
     </Modal>
+    // <WebView
+    //   ref={webview}
+    //   originWhitelist={['*']}
+    //   source={{html: '<html><body></body></html>'}}
+    //   style={{width: 1, height: 1}}
+    //   onLoad={downloadZip}
+    // />
   );
 };
 
