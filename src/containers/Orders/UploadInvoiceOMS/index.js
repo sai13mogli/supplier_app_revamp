@@ -17,6 +17,7 @@ import InvoiceOmsCard from '../../../component/InvoiceOmsCard';
 import { BASE_URL } from '../../../redux/constants';
 import RNFetchBlob from 'rn-fetch-blob';
 import Toast from 'react-native-toast-message';
+import moment from 'moment';
 
 const UploadInvoiceOMSScreen = (props) => {
 
@@ -28,6 +29,7 @@ const UploadInvoiceOMSScreen = (props) => {
     const [uploadInvoice, setUploadInvoice] = useState({});
     const [uploadInvoiceError, setuploadInvoiceError] = useState(false);
     const [supplierInvoiceTotal, setSupplierInvoiceTotal] = useState("");
+    const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] = useState(false);
     const [poTotal, setPoTotal] = useState("");
     const [poTotalError, setpoTotalError] = useState(false);
     const [uploadDisabled, setUploadDisabled] = useState(false);
@@ -40,7 +42,6 @@ const UploadInvoiceOMSScreen = (props) => {
     const [invoiceDateError, setInvoiceDateError] = useState(false);
     const [actionCTA, setaAtionCTA] = useState(props?.route?.params?.actionCTA)
 
-    console.log("Oke====>", OmsUploadList);
 
 
     const Documents = new OrderedMap({
@@ -83,8 +84,10 @@ const UploadInvoiceOMSScreen = (props) => {
             keyboardType: 'number-pad',
             label: 'Supplier Invoice Total',
             placeholder: 'Supplier Invoice Total',
-            errorMessage: 'Enter valid supplier invoice total ',
+            showError: supplierInvoiceTotalError,
+            errorMessage: 'Supplier invoice total must be equal to Po Total',
             value: supplierInvoiceTotal,
+            onBlur: () => onSupplierInvoiceBlur(),
             onChangeText: text => setSupplierInvoiceTotal(text),
             component: FloatingLabelInputField,
         },
@@ -133,6 +136,14 @@ const UploadInvoiceOMSScreen = (props) => {
             setInvoiceNumberError(true);
         }
     };
+    const onSupplierInvoiceBlur = () => {
+        if (supplierInvoiceTotal != poTotal && supplierInvoiceTotal.length && supplierInvoiceTotal) {
+            setSupplierInvoiceTotalError(false);
+        } else {
+            setSupplierInvoiceTotalError(true);
+        }
+    };
+
     const onInvoiceDateBlur = () => {
         if (invoiceDate && invoiceDate.length) {
             setInvoiceDateError(false);
@@ -178,7 +189,6 @@ const UploadInvoiceOMSScreen = (props) => {
     };
 
     const setFormState = data => {
-        console.log("Dtata===>", data);
         switch (fId) {
             case 'uploadInvoice':
                 setUploadInvoice(data);
@@ -257,7 +267,7 @@ const UploadInvoiceOMSScreen = (props) => {
         let currentItemIds = [...bulkItemIds];
         let currentPrice = [...poTotalPrice];
         let currentKeys = [...totalKeys]
-        console.log("Price====>", keys);
+        console.log("Price====>", currentItemIds);
         if (currentItemIds.includes(podId)) {
             currentItemIds = currentItemIds.filter(_ => _ != podId);
 
@@ -274,12 +284,11 @@ const UploadInvoiceOMSScreen = (props) => {
                 currentItemIds.push(podId);
                 currentPrice.push(totalPrice);
                 currentKeys.push(keys);
-
             }
         }
         setTotalKeys(currentKeys)
         setBulkItemIds(currentItemIds);
-        setPoTotalPrice(currentPrice)
+        setPoTotal(totalPrice)
     };
 
     const renderItem = ({ item, index }) => {
@@ -327,8 +336,9 @@ const UploadInvoiceOMSScreen = (props) => {
             invoiceNumber &&
             invoiceNumber.length &&
             invoiceDate &&
-            uploadInvoice && uploadInvoice.name
-
+            uploadInvoice && uploadInvoice.name &&
+            supplierInvoiceTotal.length
+            // && (supplierInvoiceTotal != poTotal)
 
         ) {
             try {
@@ -356,7 +366,7 @@ const UploadInvoiceOMSScreen = (props) => {
                 },
                 {
                     name: 'invoiceDate',
-                    data: invoiceDate,
+                    data: moment(invoiceDate).format('YYYY-MM-DD')
                 },
                 {
                     name: 'file',
@@ -404,7 +414,7 @@ const UploadInvoiceOMSScreen = (props) => {
 
                 );
                 const res = await response.json();
-                console.log("Response====>", res);
+                console.log("res", res);
                 if (res.success) {
                     Toast.show({
                         type: 'success',
@@ -429,7 +439,7 @@ const UploadInvoiceOMSScreen = (props) => {
             }
         } else {
             onInvoiceNumberBlur();
-
+            onSupplierInvoiceBlur();
         }
 
 
