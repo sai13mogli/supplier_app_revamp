@@ -1,5 +1,5 @@
 import React, { useEffect, useState, } from 'react';
-import { Text, View, FlatList, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import colors from "../../../../Theme/Colors"
 import { useSelector, useDispatch } from 'react-redux';
 import Dimension from "../../../../Theme/Dimension";
@@ -7,12 +7,13 @@ import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import { fetchDeleteAddresses } from '../../../../redux/actions/profile';
 import styles from './styles';
-
+import { STATE_STATUS } from '../../../../redux/constants';
 
 const Billing = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [billing, setBilling] = useState("Billing")
+  const addressesDetailsStatus = useSelector(state => state.profileReducer.addressesDetails.status || STATE_STATUS.FETCHING);
   const profileData = useSelector(state => state.profileReducer.data || {});
   const addressesResponse = useSelector(state => state.profileReducer.addressesDetails || []);
   const addressesData = addressesResponse?.data
@@ -88,30 +89,35 @@ const Billing = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.ContainerCss}>
-        <View style={styles.TopWrap}>
-          <Text style={styles.Pageheading}>
-            {BillingAddressData.length} Billing Address
-          </Text>
-          <TouchableOpacity
-            onPress={() => props.navigation.navigate('EditAddress', { tabState: billing })}
-          >
-            <View style={{ flexDirection: "row" }}>
-              <CustomeIcon name={'add-circle'} size={Dimension.font18} color={colors.BrandColor} />
-              <Text style={styles.addnewtxt}>
-                Add new
+      {
+        addressesDetailsStatus == STATE_STATUS.FETCHING ? (
+          <ActivityIndicator style={{ alignSelf: 'center', marginTop: 150 }} />
+        ) :
+          <ScrollView style={styles.ContainerCss}>
+            <View style={styles.TopWrap}>
+              <Text style={styles.Pageheading}>
+                {BillingAddressData.length} Billing Address
               </Text>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate('EditAddress', { tabState: billing })}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <CustomeIcon name={'add-circle'} size={Dimension.font18} color={colors.BrandColor} />
+                  <Text style={styles.addnewtxt}>
+                    Add new
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
             </View>
-          </TouchableOpacity>
 
-        </View>
-
-        <FlatList
-          data={BillingAddressData}
-          renderItem={renderItems}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </ScrollView>
+            <FlatList
+              data={BillingAddressData}
+              renderItem={renderItems}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </ScrollView>
+      }
     </View>
 
   );

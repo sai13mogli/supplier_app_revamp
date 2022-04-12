@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { OrderedMap } from 'immutable';
-import { NavigationActions, StackActions } from 'react-navigation';
+import { StackActions, NavigationActions } from '@react-navigation/native';
 import RNFetchBlob from 'rn-fetch-blob';
 import { View, StyleSheet, Text, TouchableOpacity, Modal, ScrollView, FlatList } from "react-native";
 import DocumentPicker from 'react-native-document-picker';
@@ -15,14 +15,16 @@ import Header from '../../../component/common/Header';
 import CustomeDatePicker from '../../../component/common/Datepicker';
 import { BASE_URL } from '../../../redux/constants';
 import Toast from 'react-native-toast-message';
+import moment from 'moment';
 
 const InvoiceEMSFormDetailScreen = props => {
     const [loading, setLoading] = useState(false);
+    const [totalAmount, setTotalAmount] = useState(props?.route?.params?.totalAmount);
     const [warehouseId, setwarehouseId] = useState(props?.route?.params?.warehouseId)
     const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
     const [itemRef, setitemRef] = useState(props?.route?.params?.itemRef)
     const [quantity, setQuantity] = useState(props?.route?.params?.quantity);
-    const [HSN, setHSN] = useState(props?.route?.params?.hsn);
+    const [hsn, setHsn] = useState(props?.route?.params?.hsn);
     const [invoiceNumber, setInvoiceNumber] = useState();
     const [invoiceNumberError, setInvoiceNumberError] = useState(false);
     const [invoiceDate, setInvoiceDate] = useState("");
@@ -39,24 +41,17 @@ const InvoiceEMSFormDetailScreen = props => {
     const [uploadDisabled, setUploadDisabled] = useState(false);
     const [baseAmount, setBaseAmount] = useState("");
     const [baseAmountError, setBaseAmountError] = useState(false);
-    const [hsn, setHsn] = useState("");
     const [hsnError, sethsnError] = useState(false);
-    const [tax, setTax] = useState("");
+    const [taxPercentage, setTaxPercentage] = useState(props?.route?.params?.taxPercentage);
     const [taxError, setTaxError] = useState(false);
     const [total, setTotal] = useState("");
-    const [totalError, setTotalError] = useState(false);
     const [commentError, setCommentError] = useState(false);
     const [addComment, setAddComment] = useState("");
     const [loadingBaseAmount, setloadingBaseAmount] = useState("");
-    const [loadingHsn, setloadingHsn] = useState("");
-    const [loadingTax, setloadingTax] = useState("");
     const [loadingTotal, setloadingTotal] = useState("");
     const [misBaseAmount, setMisBaseAmount] = useState("");
-    const [misHsn, setMisHsn] = useState("");
-    const [misTax, setMisTax] = useState("");
     const [misTotal, setMisTotal] = useState("");
     const [fId, setFId] = useState(null);
-    const [phoneErrorMsg, setPhoneErrorMsg] = useState('');
 
 
     const Documents = new OrderedMap({
@@ -72,6 +67,7 @@ const InvoiceEMSFormDetailScreen = props => {
                 doc: uploadInvoice
             },
             isImp: true,
+            onBlur: () => onUploadInvoiceBlur(),
             errorState: uploadInvoiceError,
             errorText: "Please upload Invoice",
             placeholder: 'Tap to Upload',
@@ -89,6 +85,7 @@ const InvoiceEMSFormDetailScreen = props => {
             },
             isImp: false,
             errorState: uploadEwayBillError,
+            onBlur: () => onUploadEwayBlur(),
             errorText: "Please upload E-way Bill",
             placeholder: 'Tap to Upload',
             setUpload: uploadEwayBill && uploadEwayBill.setUpload,
@@ -114,7 +111,9 @@ const InvoiceEMSFormDetailScreen = props => {
             label: 'Invoice Date',
             placeholder: 'Invoice Date',
             errorMessage: 'Enter valid Invoice date',
+            showError: invoiceDateError,
             value: invoiceDate,
+            onBlur: () => onInvoiceDateBlur(),
             onChange: invoiceDate => setInvoiceDate(invoiceDate),
             component: CustomeDatePicker,
         },
@@ -162,8 +161,7 @@ const InvoiceEMSFormDetailScreen = props => {
             errorMessage: 'Enter valid base amount',
             showError: baseAmountError,
             value: baseAmount,
-            // onBlur: () => onContactNameBlur(),
-            onChangeText: text => setBaseAmount(text),
+            onChangeText: (text) => calculateTotalFreight(text),
             component: FloatingLabelInputField,
         },
         hsn: {
@@ -173,35 +171,31 @@ const InvoiceEMSFormDetailScreen = props => {
             placeholder: 'HSN',
             errorMessage: 'Enter valid hsn',
             showError: hsnError,
-            value: hsn,
-            onChangeText: text => setHsn(text),
+            value: baseAmount ? hsn : "",
+            onChangeText: text => baseAmount ? setHsn(text) : "",
             component: FloatingLabelInputField,
-            // onBlur: () => onGstinBlur(),
         },
-        tax: {
+        taxPercentage: {
             title: 'Tax%',
             isImp: false,
             label: 'Tax%',
             placeholder: 'Tax',
             errorMessage: 'Enter valid tax',
             showError: taxError,
-            value: tax,
-            onChangeText: text => setTax(text),
+            value: baseAmount ? String(taxPercentage) : "",
+            onChangeText: text => setTaxPercentage(text),
             component: FloatingLabelInputField,
-            // onBlur: () => onGstinBlur(),
         },
         total: {
             title: 'Total',
             isImp: false,
             label: 'Total',
             keyboardType: 'number-pad',
-            placeholder: '',
+            placeholder: 'Total',
             errorMessage: 'Enter valid total',
-            showError: totalError,
             value: total,
             onChangeText: text => setTotal(text),
             component: FloatingLabelInputField,
-            // onBlur: () => onGstinBlur(),
         },
         addComment: {
             title: 'Add Comment',
@@ -213,7 +207,6 @@ const InvoiceEMSFormDetailScreen = props => {
             value: addComment,
             onChangeText: text => setAddComment(text),
             component: FloatingLabelInputField,
-            // onBlur: () => onGstinBlur(),
         },
         loadingBaseAmount: {
             title: 'Base Amount',
@@ -224,8 +217,7 @@ const InvoiceEMSFormDetailScreen = props => {
             errorMessage: 'Enter valid base amount',
             showError: baseAmountError,
             value: loadingBaseAmount,
-            // onBlur: () => onContactNameBlur(),
-            onChangeText: text => setloadingBaseAmount(text),
+            onChangeText: text => calculateLoadingCharges(text),
             component: FloatingLabelInputField,
         },
         loadingHsn: {
@@ -235,10 +227,9 @@ const InvoiceEMSFormDetailScreen = props => {
             placeholder: 'HSN',
             errorMessage: 'Enter valid hsn',
             showError: hsnError,
-            value: loadingHsn,
-            onChangeText: text => setloadingHsn(text),
+            value: loadingBaseAmount ? hsn : "",
+            onChangeText: text => loadingBaseAmount ? setHsn(text) : "",
             component: FloatingLabelInputField,
-            // onBlur: () => onGstinBlur(),
         },
         loadingTax: {
             title: 'Tax%',
@@ -247,10 +238,9 @@ const InvoiceEMSFormDetailScreen = props => {
             placeholder: 'Tax',
             errorMessage: 'Enter valid tax',
             showError: taxError,
-            value: loadingTax,
-            onChangeText: text => setloadingTax(text),
+            value: loadingBaseAmount ? String(taxPercentage) : "",
+            onChangeText: text => setTaxPercentage(text),
             component: FloatingLabelInputField,
-            // onBlur: () => onGstinBlur(),
         },
         loadingTotal: {
             title: 'Total',
@@ -259,11 +249,9 @@ const InvoiceEMSFormDetailScreen = props => {
             placeholder: 'Total',
             errorMessage: 'Enter valid total',
             keyboardType: 'number-pad',
-            showError: totalError,
             value: loadingTotal,
             onChangeText: text => setloadingTotal(text),
             component: FloatingLabelInputField,
-            // onBlur: () => onGstinBlur(),
         },
         misBaseAmount: {
             title: 'Base Amount',
@@ -274,8 +262,7 @@ const InvoiceEMSFormDetailScreen = props => {
             errorMessage: 'Enter valid base amount',
             showError: baseAmountError,
             value: misBaseAmount,
-            // onBlur: () => onContactNameBlur(),
-            onChangeText: text => setMisBaseAmount(text),
+            onChangeText: text => calculateMiscCharges(text),
             component: FloatingLabelInputField,
         },
         misHsn: {
@@ -285,10 +272,9 @@ const InvoiceEMSFormDetailScreen = props => {
             placeholder: 'HSN',
             errorMessage: 'Enter valid hsn',
             showError: hsnError,
-            value: misHsn,
-            onChangeText: text => setMisHsn(text),
+            value: misBaseAmount ? hsn : "",
+            onChangeText: text => misBaseAmount ? setHsn(text) : "",
             component: FloatingLabelInputField,
-            // onBlur: () => onGstinBlur(),
         },
         misTax: {
             title: 'Tax%',
@@ -297,10 +283,9 @@ const InvoiceEMSFormDetailScreen = props => {
             placeholder: 'Tax',
             errorMessage: 'Enter valid tax',
             showError: taxError,
-            value: misTax,
-            onChangeText: text => setMisTax(text),
+            value: misBaseAmount ? String(taxPercentage) : "",
+            onChangeText: text => setTaxPercentage(text),
             component: FloatingLabelInputField,
-            // onBlur: () => onGstinBlur(),
         },
         misTotal: {
             title: 'Total',
@@ -309,19 +294,61 @@ const InvoiceEMSFormDetailScreen = props => {
             keyboardType: 'number-pad',
             placeholder: 'Total',
             errorMessage: 'Enter valid total',
-            showError: totalError,
             value: misTotal,
             onChangeText: text => setMisTotal(text),
             component: FloatingLabelInputField,
-            // onBlur: () => onGstinBlur(),
         },
     });
+
+    const onUploadInvoiceBlur = () => {
+        if (uploadInvoice && uploadInvoice.name) {
+            setuploadInvoiceError(false);
+        } else {
+            setuploadInvoiceError(true);
+        }
+    };
+
+    const onUploadEwayBlur = () => {
+        if (uploadEwayBill && uploadEwayBill.name) {
+            setUploadEwayBillError(false);
+        } else {
+            setUploadEwayBillError(true);
+        }
+    };
+
+    const calculateTotalFreight = (text) => {
+        let percentage = ((text / 100) * String(taxPercentage))
+        setBaseAmount(text)
+        let total = ((percentage) + (text))
+        setTotal(total)
+    }
+
+    const calculateLoadingCharges = (text) => {
+        setloadingBaseAmount(text)
+        let percentage = ((text / 100) * taxPercentage)
+        let total = ((percentage) + (text))
+        setloadingTotal(total)
+    }
+
+    const calculateMiscCharges = (text) => {
+        setMisBaseAmount(text)
+        let percentage = ((text / 100) * taxPercentage)
+        let total = ((percentage) + (text))
+        setMisTotal(total)
+    }
 
     const onInvoiceNumberBlur = () => {
         if (invoiceNumber && invoiceNumber.length) {
             setInvoiceNumberError(false);
         } else {
             setInvoiceNumberError(true);
+        }
+    };
+    const onInvoiceDateBlur = () => {
+        if (invoiceDate && invoiceDate.length) {
+            setInvoiceDateError(false);
+        } else {
+            setInvoiceDateError(true);
         }
     };
 
@@ -355,16 +382,12 @@ const InvoiceEMSFormDetailScreen = props => {
         }
     };
 
-    //upload from fileExp
     const uploadFromFileExp = async () => {
-        //Opening Document Picker for selection of one file
         try {
             const res = await DocumentPicker.pick({
-                // type: [DocumentPicker],
             });
             console.log('doc', res[0]);
             setFormState(res[0]);
-            console.log("kya set ho raha hai", res);
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
                 console.log('Canceled from single doc picker');
@@ -374,7 +397,6 @@ const InvoiceEMSFormDetailScreen = props => {
             }
         }
     };
-    //Doneeee
     const setFormState = data => {
         console.log("IFIDDD", fId);
 
@@ -441,140 +463,109 @@ const InvoiceEMSFormDetailScreen = props => {
     };
 
     const onsubmit = async () => {
-        try {
-            let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-            const url = `${BASE_URL}api/order/mapDropshipInvoice`;
-            // setLoading(true);
 
-            let payload =
-            {
-                supplierId: await AsyncStorage.getItem('userId'),
-                invoiceNumber: invoiceNumber,
-                invoiceDate: invoiceDate,
-                source: 0,
-                ewayDate: ewayDate,
-                ewayNumber: ewayBillNumber,
-                warehouseId: warehouseId,
-                orderRef: orderRef,
-                itemLists: [{ quantity: quantity, hsnPercentage: 18, itemRef: itemRef, hsn: HSN }],
-                igstApplicable: true,
-                countryCode: 356,
-                "frieght": { charge: "", hsn: "", tax: "", totalAmount: null, remarks: "", countryCode: 356, igst: null, cgst: 0, sgst: 0, vatAmount: 0 },
-                "loading": { charge: "", hsn: "", tax: "", totalAmount: null, countryCode: 356, igst: null, cgst: 0, sgst: 0, vatAmount: 0 },
-                "misc": { charge: "", hsn: "", tax: "", totalAmount: null, countryCode: 356, igst: null, cgst: 0, sgst: 0, vatAmount: 0 },
-                invoiceTotal: 580
-            }
+        if (
+            invoiceNumber &&
+            invoiceNumber.length &&
+            invoiceDate &&
+            invoiceAmount &&
+            invoiceAmount.length &&
+            ewayBillNumber &&
+            ewayBillNumber.length &&
+            ewayDate && uploadInvoice
+            && uploadEwayBill
+        ) {
+            try {
+                let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+                const url = `${BASE_URL}api/order/mapDropshipInvoice`;
 
-            // {
-            //     supplierId: await AsyncStorage.getItem('userId'),
-            //     invoiceNumber,
-            //     invoiceDate,
-            //     invoiceTotal: invoiceAmount,
-            //     source: 0,
-            //     ewayDate,
-            //     warehouseId,
-            //     orderRef,
-            //     "itemLists": [{
-            //         quantity,
-            //         hsnPercentage: 18,
-            //         itemRef,
-            //         hsn: HSN
-            //     }],
-            //     igstApplicable: true,
-            //     "frieght": {
-            //         hsn,
-            //         charge: "",
-            //         tax,
-            //         totalAmount: invoiceAmount,
-            //         countryCode: 356,
-            //         remarks: "",
-            //         igst: null,
-            //         cgst: 0,
-            //         sgst: 0,
-            //         vatAmount: 0
-            //     },
-            //     "loading": {
-            //         hsn,
-            //         charge: "",
-            //         tax,
-            //         totalAmount: null,
-            //         countryCode: 356,
-            //         remarks: "",
-            //         igst: null,
-            //         cgst: 0,
-            //         sgst: 0,
-            //         vatAmount: 0
-            //     },
-            //     "misc": {
-            //         hsn,
-            //         charge: "",
-            //         tax,
-            //         totalAmount: null,
-            //         countryCode: 356,
-            //         remarks: "",
-            //         igst: null,
-            //         cgst: 0,
-            //         sgst: 0,
-            //         vatAmount: 0
-            //     }
-
-            // }
-            console.log("Payload====>", payload);
-
-            const response = await RNFetchBlob.fetch(
-                'POST',
-                url,
+                let totalInvoiceAmount = (invoiceAmount + (totalAmount + 7) || invoiceAmount + (totalAmount - 7))
+                let payload =
                 {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `${token}`,
-                },
-                [
-                    {
-                        name: "dropshipInvoiceRequest",
-                        data: JSON.stringify(payload),
-                        type: 'application/json',
-                    },
-                    {
-                        name: 'invoiceFile',
-                        filename: uploadInvoice.name,
-                        type: uploadInvoice.type,
-                        data: RNFetchBlob.wrap(uploadInvoice.uri),
-                    },
-                    {
-                        name: 'ewayBillFile',
-                        filename: uploadEwayBill.name,
-                        type: uploadEwayBill.type,
-                        data: RNFetchBlob.wrap(uploadEwayBill.uri),
-                    },
-                ],
-            );
-            const res = await response.json();
-            console.log("Respose====>", res, payload);
-            if (res.success) {
-                Toast.show({
-                    type: 'success',
-                    text2: res.message,
-                    visibilityTime: 2000,
-                    autoHide: true,
-                });
-                props.navigation.goBack();
-            } else if (res.success == false) {
-                setLoading(false);
-                Toast.show({
-                    type: 'success',
-                    text2: res.message,
-                    visibilityTime: 2000,
-                    autoHide: true,
+                    supplierId: await AsyncStorage.getItem('userId'),
+                    invoiceNumber: invoiceNumber,
+                    invoiceDate: moment(invoiceDate).format('YYYY-MM-DD'),
+                    source: 0,
+                    ewayDate: moment(ewayDate).format('YYYY-MM-DD'),
+                    ewayNumber: ewayBillNumber,
+                    warehouseId: warehouseId,
+                    orderRef: orderRef,
+                    itemLists: [{ quantity: quantity, hsnPercentage: String(taxPercentage), itemRef: itemRef, hsn: hsn }],
+                    igstApplicable: true,
+                    countryCode: 356,
+                    "frieght": { charge: "", hsn: "", tax: "", totalAmount: null, remarks: "", countryCode: 356, igst: null, cgst: 0, sgst: 0, vatAmount: 0 },
+                    "loading": { charge: "", hsn: "", tax: "", totalAmount: null, countryCode: 356, igst: null, cgst: 0, sgst: 0, vatAmount: 0 },
+                    "misc": { charge: "", hsn: "", tax: "", totalAmount: null, countryCode: 356, igst: null, cgst: 0, sgst: 0, vatAmount: 0 },
+                    invoiceTotal: totalInvoiceAmount
+                }
 
-                });
+                const response = await RNFetchBlob.fetch(
+                    'POST',
+                    url,
+                    {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `${token}`,
+                    },
+                    [
+                        {
+                            name: "dropshipInvoiceRequest",
+                            data: JSON.stringify(payload),
+                            type: 'application/json',
+                        },
+                        {
+                            name: 'invoiceFile',
+                            filename: uploadInvoice.name,
+                            type: uploadInvoice.type,
+                            data: RNFetchBlob.wrap(uploadInvoice.uri),
+                        },
+                        {
+                            name: 'ewayBillFile',
+                            filename: uploadEwayBill.name,
+                            type: uploadEwayBill.type,
+                            data: RNFetchBlob.wrap(uploadEwayBill.uri),
+                        },
+                    ],
+                );
+                const res = await response.json();
+                if (res.success) {
+                    Toast.show({
+                        type: 'success',
+                        text2: res.message,
+                        visibilityTime: 2000,
+                        autoHide: true,
+                    });
+                    props.navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'HomeApp' }],
+                    });
 
+                } else if (res.success == false) {
+                    setLoading(false);
+                    Toast.show({
+                        type: 'success',
+                        text2: res.message,
+                        visibilityTime: 2000,
+                        autoHide: true,
+
+                    });
+
+                }
             }
-        }
-        catch (err) {
-            // console.log("Error", err);
-            setLoading(false);
+            catch (err) {
+                console.log("Error", err);
+                setLoading(false);
+            }
+        } else {
+            onInvoiceNumberBlur();
+            onEwayBillNumberBlur();
+            onInvoiceAmountBlur();
         }
     };
+
+    const onCancel = () => {
+        props.navigation.goBack();
+
+    }
 
 
     return (
@@ -587,17 +578,31 @@ const InvoiceEMSFormDetailScreen = props => {
                 showText={'Upload Invoice'}
                 rightIconName={'business-details'}></Header>
             <ScrollView style={styles.ContainerCss}>
+
                 {FORM_FIELDS.map((field, fieldKey) => (
-                    <field.component
-                        {...field}
-                        key={fieldKey}
-                        disabled={field.disabled}
-                    />
+                    <View>
+                        {
+                            fieldKey == "baseAmount" ?
+                                <Text style={styles.middleTxt}>Freight Charges (if Applicable)</Text> :
+                                fieldKey == "loadingBaseAmount" ?
+                                    <Text style={styles.middleTxt}>Loading Charges (if Applicable)</Text> :
+                                    fieldKey == "misBaseAmount" ?
+                                        <Text style={styles.middleTxt}>Misc. Charges (if Applicable)</Text> : null
+                        }
+
+
+                        <field.component
+                            {...field}
+                            key={fieldKey}
+                            disabled={field.disabled}
+                        />
+                    </View>
                 )).toList()}
 
-                {Documents.map(_ => renderInputText(_))
-                    .toList()
-                    .toArray()}
+                {
+                    Documents.map(_ => renderInputText(_))
+                        .toList()
+                        .toArray()}
                 <ActionSheet
                     id="action_sheet"
                     onBeforeShow={data => {
@@ -622,8 +627,7 @@ const InvoiceEMSFormDetailScreen = props => {
                         TextColor={colors.blackColor}
                         TextFontSize={Dimension.font16}
                         title={'CANCEL'}
-                        loading={loading}
-                    // onPress={onContinue}
+                        onPress={onCancel}
                     />
                 </View>
                 <View style={{ flex: 1 }}>
@@ -693,6 +697,11 @@ const styles = StyleSheet.create({
         backgroundColor: colors.WhiteColor,
         paddingHorizontal: Dimension.padding5,
         paddingVertical: Dimension.padding20
+    },
+    middleTxt: {
+        fontSize: Dimension.font12,
+        color: colors.FontColor,
+        fontFamily: Dimension.CustomMediumFont,
     },
     verticalWrapper: {
         paddingHorizontal: Dimension.padding15,
