@@ -489,8 +489,9 @@ const InvoiceEMSFormDetailScreen = props => {
             invoiceAmount.length &&
             ewayBillNumber &&
             ewayBillNumber.length &&
-            ewayDate && uploadInvoice
-            && uploadEwayBill
+            ewayDate
+            // && !uploadInvoice
+            // && !uploadEwayBill
         ) {
             try {
                 let token = `Bearer ${await AsyncStorage.getItem('token')}`;
@@ -544,6 +545,7 @@ const InvoiceEMSFormDetailScreen = props => {
                     ],
                 );
                 const res = await response.json();
+                console.log("Respose====>", res, payload);
                 if (res.success) {
                     Toast.show({
                         type: 'success',
@@ -558,12 +560,12 @@ const InvoiceEMSFormDetailScreen = props => {
 
                 } else if (res.success == false) {
                     setLoading(false);
+                    alert(res.message)
                     Toast.show({
                         type: 'success',
                         text2: res.message,
                         visibilityTime: 2000,
                         autoHide: true,
-
                     });
 
                 }
