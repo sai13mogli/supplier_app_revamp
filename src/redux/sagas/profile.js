@@ -41,10 +41,18 @@ import {
   failedFetchTdsInfoDetails,
   fetchedTdsInfoDetails,
   fetchProfile,
+  fetchBusinessDetails,
 } from '../actions/profile';
 import * as RootNavigation from '../../routes/RootNavigation';
+import {setShipmentType} from '../actions/orders';
 
-function* fetchBusinessDetails() {
+const shipmentModes = {
+  2: 'ONESHIP',
+  1: 'DROPSHIP',
+  3: 'DOOR DELIVERY',
+};
+
+function* fetchBusinessDetail() {
   try {
     const {data, error} = yield call(getBusinessDetails);
     if (error) {
@@ -54,6 +62,15 @@ function* fetchBusinessDetails() {
         yield put(failedFetchBusinessDetails(data.data.errors));
       } else {
         yield put(fetchedBusinessDetails(data.data));
+        if (data.data && data.data.businessNature) {
+          yield put(setShipmentType(shipmentModes[data.data.businessNature]));
+          yield call(
+            AsyncStorage.setItem(
+              'onlineShipmentMode',
+              shipmentModes[data.data.businessNature],
+            ),
+          );
+        }
       }
     }
   } catch (error) {
@@ -71,6 +88,7 @@ function* fetchUpdateBusinessDetails({payload: {formData}}) {
         yield put(failedFetchUpdateBusinessDetails(data.data.errors));
       } else {
         yield put(fetchedUpdateBusinessDetails(formData, data.data));
+        yield put(fetchBusinessDetails());
         yield put(fetchProfile());
       }
     }
@@ -193,7 +211,7 @@ function* fetchTdsInfoDetail() {
 
 export default fork(function* () {
   yield takeEvery(PROFILE_ACTIONS.FETCH_PROFILE, fetchUserProfile);
-  yield takeEvery(PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS, fetchBusinessDetails);
+  yield takeEvery(PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS, fetchBusinessDetail);
   yield takeEvery(PROFILE_ACTIONS.FETCH_DELETE_ADDRESSES, fetchDeleteAddresses);
   yield takeEvery(PROFILE_ACTIONS.FETCH_ADDRESSES, fetchAddressDetail);
   yield takeEvery(

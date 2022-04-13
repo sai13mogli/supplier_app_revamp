@@ -32,12 +32,15 @@ const Conversation = props => {
   const [search, setSearch] = useState(props.route.params.search || '');
   const [ticketConversation, setTicketConversation] = useState({});
   const [body, setBody] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
   useEffect(() => {
     getTicketConversation();
   }, []);
 
   const onReply = async () => {
+    setLoading(true);
     let token = `Bearer ${await AsyncStorage.getItem('token')}`;
     const url = `${BASE_URL}api/ticket/reply`;
     const response = await RNFetchBlob.fetch(
@@ -70,6 +73,7 @@ const Conversation = props => {
       setBody('');
       getTicketConversation();
     }
+    setLoading(false);
   };
 
   const getTicketConversation = async () => {
@@ -125,10 +129,13 @@ const Conversation = props => {
   };
 
   const getCreatedDate = createddate => {
+    let updatedDate = new Date(
+      new Date(createddate).getTime() + (5 * 60 + 30) * 60000,
+    ).toISOString();
     let mutatedate =
-      createddate && createddate.split('T') && createddate.split('T')[0];
+      updatedDate && updatedDate.split('T') && updatedDate.split('T')[0];
     let createdtime =
-      createddate && createddate.split('T') && createddate.split('T')[1];
+      updatedDate && updatedDate.split('T') && updatedDate.split('T')[1];
     let modifieddate = mutatedate.split('-').reverse().join('/');
 
     let mutatetime = '';
@@ -148,7 +155,15 @@ const Conversation = props => {
       modifiedtime[5] = +modifiedtime[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
       modifiedtime[0] = +modifiedtime[0] % 12 || 12;
     }
-    let adjustedtime = `${modifiedtime[0]}${modifiedtime[1]}${modifiedtime[2]}${modifiedtime[5]}`;
+    modifiedtime = [
+      modifiedtime[0]
+        .split('.')
+        .map((_, k) => {
+          return k == 1 ? '' : _;
+        })
+        .join(''),
+    ];
+    let adjustedtime = `${modifiedtime[0]}`;
 
     return `${modifieddate}, ${adjustedtime}`;
   };
@@ -524,13 +539,17 @@ const Conversation = props => {
               style={styles.InputCss}
             />
             <TouchableOpacity
-              disabled={!body}
+              disabled={!body || loading}
               onPress={onReply}
               style={styles.SendBtn}>
-              <Image
-                source={require('../../../assets/images/Send.png')}
-                style={{height: Dimension.width22, width: Dimension.width22}}
-              />
+              {loading ? (
+                <ActivityIndicator size={'small'} color={Colors.WhiteColor} />
+              ) : (
+                <Image
+                  source={require('../../../assets/images/Send.png')}
+                  style={{height: Dimension.width22, width: Dimension.width22}}
+                />
+              )}
             </TouchableOpacity>
           </View>
         ) : null}
