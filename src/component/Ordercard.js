@@ -1087,7 +1087,11 @@ const Ordercard = props => {
               size={Dimension.font22}
               onPress={() =>
                 selectedTab == 'SHIPMENT'
-                  ? selectItemData({itemId, shipmentUrl, invoiceUrl: podUrl})
+                  ? selectItemData({
+                      itemId,
+                      shipmentUrl,
+                      invoiceUrl: podUrl || invoiceUrl,
+                    })
                   : selectItemId(itemId)
               }
               style={{

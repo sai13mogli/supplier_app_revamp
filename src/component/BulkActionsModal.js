@@ -41,17 +41,17 @@ const BulkActionsModal = props => {
   const [base64, setBase64] = useState('');
   let webview = useRef();
 
-  // const downloadZip = data => {
-  //   console.log(data, 'data hai dost');
-  //   let fp = `console.log(window)
-  //     const a = document.createElement('a');
-  //      a.href = ${base64}
-  //     // the filename you want
-  //     a.download = 'supplier_files.zip';
-  //     document.body.appendChild(a);
-  //     a.click();`;
-  //   webview.current.injectJavaScript(fp);
-  // };
+  const downloadZip = data => {
+    console.log(data, window, 'data hai dost');
+    let fp = `console.log(window)
+      const a = document.createElement('a');
+       a.href = ${base64}
+      // the filename you want
+      a.download = 'supplier_files.zip';
+      document.body.appendChild(a);
+      a.click();`;
+    webview.current.injectJavaScript(fp);
+  };
 
   const bulkCreateManifest = async () => {
     try {
@@ -105,83 +105,14 @@ const BulkActionsModal = props => {
     }
   };
 
-  // const bulkInvoiceShipmentDownload = async downloadType => {
-  //   try {
-  //     if (downloadType == 'shipment') {
-  //       setShipmentLoader(true);
-  //     } else {
-  //       setInvoiceLoader(true);
-  //     }
-
-  //     const {data} = await bulkDownloadApi(currbulkItems);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const downloadFile = async downloadType => {
-  //   try {
-  //     const {fs} = RNFetchBlob;
-  //     let currbulkItems = [...bulkDownloadItems];
-  //     currbulkItems = (currbulkItems || []).map(_ => ({
-  //       itemId: _.itemId,
-  //       downloadType: downloadType,
-  //       url: downloadType == 'shipment' ? _.invoiceUrl : _.invoiceUrl,
-  //     }));
-
-  //     const downloads = fs.dirs.DownloadDir;
-
-  //     RNFetchBlob.config({
-  //       fileCache: true,
-  //       path: downloads + '/' + 'supplier' + '.zip',
-  //       useDownloadManager: true,
-  //       notification: true,
-  //     })
-  //       .fetch(
-  //         'POST',
-  //         `${BASE_URL}api/order/oms/bulkDownload`,
-  //         {
-  //           Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
-  //         },
-  //         JSON.stringify([...currbulkItems]),
-  //       )
-  //       .then(res => {
-  //         console.log('res', res);
-  //         return res.base64();
-  //       })
-  //       .then(resp => {
-  //         console.log('resp hai boss', resp);
-  //       });
-
-  //     // return config({
-  //     //   // add this option that makes response data to be stored as a file,
-  //     //   // this is much more performant.
-  //     //   fileCache: true,
-  //     //   addAndroidDownloads: {
-
-  //     //     path: ,
-  //     //   },
-  //     // }).fetch(
-  //     //   'POST',
-  //     //   ``,
-  //     //   ,
-  //     // );
-  //   } catch (error) {
-  //     console.log('error hai dost', error);
-  //   }
-  // };
-
   const downloadFile = async downloadType => {
     const {config, fs} = RNFetchBlob;
     let currbulkItems = [...bulkDownloadItems];
-
+    console.log(currbulkItems);
     currbulkItems = (currbulkItems || []).map(_ => ({
       itemId: _.itemId,
       downloadType: downloadType,
-      url:
-        downloadType == 'shipment'
-          ? 'https://doc.moglix.com/p/pdf/gst/invoice-engine/qa/a7c661b4-f712-37eb-a57b-72cc64407645GST_Invoice-10_MS16691042206350.pdf'
-          : 'https://doc.moglix.com/p/pdf/gst/invoice-engine/qa/a7c661b4-f712-37eb-a57b-72cc64407645GST_Invoice-10_MS16691042206350.pdf',
+      url: downloadType == 'shipment' ? _.invoiceUrl : _.invoiceUrl,
     }));
     console.log('payload', [...currbulkItems]);
     let token = `Bearer ${await AsyncStorage.getItem('token')}`;
@@ -196,41 +127,37 @@ const BulkActionsModal = props => {
         console.warn('error');
       }
     };
-
-    // myrequest.setRequestHeader('Authorization', token);
     myrequest.responseType = 'blob';
-    // myrequest.send();
     myrequest.onload = e => {
       var response = myrequest.response;
       console.log('responseOnLoad', response);
       var mimetype = myrequest.getResponseHeader('Content-Type');
       var fields = mimetype.split(';');
       var name = fields[0];
-      // var isPdf = false;
-      // if (name == 'application/pdf') {
-      //   isPdf = true;¸
-      // }
       if (response) {
-        // setLoader(false);
-        // alert('success', JSON.stringify(response));
         const fileReaderInstance = new FileReader();
         fileReaderInstance.readAsDataURL(response);
         fileReaderInstance.onload = async () => {
           var fileUrl = fileReaderInstance.result;
-          console.log('fileUrl', fileUrl);
-          setBase64(fileUrl);
-          setIsWebView(true);
-          // const dirToSave = fs.dirs.PictureDir;
-          // let fLocation = dirToSave + '/' + 'supplier_files.zip';
-          // const granted = await PermissionsAndroid.request(
-          //   PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          // );
-          // console.log('granted hai ki nahi', granted);
-          // RNFetchBlob.fs.writeFile(
-          //   fLocation,
-          //   RNFetchBlob.base64.encode(fileUrl),
-          //   'base64',
-          // );
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          );
+          if (granted) {
+            try {
+              console.log(
+                RNFetchBlob.fs.dirs.MainBundleDir + '/' + 'supplier_app.zip',
+              );
+              let pdfLocation =
+                RNFetchBlob.fs.dirs.MainBundleDir + '/' + 'supplier_app.zip';
+              RNFetchBlob.fs.writeFile(
+                pdfLocation,
+                RNFetchBlob.base64.encode(fileUrl),
+                'base64',
+              );
+            } catch (e) {
+              console.log(e);
+            }
+          }
         };
       } else {
         alert('error', JSON.stringify(response));
@@ -328,16 +255,15 @@ const BulkActionsModal = props => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* {isWebView && (
-        <Base64Downloader
-          base64={base64}
-          downloadName="1x1_red_pixel"
-          style={{color: 'orange'}}
-          onDownloadSuccess={() => console.log('File download initiated')}
-          onDownloadError={() =>
-            console.warn('Download failed to start')
-          }></Base64Downloader>
-      )} */}
+      {isWebView && (
+        <WebView
+          ref={webview}
+          originWhitelist={['*']}
+          source={{html: '<html><body></body></html>'}}
+          style={{width: 1, height: 1}}
+          onLoad={downloadZip}
+        />
+      )}
     </Modal>
     // <WebView
     //   ref={webview}
