@@ -12,18 +12,16 @@ import InvoiceEmsCard from '../../../component/InvoiceEmsCard';
 const UploadInvoiceScreen = (props) => {
 
     const [loading, setLoading] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
-    const onEndReachedCalledDuringMomentum = useRef(true);
     const [bulkItemIds, setBulkItemIds] = useState([]);
     const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
     const [totalAmount, setTotalAmount] = useState(props?.route?.params?.totalAmount);
     const [hsn, sethsn] = useState(props?.route?.params?.hsn);
+    const [taxPercentage, setTaxPercentage] = useState(props?.route?.params?.taxPercentage);
     const [quantity, setquantity] = useState(props?.route?.params?.quantity);
     const [warehouseId, setwarehouseId] = useState(props?.route?.params?.warehouseId)
     const [itemRef, setitemRef] = useState(props?.route?.params?.itemRef)
     const [actionCTA, setaAtionCTA] = useState(props?.route?.params?.actionCTA)
     const [invoiceList, setInvoiceList] = useState([]);
-
 
 
     let EmsOmsFlag = actionCTA
@@ -136,7 +134,7 @@ const UploadInvoiceScreen = (props) => {
                     title={'CONTINUE'}
                     loading={loading}
                     onPress={() => props.navigation.navigate('InvoiceEMSFormDetails', {
-                        orderRef, itemRef, warehouseId, quantity, hsn, totalAmount
+                        orderRef, itemRef, warehouseId, quantity, hsn, totalAmount, taxPercentage
                     })}
 
                 />

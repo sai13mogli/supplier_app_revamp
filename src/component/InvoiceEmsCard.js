@@ -35,49 +35,34 @@ const deviceWidth = Dimensions.get('window').width;
 
 const InvoiceCard = props => {
     const {
-        // quantity,
         selectItemId,
         productUom,
         orderRef,
         transferPrice,
         hsn,
         taxPercentage,
-        // totalAmount,
         productName,
         itemId,
         bulkItemIds,
     } = props;
 
     const [quantity, setQuantity] = useState(props.quantity);
-    // const [productUom, setproductUom] = useState(props.productUom);
-    // const [orderRef, setorderRef] = useState(props.orderRef);
-    // const [transferPrice, settransferPrice] = useState(props.transferPrice);
-    // const [hsn, setHsn] = useState(props.hsn);
-    // const [taxPercentage, settaxPercentage] = useState(props.taxPercentage);
-    // const [productName, setproductName] = useState(props.productName);
     const [totalAmount, settotalAmount] = useState(props.totalAmount);
-    // const [totalPrice, setTotalPrice] = useState(0);
-    // const [itemId, setitemId] = useState(props.itemId);
-    // const [bulkItemIds, setbulkItemIds] = useState(props.bulkItemIds);
-    // const [selectItemId, setselectItemId] = useState(props.selectItemId);
-
-
-
-
-    useEffect(() => {
-
-        settotalAmount(totalAmount)
-        // calculatePrice()
-
-    })
+    const [amount, setAmount] = useState("")
 
     const calculatePrice = (text) => {
+        setQuantity(text)
+        const { taxPercentage, transferPrice } = props
+        let Price = (transferPrice * text)
+        let percentage = (((Price / 100) * taxPercentage) + (text * transferPrice))
+        setAmount(percentage)
+    }
 
-        // const { taxPercentage, hsn, quantity, transferPrice } = props
-        // let Price = ((transferPrice * quantity)
-        // let totalPrice = (Price%100)*hsn)
-        // settotalAmount(totalAmount)
-
+    const calculateHsn = (text) => {
+        const { transferPrice } = props
+        let Price = (transferPrice * quantity)
+        let percentage = (((Price / 100) * text) + (quantity * transferPrice))
+        setAmount(percentage)
     }
 
 
@@ -116,7 +101,9 @@ const InvoiceCard = props => {
 
                             <View style={{ marginLeft: 30 }}>
                                 <Text style={styles.TitleLightTxt}>
-                                    Total Price - <Text style={styles.TitleBoldTxt}>{Math.floor(totalAmount)}</Text>
+                                    Total Price - <Text style={styles.TitleBoldTxt}>{
+                                        (bulkItemIds || []).includes(itemId) ? (amount) : (totalAmount)}
+                                    </Text>
                                 </Text>
                                 <Text style={styles.TitleLightTxt}>
                                     TP/Unit -{' '}
@@ -133,6 +120,7 @@ const InvoiceCard = props => {
                                     HSN
                                 </Text>
                                 <TextInput style={styles.wrapInput}
+                                    onChangeText={(text) => (text)}
                                     keyboardType={'number-pad'}
                                     editable={(bulkItemIds || []).includes(itemId) ? true : false}>
                                     {hsn}
@@ -143,7 +131,7 @@ const InvoiceCard = props => {
                                     Qty
                                 </Text>
                                 <TextInput style={styles.wrapInput}
-                                    onChangeText={(text) => calculatePrice()}
+                                    onChangeText={(text) => calculatePrice(text)}
                                     keyboardType={'number-pad'}
                                     editable={(bulkItemIds || []).includes(itemId) ? true : false}>
                                     {quantity}
@@ -154,6 +142,7 @@ const InvoiceCard = props => {
                                     HSN Tax %
                                 </Text>
                                 <TextInput style={styles.wrapInput}
+                                    onChangeText={(text) => calculateHsn(text)}
                                     keyboardType={'number-pad'}
                                     editable={(bulkItemIds || []).includes(itemId) ? true : false}>
                                     {taxPercentage}
@@ -192,37 +181,7 @@ const InvoiceCard = props => {
             {renderOrderHeaderDetail()}
 
             <View style={[styles.orderCardwrap, { marginTop: Dimension.margin20 }]}>
-
                 {renderOrderDetails()}
-                {/* {isOrderVisible && (
-                    <Modal
-                        overlayPointerEvents={'auto'}
-                        isVisible={isOrderVisible}
-                        onTouchOutside={() => {
-                            setIsOrderVisible(false);
-                        }}
-                        onDismiss={() => {
-                            setIsOrderVisible(false);
-                        }}
-                        coverScreen={true}
-                        style={{ padding: 0, margin: 0 }}
-                        deviceWidth={deviceWidth}
-                        hasBackdrop={true}
-                        onBackdropPress={() => setIsOrderVisible(false)}
-                        onBackButtonPress={() => setIsOrderVisible(false)}>
-                        <View style={styles.modalContainer}>
-                            <View style={styles.topbdr}></View>
-                            <View style={styles.ModalheadingWrapper}>
-                                <CustomeIcon
-                                    name={'close'}
-                                    size={Dimension.font22}
-                                    color={Colors.FontColor}
-                                    onPress={() => setIsOrderVisible(false)}></CustomeIcon>
-                            </View>
-                            {renderOrderDetails(true, '')}
-                        </View>
-                    </Modal>
-                )} */}
             </View>
 
 

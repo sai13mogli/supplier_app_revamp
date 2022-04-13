@@ -1,5 +1,5 @@
 import React, { useEffect, useState, } from 'react';
-import { Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, FlatList, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import colors from "../../../../Theme/Colors"
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchDeleteAddresses } from '../../../../redux/actions/profile';
@@ -7,13 +7,17 @@ import Dimension from "../../../../Theme/Dimension";
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
+import { STATE_STATUS } from '../../../../redux/constants';
 
 const PickedUp = (props) => {
 
   const profileData = useSelector(state => state.profileReducer.data || {});
   const addressesResponse = useSelector(state => state.profileReducer.addressesDetails || []);
   const [pickedUp, setPickedUp] = useState("PickedUp")
+  const addressesDetailsStatus = useSelector(state => state.profileReducer.addressesDetails.status || STATE_STATUS.FETCHING);
   const addressesData = addressesResponse?.data
+
+
   const dispatch = useDispatch();
 
   const filterById = (obj) => {
@@ -30,6 +34,8 @@ const PickedUp = (props) => {
     }
     dispatch(fetchDeleteAddresses(data));
   }
+
+
 
   const renderItems = ({ item }) => (
     <View style={{ flex: 1, }}>
@@ -86,32 +92,38 @@ const PickedUp = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.ContainerCss}>
-        <View style={styles.TopWrap}>
-          <Text style={styles.Pageheading}>
-            {PickupAddressData.length} Pickup Addresses
-          </Text>
-          <TouchableOpacity
-            onPress={() =>
-              props.navigation.navigate('EditAddress',
-                { tabState: pickedUp }
-              )
-            }
-          >
-            <View style={{ flexDirection: "row" }}>
-              <CustomeIcon name={'add-circle'} size={Dimension.font18} color={colors.BrandColor} />
-              <Text style={styles.addnewtxt}> Add new</Text>
+      {
+        addressesDetailsStatus == STATE_STATUS.FETCHING ? (
+          <ActivityIndicator style={{ alignSelf: 'center', marginTop: 150 }} />
+        ) :
+          <ScrollView style={styles.ContainerCss}>
+            <View style={styles.TopWrap}>
+              <Text style={styles.Pageheading}>
+                {PickupAddressData.length} Pickup Addresses
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate('EditAddress',
+                    { tabState: pickedUp }
+                  )
+                }
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <CustomeIcon name={'add-circle'} size={Dimension.font18} color={colors.BrandColor} />
+                  <Text style={styles.addnewtxt}> Add new</Text>
+                </View>
+              </TouchableOpacity>
+
             </View>
-          </TouchableOpacity>
 
-        </View>
+            <FlatList
+              data={PickupAddressData}
+              renderItem={renderItems}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </ScrollView>
+      }
 
-        <FlatList
-          data={PickupAddressData}
-          renderItem={renderItems}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </ScrollView>
     </View>
 
   );

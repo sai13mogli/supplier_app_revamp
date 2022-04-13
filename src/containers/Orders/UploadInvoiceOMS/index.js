@@ -17,24 +17,32 @@ import InvoiceOmsCard from '../../../component/InvoiceOmsCard';
 import { BASE_URL } from '../../../redux/constants';
 import RNFetchBlob from 'rn-fetch-blob';
 import Toast from 'react-native-toast-message';
+import moment from 'moment';
 
 const UploadInvoiceOMSScreen = (props) => {
 
     const [loading, setLoading] = useState(false);
+    const [itemRef, setitemRef] = useState(props?.route?.params?.itemRef)
     const [invoiceNumber, setInvoiceNumber] = useState("");
     const [invoiceNumberError, setInvoiceNumberError] = useState(false);
     const [invoiceDate, setInvoiceDate] = useState("");
     const [uploadInvoice, setUploadInvoice] = useState({});
     const [uploadInvoiceError, setuploadInvoiceError] = useState(false);
     const [supplierInvoiceTotal, setSupplierInvoiceTotal] = useState("");
+    const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] = useState(false);
     const [poTotal, setPoTotal] = useState("");
     const [poTotalError, setpoTotalError] = useState(false);
     const [uploadDisabled, setUploadDisabled] = useState(false);
     const [OmsUploadList, setOmsUploadList] = useState([]);
     const [bulkItemIds, setBulkItemIds] = useState([]);
+    const [poTotalPrice, setPoTotalPrice] = useState([]);
+    const [totalKeys, setTotalKeys] = useState([]);
+    const [totalKeysValues, setTotalKeysValues] = useState([]);
     const [fId, setFId] = useState(null);
-    const [phoneErrorMsg, setPhoneErrorMsg] = useState('');
+    const [invoiceDateError, setInvoiceDateError] = useState(false);
     const [actionCTA, setaAtionCTA] = useState(props?.route?.params?.actionCTA)
+
+
 
     const Documents = new OrderedMap({
         upload_invoice: {
@@ -50,6 +58,7 @@ const UploadInvoiceOMSScreen = (props) => {
             },
             isImp: true,
             errorState: uploadInvoiceError,
+            onBlur: () => onUploadInvoiceBlur(),
             errorText: "Please upload Invoice",
             placeholder: 'Tap to Upload',
         },
@@ -75,8 +84,10 @@ const UploadInvoiceOMSScreen = (props) => {
             keyboardType: 'number-pad',
             label: 'Supplier Invoice Total',
             placeholder: 'Supplier Invoice Total',
-            errorMessage: 'Enter valid supplier invoice total ',
+            showError: supplierInvoiceTotalError,
+            errorMessage: 'Supplier invoice total must be equal to Po Total',
             value: supplierInvoiceTotal,
+            onBlur: () => onSupplierInvoiceBlur(),
             onChangeText: text => setSupplierInvoiceTotal(text),
             component: FloatingLabelInputField,
         },
@@ -86,20 +97,22 @@ const UploadInvoiceOMSScreen = (props) => {
             label: 'Invoice Date',
             placeholder: 'Invoice Date',
             errorMessage: 'Enter valid Invoice date',
+            showError: invoiceDateError,
             value: invoiceDate,
+            onBlur: () => onInvoiceDateBlur(),
             onChange: invoiceDate => setInvoiceDate(invoiceDate),
             component: CustomeDatePicker,
         },
         poTotal: {
             title: 'Po Total',
             disabled: true,
-            isImp: true,
+            isImp: false,
             label: 'Po Total',
             keyboardType: 'number-pad',
             placeholder: 'Po Total',
             errorMessage: 'Enter valid po total amount',
             showError: poTotalError,
-            value: poTotal,
+            value: String(poTotal),
             onBlur: () => onPoTotalBlur(),
             onChangeText: text => setPoTotal(text),
             component: FloatingLabelInputField,
@@ -123,15 +136,29 @@ const UploadInvoiceOMSScreen = (props) => {
             setInvoiceNumberError(true);
         }
     };
-
-    const onPoTotalBlur = () => {
-        if (poTotal && poTotal.length) {
-            setpoTotalError(false);
+    const onSupplierInvoiceBlur = () => {
+        if (supplierInvoiceTotal != poTotal && supplierInvoiceTotal.length && supplierInvoiceTotal) {
+            setSupplierInvoiceTotalError(false);
         } else {
-            setpoTotalError(true);
+            setSupplierInvoiceTotalError(true);
         }
     };
 
+    const onInvoiceDateBlur = () => {
+        if (invoiceDate && invoiceDate.length) {
+            setInvoiceDateError(false);
+        } else {
+            setInvoiceDateError(true);
+        }
+    };
+
+    const onUploadInvoiceBlur = () => {
+        if (uploadInvoice && uploadInvoice.name) {
+            setuploadInvoiceError(false);
+        } else {
+            setuploadInvoiceError(true);
+        }
+    };
 
     const openSelection = async selection => {
         switch (selection) {
@@ -162,8 +189,6 @@ const UploadInvoiceOMSScreen = (props) => {
     };
 
     const setFormState = data => {
-        console.log("IFIDDD", fId);
-
         switch (fId) {
             case 'uploadInvoice':
                 setUploadInvoice(data);
@@ -228,9 +253,8 @@ const UploadInvoiceOMSScreen = (props) => {
                 supplierId: await AsyncStorage.getItem('userId'),
             };
             const { data } = await getInvoiceOMSDetails(payload);
-            console.log("data===>", data);
             if (data.success) {
-                setOmsUploadList(data?.data?.records);
+                setOmsUploadList(data?.data);
                 setLoading(false);
             }
         } catch (error) {
@@ -239,23 +263,38 @@ const UploadInvoiceOMSScreen = (props) => {
         }
     };
 
-    const selectItemId = itemId => {
+    const selectItemId = (podId, totalPrice, keys) => {
         let currentItemIds = [...bulkItemIds];
-        if (currentItemIds.includes(itemId)) {
-            currentItemIds = currentItemIds.filter(_ => _ != itemId);
+        let currentPrice = [...poTotalPrice];
+        let currentKeys = [...totalKeys]
+        console.log("Price====>", currentItemIds);
+        if (currentItemIds.includes(podId)) {
+            currentItemIds = currentItemIds.filter(_ => _ != podId);
+
         } else {
             if (currentItemIds) {
-                currentItemIds.push(itemId);
+                currentItemIds.push(podId);
+                currentPrice.push(totalPrice);
+                currentKeys.push(keys)
+
             } else {
                 currentItemIds = [];
-                currentItemIds.push(itemId);
+                currentPrice = [];
+                currentKeys = [];
+                currentItemIds.push(podId);
+                currentPrice.push(totalPrice);
+                currentKeys.push(keys);
             }
         }
+        setTotalKeys(currentKeys)
         setBulkItemIds(currentItemIds);
+        setPoTotal(totalPrice)
     };
 
     const renderItem = ({ item, index }) => {
         let list = Object.values(item)?.[0]
+        let keys = Object.keys(item)?.[0]
+
         return (
             <InvoiceOmsCard
                 msn={list.product_msn}
@@ -266,6 +305,10 @@ const UploadInvoiceOMSScreen = (props) => {
                 TpUnit={list.transfer_price}
                 productName={list.product_name}
                 bulkItemIds={bulkItemIds}
+                poTotalPrice={poTotalPrice}
+                keys={keys}
+                totalKeys={totalKeys}
+                setTotalPrice={setPoTotalPrice}
                 setBulkItemIds={setBulkItemIds}
                 selectItemId={selectItemId}
 
@@ -289,70 +332,122 @@ const UploadInvoiceOMSScreen = (props) => {
     };
 
     const onsubmit = async () => {
-        try {
-            let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-            const url = `${BASE_URL}api/order/oms/mapInvoice`;
-            const response = await RNFetchBlob.fetch(
-                'POST',
-                url,
-                {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `${token}`,
-                },
+        if (
+            invoiceNumber &&
+            invoiceNumber.length &&
+            invoiceDate &&
+            uploadInvoice && uploadInvoice.name &&
+            supplierInvoiceTotal.length
+            // && (supplierInvoiceTotal != poTotal)
 
-                [{
+        ) {
+            try {
+                let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+                const url = `${BASE_URL}api/order/oms/mapInvoice`;
+                const userId = await AsyncStorage.getItem('userId');
+
+
+
+                console.log("itemref====>", [{
                     name: 'invoiceNumber',
                     data: invoiceNumber,
                 },
                 {
                     name: 'supplierId',
-                    data: await AsyncStorage.getItem('userId'),
+                    data: userId
                 },
                 {
                     name: 'itemLists',
-                    data: 927212,
+                    data: itemRef
                 },
                 {
                     name: 'invoiceTotal',
-                    data: 1000,
+                    data: supplierInvoiceTotal,
                 },
                 {
                     name: 'invoiceDate',
-                    data: invoiceDate,
+                    data: moment(invoiceDate).format('YYYY-MM-DD')
                 },
                 {
                     name: 'file',
                     filename: uploadInvoice.name,
                     type: uploadInvoice.type,
                     data: RNFetchBlob.wrap(uploadInvoice.uri),
-                }]
-            );
-            const res = await response.json();
-            console.log("Response====>", res);
-            if (res.success) {
-                Toast.show({
-                    type: 'success',
-                    text2: res.message,
-                    visibilityTime: 2000,
-                    autoHide: true,
-                });
-                props.navigation.goBack();
-            } else if (res.success == false) {
-                Toast.show({
-                    type: 'success',
-                    text2: res.message,
-                    visibilityTime: 2000,
-                    autoHide: true,
-                });
+                }
+                ]);
 
+                const response = await RNFetchBlob.fetch(
+                    'POST',
+                    url,
+                    {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `${token}`,
+                    },
+
+                    [{
+                        name: 'invoiceNumber',
+                        data: String(invoiceNumber),
+                    },
+                    {
+                        name: 'supplierId',
+                        data: String(userId)
+                    },
+                    {
+                        name: 'itemLists',
+                        data: String(itemRef)
+                    },
+                    {
+                        name: 'invoiceTotal',
+                        data: String(supplierInvoiceTotal),
+                    },
+                    {
+                        name: 'invoiceDate',
+                        data: moment(invoiceDate).format('YYYY-MM-DD')
+                    },
+                    {
+                        name: 'file',
+                        filename: uploadInvoice.name,
+                        type: uploadInvoice.type,
+                        data: RNFetchBlob.wrap(uploadInvoice.uri),
+                    },
+                    ]
+
+                );
+                const res = await response.json();
+                console.log("res", res);
+                if (res.success) {
+                    Toast.show({
+                        type: 'success',
+                        text2: res.message,
+                        visibilityTime: 2000,
+                        autoHide: true,
+                    });
+                    props.navigation.goBack();
+                } else if (res.success == false) {
+                    Toast.show({
+                        type: 'success',
+                        text2: res.message,
+                        visibilityTime: 2000,
+                        autoHide: true,
+                    });
+
+                }
             }
+            catch (err) {
+                console.log("Error", err);
+                setLoading(false);
+            }
+        } else {
+            onInvoiceNumberBlur();
+            onSupplierInvoiceBlur();
         }
-        catch (err) {
-            console.log("Error", err);
-            setLoading(false);
-        }
+
 
     };
+
+    const onCancel = () => {
+        props.navigation.goBack();
+    }
 
 
     return (
@@ -365,7 +460,7 @@ const UploadInvoiceOMSScreen = (props) => {
 
             <ScrollView style={styles.ContainerCss}>
                 <FlatList
-                    data={OmsUploadList}
+                    data={OmsUploadList.records}
                     renderItem={renderItem}
                     ListEmptyComponent={renderListEmptyComponent}
                     keyExtractor={(item, index) => `${index}-item`}
@@ -373,6 +468,7 @@ const UploadInvoiceOMSScreen = (props) => {
                     showsVerticalScrollIndicator={false}
                 />
                 {FORM_FIELDS.map((field, fieldKey) => (
+
                     <field.component
                         {...field}
                         key={fieldKey}
@@ -404,8 +500,7 @@ const UploadInvoiceOMSScreen = (props) => {
                         TextColor={colors.blackColor}
                         TextFontSize={Dimension.font16}
                         title={'CANCEL'}
-                    // loading={loading}
-                    // onPress={onContinue}
+                        onPress={onCancel}
                     />
                 </View>
                 <View style={{ flex: 1 }}>

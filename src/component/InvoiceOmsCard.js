@@ -50,7 +50,7 @@ const InvoiceOmsCard = props => {
         itemId,
         bulkItemIds,
         selectItemId,
-
+        keys
 
     } = props;
 
@@ -122,17 +122,17 @@ const InvoiceOmsCard = props => {
                     style={[styles.orderCardwrapInner]}>
                     <CustomeIcon
                         name={
-                            (bulkItemIds || []).includes(itemId)
+                            (bulkItemIds || []).includes(podId)
                                 ? 'checkbox-tick'
                                 : 'checkbox-blank'
                         }
                         color={
-                            (bulkItemIds || []).includes(itemId)
+                            (bulkItemIds || []).includes(podId)
                                 ? Colors.BrandColor
                                 : Colors.FontColor
                         }
                         size={Dimension.font22}
-                        onPress={() => selectItemId(itemId)}
+                        onPress={() => selectItemId(podId, totalPrice, keys)}
                         style={{
                             position: 'absolute',
                             right: 0,
