@@ -25,6 +25,7 @@ const UploadInvoiceOMSScreen = (props) => {
     const [invoiceNumber, setInvoiceNumber] = useState("");
     const [invoiceNumberError, setInvoiceNumberError] = useState(false);
     const [invoiceDate, setInvoiceDate] = useState("");
+    const [invoiceDateError, setInvoiceDateError] = useState(false);
     const [uploadInvoice, setUploadInvoice] = useState({});
     const [uploadInvoiceError, setuploadInvoiceError] = useState(false);
     const [supplierInvoiceTotal, setSupplierInvoiceTotal] = useState("");
@@ -38,7 +39,6 @@ const UploadInvoiceOMSScreen = (props) => {
     const [totalKeys, setTotalKeys] = useState([]);
     const [totalKeysValues, setTotalKeysValues] = useState([]);
     const [fId, setFId] = useState(null);
-    const [invoiceDateError, setInvoiceDateError] = useState(false);
     const [actionCTA, setaAtionCTA] = useState(props?.route?.params?.actionCTA)
 
 
@@ -127,6 +127,12 @@ const UploadInvoiceOMSScreen = (props) => {
             fetchInvoiceOMSDetails()
         }
     }, []);
+
+    useEffect(() => {
+        if (!invoiceDate) {
+            setInvoiceDateError(false)
+        }
+    })
 
     const onInvoiceNumberBlur = () => {
         if (invoiceNumber && invoiceNumber.length) {
@@ -266,7 +272,6 @@ const UploadInvoiceOMSScreen = (props) => {
         let currentItemIds = [...bulkItemIds];
         let currentPrice = [...poTotalPrice];
         let currentKeys = [...totalKeys]
-        console.log("Price====>", currentItemIds);
         if (currentItemIds.includes(podId)) {
             currentItemIds = currentItemIds.filter(_ => _ != podId);
 

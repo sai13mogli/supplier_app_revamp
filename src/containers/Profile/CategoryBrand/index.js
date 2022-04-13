@@ -6,34 +6,34 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
-import {OrderedMap} from 'immutable';
+import { OrderedMap } from 'immutable';
 import MultiSelectInput from '../../../component/common/MultiSelectInput';
 import Header from '../../../component/common/Header';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import styles from './style';
 import CustomeIcon from '../../../component/common/CustomeIcon';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DropDown from '../../../component/common/DropDown';
 import FileUpload from '../../../component/common/FileUpload';
 import CustomeDatePicker from '../../../component/common/Datepicker';
 import Modal from 'react-native-modal';
 import CustomButton from '../../../component/common/Button';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BASE_URL, STATE_STATUS} from '../../../redux/constants/index';
+import { BASE_URL, STATE_STATUS } from '../../../redux/constants/index';
 import {
   setSelectedCategories,
   updateBrandData,
   fetchCategoriesBrands,
 } from '../../../redux/actions/categorybrand';
-import {addOrUpdateCategoryAndBrand} from '../../../services/categorybrand';
-import {getAllCategories} from '../../../services/auth';
-import {fetchProfile} from '../../../redux/actions/profile';
+import { addOrUpdateCategoryAndBrand } from '../../../services/categorybrand';
+import { getAllCategories } from '../../../services/auth';
+import { fetchProfile } from '../../../redux/actions/profile';
 import PickerDropDown from '../../../component/common/PickerDropDown';
 
 // import {uploadDocumentService} from '../../../services/documents';
@@ -232,13 +232,12 @@ const CategoryBrandScreen = props => {
   }, [userCategories]);
 
   const filterSelectedArr = async () => {
-    const {data} = await getAllCategories();
-    console.log('bc data', data.data);
+    const { data } = await getAllCategories();
     let arr = [];
     (data.data || []).forEach(ele => {
       (userCategories || []).forEach(e => {
         if (ele.categoryCode == e) {
-          arr.push({categoryCode: e, categoryName: ele.categoryName});
+          arr.push({ categoryCode: e, categoryName: ele.categoryName });
         }
       });
     });
@@ -250,13 +249,12 @@ const CategoryBrandScreen = props => {
     }));
 
     dispatch(setSelectedCategories(mutateArr));
-    // dispatch(setCategories(mutateArr));
   };
 
   const uploadDocu = async data => {
     let res = await uploadDocumentService(data);
     console.log('uploadDocument ka res hai bhaiii!', res);
-    let {resp} = res;
+    let { resp } = res;
 
     if (resp.error) {
       setErrorData();
@@ -302,7 +300,7 @@ const CategoryBrandScreen = props => {
     };
   };
 
-  const setDocument = ({fileData, resp}) => {
+  const setDocument = ({ fileData, resp }) => {
     setBrandCertificate({
       ...brandCertificate,
       title: fileData && fileData.name,
@@ -506,7 +504,7 @@ const CategoryBrandScreen = props => {
         categoryCode: [...categoryIds],
         brandList: [...mutatebrands],
       };
-      const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
+      const { data } = await addOrUpdateCategoryAndBrand(payloadObj);
       if (data && data.success) {
         setNextLoader(false);
         dispatch(fetchProfile());
@@ -542,7 +540,7 @@ const CategoryBrandScreen = props => {
   // };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Header
         showBack
         navigation={props.navigation}
@@ -563,12 +561,12 @@ const CategoryBrandScreen = props => {
                   .filter(it => it.isDeleted == '0' || it.isDeleted == '4')
                   .map((_, i) => (
                     <View style={styles.BrandWrap}>
-                      <View style={{flex: 1}}>
+                      <View style={{ flex: 1 }}>
                         <Text style={styles.brandTitleTxt}>Brand Name</Text>
                         <Text style={styles.brandNameTxt}>{_.brandName}</Text>
                       </View>
 
-                      <View style={{flex: 1}}>
+                      <View style={{ flex: 1 }}>
                         <Text style={styles.brandTitleTxt}>Status</Text>
                         {_.isDeleted == '0' ? (
                           <Text style={styles.ApprovedStatus}>Approved</Text>
@@ -582,9 +580,9 @@ const CategoryBrandScreen = props => {
                       </View>
                       {/* //onPress={() => openModal(_)} */}
 
-                      <View style={{flex: 1}}>
+                      <View style={{ flex: 1 }}>
                         {(_.isDeleted == '0' || _.isDeleted == '4') &&
-                        _.isDocumentRequired ? (
+                          _.isDocumentRequired ? (
                           <TouchableOpacity
                             onPress={() => openModal(_)}
                             style={styles.fillBtn}>
@@ -623,22 +621,22 @@ const CategoryBrandScreen = props => {
                   .filter(item => item && item.isDeleted == 2)
                   .map((_, i) => (
                     <View style={styles.BrandWrap}>
-                      <View style={{flex: 1}}>
+                      <View style={{ flex: 1 }}>
                         <Text style={styles.brandTitleTxt}>Brand Name</Text>
                         <Text style={styles.brandNameTxt}>
                           {_.name || _.brandName}
                         </Text>
                       </View>
 
-                      <View style={{flex: 1}}>
+                      <View style={{ flex: 1 }}>
                         <Text style={styles.brandTitleTxt}>Status</Text>
                         <Text style={styles.pendingStatus}>Pending</Text>
                       </View>
 
-                      <View style={{flex: 1}}>
+                      <View style={{ flex: 1 }}>
                         {_.isDeleted == '2' &&
-                        _.isRaiseRequest == 'true' &&
-                        _.isDocumentRequired ? (
+                          _.isRaiseRequest == 'true' &&
+                          _.isDocumentRequired ? (
                           <TouchableOpacity
                             onPress={() => openModal(_)}
                             style={styles.fillBtn}>
@@ -672,7 +670,7 @@ const CategoryBrandScreen = props => {
               // animating={true}
               size={'large'}
               color={'red'}
-              style={{alignSelf: 'center'}}
+              style={{ alignSelf: 'center' }}
             />
           </View>
         )}
@@ -694,7 +692,7 @@ const CategoryBrandScreen = props => {
         onBackdropPress={() => {
           setModalVisible(false);
         }}
-        style={{padding: 0, margin: 0}}>
+        style={{ padding: 0, margin: 0 }}>
         <View style={styles.modalContainer}>
           <View style={styles.TopWrap}>
             <View style={styles.topbdr}></View>

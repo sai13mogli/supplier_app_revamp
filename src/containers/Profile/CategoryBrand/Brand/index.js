@@ -1,18 +1,18 @@
-import React, {useEffect, useState, createRef} from 'react';
-import {TouchableOpacity, Text, View, Dimensions, FlatList} from 'react-native';
+import React, { useEffect, useState, createRef } from 'react';
+import { TouchableOpacity, Text, View, Dimensions, FlatList } from 'react-native';
 import AllBrandsScreen from './AllBrands';
 import PopularBrandsScreen from './PopularBrands';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../../../component/common/Button';
 import styles from './style';
 import Colors from '../../../../Theme/Colors';
 import Dimension from '../../../../Theme/Dimension';
 import Modal from 'react-native-modal';
 import MultiSelect from '../../../../component/common/MultiSelect';
-import {TOP_BRANDS_SCREENS} from '../../../../constants';
+import { TOP_BRANDS_SCREENS } from '../../../../constants';
 import Tabs from '../../../../component/common/Tabs';
 import Header from '../../../../component/common/Header';
-import {addMultipleBrands} from '../../../../redux/actions/categorybrand';
+import { addMultipleBrands } from '../../../../redux/actions/categorybrand';
 const deviceWidth = Dimensions.get('window').width;
 
 const TABS = [
@@ -60,7 +60,7 @@ const BrandScreen = props => {
         rightIconName={'category--brand'}
       />
 
-      <Tabs data={TABS.map(_ => ({..._}))} />
+      <Tabs data={TABS.map(_ => ({ ..._ }))} />
 
       <View style={styles.bottombtnWrap}>
         <TouchableOpacity style={styles.BrandNumWrap}>
@@ -72,7 +72,7 @@ const BrandScreen = props => {
             {userBrands.length}
           </Text>
         </TouchableOpacity>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <CustomButton
             title={'SUBMIT'}
             onPress={() => {
@@ -123,12 +123,11 @@ const BrandScreen = props => {
                 {' '}
                 {(userBrands || []).filter(_ => _.isRaiseRequest == 'true')
                   .length < 10
-                  ? `0${
-                      (userBrands || []).filter(_ => _.isRaiseRequest == 'true')
-                        .length
-                    }`
+                  ? `0${(userBrands || []).filter(_ => _.isRaiseRequest == 'true')
+                    .length
+                  }`
                   : (userBrands || []).filter(_ => _.isRaiseRequest == 'true')
-                      .length}
+                    .length}
               </Text>{' '}
               brands
             </Text>
@@ -143,7 +142,7 @@ const BrandScreen = props => {
             fromBrand={true}
           />
           <View style={styles.ModalBtnWrap}>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <CustomButton
                 title="CANCEL"
                 buttonColor={Colors.WhiteColor}
@@ -152,7 +151,7 @@ const BrandScreen = props => {
                 TextFontSize={Dimension.font16}
                 onPress={onCancel}></CustomButton>
             </View>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <CustomButton
                 title="CONFIRM"
                 buttonColor={Colors.BrandColor}
@@ -172,13 +171,6 @@ const BrandScreen = props => {
   );
 };
 
-const tabBarOptions = {
-  activeTintColor: '#D9232D',
-  inactiveTintColor: '#C4C4C4',
-  showLabel: false,
-  lazy: false,
-  style: styles.tabBar,
-  safeAreaInsets: {bottom: 0},
-};
+
 
 export default BrandScreen;

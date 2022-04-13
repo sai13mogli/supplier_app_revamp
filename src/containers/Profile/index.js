@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -9,31 +9,28 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Header from '../../component/common/Header';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchBusinessDetails,
   fetchProfile,
   fetchBankDetails,
   fetchTdsInfoDetails,
   fetchAddressDetails,
-  logout,
 } from '../../redux/actions/profile';
-import {fetchCategoriesBrands} from '../../redux/actions/categorybrand';
+import { fetchCategoriesBrands } from '../../redux/actions/categorybrand';
 
 import Progress from 'react-native-progress/Bar';
-import {OrderedMap} from 'immutable';
-import {PROFILE_TABS} from '../../constants';
+import { PROFILE_TABS } from '../../constants';
 import styles from './style';
 import CustomButton from '../../component/common/Button';
 import Colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomeIcon from '../../component/common/CustomeIcon';
-import {STATE_STATUS} from '../../redux/constants';
+import { STATE_STATUS } from '../../redux/constants';
 
 const ProfileScreen = props => {
-  const {navigate} = useNavigation();
+  const { navigate } = useNavigation();
   const dispatch = useDispatch();
   const profileStatus = useSelector(
     state => (state.profileReducer || {}).status || STATE_STATUS.UNFETCHED,
@@ -75,7 +72,6 @@ const ProfileScreen = props => {
   };
 
   const isActive = (tab, route, tabData) => {
-    console.log(tab, profileData, tabData);
     if (
       NEXT_ACTIVE_TAB[profileData.verificationStatus] == tab ||
       tabData.activity < profileData.verificationStatus
@@ -87,11 +83,11 @@ const ProfileScreen = props => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Header showText={'My Profile'} navigation={props.navigation} showBack />
       {profileStatus == STATE_STATUS.FETCHING ? (
         <ActivityIndicator
-          style={{alignSelf: 'center', margin: Dimension.margin12}}
+          style={{ alignSelf: 'center', margin: Dimension.margin12 }}
           size={'small'}
           color={Colors.BrandColor}
         />
@@ -134,7 +130,7 @@ const ProfileScreen = props => {
                     {(profileData.userInfo || {}).email}
                   </Text>
                 </View>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <CustomeIcon
                     name={
                       profileData?.phoneVerified
@@ -150,7 +146,7 @@ const ProfileScreen = props => {
               </View>
             </View>
             <View style={styles.UserEmailVerfyWrap}>
-              <View style={{flex: 6, marginRight: Dimension.margin10}}>
+              <View style={{ flex: 6, marginRight: Dimension.margin10 }}>
                 <Text style={styles.UserEmailVerfyBoldTxt}>
                   A verification link has been sent on your email.
                 </Text>
@@ -158,7 +154,7 @@ const ProfileScreen = props => {
                   Link is active for 24 hours only.
                 </Text>
               </View>
-              <View style={{flex: 3}}>
+              <View style={{ flex: 3 }}>
                 <CustomButton
                   title={'OPEN MAIL'}
                   onPress={() => Linking.openURL('mailto:')}
@@ -192,14 +188,13 @@ const ProfileScreen = props => {
               </Text>
             </View>
 
-            {/* navigate to activeTab isActive(tabIndex, tab.route) */}
 
             {PROFILE_TABS.map((tab, tabIndex) => (
               <TouchableOpacity
                 key={tabIndex}
                 onPress={() => isActive(tabIndex, tab.route, tab)}
                 style={styles.profileTabWrap}>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <View
                     style={[
                       styles.IconWrap,
@@ -221,7 +216,7 @@ const ProfileScreen = props => {
                   <View>
                     <Text style={styles.tabTitle}>{tab.title}</Text>
 
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                       {isCompleted(tab.progress) ? (
                         <>
                           <CustomeIcon

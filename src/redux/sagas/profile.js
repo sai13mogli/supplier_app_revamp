@@ -1,7 +1,7 @@
 // dependencies
-import {put, call, fork, takeEvery} from 'redux-saga/effects';
+import { put, call, fork, takeEvery } from 'redux-saga/effects';
 // constants
-import {PROFILE_ACTIONS} from '../constants/profile';
+import { PROFILE_ACTIONS } from '../constants/profile';
 // api call
 import {
   getBusinessDetails,
@@ -54,7 +54,7 @@ const shipmentModes = {
 
 function* fetchBusinessDetail() {
   try {
-    const {data, error} = yield call(getBusinessDetails);
+    const { data, error } = yield call(getBusinessDetails);
     if (error) {
       yield put(failedFetchBusinessDetails(error));
     } else {
@@ -78,9 +78,9 @@ function* fetchBusinessDetail() {
   }
 }
 
-function* fetchUpdateBusinessDetails({payload: {formData}}) {
+function* fetchUpdateBusinessDetails({ payload: { formData } }) {
   try {
-    const {data, error} = yield call(setBusinessDetails, formData);
+    const { data, error } = yield call(setBusinessDetails, formData);
     if (error) {
       yield put(failedFetchUpdateBusinessDetails(error));
     } else {
@@ -97,36 +97,44 @@ function* fetchUpdateBusinessDetails({payload: {formData}}) {
   }
 }
 
-function* fetchUpdateTDSDetails({payload: {formData}}) {
+function* fetchUpdateTDSDetails({ payload: { formData } }) {
   try {
-    const {data, error} = yield call(setUpdateTDSDetails, formData);
+    const { data, error } = yield call(setUpdateTDSDetails, formData);
     if (error) {
       yield put(failedFetchUpdateTDSDetails(error));
     } else {
-      yield put(fetchedUpdateTDSDetails(formData, data));
-      yield put(fetchTdsInfoDetails());
+      if (data.status == 400 || data.data.errors) {
+        yield put(failedFetchUpdateBillingAddress(data.data.errors));
+      } else {
+        yield put(fetchedUpdateTDSDetails(formData, data));
+        yield put(fetchTdsInfoDetails());
+      }
     }
   } catch (error) {
     yield put(failedFetchUpdateTDSDetails(error));
   }
 }
 
-function* fetchUpdateBankDetails({payload: {formData}}) {
+function* fetchUpdateBankDetails({ payload: { formData } }) {
   try {
-    const {data, error} = yield call(setBankDetails, formData);
+    const { data, error } = yield call(setBankDetails, formData);
     if (error) {
       yield put(failedFetchUpdateBankDetails(error));
     } else {
-      yield put(fetchedUpdateBankDetails(formData, data.data));
+      if (data.status == 400 || data.data.errors) {
+        yield put(failedFetchUpdateBillingAddress(data.data.errors));
+      } else {
+        yield put(fetchedUpdateBankDetails(formData, data.data));
+      }
     }
   } catch (error) {
     yield put(failedFetchUpdateBankDetails(error));
   }
 }
 
-function* fetchUserProfile({}) {
+function* fetchUserProfile({ }) {
   try {
-    let {data, error} = yield call(getProfile);
+    let { data, error } = yield call(getProfile);
     const profileData = yield call(getUserInfo);
     data.data.userInfo = profileData.data.data;
     if (error) {
@@ -144,7 +152,7 @@ function* fetchUserProfile({}) {
 
 function* fetchAddressDetail() {
   try {
-    const {data, error} = yield call(getAddressesDetails);
+    const { data, error } = yield call(getAddressesDetails);
     if (error) {
       yield put(failedFetchAddressDetails(error));
     } else {
@@ -155,9 +163,9 @@ function* fetchAddressDetail() {
   }
 }
 
-function* fetchDeleteAddresses({payload: {formData}}) {
+function* fetchDeleteAddresses({ payload: { formData } }) {
   try {
-    const {data, error} = yield call(setDeleteAddress, formData);
+    const { data, error } = yield call(setDeleteAddress, formData);
     if (error) {
       yield put(failedFetchDeleteAddresses(error));
     } else {
@@ -169,14 +177,18 @@ function* fetchDeleteAddresses({payload: {formData}}) {
   }
 }
 
-function* fetchUpdateBillingAddress({payload: {formData}}) {
+function* fetchUpdateBillingAddress({ payload: { formData } }) {
   try {
-    const {data, error} = yield call(setUpdateBillingAddress, formData);
+    const { data, error } = yield call(setUpdateBillingAddress, formData);
     if (error) {
       yield put(failedFetchUpdateBillingAddress(error));
     } else {
-      yield put(fetchedUpdateBillingAddress(formData, data.data));
-      yield put(fetchAddressDetails());
+      if (data.status == 400 || data.data.errors) {
+        yield put(failedFetchUpdateBillingAddress(data.data.errors));
+      } else {
+        yield put(fetchedUpdateBillingAddress(formData, data.data));
+        yield put(fetchAddressDetails());
+      }
     }
   } catch (error) {
     yield put(failedFetchUpdateBillingAddress(error));
@@ -185,7 +197,7 @@ function* fetchUpdateBillingAddress({payload: {formData}}) {
 
 function* fetchBankDetails() {
   try {
-    const {data, error} = yield call(getBankDetails);
+    const { data, error } = yield call(getBankDetails);
     if (error) {
       yield put(failedFetchBankDetails(error));
     } else {
@@ -198,7 +210,7 @@ function* fetchBankDetails() {
 
 function* fetchTdsInfoDetail() {
   try {
-    const {data, error} = yield call(getTdsInfoDetails);
+    const { data, error } = yield call(getTdsInfoDetails);
     if (error) {
       yield put(failedFetchTdsInfoDetails(error));
     } else {
