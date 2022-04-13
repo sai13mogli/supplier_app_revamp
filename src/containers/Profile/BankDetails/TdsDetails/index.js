@@ -69,7 +69,6 @@ const TdsDetails = (props) => {
   };
 
   const _renderContent = section => {
-    console.log("Section====>", section);
     return (
       <View style={{}}>
 

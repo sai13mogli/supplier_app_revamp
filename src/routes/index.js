@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,10 +7,10 @@ import {
   ActivityIndicator,
   View,
 } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {navigationRef} from '../generic/navigator';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { navigationRef } from '../generic/navigator';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Dimension from '../Theme/Dimension';
 import CustomeIcon from '../component/common/CustomeIcon';
 import {
@@ -18,7 +18,7 @@ import {
   AUTH_STACK_SCREENS,
   BOTTOM_TAB_SCREENS,
 } from '../constants/index';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';
 
 const AppStack = createNativeStackNavigator();
@@ -26,7 +26,7 @@ const Tab = createBottomTabNavigator();
 
 const horizontalAnimation = {
   gestureDirection: 'horizontal',
-  cardStyleInterpolator: ({current, layouts}) => {
+  cardStyleInterpolator: ({ current, layouts }) => {
     return {
       cardStyle: {
         transform: [
@@ -66,14 +66,7 @@ const Routes = props => {
           name={iconName}
           size={Dimension.font16}
           color={color}></CustomeIcon>
-        {/* {tabName == 'Profile' ? (
-                <ProfileTabIcon focused={focused} iconName={iconName} color={color} />
-              ) : currentScreen.iconType ? (
-                <BottomIcon name={iconName} size={26} color={color} />
-              ) : (
-                <Icon name={iconName} size={26} color={color} />
-              )} */}
-        <Text style={[styles.tabText, {color: focused ? color : '#A2A2A2'}]}>
+        <Text style={[styles.tabText, { color: focused ? color : '#A2A2A2' }]}>
           {tabName}
         </Text>
       </TouchableOpacity>
@@ -86,19 +79,20 @@ const Routes = props => {
         initialParams={{
           setIsLoggedIn,
         }}
-        screenOptions={({route, ...rest}) => ({
+        screenOptions={({ route, ...rest }) => ({
           headerShown: false,
-          tabBarIcon: ({focused, color}) =>
+          tabBarIcon: ({ focused, color }) =>
             tabBarIcon(focused, color, route, rest),
           lazy: false,
-          safeAreaInsets: {bottom: 0},
+          safeAreaInsets: { bottom: 0 },
         })}
-        tabBarOptions={tabBarOptions}>
+        tabBarOptions={tabBarOptions}
+      >
         {BOTTOM_TAB_SCREENS.map((screen, key) => (
           <Tab.Screen
             key={key}
             // lazy={true}
-            params={{setIsLoggedIn}}
+            params={{ setIsLoggedIn }}
             initialParams={{
               setIsLoggedIn,
             }}
@@ -206,7 +200,7 @@ const Routes = props => {
                   setIsLoggedIn,
                 }}
                 component={screen.component}
-                // options={navOptionHandler}
+              // options={navOptionHandler}
               />
             ))}
           </>
@@ -226,7 +220,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
     marginTop: Dimension.margin4,
   },
-  iconAlignment: {alignItems: 'center', alignSelf: 'center'},
+  iconAlignment: { alignItems: 'center', alignSelf: 'center' },
 });
 const tabBarOptions = {
   activeTintColor: '#D9232D',
@@ -234,7 +228,7 @@ const tabBarOptions = {
   showLabel: false,
   lazy: false,
   style: styles.tabBar,
-  safeAreaInsets: {bottom: 0},
+  safeAreaInsets: { bottom: 0 },
 };
 
 export default Routes;
