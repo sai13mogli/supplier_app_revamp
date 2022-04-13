@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin5,
     alignSelf: 'center',
     marginTop: Dimension.margin1,
-    textTransform:"uppercase"
+    textTransform: "uppercase"
   },
   TopWrap: {
     flexDirection: 'row',
@@ -38,26 +38,26 @@ const styles = StyleSheet.create({
   },
   pendingBox: {
     borderWidth: .5,
-   // marginTop: 20,
-   borderRadius: 4,
+    // marginTop: 20,
+    borderRadius: 4,
     borderColor: Colors.grayShade14,
   },
   HeadingWrap: {
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    marginRight:Dimension.margin15
+    marginRight: Dimension.margin15
   },
   Detailtxt: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-    marginBottom:Dimension.margin3
+    marginBottom: Dimension.margin4
   },
-  DetailHeading:{
+  DetailHeading: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomMediumFont,
-    marginBottom:Dimension.margin3
+    marginBottom: Dimension.margin3
   },
   Pendingtxt: {
     fontSize: Dimension.font12,
@@ -71,10 +71,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
     backgroundColor: Colors.grayShade12,
-   
-    justifyContent:"space-between",
-    paddingVertical:Dimension.padding8,
-    paddingHorizontal:Dimension.padding15
+
+    justifyContent: "space-between",
+    paddingVertical: Dimension.padding8,
+    paddingHorizontal: Dimension.padding15
   },
   bottombtnWrap: {
     padding: Dimension.padding15,

@@ -12,11 +12,13 @@ import colors from '../../../Theme/Colors';
 import { STATE_STATUS } from '../../../redux/constants';
 import { fetchUpdateBillingAddress, fetchAddressDetails } from '../../../redux/actions/profile';
 import { getPincodeDetails } from '../../../services/profile';
+import Toast from 'react-native-toast-message';
 
 const EditAddress = props => {
 
     const businessDetails = useSelector(state => state.profileReducer.businessDetails.data || {});
     const addressesDetailsStatus = useSelector(state => state.profileReducer.addressesDetails.status || STATE_STATUS.FETCHING);
+    const addressesDetailsError = useSelector(state => state.profileReducer.addressesDetails.error || '',);
     const [loading, setLoading] = useState(false);
     const [isSelected, setSelection] = useState((props?.route?.params?.addressesDetails || {})?.default);
     const [editID, setEditID] = useState(props?.route?.params?.editID || '');
@@ -38,9 +40,6 @@ const EditAddress = props => {
     const [cityError, setcityError] = useState(false);
     const [tabState, setTabState] = useState((props))
     const dispatch = useDispatch();
-
-
-
 
     const FORM_FIELDS = new OrderedMap({
         phone: {
@@ -163,11 +162,22 @@ const EditAddress = props => {
     };
 
     useEffect(() => {
-        if (loading && addressesDetailsStatus == STATE_STATUS.FETCHED) {
+        if (loading && addressesDetailsStatus == STATE_STATUS.UPDATED) {
             setLoading(false);
             props.navigation.goBack();
+        } else if (loading && addressesDetailsStatus == STATE_STATUS.FAILED_UPDATE) {
+            setLoading(false);
+            alert(addressesDetailsError.state)
+            Toast.show({
+                type: 'error',
+                text2: addressesDetailsError && addressesDetailsError.state,
+                visibilityTime: 2000,
+                autoHide: true,
+            });
         }
     }, [addressesDetailsStatus]);
+
+
 
     const onPhoneBlur = () => {
         if (phone && phone.length == 10) {
@@ -231,6 +241,7 @@ const EditAddress = props => {
             }
             else {
                 const data = {
+                    id: "",
                     type: tabState?.route?.params?.tabState == "Billing" ? 3 : 4,
                     phonePrefix: +971,
                     phone: phone,
@@ -304,6 +315,5 @@ const styles = StyleSheet.create({
     },
 })
 
-// Exampe for CustomButton Component
 
 export default EditAddress;

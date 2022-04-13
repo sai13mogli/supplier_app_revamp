@@ -21,10 +21,9 @@ const Accounts = (props) => {
               props.navigation.navigate('EditBankAccount',
                 {
                   editID: bankDetails.id,
-                  // addressesDetails: item
                 })
             }}>
-              <View style={{ flexDirection: "row",}}>
+              <View style={{ flexDirection: "row", }}>
                 <CustomeIcon name={'edit-box'} size={Dimension.font16} color={colors.BrandColor} />
                 <Text style={styles.addnewtxt}>
                   Edit
@@ -33,7 +32,7 @@ const Accounts = (props) => {
             </TouchableOpacity>
 
           </View>
-          <View style={{ flexDirection: 'row',paddingHorizontal:Dimension.padding15}}>
+          <View style={{ flexDirection: 'row', paddingHorizontal: Dimension.padding15 }}>
             <View style={styles.HeadingWrap}>
               <Text style={styles.DetailHeading}>
                 Name

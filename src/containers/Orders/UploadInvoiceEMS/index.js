@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, FlatList, ScrollView, Image } from 'react-native';
+import React, { useState, useEffect, } from 'react';
+import { Text, View, FlatList, Image } from 'react-native';
 import Header from '../../../component/common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../../../component/common/Button';
-import { getInvoiceEMSDetails, getInvoiceOMSDetails } from '../../../services/orders';
+import { getInvoiceEMSDetails } from '../../../services/orders';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import styles from './style';
@@ -68,7 +68,7 @@ const UploadInvoiceScreen = (props) => {
     };
 
 
-    const renderItem = ({ item, index }) => {
+    const renderItem = ({ item }) => {
         return (
             <InvoiceEmsCard
                 msn={item.productMsn}
