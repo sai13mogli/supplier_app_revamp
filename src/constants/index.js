@@ -1,5 +1,5 @@
-import {createRef} from 'react';
-import {Linking} from 'react-native';
+import { createRef } from 'react';
+import { Linking } from 'react-native';
 import HomeScreen from '../containers/Home';
 import ProfileScreen from '../containers/Profile';
 import OrdersScreen from '../containers/Orders';
@@ -19,7 +19,7 @@ import CategoryBrand from '../containers/Profile/CategoryBrand';
 import SelectCategoryScreen from '../containers/Auth/SelectCategory';
 import NotificationScreen from '../containers/Notification';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
-import {OrderedMap} from 'immutable';
+import { OrderedMap } from 'immutable';
 import Accounts from '../containers/Profile/BankDetails/Accounts';
 import TdsDetails from '../containers/Profile/BankDetails/TdsDetails';
 import PickedUp from '../containers/Profile/Addresses/PickedUp';
@@ -66,11 +66,17 @@ export const BOTTOM_TAB_SCREENS = [
 export const TOP_TAB_SCREENS = [
   {
     name: 'Account',
+    key: 'account',
     component: Accounts,
+    ref: createRef(),
+    idx: 0,
   },
   {
     name: 'TDS Taxation Details',
+    key: 'tdsTaxationDetails',
     component: TdsDetails,
+    ref: createRef(),
+    idx: 1,
   },
 ];
 

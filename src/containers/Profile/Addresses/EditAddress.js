@@ -176,8 +176,6 @@ const EditAddress = props => {
             setphoneError(true);
         }
     };
-
-
     const onAddressLine1Blur = () => {
         if (address1 && address1.length) {
             setaddressLine1Error(false);
@@ -262,7 +260,7 @@ const EditAddress = props => {
             <Header
                 showBack
                 navigation={props.navigation}
-                showText={editID ? 'Edit Billing Address' : 'Add Billing Address'}
+                showText={editID ? 'Edit Address' : 'Add Address'}
                 rightIconName={'business-details'}>
             </Header>
             <View style={{ flex: 1 }}>

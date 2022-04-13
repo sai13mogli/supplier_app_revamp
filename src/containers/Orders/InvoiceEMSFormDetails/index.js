@@ -15,7 +15,6 @@ import Header from '../../../component/common/Header';
 import CustomeDatePicker from '../../../component/common/Datepicker';
 import { BASE_URL } from '../../../redux/constants';
 import Toast from 'react-native-toast-message';
-import moment from 'moment';
 
 const InvoiceEMSFormDetailScreen = props => {
     const [loading, setLoading] = useState(false);
@@ -462,6 +461,24 @@ const InvoiceEMSFormDetailScreen = props => {
         SheetManager.show('action_sheet', id);
     };
 
+    const getMinDate = () => {
+        let today = new Date();
+        let mutateMonth;
+
+        if (today.getMonth() + 1 < 10) {
+            mutateMonth = `0${today.getMonth() + 1}`;
+        } else {
+            mutateMonth = today.getMonth() + 1;
+        }
+
+        let currdate =
+            Number(today.getDate()) < 10
+                ? `0${Number(today.getDate())}`
+                : `${Number(today.getDate())}`;
+        let date = today.getFullYear() + '-' + mutateMonth + '-' + currdate;
+        return date;
+    };
+
     const onsubmit = async () => {
 
         if (
@@ -484,9 +501,9 @@ const InvoiceEMSFormDetailScreen = props => {
                 {
                     supplierId: await AsyncStorage.getItem('userId'),
                     invoiceNumber: invoiceNumber,
-                    invoiceDate: moment(invoiceDate).format('YYYY-MM-DD'),
+                    invoiceDate: getMinDate(invoiceDate),
                     source: 0,
-                    ewayDate: moment(ewayDate).format('YYYY-MM-DD'),
+                    ewayDate: getMinDate(ewayDate),
                     ewayNumber: ewayBillNumber,
                     warehouseId: warehouseId,
                     orderRef: orderRef,
