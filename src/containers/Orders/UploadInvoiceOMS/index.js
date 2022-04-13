@@ -17,7 +17,6 @@ import InvoiceOmsCard from '../../../component/InvoiceOmsCard';
 import { BASE_URL } from '../../../redux/constants';
 import RNFetchBlob from 'rn-fetch-blob';
 import Toast from 'react-native-toast-message';
-import moment from 'moment';
 
 const UploadInvoiceOMSScreen = (props) => {
 
@@ -331,6 +330,24 @@ const UploadInvoiceOMSScreen = (props) => {
         return null;
     };
 
+    const getMinDate = () => {
+        let today = new Date();
+        let mutateMonth;
+
+        if (today.getMonth() + 1 < 10) {
+            mutateMonth = `0${today.getMonth() + 1}`;
+        } else {
+            mutateMonth = today.getMonth() + 1;
+        }
+
+        let currdate =
+            Number(today.getDate()) < 10
+                ? `0${Number(today.getDate())}`
+                : `${Number(today.getDate())}`;
+        let date = today.getFullYear() + '-' + mutateMonth + '-' + currdate;
+        return date;
+    };
+
     const onsubmit = async () => {
         if (
             invoiceNumber &&
@@ -345,37 +362,6 @@ const UploadInvoiceOMSScreen = (props) => {
                 let token = `Bearer ${await AsyncStorage.getItem('token')}`;
                 const url = `${BASE_URL}api/order/oms/mapInvoice`;
                 const userId = await AsyncStorage.getItem('userId');
-
-
-
-                console.log("itemref====>", [{
-                    name: 'invoiceNumber',
-                    data: invoiceNumber,
-                },
-                {
-                    name: 'supplierId',
-                    data: userId
-                },
-                {
-                    name: 'itemLists',
-                    data: itemRef
-                },
-                {
-                    name: 'invoiceTotal',
-                    data: supplierInvoiceTotal,
-                },
-                {
-                    name: 'invoiceDate',
-                    data: moment(invoiceDate).format('YYYY-MM-DD')
-                },
-                {
-                    name: 'file',
-                    filename: uploadInvoice.name,
-                    type: uploadInvoice.type,
-                    data: RNFetchBlob.wrap(uploadInvoice.uri),
-                }
-                ]);
-
                 const response = await RNFetchBlob.fetch(
                     'POST',
                     url,
@@ -402,7 +388,7 @@ const UploadInvoiceOMSScreen = (props) => {
                     },
                     {
                         name: 'invoiceDate',
-                        data: moment(invoiceDate).format('YYYY-MM-DD')
+                        data: getMinDate(invoiceDate)
                     },
                     {
                         name: 'file',
@@ -448,6 +434,8 @@ const UploadInvoiceOMSScreen = (props) => {
     const onCancel = () => {
         props.navigation.goBack();
     }
+
+
 
 
     return (
