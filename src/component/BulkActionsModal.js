@@ -108,69 +108,141 @@ const BulkActionsModal = props => {
   const downloadFile = async downloadType => {
     const {config, fs} = RNFetchBlob;
     let currbulkItems = [...bulkDownloadItems];
-    console.log(currbulkItems);
     currbulkItems = (currbulkItems || []).map(_ => ({
       itemId: _.itemId,
       downloadType: downloadType,
       url: downloadType == 'shipment' ? _.invoiceUrl : _.invoiceUrl,
     }));
-    console.log('payload', [...currbulkItems]);
-    let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-    var myrequest = new XMLHttpRequest();
-    myrequest.onreadystatechange = e => {
-      if (myrequest.readyState !== 4) {
-        return;
-      }
-
-      if (myrequest.status === 200) {
-      } else {
-        console.warn('error');
-      }
-    };
-    myrequest.responseType = 'blob';
-    myrequest.onload = e => {
-      var response = myrequest.response;
-      console.log('responseOnLoad', response);
-      var mimetype = myrequest.getResponseHeader('Content-Type');
-      var fields = mimetype.split(';');
-      var name = fields[0];
-      if (response) {
-        const fileReaderInstance = new FileReader();
-        fileReaderInstance.readAsDataURL(response);
-        fileReaderInstance.onload = async () => {
-          var fileUrl = fileReaderInstance.result;
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          );
-          if (granted) {
-            try {
-              console.log(
-                RNFetchBlob.fs.dirs.MainBundleDir + '/' + 'supplier_app.zip',
-              );
-              let pdfLocation =
-                RNFetchBlob.fs.dirs.MainBundleDir + '/' + 'supplier_app.zip';
-              RNFetchBlob.fs.writeFile(
-                pdfLocation,
-                RNFetchBlob.base64.encode(fileUrl),
-                'base64',
-              );
-            } catch (e) {
-              console.log(e);
-            }
-          }
-        };
-      } else {
-        alert('error', JSON.stringify(response));
-      }
-    };
-
-    myrequest.open(
-      'POST',
-      `http://apigatewayqa.moglix.com/api/order/oms/bulkDownload`,
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
     );
-    myrequest.setRequestHeader('Content-Type', 'application/json');
-    myrequest.setRequestHeader('Authorization', token);
-    myrequest.send(JSON.stringify([...currbulkItems]));
+    if (granted) {
+      let folder =
+        RNFetchBlob.fs.dirs.SDCardDir +
+        '/Android/data/com.moglix.supplier/files/' +
+        new Date().getTime();
+      await RNFetchBlob.fs.mkdir(folder);
+      await Promise.all(
+        currbulkItems.map(async _ => {
+          let options = {
+            fileCache: true,
+            addAndroidDownloads: {
+              //Related to the Android only
+              useDownloadManager: true,
+              notification: true,
+              path:
+                folder +
+                '/' +
+                Math.floor(new Date().getTime() + new Date().getSeconds() / 2) +
+                '.pdf',
+              description: 'PDF',
+            },
+          };
+          config(options)
+            .fetch('GET', _.url, {'Cache-Control': 'no-store'})
+            .then(res => {
+              //Showing alert after successful downloading
+              console.log('res -> ', JSON.stringify(res));
+              return;
+            });
+        }),
+      );
+      Toast.show({
+        type: 'success',
+        text2: 'Files downloaded successfully!',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+      setBulkActionsModal(false);
+    }
+    // RNFetchBlob.fetch(
+    //   'POST',
+    //   'http://apigatewayqa.moglix.com/api/order/oms/bulkDownload',
+    //   {
+    //     'Content-Type': 'application/json',
+    //     Authorization: token,
+    //   },
+    //   JSON.stringify(currbulkItems),
+    // ).then(async res => {
+    //   const granted = await PermissionsAndroid.request(
+    //     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    //   );
+    //   if (granted) {
+    //     let pdfLocation =
+    //       RNFetchBlob.fs.dirs.SDCardDir +
+    //       '/Android/data/com.moglix.supplier/files/' +
+    //       `${new Date().getTime()}` +
+    //       `${currbulkItems.length == 1 ? '.pdf' : '.zip'}`;
+    //     RNFetchBlob.fs.writeFile(
+    //       pdfLocation,
+    //       RNFetchBlob.base64.encode(res.data),
+    //       'base64',
+    //     );
+    //   }
+    // });
+
+    // console.log('payload', [...currbulkItems]);
+    // var myrequest = new XMLHttpRequest();
+    // myrequest.onreadystatechange = e => {
+    //   if (myrequest.readyState !== 4) {
+    //     return;
+    //   }
+
+    //   if (myrequest.status === 200) {
+    //   } else {
+    //     console.warn('error');
+    //   }
+    // };
+    // myrequest.responseType = 'blob';
+    // myrequest.onload = e => {
+    //   var response = myrequest.response;
+    //   console.log('responseOnLoad', response);
+    //   var mimetype = myrequest.getResponseHeader('Content-Type');
+    //   var fields = mimetype.split(';');
+    //   var name = fields[0];
+    //   if (response) {
+    //     const fileReaderInstance = new FileReader();
+    //     fileReaderInstance.readAsDataURL(response);
+    //     fileReaderInstance.onload = async () => {
+    //       var fileUrl = fileReaderInstance.result;
+    //       console.log(fileUrl);
+    //       const granted = await PermissionsAndroid.request(
+    //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    //       );
+    //       if (granted) {
+    //         console.log(
+    //           currbulkItems.length == 1
+    //             ? fileUrl.replace('octet-stream', 'pdf')
+    //             : fileUrl,
+    //         );
+    //         let pdfLocation =
+    //           RNFetchBlob.fs.dirs.SDCardDir +
+    //           '/Android/data/com.moglix.supplier/files/' +
+    //           `${new Date().getTime()}` +
+    //           `${currbulkItems.length == 1 ? '.pdf' : '.zip'}`;
+    //         RNFetchBlob.fs.writeFile(
+    //           pdfLocation,
+    //           RNFetchBlob.base64.encode(
+    //             currbulkItems.length == 1
+    //               ? fileUrl.replace('octet-stream', 'pdf')
+    //               : fileUrl,
+    //           ),
+    //           'base64',
+    //         );
+    //       }
+    //     };
+    //   } else {
+    //     console.log(error.response.data);
+    //   }
+    // };
+
+    // myrequest.open(
+    //   'POST',
+    //   `http://apigatewayqa.moglix.com/api/order/oms/bulkDownload`,
+    // );
+    // myrequest.setRequestHeader('Content-Type', 'application/json');
+    // myrequest.setRequestHeader('Authorization', token);
+    // myrequest.send(JSON.stringify([...currbulkItems]));
   };
 
   return (
