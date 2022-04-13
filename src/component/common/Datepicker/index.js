@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Button,
@@ -16,7 +16,7 @@ import CustomeIcon from '../CustomeIcon';
 import styles from './styles';
 
 const CustomeDatePicker = props => {
-  const {onChange, onPress, display, label, title, isImp, value, activeFilter} =
+  const { onChange, onPress, display, label, title, isImp, value, activeFilter } =
     props;
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
@@ -60,11 +60,11 @@ const CustomeDatePicker = props => {
 
   return (
     <>
-    <View style={{flexDirection:"row"}}>
-    <Text style={styles.labelStyle}>{label}</Text>
-      {isImp ? <Text style={styles.starIcon}>*</Text> : null}
-    </View>
-     
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.labelStyle}>{label}</Text>
+        {isImp ? <Text style={styles.starIcon}>*</Text> : null}
+      </View>
+
       <View>
         <TouchableOpacity
           style={styles.inputContainerStyle}

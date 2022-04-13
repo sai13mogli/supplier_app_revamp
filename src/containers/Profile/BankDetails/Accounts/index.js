@@ -6,10 +6,13 @@ import Dimension from "../../../../Theme/Dimension";
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
 
-const ifscCodeRegex = '^[A-Za-z]{4}[a-zA-Z0-9]{7}$'
 
 const Accounts = (props) => {
   const bankDetails = useSelector(state => (state.profileReducer.bankDetails.data || {}));
+  const profileData = useSelector(state => state.profileReducer.data || {});
+  console.log('====================================');
+  console.log("ProcfilData===>", profileData?.verificationStatus);
+  console.log('====================================');
 
   return (
     <View style={{ flex: 1 }}>
@@ -17,19 +20,24 @@ const Accounts = (props) => {
         <View style={styles.pendingBox}>
           <View style={styles.pendingWrap}>
             <Text style={styles.Pendingtxt}>Bank Account Details Provided To Moglix</Text>
-            <TouchableOpacity onPress={() => {
-              props.navigation.navigate('EditBankAccount',
-                {
-                  editID: bankDetails.id,
-                })
-            }}>
-              <View style={{ flexDirection: "row", }}>
-                <CustomeIcon name={'edit-box'} size={Dimension.font16} color={colors.BrandColor} />
-                <Text style={styles.addnewtxt}>
-                  Edit
-                </Text>
-              </View>
-            </TouchableOpacity>
+            {
+              profileData?.verificationStatus < 10 ?
+                <TouchableOpacity
+                  onPress={() => {
+                    props.navigation.navigate('EditBankAccount',
+                      {
+                        editID: bankDetails.id,
+                      })
+                  }}>
+                  <View style={{ flexDirection: "row", }}>
+                    <CustomeIcon name={'edit-box'} size={Dimension.font16} color={colors.BrandColor} />
+                    <Text style={styles.addnewtxt}>
+                      Edit
+                    </Text>
+                  </View>
+                </TouchableOpacity> : null
+            }
+
 
           </View>
           <View style={{ flexDirection: 'row', paddingHorizontal: Dimension.padding15 }}>
