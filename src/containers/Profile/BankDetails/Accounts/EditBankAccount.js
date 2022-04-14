@@ -18,6 +18,7 @@ const EditBankAccount = props => {
 
     const bankDetails = useSelector(state => (state.profileReducer.bankDetails.data || {}));
     const bankDetailsStatus = useSelector(state => (state.profileReducer.bankDetails.status || STATE_STATUS.FETCHING));
+    const bankDetailsError = useSelector(state => state.profileReducer.bankDetails.error || '',);
     const [loading, setLoading] = useState(false);
     const [editID, setEditID] = useState(bankDetails.id || '');
     const [accountHolderName, setAccountHolderName] = useState(bankDetails.accountHolderName);
@@ -130,8 +131,17 @@ const EditBankAccount = props => {
         if (loading && bankDetailsStatus == STATE_STATUS.UPDATED) {
             setLoading(false);
             props.navigation.goBack();
+        } else if (loading && bankDetailsStatus == STATE_STATUS.FAILED_UPDATE) {
+            setLoading(false);
+            Toast.show({
+                type: 'error',
+                text2: bankDetailsError && bankDetailsError.state,
+                visibilityTime: 2000,
+                autoHide: true,
+            });
         }
     }, [bankDetailsStatus]);
+
 
     const onHolderNameBlur = () => {
         if (accountHolderName && accountHolderName.length) {
@@ -180,14 +190,6 @@ const EditBankAccount = props => {
 
 
     const onSubmit = () => {
-        console.log(
-            accountHolderName,
-            accountNumber,
-            ifscCode,
-            branch,
-            accountType,
-            bankName,
-        );
         if (
             accountHolderName &&
             accountHolderName.length &&

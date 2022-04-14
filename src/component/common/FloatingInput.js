@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {Input, Icon} from 'react-native-elements';
+import { Input, Icon } from 'react-native-elements';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 
@@ -51,7 +51,7 @@ const FloatingLabelInputField = props => {
       <Input
         {...props}
         label={() => (
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <Text style={styles.labelStyle}>{props.label}</Text>
             {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
           </View>
@@ -73,7 +73,7 @@ const FloatingLabelInputField = props => {
         errorStyle={styles.errorText}
         disabledInputStyle={styles.disabledInputStyle}
         errorMessage={props.showError ? props.errorMessage : null}
-        // errorStyle={}
+      // errorStyle={}
       />
       {/* ) */}
     </TouchableOpacity>

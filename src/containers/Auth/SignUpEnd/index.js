@@ -16,6 +16,8 @@ import CreatePasswordModal from '../../../component/common/CreatePasswordModal';
 import {useDispatch} from 'react-redux';
 import {setShipmentType} from '../../../redux/actions/orders';
 import {setMasterAction} from '../../../redux/actions/master';
+import Toast from 'react-native-toast-message';
+
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
 
@@ -130,6 +132,12 @@ const SignUpEndScreen = props => {
         setNextLoader(false);
         onLogin(data);
       } else {
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
         setNextLoader(false);
       }
     } else {
@@ -151,11 +159,11 @@ const SignUpEndScreen = props => {
   const onLogin = async data => {
     await AsyncStorage.setItem('token', data.data.token);
     await AsyncStorage.setItem('userId', JSON.stringify(data.data.userId));
-    await AsyncStorage.setItem(
-      'onlineShipmentMode',
-      data.data.onlineShipmentMode,
-    );
-    dispatch(setShipmentType(data.data.onlineShipmentMode));
+    // await AsyncStorage.setItem(
+    //   'onlineShipmentMode',
+    //   data.data.onlineShipmentMode,
+    // );
+    // dispatch(setShipmentType(data.data.onlineShipmentMode));
     dispatch(setMasterAction(props.route.params.setIsLoggedIn));
     setShowCreatePass(true);
   };

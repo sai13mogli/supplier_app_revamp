@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { OrderedMap } from 'immutable';
-import { StackActions, NavigationActions } from '@react-navigation/native';
 import RNFetchBlob from 'rn-fetch-blob';
 import { View, StyleSheet, Text, TouchableOpacity, Modal, ScrollView, FlatList } from "react-native";
 import DocumentPicker from 'react-native-document-picker';
@@ -489,8 +488,9 @@ const InvoiceEMSFormDetailScreen = props => {
             invoiceAmount.length &&
             ewayBillNumber &&
             ewayBillNumber.length &&
-            ewayDate && uploadInvoice
-            && uploadEwayBill
+            ewayDate
+            // && uploadInvoice
+            // && uploadEwayBill
         ) {
             try {
                 let token = `Bearer ${await AsyncStorage.getItem('token')}`;
@@ -513,7 +513,7 @@ const InvoiceEMSFormDetailScreen = props => {
                     "frieght": { charge: "", hsn: "", tax: "", totalAmount: null, remarks: "", countryCode: 356, igst: null, cgst: 0, sgst: 0, vatAmount: 0 },
                     "loading": { charge: "", hsn: "", tax: "", totalAmount: null, countryCode: 356, igst: null, cgst: 0, sgst: 0, vatAmount: 0 },
                     "misc": { charge: "", hsn: "", tax: "", totalAmount: null, countryCode: 356, igst: null, cgst: 0, sgst: 0, vatAmount: 0 },
-                    invoiceTotal: totalInvoiceAmount
+                    invoiceTotal: invoiceAmount
                 }
 
                 const response = await RNFetchBlob.fetch(
@@ -544,6 +544,7 @@ const InvoiceEMSFormDetailScreen = props => {
                     ],
                 );
                 const res = await response.json();
+                console.log("Ok===>", res);
                 if (res.success) {
                     Toast.show({
                         type: 'success',
@@ -558,6 +559,7 @@ const InvoiceEMSFormDetailScreen = props => {
 
                 } else if (res.success == false) {
                     setLoading(false);
+                    alert(res.message)
                     Toast.show({
                         type: 'success',
                         text2: res.message,
