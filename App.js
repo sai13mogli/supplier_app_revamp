@@ -14,6 +14,11 @@ import codePush from 'react-native-code-push';
 import Toast from 'react-native-toast-message';
 import Modal from 'react-native-modal';
 import * as RootNavigation from './src/generic/navigator';
+import {
+  requestUserPermission,
+  notificationListener,
+} from './src/utils/firebasepushnotification';
+import messaging from '@react-native-firebase/messaging';
 
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
@@ -40,6 +45,16 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    messaging()
+      .hasPermission()
+      .then(enabled => {
+        if (enabled) {
+          console.log('enabled hai!!');
+          requestUserPermission();
+          notificationListener();
+        }
+      });
+
     let urlListener = {};
     if (Platform.OS === 'android') {
       urlListener = Linking.addEventListener(
