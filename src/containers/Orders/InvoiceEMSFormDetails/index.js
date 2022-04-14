@@ -489,8 +489,8 @@ const InvoiceEMSFormDetailScreen = props => {
             ewayBillNumber &&
             ewayBillNumber.length &&
             ewayDate
-            // && uploadInvoice
-            // && uploadEwayBill
+            && uploadInvoice
+            && uploadEwayBill
         ) {
             try {
                 let token = `Bearer ${await AsyncStorage.getItem('token')}`;

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import {sendOtpForLogin, loginWithOtp} from '../services/auth';
-import {updateEmail, updatePhone} from '../services/profile';
+import { sendOtpForLogin, loginWithOtp } from '../services/auth';
+import { updateEmail, updatePhone } from '../services/profile';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import CustomButton from './common/Button';
@@ -23,7 +23,7 @@ const LoginOtpModal = props => {
   const [isVisible, setIsVisible] = useState(false);
   const [inputType, setInputType] = useState(true);
   const [timer, setTimer] = useState(0);
-  const {email} = props;
+  const { email } = props;
 
   useEffect(() => {
     onSendOtp();
@@ -52,9 +52,9 @@ const LoginOtpModal = props => {
       );
     } else {
       return (
-       // <TouchableOpacity onPress={onSendOtp} style={styles.setndOtpBtn}>
-          <Text style={styles.sendOtptext} onPress={onSendOtp}>Resend OTP</Text>
-       // </TouchableOpacity>
+        // <TouchableOpacity onPress={onSendOtp} style={styles.setndOtpBtn}>
+        <Text style={styles.sendOtptext} onPress={onSendOtp}>Resend OTP</Text>
+        // </TouchableOpacity>
       );
     }
   };
@@ -62,7 +62,7 @@ const LoginOtpModal = props => {
   const onSendOtp = async () => {
     if (!props.frombusinessDetails) {
       initializeCounter();
-      const {data} = await sendOtpForLogin(props.email);
+      const { data } = await sendOtpForLogin(props.email);
       if (!data.success) {
         setIsVisible(true);
 
@@ -86,7 +86,7 @@ const LoginOtpModal = props => {
           phone: props.email,
           otp: otp,
         };
-        const {data} = await updatePhone(payload);
+        const { data } = await updatePhone(payload);
         let suc = true;
         if (data.success) {
           setLoading(false);
@@ -103,7 +103,7 @@ const LoginOtpModal = props => {
           email: props.email,
           otp: otp,
         };
-        const {data} = await updateEmail(payload);
+        const { data } = await updateEmail(payload);
         let suc = true;
         if (data.success) {
           setLoading(false);
@@ -116,7 +116,7 @@ const LoginOtpModal = props => {
           alert('Error!!');
         }
       } else {
-        const {data} = await loginWithOtp({
+        const { data } = await loginWithOtp({
           username: props.email,
           password: '',
           otp,
@@ -146,18 +146,18 @@ const LoginOtpModal = props => {
       coverScreen={true}
       backdropOpacity={0.9}
       onRequestClose={props.onClose}
-      style={{padding: 0, margin: 0}}
+      style={{ padding: 0, margin: 0 }}
       overlayPointerEvents={'auto'}
       onTouchOutside={props.onClose}
       onDismiss={props.onClose}
       //deviceWidth={deviceWidth}
       onBackButtonPress={props.onClose}
       onBackdropPress={props.onClose}
-      //deviceHeight={Dimensions.get('window').height * 0.9}
-      // style={{
-      //   padding: 0,
-      //   margin: 0,
-      // }}
+    //deviceHeight={Dimensions.get('window').height * 0.9}
+    // style={{
+    //   padding: 0,
+    //   margin: 0,
+    // }}
     >
       <View style={styles.modalContainer}>
         <View style={styles.topbdr}></View>
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomRegularFont,
     marginBottom: Dimension.margin40,
     alignSelf: 'center',
-    marginHorizontal:Dimension.margin30
+    marginHorizontal: Dimension.margin30
   },
   ModalFormWrap: {
     marginBottom: Dimension.margin20,
@@ -289,10 +289,10 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin5,
   },
   setndOtpBtn: {
-   // backgroundColor: Colors.LightBrandColor,
-   // paddingVertical: Dimension.padding8,
-   // paddingHorizontal: Dimension.padding10,
-   // borderRadius: 2,
+    // backgroundColor: Colors.LightBrandColor,
+    // paddingVertical: Dimension.padding8,
+    // paddingHorizontal: Dimension.padding10,
+    // borderRadius: 2,
 
     //alignItems: 'center',
   },

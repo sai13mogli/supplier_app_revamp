@@ -1,7 +1,7 @@
-import {STATE_STATUS} from '../constants/index';
-import {NOTIFICATIONS_ACTIONS} from '../constants/notifications';
-import {PROFILE_ACTIONS} from '../constants/profile';
-import {OrderedMap} from 'immutable';
+import { STATE_STATUS } from '../constants/index';
+import { NOTIFICATIONS_ACTIONS } from '../constants/notifications';
+import { PROFILE_ACTIONS } from '../constants/profile';
+import { OrderedMap } from 'immutable';
 const initialState = {
   status: STATE_STATUS.UNFETCHED,
   data: [],
@@ -33,14 +33,12 @@ const getTime = (time, ind) => {
       } else if (currentDate.getDate() - date.getDate() == 1) {
         return `Yesterday`;
       } else {
-        return `${date.getDate()} ${
-          months[date.getMonth()]
-        } ${date.getFullYear()}`;
+        return `${date.getDate()} ${months[date.getMonth()]
+          } ${date.getFullYear()}`;
       }
     } else {
-      return `${date.getDate()} ${
-        months[date.getMonth()]
-      } ${date.getFullYear()}`;
+      return `${date.getDate()} ${months[date.getMonth()]
+        } ${date.getFullYear()}`;
     }
   } else {
     return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
@@ -48,7 +46,7 @@ const getTime = (time, ind) => {
 };
 
 export const notificationsReducer = (state = initialState, action) => {
-  const {type, payload, error} = action;
+  const { type, payload, error } = action;
   switch (type) {
     case NOTIFICATIONS_ACTIONS.FETCH_NOTIFICATIONS:
       if (payload.page == 0) {
