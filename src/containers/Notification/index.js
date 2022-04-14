@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlatList,
   Text,
@@ -9,8 +9,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import {useDispatch} from 'react-redux';
-import {useSelector} from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   deleteBulk,
   deleteNotification,
@@ -18,7 +18,7 @@ import {
   markBulkRead,
   markRead,
 } from '../../redux/actions/notifications';
-import {STATE_STATUS} from '../../redux/constants';
+import { STATE_STATUS } from '../../redux/constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../../component/common/Header';
 import CustomeIcon from '../../component/common/CustomeIcon';
@@ -42,13 +42,13 @@ const NotificationScreen = props => {
 
   const dispatch = useDispatch();
   const [isModalVisible, setModalVisible] = useState(false);
-  const [singleNotificationAction, setsingleNotificationAction] =
-    useState(false);
+  const [singleNotificationAction, setsingleNotificationAction] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState({});
 
   useEffect(() => {
     dispatch(fetchNotifications(0));
   }, []);
+
 
   useEffect(() => {
     if (!singleNotificationAction) {
@@ -89,23 +89,20 @@ const NotificationScreen = props => {
         } else if (currentDate.getDate() - date.getDate() == 1) {
           return `Yesterday`;
         } else {
-          return `${date.getDate()} ${
-            months[date.getMonth()]
-          } ${date.getFullYear()}`;
+          return `${date.getDate()} ${months[date.getMonth()]
+            } ${date.getFullYear()}`;
         }
       } else {
-        return `${date.getDate()} ${
-          months[date.getMonth()]
-        } ${date.getFullYear()}`;
+        return `${date.getDate()} ${months[date.getMonth()]
+          } ${date.getFullYear()}`;
       }
     } else {
-      return `${date.getDate()} ${
-        months[date.getMonth()]
-      } ${date.getFullYear()}`;
+      return `${date.getDate()} ${months[date.getMonth()]
+        } ${date.getFullYear()}`;
     }
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <View
         key={index}
@@ -114,7 +111,7 @@ const NotificationScreen = props => {
             ? styles.notificationWrap
             : styles.ActivenotificationWrap
         }>
-        <View style={{flexDirection: 'row', flex: 7, alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', flex: 7, alignItems: 'center' }}>
           <View
             style={item.readStatus ? styles.iconWrap : styles.ActioniconWrap}>
             <CustomeIcon
@@ -133,7 +130,7 @@ const NotificationScreen = props => {
           {/* <Text style={styles.titleCss}>{item.title}</Text> */}
           <Text style={styles.titleCss}>{item.content}</Text>
         </View>
-        <View style={{flex: 3, alignItems: 'flex-end'}}>
+        <View style={{ flex: 3, alignItems: 'flex-end' }}>
           {item.readStatus ? null : (
             <TouchableOpacity
               onPress={() => {
@@ -144,7 +141,7 @@ const NotificationScreen = props => {
                 name={'dots-horizontal'}
                 color={Colors.FontColor}
                 size={Dimension.font20}
-                //onPress={() => dispatch(markRead(item.id))}
+              //onPress={() => dispatch(markRead(item.id))}
               ></Icon>
             </TouchableOpacity>
           )}
@@ -168,7 +165,7 @@ const NotificationScreen = props => {
         onDismiss={() => setModalVisible(false)}
         overlayPointerEvents={'auto'}
         coverScreen={true}
-        style={{padding: 0, margin: 0}}
+        style={{ padding: 0, margin: 0 }}
         //deviceWidth={deviceWidth}
         hasBackdrop={true}>
         <View style={styles.modalContainer}>
@@ -226,7 +223,7 @@ const NotificationScreen = props => {
         onDismiss={() => setsingleNotificationAction(false)}
         overlayPointerEvents={'auto'}
         coverScreen={true}
-        style={{padding: 0, margin: 0}}
+        style={{ padding: 0, margin: 0 }}
         //deviceWidth={deviceWidth}
         hasBackdrop={true}>
         <View style={styles.modalContainer}>
@@ -299,13 +296,13 @@ const NotificationScreen = props => {
             notificationsStatus == STATE_STATUS.FETCHING ? (
               <View
                 style={{
-                    flex:1,
-                   //backgroundColor:"#ccc",
-                   justifyContent:"center",
-                   alignContent:"center",
-                   height:'100%',
-                   padding:Dimension.padding20
-                 }}>
+                  flex: 1,
+                  //backgroundColor:"#ccc",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  height: '100%',
+                  padding: Dimension.padding20
+                }}>
                 <ActivityIndicator
                   //style={{alignSelf: 'center'}}
                   color={Colors.BrandColor}
@@ -333,7 +330,7 @@ const NotificationScreen = props => {
               </View>
             ) : null
           }
-          renderSectionHeader={({section}) => (
+          renderSectionHeader={({ section }) => (
             <View style={styles.titleDateWrap}>
               <Text style={styles.TitleDateCss}>{section.title}</Text>
             </View>
@@ -341,7 +338,7 @@ const NotificationScreen = props => {
           sections={notifications}
           renderItem={renderItem}
           keyExtractor={(item, index) => `${index}-item`}
-          style={{marginHorizontal: Dimension.margin8}}
+          style={{ marginHorizontal: Dimension.margin8 }}
         />
       </View>
       {renderBulkActions()}

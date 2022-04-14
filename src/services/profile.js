@@ -125,6 +125,8 @@ export const updatePhone = async data =>
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
   });
+
+
 export const updateEmail = async data =>
   axios.post(`${BASE_URL}profile/updateEmail`, data, {
     headers: {
