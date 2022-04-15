@@ -13,10 +13,8 @@ const ForgotPasswordModal = props => {
 
     const [email, setEmail] = useState('');
     const [isVisible, setIsVisible] = useState(false);
-    const [inputType, setInputType] = useState(true);
     const [emalError, setEmalError] = useState(false);
     const [loading, setLoading] = useState(false);
-    const dispatch = useDispatch();
 
     const {
         onPress,
@@ -33,8 +31,7 @@ const ForgotPasswordModal = props => {
             let payload = {
                 email: email
             };
-            const { data, message } = await forgotPassword(payload);
-            let suc = true;
+            const { data } = await forgotPassword(payload);
             if (data.success) {
                 setLoading(false);
                 setIsVisible(true);
@@ -83,21 +80,23 @@ const ForgotPasswordModal = props => {
                             />
                         </TouchableOpacity>
                     </View>
-                    <FloatingInput
-                        value={email}
-                        errorMessage={'Invalid Email'}
-                        showError={emalError}
-                        onChangeText={text => setEmail(text)}
-                        onBlur={() =>
-                            !email || (email && email.length)
-                                ? setEmalError(true)
-                                : setEmalError(false)
-                        }
-                        label={'Email'}
-                        title={'Email'}
-                        isImp={true}
+                    <View style={styles.flotingWarp}>
+                        <FloatingInput
+                            value={email}
+                            errorMessage={'Type the Registered email id to retrieve the password reset link'}
+                            showError={emalError}
+                            onChangeText={text => setEmail(text)}
+                            onBlur={() =>
+                                !email || (email && email.length)
+                                    ? setEmalError(true)
+                                    : setEmalError(false)
+                            }
+                            label={'Email'}
+                            title={'Email'}
+                            isImp={true}
 
-                    />
+                        />
+                    </View>
                 </View>
                 <View style={styles.bottombtnWrap}>
                     <CustomButton
@@ -120,6 +119,10 @@ const ForgotPasswordModal = props => {
 const styles = StyleSheet.create({
     container: {
     },
+    flotingWarp: {
+        paddingHorizontal: Dimension.padding15,
+        marginBottom: Dimension.margin25,
+    },
     Email: {
         fontSize: Dimension.font16,
         color: colors.FontColor,
@@ -134,7 +137,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
         width: '100%',
         marginTop: 'auto',
-        paddingTop: Dimension.padding80,
+        paddingTop: Dimension.padding20,
     },
     bottombtnWrap: {
         padding: Dimension.padding15,
@@ -145,13 +148,14 @@ const styles = StyleSheet.create({
     ModalheadingWrapper: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: Dimension.padding15,
+        paddingHorizontal: Dimension.padding15,
+        marginBottom: Dimension.margin20
     },
     ModalHeading: {
         fontSize: Dimension.font16,
         color: colors.FontColor,
         fontFamily: Dimension.CustomSemiBoldFont,
-        marginBottom: Dimension.margin5,
+        marginBottom: Dimension.margin20,
     },
 
 });
