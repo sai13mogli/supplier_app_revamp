@@ -53,7 +53,8 @@ export const notificationsReducer = (state = initialState, action) => {
     case NOTIFICATIONS_ACTIONS.FETCH_NOTIFICATIONS:
       if (payload.page == 0) {
         return {
-          data: [],
+          // data: [],
+          ...state,
           page: payload.page,
           status: STATE_STATUS.FETCHING,
         };
