@@ -128,12 +128,6 @@ const UploadInvoiceOMSScreen = (props) => {
         }
     }, []);
 
-    useEffect(() => {
-        if (!invoiceDate) {
-            setInvoiceDateError(false)
-        }
-    })
-
     const onInvoiceNumberBlur = () => {
         if (invoiceNumber && invoiceNumber.length) {
             setInvoiceNumberError(false);
@@ -357,7 +351,7 @@ const UploadInvoiceOMSScreen = (props) => {
         if (
             invoiceNumber &&
             invoiceNumber.length &&
-            invoiceDate &&
+            invoiceDate && invoiceDate.length &&
             uploadInvoice && uploadInvoice.name &&
             supplierInvoiceTotal.length
             // && (supplierInvoiceTotal != poTotal)
@@ -431,6 +425,8 @@ const UploadInvoiceOMSScreen = (props) => {
         } else {
             onInvoiceNumberBlur();
             onSupplierInvoiceBlur();
+            onInvoiceDateBlur();
+            // alert("please select date")
         }
 
 

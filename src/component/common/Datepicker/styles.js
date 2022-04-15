@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import Dimension from "../../../Theme/Dimension";
 import colors from "../../../Theme/Colors"
 
@@ -15,15 +15,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding12,
     height: Dimension.height40,
     paddingBottom: 0,
-    flexDirection:"row",
-    justifyContent:"space-between",
-    marginBottom:Dimension.margin10,
-    backgroundColor:colors.WhiteColor,
-    textAlignVertical:'center',
-    paddingVertical:Dimension.padding12,
-    marginBottom:Dimension.margin20
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: Dimension.margin10,
+    backgroundColor: colors.WhiteColor,
+    textAlignVertical: 'center',
+    paddingVertical: Dimension.padding12,
+    marginBottom: Dimension.margin20
   },
-  placeholderCss:{
+  placeholderCss: {
     fontSize: Dimension.font14,
     color: colors.placeholderColor,
     fontFamily: Dimension.CustomMediumFont,
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     marginBottom: Dimension.margin5,
     fontWeight: 'normal',
   },
-  starIcon:{
+  starIcon: {
     fontSize: Dimension.font10,
     color: colors.BrandColor,
     fontFamily: Dimension.CustomMediumFont,
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font10,
     color: colors.BrandColor,
     fontFamily: Dimension.CustomMediumFont,
+    bottom: 20
   },
   disabledInputStyle: {
     fontSize: Dimension.font14,
@@ -66,6 +67,6 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     backgroundColor: colors.DisableStateColor,
   },
-  });
+});
 
-  export default styles;
+export default styles;
