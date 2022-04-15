@@ -64,7 +64,8 @@ const FloatingLabelInputField = props => {
         onFocus={handleFocus}
         onBlur={() => handleBlur(true)}
         containerStyle={styles.WrapperStyle}
-        inputContainerStyle={styles.inputContainerStyle}
+        inputContainerStyle={
+          props.IsMultiline ? styles.MultiinputContainerStyle : styles.inputContainerStyle}
         inputStyle={styles.inputStyle}
         labelStyle={styles.labelStyle}
         rightIconContainerStyle={
@@ -106,6 +107,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding12,
     height: Dimension.height40,
     paddingBottom: 0,
+  },
+  MultiinputContainerStyle:{
+    borderWidth: 1,
+    borderColor: colors.FontColor,
+    borderRadius: 4,
+    paddingHorizontal: Dimension.padding12,
+    height: Dimension.height90,
+    paddingBottom: 0, 
   },
   labelStyle: {
     fontSize: Dimension.font10,

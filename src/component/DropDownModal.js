@@ -73,7 +73,7 @@ const DropDownModal = props => {
               data={items}
               onCheck={getFilterValue}
               value={props.selectedValue}
-              formfilterModal={true}
+             // formfilterModal={true}
             />
           </View>
 
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
 
   MidWrapper: {
-    marginVertical: Dimension.margin20,
+    marginBottom: Dimension.margin20,
     paddingHorizontal: Dimension.padding15,
   },
 });
