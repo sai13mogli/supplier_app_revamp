@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { logout } from '../actions/profile';
+import {logout} from '../actions/profile';
+import {Alert} from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 export const logoutMiddleware = store => next => async action => {
   if (
@@ -8,7 +10,24 @@ export const logoutMiddleware = store => next => async action => {
     action.error.response &&
     action.error.response.status == 401
   ) {
-    // alert('Token has expired and user is unauthorized.');
+    console.log('set_token', store.getState().profileReducer.token);
+    Alert.alert(
+      `Title`,
+      `Token has expired and user is unauthorized.${
+        store.getState().profileReducer.token
+      }`,
+      [
+        {
+          text: 'Copy',
+          onPress: () =>
+            Clipboard.setString(store.getState().profileReducer.token),
+          style: 'cancel',
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('userId');
     store.getState().masterReducer.setIsLoggedIn();
@@ -16,5 +35,6 @@ export const logoutMiddleware = store => next => async action => {
       type: 'LOGOUT',
     });
   }
+
   return next(action);
 };

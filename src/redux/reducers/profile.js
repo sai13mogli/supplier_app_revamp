@@ -4,6 +4,7 @@ import {PROFILE_ACTIONS} from '../constants/profile';
 const initialState = {
   status: STATE_STATUS.UNFETCHED,
   data: [],
+  token: '',
   businessDetails: {
     status: STATE_STATUS.UNFETCHED,
     data: {},
@@ -344,6 +345,7 @@ export const profileReducer = (state = initialState, action) => {
       return {
         status: STATE_STATUS.UNFETCHED,
         data: [],
+        token: payload.token,
         businessDetails: {
           status: STATE_STATUS.UNFETCHED,
           data: {},
@@ -369,6 +371,11 @@ export const profileReducer = (state = initialState, action) => {
           data: {},
           error: null,
         },
+      };
+    case PROFILE_ACTIONS.SET_TOKEN:
+      return {
+        ...state,
+        token: payload.token,
       };
     default:
       return state;
