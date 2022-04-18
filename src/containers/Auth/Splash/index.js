@@ -15,8 +15,10 @@ const SplashScreen = props => {
     const token = await AsyncStorage.getItem('token');
     const onlineShipmentMode = await AsyncStorage.getItem('onlineShipmentMode');
     console.log(token, props);
-    if (token && onlineShipmentMode) {
-      dispatch(setShipmentType(onlineShipmentMode));
+    if (token || onlineShipmentMode) {
+      if (onlineShipmentMode) {
+        dispatch(setShipmentType(onlineShipmentMode));
+      }
       props.route.params.setIsLoggedIn(true);
     } else {
       props.navigation.navigate('Login');

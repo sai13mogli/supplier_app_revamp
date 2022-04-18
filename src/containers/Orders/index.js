@@ -81,6 +81,7 @@ const OrdersScreen = props => {
   const [selectAll, setSelectAll] = useState(false);
   const [bulkActionsModal, setBulkActionsModal] = useState(false);
   const [bulkDownloadItems, setBulkDownloadItems] = useState([]);
+  const [initLoader, setInitLoader] = useState(true);
 
   const OPTIONS = [
     {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
@@ -118,6 +119,17 @@ const OrdersScreen = props => {
       {label: 'Return Done', key: 'RETURN_DONE'},
     ],
   };
+
+  useEffect(() => {
+    if (
+      profileStatus == STATE_STATUS.FETCHED &&
+      profileData.verificationStatus < 10 &&
+      initLoader
+    ) {
+      props.navigation.push('Profile');
+      setInitLoader(false);
+    }
+  }, [profileStatus]);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -395,7 +407,7 @@ const OrdersScreen = props => {
       );
     } else if (
       profileStatus == STATE_STATUS.FETCHED &&
-      profileData.verificationStatus >= 10
+      profileData.verificationStatus == 10
     ) {
       return (
         <View style={styles.emptyWrap}>
