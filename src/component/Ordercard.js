@@ -579,13 +579,7 @@ const Ordercard = props => {
   };
 
   const renderCTAs = (cta, url, fromCTA, fromPartial, podcopy) => {
-<<<<<<< HEAD
     const ctaLength = actionCTA.filter(number => number % 2 !== 0);
-    // let odd = actionCTA.flatMap(o => o.length % 2 == 0);
-    console.log('actionCTA.length===>', ctaLength.length);
-=======
-    const ctaLength = actionCTA.filter((number) => number % 2 !== 0);
->>>>>>> 01aa93ccfc45e9820e4430d360473e05027bed46
     return (
       <>
         {cta == 'REJECT' ? (
