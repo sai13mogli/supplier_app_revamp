@@ -124,6 +124,7 @@ const NewTicket = props => {
       errorMessage: 'Please explain your query',
       onChangeText: text => setexplainQuery(text),
       showError: explainQueryError,
+      IsMultiline:true
     },
   });
 

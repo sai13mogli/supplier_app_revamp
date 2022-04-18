@@ -210,7 +210,7 @@ const TicketsList = props => {
           <Text style={styles.EmptyLightTxt}>
             Click on below button as soon as you face any problem
           </Text>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => props.navigation.navigate('NewTicket')}
             style={styles.NewTicktbtn}>
             <CustomeIcon
@@ -218,7 +218,7 @@ const TicketsList = props => {
               color={colors.WhiteColor}
               size={Dimension.font20}></CustomeIcon>
             <Text style={styles.NewTicktbtnTxt}>Raise new Ticket</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       );
     }

@@ -30,6 +30,7 @@ const deviceHeight = Dimensions.get('window').height;
 
 const OrdersFilterModal = props => {
   const dispatch = useDispatch();
+  const [tooltip1, settooltip1] = useState(false);
   const {
     ordersfiltersModal,
     setOrdersFiltersModal,
@@ -51,6 +52,7 @@ const OrdersFilterModal = props => {
     setPoFromDate,
     setPoToDate,
     resetFilters,
+    
   } = props;
 
   const poStatus = useSelector(state =>
@@ -90,7 +92,7 @@ const OrdersFilterModal = props => {
       });
 
       return (
-        <View style={{width: deviceWidth, height: deviceHeight}}>
+        <View style={{height: deviceHeight}}>
          
           <ScrollView>
             {poIds.map((_, i) => (
@@ -142,7 +144,7 @@ const OrdersFilterModal = props => {
       );
     } else {
       return (
-        <View style={{width: deviceWidth, height: deviceHeight}}>
+        <View style={{height: deviceHeight}}>
           <ScrollView>
             <>
               {orderfiltersData[activeFilter].map((_, i) => (
@@ -186,17 +188,25 @@ const OrdersFilterModal = props => {
                 </TouchableOpacity>
               ))}
               {activeFilter == 'deliveryType' ? (
-                <View style={{flexDirection:"row",marginHorizontal:Dimension.padding20,marginTop:Dimension.margin50,flex:1}}>
+                <>
+                <View style={{flexDirection:"row",marginHorizontal:Dimension.padding20,marginTop:Dimension.margin50,flex:1,}}>
                   <Text style={styles.deliveryTypeTxt}>
                   What is Delivery Type 
                   </Text>
-                 <View style={{flex:.5,alignItems:"flex-end"}}>
-                  <Tooltip
+                 <TouchableOpacity style={{flex:.5,alignItems:"flex-end"}} onPress={() => settooltip1(!tooltip1)}>
+                 <Image
+            
+            source={require('../assets/images/tooltipIcon.png')}
+            style={{width:24,height:24}} ></Image>
+            </TouchableOpacity>
+            
+                  {/* <Tooltip
             backgroundColor={"#000"}
             popover={
               <Text>Tooltip info goes here too. Find tooltip everywhere</Text>
             }
-            containerStyle={{ width: 200, height: 60 }}
+            containerStyle={{width:"80%",}}
+            withOverlay={false}
           >
             
             <Image
@@ -204,10 +214,26 @@ const OrdersFilterModal = props => {
             source={require('../assets/images/tooltipIcon.png')}
             style={{width:24,height:24}}
           />
-          </Tooltip>
-          </View>
+          </Tooltip> */}
+          
                 </View>
-                
+                {tooltip1 && (
+                <View style={styles.tooltipWrap}>
+                <View style={styles.arrow}></View>
+                <View>
+                <Text style={styles.tooltipTxt}>
+                <Text style={styles.tooltipBoldTxt}>Dropship-</Text> Products are delivered from supplier to customer location directly
+                  </Text>
+                  <Text style={styles.tooltipTxt}>
+                  <Text style={styles.tooltipBoldTxt}>Oneship-</Text> Products are picked by Moglix runners from supplier
+                  </Text>
+                  <Text style={styles.tooltipTxt}>
+                  <Text style={styles.tooltipBoldTxt}>Door Delivery-</Text> Products are delivered by supplier to Moglix warehouse
+                  </Text>
+                </View>
+                </View>
+              )}
+            </>
               ) : null}
             </>
           </ScrollView>
@@ -454,6 +480,7 @@ paddingHorizontal:Dimension.padding15
     color: Colors.FontColor,
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomMediumFont,
+    flex:.5
     
   }, 
   acceptCtabtn: {
@@ -498,6 +525,38 @@ paddingHorizontal:Dimension.padding15
     color: Colors.FontColor,
     fontSize: Dimension.font16,
   },
+  tooltipWrap:{
+    backgroundColor:"#000",
+    marginTop:10,
+    position:"relative",
+    borderRadius:4,
+    marginHorizontal:Dimension.margin15,
+    padding:15
+  },
+  arrow:{
+    borderLeftColor:"#fff",
+    borderBottomColor:"#000",
+    borderRightColor:'#fff',
+    borderLeftWidth:5,
+    borderRightWidth:5,
+    borderBottomWidth:8,
+    width:0,
+    height:0,
+    position:"absolute",
+    right:15,
+    top:-8
+  },
+  tooltipTxt:{
+    fontFamily:Dimension.CustomRegularFont,
+    color:Colors.WhiteColor,
+    fontSize:Dimension.font10,
+    marginBottom:Dimension.margin8
+  },
+  tooltipBoldTxt:{
+    fontFamily:Dimension.CustomMediumFont,
+  }
+  
+
 });
 
 export default OrdersFilterModal;
