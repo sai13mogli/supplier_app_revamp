@@ -1,5 +1,5 @@
-import { OrderedMap } from 'immutable';
-import React, { useEffect, useState } from 'react';
+import {OrderedMap} from 'immutable';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,11 @@ import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
-import { loginWithPass, loginWithGoogle } from '../../../services/auth';
+import {
+  loginWithPass,
+  loginWithGoogle,
+  sendOtpForLogin,
+} from '../../../services/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginOtpModal from '../../../component/LoginOtpModal';
 import CustomeIcon from '../../../component/common/CustomeIcon';
@@ -23,9 +27,10 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import { useDispatch } from 'react-redux';
-import { setShipmentType } from '../../../redux/actions/orders';
-import { setMasterAction } from '../../../redux/actions/master';
+import Toast from 'react-native-toast-message';
+import {useDispatch} from 'react-redux';
+import {setShipmentType} from '../../../redux/actions/orders';
+import {setMasterAction} from '../../../redux/actions/master';
 import ForgotPasswordModal from '../../../component/ForgotPasswordModal';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -107,7 +112,6 @@ const LoginScreen = props => {
     props.route.params.setIsLoggedIn(true);
   };
 
-
   const onContinue = async => {
     setShowForgotPass(false);
   };
@@ -144,7 +148,7 @@ const LoginScreen = props => {
       try {
         setLoading(true);
         setError(false);
-        const { data } = await loginWithPass({
+        const {data} = await loginWithPass({
           username: email,
           password: password,
           otp: '',
@@ -168,17 +172,24 @@ const LoginScreen = props => {
     }
   };
 
-  const onSendOtp = () => {
+  const onSendOtp = async () => {
     if (
       email &&
       email.length &&
       (email.match(phoneRegex) || email.length == 10)
     ) {
-      setOtpModal(true);
+      const {data} = await sendOtpForLogin(email);
+      if (!data.success) {
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      } else {
+        setOtpModal(true);
+      }
     }
-    // } else {
-    //   onEmailBlur();
-    // }
   };
 
   const loginViaOtp = () => {
@@ -196,7 +207,7 @@ const LoginScreen = props => {
       source: Platform.OS === 'ios' ? 2 : 1,
       deviceToken: '',
     };
-    const { data } = await loginWithGoogle(request);
+    const {data} = await loginWithGoogle(request);
     if (data.success) {
       onLogin(data);
     } else {
@@ -208,7 +219,7 @@ const LoginScreen = props => {
 
   const googleSignIn = async () => {
     try {
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
       const userInfo = await GoogleSignin.signIn();
       logInWithGoogleToServer(userInfo.idToken, userInfo.user.email);
     } catch (error) {
@@ -227,7 +238,7 @@ const LoginScreen = props => {
   return (
     // <View style={{backgroundColor:"#fff",flex:1}}>
     //   <View style={{height:"30%",justifyContent:"center",}}>
-    <View style={{ backgroundColor: '#fff', flex: 1 }}>
+    <View style={{backgroundColor: '#fff', flex: 1}}>
       <StatusBar
         translucent
         backgroundColor="transparent"
@@ -239,7 +250,7 @@ const LoginScreen = props => {
       >
         <Image
           source={require('../../../assets/images/logo.png')}
-          style={{ height: 44, width: 180, marginTop: 80, alignSelf: 'center' }}
+          style={{height: 44, width: 180, marginTop: 80, alignSelf: 'center'}}
         />
       </ImageBackground>
 
@@ -253,11 +264,11 @@ const LoginScreen = props => {
         {error ? <Text style={styles.errorTxt}>{error}</Text> : null}
         <TouchableOpacity
           onPress={() => setShowForgotPass(true)}
-          style={{ justifyContent: 'flex-end' }}>
+          style={{justifyContent: 'flex-end'}}>
           <Text style={styles.fotgotTxt}>Forgot Password</Text>
         </TouchableOpacity>
         <View style={styles.buttonWrap}>
-          <View style={{ flex: 1, marginRight: Dimension.margin15 }}>
+          <View style={{flex: 1, marginRight: Dimension.margin15}}>
             <CustomButton
               title={'LOGIN VIA OTP'}
               buttonColor={Colors.FontColor}
@@ -268,7 +279,7 @@ const LoginScreen = props => {
               TextFontSize={Dimension.font16}
             />
           </View>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <CustomButton
               loading={loading}
               disabled={loading}
@@ -295,22 +306,26 @@ const LoginScreen = props => {
             email={email}
           />
         )}
-        {showForgotPass && <ForgotPasswordModal
-          visible={showForgotPass}
-          transparent={true}
-          email={email}
-          onContinue={onContinue}
-          onClose={() => setShowForgotPass(false)}
-          onPress={() => { setShowForgotPass(!showForgotPass) }}
-        />}
+        {showForgotPass && (
+          <ForgotPasswordModal
+            visible={showForgotPass}
+            transparent={true}
+            email={email}
+            onContinue={onContinue}
+            onClose={() => setShowForgotPass(false)}
+            onPress={() => {
+              setShowForgotPass(!showForgotPass);
+            }}
+          />
+        )}
         <GoogleSigninButton
-          style={{ width: '100%', height: Dimension.height45, elevation: 0 }}
+          style={{width: '100%', height: Dimension.height45, elevation: 0}}
           size={GoogleSigninButton.Size.Wide}
           color={GoogleSigninButton.Color.Dark}
           onPress={googleSignIn}
           disabled={loading}
         />
-        <View style={{ marginTop: 30 }}>
+        <View style={{marginTop: 30}}>
           <CustomButton
             title={'Not a Moglix Supplier? SignUp now'}
             buttonColor={Colors.LightBrandColor}

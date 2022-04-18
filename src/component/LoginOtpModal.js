@@ -14,6 +14,7 @@ import Dimension from '../Theme/Dimension';
 import CustomButton from './common/Button';
 import CustomeIcon from './common/CustomeIcon';
 import FloatingInput from './common/FloatingInput';
+import Toast from 'react-native-toast-message';
 
 const LoginOtpModal = props => {
   let interval = {};
@@ -26,7 +27,12 @@ const LoginOtpModal = props => {
   const { email } = props;
 
   useEffect(() => {
-    onSendOtp();
+    if (props.frombusinessDetails) {
+      onSendOtp();
+    } else {
+      setIsVisible(true);
+      initializeCounter();
+    }
   }, []);
 
   const initializeCounter = () => {
@@ -53,7 +59,9 @@ const LoginOtpModal = props => {
     } else {
       return (
         // <TouchableOpacity onPress={onSendOtp} style={styles.setndOtpBtn}>
-        <Text style={styles.sendOtptext} onPress={onSendOtp}>Resend OTP</Text>
+        <Text style={styles.sendOtptext} onPress={onSendOtp}>
+          Resend OTP
+        </Text>
         // </TouchableOpacity>
       );
     }
@@ -64,7 +72,13 @@ const LoginOtpModal = props => {
       initializeCounter();
       const { data } = await sendOtpForLogin(props.email);
       if (!data.success) {
-        setIsVisible(true);
+        setIsVisible(false);
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
 
         // alert(data.message);
         // props.onClose();
@@ -96,7 +110,12 @@ const LoginOtpModal = props => {
         } else {
           setLoading(false);
           setIsVisible(false);
-          alert('Error!!');
+          Toast.show({
+            type: 'error',
+            text2: data.message,
+            visibilityTime: 2000,
+            autoHide: true,
+          });
         }
       } else if (props.frombusinessDetails && props.type == 5) {
         let payload = {
@@ -113,7 +132,12 @@ const LoginOtpModal = props => {
         } else {
           setLoading(false);
           setIsVisible(false);
-          alert('Error!!');
+          Toast.show({
+            type: 'error',
+            text2: data.message,
+            visibilityTime: 2000,
+            autoHide: true,
+          });
         }
       } else {
         const { data } = await loginWithOtp({
@@ -260,7 +284,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomRegularFont,
     marginBottom: Dimension.margin40,
     alignSelf: 'center',
-    marginHorizontal: Dimension.margin30
+    marginHorizontal: Dimension.margin30,
   },
   ModalFormWrap: {
     marginBottom: Dimension.margin20,
@@ -293,7 +317,6 @@ const styles = StyleSheet.create({
     // paddingVertical: Dimension.padding8,
     // paddingHorizontal: Dimension.padding10,
     // borderRadius: 2,
-
     //alignItems: 'center',
   },
   sendOtptext: {

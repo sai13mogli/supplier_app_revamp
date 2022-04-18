@@ -84,12 +84,12 @@ const styles = StyleSheet.create({
   },
 
   SearchInputCss: {
-    fontSize: Dimension.font12,
+    fontSize: Dimension.font10,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
     height: Dimension.margin35,
-    width:"85%",
-    flex: 8,
+    // width:"85%",
+    // flex: 8,
   },
   seacrhIcon: {
     position: 'absolute',

@@ -16,11 +16,11 @@ const PickerDropDown = props => {
     disabled,
   } = props;
 
+  console.log('selectedValue', value);
+
   return (
     <>
-      <Text style={styles.labelStyle}>
-        {title}
-      </Text>
+      <Text style={styles.labelStyle}>{title}</Text>
       <View style={styles.pickerWrapper}>
         <Picker
           selectedValue={value}
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     borderColor: colors.FontColor,
     padding: 1,
     position: 'relative',
-    marginBottom:Dimension.margin15
+    marginBottom: Dimension.margin15,
   },
   pickerStyle: {
     backgroundColor: colors.WhiteColor,
@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontFamily: Dimension.CustomRegularFont,
     //height:40
-
   },
   iconWrapper: {
     position: 'absolute',

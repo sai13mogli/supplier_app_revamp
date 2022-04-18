@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Modal from 'react-native-modal';
 import {filtersTypeData, filtersData} from '../redux/constants/support';
 import {
@@ -21,7 +21,7 @@ import CustomeIcon from './common/CustomeIcon';
 const deviceWidth = Dimensions.get('window').width;
 
 const FilterModal = props => {
-  const [sliderIndex, setSliderIndex] = useState(0);
+  const [sliderIndex, setSliderIndex] = useState(props.value || 0);
   const [currentSlider, setCurrentSlider] = useState(0);
 
   const getFilterValue = value => {
@@ -60,11 +60,13 @@ const FilterModal = props => {
             }}>
             <CustomSlider
               values={[sliderIndex]}
-              min={1}
+              min={0}
               max={4}
               LRpadding={0}
               callback={singleSliderValueCallback}
               single={true}
+              value={props.value}
+              setValue={props.setValue}
             />
           </View>
         </View>
@@ -74,29 +76,28 @@ const FilterModal = props => {
 
   const singleSliderValueCallback = values => {
     let days = 180;
+    console.log('values hai dost', values, values[0]);
     if (values[0] == 0) {
       setSliderIndex(0);
       days = 180;
-    }
-    if (values[0] == 1) {
+    } else if (values[0] == 1) {
       setSliderIndex(1);
       days = 90;
-    }
-    if (values[0] == 2) {
-      setSliderIndex(3);
+    } else if (values[0] == 2) {
+      setSliderIndex(2);
       days = 30;
-    }
-    if (values[0] == 3) {
+    } else if (values[0] == 3) {
       setSliderIndex(3);
       days = 15;
-    }
-    if (values[0] == 4) {
+    } else if (values[0] == 4) {
       setSliderIndex(4);
       days = 7;
     }
     setCurrentSlider(days);
     props.setTimeFilter(days);
   };
+
+  console.log('FilterModalProps', props);
 
   // const resetFilters = () => {
   //   setTypeFilter(0);
@@ -123,7 +124,7 @@ const FilterModal = props => {
       <View style={styles.modalContainer}>
         <View style={styles.topbdr}></View>
         <View style={styles.ModalheadingWrapper}>
-          <Text style={styles.ModalHeading}>filter</Text>
+          <Text style={styles.ModalHeading}>Filter</Text>
           <CustomeIcon
             name={'close'}
             size={Dimension.font22}
@@ -160,16 +161,12 @@ const FilterModal = props => {
           <TouchableOpacity
             onPress={() => props.resetFilters()}
             style={styles.cancelBtn}>
-            <Text style={styles.canceltxt}>
-              RESET
-            </Text>
+            <Text style={styles.canceltxt}>RESET</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => props.applyFilters()}
             style={styles.rejectCtabtn}>
-            <Text style={styles.rejectCtaTxt}>
-              APPLY
-            </Text>
+            <Text style={styles.rejectCtaTxt}>APPLY</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -261,10 +258,10 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.grayShade2,
     padding: Dimension.padding15,
     backgroundColor: Colors.WhiteColor,
-   // position: 'absolute',
+    // position: 'absolute',
     width: '100%',
     bottom: 0,
-   flexDirection: 'row',
+    flexDirection: 'row',
   },
   rejectCtabtn: {
     flex: 5,
@@ -273,7 +270,6 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding12,
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   rejectCtaTxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
@@ -287,7 +283,6 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding12,
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   canceltxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
