@@ -193,12 +193,12 @@ const OrdersFilterModal = props => {
                   <Text style={styles.deliveryTypeTxt}>
                   What is Delivery Type 
                   </Text>
-                 <View style={{flex:.5,alignItems:"flex-end"}}>
+                 <TouchableOpacity style={{flex:.5,alignItems:"flex-end"}} onPress={() => settooltip1(!tooltip1)}>
                  <Image
             
             source={require('../assets/images/tooltipIcon.png')}
-            style={{width:24,height:24}} onPress={() => settooltip1(!tooltip1)}></Image>
-            </View>
+            style={{width:24,height:24}} ></Image>
+            </TouchableOpacity>
             
                   {/* <Tooltip
             backgroundColor={"#000"}

@@ -75,19 +75,21 @@ const styles = StyleSheet.create({
     position: 'relative',
     backgroundColor: '#fff',
     flex: 8,
+   borderRadius: 4,
+    borderWidth: 1,
+    borderColor: Colors.BoxBorderColor,
+    paddingHorizontal: Dimension.padding10,
+    //paddingVertical: Dimension.padding8,
+    height: Dimension.margin35,
   },
 
   SearchInputCss: {
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: Colors.BoxBorderColor,
-    paddingHorizontal: Dimension.padding10,
-    paddingVertical: Dimension.padding8,
-    borderRadius: 4,
     height: Dimension.margin35,
+    width:"85%",
+    flex: 8,
   },
   seacrhIcon: {
     position: 'absolute',
@@ -102,8 +104,8 @@ const styles = StyleSheet.create({
     //flex:1
   },
   filterBtnWrap: {
-    flex: 2,
-    marginLeft: Dimension.margin5,
+    flex: 1.8,
+    marginLeft: Dimension.margin10,
     alignItems: 'center',
   },
   filterBtn: {
@@ -113,13 +115,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColo: Colors.grayShade13,
     paddingHorizontal: Dimension.padding10,
-    paddingVertical: Dimension.padding10,
+    paddingVertical: Dimension.padding8,
     height: Dimension.height35,
   },
   filterIcon: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
     marginLeft: Dimension.margin5,
+    marginTop:Dimension.margin5
   },
   filtertxt: {
     fontSize: Dimension.font12,

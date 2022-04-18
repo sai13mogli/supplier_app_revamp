@@ -661,7 +661,11 @@ const OrdersScreen = props => {
                     }
                   }}
                   blurOnSubmit={true}
-                  style={styles.SearchInputCss}></TextInput>
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={styles.SearchInputCss}>
+                  
+                  </TextInput>
                 <CustomeIcon
                   name={'search'}
                   style={styles.seacrhIcon}></CustomeIcon>
