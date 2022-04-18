@@ -36,7 +36,6 @@ const CustomeDatePicker = props => {
   const [text, setText] = useState(value || 'Select Date');
 
   const onchangeDate = (event, selectedDate) => {
-    console.log('event', event);
     const currentDate = selectedDate;
     setShow(Platform.OS === 'ios');
     if (event.type != 'dismissed') {
@@ -72,6 +71,7 @@ const CustomeDatePicker = props => {
     setShow(true);
     setMode(currentMode);
   };
+
   const handleFocus = () => {
     setIsFocused(true);
     if (props.handleFocus) {

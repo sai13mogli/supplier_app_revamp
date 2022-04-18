@@ -579,6 +579,9 @@ const Ordercard = props => {
   };
 
   const renderCTAs = (cta, url, fromCTA, fromPartial, podcopy) => {
+    const ctaLength = actionCTA.filter((number) => number % 2 !== 0);
+    // let odd = actionCTA.flatMap(o => o.length % 2 == 0);
+    console.log("actionCTA.length===>", ctaLength.length);
     return (
       <>
         {cta == 'REJECT' ? (
@@ -619,8 +622,11 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                height: Dimension.height33,
+                flex: ctaLength.length ? 4 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD INVOICE</Text>
@@ -635,8 +641,12 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                height: Dimension.height34,
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%'
+
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
@@ -674,7 +684,10 @@ const Ordercard = props => {
                 itemRef,
               })
             }
-            style={styles.DownloadPoBtn}>
+            style={[styles.DownloadPoBtn, {
+              flex: ctaLength.length ? 5 : 1,
+              flexBasis: ctaLength.length ? '45%' : '100%',
+            }]}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
             {poLoader && (
               <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
@@ -687,8 +700,12 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                height: Dimension.height33,
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%'
+
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
@@ -706,8 +723,10 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%'
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD POD COPY</Text>
@@ -722,8 +741,10 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%'
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD DEBIT NOTE</Text>
@@ -749,8 +770,11 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%'
+
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
@@ -803,8 +827,11 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%'
+
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>VIEW LSP DETAILS</Text>
@@ -848,8 +875,10 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}
             onPress={() => setAddViewModal(true)}>
@@ -860,8 +889,11 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%',
+
               },
             ]}
             onPress={() => setSplitQuantityModal(true)}>
@@ -905,19 +937,24 @@ const Ordercard = props => {
           </>
         ) : cta == 'MAP_INVOICE_PENDING' ? (
           <>
-            <TouchableOpacity
-              disabled={true}
-              style={[
-                styles.disabledbtn,
-                {
-                  flex: actionCTA.length > 1 ? 5 : 1,
-                  flexBasis: actionCTA.length > 1 ? '48%' : '100%',
-                },
-              ]}>
-              <Text style={styles.disabledBtntxt}>Upload Invoice</Text>
-            </TouchableOpacity>
-            <Text style={styles.shipmentLbelTxt}>Invoice Approval pending</Text>
+            < View style={{ flexDirection: 'column', flex: 35, }}>
+              <TouchableOpacity
+                disabled={true}
+                style={[
+                  styles.disabledbtn,
+                  {
+                    // flex: actionCTA.length > 1 ? 5 : 1,
+                    // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                    flex: ctaLength.length ? 0 : 1,
+                    flexBasis: ctaLength.length ? '45%' : '100%'
+                  },
+                ]}>
+                <Text style={styles.disabledBtntxt}>Upload Invoice</Text>
+              </TouchableOpacity>
+              <Text style={styles.shipmentLbelTxt}>Invoice Approval pending</Text>
+            </View>
           </>
+
         ) : cta == 'PACK_ORDER_DISABLED' ? (
           <>
             <TouchableOpacity
@@ -954,20 +991,25 @@ const Ordercard = props => {
           </>
         ) : cta == 'CREATE_MANIFEST_DISABLED' ? (
           <>
-            <TouchableOpacity
-              disabled={true}
-              style={[
-                styles.disabledbtn,
-                {
-                  flex: actionCTA.length > 1 ? 5 : 1,
-                  flexBasis: actionCTA.length > 1 ? '48%' : '100%',
-                },
-              ]}>
-              <Text style={styles.disabledBtntxt}>Create Manifest</Text>
-            </TouchableOpacity>
-            <Text style={styles.shipmentLbelTxt}>
-              Shipment lable not created
-            </Text>
+            <View style={{ flexDirection: 'column', flex: 0, flexBasis: '50%' }}>
+              <TouchableOpacity
+                disabled={true}
+                style={[
+                  styles.disabledbtn,
+                  {
+                    // flex: actionCTA.length > 1 ? 5 : 1,
+                    // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                    flex: ctaLength.length ? 5 : 1,
+                    flexBasis: ctaLength.length ? '45%' : '100%'
+                  },
+                ]}>
+                <Text style={styles.disabledBtntxt}>Create Manifest</Text>
+              </TouchableOpacity>
+              <Text numberOfLines={2} style={styles.shipmentLbelTxt}>
+                Shipment lable not created
+              </Text>
+            </View>
+
           </>
         ) : cta == 'CREATE_MANIFEST' ? (
           <TouchableOpacity
@@ -975,8 +1017,10 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flex: ctaLength.length ? 0 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%'
               },
             ]}
             disabled={manifestLoader}>
@@ -991,8 +1035,10 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '49%' : '100%'
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
               },
             ]}
             disabled={manifestLoader}>
@@ -1089,10 +1135,10 @@ const Ordercard = props => {
               onPress={() =>
                 selectedTab == 'SHIPMENT'
                   ? selectItemData({
-                      itemId,
-                      shipmentUrl,
-                      invoiceUrl: podUrl || invoiceUrl,
-                    })
+                    itemId,
+                    shipmentUrl,
+                    invoiceUrl: podUrl || invoiceUrl,
+                  })
                   : selectItemId(itemId)
               }
               style={{
