@@ -206,7 +206,7 @@ const CategoryBrandScreen = props => {
     },
     brand_url: {
       title: 'Brand URL (If Applicable)',
-      isImp: isDeletedKey == '2' ? true : false,
+      isImp: false,
       label: 'Brand URL (If Applicable)',
       placeholder: 'http://ABCD.com',
       value: brandUrl,
@@ -466,21 +466,13 @@ const CategoryBrandScreen = props => {
       natureOfBusiness &&
       expiryDate &&
       expiryDate.length &&
-      brandUrl &&
-      brandUrl.length &&
       brandCertificate &&
       brandCertificate.value
     );
   };
 
   const checkValidationReqBrand = () => {
-    return (
-      brandName &&
-      brandName.length &&
-      natureOfBusiness &&
-      brandUrl &&
-      brandUrl.length
-    );
+    return brandName && brandName.length && natureOfBusiness;
   };
 
   const getButtonColor = () => {
@@ -524,9 +516,7 @@ const CategoryBrandScreen = props => {
       brandName.length &&
       natureOfBusiness &&
       brandCertificate &&
-      brandCertificate.value &&
-      brandUrl &&
-      brandUrl.length
+      brandCertificate.value
     );
   };
 
