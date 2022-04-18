@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
   },
   inputStyle: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
 

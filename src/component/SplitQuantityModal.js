@@ -220,6 +220,7 @@ const SplitQuantityModal = props => {
           onChangeText={text => setSplitQuantity(text)}
           //   errorMessage={serialNumberError}
           placeholder={'Type the number you want to split the quantity in'}
+          
           //   showError={serialNumberError}
           //   onBlur={() => onPasswordBlur()}
           //   secureTextEntry={isSecure}

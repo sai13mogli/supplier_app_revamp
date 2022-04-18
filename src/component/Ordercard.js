@@ -620,7 +620,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD INVOICE</Text>
@@ -636,7 +636,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
@@ -688,7 +688,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
@@ -707,7 +707,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD POD COPY</Text>
@@ -723,7 +723,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD DEBIT NOTE</Text>
@@ -750,7 +750,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
@@ -766,7 +766,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>MARK OUT FOR DELIVERY</Text>
@@ -785,7 +785,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>VIEW SPLIT HISTORY</Text>
@@ -804,7 +804,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>VIEW LSP DETAILS</Text>
@@ -823,7 +823,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>PACK NOW</Text>
@@ -837,7 +837,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}
             onPress={() => setAddViewModal(true)}>
@@ -849,7 +849,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}
             onPress={() => setAddViewModal(true)}>
@@ -861,7 +861,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}
             onPress={() => setSplitQuantityModal(true)}>
@@ -875,7 +875,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>PROOF OF DELIVERY</Text>
@@ -894,7 +894,7 @@ const Ordercard = props => {
                 styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
-                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                  flexBasis: actionCTA.length > 1 ? '48%' : '100%',
                 },
               ]}>
               <Text style={styles.disabledBtntxt}>Map PO to Invoice</Text>
@@ -911,7 +911,7 @@ const Ordercard = props => {
                 styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
-                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                  flexBasis: actionCTA.length > 1 ? '48%' : '100%',
                 },
               ]}>
               <Text style={styles.disabledBtntxt}>Upload Invoice</Text>
@@ -926,7 +926,7 @@ const Ordercard = props => {
                 styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
-                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                  flexBasis: actionCTA.length > 1 ? '48%' : '100%',
                 },
               ]}>
               <Text style={styles.disabledBtntxt}>Pack Order</Text>
@@ -943,7 +943,7 @@ const Ordercard = props => {
                 styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
-                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                  flexBasis: actionCTA.length > 1 ? '48%' : '100%',
                 },
               ]}>
               <Text style={styles.disabledBtntxt}>Pack Order Invoice</Text>
@@ -960,7 +960,7 @@ const Ordercard = props => {
                 styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
-                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                  flexBasis: actionCTA.length > 1 ? '48%' : '100%',
                 },
               ]}>
               <Text style={styles.disabledBtntxt}>Create Manifest</Text>
@@ -976,7 +976,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}
             disabled={manifestLoader}>
@@ -992,7 +992,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}
             disabled={manifestLoader}>
@@ -1130,6 +1130,7 @@ const Ordercard = props => {
               ]}>
               {msn}
             </Text>
+            <View style={styles.productnameWrap}>
             {!fromModal ? (
               <Text
                 onTextLayout={onTextLayout}
@@ -1145,6 +1146,7 @@ const Ordercard = props => {
                 {showMoreTxt ? 'Read less' : 'Read more'}
               </Text>
             ) : null}
+            </View>
             {fromModal ? (
               <View
                 style={{
@@ -1436,12 +1438,14 @@ const styles = StyleSheet.create({
     // color: Colors.BrandColor,
     fontFamily: Dimension.CustomSemiBoldFont,
   },
+  productnameWrap:{
+    marginBottom: Dimension.margin10,
+  },
   productName: {
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-    marginBottom: Dimension.margin10,
-    marginTop: Dimension.margin5,
+   marginTop: Dimension.margin5,
   },
   readMoretxt: {
     fontSize: Dimension.font12,
@@ -1581,13 +1585,13 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
   },
   DownloadPoBtn: {
-    flex: 1,
+    flex: 5,
     backgroundColor: Colors.WhiteColor,
     borderRadius: 4,
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
-    flexBasis: '50%',
+    flexBasis: '48%',
     marginTop: Dimension.margin10,
     borderColor: Colors.grayShade15,
     borderWidth: 1,
@@ -1595,13 +1599,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   disabledbtn: {
-    flex: 1,
+    flex: 5,
     backgroundColor: Colors.grayshade16,
     borderRadius: 4,
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
-    flexBasis: '50%',
+    flexBasis: '48%',
     marginTop: Dimension.margin10,
     borderColor: Colors.BoxBorderColor,
     borderWidth: 1,
