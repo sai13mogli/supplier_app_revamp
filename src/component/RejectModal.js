@@ -99,6 +99,7 @@ const RejectModal = props => {
           orderRefs: [],
         });
         fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
+        props.setLoadingTabs(true);
         setRejectLoader(false);
         setRejectModal(false);
       } else {

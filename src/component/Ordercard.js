@@ -162,6 +162,7 @@ const Ordercard = props => {
       orderRefs: [],
     });
     fetchTabCountFunc(selectedTab, shipmentType);
+    props.setLoadingTabs(true);
   };
 
   const getPOInvoice = (fromPO, invoiceUrl, isInvoice) => {
@@ -375,6 +376,7 @@ const Ordercard = props => {
           orderRefs: [],
         });
         fetchTabCountFunc(selectedTab, shipmentType);
+        props.setLoadingTabs(true);
         Toast.show({
           type: 'success',
           text2: data.message,
@@ -1088,6 +1090,7 @@ const Ordercard = props => {
         orderRefs: [],
       });
       fetchTabCountFunc(selectedTab, shipmentType);
+      props.setLoadingTabs(true);
     }
     setMarkForDelivery(false);
   };
@@ -1103,6 +1106,7 @@ const Ordercard = props => {
       orderRefs: [],
     });
     fetchTabCountFunc(selectedTab, shipmentType);
+    props.setLoadingTabs(true);
   };
 
   const renderOrderDetails = (fromModal, fromCTA) => {
@@ -1370,6 +1374,7 @@ const Ordercard = props => {
             itemId={itemId}
             fetchOrdersFunc={fetchOrdersFunc}
             fetchTabCountFunc={fetchTabCountFunc}
+            setLoadingTabs={props.setLoadingTabs}
             msn={msn}
             quantity={quantity}
             orderRef={orderRef}
@@ -1395,6 +1400,7 @@ const Ordercard = props => {
         <AcceptModal
           selectedTab={selectedTab}
           fetchOrdersFunc={fetchOrdersFunc}
+          setLoadingTabs={props.setLoadingTabs}
           fetchTabCountFunc={fetchTabCountFunc}
           itemId={itemId}
           shipmentType={shipmentType}
@@ -1410,6 +1416,7 @@ const Ordercard = props => {
           itemId={itemId}
           fetchOrdersFunc={fetchOrdersFunc}
           fetchTabCountFunc={fetchTabCountFunc}
+          setLoadingTabs={props.setLoadingTabs}
           msn={msn}
           quantity={quantity}
           orderRef={orderRef}
@@ -1439,6 +1446,7 @@ const Ordercard = props => {
           itemId={itemId}
           fetchOrdersFunc={fetchOrdersFunc}
           fetchTabCountFunc={fetchTabCountFunc}
+          setLoadingTabs={props.setLoadingTabs}
           msn={msn}
           quantity={quantity}
           orderRef={orderRef}
