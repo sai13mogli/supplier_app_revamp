@@ -110,7 +110,8 @@ const UploadInvoiceScreen = (props) => {
                 showBack
                 navigation={props.navigation}
                 showText={'Upload Invoice'}
-                rightIconName={'business-details'} />
+                //rightIconName={'business-details'} 
+                />
             <FlatList
                 data={invoiceList}
                 renderItem={renderItem}
