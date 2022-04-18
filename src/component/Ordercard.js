@@ -702,6 +702,7 @@ const Ordercard = props => {
               {
                 // flex: actionCTA.length > 1 ? 5 : 1,
                 // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                height: Dimension.height34,
                 flex: ctaLength.length ? 5 : 1,
                 flexBasis: ctaLength.length ? '45%' : '100%'
 
@@ -822,10 +823,10 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
-                // flex: ctaLength.length ? 5 : 1,
-                // flexBasis: ctaLength.length ? '45%' : '100%'
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%'
 
               },
             ]}>
@@ -885,9 +886,10 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
                 flexBasis: ctaLength.length ? '45%' : '100%',
-                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+
               },
             ]}
             onPress={() => setSplitQuantityModal(true)}>
@@ -1028,8 +1030,10 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '49%' : '100%'
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
               },
             ]}
             disabled={manifestLoader}>
