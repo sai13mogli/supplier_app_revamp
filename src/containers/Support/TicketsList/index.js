@@ -152,9 +152,9 @@ const TicketsList = props => {
             {item.statusText}
           </Text>
           <Text style={styles.ticketIdTxt}>Ticket ID: {item.id}</Text>
-          {item.type ? (
+          {item.ticketType ? (
             <View style={styles.TicketTypeWrap}>
-              <Text style={styles.tickettypetxt}>{item.type}</Text>
+              <Text style={styles.tickettypetxt}>{item.ticketType}</Text>
             </View>
           ) : null}
         </View>

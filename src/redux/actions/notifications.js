@@ -1,4 +1,4 @@
-import {NOTIFICATIONS_ACTIONS} from '../constants/notifications';
+import { NOTIFICATIONS_ACTIONS } from '../constants/notifications';
 
 export const fetchNotifications = page => {
   return {

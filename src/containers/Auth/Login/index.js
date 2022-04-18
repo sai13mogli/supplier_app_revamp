@@ -27,10 +27,11 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import Toast from 'react-native-toast-message';
 import {useDispatch} from 'react-redux';
 import {setShipmentType} from '../../../redux/actions/orders';
 import {setMasterAction} from '../../../redux/actions/master';
-import Toast from 'react-native-toast-message';
+import ForgotPasswordModal from '../../../component/ForgotPasswordModal';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const phoneRegex = '^[1-9][0-9]{9}$';
@@ -47,7 +48,7 @@ const LoginScreen = props => {
   const [error, setError] = useState('');
   const [otpModal, setOtpModal] = useState(false);
   const [isSecure, setIsSecure] = useState(true);
-  // const [showForgotPass, setShowForgotPass] = useState(false);
+  const [showForgotPass, setShowForgotPass] = useState(false);
 
   const FORM_FIELDS = new OrderedMap({
     email: {
@@ -109,6 +110,10 @@ const LoginScreen = props => {
     console.log(props.route.params.setIsLoggedIn);
     dispatch(setMasterAction(props.route.params.setIsLoggedIn));
     props.route.params.setIsLoggedIn(true);
+  };
+
+  const onContinue = async => {
+    setShowForgotPass(false);
   };
 
   const onEmailBlur = () => {
@@ -258,7 +263,7 @@ const LoginScreen = props => {
         )).toList()}
         {error ? <Text style={styles.errorTxt}>{error}</Text> : null}
         <TouchableOpacity
-          // onPress={() => setShowForgotPass(true)}
+          onPress={() => setShowForgotPass(true)}
           style={{justifyContent: 'flex-end'}}>
           <Text style={styles.fotgotTxt}>Forgot Password</Text>
         </TouchableOpacity>
@@ -299,6 +304,18 @@ const LoginScreen = props => {
             onLogin={onLogin}
             onClose={() => setOtpModal(false)}
             email={email}
+          />
+        )}
+        {showForgotPass && (
+          <ForgotPasswordModal
+            visible={showForgotPass}
+            transparent={true}
+            email={email}
+            onContinue={onContinue}
+            onClose={() => setShowForgotPass(false)}
+            onPress={() => {
+              setShowForgotPass(!showForgotPass);
+            }}
           />
         )}
         <GoogleSigninButton

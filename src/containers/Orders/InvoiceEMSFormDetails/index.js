@@ -34,6 +34,7 @@ const InvoiceEMSFormDetailScreen = props => {
     const [ewayBillNumber, setEwayBillNumber] = useState("");
     const [ewayBillNumberError, setEwayBillNumberError] = useState(false);
     const [ewayDate, setEwayDate] = useState("");
+    const [ewayDateError, setEwayDateError] = useState(false);
     const [uploadEwayBill, setUploadEwayBill] = useState({});
     const [uploadEwayBillError, setUploadEwayBillError] = useState(false);
     const [uploadDisabled, setUploadDisabled] = useState(false);
@@ -65,7 +66,6 @@ const InvoiceEMSFormDetailScreen = props => {
                 doc: uploadInvoice
             },
             isImp: true,
-            onBlur: () => onUploadInvoiceBlur(),
             errorState: uploadInvoiceError,
             errorText: "Please upload Invoice",
             placeholder: 'Tap to Upload',
@@ -147,6 +147,8 @@ const InvoiceEMSFormDetailScreen = props => {
             placeholder: 'E-way Date',
             errorMessage: 'Enter valid e-way date',
             value: ewayDate,
+            showError: ewayDateError,
+            onBlur: () => onEwayDateDateBlur(),
             onChange: ewayDate => setEwayDate(ewayDate),
             component: CustomeDatePicker,
         },
@@ -298,6 +300,7 @@ const InvoiceEMSFormDetailScreen = props => {
         },
     });
 
+
     const onUploadInvoiceBlur = () => {
         if (uploadInvoice && uploadInvoice.name) {
             setuploadInvoiceError(false);
@@ -347,6 +350,14 @@ const InvoiceEMSFormDetailScreen = props => {
             setInvoiceDateError(false);
         } else {
             setInvoiceDateError(true);
+        }
+    };
+
+    const onEwayDateDateBlur = () => {
+        if (ewayDate && ewayDate.length) {
+            setEwayDateError(false);
+        } else {
+            setEwayDateError(true);
         }
     };
 
@@ -488,9 +499,9 @@ const InvoiceEMSFormDetailScreen = props => {
             invoiceAmount.length &&
             ewayBillNumber &&
             ewayBillNumber.length &&
-            ewayDate
-            // && uploadInvoice
-            // && uploadEwayBill
+            ewayDate && ewayDate.length
+            && uploadInvoice == ""
+            && uploadEwayBill
         ) {
             try {
                 let token = `Bearer ${await AsyncStorage.getItem('token')}`;
@@ -544,7 +555,7 @@ const InvoiceEMSFormDetailScreen = props => {
                     ],
                 );
                 const res = await response.json();
-                console.log("Ok===>", res);
+                console.log("res===>", res);
                 if (res.success) {
                     Toast.show({
                         type: 'success',
@@ -578,6 +589,8 @@ const InvoiceEMSFormDetailScreen = props => {
             onInvoiceNumberBlur();
             onEwayBillNumberBlur();
             onInvoiceAmountBlur();
+            onInvoiceDateBlur();
+            onEwayDateDateBlur();
         }
     };
 

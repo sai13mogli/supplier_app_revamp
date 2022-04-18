@@ -66,43 +66,10 @@ const NotificationScreen = props => {
   };
 
   const getTime = time => {
-    let months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
     let date = new Date(time);
-    let currentDate = new Date();
-    if (currentDate.getFullYear() == date.getFullYear()) {
-      if (currentDate.getMonth() == date.getMonth()) {
-        if (currentDate.getDate() == date.getDate()) {
-          return `Today`;
-        } else if (currentDate.getDate() - date.getDate() == 1) {
-          return `Yesterday`;
-        } else {
-          return `${date.getDate()} ${
-            months[date.getMonth()]
-          } ${date.getFullYear()}`;
-        }
-      } else {
-        return `${date.getDate()} ${
-          months[date.getMonth()]
-        } ${date.getFullYear()}`;
-      }
-    } else {
-      return `${date.getDate()} ${
-        months[date.getMonth()]
-      } ${date.getFullYear()}`;
-    }
+    return `${date.getHours() < 10 ? '0' + date.getHours() : date.getHours()}:${
+      date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+    } ${date.getHours() < 12 ? 'PM' : 'AM'}`;
   };
 
   const renderItem = ({item, index}) => {
@@ -134,20 +101,20 @@ const NotificationScreen = props => {
           <Text style={styles.titleCss}>{item.content}</Text>
         </View>
         <View style={{flex: 3, alignItems: 'flex-end'}}>
-          {item.readStatus ? null : (
-            <TouchableOpacity
-              onPress={() => {
-                setsingleNotificationAction(true);
-                setSelectedOrder(item);
-              }}>
-              <Icon
-                name={'dots-horizontal'}
-                color={Colors.FontColor}
-                size={Dimension.font20}
-                //onPress={() => dispatch(markRead(item.id))}
-              ></Icon>
-            </TouchableOpacity>
-          )}
+          {/* {item.readStatus ? null : ( */}
+          <TouchableOpacity
+            onPress={() => {
+              setsingleNotificationAction(true);
+              setSelectedOrder(item);
+            }}>
+            <Icon
+              name={'dots-horizontal'}
+              color={Colors.FontColor}
+              size={Dimension.font20}
+              //onPress={() => dispatch(markRead(item.id))}
+            ></Icon>
+          </TouchableOpacity>
+          {/* )} */}
           <Text style={styles.timeorDateCss}>{getTime(item.createdAt)}</Text>
           {/* {item.readStatus ? null : (
           <TouchableOpacity onPress={() => dispatch(markRead(item.id))}>
@@ -299,13 +266,13 @@ const NotificationScreen = props => {
             notificationsStatus == STATE_STATUS.FETCHING ? (
               <View
                 style={{
-                    flex:1,
-                   //backgroundColor:"#ccc",
-                   justifyContent:"center",
-                   alignContent:"center",
-                   height:'100%',
-                   padding:Dimension.padding20
-                 }}>
+                  flex: 1,
+                  //backgroundColor:"#ccc",
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  height: '100%',
+                  padding: Dimension.padding20,
+                }}>
                 <ActivityIndicator
                   //style={{alignSelf: 'center'}}
                   color={Colors.BrandColor}

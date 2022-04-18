@@ -11,7 +11,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
-
+import {Input} from 'react-native-elements';
 import CustomeIcon from '../CustomeIcon';
 import styles from './styles';
 
@@ -30,6 +30,7 @@ const CustomeDatePicker = props => {
   } = props;
   console.log('expiryDate', value);
   const [date, setDate] = useState(new Date());
+  const [isFocused, setIsFocused] = useState(false);
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [text, setText] = useState(value || 'Select Date');
@@ -55,6 +56,13 @@ const CustomeDatePicker = props => {
   };
 
   useEffect(() => {
+    handleBlur();
+    if (props.autoFocus) {
+      handleFocus();
+    }
+  }, []);
+
+  useEffect(() => {
     if (activeFilter) {
       setText(value);
     }
@@ -63,6 +71,27 @@ const CustomeDatePicker = props => {
   const showMode = currentMode => {
     setShow(true);
     setMode(currentMode);
+  };
+  const handleFocus = () => {
+    setIsFocused(true);
+    if (props.handleFocus) {
+      props.handleFocus();
+    }
+  };
+
+  const handleBlur = runOnBlur => {
+    if (props.hideLabel) {
+      setIsFocused(true);
+    } else {
+      if (!props.value) {
+        setIsFocused(false);
+      } else {
+        setIsFocused(true);
+      }
+    }
+    if (props.onBlur && runOnBlur) {
+      props.onBlur();
+    }
   };
 
   const showDatepicker = () => {
