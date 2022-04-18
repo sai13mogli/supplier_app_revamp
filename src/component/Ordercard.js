@@ -702,7 +702,7 @@ const Ordercard = props => {
               {
                 // flex: actionCTA.length > 1 ? 5 : 1,
                 // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
-                height: Dimension.height34,
+                height: Dimension.height33,
                 flex: ctaLength.length ? 5 : 1,
                 flexBasis: ctaLength.length ? '45%' : '100%'
 
@@ -723,8 +723,10 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%'
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD POD COPY</Text>
@@ -739,8 +741,10 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                // flex: actionCTA.length > 1 ? 5 : 1,
+                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%'
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD DEBIT NOTE</Text>
@@ -987,7 +991,7 @@ const Ordercard = props => {
           </>
         ) : cta == 'CREATE_MANIFEST_DISABLED' ? (
           <>
-            <View style={{ flexDirection: 'column', flex: 30 }}>
+            <View style={{ flexDirection: 'column', flex: 0, flexBasis: '50%' }}>
               <TouchableOpacity
                 disabled={true}
                 style={[
@@ -995,7 +999,7 @@ const Ordercard = props => {
                   {
                     // flex: actionCTA.length > 1 ? 5 : 1,
                     // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
-                    flex: ctaLength.length ? 0 : 1,
+                    flex: ctaLength.length ? 5 : 1,
                     flexBasis: ctaLength.length ? '45%' : '100%'
                   },
                 ]}>
@@ -1005,6 +1009,7 @@ const Ordercard = props => {
                 Shipment lable not created
               </Text>
             </View>
+
           </>
         ) : cta == 'CREATE_MANIFEST' ? (
           <TouchableOpacity
