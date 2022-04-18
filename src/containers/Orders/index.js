@@ -34,7 +34,7 @@ const OrdersScreen = props => {
     state => (state.profileReducer || {}).status || STATE_STATUS.UNFETCHED,
   );
   const profileData = useSelector(state => state.profileReducer.data || {});
-
+  const scrollRef = useRef(null)
   const tabStatus = useSelector(state =>
     state.ordersReducer.getIn(['tabCounts', 'status']),
   );
@@ -333,10 +333,26 @@ const OrdersScreen = props => {
   //   setBulkItemIds(currentItemIds);
   // };
 
+  // const handleScroll = (event) => {
+  //   this.setState({ hideScroll: false });
+  //   if (event.nativeEvent.contentOffset.x >= 10) {
+  //     this.setState({ hideScroll: true });
+  //   }
+  // };
+  const upButtonHandler = () => {
+
+    scrollRef.current.scrollTo({
+      x: 200,
+      y: 0,
+      animated: true,
+    });
+  };
+
   const renderHeaderComponent = () => {
     return (
       <ScrollView
         horizontal={true}
+        ref={scrollRef}
         style={{
           padding: Dimension.padding10,
           flexDirection: 'row',
@@ -344,7 +360,7 @@ const OrdersScreen = props => {
         }}>
         {TABS[selectedType].map((tab, tabIndex) => (
           <TouchableOpacity
-            onPress={() => changeTab(tab)}
+            onPress={() => { changeTab(tab), upButtonHandler() }}
             style={
               selectedTab == tab.key
                 ? styles.selectedTabCss
@@ -582,17 +598,7 @@ const OrdersScreen = props => {
               enabled={true}
               isFromOrders={true}
             />
-            {/* <TouchableOpacity
-              onPress={() => props.navigation.navigate('Notification')}
-              style={styles.notifocationBtn}>
-              <CustomeIcon
-                name={'notification'}
-                size={Dimension.font22}
-                color={colors.FontColor}
-              />
-            </TouchableOpacity> */}
           </View>
-
           <FlatList
             data={OrderData.toArray()}
             stickyHeaderIndices={[0]}
