@@ -1,18 +1,18 @@
-import React, { useEffect, useState, createRef } from 'react';
-import { TouchableOpacity, Text, View, Dimensions, FlatList } from 'react-native';
+import React, {useEffect, useState, createRef} from 'react';
+import {TouchableOpacity, Text, View, Dimensions, FlatList} from 'react-native';
 import AllBrandsScreen from './AllBrands';
 import PopularBrandsScreen from './PopularBrands';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import CustomButton from '../../../../component/common/Button';
 import styles from './style';
 import Colors from '../../../../Theme/Colors';
 import Dimension from '../../../../Theme/Dimension';
 import Modal from 'react-native-modal';
 import MultiSelect from '../../../../component/common/MultiSelect';
-import { TOP_BRANDS_SCREENS } from '../../../../constants';
+import {TOP_BRANDS_SCREENS} from '../../../../constants';
 import Tabs from '../../../../component/common/Tabs';
 import Header from '../../../../component/common/Header';
-import { addMultipleBrands } from '../../../../redux/actions/categorybrand';
+import {addMultipleBrands} from '../../../../redux/actions/categorybrand';
 const deviceWidth = Dimensions.get('window').width;
 
 const TABS = [
@@ -41,6 +41,13 @@ const BrandScreen = props => {
   const dispatch = useDispatch();
 
   const onConfirm = () => {
+    let currbrands = [...userBrands];
+    currbrands = (currbrands || []).map(_ => ({
+      ..._,
+      brandName: _.brandName || _.brandCode,
+      confirmed: true,
+    }));
+    dispatch(addMultipleBrands(currbrands));
     props.navigation.navigate('CategoryBrand');
   };
 
@@ -49,6 +56,17 @@ const BrandScreen = props => {
     currbrands = (currbrands || []).filter(_ => _.isRaiseRequest == 'false');
     dispatch(addMultipleBrands(currbrands));
     props.navigation.navigate('CategoryBrand');
+  };
+
+  const onBrandsSubmit = () => {
+    let isbrands = (userBrands || []).filter(
+      _ => _.isRaiseRequest == 'true' && !_.confirmed,
+    ).length;
+    if (isbrands) {
+      setModalVisible(true);
+    } else {
+      onConfirm();
+    }
   };
 
   return (
@@ -60,7 +78,7 @@ const BrandScreen = props => {
         rightIconName={'category--brand'}
       />
 
-      <Tabs data={TABS.map(_ => ({ ..._ }))} />
+      <Tabs data={TABS.map(_ => ({..._}))} />
 
       <View style={styles.bottombtnWrap}>
         <TouchableOpacity style={styles.BrandNumWrap}>
@@ -72,12 +90,10 @@ const BrandScreen = props => {
             {userBrands.length}
           </Text>
         </TouchableOpacity>
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <CustomButton
             title={'SUBMIT'}
-            onPress={() => {
-              setModalVisible(true);
-            }}
+            onPress={onBrandsSubmit}
             disabled={!userBrands.length}
             TextColor={userBrands.length ? Colors.WhiteColor : Colors.FontColor}
             borderColor={
@@ -121,28 +137,35 @@ const BrandScreen = props => {
               Are you sure you want to create these
               <Text style={styles.redTxt}>
                 {' '}
-                {(userBrands || []).filter(_ => _.isRaiseRequest == 'true')
-                  .length < 10
-                  ? `0${(userBrands || []).filter(_ => _.isRaiseRequest == 'true')
-                    .length
-                  }`
-                  : (userBrands || []).filter(_ => _.isRaiseRequest == 'true')
-                    .length}
+                {(userBrands || []).filter(
+                  _ => _.isRaiseRequest == 'true' && !_.confirmed,
+                ).length < 10
+                  ? `0${
+                      (userBrands || []).filter(
+                        _ => _.isRaiseRequest == 'true' && !_.confirmed,
+                      ).length
+                    }`
+                  : (userBrands || []).filter(
+                      _ => _.isRaiseRequest == 'true' && !_.confirmed,
+                    ).length}
               </Text>{' '}
               brands
             </Text>
           </View>
           <MultiSelect
-            data={(userBrands || []).filter(_ => _.isRaiseRequest == 'true')}
+            data={(userBrands || []).filter(
+              _ => _.isRaiseRequest == 'true' && !_.confirmed,
+            )}
             onChangeDataChoosed={data => {
               console.log(data);
             }}
             fromAllBrands={true}
+            notSure={false}
             selectedValues={userBrands}
             fromBrand={true}
           />
           <View style={styles.ModalBtnWrap}>
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <CustomButton
                 title="CANCEL"
                 buttonColor={Colors.WhiteColor}
@@ -151,12 +174,37 @@ const BrandScreen = props => {
                 TextFontSize={Dimension.font16}
                 onPress={onCancel}></CustomButton>
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <CustomButton
                 title="CONFIRM"
-                buttonColor={Colors.BrandColor}
-                borderColor={Colors.BrandColor}
-                TextColor={Colors.WhiteColor}
+                disabled={
+                  (userBrands || []).filter(
+                    _ => _.isRaiseRequest == 'true' && !_.confirmed,
+                  ).length
+                    ? false
+                    : true
+                }
+                buttonColor={
+                  (userBrands || []).filter(
+                    _ => _.isRaiseRequest == 'true' && !_.confirmed,
+                  ).length
+                    ? Colors.BrandColor
+                    : Colors.DisableStateColor
+                }
+                borderColor={
+                  (userBrands || []).filter(
+                    _ => _.isRaiseRequest == 'true' && !_.confirmed,
+                  ).length
+                    ? Colors.BrandColor
+                    : Colors.DisableStateColor
+                }
+                TextColor={
+                  (userBrands || []).filter(
+                    _ => _.isRaiseRequest == 'true' && !_.confirmed,
+                  ).length
+                    ? Colors.WhiteColor
+                    : Colors.FontColor
+                }
                 TextFontSize={Dimension.font16}
                 loadingColor={'#fff'}
                 onPress={() => {
@@ -170,7 +218,5 @@ const BrandScreen = props => {
     </>
   );
 };
-
-
 
 export default BrandScreen;

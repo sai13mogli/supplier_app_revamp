@@ -109,7 +109,9 @@ const MultiSelect = props => {
                 supplierId: await AsyncStorage.getItem('userId'),
                 businessNature: businessNature,
                 isDocumentRequired: customeListNow[item].isDocumentRequired,
+                confirmed: props.fromAllBrands && props.notSure ? true : false,
               };
+              console.log('brandObj hai dost!!', brandObj);
               dispatch(addBrand(brandObj));
             }
             if (props.fromCategory) {

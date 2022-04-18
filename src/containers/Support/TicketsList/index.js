@@ -37,6 +37,7 @@ const TicketsList = props => {
   const [inputValue, setInputValue] = useState('');
   const [fromReset, setFromReset] = useState(false);
   const dispatch = useDispatch();
+  const [value, setValue] = useState(0);
   const onEndReachedCalledDuringMomentum = useRef(true);
 
   useEffect(() => {
@@ -85,6 +86,7 @@ const TicketsList = props => {
       setFiltersModal(false);
       setTypeFilter(0);
       setTimeFilter(180);
+      setValue(0);
       fetchTicketListing(1, '', true);
     }
   };
@@ -158,7 +160,7 @@ const TicketsList = props => {
         </View>
         <View style={styles.ticketBottomWrap}>
           <Text style={styles.ticketSubTxt}>{item.subject}</Text>
-          <Text style={styles.TicketDate}>{getDate(item.created_at)}</Text>
+          <Text style={styles.TicketDate}>{getDate(item.updated_at)}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -324,6 +326,8 @@ const TicketsList = props => {
           resetFilters={resetFilters}
           fromReset={fromReset}
           setFromReset={setFromReset}
+          value={value}
+          setValue={setValue}
         />
       )}
     </View>

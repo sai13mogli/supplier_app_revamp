@@ -6,34 +6,34 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
-import { OrderedMap } from 'immutable';
+import {OrderedMap} from 'immutable';
 import MultiSelectInput from '../../../component/common/MultiSelectInput';
 import Header from '../../../component/common/Header';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import styles from './style';
 import CustomeIcon from '../../../component/common/CustomeIcon';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import DropDown from '../../../component/common/DropDown';
 import FileUpload from '../../../component/common/FileUpload';
 import CustomeDatePicker from '../../../component/common/Datepicker';
 import Modal from 'react-native-modal';
 import CustomButton from '../../../component/common/Button';
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BASE_URL, STATE_STATUS } from '../../../redux/constants/index';
+import {BASE_URL, STATE_STATUS} from '../../../redux/constants/index';
 import {
   setSelectedCategories,
   updateBrandData,
   fetchCategoriesBrands,
 } from '../../../redux/actions/categorybrand';
-import { addOrUpdateCategoryAndBrand } from '../../../services/categorybrand';
-import { getAllCategories } from '../../../services/auth';
-import { fetchProfile } from '../../../redux/actions/profile';
+import {addOrUpdateCategoryAndBrand} from '../../../services/categorybrand';
+import {getAllCategories} from '../../../services/auth';
+import {fetchProfile} from '../../../redux/actions/profile';
 import PickerDropDown from '../../../component/common/PickerDropDown';
 
 // import {uploadDocumentService} from '../../../services/documents';
@@ -91,6 +91,7 @@ const CategoryBrandScreen = props => {
   const [initialCategories, setInitialCategories] = useState([]);
   const [nextLoader, setNextLoader] = useState(false);
   const [isRaiseRequest, setIsRaiseRequest] = useState('false');
+  const [isDeletedKey, setIsDeletedKey] = useState('');
 
   const dispatch = useDispatch();
 
@@ -134,6 +135,7 @@ const CategoryBrandScreen = props => {
       onBlur: () => onBrandNameBlur(),
       onChangeText: text => setBrandName(text),
       component: FloatingLabelInputField,
+      brandName: true,
     },
     nature_of_business: {
       title: 'Nature of Business',
@@ -144,6 +146,7 @@ const CategoryBrandScreen = props => {
       onValueChange: text => setnatureOfBusiness(text),
       component: PickerDropDown,
       enabled: true,
+      value: natureOfBusiness,
       items: [
         {
           label: 'Trader',
@@ -189,6 +192,7 @@ const CategoryBrandScreen = props => {
       uploadDocument: () => uploadFromFileExp(),
       onPress: () => uploadFromFileExp(),
       component: FileUpload,
+      isImp: natureOfBusiness == 3 || natureOfBusiness == 2 ? true : false,
     },
     date: {
       title: 'Date (If Applicable)',
@@ -202,12 +206,15 @@ const CategoryBrandScreen = props => {
     },
     brand_url: {
       title: 'Brand URL (If Applicable)',
-      isImp: brand && brand.code ? false : true,
+      isImp: isDeletedKey == '2' ? true : false,
       label: 'Brand URL (If Applicable)',
       placeholder: 'http://ABCD.com',
       value: brandUrl,
       onChangeText: text => setBrandUrl(text),
       component: FloatingLabelInputField,
+      isRaiseRequest: isRaiseRequest,
+      brandListingUrl: true,
+      isDeletedKey: isDeletedKey,
     },
   });
 
@@ -232,12 +239,12 @@ const CategoryBrandScreen = props => {
   }, [userCategories]);
 
   const filterSelectedArr = async () => {
-    const { data } = await getAllCategories();
+    const {data} = await getAllCategories();
     let arr = [];
     (data.data || []).forEach(ele => {
       (userCategories || []).forEach(e => {
         if (ele.categoryCode == e) {
-          arr.push({ categoryCode: e, categoryName: ele.categoryName });
+          arr.push({categoryCode: e, categoryName: ele.categoryName});
         }
       });
     });
@@ -254,7 +261,7 @@ const CategoryBrandScreen = props => {
   const uploadDocu = async data => {
     let res = await uploadDocumentService(data);
     console.log('uploadDocument ka res hai bhaiii!', res);
-    let { resp } = res;
+    let {resp} = res;
 
     if (resp.error) {
       setErrorData();
@@ -300,7 +307,7 @@ const CategoryBrandScreen = props => {
     };
   };
 
-  const setDocument = ({ fileData, resp }) => {
+  const setDocument = ({fileData, resp}) => {
     setBrandCertificate({
       ...brandCertificate,
       title: fileData && fileData.name,
@@ -390,7 +397,7 @@ const CategoryBrandScreen = props => {
 
   const onSubmit = raiseRequest => {
     let currBrand = (userBrands || []).find(_ => _.brandCode == brand.code);
-    console.log(currBrand);
+    console.log(currBrand, 'curr brand hai dost!!');
     if (currBrand) {
       let currBrandObj = {
         supplierId: supplierId,
@@ -407,7 +414,15 @@ const CategoryBrandScreen = props => {
       let currbrands = ([...userBrands] || []).filter(
         _ => _.brandCode !== brand.code,
       );
-      currbrands = [...currbrands, currBrandObj];
+      currbrands = ([...currbrands, currBrandObj] || []).sort((a, b) => {
+        if (a.brandName < b.brandName) {
+          return -1;
+        }
+        if (a.brandName > b.brandName) {
+          return 1;
+        }
+        return 0;
+      });
       dispatch(updateBrandData(currbrands));
     }
     setModalVisible(false);
@@ -420,19 +435,20 @@ const CategoryBrandScreen = props => {
       code: brand.brandCode,
     });
     setBrandName(brand.brandName);
-    setnatureOfBusiness(1);
+    setnatureOfBusiness(parseInt(brand.businessNature) || 1);
     setBrandCertificate({
-      title: '',
-      value: '',
+      title: brand.fileKey || '',
+      value: brand.fileKey || '',
       loading: false,
       showDoc: false,
       closeDoc: false,
       errorState: false,
       errorText: 'Certificate upload failed.Please try again.',
     });
-    setExpiryDate('');
-    setBrandUrl('');
+    setExpiryDate(brand.expiryDate);
+    setBrandUrl(brand.brandListingUrl);
     setIsRaiseRequest(brand.isRaiseRequest);
+    setIsDeletedKey(brand.isDeleted);
     setModalVisible(true);
   };
 
@@ -451,7 +467,9 @@ const CategoryBrandScreen = props => {
       expiryDate &&
       expiryDate.length &&
       brandUrl &&
-      brandUrl.length
+      brandUrl.length &&
+      brandCertificate &&
+      brandCertificate.value
     );
   };
 
@@ -468,7 +486,13 @@ const CategoryBrandScreen = props => {
   const getButtonColor = () => {
     if (natureOfBusiness == 3 && checkCommonValidation()) {
       return true;
-    } else if (natureOfBusiness != 3 && checkValidation()) {
+    } else if (natureOfBusiness == 2 && checkBusinessNatureValidation()) {
+      return true;
+    } else if (
+      natureOfBusiness != 3 &&
+      natureOfBusiness != 2 &&
+      checkValidation()
+    ) {
       return true;
     } else {
       return false;
@@ -478,11 +502,32 @@ const CategoryBrandScreen = props => {
   const getButtonColorReqBrand = () => {
     if (natureOfBusiness == 3 && checkCommonValidationReqBrand()) {
       return true;
-    } else if (natureOfBusiness != 3 && checkValidationReqBrand()) {
+    } else if (
+      natureOfBusiness == 2 &&
+      checkBusinessNatureReqBrandValidation()
+    ) {
+      return true;
+    } else if (
+      natureOfBusiness != 3 &&
+      natureOfBusiness != 2 &&
+      checkValidationReqBrand()
+    ) {
       return true;
     } else {
       return false;
     }
+  };
+
+  const checkBusinessNatureReqBrandValidation = () => {
+    return (
+      brandName &&
+      brandName.length &&
+      natureOfBusiness &&
+      brandCertificate &&
+      brandCertificate.value &&
+      brandUrl &&
+      brandUrl.length
+    );
   };
 
   const onNext = async () => {
@@ -504,7 +549,7 @@ const CategoryBrandScreen = props => {
         categoryCode: [...categoryIds],
         brandList: [...mutatebrands],
       };
-      const { data } = await addOrUpdateCategoryAndBrand(payloadObj);
+      const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
       if (data && data.success) {
         setNextLoader(false);
         dispatch(fetchProfile());
@@ -517,6 +562,16 @@ const CategoryBrandScreen = props => {
       setNextLoader(false);
       console.log(error);
     }
+  };
+
+  const checkBusinessNatureValidation = () => {
+    return (
+      brandName &&
+      brandName.length &&
+      natureOfBusiness &&
+      brandCertificate &&
+      brandCertificate.value
+    );
   };
 
   // const getNextStatus = () => {
@@ -540,7 +595,7 @@ const CategoryBrandScreen = props => {
   // };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Header
         showBack
         navigation={props.navigation}
@@ -558,31 +613,48 @@ const CategoryBrandScreen = props => {
             ).length ? (
               <View>
                 {userBrands
+                  .sort((a, b) => {
+                    if (a.brandName < b.brandName) {
+                      return -1;
+                    }
+                    if (a.brandName > b.brandName) {
+                      return 1;
+                    }
+                    return 0;
+                  })
                   .filter(it => it.isDeleted == '0' || it.isDeleted == '4')
                   .map((_, i) => (
-                    <View style={styles.BrandWrap}>
-                      <View style={{ flex: 1 }}>
+                    <TouchableOpacity
+                      style={styles.BrandWrap}
+                      onPress={() => openModal(_)}>
+                      <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Brand Name</Text>
                         <Text style={styles.brandNameTxt}>{_.brandName}</Text>
                       </View>
 
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Status</Text>
                         {_.isDeleted == '0' ? (
                           <Text style={styles.ApprovedStatus}>Approved</Text>
                         ) : (
                           <Text style={styles.pendingStatus}>
                             {_.isDeleted == '4'
-                              ? 'Approved Pending'
+                              ? 'Approval Pending'
                               : 'Pending'}
                           </Text>
                         )}
                       </View>
                       {/* //onPress={() => openModal(_)} */}
 
-                      <View style={{ flex: 1 }}>
-                        {(_.isDeleted == '0' || _.isDeleted == '4') &&
-                          _.isDocumentRequired ? (
+                      <View style={{flex: 1}}>
+                        <TouchableOpacity style={styles.ArrowBtn}>
+                          <CustomeIcon
+                            name={'arrow-right-line'}
+                            size={Dimension.font28}
+                            color={colors.FontColor}></CustomeIcon>
+                        </TouchableOpacity>
+                        {/* {(_.isDeleted == '0' || _.isDeleted == '4') &&
+                        _.isDocumentRequired ? (
                           <TouchableOpacity
                             onPress={() => openModal(_)}
                             style={styles.fillBtn}>
@@ -591,15 +663,10 @@ const CategoryBrandScreen = props => {
                             </Text>
                           </TouchableOpacity>
                         ) : (
-                          <TouchableOpacity style={styles.ArrowBtn}>
-                            <CustomeIcon
-                              name={'arrow-right-line'}
-                              size={Dimension.font28}
-                              color={colors.FontColor}></CustomeIcon>
-                          </TouchableOpacity>
-                        )}
+                          
+                        )} */}
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   ))}
               </View>
             ) : (
@@ -618,25 +685,36 @@ const CategoryBrandScreen = props => {
             {userBrands.filter(item => item && item.isDeleted == 2).length ? (
               <View>
                 {userBrands
+                  .sort((a, b) => {
+                    if (a.brandName < b.brandName) {
+                      return -1;
+                    }
+                    if (a.brandName > b.brandName) {
+                      return 1;
+                    }
+                    return 0;
+                  })
                   .filter(item => item && item.isDeleted == 2)
                   .map((_, i) => (
-                    <View style={styles.BrandWrap}>
-                      <View style={{ flex: 1 }}>
+                    <TouchableOpacity
+                      style={styles.BrandWrap}
+                      onPress={() => openModal(_)}>
+                      <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Brand Name</Text>
                         <Text style={styles.brandNameTxt}>
                           {_.name || _.brandName}
                         </Text>
                       </View>
 
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Status</Text>
                         <Text style={styles.pendingStatus}>Pending</Text>
                       </View>
 
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         {_.isDeleted == '2' &&
-                          _.isRaiseRequest == 'true' &&
-                          _.isDocumentRequired ? (
+                        _.isRaiseRequest == 'true' &&
+                        _.isDocumentRequired ? (
                           <TouchableOpacity
                             onPress={() => openModal(_)}
                             style={styles.fillBtn}>
@@ -653,7 +731,7 @@ const CategoryBrandScreen = props => {
                           </TouchableOpacity>
                         )}
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   ))}
               </View>
             ) : null}
@@ -670,7 +748,7 @@ const CategoryBrandScreen = props => {
               // animating={true}
               size={'large'}
               color={'red'}
-              style={{ alignSelf: 'center' }}
+              style={{alignSelf: 'center'}}
             />
           </View>
         )}
@@ -692,7 +770,7 @@ const CategoryBrandScreen = props => {
         onBackdropPress={() => {
           setModalVisible(false);
         }}
-        style={{ padding: 0, margin: 0 }}>
+        style={{padding: 0, margin: 0}}>
         <View style={styles.modalContainer}>
           <View style={styles.TopWrap}>
             <View style={styles.topbdr}></View>
@@ -710,11 +788,12 @@ const CategoryBrandScreen = props => {
                   fileUpload={natureOfBusiness}
                   {...field}
                   key={fieldKey}
+                  fromCategoryBrand={true}
                 />
               )).toList()}
             </View>
           </View>
-          {isRaiseRequest == 'false' ? (
+          {isRaiseRequest == 'false' && isDeletedKey !== '2' ? (
             <View style={styles.ModalBottomBtnWrap}>
               <CustomButton
                 buttonColor={
@@ -735,6 +814,8 @@ const CategoryBrandScreen = props => {
                 disabled={
                   natureOfBusiness == 3
                     ? !checkCommonValidation()
+                    : natureOfBusiness == 2
+                    ? !checkBusinessNatureValidation()
                     : !checkValidation()
                 }
                 onPress={() => onSubmit(false)}
@@ -763,6 +844,8 @@ const CategoryBrandScreen = props => {
                 disabled={
                   natureOfBusiness == 3
                     ? !checkCommonValidationReqBrand()
+                    : natureOfBusiness == 2
+                    ? !checkBusinessNatureReqBrandValidation()
                     : !checkValidationReqBrand()
                 }
                 onPress={() => onSubmit(true)}

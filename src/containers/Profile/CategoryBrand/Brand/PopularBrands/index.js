@@ -95,9 +95,10 @@ const PopularBrandsScreen = props => {
       supplierId: await AsyncStorage.getItem('userId'),
       businessNature: businessNature,
       isDocumentRequired: item.isDocumentRequired,
+      confirmed: true,
     };
     let brandObj = (userBrands || []).find(_ => _.brandCode == currbrand.code);
-    console.log(brandObj, 'brandObj');
+    console.log(brandObj, 'brandObj hai mc!!');
     if (brandObj && brandObj.brandCode) {
       dispatch(removeBrand(currbrand));
     } else {

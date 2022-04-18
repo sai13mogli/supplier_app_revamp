@@ -223,13 +223,14 @@ const AllBrandsScreen = props => {
           supplierId: supplierId,
           brandCode: inputValue,
           fileKey: '',
-          businessNature: businessNature,
+          businessNature: 1,
           expiryDate: '',
           isDeleted: '2',
           isRaiseRequest: 'true',
           brandListingUrl: '',
           name: inputValue,
           isDocumentRequired: 1,
+          confirmed: false,
         }),
       );
       Toast.show({
@@ -297,6 +298,7 @@ const AllBrandsScreen = props => {
               maxToRenderPerBatch={18}
               ListEmptyComponent={listEmptyComponent}
               fromAllBrands={true}
+              notSure={true}
               allbrandsListing={true}
               // windowSize={30}
               initialNumToRender={18}

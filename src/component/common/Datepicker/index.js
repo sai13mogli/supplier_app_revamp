@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Button,
@@ -16,12 +16,23 @@ import CustomeIcon from '../CustomeIcon';
 import styles from './styles';
 
 const CustomeDatePicker = props => {
-  const { onChange, onPress, display, label, title, isImp, value, activeFilter } =
-    props;
+  const {
+    onChange,
+    onPress,
+    display,
+    label,
+    title,
+    isImp,
+    value,
+    activeFilter,
+    fromCategoryBrand,
+    fileUpload,
+  } = props;
+  console.log('expiryDate', value);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [text, setText] = useState('Select Date');
+  const [text, setText] = useState(value || 'Select Date');
 
   const onchangeDate = (event, selectedDate) => {
     console.log('event', event);
@@ -58,40 +69,50 @@ const CustomeDatePicker = props => {
     showMode('date');
   };
 
-  return (
-    <>
-      <View style={{ flexDirection: "row" }}>
-        <Text style={styles.labelStyle}>{label}</Text>
-        {isImp ? <Text style={styles.starIcon}>*</Text> : null}
-      </View>
+  const renderDateTimePicker = () => {
+    return (
+      <>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.labelStyle}>{label}</Text>
+          {isImp ? <Text style={styles.starIcon}>*</Text> : null}
+        </View>
 
-      <View>
-        <TouchableOpacity
-          style={styles.inputContainerStyle}
-          onPress={showDatepicker}>
-          <Text style={styles.placeholderCss}>{text || 'Select Date'}</Text>
-          <CustomeIcon
-            name={'calendar'}
-            size={Dimension.font20}
-            color={colors.FontColor}
-          />
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity
+            style={styles.inputContainerStyle}
+            onPress={showDatepicker}>
+            <Text style={styles.placeholderCss}>{text || 'Select Date'}</Text>
+            <CustomeIcon
+              name={'calendar'}
+              size={Dimension.font20}
+              color={colors.FontColor}
+            />
+          </TouchableOpacity>
 
-        {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode={mode}
-            is24Hour={true}
-            display={display}
-            onChange={onchangeDate}
-          />
-        )}
-      </View>
-    </>
-  );
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              display={display}
+              onChange={onchangeDate}
+            />
+          )}
+        </View>
+      </>
+    );
+  };
+
+  if (fromCategoryBrand) {
+    if (fileUpload == 3) {
+      return renderDateTimePicker();
+    } else {
+      return null;
+    }
+  } else {
+    return renderDateTimePicker();
+  }
 };
 
 export default CustomeDatePicker;
-
-/*Created by Aakash*/

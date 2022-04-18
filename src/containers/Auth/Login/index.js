@@ -13,7 +13,11 @@ import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
-import {loginWithPass, loginWithGoogle} from '../../../services/auth';
+import {
+  loginWithPass,
+  loginWithGoogle,
+  sendOtpForLogin,
+} from '../../../services/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginOtpModal from '../../../component/LoginOtpModal';
 import CustomeIcon from '../../../component/common/CustomeIcon';
@@ -26,6 +30,7 @@ import {
 import {useDispatch} from 'react-redux';
 import {setShipmentType} from '../../../redux/actions/orders';
 import {setMasterAction} from '../../../redux/actions/master';
+import Toast from 'react-native-toast-message';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const phoneRegex = '^[1-9][0-9]{9}$';
@@ -162,17 +167,24 @@ const LoginScreen = props => {
     }
   };
 
-  const onSendOtp = () => {
+  const onSendOtp = async () => {
     if (
       email &&
       email.length &&
       (email.match(phoneRegex) || email.length == 10)
     ) {
-      setOtpModal(true);
+      const {data} = await sendOtpForLogin(email);
+      if (!data.success) {
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      } else {
+        setOtpModal(true);
+      }
     }
-    // } else {
-    //   onEmailBlur();
-    // }
   };
 
   const loginViaOtp = () => {
