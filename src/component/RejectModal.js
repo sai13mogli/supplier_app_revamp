@@ -18,6 +18,7 @@ import DropDown from '../component/common/DropDown';
 import CustomeIcon from './common/CustomeIcon';
 import Productcard from './Productcard';
 import PickerDropDown from './common/PickerDropDown';
+import DropDownModal from './DropDownModal';
 
 const deviceWidth = Dimensions.get('window').width;
 const RejectModal = props => {
@@ -178,14 +179,11 @@ const RejectModal = props => {
             style={{
               paddingVertical: Dimension.padding10,
             }}>
-            <PickerDropDown
+            <DropDownModal
+              fromRejectModal={true}
               items={Reasons}
-              enabled={true}
-              title={'Specify Reason'}
-              onValueChange={text => {
-                setReason(text);
-              }}
-              value={reason}
+              selectedValue={reason}
+              onSelect={text => setReason(text)}
             />
           </View>
         </View>
