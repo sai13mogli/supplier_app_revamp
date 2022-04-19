@@ -20,7 +20,6 @@ import {getImageUrl, acceptBulk} from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
@@ -597,8 +596,8 @@ const OrdersScreen = props => {
           padding: 15,
         }}>
         <DropDown
-          title={''}
-          label={''}
+          title={'Orders'}
+          label={'Orders'}
           selectedValue={selectedType}
           onValueChange={text => {
             setSelectedType(text);
