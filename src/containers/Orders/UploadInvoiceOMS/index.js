@@ -30,7 +30,7 @@ const UploadInvoiceOMSScreen = (props) => {
     const [uploadInvoiceError, setuploadInvoiceError] = useState(false);
     const [supplierInvoiceTotal, setSupplierInvoiceTotal] = useState("");
     const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] = useState(false);
-    const [poTotal, setPoTotal] = useState("");
+    const [poTotal, setPoTotal] = useState(0);
     const [poTotalError, setpoTotalError] = useState(false);
     const [uploadDisabled, setUploadDisabled] = useState(false);
     const [OmsUploadList, setOmsUploadList] = useState([]);
@@ -63,6 +63,14 @@ const UploadInvoiceOMSScreen = (props) => {
         },
 
     });
+
+    const getTotalPrice = () => {
+        let price = 0
+        price = poTotalPrice.reduce(function (sum, tax) {
+            return sum + tax.price;
+        }, 0)
+        return price
+    }
 
     const FORM_FIELDS = new OrderedMap({
         invoiceNumber: {
@@ -111,7 +119,7 @@ const UploadInvoiceOMSScreen = (props) => {
             placeholder: 'Po Total',
             errorMessage: 'Enter valid po total amount',
             showError: poTotalError,
-            value: String(poTotal),
+            value: String(getTotalPrice()),
             onBlur: () => onPoTotalBlur(),
             onChangeText: text => setPoTotal(text),
             component: FloatingLabelInputField,
@@ -121,6 +129,8 @@ const UploadInvoiceOMSScreen = (props) => {
 
 
     let EmsOmsFlag = actionCTA
+
+
 
     useEffect(() => {
         if (EmsOmsFlag.includes("MAP_PO_TO_INVOICE")) {
@@ -262,31 +272,57 @@ const UploadInvoiceOMSScreen = (props) => {
         }
     };
 
+    console.log("price===>", poTotalPrice);
+    const initialValue = 0;
+    // const sumWithInitial = poTotalPrice.reduce(
+    //     (previousValue, currentValue) => previousValue.price + currentValue.price,
+    //     initialValue
+    // );
+
+    // console.log("Sum====>", totalTaxes);
+
     const selectItemId = (podId, totalPrice, keys) => {
+
         let currentItemIds = [...bulkItemIds];
         let currentPrice = [...poTotalPrice];
         let currentKeys = [...totalKeys]
+
         if (currentItemIds.includes(podId)) {
             currentItemIds = currentItemIds.filter(_ => _ != podId);
 
         } else {
             if (currentItemIds) {
                 currentItemIds.push(podId);
-                currentPrice.push(totalPrice);
                 currentKeys.push(keys)
-
             } else {
                 currentItemIds = [];
-                currentPrice = [];
                 currentKeys = [];
                 currentItemIds.push(podId);
-                currentPrice.push(totalPrice);
                 currentKeys.push(keys);
             }
         }
         setTotalKeys(currentKeys)
         setBulkItemIds(currentItemIds);
-        setPoTotal(totalPrice)
+
+        let filterData = poTotalPrice.filter(item => item.id == podId);
+        if (filterData.length > 0) {
+
+            const index = poTotalPrice.findIndex(x => x.id === filterData[0].id);
+            let priceList = [...poTotalPrice];
+            priceList.splice(index, 1)
+            setPoTotalPrice(priceList)
+            setPoTotal(getTotalPrice())
+        } else {
+            let row = {
+                id: podId,
+                price: totalPrice
+            }
+            let priceList = [...poTotalPrice];
+            priceList.push(row)
+            setPoTotalPrice(priceList)
+            setPoTotal(getTotalPrice())
+
+        }
     };
 
     const renderItem = ({ item, index }) => {
@@ -303,10 +339,10 @@ const UploadInvoiceOMSScreen = (props) => {
                 TpUnit={list.transfer_price}
                 productName={list.product_name}
                 bulkItemIds={bulkItemIds}
-                poTotalPrice={poTotalPrice}
+                // poTotalPrice={totalTaxes}
                 keys={keys}
                 totalKeys={totalKeys}
-                setTotalPrice={setPoTotalPrice}
+                // setTotalPrice={setPoTotalPrice}
                 setBulkItemIds={setBulkItemIds}
                 selectItemId={selectItemId}
 
