@@ -15,8 +15,8 @@ const Colors = {
   SuccessStateColor: '#54B110',
   BoxBorderColor: '#CFD2E2',
   LightBrandColor: '#FFF2F2',
-  LightBrandColor1:'#FFEBEB',
-  LightBrandColor2:"#FFE5E5",
+  LightBrandColor1: '#FFEBEB',
+  LightBrandColor2: '#FFE5E5',
 
   //Secondary Color
 
@@ -36,11 +36,11 @@ const Colors = {
   grayShade9: '#F7F7FA',
   grayShade10: '#EBEBEB',
   grayShade11: '#E8E8E8',
-  grayShade12:"#F0F0F0",
-  grayShade13:"#E2E2E2",
-  grayShade14:"#BFBFBF",
-  grayShade15:"#707070",
-  grayshade16:"#FAFAFA",
+  grayShade12: '#F0F0F0',
+  grayShade13: '#E2E2E2',
+  grayShade14: '#BFBFBF',
+  grayShade15: '#707070',
+  grayshade16: '#FAFAFA',
 
   headerTxtColor: '#3C3C3C',
   blackColor: '#000',
@@ -48,14 +48,14 @@ const Colors = {
   modalBorder: '#CECECE',
   NudgeColor1: '#FFCEB4',
   WeakPasswordColor: '#F28314',
-  pickupLight:'#EBF2FF',
-  oneShipTxt:"#6923D9",
-  oneShipLight:'#F3EBFF',
-  VmiLight:"#EFFFD5",
-  VmiTxt:"#689512",
-  greenShade:"#52950F",
-  BlueShade:"#007FFF"
-
+  pickupLight: '#EBF2FF',
+  oneShipTxt: '#6923D9',
+  oneShipLight: '#F3EBFF',
+  VmiLight: '#EFFFD5',
+  VmiTxt: '#689512',
+  greenShade: '#52950F',
+  BlueShade: '#007FFF',
+  redShade: '#D9232D',
 };
 
 export default Colors;

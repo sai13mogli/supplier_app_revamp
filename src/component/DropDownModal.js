@@ -35,6 +35,9 @@ const DropDownModal = props => {
     return (
       <View>
         <View style={styles.MidWrapper}>
+          {props.label ? (
+            <Text style={styles.labelStyle}>{props.label}</Text>
+          ) : null}
           <DotCheckbox
             data={items}
             onCheck={getFilterValue}
@@ -112,7 +115,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingTop: Dimension.padding10,
   },
-
+  labelStyle: {
+    fontSize: Dimension.font14,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+    marginLeft: Dimension.margin12,
+    marginBottom: Dimension.margin5,
+    fontWeight: 'normal',
+  },
   topbdr: {
     alignSelf: 'center',
     height: 3,

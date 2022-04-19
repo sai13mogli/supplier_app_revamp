@@ -139,7 +139,7 @@ const InvoiceOmsCard = props => {
                             zIndex: 9999,
                         }}></CustomeIcon>
 
-                    <View style={[styles.leftpart]}>
+                    <View style={styles.leftpart}>
                         <Image
                             source={require('../assets/images/Prd.png')}
                             style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
@@ -157,12 +157,13 @@ const InvoiceOmsCard = props => {
                             ]}>
                             {msn}
                         </Text>
-
-                        <Text style={styles.productName}>{productName}</Text>
+                        <View style={styles.productnameWrap}>
+                        <Text style={styles.productName}
+                numberOfLines={showMoreTxt ? undefined : 1}>{productName}</Text>
                         <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
                             {showMoreTxt ? 'Read less' : 'Read more'}
                         </Text>
-
+                        </View>
 
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ marginRight: Dimension.margin20 }}>
@@ -225,11 +226,14 @@ const styles = StyleSheet.create({
         // color: Colors.BrandColor,
         fontFamily: Dimension.CustomSemiBoldFont,
     },
+    productnameWrap:{
+        marginBottom: Dimension.margin10,
+    },
     productName: {
         fontSize: Dimension.font12,
         color: Colors.FontColor,
         fontFamily: Dimension.CustomRegularFont,
-        marginBottom: Dimension.margin10,
+       
         marginTop: Dimension.margin5,
     },
     readMoretxt: {
@@ -322,10 +326,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#E2E2E2',
         borderRadius: 2,
         marginTop: Dimension.margin8,
-        width: '60%',
+        width: '100%',
         alignItems: 'center',
         paddingVertical: Dimension.padding5,
-    },
+      },
     modalContainer: {
         backgroundColor: Colors.WhiteColor,
         borderTopLeftRadius: 20,
