@@ -5,9 +5,10 @@ import {
   Dimensions,
   StyleSheet,
   Image,
+  ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import Modal from 'react-native-modal';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
@@ -19,6 +20,7 @@ import CustomeIcon from './common/CustomeIcon';
 import Productcard from './Productcard';
 import PickerDropDown from './common/PickerDropDown';
 import DropDownModal from './DropDownModal';
+import FloatingLabelInputField from './common/FloatingInput';
 
 const deviceWidth = Dimensions.get('window').width;
 const RejectModal = props => {
@@ -49,6 +51,7 @@ const RejectModal = props => {
   } = props;
   const [rejectLoader, setRejectLoader] = useState(false);
   const [reason, setReason] = useState('Material is not ready');
+  const [reasonText, setReasonText] = useState('');
   const Reasons = [
     {
       id: 1,
@@ -77,6 +80,10 @@ const RejectModal = props => {
     },
   ];
 
+  useEffect(() => {
+    console.log(reason);
+  });
+
   //rejectOrder
   const onReject = async () => {
     try {
@@ -84,7 +91,8 @@ const RejectModal = props => {
       let payload = {
         supplierId: await AsyncStorage.getItem('userId'),
         itemId: `${itemId}`,
-        remark: reason || 'Material is not ready',
+        remark:
+          reason == 'Other' ? reasonText : reason || 'Material is not ready',
       };
 
       console.log('reason', reason);
@@ -175,17 +183,28 @@ const RejectModal = props => {
         </View>
         <View style={{paddingHorizontal: Dimension.padding15}}>
           {renderOrderDetails()}
-          <View
+          <ScrollView
             style={{
+              height: 250,
               paddingVertical: Dimension.padding10,
             }}>
             <DropDownModal
               fromRejectModal={true}
+              label={'Select reason for rejecting'}
               items={Reasons}
               selectedValue={reason}
               onSelect={text => setReason(text)}
             />
-          </View>
+            {reason == 'Other' ? (
+              <FloatingLabelInputField
+                title={'Specify a reason'}
+                label={'Specify a reason'}
+                placeholder={'Reason'}
+                value={reasonText}
+                onChangeText={text => setReasonText(text)}
+              />
+            ) : null}
+          </ScrollView>
         </View>
         <View style={styles.btnWrap}>
           <TouchableOpacity
