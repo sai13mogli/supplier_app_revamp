@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding6,
     borderRadius: 4,
-    maxWidth: Dimension.width100,
+    maxWidth: Dimension.width120,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
   },
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding6,
     borderRadius: 4,
-    maxWidth: Dimension.width100,
+    maxWidth: Dimension.width120,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
   },
@@ -88,7 +88,8 @@ const styles = StyleSheet.create({
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
     height: Dimension.margin35,
-    // width:"85%",
+    width:"90%",
+   
     // flex: 8,
   },
   seacrhIcon: {

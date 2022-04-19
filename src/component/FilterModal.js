@@ -76,7 +76,6 @@ const FilterModal = props => {
 
   const singleSliderValueCallback = values => {
     let days = 180;
-    console.log('values hai dost', values, values[0]);
     if (values[0] == 0) {
       setSliderIndex(0);
       days = 180;
@@ -96,8 +95,6 @@ const FilterModal = props => {
     setCurrentSlider(days);
     props.setTimeFilter(days);
   };
-
-  console.log('FilterModalProps', props);
 
   // const resetFilters = () => {
   //   setTypeFilter(0);

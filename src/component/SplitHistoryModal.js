@@ -89,7 +89,6 @@ const SplitHistoryModal = props => {
   };
   const fetchSplitHistory = async () => {
     const {data} = await getSplitHistory(supplierId, orderRef, itemRef);
-    console.log('OrdeRef====>', orderRef);
     if (data.success) {
       setHistory(data.data);
       setLoading(false);
@@ -259,7 +258,7 @@ const SplitHistoryModal = props => {
           </>
         )}
         <View style={styles.BottomDataWrap}>
-          <Text style={styles.BottomDataTitle}>Item Breakdow</Text>
+          <Text style={styles.BottomDataTitle}>Item Breakdown</Text>
           <View style={{flexDirection: 'row'}}>
             <View style={{paddingTop: Dimension.padding12}}>
               {((history || {}).children || []).map((_, k) => (
@@ -281,9 +280,16 @@ const SplitHistoryModal = props => {
                     PO ITem ID -{' '}
                     <Text style={styles.PoBoldText}>{_.itemId}</Text>
                   </Text>
-                  <Text style={styles.PoText}>
-                    {_.itemQty}Qty. | {_.itemStatus}
-                  </Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.PoText}>{_.itemQty} Qty. </Text>
+                    <Text
+                      style={[
+                        styles.PoText,
+                        {paddingLeft: Dimension.padding5},
+                      ]}>
+                      | {_.itemStatus}
+                    </Text>
+                  </View>
                 </View>
               ))}
             </View>

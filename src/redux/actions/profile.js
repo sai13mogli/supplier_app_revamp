@@ -1,4 +1,4 @@
-import { PROFILE_ACTIONS } from '../constants/profile';
+import {PROFILE_ACTIONS} from '../constants/profile';
 
 export const fetchProfile = () => {
   return {
@@ -47,12 +47,11 @@ export const failedFetchBusinessDetails = error => {
 export const fetchUpdateBusinessDetails = formData => {
   return {
     type: PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,
-    payload: { formData },
+    payload: {formData},
   };
 };
 
 export const fetchedUpdateBusinessDetails = (formData, data) => {
-
   return {
     type: PROFILE_ACTIONS.FETCHED_UPDATE_BUSINESS_DETAILS,
     payload: {
@@ -73,12 +72,11 @@ export const failedFetchUpdateBusinessDetails = error => {
 export const fetchUpdateTDSDetails = formData => {
   return {
     type: PROFILE_ACTIONS.FETCH_UPDATE_TDS_DETAILS,
-    payload: { formData },
+    payload: {formData},
   };
 };
 
 export const fetchedUpdateTDSDetails = (formData, data) => {
-
   return {
     type: PROFILE_ACTIONS.FETCHED_UPDATE_TDS_DETAILS,
     payload: {
@@ -121,7 +119,7 @@ export const failedFetchAddressDetails = error => {
 export const fetchDeleteAddresses = formData => {
   return {
     type: PROFILE_ACTIONS.FETCH_DELETE_ADDRESSES,
-    payload: { formData },
+    payload: {formData},
   };
 };
 
@@ -145,7 +143,7 @@ export const failedFetchDeleteAddresses = error => {
 export const fetchUpdateBillingAddress = formData => {
   return {
     type: PROFILE_ACTIONS.FETCH_UPDATE_BILLING_ADDRESS,
-    payload: { formData },
+    payload: {formData},
   };
 };
 
@@ -213,7 +211,7 @@ export const failedFetchTdsInfoDetails = error => {
 export const fetchUpdateBankDetails = formData => {
   return {
     type: PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS,
-    payload: { formData },
+    payload: {formData},
   };
 };
 
@@ -234,8 +232,20 @@ export const failedFetchUpdateBankDetails = error => {
   };
 };
 
-export const logout = () => {
+export const logout = token => {
   return {
     type: PROFILE_ACTIONS.LOGOUT,
+    payload: {
+      token,
+    },
+  };
+};
+
+export const setToken = token => {
+  return {
+    type: PROFILE_ACTIONS.SET_TOKEN,
+    payload: {
+      token,
+    },
   };
 };

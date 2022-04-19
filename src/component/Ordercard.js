@@ -8,8 +8,8 @@ import {
   ActivityIndicator,
   PermissionsAndroid,
 } from 'react-native';
-import React, { useState, useEffect, useCallback } from 'react';
-import { getImageUrl, markOutForOrderApi, getItemInfo } from '../services/orders';
+import React, {useState, useEffect, useCallback} from 'react';
+import {getImageUrl, markOutForOrderApi, getItemInfo} from '../services/orders';
 import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
@@ -33,7 +33,7 @@ import ProofOfDeliveryModal from '../component/ProofOfDeliveryModal';
 import AcceptModal from './AcceptModal';
 import AddView from './AddView';
 import SplitQuantityModal from './SplitQuantityModal';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -94,7 +94,7 @@ const Ordercard = props => {
   const [shipmentLoader, setShipmentLoader] = useState(false);
   const [podLoader, setPodLoader] = useState(false);
   const [debitLoader, setDebitLoader] = useState(false);
-  const { navigate } = useNavigation();
+  const {navigate} = useNavigation();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -105,7 +105,7 @@ const Ordercard = props => {
   }, []);
 
   const fetchImage = async () => {
-    const { data } = await getImageUrl(msn);
+    const {data} = await getImageUrl(msn);
     let imageUrl =
       'https://cdn.moglix.com/' +
       (data &&
@@ -162,6 +162,7 @@ const Ordercard = props => {
       orderRefs: [],
     });
     fetchTabCountFunc(selectedTab, shipmentType);
+    props.setLoadingTabs(true);
   };
 
   const getPOInvoice = (fromPO, invoiceUrl, isInvoice) => {
@@ -219,7 +220,7 @@ const Ordercard = props => {
         if (!isInvoice) {
           setPoLoader(true);
         }
-        const { data } = await getpoChallan(orderRef);
+        const {data} = await getpoChallan(orderRef);
         if (data && data.success) {
           //Image URL which we want to download
           image_URL = data.responseMessage;
@@ -237,7 +238,7 @@ const Ordercard = props => {
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
       //fs: To get the directory path in which we want our image to download
-      const { config, fs } = RNFetchBlob;
+      const {config, fs} = RNFetchBlob;
       let PictureDir =
         Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
       let options = {
@@ -255,11 +256,9 @@ const Ordercard = props => {
         },
       };
       config(options)
-        .fetch('GET', image_URL, { 'Cache-Control': 'no-store' })
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
         .then(res => {
           //Showing alert after successful downloading
-          console.log('res -> ', JSON.stringify(res));
-          console.log('imageUrl', image_URL, isPO);
           setInvoiceLoading(false);
           if (isPO) {
             setPoLoader(false);
@@ -304,7 +303,7 @@ const Ordercard = props => {
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
       //fs: To get the directory path in which we want our image to download
-      const { config, fs } = RNFetchBlob;
+      const {config, fs} = RNFetchBlob;
       let PictureDir =
         Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
       let options = {
@@ -322,11 +321,9 @@ const Ordercard = props => {
         },
       };
       config(options)
-        .fetch('GET', image_URL, { 'Cache-Control': 'no-store' })
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
         .then(res => {
           //Showing alert after successful downloading
-          console.log('res -> ', JSON.stringify(res));
-          console.log('imageUrl', image_URL);
           setShipmentLoader(false);
           Toast.show({
             type: 'success',
@@ -336,7 +333,6 @@ const Ordercard = props => {
           });
         });
     } catch (error) {
-      console.log(error);
       setShipmentLoader(false);
       Toast.show({
         type: 'success',
@@ -358,7 +354,7 @@ const Ordercard = props => {
   const createManifest = async () => {
     try {
       setManifestLoader(true);
-      const { data } = await createManifestApi({
+      const {data} = await createManifestApi({
         supplierId: await AsyncStorage.getItem('userId'),
         itemList: [`${itemId}`],
         source: 0,
@@ -375,6 +371,7 @@ const Ordercard = props => {
           orderRefs: [],
         });
         fetchTabCountFunc(selectedTab, shipmentType);
+        props.setLoadingTabs(true);
         Toast.show({
           type: 'success',
           text2: data.message,
@@ -403,7 +400,6 @@ const Ordercard = props => {
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         ).then(granted => {
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log('Storage Permission Granted.');
             downloadPodCopyUrl(podcopyUrl);
           } else {
           }
@@ -427,12 +423,11 @@ const Ordercard = props => {
       image_URL = url;
       //Getting the extention of the file
       let ext = getExtention(image_URL);
-      console.log('ext', ext);
       ext = '.' + ext[0];
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
       //fs: To get the directory path in which we want our image to download
-      const { config, fs } = RNFetchBlob;
+      const {config, fs} = RNFetchBlob;
       let PictureDir =
         Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
       let options = {
@@ -450,11 +445,9 @@ const Ordercard = props => {
         },
       };
       config(options)
-        .fetch('GET', image_URL, { 'Cache-Control': 'no-store' })
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
         .then(res => {
           //Showing alert after successful downloading
-          console.log('res -> ', JSON.stringify(res));
-          console.log('imageUrl', image_URL);
           setPodLoader(false);
           Toast.show({
             type: 'success',
@@ -478,14 +471,14 @@ const Ordercard = props => {
   const getDebitNoteUrl = async () => {
     try {
       setDebitLoader(true);
-      const { data } = await getItemInfo(supplierId, `${itemRef}`);
+      const {data} = await getItemInfo(supplierId, `${itemRef}`);
       if (data.success) {
         getDebitNoteFn(
           data &&
-          data.data &&
-          data.data.records &&
-          data.data.records[0] &&
-          data.data.records[0].dnUrl,
+            data.data &&
+            data.data.records &&
+            data.data.records[0] &&
+            data.data.records[0].dnUrl,
         );
       } else {
         setDebitLoader(false);
@@ -530,12 +523,11 @@ const Ordercard = props => {
       image_URL = url;
       //Getting the extention of the file
       let ext = getExtention(image_URL);
-      console.log('ext', ext);
       ext = '.' + ext[0];
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
       //fs: To get the directory path in which we want our image to download
-      const { config, fs } = RNFetchBlob;
+      const {config, fs} = RNFetchBlob;
       let PictureDir =
         Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
       let options = {
@@ -553,11 +545,9 @@ const Ordercard = props => {
         },
       };
       config(options)
-        .fetch('GET', image_URL, { 'Cache-Control': 'no-store' })
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
         .then(res => {
           //Showing alert after successful downloading
-          console.log('res -> ', JSON.stringify(res));
-          console.log('imageUrl', image_URL);
           setDebitLoader(false);
           Toast.show({
             type: 'success',
@@ -579,7 +569,7 @@ const Ordercard = props => {
   };
 
   const renderCTAs = (cta, url, fromCTA, fromPartial, podcopy) => {
-    const ctaLength = actionCTA.filter((number) => number % 2 !== 0);
+    const ctaLength = actionCTA.filter(number => number % 2 !== 0);
     return (
       <>
         {cta == 'REJECT' ? (
@@ -589,7 +579,7 @@ const Ordercard = props => {
             style={styles.rejectCtabtn}>
             <Text style={styles.rejectCtaTxt}>{cta}</Text>
             {rejectLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'ACCEPT' ? (
@@ -629,7 +619,7 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD INVOICE</Text>
             {invoiceLoading && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_PO_EMS' ? (
@@ -643,13 +633,12 @@ const Ordercard = props => {
                 // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 height: Dimension.height34,
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%'
-
+                flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
             {poLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'REMAP_INVOICE' ? (
@@ -669,7 +658,7 @@ const Ordercard = props => {
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>REMAP INVOICE</Text>
             {poLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'MAP_PO_TO_INVOICE' ? (
@@ -682,13 +671,16 @@ const Ordercard = props => {
                 itemRef,
               })
             }
-            style={[styles.DownloadPoBtn, {
-              flex: ctaLength.length ? 5 : 1,
-              flexBasis: ctaLength.length ? '45%' : '100%',
-            }]}>
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%',
+              },
+            ]}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
             {poLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_PO_OMS' ? (
@@ -702,15 +694,14 @@ const Ordercard = props => {
                 // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 height: Dimension.height33,
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%'
-
+                flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -724,12 +715,12 @@ const Ordercard = props => {
                 // flex: actionCTA.length > 1 ? 5 : 1,
                 // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%'
+                flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD POD COPY</Text>
             {podLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_DEBIT_NOTE' ? (
@@ -742,12 +733,12 @@ const Ordercard = props => {
                 // flex: actionCTA.length > 1 ? 5 : 1,
                 // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%'
+                flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD DEBIT NOTE</Text>
             {debitLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'MAP_INVOICE' ? (
@@ -771,13 +762,12 @@ const Ordercard = props => {
                 // flex: actionCTA.length > 1 ? 5 : 1,
                 // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%'
-
+                flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY' ? (
@@ -788,14 +778,14 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>MARK OUT FOR DELIVERY</Text>
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -807,14 +797,14 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>VIEW SPLIT HISTORY</Text>
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -828,15 +818,14 @@ const Ordercard = props => {
                 // flex: actionCTA.length > 1 ? 5 : 1,
                 // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%'
-
+                flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>VIEW LSP DETAILS</Text>
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -848,7 +837,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>PACK NOW</Text>
@@ -862,7 +851,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}
             onPress={() => setAddViewModal(true)}>
@@ -891,7 +880,6 @@ const Ordercard = props => {
                 // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
                 flexBasis: ctaLength.length ? '45%' : '100%',
-
               },
             ]}
             onPress={() => setSplitQuantityModal(true)}>
@@ -905,14 +893,14 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>PROOF OF DELIVERY</Text>
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -924,7 +912,7 @@ const Ordercard = props => {
                 styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
-                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                  flexBasis: actionCTA.length > 1 ? '48%' : '100%',
                 },
               ]}>
               <Text style={styles.disabledBtntxt}>Map PO to Invoice</Text>
@@ -935,7 +923,7 @@ const Ordercard = props => {
           </>
         ) : cta == 'MAP_INVOICE_PENDING' ? (
           <>
-            < View style={{ flexDirection: 'column', flex: 35, }}>
+            <View style={{flexDirection: 'column', flex: 35}}>
               <TouchableOpacity
                 disabled={true}
                 style={[
@@ -944,15 +932,16 @@ const Ordercard = props => {
                     // flex: actionCTA.length > 1 ? 5 : 1,
                     // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                     flex: ctaLength.length ? 0 : 1,
-                    flexBasis: ctaLength.length ? '45%' : '100%'
+                    flexBasis: ctaLength.length ? '45%' : '100%',
                   },
                 ]}>
                 <Text style={styles.disabledBtntxt}>Upload Invoice</Text>
               </TouchableOpacity>
-              <Text style={styles.shipmentLbelTxt}>Invoice Approval pending</Text>
+              <Text style={styles.shipmentLbelTxt}>
+                Invoice Approval pending
+              </Text>
             </View>
           </>
-
         ) : cta == 'PACK_ORDER_DISABLED' ? (
           <>
             <TouchableOpacity
@@ -961,7 +950,7 @@ const Ordercard = props => {
                 styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
-                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                  flexBasis: actionCTA.length > 1 ? '48%' : '100%',
                 },
               ]}>
               <Text style={styles.disabledBtntxt}>Pack Order</Text>
@@ -978,7 +967,7 @@ const Ordercard = props => {
                 styles.disabledbtn,
                 {
                   flex: actionCTA.length > 1 ? 5 : 1,
-                  flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                  flexBasis: actionCTA.length > 1 ? '48%' : '100%',
                 },
               ]}>
               <Text style={styles.disabledBtntxt}>Pack Order Invoice</Text>
@@ -989,7 +978,7 @@ const Ordercard = props => {
           </>
         ) : cta == 'CREATE_MANIFEST_DISABLED' ? (
           <>
-            <View style={{ flexDirection: 'column', flex: 0, flexBasis: '50%' }}>
+            <View style={{flexDirection: 'column', flex: 0, flexBasis: '50%'}}>
               <TouchableOpacity
                 disabled={true}
                 style={[
@@ -998,7 +987,7 @@ const Ordercard = props => {
                     // flex: actionCTA.length > 1 ? 5 : 1,
                     // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                     flex: ctaLength.length ? 5 : 1,
-                    flexBasis: ctaLength.length ? '45%' : '100%'
+                    flexBasis: ctaLength.length ? '45%' : '100%',
                   },
                 ]}>
                 <Text style={styles.disabledBtntxt}>Create Manifest</Text>
@@ -1007,7 +996,6 @@ const Ordercard = props => {
                 Shipment lable not created
               </Text>
             </View>
-
           </>
         ) : cta == 'CREATE_MANIFEST' ? (
           <TouchableOpacity
@@ -1018,13 +1006,13 @@ const Ordercard = props => {
                 // flex: actionCTA.length > 1 ? 5 : 1,
                 // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 0 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%'
+                flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}
             disabled={manifestLoader}>
             <Text style={styles.rejectCtaTxt}>Create Manifest</Text>
             {manifestLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_SHIPMENT_LABEL' ? (
@@ -1034,7 +1022,7 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '49%' : '100%'
+                flexBasis: ctaLength.length ? '49%' : '100%',
                 // flex: actionCTA.length > 1 ? 5 : 1,
                 // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
               },
@@ -1042,7 +1030,7 @@ const Ordercard = props => {
             disabled={manifestLoader}>
             <Text style={styles.rejectCtaTxt}>Download Shipment Label</Text>
             {manifestLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : null}
@@ -1076,9 +1064,7 @@ const Ordercard = props => {
   };
 
   const onMarkForDelivery = async () => {
-    // console.log(itemId, supplierId);
-    const { data } = await markOutForOrderApi(supplierId, itemId);
-    console.log(data);
+    const {data} = await markOutForOrderApi(supplierId, itemId);
     if (data.success) {
       fetchOrdersFunc(0, '', selectedTab, shipmentType, {
         pickupFromDate: '',
@@ -1090,6 +1076,7 @@ const Ordercard = props => {
         orderRefs: [],
       });
       fetchTabCountFunc(selectedTab, shipmentType);
+      props.setLoadingTabs(true);
     }
     setMarkForDelivery(false);
   };
@@ -1105,6 +1092,7 @@ const Ordercard = props => {
       orderRefs: [],
     });
     fetchTabCountFunc(selectedTab, shipmentType);
+    props.setLoadingTabs(true);
   };
 
   const renderOrderDetails = (fromModal, fromCTA) => {
@@ -1117,7 +1105,7 @@ const Ordercard = props => {
               : styles.orderCardwrapInner,
           ]}>
           {!fromModal &&
-            (selectedTab == 'PENDING_ACCEPTANCE' || selectedTab == 'SHIPMENT') ? (
+          (selectedTab == 'PENDING_ACCEPTANCE' || selectedTab == 'SHIPMENT') ? (
             <CustomeIcon
               name={
                 (bulkItemIds || []).includes(itemId)
@@ -1133,10 +1121,10 @@ const Ordercard = props => {
               onPress={() =>
                 selectedTab == 'SHIPMENT'
                   ? selectItemData({
-                    itemId,
-                    shipmentUrl,
-                    invoiceUrl: podUrl || invoiceUrl,
-                  })
+                      itemId,
+                      shipmentUrl,
+                      invoiceUrl: podUrl || invoiceUrl,
+                    })
                   : selectItemId(itemId)
               }
               style={{
@@ -1168,27 +1156,29 @@ const Ordercard = props => {
             <Text
               style={[
                 fromModal
-                  ? { color: Colors.FontColor }
-                  : { color: Colors.BrandColor },
+                  ? {color: Colors.FontColor}
+                  : {color: Colors.BrandColor},
                 styles.msnName,
               ]}>
               {msn}
             </Text>
-            {!fromModal ? (
-              <Text
-                onTextLayout={onTextLayout}
-                numberOfLines={showMoreTxt ? undefined : 1}
-                style={styles.productName}>
-                {productName}
-              </Text>
-            ) : (
-              <Text style={styles.productName}>{productName}</Text>
-            )}
-            {lengthMore && !fromModal ? (
-              <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
-                {showMoreTxt ? 'Read less' : 'Read more'}
-              </Text>
-            ) : null}
+            <View style={styles.productnameWrap}>
+              {!fromModal ? (
+                <Text
+                  onTextLayout={onTextLayout}
+                  numberOfLines={showMoreTxt ? undefined : 1}
+                  style={styles.productName}>
+                  {productName}
+                </Text>
+              ) : (
+                <Text style={styles.productName}>{productName}</Text>
+              )}
+              {lengthMore && !fromModal ? (
+                <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
+                  {showMoreTxt ? 'Read less' : 'Read more'}
+                </Text>
+              ) : null}
+            </View>
             {fromModal ? (
               <View
                 style={{
@@ -1203,8 +1193,8 @@ const Ordercard = props => {
                 <Text style={styles.taxpercentageTxt}>{taxPercentage}%</Text>
               </View>
             ) : null}
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ marginRight: Dimension.margin20 }}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{marginRight: Dimension.margin20}}>
                 <Text style={styles.TitleLightTxt}>
                   PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
                 </Text>
@@ -1238,14 +1228,14 @@ const Ordercard = props => {
                 </Text>
               </View>
             </View>
-            <View style={{ flexDirection: 'row', marginTop: Dimension.margin10 }}>
+            <View style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
               <Text style={styles.GstWrapTxt}>{orderTypeString}</Text>
               <Text style={styles.shipmentModeWrap}>
                 {shipmentMode == 2
                   ? 'Dropship'
                   : shipmentMode == 3
-                    ? 'Door Delivery'
-                    : shipmentType}
+                  ? 'Door Delivery'
+                  : shipmentType}
               </Text>
               {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
               <Text style={styles.shipmentModeStringWrap}>
@@ -1258,16 +1248,16 @@ const Ordercard = props => {
           style={
             fromModal
               ? {
-                flexDirection: 'row',
-                flex: 1,
-                marginTop: Dimension.margin30,
-                padding: Dimension.padding15,
-                borderTopColor: Colors.grayShade1,
-                borderTopWidth: 1,
-              }
-              : { flexDirection: 'row', flex: 1, marginTop: Dimension.margin15 }
+                  flexDirection: 'row',
+                  flex: 1,
+                  marginTop: Dimension.margin30,
+                  padding: Dimension.padding15,
+                  borderTopColor: Colors.grayShade1,
+                  borderTopWidth: 1,
+                }
+              : {flexDirection: 'row', flex: 1, marginTop: Dimension.margin15}
           }>
-          <View style={{ flex: 9, flexDirection: 'row', flexWrap: 'wrap' }}>
+          <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
             {renderPartialCTAs(invoiceUrl, fromCTA, podUrl)}
             {!showMoreCTA
               ? renderFurtherCTAs(invoiceUrl, fromCTA, podUrl)
@@ -1275,7 +1265,7 @@ const Ordercard = props => {
           </View>
 
           {actionCTA && actionCTA.length > 2 ? (
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <TouchableOpacity
                 onPress={toggleMoreCTAs}
                 style={styles.showMoreCta}>
@@ -1306,7 +1296,7 @@ const Ordercard = props => {
               setIsOrderVisible(false);
             }}
             coverScreen={true}
-            style={{ padding: 0, margin: 0 }}
+            style={{padding: 0, margin: 0}}
             deviceWidth={deviceWidth}
             hasBackdrop={true}
             onBackdropPress={() => setIsOrderVisible(false)}
@@ -1370,6 +1360,7 @@ const Ordercard = props => {
             itemId={itemId}
             fetchOrdersFunc={fetchOrdersFunc}
             fetchTabCountFunc={fetchTabCountFunc}
+            setLoadingTabs={props.setLoadingTabs}
             msn={msn}
             quantity={quantity}
             orderRef={orderRef}
@@ -1395,6 +1386,7 @@ const Ordercard = props => {
         <AcceptModal
           selectedTab={selectedTab}
           fetchOrdersFunc={fetchOrdersFunc}
+          setLoadingTabs={props.setLoadingTabs}
           fetchTabCountFunc={fetchTabCountFunc}
           itemId={itemId}
           shipmentType={shipmentType}
@@ -1410,6 +1402,7 @@ const Ordercard = props => {
           itemId={itemId}
           fetchOrdersFunc={fetchOrdersFunc}
           fetchTabCountFunc={fetchTabCountFunc}
+          setLoadingTabs={props.setLoadingTabs}
           msn={msn}
           quantity={quantity}
           orderRef={orderRef}
@@ -1439,6 +1432,7 @@ const Ordercard = props => {
           itemId={itemId}
           fetchOrdersFunc={fetchOrdersFunc}
           fetchTabCountFunc={fetchTabCountFunc}
+          setLoadingTabs={props.setLoadingTabs}
           msn={msn}
           quantity={quantity}
           orderRef={orderRef}
@@ -1480,11 +1474,13 @@ const styles = StyleSheet.create({
     // color: Colors.BrandColor,
     fontFamily: Dimension.CustomSemiBoldFont,
   },
+  productnameWrap: {
+    marginBottom: Dimension.margin10,
+  },
   productName: {
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-    marginBottom: Dimension.margin10,
     marginTop: Dimension.margin5,
   },
   readMoretxt: {
@@ -1625,13 +1621,13 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
   },
   DownloadPoBtn: {
-    flex: 1,
+    flex: 5,
     backgroundColor: Colors.WhiteColor,
     borderRadius: 4,
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
-    flexBasis: '50%',
+    flexBasis: '48%',
     marginTop: Dimension.margin10,
     borderColor: Colors.grayShade15,
     borderWidth: 1,
@@ -1639,13 +1635,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   disabledbtn: {
-    flex: 1,
+    flex: 5,
     backgroundColor: Colors.grayshade16,
     borderRadius: 4,
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
-    flexBasis: '50%',
+    flexBasis: '48%',
     marginTop: Dimension.margin10,
     borderColor: Colors.BoxBorderColor,
     borderWidth: 1,
@@ -1688,8 +1684,8 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
   },
-  LeftpartModal: { flex: 1 },
-  orderCardwrapInnerModal: { paddingHorizontal: Dimension.padding15 },
+  LeftpartModal: {flex: 1},
+  orderCardwrapInnerModal: {paddingHorizontal: Dimension.padding15},
   rupeeSign: {
     fontFamily: Dimension.CustomRobotoBold,
     fontSize: Dimension.font12,

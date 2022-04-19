@@ -14,7 +14,6 @@ const SplashScreen = props => {
   const checkAuthState = async () => {
     const token = await AsyncStorage.getItem('token');
     const onlineShipmentMode = await AsyncStorage.getItem('onlineShipmentMode');
-    console.log(token, props);
     if (token || onlineShipmentMode) {
       if (onlineShipmentMode) {
         dispatch(setShipmentType(onlineShipmentMode));

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
-  Image
+  Image,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Modal from 'react-native-modal';
@@ -23,7 +23,7 @@ import {STATE_STATUS} from '../redux/constants';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomeDatePicker from '../component/common/Datepicker/index';
 import CustomeIcon from './common/CustomeIcon';
-import { Tooltip, } from 'react-native-elements';
+import {Tooltip} from 'react-native-elements';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -52,7 +52,6 @@ const OrdersFilterModal = props => {
     setPoFromDate,
     setPoToDate,
     resetFilters,
-    
   } = props;
 
   const poStatus = useSelector(state =>
@@ -93,11 +92,12 @@ const OrdersFilterModal = props => {
 
       return (
         <View style={{height: deviceHeight}}>
-         
           <ScrollView>
             {poIds.map((_, i) => (
-              <TouchableOpacity onPress={() => selectFilter(_)} style={styles.checkboxWrap}>
-               <CustomeIcon
+              <TouchableOpacity
+                onPress={() => selectFilter(_)}
+                style={styles.checkboxWrap}>
+                <CustomeIcon
                   name={
                     appliedFilter[initialFilter] &&
                     appliedFilter[initialFilter].includes(_)
@@ -110,11 +110,8 @@ const OrdersFilterModal = props => {
                       ? Colors.BrandColor
                       : Colors.blackColor
                   }
-                  size={Dimension.font22}
-                  >
+                  size={Dimension.font22}></CustomeIcon>
 
-                  </CustomeIcon>
-              
                 {/* <MaterialCommunityIcon
                   name={
                     appliedFilter[initialFilter] &&
@@ -148,24 +145,23 @@ const OrdersFilterModal = props => {
           <ScrollView>
             <>
               {orderfiltersData[activeFilter].map((_, i) => (
-                <TouchableOpacity onPress={() => selectFilter(_.key)} style={styles.checkboxWrap}>
+                <TouchableOpacity
+                  onPress={() => selectFilter(_.key)}
+                  style={styles.checkboxWrap}>
                   <CustomeIcon
-                  name={
-                    appliedFilter[initialFilter] &&
-                    appliedFilter[initialFilter].includes(_.key)
-                      ? 'checkbox-tick'
-                      : 'checkbox-blank'
-                  }
-                  color={
-                    appliedFilter[initialFilter] &&
-                    appliedFilter[initialFilter].includes(_.key)
-                      ? Colors.BrandColor
-                      : Colors.blackColor
-                  }
-                  size={Dimension.font22}
-                  >
-
-                  </CustomeIcon>
+                    name={
+                      appliedFilter[initialFilter] &&
+                      appliedFilter[initialFilter].includes(_.key)
+                        ? 'checkbox-tick'
+                        : 'checkbox-blank'
+                    }
+                    color={
+                      appliedFilter[initialFilter] &&
+                      appliedFilter[initialFilter].includes(_.key)
+                        ? Colors.BrandColor
+                        : Colors.blackColor
+                    }
+                    size={Dimension.font22}></CustomeIcon>
                   {/* <MaterialCommunityIcon
                     name={
                       appliedFilter[initialFilter] &&
@@ -181,26 +177,30 @@ const OrdersFilterModal = props => {
                         : '#000'
                     }
                   /> */}
-                  <Text
-                    style={styles.checkBoxTitle}>
-                    {_.title}
-                  </Text>
+                  <Text style={styles.checkBoxTitle}>{_.title}</Text>
                 </TouchableOpacity>
               ))}
               {activeFilter == 'deliveryType' ? (
                 <>
-                <View style={{flexDirection:"row",marginHorizontal:Dimension.padding20,marginTop:Dimension.margin50,flex:1,}}>
-                  <Text style={styles.deliveryTypeTxt}>
-                  What is Delivery Type 
-                  </Text>
-                 <TouchableOpacity style={{flex:.5,alignItems:"flex-end"}} onPress={() => settooltip1(!tooltip1)}>
-                 <Image
-            
-            source={require('../assets/images/tooltipIcon.png')}
-            style={{width:24,height:24}} ></Image>
-            </TouchableOpacity>
-            
-                  {/* <Tooltip
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginHorizontal: Dimension.padding20,
+                      marginTop: Dimension.margin50,
+                      flex: 1,
+                    }}>
+                    <Text style={styles.deliveryTypeTxt}>
+                      What is Delivery Type
+                    </Text>
+                    <TouchableOpacity
+                      style={{flex: 0.5, alignItems: 'flex-end'}}
+                      onPress={() => settooltip1(!tooltip1)}>
+                      <Image
+                        source={require('../assets/images/tooltipIcon.png')}
+                        style={{width: 24, height: 24}}></Image>
+                    </TouchableOpacity>
+
+                    {/* <Tooltip
             backgroundColor={"#000"}
             popover={
               <Text>Tooltip info goes here too. Find tooltip everywhere</Text>
@@ -215,25 +215,30 @@ const OrdersFilterModal = props => {
             style={{width:24,height:24}}
           />
           </Tooltip> */}
-          
-                </View>
-                {tooltip1 && (
-                <View style={styles.tooltipWrap}>
-                <View style={styles.arrow}></View>
-                <View>
-                <Text style={styles.tooltipTxt}>
-                <Text style={styles.tooltipBoldTxt}>Dropship-</Text> Products are delivered from supplier to customer location directly
-                  </Text>
-                  <Text style={styles.tooltipTxt}>
-                  <Text style={styles.tooltipBoldTxt}>Oneship-</Text> Products are picked by Moglix runners from supplier
-                  </Text>
-                  <Text style={styles.tooltipTxt}>
-                  <Text style={styles.tooltipBoldTxt}>Door Delivery-</Text> Products are delivered by supplier to Moglix warehouse
-                  </Text>
-                </View>
-                </View>
-              )}
-            </>
+                  </View>
+                  {tooltip1 && (
+                    <View style={styles.tooltipWrap}>
+                      <View style={styles.arrow}></View>
+                      <View>
+                        <Text style={styles.tooltipTxt}>
+                          <Text style={styles.tooltipBoldTxt}>Dropship-</Text>{' '}
+                          Products are delivered from supplier to customer
+                          location directly
+                        </Text>
+                        <Text style={styles.tooltipTxt}>
+                          <Text style={styles.tooltipBoldTxt}>Oneship-</Text>{' '}
+                          Products are picked by Moglix runners from supplier
+                        </Text>
+                        <Text style={styles.tooltipTxt}>
+                          <Text style={styles.tooltipBoldTxt}>
+                            Door Delivery-
+                          </Text>{' '}
+                          Products are delivered by supplier to Moglix warehouse
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                </>
               ) : null}
             </>
           </ScrollView>
@@ -256,11 +261,9 @@ const OrdersFilterModal = props => {
     setPoToDate(date);
   };
 
-  console.log(pickupFromDate, pickupToDate, poFromDate, poToDate);
-
   const renderComponent = () => {
     return (
-      <View style={styles.DateWrapper}> 
+      <View style={styles.DateWrapper}>
         <CustomeDatePicker
           title={'From Date'}
           isImp={true}
@@ -300,15 +303,6 @@ const OrdersFilterModal = props => {
             })} */
   /* {_ == '1' ? `${_} item` : `${_} items`} */
 
-  useEffect(() => {
-    if (poStatus == STATE_STATUS.FETCHED) {
-      console.log(poData);
-      // poData.map((_, i) => {
-      //   console.log(_, i);
-      // });
-    }
-  }, [poStatus]);
-
   return (
     <Modal
       overlayPointerEvents={'auto'}
@@ -327,48 +321,47 @@ const OrdersFilterModal = props => {
       onBackdropPress={() => setOrdersFiltersModal(false)}
       onBackButtonPress={() => setOrdersFiltersModal(false)}>
       <View style={{height: deviceHeight, width: deviceWidth}}>
-      <View style={styles.headerWrap}>
+        <View style={styles.headerWrap}>
           <CustomeIcon
-                name={'arrow-back'}
-                size={Dimension.font22}
-                color={Colors.FontColor}
-              />
-              <Text style={styles.headerTxt}>Filter</Text>
-          </View>
-          <View style={styles.MidWrapper}>
+            name={'arrow-back'}
+            size={Dimension.font22}
+            color={Colors.FontColor}
+          />
+          <Text style={styles.headerTxt}>Filter</Text>
+        </View>
+        <View style={styles.MidWrapper}>
           <View style={styles.leftPart}>
-          {orderFiltersTypeData.map((item, index) => (
-          <TouchableOpacity
-            onPress={() => {
-              setActiveFilter(item.key);
-              setInitialFilter(item.key);
-            }}
-            style={[
-              item && item.key == activeFilter
-                ? styles.activeBackground
-                : styles.inactiveBackground,
-            ]}>
-            <Text
-              style={[
-                item && item.key == activeFilter
-                  ? styles.LeftActiveTxt
-                  : styles.LeftInActiveTxt,
-              ]}>
-              {item.title}
-            </Text>
-          </TouchableOpacity>
-        ))}
+            {orderFiltersTypeData.map((item, index) => (
+              <TouchableOpacity
+                onPress={() => {
+                  setActiveFilter(item.key);
+                  setInitialFilter(item.key);
+                }}
+                style={[
+                  item && item.key == activeFilter
+                    ? styles.activeBackground
+                    : styles.inactiveBackground,
+                ]}>
+                <Text
+                  style={[
+                    item && item.key == activeFilter
+                      ? styles.LeftActiveTxt
+                      : styles.LeftInActiveTxt,
+                  ]}>
+                  {item.title}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
           <View style={styles.rightPart}>
-          {['poDate', 'pickupDate'].includes(activeFilter)
-          ? renderComponent()
-          : renderRight()}
+            {['poDate', 'pickupDate'].includes(activeFilter)
+              ? renderComponent()
+              : renderRight()}
           </View>
         </View>
-        
-     
+
         <View style={styles.bottomAction}>
-        <TouchableOpacity
+          <TouchableOpacity
             onPress={() => resetFilters()}
             style={styles.cancelBtn}>
             <Text style={styles.canceltxt}>RESET</Text>
@@ -378,7 +371,6 @@ const OrdersFilterModal = props => {
             style={styles.acceptCtabtn}>
             <Text style={styles.acceptCtaTxt}>APPLY FILTERS</Text>
           </TouchableOpacity>
-          
         </View>
       </View>
     </Modal>
@@ -386,29 +378,28 @@ const OrdersFilterModal = props => {
 };
 
 const styles = StyleSheet.create({
-  headerWrap:{
-    flexDirection:"row",
-    backgroundColor:"#fff",
-    paddingTop:Dimension.padding20,
-    paddingHorizontal:Dimension.padding10,
-    paddingBottom:Dimension.padding10
+  headerWrap: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    paddingTop: Dimension.padding20,
+    paddingHorizontal: Dimension.padding10,
+    paddingBottom: Dimension.padding10,
   },
-  headerTxt:{
+  headerTxt: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
-    marginLeft:Dimension.margin10,
-
+    marginLeft: Dimension.margin10,
   },
   activeBackground: {
     backgroundColor: Colors.LightBrandColor,
-     paddingVertical: Dimension.padding15,
+    paddingVertical: Dimension.padding15,
     paddingHorizontal: Dimension.padding20,
   },
   inactiveBackground: {
     backgroundColor: '#fff',
-     paddingVertical: Dimension.padding15,
-     paddingHorizontal: Dimension.padding20,
+    paddingVertical: Dimension.padding15,
+    paddingHorizontal: Dimension.padding20,
   },
   LeftInActiveTxt: {
     fontSize: Dimension.font12,
@@ -428,61 +419,55 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     bottom: 0,
-    
+
     flexDirection: 'row',
   },
-  
-  ModalBottomBtnWrap: {
-   
-  },
+
+  ModalBottomBtnWrap: {},
 
   MidWrapper: {
-    flexDirection: "row",
+    flexDirection: 'row',
     borderTopColor: Colors.grayShade2,
     borderTopWidth: 1,
-   backgroundColor:"#fff",
-   height:deviceHeight
-
+    backgroundColor: '#fff',
+    height: deviceHeight,
   },
   leftPart: {
     flex: 3,
     borderRightColor: Colors.grayShade2,
-    borderRightWidth: 1, 
-  backgroundColor:"#fff",
-  paddingTop:Dimension.padding20,
-  height: deviceHeight,
+    borderRightWidth: 1,
+    backgroundColor: '#fff',
+    paddingTop: Dimension.padding20,
+    height: deviceHeight,
   },
   rightPart: {
     flex: 7,
     //alignItems:"flex-start"
-    paddingTop:Dimension.padding25,
+    paddingTop: Dimension.padding25,
     height: deviceHeight,
   },
-  
 
-  checkBoxTitle:{
+  checkBoxTitle: {
     color: Colors.blackColor,
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomMediumFont,
-    marginLeft:Dimension.margin10,
-    marginTop:Dimension.margin4
+    marginLeft: Dimension.margin10,
+    marginTop: Dimension.margin4,
   },
-  checkboxWrap:{
-    flexDirection:"row",
-    marginVertical:Dimension.padding10,
-    marginHorizontal:Dimension.margin25,
-
+  checkboxWrap: {
+    flexDirection: 'row',
+    marginVertical: Dimension.padding10,
+    marginHorizontal: Dimension.margin25,
   },
-  DateWrapper:{
-paddingHorizontal:Dimension.padding15
+  DateWrapper: {
+    paddingHorizontal: Dimension.padding15,
   },
-  deliveryTypeTxt:{
+  deliveryTypeTxt: {
     color: Colors.FontColor,
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomMediumFont,
-    flex:.5
-    
-  }, 
+    flex: 0.5,
+  },
   acceptCtabtn: {
     flex: 5,
     backgroundColor: Colors.BrandColor,
@@ -504,7 +489,6 @@ paddingHorizontal:Dimension.padding15
     paddingVertical: Dimension.padding12,
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   rejectCtaTxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
@@ -518,45 +502,42 @@ paddingHorizontal:Dimension.padding15
     paddingVertical: Dimension.padding12,
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   canceltxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
     color: Colors.FontColor,
     fontSize: Dimension.font16,
   },
-  tooltipWrap:{
-    backgroundColor:"#000",
-    marginTop:10,
-    position:"relative",
-    borderRadius:4,
-    marginHorizontal:Dimension.margin15,
-    padding:15
+  tooltipWrap: {
+    backgroundColor: '#000',
+    marginTop: 10,
+    position: 'relative',
+    borderRadius: 4,
+    marginHorizontal: Dimension.margin15,
+    padding: 15,
   },
-  arrow:{
-    borderLeftColor:"#fff",
-    borderBottomColor:"#000",
-    borderRightColor:'#fff',
-    borderLeftWidth:5,
-    borderRightWidth:5,
-    borderBottomWidth:8,
-    width:0,
-    height:0,
-    position:"absolute",
-    right:15,
-    top:-8
+  arrow: {
+    borderLeftColor: '#fff',
+    borderBottomColor: '#000',
+    borderRightColor: '#fff',
+    borderLeftWidth: 5,
+    borderRightWidth: 5,
+    borderBottomWidth: 8,
+    width: 0,
+    height: 0,
+    position: 'absolute',
+    right: 15,
+    top: -8,
   },
-  tooltipTxt:{
-    fontFamily:Dimension.CustomRegularFont,
-    color:Colors.WhiteColor,
-    fontSize:Dimension.font10,
-    marginBottom:Dimension.margin8
+  tooltipTxt: {
+    fontFamily: Dimension.CustomRegularFont,
+    color: Colors.WhiteColor,
+    fontSize: Dimension.font10,
+    marginBottom: Dimension.margin8,
   },
-  tooltipBoldTxt:{
-    fontFamily:Dimension.CustomMediumFont,
-  }
-  
-
+  tooltipBoldTxt: {
+    fontFamily: Dimension.CustomMediumFont,
+  },
 });
 
 export default OrdersFilterModal;

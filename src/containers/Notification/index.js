@@ -110,7 +110,6 @@ const NotificationScreen = props => {
   };
 
   const renderItem = ({ item, index }) => {
-    console.log("item===>", item);
     return (
       <View
         key={index}
@@ -123,8 +122,8 @@ const NotificationScreen = props => {
           <View
             style={item.readStatus ? styles.iconWrap : styles.ActioniconWrap}>
             <CustomeIcon
-              // name={item.readStatus ? 'support-line' : 'orders-line'}
-              name={item.readStatus ? notificationsStatusIcon(item.recordType) : notificationsStatusIcon(item.recordType)}
+              name={item.readStatus ? 'support-line' : 'orders-line'}
+              // name={item.readStatus ? notificationsStatusIcon(item.recordType) : notificationsStatusIcon(item.recordType)}
               size={Dimension.font20}
               //color={Colors.eyeIcon}
               color={item.readStatus ? Colors.eyeIcon : Colors.BrandColor}
