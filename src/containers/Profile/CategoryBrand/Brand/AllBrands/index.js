@@ -116,8 +116,6 @@ const AllBrandsScreen = props => {
     dispatch(fetchBrandSearchResult(fetchListingObj));
   };
 
-  console.log(payloadParams[0], 'payloadParams');
-
   const fetchListingDataByAlphabet = term => {
     if (term == '0-9') {
       setActiveTerm('0-9');
@@ -319,7 +317,6 @@ const AllBrandsScreen = props => {
   };
 
   const renderListing = () => {
-    console.log('pageIndex', pageIndex, allBrandsStatus);
     if (initLoader) {
       return renderLoader();
     } else if (

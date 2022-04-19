@@ -378,19 +378,6 @@ const BusinessDetailsScreen = props => {
   };
 
   const onSubmit = () => {
-    console.log(
-      legalEntityName,
-      tradeName,
-      contactName,
-      gstin,
-      country,
-      pincode,
-      state,
-      city,
-      phone,
-      email,
-      tan,
-    );
     if (
       legalEntityName &&
       legalEntityName.length &&
@@ -500,7 +487,6 @@ const BusinessDetailsScreen = props => {
         if (phone && phone.length && phone.length == 10) {
           initializeCounter(type);
           const {data} = await sendOtpForVerification(type);
-          console.log('data', data);
           setOtpModal(true);
         } else {
           setphoneError(true);
@@ -514,7 +500,6 @@ const BusinessDetailsScreen = props => {
         if (email && email.length && email.match(emailRegex)) {
           initializeCounter(type);
           const {data} = await sendOtpForVerification(type);
-          console.log('data', data);
           setOtpModal(true);
         } else {
           setemailError(true);
@@ -597,9 +582,7 @@ const BusinessDetailsScreen = props => {
     }
   };
 
-  const onLogin = () => {
-    console.log('login!!');
-  };
+  const onLogin = () => {};
 
   return (
     <View style={{flex: 1}}>

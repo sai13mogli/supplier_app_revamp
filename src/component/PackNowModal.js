@@ -21,7 +21,6 @@ import Productcard from './Productcard';
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-
 const PackNowModal = props => {
   const [orderImage, setOrderImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -101,7 +100,15 @@ const PackNowModal = props => {
       showError: weightError,
       keyboardType: 'number-pad',
       onBlur: () => onweightBlur(),
-      extraView: () => <View style={{flexDirection:"row"}}><Text style={styles.InputRighttxt}>Kg</Text><CustomeIcon name={'arrow-drop-down-line'} color={Colors.FontColor} size={Dimension.font16}></CustomeIcon></View>,
+      extraView: () => (
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.InputRighttxt}>Kg</Text>
+          <CustomeIcon
+            name={'arrow-drop-down-line'}
+            color={Colors.FontColor}
+            size={Dimension.font16}></CustomeIcon>
+        </View>
+      ),
     },
     height: {
       title: 'Height',
@@ -114,7 +121,15 @@ const PackNowModal = props => {
       showError: heightError,
       keyboardType: 'number-pad',
       onBlur: () => onheightBlur(),
-      extraView: () => <View style={{flexDirection:"row"}}><Text style={styles.InputRighttxt}>Cm</Text><CustomeIcon name={'arrow-drop-down-line'} color={Colors.FontColor} size={Dimension.font16}></CustomeIcon></View>,
+      extraView: () => (
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.InputRighttxt}>Cm</Text>
+          <CustomeIcon
+            name={'arrow-drop-down-line'}
+            color={Colors.FontColor}
+            size={Dimension.font16}></CustomeIcon>
+        </View>
+      ),
     },
     length: {
       title: 'Length',
@@ -192,18 +207,6 @@ const PackNowModal = props => {
   }, []);
 
   const onPackNow = async () => {
-    console.log(
-      noOfPackets,
-      weight,
-      height,
-      length,
-      width,
-      !noOfPacketsError,
-      !weightError,
-      !heightError,
-      !lengthError,
-      !widthError,
-    );
     if (
       noOfPackets &&
       weight &&
@@ -285,91 +288,82 @@ const PackNowModal = props => {
         setModal(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 'auto',width:'100%',height:"100%"}}
+      style={{padding: 0, margin: 'auto', width: '100%', height: '100%'}}
       deviceWidth={deviceWidth}
       deviceHeight={deviceHeight}
-
       //height={'80%'}
       hasBackdrop={true}
       onBackdropPress={() => setModal(false)}
       onBackButtonPress={() => setModal(false)}>
-        
       <View style={styles.modalContainer}>
-     
-      <View style={styles.topbdr}></View>
-      <View style={styles.closeIconWrap}>
+        <View style={styles.topbdr}></View>
+        <View style={styles.closeIconWrap}>
           <CustomeIcon
-                name={'close'}
-                size={Dimension.font22}
-                color={Colors.FontColor}
-                onPress={() => {
-                  setModal(false);
-                }}
-              />
-          </View>
-          <View style={styles.headerTxtWrap}>
-              <Text style={styles.headerTxt}>Pack Order</Text>
-           </View>
-           <ScrollView>
-        <>
-        
-        <View style={{paddingHorizontal: Dimension.padding15}}>
-          {renderOrderDetails()}
+            name={'close'}
+            size={Dimension.font22}
+            color={Colors.FontColor}
+            onPress={() => {
+              setModal(false);
+            }}
+          />
         </View>
-          
-        </>
+        <View style={styles.headerTxtWrap}>
+          <Text style={styles.headerTxt}>Pack Order</Text>
+        </View>
+        <ScrollView>
+          <>
+            <View style={{paddingHorizontal: Dimension.padding15}}>
+              {renderOrderDetails()}
+            </View>
+          </>
 
-        <View style={styles.BottomDataWrap}>
-          {FORM_FIELDS.map((_, key) => (
-            <_.component key={key} {..._} />
-          )).toList()}
-        </View>
+          <View style={styles.BottomDataWrap}>
+            {FORM_FIELDS.map((_, key) => (
+              <_.component key={key} {..._} />
+            )).toList()}
+          </View>
         </ScrollView>
         <View style={styles.bottomAction}>
-          <View style={{flex:1}}>
-          <CustomButton
-          title="RESET"
-          buttonColor={Colors.WhiteColor}
-          borderColor={Colors.WhiteColor}
-          TextColor={Colors.blackColor}
-          TextFontSize={Dimension.font16}
-          onPress={() => {
-            setNoOfPackets('');
-            setNoOfPacketsError(false);
-            setWeight('');
-            setWeightError(false);
-            setHeight('');
-            setHeightError(false);
-            setLength('');
-            setLengthError(false);
-            setWidth('');
-            setWidthError(false);
-          }}
-        />
+          <View style={{flex: 1}}>
+            <CustomButton
+              title="RESET"
+              buttonColor={Colors.WhiteColor}
+              borderColor={Colors.WhiteColor}
+              TextColor={Colors.blackColor}
+              TextFontSize={Dimension.font16}
+              onPress={() => {
+                setNoOfPackets('');
+                setNoOfPacketsError(false);
+                setWeight('');
+                setWeightError(false);
+                setHeight('');
+                setHeightError(false);
+                setLength('');
+                setLengthError(false);
+                setWidth('');
+                setWidthError(false);
+              }}
+            />
           </View>
-          <View style={{flex:1}}>
-          <CustomButton
-          title="PACK NOW"
-          loading={loading}
-          disabled={loading}
-          buttonColor={Colors.BrandColor}
-          borderColor={Colors.BrandColor}
-          TextColor={Colors.WhiteColor}
-          TextFontSize={Dimension.font16}
-          onPress={() => onPackNow()}
-        />
+          <View style={{flex: 1}}>
+            <CustomButton
+              title="PACK NOW"
+              loading={loading}
+              disabled={loading}
+              buttonColor={Colors.BrandColor}
+              borderColor={Colors.BrandColor}
+              TextColor={Colors.WhiteColor}
+              TextFontSize={Dimension.font16}
+              onPress={() => onPackNow()}
+            />
           </View>
         </View>
-       
-       
       </View>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-   
- 
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
@@ -379,7 +373,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingTop: Dimension.padding10,
     //marginTop: 'auto',
-    height:deviceHeight-100
+    height: deviceHeight - 100,
   },
   topbdr: {
     alignSelf: 'center',
@@ -388,36 +382,35 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     width: Dimension.width70,
   },
-  closeIconWrap:{
-    alignItems:"flex-end",
-    paddingHorizontal:Dimension.padding15,
+  closeIconWrap: {
+    alignItems: 'flex-end',
+    paddingHorizontal: Dimension.padding15,
   },
-  headerTxtWrap:{
-    paddingHorizontal:Dimension.padding15,
-    marginBottom:Dimension.margin20
+  headerTxtWrap: {
+    paddingHorizontal: Dimension.padding15,
+    marginBottom: Dimension.margin20,
   },
 
-  headerTxt:{
+  headerTxt: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
-   // marginLeft:Dimension.margin10,
+    // marginLeft:Dimension.margin10,
+  },
 
+  BottomDataWrap: {
+    paddingVertical: Dimension.padding30,
+    paddingHorizontal: Dimension.padding15,
+    //maxHeight:200
+    //flex:1
   },
- 
-  BottomDataWrap:{
-paddingVertical:Dimension.padding30,
-paddingHorizontal:Dimension.padding15,
-//maxHeight:200
-//flex:1
-  },
-  BottomDataTitle:{
+  BottomDataTitle: {
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
-    marginBottom:Dimension.margin10,
+    marginBottom: Dimension.margin10,
   },
-  InputRighttxt:{
+  InputRighttxt: {
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomMediumFont,
@@ -431,7 +424,7 @@ paddingHorizontal:Dimension.padding15,
     //position: 'absolute',
     width: '100%',
     //bottom: 0,
-     flexDirection: 'row',
+    flexDirection: 'row',
   },
 });
 

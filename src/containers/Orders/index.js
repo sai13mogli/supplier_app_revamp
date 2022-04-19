@@ -20,7 +20,6 @@ import {getImageUrl, acceptBulk} from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
@@ -111,7 +110,7 @@ const OrdersScreen = props => {
       {label: 'Upload Invoice', key: 'UPLOAD_INVOICE'},
       {label: 'Packed', key: 'PACKED'},
       {label: 'Shipment', key: 'SHIPMENT'},
-      {label: 'Mark Shipped', key: 'MARK_SHIPPED'},
+      {label: 'Mark Shipped/Delivered', key: 'MARK_SHIPPED'},
     ],
     Fulfilled_Orders: [{label: 'Fulfilled', key: 'FULFILLED'}],
     Cancelled: [{label: 'Cancelled', key: 'CANCELLED'}],
@@ -199,6 +198,7 @@ const OrdersScreen = props => {
   const renderItem = ({item, index}) => {
     return (
       <Ordercard
+        key={index}
         warehouseId={item.warehouseId}
         msn={item.productMsn}
         quantity={item.quantity}
@@ -290,7 +290,6 @@ const OrdersScreen = props => {
 
   //select Item Data
   const selectItemData = itemObj => {
-    console.log('itemdata hai mc', itemObj);
     let currentBulkDownloadItems = [...bulkDownloadItems];
     let currItemIds = [...bulkItemIds];
     if (currItemIds.includes(itemObj.itemId)) {
@@ -308,7 +307,6 @@ const OrdersScreen = props => {
         currItemIds.push(itemObj.itemId);
       }
     }
-    console.log(currentBulkDownloadItems, 'mc data hai', currItemIds);
     setBulkDownloadItems(currentBulkDownloadItems);
     setBulkItemIds(currItemIds);
   };
@@ -325,7 +323,6 @@ const OrdersScreen = props => {
 
   useEffect(() => {
     if (selectedTab == 'SHIPMENT' && bulkItemIds && bulkItemIds.length) {
-      console.log('bhk bulkActions', bulkItemIds.length);
       setBulkActionsModal(true);
     }
   }, [bulkItemIds]);
@@ -355,8 +352,8 @@ const OrdersScreen = props => {
 
   const upButtonHandler = tabIndex => {
     scrollRef.current.scrollTo({
-      x: tabIndex * 200,
-      y: tabIndex * 200,
+      x: tabIndex == 1 ? 0 : tabIndex * 60,
+      y: 0,
       animated: true,
     });
   };
@@ -600,8 +597,8 @@ const OrdersScreen = props => {
           padding: 15,
         }}>
         <DropDown
-          title={''}
-          label={''}
+          title={'Orders'}
+          label={'Orders'}
           selectedValue={selectedType}
           onValueChange={text => {
             setSelectedType(text);
@@ -619,13 +616,14 @@ const OrdersScreen = props => {
         />
       ) : (
         <>
+          {renderHeaderComponent()}
           <FlatList
             data={OrderData.toArray()}
-            stickyHeaderIndices={[0]}
+            // stickyHeaderIndices={[0]}
             renderItem={renderItem}
             ListEmptyComponent={renderListEmptyComponent}
             keyExtractor={(item, index) => `${index}-item`}
-            ListHeaderComponent={renderHeaderComponent}
+            // ListHeaderComponent={renderHeaderComponent}
             ListFooterComponent={renderFooterComponent}
             onEndReachedThreshold={0.9}
             style={{paddingBottom: 380}}
