@@ -211,18 +211,20 @@ const NotificationScreen = props => {
               padding: Dimension.padding20,
               marginBottom: Dimension.margin40,
             }}>
-            <TouchableOpacity
-              onPress={() => {
-                dispatch(markRead(selectedOrder.id));
-                setsingleNotificationAction(false);
-              }}
-              style={styles.modalBtn}>
-              <CustomeIcon
-                name={'right-tick-line'}
-                size={Dimension.font20}
-                color={Colors.FontColor}></CustomeIcon>
-              <Text style={styles.ModalTxt}>Mark as Read</Text>
-            </TouchableOpacity>
+            {!selectedOrder.readStatus ? (
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(markRead(selectedOrder.id));
+                  setsingleNotificationAction(false);
+                }}
+                style={styles.modalBtn}>
+                <CustomeIcon
+                  name={'right-tick-line'}
+                  size={Dimension.font20}
+                  color={Colors.FontColor}></CustomeIcon>
+                <Text style={styles.ModalTxt}>Mark as Read</Text>
+              </TouchableOpacity>
+            ) : null}
             <TouchableOpacity
               onPress={() => {
                 dispatch(deleteNotification(selectedOrder.id));

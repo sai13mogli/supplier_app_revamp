@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     },
     ContainerCss: {
         backgroundColor: Colors.WhiteColor,
-        paddingHorizontal: Dimension.padding15,
+        paddingHorizontal: Dimension.padding10,
     },
     UserName: {
         fontSize: Dimension.font14,

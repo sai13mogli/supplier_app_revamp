@@ -24,7 +24,7 @@ import styles from './style';
 import InvoiceOmsCard from '../../../component/InvoiceOmsCard';
 import {BASE_URL} from '../../../redux/constants';
 import RNFetchBlob from 'rn-fetch-blob';
-import Toast from 'react-native-toast-message';
+
 
 const UploadInvoiceOMSScreen = props => {
   const [loading, setLoading] = useState(false);
@@ -466,8 +466,8 @@ const UploadInvoiceOMSScreen = props => {
       <Header
         showBack
         navigation={props.navigation}
-        showText={'Upload OMS Invoice'}
-        rightIconName={'business-details'}
+        showText={'Upload Invoice'}
+        //rightIconName={'business-details'}
       />
 
       <ScrollView style={styles.ContainerCss}>
