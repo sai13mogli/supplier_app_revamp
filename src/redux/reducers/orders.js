@@ -1,7 +1,7 @@
-import { List, OrderedMap } from 'immutable';
-import { STATE_STATUS } from '../constants/index';
-import { PROFILE_ACTIONS } from '../constants/profile';
-import { ORDERS_ACTIONS } from '../constants/orders';
+import {List, OrderedMap} from 'immutable';
+import {STATE_STATUS} from '../constants/index';
+import {PROFILE_ACTIONS} from '../constants/profile';
+import {ORDERS_ACTIONS} from '../constants/orders';
 
 const initialState = new OrderedMap({
   shipmentType: '',
@@ -38,7 +38,7 @@ const initialState = new OrderedMap({
 });
 
 export const ordersReducer = (state = initialState, action) => {
-  const { type, payload, error } = action;
+  const {type, payload, error} = action;
   switch (type) {
     case ORDERS_ACTIONS.SET_SHIPMENT_TYPE:
       return state.setIn(['shipmentType'], payload.shipmentType);
@@ -94,7 +94,8 @@ export const ordersReducer = (state = initialState, action) => {
     case ORDERS_ACTIONS.FETCHED_TAB_COUNT:
       return state
         .setIn(['tabCounts', 'status'], STATE_STATUS.FETCHED)
-        .setIn(['tabCounts', 'data'], new OrderedMap(payload.data));
+        .setIn(['tabCounts', 'data'], new OrderedMap(payload.data))
+        .setIn(['tabCounts', 'filters'], payload.filters);
     case ORDERS_ACTIONS.FAILED_FETCH_TAB_COUNT:
       return state
         .setIn(['tabCounts', 'error'], error)

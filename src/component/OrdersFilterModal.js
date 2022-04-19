@@ -247,18 +247,35 @@ const OrdersFilterModal = props => {
     }
   };
 
+  const mutateDate = date => {
+    let month = date.split('-');
+    let currMonth = Number(month[1]);
+    let mutateMonth;
+    if (currMonth < 10) {
+      mutateMonth = `0${currMonth}`;
+    } else {
+      mutateMonth = `${currMonth}`;
+    }
+    let currdate = `${month[2]}-${mutateMonth}-${month[0]}`;
+    return currdate;
+  };
+
   const setFromDatePickup = date => {
-    setPickupFromDate(date);
+    let currdate = mutateDate(date);
+    setPickupFromDate(currdate);
   };
   const setFromDatePo = date => {
-    setPoFromDate(date);
+    let currdate = mutateDate(date);
+    setPoFromDate(currdate);
   };
 
   const setPickupDateTo = date => {
-    setPickupToDate(date);
+    let currdate = mutateDate(date);
+    setPickupToDate(currdate);
   };
   const setPoDateTo = date => {
-    setPoToDate(date);
+    let currdate = mutateDate(date);
+    setPoToDate(currdate);
   };
 
   const renderComponent = () => {
@@ -326,6 +343,7 @@ const OrdersFilterModal = props => {
             name={'arrow-back'}
             size={Dimension.font22}
             color={Colors.FontColor}
+            onPress={() => setOrdersFiltersModal(false)}
           />
           <Text style={styles.headerTxt}>Filter</Text>
         </View>

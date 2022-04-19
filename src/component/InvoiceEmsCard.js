@@ -96,7 +96,7 @@ const InvoiceCard = props => {
                 </Text>
               </View>
 
-              <View style={{marginLeft: 30}}>
+              <View style={{marginLeft:Dimension.margin30}}>
                 <Text style={styles.TitleLightTxt}>
                   Total Price -{' '}
                   <Text style={styles.TitleBoldTxt}>
@@ -165,14 +165,17 @@ const InvoiceCard = props => {
             style={[
               styles.TitleBoldTxt,
               {
-                marginLeft: Dimension.margin10,
-                fontSize: 10,
-                marginTop: Dimension.margin13,
-                marginBottom: Dimension.margin10,
+               // marginLeft: Dimension.margin10,
+               // fontSize: 10,
+               // marginTop: Dimension.margin13,
+                //marginBottom: Dimension.margin10,
               },
             ]}>
             PO ID -{' '}
-            <Text style={[styles.TitleBoldTxt, {fontSize: 10}]}>
+            <Text style={[styles.TitleBoldTxt, 
+              {
+               // fontSize: 10
+                }]}>
               {orderRef}
             </Text>
           </Text>
@@ -180,9 +183,9 @@ const InvoiceCard = props => {
             style={[
               styles.TitleBoldTxt,
               {
-                marginLeft: Dimension.margin10,
-                fontSize: 10,
-                marginBottom: Dimension.margin10,
+                //marginLeft: Dimension.margin10,
+                //fontSize: 10,
+                marginTop: Dimension.margin10,
               },
             ]}>
             Total Price -{' '}
@@ -229,9 +232,12 @@ const styles = StyleSheet.create({
   headerView: {
     backgroundColor: Colors.DisableStateColor,
     borderRadius: 3,
-    height: 60,
-    marginLeft: Dimension.margin10,
-    marginRight: Dimension.margin10,
+    //height: 60,
+   // marginLeft: Dimension.margin10,
+    //marginRight: Dimension.margin10,
+    marginHorizontal:Dimension.margin10,
+    paddingHorizontal:Dimension.padding10,
+    paddingVertical:Dimension.padding8
   },
   sectionText: {
     fontSize: Dimension.font10,
@@ -240,11 +246,12 @@ const styles = StyleSheet.create({
   },
   checkboxDesign: {
     position: 'absolute',
-    marginTop: Dimension.margin10,
-    marginRight: Dimension.margin10,
-    marginLeft: Dimension.margin315,
-    marginBottom: Dimension.margin164,
+    //marginTop: Dimension.margin10,
+    //marginRight: Dimension.margin10,
+   // marginLeft: Dimension.margin315,
+   // marginBottom: Dimension.margin164,
     right: 0,
+    top:0,
     zIndex: 9999,
   },
   borderWrap: {
@@ -262,6 +269,10 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomMediumFont,
     color: Colors.FontColor,
+    backgroundColor:"#fff",
+    paddingTop:0,
+    paddingBottom:0,
+    paddingHorizontal:Dimension.padding10
   },
   msnName: {
     fontSize: Dimension.font12,
@@ -273,9 +284,11 @@ const styles = StyleSheet.create({
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
     marginBottom: Dimension.margin8,
-    marginTop: Dimension.margin15,
+    marginTop: Dimension.margin5,
     // marginLeft: Dimension.margin15,
     // marginRight: Dimension.margin11,
+    //backgroundColor:"#000",
+    width:"90%"
   },
   textMeasure: {
     fontSize: Dimension.font12,
@@ -349,8 +362,8 @@ const styles = StyleSheet.create({
   },
   rightPart: {
     flex: 1,
-    height: Dimension.height38,
-    width: Dimension.width289,
+    //height: Dimension.height38,
+    //width: Dimension.width289,
     // marginLeft: Dimension.margin15,
     // marginRight: Dimension.margin41,
     // paddingLeft: Dimension.padding15,

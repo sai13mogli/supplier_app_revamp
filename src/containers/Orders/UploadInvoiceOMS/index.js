@@ -479,6 +479,7 @@ const UploadInvoiceOMSScreen = props => {
           onEndReachedThreshold={0.9}
           showsVerticalScrollIndicator={false}
         />
+        <View style={{marginTop:Dimension.margin30}}>
         {FORM_FIELDS.map((field, fieldKey) => (
           <field.component
             {...field}
@@ -486,6 +487,7 @@ const UploadInvoiceOMSScreen = props => {
             disabled={field.disabled}
           />
         )).toList()}
+        </View>
         {Documents.map(_ => renderInputText(_))
           .toList()
           .toArray()}

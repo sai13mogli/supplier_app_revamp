@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding10,
     flexDirection: 'row',
     backgroundColor: Colors.grayShade1,
-    paddingBottom:Dimension.padding10
+    //marginBottom:Dimension.padding50,
   },
   notifocationBtn: {
     //width:Dimension.width24,
@@ -32,28 +32,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding6,
     borderRadius: 4,
-    Width: Dimension.width95,
-    maxWidth:Dimension.width95,
+    Width: Dimension.width90,
+    maxWidth:Dimension.width100,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
+    minHeight:Dimension.height50
   },
   selectedTabCss: {
     backgroundColor: Colors.FontColor,
     paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding6,
     borderRadius: 4,
-    Width: Dimension.width95,
-    maxWidth:Dimension.width95,
+    Width: Dimension.width90,
+    maxWidth:Dimension.width100,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
+    minHeight:Dimension.height50
   },
   selectedTabTxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
+    fontFamily: Dimension.CustomMediumFont,
     fontSize: Dimension.font12,
     color: Colors.WhiteColor,
   },
   UnselectedtabTxt: {
-    fontFamily: Dimension.CustomSemiBoldFont,
+    fontFamily: Dimension.CustomMediumFont,
     fontSize: Dimension.font12,
     color: Colors.FontColor,
   },

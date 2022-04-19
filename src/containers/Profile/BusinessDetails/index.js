@@ -232,6 +232,7 @@ const BusinessDetailsScreen = props => {
       component: FloatingLabelInputField,
       disabled: false,
       extraView: () => getExtraViewEmail(),
+      isfromLogin: true,
     },
     tan: {
       title: 'TAN',
@@ -547,7 +548,8 @@ const BusinessDetailsScreen = props => {
         <CustomeIcon
           name={'right-tick-line'}
           color={Colors.SuccessStateColor}
-          size={Dimension.font20}></CustomeIcon>
+          size={Dimension.font20}>
+         </CustomeIcon>
       );
     } else {
       if (sendOtpEmail) {
