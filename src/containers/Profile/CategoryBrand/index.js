@@ -632,7 +632,9 @@ const CategoryBrandScreen = props => {
                       {/* //onPress={() => openModal(_)} */}
 
                       <View style={{flex: 1}}>
-                        <TouchableOpacity style={styles.ArrowBtn}>
+                        <TouchableOpacity
+                          style={styles.ArrowBtn}
+                          onPress={() => openModal(_)}>
                           <CustomeIcon
                             name={'arrow-right-line'}
                             size={Dimension.font28}

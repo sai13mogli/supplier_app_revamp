@@ -229,7 +229,7 @@ const OrdersScreen = props => {
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
         shipmentUrl={item.shipmentUrl}
-        podUrl={item.poUrl}
+        podUrl={item.podUrl}
         selectItemData={selectItemData}
       />
     );
@@ -516,19 +516,25 @@ const OrdersScreen = props => {
   //applied filters api hit
   const applyFilters = () => {
     setOrdersFiltersModal(false);
+    console.log(appliedFilter, 'appliedFilter hai boss!!');
     fetchOrdersFunc(0, inputValue, selectedTab, shipmentType, {
       pickupFromDate: pickupFromDate,
       pickupToDate: pickupToDate,
       poFromDate: poFromDate,
       poToDate: poToDate,
-      orderType: appliedFilter['orderType'],
-      deliveryType: appliedFilter['deliveryType'],
-      orderRefs: appliedFilter['orderRefs'],
+      orderType: appliedFilter['orderType'] || [],
+      deliveryType: appliedFilter['deliveryType'] || [],
+      orderRefs: appliedFilter['orderRefs'] || [],
     });
   };
 
   //reset filters api hit
   const resetFilters = () => {
+    setPickupFromDate('');
+    setPickupToDate('');
+    setPoFromDate('');
+    setPoToDate('');
+    setActiveFilter('orderRefs');
     fetchOrdersFunc(0, '', selectedTab, shipmentType, {
       pickupFromDate: '',
       pickupToDate: '',
