@@ -30,6 +30,7 @@ import AcceptModal from './AcceptModal';
 import AddView from './AddView';
 import SplitQuantityModal from './SplitQuantityModal';
 import {useNavigation} from '@react-navigation/native';
+import {colors} from 'react-native-elements';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -80,13 +81,9 @@ const InvoiceCard = props => {
                 ? Colors.BrandColor
                 : Colors.FontColor
             }
-            size={Dimension.font22}
+            size={Dimension.font20}
             onPress={() => selectItemId(itemId)}
-            style={{
-              position: 'absolute',
-              right: 0,
-              zIndex: 9999,
-            }}></CustomeIcon>
+            style={styles.checkboxDesign}></CustomeIcon>
           <View style={styles.rightPart}>
             <Text style={styles.productName}>{productName}</Text>
             <View style={{flexDirection: 'row'}}>
@@ -171,6 +168,7 @@ const InvoiceCard = props => {
                 marginLeft: Dimension.margin10,
                 fontSize: 10,
                 marginTop: Dimension.margin13,
+                marginBottom: Dimension.margin10,
               },
             ]}>
             PO ID -{' '}
@@ -181,13 +179,17 @@ const InvoiceCard = props => {
           <Text
             style={[
               styles.TitleBoldTxt,
-              {marginLeft: Dimension.margin10, fontSize: 10},
+              {
+                marginLeft: Dimension.margin10,
+                fontSize: 10,
+                marginBottom: Dimension.margin10,
+              },
             ]}>
             Total Price -{' '}
             <Text style={styles.TitleBoldTxt}>
               ₹{Math.floor(totalAmount)}
               {'   '} (Price Including Tax-
-              <Text style={styles.sectionText}> Excluding TDS-TCS</Text>
+              <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
               <Text style={styles.TitleBoldTxt}> )</Text>
             </Text>
           </Text>
@@ -230,12 +232,20 @@ const styles = StyleSheet.create({
     height: 60,
     marginLeft: Dimension.margin10,
     marginRight: Dimension.margin10,
-    // marginBottom: Dimension.margin10,
   },
   sectionText: {
     fontSize: Dimension.font10,
     color: Colors.redShade,
     fontFamily: Dimension.CustomBoldFont,
+  },
+  checkboxDesign: {
+    position: 'absolute',
+    marginTop: Dimension.margin10,
+    marginRight: Dimension.margin10,
+    marginLeft: Dimension.margin315,
+    marginBottom: Dimension.margin164,
+    right: 0,
+    zIndex: 9999,
   },
   borderWrap: {
     flexDirection: 'row',
@@ -247,7 +257,11 @@ const styles = StyleSheet.create({
     width: Dimension.width66,
     borderColor: Colors.eyeIcon,
     borderRadius: 4,
-    borderWidth: 0.5,
+    borderWidth: 1,
+    marginBottom: Dimension.margin15,
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    color: Colors.FontColor,
   },
   msnName: {
     fontSize: Dimension.font12,
@@ -258,8 +272,10 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-    marginBottom: Dimension.margin10,
-    marginTop: Dimension.margin5,
+    marginBottom: Dimension.margin8,
+    marginTop: Dimension.margin15,
+    // marginLeft: Dimension.margin15,
+    // marginRight: Dimension.margin11,
   },
   textMeasure: {
     fontSize: Dimension.font12,
@@ -333,6 +349,10 @@ const styles = StyleSheet.create({
   },
   rightPart: {
     flex: 1,
+    height: Dimension.height38,
+    width: Dimension.width289,
+    // marginLeft: Dimension.margin15,
+    // marginRight: Dimension.margin41,
     // paddingLeft: Dimension.padding15,
   },
   imgStyle: {
