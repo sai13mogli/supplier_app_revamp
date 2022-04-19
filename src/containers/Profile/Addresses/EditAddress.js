@@ -152,7 +152,7 @@ const EditAddress = props => {
                 setStates([{ value: data.data[0].state, label: data.data[0].state }]);
                 setCities(data.data.map(_ => ({ label: _.city, value: _.city })));
                 setstate(data.data[0].state);
-                if (data.data.length == 1) {
+                if (data.data.length) {
                     setcity(data.data[0].city);
                 }
             }
