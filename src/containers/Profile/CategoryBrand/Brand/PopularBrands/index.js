@@ -56,12 +56,10 @@ const PopularBrandsScreen = props => {
       selectedCategories &&
       selectedCategories.length
     ) {
-      console.log('selectedCategories mcmcmcmmc', selectedCategories);
       let categoryIds = (selectedCategories || []).map(_ => _.id);
       let payloadObj = {
         categoryCodes: [...categoryIds],
       };
-      console.log('categoryCodes', payloadObj);
       dispatch(fetchBrandsByCategory(payloadObj));
     }
   }, [selectedCategories]);
@@ -89,7 +87,6 @@ const PopularBrandsScreen = props => {
   };
 
   const updatePopularBrand = async item => {
-    console.log(item);
     let currbrand = {
       ...item,
       supplierId: await AsyncStorage.getItem('userId'),
@@ -98,7 +95,6 @@ const PopularBrandsScreen = props => {
       confirmed: true,
     };
     let brandObj = (userBrands || []).find(_ => _.brandCode == currbrand.code);
-    console.log(brandObj, 'brandObj hai mc!!');
     if (brandObj && brandObj.brandCode) {
       dispatch(removeBrand(currbrand));
     } else {

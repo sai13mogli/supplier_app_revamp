@@ -260,7 +260,6 @@ const CategoryBrandScreen = props => {
 
   const uploadDocu = async data => {
     let res = await uploadDocumentService(data);
-    console.log('uploadDocument ka res hai bhaiii!', res);
     let {resp} = res;
 
     if (resp.error) {
@@ -372,7 +371,6 @@ const CategoryBrandScreen = props => {
       const res = await DocumentPicker.pick({
         // type: [DocumentPicker],
       });
-      console.log('doc', res[0]);
       setFormState(res[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -397,7 +395,6 @@ const CategoryBrandScreen = props => {
 
   const onSubmit = raiseRequest => {
     let currBrand = (userBrands || []).find(_ => _.brandCode == brand.code);
-    console.log(currBrand, 'curr brand hai dost!!');
     if (currBrand) {
       let currBrandObj = {
         supplierId: supplierId,
@@ -429,7 +426,6 @@ const CategoryBrandScreen = props => {
   };
 
   const openModal = brand => {
-    console.log(brand);
     setBrand({
       name: brand.brandName,
       code: brand.brandCode,
@@ -546,7 +542,6 @@ const CategoryBrandScreen = props => {
         props.navigation.goBack();
       } else {
         setNextLoader(false);
-        console.log('something went wrong!!');
       }
     } catch (error) {
       setNextLoader(false);

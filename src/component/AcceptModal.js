@@ -63,7 +63,6 @@ const AcceptModal = props => {
         pickupDate: day.dateString,
       };
       // getTime(pickupDate, true)
-      console.log(payload.pickupDate);
       const {data} = await acceptOrder(payload);
       if (data && data.success) {
         fetchOrdersFunc(0, '', selectedTab, shipmentType, {

@@ -20,7 +20,6 @@ import {getImageUrl, acceptBulk} from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
@@ -290,7 +289,6 @@ const OrdersScreen = props => {
 
   //select Item Data
   const selectItemData = itemObj => {
-    console.log('itemdata hai mc', itemObj);
     let currentBulkDownloadItems = [...bulkDownloadItems];
     let currItemIds = [...bulkItemIds];
     if (currItemIds.includes(itemObj.itemId)) {
@@ -308,7 +306,6 @@ const OrdersScreen = props => {
         currItemIds.push(itemObj.itemId);
       }
     }
-    console.log(currentBulkDownloadItems, 'mc data hai', currItemIds);
     setBulkDownloadItems(currentBulkDownloadItems);
     setBulkItemIds(currItemIds);
   };
@@ -325,7 +322,6 @@ const OrdersScreen = props => {
 
   useEffect(() => {
     if (selectedTab == 'SHIPMENT' && bulkItemIds && bulkItemIds.length) {
-      console.log('bhk bulkActions', bulkItemIds.length);
       setBulkActionsModal(true);
     }
   }, [bulkItemIds]);
@@ -600,8 +596,8 @@ const OrdersScreen = props => {
           padding: 15,
         }}>
         <DropDown
-          title={''}
-          label={''}
+          title={'Orders'}
+          label={'Orders'}
           selectedValue={selectedType}
           onValueChange={text => {
             setSelectedType(text);

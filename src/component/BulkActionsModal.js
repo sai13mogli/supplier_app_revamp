@@ -42,7 +42,6 @@ const BulkActionsModal = props => {
   let webview = useRef();
 
   const downloadZip = data => {
-    console.log(data, window, 'data hai dost');
     let fp = `console.log(window)
       const a = document.createElement('a');
        a.href = ${base64}
@@ -93,7 +92,6 @@ const BulkActionsModal = props => {
         setBulkActionsModal(false);
       }
     } catch (error) {
-      console.log(error);
       setBulkAcceptLoader(false);
       Toast.show({
         type: 'error',

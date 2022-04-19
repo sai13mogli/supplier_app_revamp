@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Text,
@@ -9,8 +9,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import {useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {
   deleteBulk,
   deleteNotification,
@@ -18,7 +18,7 @@ import {
   markBulkRead,
   markRead,
 } from '../../redux/actions/notifications';
-import { STATE_STATUS } from '../../redux/constants';
+import {STATE_STATUS} from '../../redux/constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../../component/common/Header';
 import CustomeIcon from '../../component/common/CustomeIcon';
@@ -67,14 +67,12 @@ const NotificationScreen = props => {
 
   const getTime = time => {
     let date = new Date(time);
-    return `${date.getHours() < 10 ? '0' + date.getHours() : date.getHours()}:${date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
-      } ${date.getHours() < 12 ? 'PM' : 'AM'}`;
+    return `${date.getHours() < 10 ? '0' + date.getHours() : date.getHours()}:${
+      date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+    } ${date.getHours() < 12 ? 'PM' : 'AM'}`;
   };
 
-  const renderItem = ({ item, index }) => {
-    console.log('====================================');
-    console.log("Item===>", item);
-    console.log('====================================');
+  const renderItem = ({item, index}) => {
     return (
       <View
         key={index}
@@ -83,7 +81,7 @@ const NotificationScreen = props => {
             ? styles.notificationWrap
             : styles.ActivenotificationWrap
         }>
-        <View style={{ flexDirection: 'row', flex: 7, alignItems: 'center' }}>
+        <View style={{flexDirection: 'row', flex: 7, alignItems: 'center'}}>
           <View
             style={item.readStatus ? styles.iconWrap : styles.ActioniconWrap}>
             <CustomeIcon
@@ -102,7 +100,7 @@ const NotificationScreen = props => {
           {/* <Text style={styles.titleCss}>{item.title}</Text> */}
           <Text style={styles.titleCss}>{item.content}</Text>
         </View>
-        <View style={{ flex: 3, alignItems: 'flex-end' }}>
+        <View style={{flex: 3, alignItems: 'flex-end'}}>
           {/* {item.readStatus ? null : ( */}
           <TouchableOpacity
             onPress={() => {
@@ -113,7 +111,7 @@ const NotificationScreen = props => {
               name={'dots-horizontal'}
               color={Colors.FontColor}
               size={Dimension.font20}
-            //onPress={() => dispatch(markRead(item.id))}
+              //onPress={() => dispatch(markRead(item.id))}
             ></Icon>
           </TouchableOpacity>
           {/* )} */}
@@ -137,7 +135,7 @@ const NotificationScreen = props => {
         onDismiss={() => setModalVisible(false)}
         overlayPointerEvents={'auto'}
         coverScreen={true}
-        style={{ padding: 0, margin: 0 }}
+        style={{padding: 0, margin: 0}}
         //deviceWidth={deviceWidth}
         hasBackdrop={true}>
         <View style={styles.modalContainer}>
@@ -195,7 +193,7 @@ const NotificationScreen = props => {
         onDismiss={() => setsingleNotificationAction(false)}
         overlayPointerEvents={'auto'}
         coverScreen={true}
-        style={{ padding: 0, margin: 0 }}
+        style={{padding: 0, margin: 0}}
         //deviceWidth={deviceWidth}
         hasBackdrop={true}>
         <View style={styles.modalContainer}>
@@ -302,7 +300,7 @@ const NotificationScreen = props => {
               </View>
             ) : null
           }
-          renderSectionHeader={({ section }) => (
+          renderSectionHeader={({section}) => (
             <View style={styles.titleDateWrap}>
               <Text style={styles.TitleDateCss}>{section.title}</Text>
             </View>
@@ -310,7 +308,7 @@ const NotificationScreen = props => {
           sections={notifications}
           renderItem={renderItem}
           keyExtractor={(item, index) => `${index}-item`}
-          style={{ marginHorizontal: Dimension.margin8 }}
+          style={{marginHorizontal: Dimension.margin8}}
         />
       </View>
       {renderBulkActions()}

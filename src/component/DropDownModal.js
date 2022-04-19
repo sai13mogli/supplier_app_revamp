@@ -29,7 +29,6 @@ const DropDownModal = props => {
   }, []);
 
   const getFilterValue = value => {
-    console.log(value);
     props.onSelect(value);
   };
   if (props.fromRejectModal) {
@@ -73,7 +72,7 @@ const DropDownModal = props => {
               data={items}
               onCheck={getFilterValue}
               value={props.selectedValue}
-             // formfilterModal={true}
+              // formfilterModal={true}
             />
           </View>
 

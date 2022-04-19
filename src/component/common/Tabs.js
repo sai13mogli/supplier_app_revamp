@@ -20,7 +20,7 @@ import {
 import colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const Tabs = props => {
   const [activetab, setActiveTab] = useState(props.data[0].key);
@@ -73,7 +73,7 @@ const Tabs = props => {
   //   );
   // };
 
-  const OneTab = forwardRef(({ item, onItemPress }, ref) => {
+  const OneTab = forwardRef(({item, onItemPress}, ref) => {
     return (
       <TouchableOpacity
         onPress={onItemPress}
@@ -92,7 +92,7 @@ const Tabs = props => {
     );
   });
 
-  const CustomTabs = ({ data, scrollX, onItemPress }) => {
+  const CustomTabs = ({data, scrollX, onItemPress}) => {
     // const [measures, setMeasures] = useState([]);
     const containerRef = useRef();
     // useEffect(() => {
@@ -151,13 +151,12 @@ const Tabs = props => {
   };
 
   const onItemPress = useCallback(itemIndex => {
-    console.log('itemIndex', flatListRef?.current);
     flatListRef?.current?.scrollToOffset({
       offset: itemIndex * width,
     });
   });
 
-  const onViewableItemsChanged = useCallback(({ viewableItems, changed }) => {
+  const onViewableItemsChanged = useCallback(({viewableItems, changed}) => {
     setActiveTab(viewableItems[0].key);
   }, []);
 
@@ -177,13 +176,13 @@ const Tabs = props => {
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
         onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: false },
+          [{nativeEvent: {contentOffset: {x: scrollX}}}],
+          {useNativeDriver: false},
         )}
         bounces={false}
-        renderItem={({ item }) => {
+        renderItem={({item}) => {
           return (
-            <View style={{ width, height }}>
+            <View style={{width, height}}>
               <item.component {...item} navigation={props.navigation} />
             </View>
           );
@@ -193,7 +192,6 @@ const Tabs = props => {
         scrollX={scrollX}
         data={props.data}
         onItemPress={onItemPress}
-
       />
     </View>
     // <>

@@ -4,12 +4,6 @@ import {StackActions} from '@react-navigation/native';
 export const navigationRef = React.createRef();
 
 export function navigate(name, params) {
-  console.log(
-    'navigationRef',
-    navigationRef && navigationRef.current,
-    name,
-    params,
-  );
   navigationRef.current?.navigate(name, params);
 }
 

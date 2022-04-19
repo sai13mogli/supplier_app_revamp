@@ -71,7 +71,6 @@ const ViewLSPModal = props => {
     const {data} = await getLspDetail(supplierId, itemId);
     if (data.success) {
       setHistory(data.data);
-      console.log(data);
       setLoading(false);
     }
   };
@@ -143,20 +142,20 @@ const ViewLSPModal = props => {
       onBackdropPress={() => setModal(false)}
       onBackButtonPress={() => setModal(false)}>
       <View style={styles.modalContainer}>
-      <View style={styles.topbdr}></View>
-      <View style={styles.closeIconWrap}>
+        <View style={styles.topbdr}></View>
+        <View style={styles.closeIconWrap}>
           <CustomeIcon
-                name={'close'}
-                size={Dimension.font22}
-                color={Colors.FontColor}
-                onPress={() => {
-                  setModal(false);
-                }}
-              />
-          </View>
-          <View style={styles.headerTxtWrap}>
-              <Text style={styles.headerTxt}>View LSP Details</Text>
-           </View>
+            name={'close'}
+            size={Dimension.font22}
+            color={Colors.FontColor}
+            onPress={() => {
+              setModal(false);
+            }}
+          />
+        </View>
+        <View style={styles.headerTxtWrap}>
+          <Text style={styles.headerTxt}>View LSP Details</Text>
+        </View>
         {loading ? (
           <ActivityIndicator
             color={Colors.BrandColor}
@@ -165,23 +164,32 @@ const ViewLSPModal = props => {
           />
         ) : (
           <>
-          <View style={{paddingHorizontal: Dimension.padding15}}>
-          {renderOrderDetails()}
-        </View>
-           </>
+            <View style={{paddingHorizontal: Dimension.padding15}}>
+              {renderOrderDetails()}
+            </View>
+          </>
         )}
         <View style={styles.BottomDataWrap}>
           {((history || {}).records || []).map((_, k) => (
             <View key={k} style={styles.ItemWrap}>
               <View style={styles.itemWrapInner}>
-              <Text style={styles.PoText}>
-                Shipper Name - <Text style={styles.PoBoldText}>{_.shipmentMode}</Text>
-              </Text>
-              <Text style={styles.PoText}>Manifest ID - <Text style={styles.PoBoldText}>{_.shipperId}</Text></Text>
+                <Text style={styles.PoText}>
+                  Shipper Name -{' '}
+                  <Text style={styles.PoBoldText}>{_.shipmentMode}</Text>
+                </Text>
+                <Text style={styles.PoText}>
+                  Manifest ID -{' '}
+                  <Text style={styles.PoBoldText}>{_.shipperId}</Text>
+                </Text>
               </View>
               <View style={styles.itemWrapInner}>
-              <Text style={styles.PoText}>No. of packets - <Text style={styles.PoBoldText}>{_.quantity}</Text></Text>
-              <Text style={styles.PoText}>AWB - <Text style={styles.PoBoldText}>{_.awbNumber}</Text></Text>
+                <Text style={styles.PoText}>
+                  No. of packets -{' '}
+                  <Text style={styles.PoBoldText}>{_.quantity}</Text>
+                </Text>
+                <Text style={styles.PoText}>
+                  AWB - <Text style={styles.PoBoldText}>{_.awbNumber}</Text>
+                </Text>
               </View>
             </View>
           ))}
@@ -192,8 +200,6 @@ const ViewLSPModal = props => {
 };
 
 const styles = StyleSheet.create({
- 
- 
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
@@ -210,75 +216,72 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     width: Dimension.width70,
   },
-  closeIconWrap:{
-    alignItems:"flex-end",
-    paddingHorizontal:Dimension.padding15,
+  closeIconWrap: {
+    alignItems: 'flex-end',
+    paddingHorizontal: Dimension.padding15,
   },
-  headerTxtWrap:{
-    paddingHorizontal:Dimension.padding15,
-    marginBottom:Dimension.margin20
+  headerTxtWrap: {
+    paddingHorizontal: Dimension.padding15,
+    marginBottom: Dimension.margin20,
   },
 
-  headerTxt:{
+  headerTxt: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
-   // marginLeft:Dimension.margin10,
-
+    // marginLeft:Dimension.margin10,
   },
   showMoreCta: {
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
   },
-  
-  BottomDataWrap:{
-paddingVertical:Dimension.padding30,
-paddingHorizontal:Dimension.padding15
+
+  BottomDataWrap: {
+    paddingVertical: Dimension.padding30,
+    paddingHorizontal: Dimension.padding15,
   },
-  BottomDataTitle:{
+  BottomDataTitle: {
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
-    marginBottom:Dimension.margin10,
+    marginBottom: Dimension.margin10,
   },
   ItemWrap: {
-    
-    paddingHorizontal:Dimension.padding20,
-    paddingVertical:Dimension.padding12,
-    borderRadius:4,
-    backgroundColor:Colors.WhiteColor,
-    borderWidth:1,
-    borderColor:Colors.BoxBorderColor,
-    marginBottom:Dimension.margin40
+    paddingHorizontal: Dimension.padding20,
+    paddingVertical: Dimension.padding12,
+    borderRadius: 4,
+    backgroundColor: Colors.WhiteColor,
+    borderWidth: 1,
+    borderColor: Colors.BoxBorderColor,
+    marginBottom: Dimension.margin40,
   },
-  itemWrapInner:{
+  itemWrapInner: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  RedItemWrap:{flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  paddingHorizontal:Dimension.padding20,
-  paddingVertical:Dimension.padding12,
-  borderRadius:4,
-  backgroundColor:Colors.LightBrandColor1,
-  borderWidth:1,
-  borderColor:Colors.LightBrandColor1,
-  marginBottom:Dimension.margin40
-
+  RedItemWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Dimension.padding20,
+    paddingVertical: Dimension.padding12,
+    borderRadius: 4,
+    backgroundColor: Colors.LightBrandColor1,
+    borderWidth: 1,
+    borderColor: Colors.LightBrandColor1,
+    marginBottom: Dimension.margin40,
   },
-  PoText:{
+  PoText: {
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
   },
-  PoBoldText:{
+  PoBoldText: {
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomBoldFont,
   },
-  
 });
 
 export default React.memo(ViewLSPModal);

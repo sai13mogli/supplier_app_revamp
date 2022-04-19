@@ -109,7 +109,6 @@ const LoginScreen = props => {
       data.data.onlineShipmentMode,
     );
     dispatch(setShipmentType(data.data.onlineShipmentMode));
-    console.log(props.route.params.setIsLoggedIn);
     dispatch(setMasterAction(props.route.params.setIsLoggedIn));
     props.route.params.setIsLoggedIn(true);
   };

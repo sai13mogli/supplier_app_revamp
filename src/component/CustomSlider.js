@@ -31,8 +31,6 @@ const CustomSlider = props => {
     multiSliderValuesChange(props.values);
   }, []);
 
-  console.log('CustomSliderProps', props);
-
   const multiSliderValuesChange = values => {
     setSecond(values[0]);
     props.callback(values);
