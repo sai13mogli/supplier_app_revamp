@@ -65,6 +65,44 @@ const NotificationScreen = props => {
     }
   };
 
+  const notificationsStatusIcon = (status) => {
+    console.log("statu", status);
+
+    switch (status) {
+      case status == 1:
+        return 'orders-line'
+        break;
+      case status == 2:
+        return 'orders-line'
+        break;
+      case status == 3:
+        return 'orders-line'
+        break;
+      case status == 4:
+        return 'orders-line'
+        break;
+      case status == 5:
+        return 'orders-line'
+        break;
+      case status == 6:
+        return 'orders-line'
+        break;
+      case status == 7:
+        return 'orders-line'
+        break;
+      case status == 8:
+        return 'orders-line'
+        break;
+      case status == 9:
+        return 'orders-line'
+
+        break;
+      default:
+        break;
+    }
+
+  }
+
   const getTime = time => {
     let date = new Date(time);
     return `${date.getHours() < 10 ? '0' + date.getHours() : date.getHours()}:${date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
@@ -72,9 +110,7 @@ const NotificationScreen = props => {
   };
 
   const renderItem = ({ item, index }) => {
-    console.log('====================================');
-    console.log("Item===>", item);
-    console.log('====================================');
+    console.log("item===>", item);
     return (
       <View
         key={index}
@@ -87,8 +123,8 @@ const NotificationScreen = props => {
           <View
             style={item.readStatus ? styles.iconWrap : styles.ActioniconWrap}>
             <CustomeIcon
-              // name={'support-line'}
-              name={item.readStatus ? 'support-line' : 'orders-line'}
+              // name={item.readStatus ? 'support-line' : 'orders-line'}
+              name={item.readStatus ? notificationsStatusIcon(item.recordType) : notificationsStatusIcon(item.recordType)}
               size={Dimension.font20}
               //color={Colors.eyeIcon}
               color={item.readStatus ? Colors.eyeIcon : Colors.BrandColor}
