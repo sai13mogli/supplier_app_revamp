@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WhiteColor,
   },
   TitleLightTxt: {
-    fontSize: Dimension.font13,
+    fontSize: Dimension.font10,
     backgroundColor: Colors.NudgeColor1,
     textAlign: 'center',
     color: Colors.blackColor,

@@ -249,6 +249,7 @@ const OrdersScreen = props => {
     });
     fetchTabCountFunc(val.key, shipmentType);
     setLoadingTabs(true);
+    setSelectAll(false);
   };
 
   //selectedFilter
@@ -285,6 +286,11 @@ const OrdersScreen = props => {
         currentItemIds.push(itemId);
       }
     }
+    if (currentItemIds.length == OrderData.toArray().length) {
+      setSelectAll(true);
+    } else {
+      setSelectAll(false);
+    }
     setBulkItemIds(currentItemIds);
   };
 
@@ -306,6 +312,11 @@ const OrdersScreen = props => {
         currentBulkDownloadItems.push(itemObj);
         currItemIds.push(itemObj.itemId);
       }
+    }
+    if (currItemIds.length == OrderData.toArray().length) {
+      setSelectAll(true);
+    } else {
+      setSelectAll(false);
     }
     setBulkDownloadItems(currentBulkDownloadItems);
     setBulkItemIds(currItemIds);

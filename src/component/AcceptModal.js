@@ -28,11 +28,11 @@ const AcceptModal = props => {
     setDisplayCalendar,
   } = props;
   const [day, setDay] = useState({
-    dateString: '2022-03-24',
-    day: 24,
-    month: 3,
-    timestamp: 1648166400000,
-    year: 2022,
+    dateString: '',
+    day: '',
+    month: '',
+    timestamp: '',
+    year: '',
   });
   const [acceptLoader, setAcceptLoader] = useState(false);
 
@@ -60,7 +60,7 @@ const AcceptModal = props => {
       let payload = {
         supplierId: await AsyncStorage.getItem('userId'),
         itemId: `${itemId}`,
-        pickupDate: day.dateString,
+        pickupDate: day.dateString.split('-').reverse().join('-'),
       };
       // getTime(pickupDate, true)
       const {data} = await acceptOrder(payload);
