@@ -16,6 +16,7 @@ import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 const deviceWidth = Dimensions.get('window').width;
 import CustomeIcon from './common/CustomeIcon';
+import moment from "moment";
 
 const AcceptModal = props => {
   const {
