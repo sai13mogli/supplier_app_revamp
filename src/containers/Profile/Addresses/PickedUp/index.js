@@ -91,7 +91,7 @@ const PickedUp = (props) => {
   )
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 0.9 }}>
       {
         addressesDetailsStatus == STATE_STATUS.FETCHING ? (
           <ActivityIndicator style={{ alignSelf: 'center', marginTop: 150 }} />
@@ -123,6 +123,17 @@ const PickedUp = (props) => {
             />
           </ScrollView>
       }
+
+      <View style={styles.bottombtnWrap}>
+        <CustomButton
+          buttonColor={colors.BrandColor}
+          borderColor={colors.BrandColor}
+          TextColor={colors.WhiteColor}
+          TextFontSize={Dimension.font16}
+          title={'Submit'}
+          onPress={() => props.navigation.navigate('Profile')}
+        />
+      </View>
 
     </View>
 

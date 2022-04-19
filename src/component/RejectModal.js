@@ -7,12 +7,12 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState, useCallback} from 'react';
+import React, { useState, useCallback } from 'react';
 import Modal from 'react-native-modal';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {rejectOrder} from '../services/orders';
+import { rejectOrder } from '../services/orders';
 import Toast from 'react-native-toast-message';
 import DropDown from '../component/common/DropDown';
 import CustomeIcon from './common/CustomeIcon';
@@ -40,6 +40,7 @@ const RejectModal = props => {
     shipmentModeString,
     actionCTA,
     taxPercentage,
+    fetchOrdersFunc,
     shipmentType,
     totalAmount,
     invoiceUrl,
@@ -86,7 +87,7 @@ const RejectModal = props => {
         remark: reason || 'Material is not ready',
       };
 
-      const {data} = await rejectOrder(payload);
+      const { data } = await rejectOrder(payload);
       if (data && data.success) {
         fetchOrdersFunc(0, '', selectedTab, shipmentType, {
           pickupFromDate: '',
@@ -157,7 +158,7 @@ const RejectModal = props => {
         setRejectModal(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 0}}
+      style={{ padding: 0, margin: 0 }}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
       onBackdropPress={() => setRejectModal(false)}
@@ -172,7 +173,7 @@ const RejectModal = props => {
             color={Colors.FontColor}
             onPress={() => setRejectModal(false)}></CustomeIcon>
         </View>
-        <View style={{paddingHorizontal: Dimension.padding15}}>
+        <View style={{ paddingHorizontal: Dimension.padding15 }}>
           {renderOrderDetails()}
           <View
             style={{
@@ -198,7 +199,7 @@ const RejectModal = props => {
           <TouchableOpacity style={styles.rejectCtabtn} onPress={onReject}>
             <Text style={styles.rejectCtaTxt}>REJECT</Text>
             {rejectLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
             )}
           </TouchableOpacity>
         </View>

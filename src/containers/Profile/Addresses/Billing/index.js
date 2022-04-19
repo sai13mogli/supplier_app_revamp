@@ -83,12 +83,13 @@ const Billing = (props) => {
 
         </View>
 
+
       </View>
     </View>
   )
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 0.9, }}>
       {
         addressesDetailsStatus == STATE_STATUS.FETCHING ? (
           <ActivityIndicator style={{ alignSelf: 'center', marginTop: 150 }} />
@@ -116,8 +117,22 @@ const Billing = (props) => {
               renderItem={renderItems}
               keyExtractor={(item, index) => index.toString()}
             />
+
           </ScrollView>
+
+
       }
+      <View style={styles.bottombtnWrap}>
+        <CustomButton
+          buttonColor={colors.BrandColor}
+          borderColor={colors.BrandColor}
+          TextColor={colors.WhiteColor}
+          TextFontSize={Dimension.font16}
+          title={'Next'}
+          onPress={() => props.navigation.navigate('PickedUp', { key: 'pickup' })}
+        />
+      </View>
+
     </View>
 
   );
