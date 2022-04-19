@@ -141,7 +141,6 @@ function* fetchUserProfile({}) {
       yield put(failedFetchProfile(error));
     } else {
       yield put(fetchedProfile(data.data));
-      console.log(data.data, 'dwewefwe');
       if (data.data.verificationStatus < 10) {
         RootNavigation.navigate('More');
       }

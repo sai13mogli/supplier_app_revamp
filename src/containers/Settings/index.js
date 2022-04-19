@@ -13,8 +13,10 @@ const SettingsScreen = props => {
   const dispatch = useDispatch();
 
   const onLogout = async () => {
+    await AsyncStorage.removeItem('onlineShipmentMode');
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('userId');
+    await AsyncStorage.removeItem('fcmToken');
     props.route.params.setIsLoggedIn(false);
     dispatch(logout(token));
   };

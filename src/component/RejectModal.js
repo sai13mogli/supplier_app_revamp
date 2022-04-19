@@ -87,7 +87,6 @@ const RejectModal = props => {
         remark: reason || 'Material is not ready',
       };
 
-      console.log('reason', reason);
       const {data} = await rejectOrder(payload);
       if (data && data.success) {
         fetchOrdersFunc(0, '', selectedTab, shipmentType, {
@@ -100,6 +99,7 @@ const RejectModal = props => {
           orderRefs: [],
         });
         fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
+        props.setLoadingTabs(true);
         setRejectLoader(false);
         setRejectModal(false);
       } else {

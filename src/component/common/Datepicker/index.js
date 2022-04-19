@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Button,
@@ -11,7 +11,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
-import { Input } from 'react-native-elements';
+import {Input} from 'react-native-elements';
 import CustomeIcon from '../CustomeIcon';
 import styles from './styles';
 
@@ -28,7 +28,6 @@ const CustomeDatePicker = props => {
     fromCategoryBrand,
     fileUpload,
   } = props;
-  console.log('expiryDate', value);
   const [date, setDate] = useState(new Date());
   const [isFocused, setIsFocused] = useState(false);
   const [mode, setMode] = useState('date');
@@ -101,7 +100,7 @@ const CustomeDatePicker = props => {
   const renderDateTimePicker = () => {
     return (
       <>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{flexDirection: 'row'}}>
           <Text style={styles.labelStyle}>{label}</Text>
           {isImp ? <Text style={styles.starIcon}>*</Text> : null}
         </View>

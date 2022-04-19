@@ -28,11 +28,11 @@ const AcceptModal = props => {
     setDisplayCalendar,
   } = props;
   const [day, setDay] = useState({
-    dateString: '2022-03-24',
-    day: 24,
-    month: 3,
-    timestamp: 1648166400000,
-    year: 2022,
+    dateString: '',
+    day: '',
+    month: '',
+    timestamp: '',
+    year: '',
   });
   const [acceptLoader, setAcceptLoader] = useState(false);
 
@@ -60,10 +60,9 @@ const AcceptModal = props => {
       let payload = {
         supplierId: await AsyncStorage.getItem('userId'),
         itemId: `${itemId}`,
-        pickupDate: day.dateString,
+        pickupDate: day.dateString.split('-').reverse().join('-'),
       };
       // getTime(pickupDate, true)
-      console.log(payload.pickupDate);
       const {data} = await acceptOrder(payload);
       if (data && data.success) {
         fetchOrdersFunc(0, '', selectedTab, shipmentType, {
@@ -76,6 +75,7 @@ const AcceptModal = props => {
           orderRefs: [],
         });
         fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
+        props.setLoadingTabs(true);
         setAcceptLoader(false);
       } else {
         setAcceptLoader(false);

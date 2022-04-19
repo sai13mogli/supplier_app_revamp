@@ -70,13 +70,6 @@ export const categorybrandReducer = (state = initialState, action) => {
       };
 
     case CATEGORY_BRAND_ACTIONS.FETCHED_BRANDS:
-      console.log(
-        state.allBrands.data,
-        'reducerData',
-        payload.data,
-        state.allBrands,
-        state.allBrands.alphabetNo,
-      );
       if (payload.obj.pageNo === 64 || payload.obj.searchString) {
         return {
           ...state,
@@ -121,14 +114,6 @@ export const categorybrandReducer = (state = initialState, action) => {
       };
 
     case CATEGORY_BRAND_ACTIONS.FETCHED_BRANDS_ALPHABETS:
-      console.log(
-        state.allBrands.data,
-        'reducerData',
-        payload.data,
-        state.allBrands,
-        state.allBrands.alphabetNo,
-      );
-
       return {
         ...state,
         allBrands: {

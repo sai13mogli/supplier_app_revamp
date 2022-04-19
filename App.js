@@ -49,7 +49,6 @@ class App extends React.Component {
       .hasPermission()
       .then(enabled => {
         if (enabled) {
-          console.log('enabled hai!!');
           requestUserPermission();
           notificationListener();
         }
@@ -90,7 +89,6 @@ class App extends React.Component {
     if (event) {
       Linking.canOpenURL(event.url).then(supported => {
         if (supported) {
-          console.log('linking hai!!', event.url);
           let input = event.url;
           if (
             input.includes(

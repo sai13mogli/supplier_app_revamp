@@ -162,6 +162,7 @@ const Ordercard = props => {
       orderRefs: [],
     });
     fetchTabCountFunc(selectedTab, shipmentType);
+    props.setLoadingTabs(true);
   };
 
   const getPOInvoice = (fromPO, invoiceUrl, isInvoice) => {
@@ -258,8 +259,6 @@ const Ordercard = props => {
         .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
         .then(res => {
           //Showing alert after successful downloading
-          console.log('res -> ', JSON.stringify(res));
-          console.log('imageUrl', image_URL, isPO);
           setInvoiceLoading(false);
           if (isPO) {
             setPoLoader(false);
@@ -325,8 +324,6 @@ const Ordercard = props => {
         .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
         .then(res => {
           //Showing alert after successful downloading
-          console.log('res -> ', JSON.stringify(res));
-          console.log('imageUrl', image_URL);
           setShipmentLoader(false);
           Toast.show({
             type: 'success',
@@ -336,7 +333,6 @@ const Ordercard = props => {
           });
         });
     } catch (error) {
-      console.log(error);
       setShipmentLoader(false);
       Toast.show({
         type: 'success',
@@ -375,6 +371,7 @@ const Ordercard = props => {
           orderRefs: [],
         });
         fetchTabCountFunc(selectedTab, shipmentType);
+        props.setLoadingTabs(true);
         Toast.show({
           type: 'success',
           text2: data.message,
@@ -403,7 +400,6 @@ const Ordercard = props => {
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         ).then(granted => {
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log('Storage Permission Granted.');
             downloadPodCopyUrl(podcopyUrl);
           } else {
           }
@@ -427,7 +423,6 @@ const Ordercard = props => {
       image_URL = url;
       //Getting the extention of the file
       let ext = getExtention(image_URL);
-      console.log('ext', ext);
       ext = '.' + ext[0];
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
@@ -453,8 +448,6 @@ const Ordercard = props => {
         .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
         .then(res => {
           //Showing alert after successful downloading
-          console.log('res -> ', JSON.stringify(res));
-          console.log('imageUrl', image_URL);
           setPodLoader(false);
           Toast.show({
             type: 'success',
@@ -530,7 +523,6 @@ const Ordercard = props => {
       image_URL = url;
       //Getting the extention of the file
       let ext = getExtention(image_URL);
-      console.log('ext', ext);
       ext = '.' + ext[0];
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
@@ -556,8 +548,6 @@ const Ordercard = props => {
         .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
         .then(res => {
           //Showing alert after successful downloading
-          console.log('res -> ', JSON.stringify(res));
-          console.log('imageUrl', image_URL);
           setDebitLoader(false);
           Toast.show({
             type: 'success',
@@ -1074,9 +1064,7 @@ const Ordercard = props => {
   };
 
   const onMarkForDelivery = async () => {
-    // console.log(itemId, supplierId);
     const {data} = await markOutForOrderApi(supplierId, itemId);
-    console.log(data);
     if (data.success) {
       fetchOrdersFunc(0, '', selectedTab, shipmentType, {
         pickupFromDate: '',
@@ -1088,6 +1076,7 @@ const Ordercard = props => {
         orderRefs: [],
       });
       fetchTabCountFunc(selectedTab, shipmentType);
+      props.setLoadingTabs(true);
     }
     setMarkForDelivery(false);
   };
@@ -1103,6 +1092,7 @@ const Ordercard = props => {
       orderRefs: [],
     });
     fetchTabCountFunc(selectedTab, shipmentType);
+    props.setLoadingTabs(true);
   };
 
   const renderOrderDetails = (fromModal, fromCTA) => {
@@ -1370,6 +1360,7 @@ const Ordercard = props => {
             itemId={itemId}
             fetchOrdersFunc={fetchOrdersFunc}
             fetchTabCountFunc={fetchTabCountFunc}
+            setLoadingTabs={props.setLoadingTabs}
             msn={msn}
             quantity={quantity}
             orderRef={orderRef}
@@ -1395,6 +1386,7 @@ const Ordercard = props => {
         <AcceptModal
           selectedTab={selectedTab}
           fetchOrdersFunc={fetchOrdersFunc}
+          setLoadingTabs={props.setLoadingTabs}
           fetchTabCountFunc={fetchTabCountFunc}
           itemId={itemId}
           shipmentType={shipmentType}
@@ -1410,6 +1402,7 @@ const Ordercard = props => {
           itemId={itemId}
           fetchOrdersFunc={fetchOrdersFunc}
           fetchTabCountFunc={fetchTabCountFunc}
+          setLoadingTabs={props.setLoadingTabs}
           msn={msn}
           quantity={quantity}
           orderRef={orderRef}
@@ -1439,6 +1432,7 @@ const Ordercard = props => {
           itemId={itemId}
           fetchOrdersFunc={fetchOrdersFunc}
           fetchTabCountFunc={fetchTabCountFunc}
+          setLoadingTabs={props.setLoadingTabs}
           msn={msn}
           quantity={quantity}
           orderRef={orderRef}

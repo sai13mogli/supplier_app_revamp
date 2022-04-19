@@ -20,7 +20,6 @@ import {getImageUrl, acceptBulk} from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
@@ -61,6 +60,7 @@ const OrdersScreen = props => {
     state.ordersReducer.getIn(['orders', 'filters']),
   );
 
+  const [loadingTabs, setLoadingTabs] = useState(true);
   const [selectedType, setSelectedType] = useState('Open_Orders');
   const [selectedTab, setSelectedTab] = useState('PENDING_ACCEPTANCE');
   const onEndReachedCalledDuringMomentum = useRef(true);
@@ -110,7 +110,7 @@ const OrdersScreen = props => {
       {label: 'Upload Invoice', key: 'UPLOAD_INVOICE'},
       {label: 'Packed', key: 'PACKED'},
       {label: 'Shipment', key: 'SHIPMENT'},
-      {label: 'Mark Shipped', key: 'MARK_SHIPPED'},
+      {label: 'Mark Shipped/Delivered', key: 'MARK_SHIPPED'},
     ],
     Fulfilled_Orders: [{label: 'Fulfilled', key: 'FULFILLED'}],
     Cancelled: [{label: 'Cancelled', key: 'CANCELLED'}],
@@ -119,6 +119,14 @@ const OrdersScreen = props => {
       {label: 'Return Done', key: 'RETURN_DONE'},
     ],
   };
+
+  useEffect(() => {
+    if (tabStatus == STATE_STATUS.FETCHED && loadingTabs) {
+      setLoadingTabs(false);
+      const index = TABS[selectedType].findIndex(_ => _.key == selectedTab);
+      upButtonHandler(index + 1);
+    }
+  }, [tabStatus]);
 
   useEffect(() => {
     if (
@@ -156,6 +164,7 @@ const OrdersScreen = props => {
         orderRefs: [],
       });
       fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
+      setLoadingTabs(true);
     }
 
     return () => {
@@ -189,6 +198,7 @@ const OrdersScreen = props => {
   const renderItem = ({item, index}) => {
     return (
       <Ordercard
+        key={index}
         warehouseId={item.warehouseId}
         msn={item.productMsn}
         quantity={item.quantity}
@@ -211,6 +221,7 @@ const OrdersScreen = props => {
         fetchOrdersFunc={fetchOrdersFunc}
         selectedTab={selectedTab}
         fetchTabCountFunc={fetchTabCountFunc}
+        setLoadingTabs={setLoadingTabs}
         itemId={item.itemId}
         invoiceUrl={item.invoiceUrl}
         bulkItemIds={bulkItemIds}
@@ -237,6 +248,8 @@ const OrdersScreen = props => {
       orderRefs: [],
     });
     fetchTabCountFunc(val.key, shipmentType);
+    setLoadingTabs(true);
+    setSelectAll(false);
   };
 
   //selectedFilter
@@ -273,12 +286,16 @@ const OrdersScreen = props => {
         currentItemIds.push(itemId);
       }
     }
+    if (currentItemIds.length == OrderData.toArray().length) {
+      setSelectAll(true);
+    } else {
+      setSelectAll(false);
+    }
     setBulkItemIds(currentItemIds);
   };
 
   //select Item Data
   const selectItemData = itemObj => {
-    console.log('itemdata hai mc', itemObj);
     let currentBulkDownloadItems = [...bulkDownloadItems];
     let currItemIds = [...bulkItemIds];
     if (currItemIds.includes(itemObj.itemId)) {
@@ -296,7 +313,11 @@ const OrdersScreen = props => {
         currItemIds.push(itemObj.itemId);
       }
     }
-    console.log(currentBulkDownloadItems, 'mc data hai', currItemIds);
+    if (currItemIds.length == OrderData.toArray().length) {
+      setSelectAll(true);
+    } else {
+      setSelectAll(false);
+    }
     setBulkDownloadItems(currentBulkDownloadItems);
     setBulkItemIds(currItemIds);
   };
@@ -313,7 +334,6 @@ const OrdersScreen = props => {
 
   useEffect(() => {
     if (selectedTab == 'SHIPMENT' && bulkItemIds && bulkItemIds.length) {
-      console.log('bhk bulkActions', bulkItemIds.length);
       setBulkActionsModal(true);
     }
   }, [bulkItemIds]);
@@ -340,9 +360,10 @@ const OrdersScreen = props => {
   //     this.setState({ hideScroll: true });
   //   }
   // };
-  const upButtonHandler = () => {
+
+  const upButtonHandler = tabIndex => {
     scrollRef.current.scrollTo({
-      x: 200,
+      x: tabIndex == 1 ? 0 : tabIndex * 60,
       y: 0,
       animated: true,
     });
@@ -361,7 +382,7 @@ const OrdersScreen = props => {
         {TABS[selectedType].map((tab, tabIndex) => (
           <TouchableOpacity
             onPress={() => {
-              changeTab(tab), upButtonHandler();
+              changeTab(tab);
             }}
             style={
               selectedTab == tab.key
@@ -540,6 +561,7 @@ const OrdersScreen = props => {
           orderRefs: appliedFilter['orderRefs'] || [],
         });
         fetchTabCountFunc(selectedTab, shipmentType);
+        setLoadingTabs(true);
       } else {
         setBulkAcceptLoader(false);
         Toast.show({
@@ -579,36 +601,40 @@ const OrdersScreen = props => {
         TextColor={colors.WhiteColor}
         borderColor={colors.WhiteColor}
       /> */}
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          padding: 15,
+        }}>
+        <DropDown
+          title={'Orders'}
+          label={'Orders'}
+          selectedValue={selectedType}
+          onValueChange={text => {
+            setSelectedType(text);
+            changeTab(TABS[text][0]);
+          }}
+          items={OPTIONS}
+          enabled={true}
+          isFromOrders={true}
+        />
+      </View>
       {tabStatus == STATE_STATUS.FETCHING ? (
-        <ActivityIndicator style={{alignSelf: 'center', margin: 12}} />
+        <ActivityIndicator
+          color={colors.BrandColor}
+          style={{alignSelf: 'center', margin: 12}}
+        />
       ) : (
         <>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              padding: 15,
-            }}>
-            <DropDown
-              title={''}
-              label={''}
-              selectedValue={selectedType}
-              onValueChange={text => {
-                setSelectedType(text);
-                changeTab(TABS[text][0]);
-              }}
-              items={OPTIONS}
-              enabled={true}
-              isFromOrders={true}
-            />
-          </View>
+          {renderHeaderComponent()}
           <FlatList
             data={OrderData.toArray()}
-            stickyHeaderIndices={[0]}
+            // stickyHeaderIndices={[0]}
             renderItem={renderItem}
             ListEmptyComponent={renderListEmptyComponent}
             keyExtractor={(item, index) => `${index}-item`}
-            ListHeaderComponent={renderHeaderComponent}
+            // ListHeaderComponent={renderHeaderComponent}
             ListFooterComponent={renderFooterComponent}
             onEndReachedThreshold={0.9}
             style={{paddingBottom: 380}}

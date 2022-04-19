@@ -156,9 +156,7 @@ const BrandScreen = props => {
             data={(userBrands || []).filter(
               _ => _.isRaiseRequest == 'true' && !_.confirmed,
             )}
-            onChangeDataChoosed={data => {
-              console.log(data);
-            }}
+            onChangeDataChoosed={data => {}}
             fromAllBrands={true}
             notSure={false}
             selectedValues={userBrands}

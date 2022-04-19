@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import React, {useState, useCallback, useEffect, useRef} from 'react';
 import Dimension from '../Theme/Dimension';
@@ -151,8 +151,8 @@ const SplitQuantityModal = props => {
             orderRefs: [],
           });
           fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
+          props.setLoadingTabs(true);
         } else {
-          console.log(data);
           setSplitLoader(false);
           Toast.show({
             type: 'error',
@@ -191,43 +191,41 @@ const SplitQuantityModal = props => {
       onBackButtonPress={() => setSplitQuantityModal(false)}>
       {/* <Toast ref={modalToastRef} /> */}
       <View style={styles.modalContainer}>
-      <View style={styles.topbdr}></View>
-      <View style={styles.closeIconWrap}>
+        <View style={styles.topbdr}></View>
+        <View style={styles.closeIconWrap}>
           <CustomeIcon
-                name={'close'}
-                size={Dimension.font22}
-                color={Colors.FontColor}
-                onPress={() => {
-                  setSplitQuantityModal(false);
-                }}
-              />  
+            name={'close'}
+            size={Dimension.font22}
+            color={Colors.FontColor}
+            onPress={() => {
+              setSplitQuantityModal(false);
+            }}
+          />
+        </View>
+        <View style={styles.headerTxtWrap}>
+          <Text style={styles.headerTxt}>Split Quantity</Text>
+        </View>
+        <ScrollView>
+          <View style={{paddingHorizontal: Dimension.padding15}}>
+            {renderOrderDetails()}
           </View>
-          <View style={styles.headerTxtWrap}>
-              <Text style={styles.headerTxt}>Split Quantity</Text>
-           </View>
-           <ScrollView>
-        <View style={{paddingHorizontal: Dimension.padding15}}>
-          {renderOrderDetails()}
-        </View>
-        <View style={styles.BottomDataWrap}>
+          <View style={styles.BottomDataWrap}>
+            <FloatingLabelInputField
+              title={'Split in portion'}
+              label={'Split in portion'}
+              isImp={true}
+              value={splitQuantity}
+              onChangeText={text => setSplitQuantity(text)}
+              //   errorMessage={serialNumberError}
+              placeholder={'Type the number you want to split the quantity in'}
 
-        
-        <FloatingLabelInputField
-          title={'Split in portion'}
-          label={'Split in portion'}
-          isImp={true}
-          value={splitQuantity}
-          onChangeText={text => setSplitQuantity(text)}
-          //   errorMessage={serialNumberError}
-          placeholder={'Type the number you want to split the quantity in'}
-          
-          //   showError={serialNumberError}
-          //   onBlur={() => onPasswordBlur()}
-          //   secureTextEntry={isSecure}
-          //   extraView={() => getExtraView()}
-        />
-        {renderSplitPortion()}
-        </View>
+              //   showError={serialNumberError}
+              //   onBlur={() => onPasswordBlur()}
+              //   secureTextEntry={isSecure}
+              //   extraView={() => getExtraView()}
+            />
+            {renderSplitPortion()}
+          </View>
         </ScrollView>
         <View style={styles.bottomAction}>
           <TouchableOpacity
@@ -242,12 +240,10 @@ const SplitQuantityModal = props => {
                 ? styles.rejectCtabtn
                 : styles.disabledrejectCtabtn,
             ]}
-            disabled={splitQuantity == 0}>  
+            disabled={splitQuantity == 0}>
             <Text
               style={[
-                splitQuantity > 0
-                  ? styles.rejectCtaTxt
-                  : styles.ResetCtaTxt,
+                splitQuantity > 0 ? styles.rejectCtaTxt : styles.ResetCtaTxt,
               ]}>
               SPLIT
             </Text>
@@ -262,7 +258,6 @@ const SplitQuantityModal = props => {
 };
 
 const styles = StyleSheet.create({
-  
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
@@ -271,7 +266,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     paddingTop: Dimension.padding10,
-    height:deviceHeight-100
+    height: deviceHeight - 100,
   },
   topbdr: {
     alignSelf: 'center',
@@ -280,30 +275,29 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     width: Dimension.width70,
   },
-  closeIconWrap:{
-    alignItems:"flex-end",
-    paddingHorizontal:Dimension.padding15,
+  closeIconWrap: {
+    alignItems: 'flex-end',
+    paddingHorizontal: Dimension.padding15,
   },
-  headerTxtWrap:{
-    paddingHorizontal:Dimension.padding15,
-    marginBottom:Dimension.margin20
+  headerTxtWrap: {
+    paddingHorizontal: Dimension.padding15,
+    marginBottom: Dimension.margin20,
   },
 
-  headerTxt:{
+  headerTxt: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
-   // marginLeft:Dimension.margin10,
-
+    // marginLeft:Dimension.margin10,
   },
   showMoreCta: {
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
   },
-  
-  BottomDataWrap:{
-paddingVertical:Dimension.padding30,
-paddingHorizontal:Dimension.padding15
+
+  BottomDataWrap: {
+    paddingVertical: Dimension.padding30,
+    paddingHorizontal: Dimension.padding15,
   },
   bottomAction: {
     borderTopWidth: 1,
@@ -313,7 +307,7 @@ paddingHorizontal:Dimension.padding15
     //position: 'absolute',
     width: '100%',
     //bottom: 0,
-     flexDirection: 'row',
+    flexDirection: 'row',
   },
   ResetCtabtn: {
     flex: 1,
@@ -327,9 +321,8 @@ paddingHorizontal:Dimension.padding15
     fontFamily: Dimension.CustomMediumFont,
     color: Colors.FontColor,
     fontSize: Dimension.font16,
-
   },
-  rejectCtabtn:{
+  rejectCtabtn: {
     flex: 1,
     backgroundColor: Colors.BrandColor,
     borderRadius: 4,
@@ -337,12 +330,12 @@ paddingHorizontal:Dimension.padding15
     justifyContent: 'center',
     alignItems: 'center',
   },
-  rejectCtaTxt:{
+  rejectCtaTxt: {
     fontFamily: Dimension.CustomMediumFont,
     color: Colors.WhiteColor,
     fontSize: Dimension.font16,
   },
-  disabledrejectCtabtn:{
+  disabledrejectCtabtn: {
     flex: 1,
     backgroundColor: Colors.grayShade10,
     borderRadius: 4,

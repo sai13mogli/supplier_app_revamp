@@ -296,7 +296,7 @@ const Conversation = props => {
         // });
       })
       .catch(err => {
-        console.log(err, 'error hai');
+        console.log(err, 'error');
       });
   };
 

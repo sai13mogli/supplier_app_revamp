@@ -24,7 +24,7 @@ const getFcmToken = async () => {
         await AsyncStorage.setItem('fcmToken', newFcmToken);
       }
     } catch (error) {
-      console.log(error, 'error aayaFcm!!');
+      console.log(error, 'error in fcm');
     }
   }
 };
@@ -38,7 +38,7 @@ export const notificationListener = async () => {
     );
     // navigation.navigate(remoteMessage.data.type);
   });
-  
+
   // app is in foreground
   messaging().onMessage(async remoteMessage => {
     console.log('received in foreground!!', remoteMessage);
