@@ -9,6 +9,19 @@ const styles = StyleSheet.create({
     top: 80,
     // marginRight:Scale(80),
   },
+  topHeaderWrap:{
+    flexDirection: 'row',
+    justifyContent:"space-between",
+    padding: Dimension.padding15,
+    backgroundColor: Colors.grayShade1,
+  
+  },
+  TopTabWrap:{
+    paddingHorizontal: Dimension.padding10,
+    flexDirection: 'row',
+    backgroundColor: Colors.grayShade1,
+    paddingBottom:Dimension.padding10
+  },
   notifocationBtn: {
     //width:Dimension.width24,
     //height:Dimension.width24,
@@ -19,7 +32,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding6,
     borderRadius: 4,
-    maxWidth: Dimension.width120,
+    Width: Dimension.width95,
+    maxWidth:Dimension.width95,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
   },
@@ -28,7 +42,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding6,
     borderRadius: 4,
-    maxWidth: Dimension.width120,
+    Width: Dimension.width95,
+    maxWidth:Dimension.width95,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
   },

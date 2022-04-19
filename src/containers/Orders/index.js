@@ -363,11 +363,7 @@ const OrdersScreen = props => {
       <ScrollView
         horizontal={true}
         ref={scrollRef}
-        style={{
-          padding: Dimension.padding10,
-          flexDirection: 'row',
-          backgroundColor: colors.grayShade7,
-        }}>
+        style={styles.TopTabWrap}>
         {TABS[selectedType].map((tab, tabIndex) => (
           <TouchableOpacity
             onPress={() => {
@@ -591,14 +587,10 @@ const OrdersScreen = props => {
         borderColor={colors.WhiteColor}
       /> */}
       <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          padding: 15,
-        }}>
+        style={styles.topHeaderWrap}>
         <DropDown
           title={'Orders'}
-          label={'Orders'}
+         // label={'Orders'}
           selectedValue={selectedType}
           onValueChange={text => {
             setSelectedType(text);
