@@ -100,7 +100,7 @@ export const ADDRESSES_TAB_SCREENS = [
     idx: 0,
   },
   {
-    name: 'PickUp',
+    name: 'Pickup',
     key: 'pickup',
     component: PickedUp,
     ref: createRef(),

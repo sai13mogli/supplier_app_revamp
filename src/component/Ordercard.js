@@ -720,7 +720,7 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD POD COPY</Text>
             {podLoader && (
-              <ActivityIndicator color={'red'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
             )}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_DEBIT_NOTE' ? (
@@ -1039,18 +1039,18 @@ const Ordercard = props => {
     // }
   };
 
-  const renderPartialCTAs = (url, fromCTA, podurl) => {
+  const renderPartialCTAs = (url, fromCTA, podUrl = '') => {
     return (actionCTA || []).map((_, i) => {
       if (i < 2) {
-        return renderCTAs(_, url, fromCTA, true, podurl);
+        return renderCTAs(_, url, fromCTA, true, podUrl);
       }
     });
   };
 
-  const renderFurtherCTAs = (url, fromCTA, podurl) => {
+  const renderFurtherCTAs = (url, fromCTA, podUrl = '') => {
     return (actionCTA || []).map((_, i) => {
       if (i > 1) {
-        return renderCTAs(_, url, fromCTA, true, podurl);
+        return renderCTAs(_, url, fromCTA, true, podUrl);
       }
     });
   };
@@ -1402,7 +1402,6 @@ const Ordercard = props => {
           shipmentType={shipmentType}
           displayCalendar={displayCalendar}
           setDisplayCalendar={setDisplayCalendar}
-          pickupDate={pickupDate}
         />
       )}
       {addViewModal && (
