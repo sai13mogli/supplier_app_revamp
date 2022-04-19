@@ -26,6 +26,7 @@ const AcceptModal = props => {
     displayCalendar,
     shipmentType,
     setDisplayCalendar,
+    pickupDate,
   } = props;
   const [day, setDay] = useState({
     dateString: '',
@@ -134,11 +135,20 @@ const AcceptModal = props => {
   };
 
   const getMaxDate = () => {
-    let today = new Date();
-    let mutatedate = Number(today.getDate()) + 2;
-    let date =
-      today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + mutatedate;
+    let mutatedate = new Date(Number(pickupDate) + 1 * 24 * 60 * 60 * 1000);
+    let mutateMonth;
 
+    if (mutatedate.getMonth() + 1 < 10) {
+      mutateMonth = `0${mutatedate.getMonth() + 1}`;
+    } else {
+      mutateMonth = mutatedate.getMonth() + 1;
+    }
+
+    let currdate =
+      Number(mutatedate.getDate()) < 10
+        ? `0${Number(mutatedate.getDate())}`
+        : `${Number(mutatedate.getDate())}`;
+    let date = mutatedate.getFullYear() + '-' + mutateMonth + '-' + currdate;
     return date;
   };
 
