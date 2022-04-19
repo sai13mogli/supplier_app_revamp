@@ -46,7 +46,6 @@ const ProofOfDeliveryModal = props => {
       const res = await DocumentPicker.pick({
         // type: [DocumentPicker],
       });
-      console.log('doc', res[0]);
       setPodFile(res[0]);
       setPodFileError(false);
     } catch (err) {
@@ -236,58 +235,56 @@ const ProofOfDeliveryModal = props => {
       onBackdropPress={() => setModal(false)}
       onBackButtonPress={() => setModal(false)}>
       <View style={styles.modalContainer}>
-      <View style={styles.topbdr}></View>
-      <View style={styles.closeIconWrap}>
+        <View style={styles.topbdr}></View>
+        <View style={styles.closeIconWrap}>
           <CustomeIcon
-                name={'close'}
-                size={Dimension.font22}
-                color={Colors.FontColor}
-                onPress={() => {
-                  setModal(false);
-                }}
-              />
-          </View>
-          <View style={styles.headerTxtWrap}>
-              <Text style={styles.headerTxt}>PROOF OF DELIVERY</Text>
-           </View>
-        <>
-         
-          <View style={{paddingHorizontal: Dimension.padding15}}>
-          {renderOrderDetails()}
+            name={'close'}
+            size={Dimension.font22}
+            color={Colors.FontColor}
+            onPress={() => {
+              setModal(false);
+            }}
+          />
         </View>
+        <View style={styles.headerTxtWrap}>
+          <Text style={styles.headerTxt}>PROOF OF DELIVERY</Text>
+        </View>
+        <>
+          <View style={{paddingHorizontal: Dimension.padding15}}>
+            {renderOrderDetails()}
+          </View>
         </>
 
         <View style={styles.BottomDataWrap}>
           {FORM_FIELDS.map((_, key) => (
             <_.component key={key} {..._} />
           )).toList()}
-          
         </View>
         <View style={styles.bottomAction}>
-        <View style={{flex:1}}>
-          <CustomButton
-          title="CANCEL"
-          buttonColor={Colors.WhiteColor}
-          borderColor={Colors.WhiteColor}
-          TextColor={Colors.blackColor}
-          TextFontSize={Dimension.font16}
-          onPress={() => {
-            setModal(false);
-          }}
-        />
-          </View>
-            <View  style={{flex:1}}>
+          <View style={{flex: 1}}>
             <CustomButton
-            title="MARK DELIVERED"
-            loading={loading}
-            disabled={loading || !podFile.name || !orderPickupDate}
-            buttonColor={Colors.BrandColor}
-            borderColor={Colors.BrandColor}
-            TextColor={Colors.WhiteColor}
-            TextFontSize={Dimension.font16}
-            onPress={() => onMarkDelivered()}
-          />
-            </View>
+              title="CANCEL"
+              buttonColor={Colors.WhiteColor}
+              borderColor={Colors.WhiteColor}
+              TextColor={Colors.blackColor}
+              TextFontSize={Dimension.font16}
+              onPress={() => {
+                setModal(false);
+              }}
+            />
+          </View>
+          <View style={{flex: 1}}>
+            <CustomButton
+              title="MARK DELIVERED"
+              loading={loading}
+              disabled={loading || !podFile.name || !orderPickupDate}
+              buttonColor={Colors.BrandColor}
+              borderColor={Colors.BrandColor}
+              TextColor={Colors.WhiteColor}
+              TextFontSize={Dimension.font16}
+              onPress={() => onMarkDelivered()}
+            />
+          </View>
         </View>
       </View>
     </Modal>
@@ -295,7 +292,6 @@ const ProofOfDeliveryModal = props => {
 };
 
 const styles = StyleSheet.create({
- 
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
@@ -312,44 +308,42 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     width: Dimension.width70,
   },
-  closeIconWrap:{
-    alignItems:"flex-end",
-    paddingHorizontal:Dimension.padding15,
+  closeIconWrap: {
+    alignItems: 'flex-end',
+    paddingHorizontal: Dimension.padding15,
   },
-  headerTxtWrap:{
-    paddingHorizontal:Dimension.padding15,
-    marginBottom:Dimension.margin20
+  headerTxtWrap: {
+    paddingHorizontal: Dimension.padding15,
+    marginBottom: Dimension.margin20,
   },
 
-  headerTxt:{
+  headerTxt: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomSemiBoldFont,
-   // marginLeft:Dimension.margin10,
-
+    // marginLeft:Dimension.margin10,
   },
   showMoreCta: {
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
   },
-  
 
-  BottomDataWrap:{
-    paddingVertical:Dimension.padding30,
-    paddingHorizontal:Dimension.padding15,
+  BottomDataWrap: {
+    paddingVertical: Dimension.padding30,
+    paddingHorizontal: Dimension.padding15,
     //maxHeight:200
     //flex:1
-      },
-      bottomAction: {
-        borderTopWidth: 1,
-        borderTopColor: Colors.grayShade2,
-        padding: Dimension.padding15,
-        backgroundColor: Colors.WhiteColor,
-        //position: 'absolute',
-        width: '100%',
-        //bottom: 0,
-         flexDirection: 'row',
-      },
+  },
+  bottomAction: {
+    borderTopWidth: 1,
+    borderTopColor: Colors.grayShade2,
+    padding: Dimension.padding15,
+    backgroundColor: Colors.WhiteColor,
+    //position: 'absolute',
+    width: '100%',
+    //bottom: 0,
+    flexDirection: 'row',
+  },
 });
 
 export default React.memo(ProofOfDeliveryModal);

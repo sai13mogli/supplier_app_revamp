@@ -16,8 +16,6 @@ const PickerDropDown = props => {
     disabled,
   } = props;
 
-  console.log('selectedValue', value);
-
   return (
     <>
       <Text style={styles.labelStyle}>{title}</Text>

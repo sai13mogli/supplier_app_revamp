@@ -9,7 +9,6 @@ export const logoutMiddleware = store => next => async action => {
     action.error.response &&
     action.error.response.status == 401
   ) {
-    console.log('set_token', store.getState().profileReducer.token);
     Alert.alert(
       `Title`,
       `Token has expired and user is unauthorized.${

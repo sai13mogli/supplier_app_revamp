@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from 'react';
+import React, {useState, useEffect, createRef} from 'react';
 import {
   ScrollView,
   Text,
@@ -9,24 +9,24 @@ import {
   Dimensions,
   StyleSheet,
 } from 'react-native';
-import { OrderedMap, setIn } from 'immutable';
+import {OrderedMap, setIn} from 'immutable';
 import CustomeIcon from '../../../component/common/CustomeIcon';
 import FileUpload from '../../../component/common/FileUpload';
-import ActionSheet, { SheetManager } from 'react-native-actions-sheet';
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
 import styles from './style';
-import { authToken, BASE_URL } from '../../../redux/constants/index';
+import {authToken, BASE_URL} from '../../../redux/constants/index';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import CustomButton from '../../../component/common/Button';
 import Modal from 'react-native-modal';
 import PDFView from 'react-native-view-pdf';
 import Checkbox from '../../../component/common/Checkbox/index';
-import { submitProfile, getDocuments } from '../../../services/documents';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchProfile } from '../../../redux/actions/profile';
+import {submitProfile, getDocuments} from '../../../services/documents';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchProfile} from '../../../redux/actions/profile';
 import Header from '../../../component/common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
@@ -297,7 +297,7 @@ const DocumentsScreen = props => {
   });
 
   const noteArr = [
-    { id: '0', note: 'Each document file should not exceed more than 2MB' },
+    {id: '0', note: 'Each document file should not exceed more than 2MB'},
     {
       id: '1',
       note: 'Please ensure the Image of a signature is on a white background',
@@ -309,7 +309,6 @@ const DocumentsScreen = props => {
   }, []);
 
   useEffect(() => {
-    console.log(pancard && pancard.loading);
     if (pancard && pancard.key == 'panCard' && pancard.loading) {
       uploadDocument(pancard);
     }
@@ -370,14 +369,12 @@ const DocumentsScreen = props => {
   const uploadDocument = async data => {
     try {
       let res = await uploadDocumentService(data);
-      console.log('uploadDocument ka res hai bhaiii!', res);
-      let { resp } = res;
+      let {resp} = res;
       if (resp.error) {
         setErrorData();
       } else {
         setDocument(res);
       }
-      console.log(fId, 'fId');
     } catch (error) {
       console.log('err', error);
     }
@@ -386,9 +383,8 @@ const DocumentsScreen = props => {
   const fetchDocuments = async () => {
     try {
       let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-      const { data } = await getDocuments(token);
+      const {data} = await getDocuments(token);
       setDocumentsData(data);
-      console.log('data', data);
     } catch (error) {
       console.log('err', error);
     }
@@ -407,9 +403,7 @@ const DocumentsScreen = props => {
   };
 
   const setDocumentsData = data => {
-    console.log('data', data);
     if (data && data.data && data.data.panCard && data.data.panCard != ' ') {
-      console.log('pancard');
       setPancard({
         ...pancard,
         title: 'pan',
@@ -421,7 +415,6 @@ const DocumentsScreen = props => {
       });
     }
     if (data && data.data && data.data.gstin && data.data.gstin != ' ') {
-      console.log('gstin');
       setGstIn({
         ...gstin,
         title: 'gst',
@@ -438,7 +431,6 @@ const DocumentsScreen = props => {
       data.data.cancelledCheque &&
       data.data.cancelledCheque != ' '
     ) {
-      console.log('cancelledCheque');
       setCheque({
         ...cheque,
         title: 'Cancelled Cheque',
@@ -456,7 +448,6 @@ const DocumentsScreen = props => {
       data.data.bankStatement &&
       data.data.bankStatement != ' '
     ) {
-      console.log('bankStatement');
       setBankStatement({
         ...bankStatement,
         title: 'Bank Statement Copy',
@@ -536,7 +527,7 @@ const DocumentsScreen = props => {
     }
   };
 
-  const setDocument = ({ fileData, resp }) => {
+  const setDocument = ({fileData, resp}) => {
     switch (resp.data && resp.data.key) {
       case 'panCard':
         setPancard({
@@ -719,7 +710,6 @@ const DocumentsScreen = props => {
     );
 
     const res = await response.json();
-    console.log(res);
     // setLoader(false);
     return {
       resp: res,
@@ -748,7 +738,6 @@ const DocumentsScreen = props => {
       const res = await DocumentPicker.pick({
         // type: [DocumentPicker],
       });
-      console.log('doc', res[0]);
       setFormState(res[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -762,7 +751,6 @@ const DocumentsScreen = props => {
 
   // set Id of a particular doc
   const setFormState = data => {
-    console.log(fId);
     switch (fId) {
       case 'pancard':
         setPancard({
@@ -1132,7 +1120,7 @@ const DocumentsScreen = props => {
     try {
       setSubmitLoader(true);
       let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-      const { data } = await submitProfile(token);
+      const {data} = await submitProfile(token);
       if (data && data.success) {
         setSubmitLoader(false);
         setConfirmModal(false);
@@ -1156,7 +1144,7 @@ const DocumentsScreen = props => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Header
         showBack
         navigation={props.navigation}
@@ -1234,11 +1222,11 @@ const DocumentsScreen = props => {
           <ActivityIndicator
             size={'small'}
             color={'white'}
-            style={{ marginRight: 4 }}
+            style={{marginRight: 4}}
           />
         ) : isPDF ? (
           <PDFView
-            style={{ flex: 1 }}
+            style={{flex: 1}}
             onError={error => console.log('onError', error)}
             onLoad={() => console.log('PDF rendered from base 64 data')}
             resource={`${imageUrl}`}
@@ -1249,8 +1237,8 @@ const DocumentsScreen = props => {
           //   No Image Found!!
           // </Text>
           <Image
-            source={{ uri: imageUrl }}
-            style={{ height: '100%', width: '100%', flex: 1 }}
+            source={{uri: imageUrl}}
+            style={{height: '100%', width: '100%', flex: 1}}
           />
         )}
       </Modal>
@@ -1282,7 +1270,7 @@ const DocumentsScreen = props => {
             profile
           </Text>
           <View style={styles.ModalBtnWrap}>
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <CustomButton
                 title="CANCEL"
                 buttonColor={colors.WhiteColor}
@@ -1291,7 +1279,7 @@ const DocumentsScreen = props => {
                 TextFontSize={Dimension.font16}
                 onPress={() => setConfirmModal(false)}></CustomButton>
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <CustomButton
                 title="CONFIRM"
                 buttonColor={colors.BrandColor}

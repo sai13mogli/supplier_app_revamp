@@ -153,7 +153,6 @@ const SplitQuantityModal = props => {
           fetchTabCountFunc('SCHEDULED_PICKUP', 'ONESHIP');
           props.setLoadingTabs(true);
         } else {
-          console.log(data);
           setSplitLoader(false);
           Toast.show({
             type: 'error',

@@ -124,7 +124,7 @@ const NewTicket = props => {
       errorMessage: 'Please explain your query',
       onChangeText: text => setexplainQuery(text),
       showError: explainQueryError,
-      IsMultiline:true
+      IsMultiline: true,
     },
   });
 
@@ -168,30 +168,6 @@ const NewTicket = props => {
       validateExplainQuery();
     } else {
       setLoading(true);
-      console.log([
-        {
-          name: 'categoryId',
-          data: category,
-        },
-        {
-          name: 'subCategoryId',
-          data: subCategory,
-        },
-        {
-          name: 'businessType',
-          data: businessType,
-        },
-        {
-          name: 'description',
-          data: explainQuery,
-        },
-        ...docs.map(_ => ({
-          name: 'attachments',
-          filename: _.name,
-          type: _.type,
-          data: RNFetchBlob.wrap(_.uri),
-        })),
-      ]);
       setcategoryError(false);
       setsubCategoryError(false);
       setbusinessTypeError(false);
@@ -237,7 +213,6 @@ const NewTicket = props => {
       //   resp: res,
       //   fileData: data,
       // };
-      console.log(res);
       if (res.success) {
         Toast.show({
           type: 'success',

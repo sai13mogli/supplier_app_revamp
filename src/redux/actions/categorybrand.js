@@ -35,7 +35,6 @@ export const fetchBrandSearchResult = obj => {
 };
 
 export const fetchedBrandSearchResult = (obj, data) => {
-  console.log('data', data);
   return {
     type: CATEGORY_BRAND_ACTIONS.FETCHED_BRANDS,
     payload: {
@@ -62,7 +61,6 @@ export const fetchBrandSearchResultByAlphabet = obj => {
 };
 
 export const fetchedBrandSearchResultByAlphabet = (obj, data) => {
-  console.log('data', data);
   return {
     type: CATEGORY_BRAND_ACTIONS.FETCHED_BRANDS_ALPHABETS,
     payload: {
