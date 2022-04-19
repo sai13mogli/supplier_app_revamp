@@ -10,8 +10,6 @@ import styles from './styles';
 import { STATE_STATUS } from '../../../../redux/constants';
 
 const Billing = (props) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [billing, setBilling] = useState("Billing")
   const addressesDetailsStatus = useSelector(state => state.profileReducer.addressesDetails.status || STATE_STATUS.FETCHING);
   const profileData = useSelector(state => state.profileReducer.data || {});
@@ -129,7 +127,7 @@ const Billing = (props) => {
           TextColor={colors.WhiteColor}
           TextFontSize={Dimension.font16}
           title={'Next'}
-          onPress={() => props.navigation.navigate('PickedUp', { key: 'pickup' })}
+          onPress={() => props.navigation.navigate('Pickup')}
         />
       </View>
 
