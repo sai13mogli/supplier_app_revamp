@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 //import { Scale } from '../../CommonConfig';
 import Dimension from '../../Theme/Dimension';
 import Colors from '../../Theme/Colors';
@@ -9,14 +9,14 @@ const styles = StyleSheet.create({
     top: 80,
     // marginRight:Scale(80),
   },
-  topHeaderWrap:{
+  topHeaderWrap: {
     flexDirection: 'row',
-    justifyContent:"space-between",
+    justifyContent: "space-between",
     padding: Dimension.padding15,
     backgroundColor: Colors.grayShade1,
-  
+
   },
-  TopTabWrap:{
+  TopTabWrap: {
     paddingHorizontal: Dimension.padding10,
     flexDirection: 'row',
     backgroundColor: Colors.grayShade1,
@@ -33,10 +33,10 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding6,
     borderRadius: 4,
     Width: Dimension.width90,
-    maxWidth:Dimension.width100,
+    maxWidth: Dimension.width100,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
-    minHeight:Dimension.height50
+    minHeight: Dimension.height50
   },
   selectedTabCss: {
     backgroundColor: Colors.FontColor,
@@ -44,10 +44,10 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding6,
     borderRadius: 4,
     Width: Dimension.width90,
-    maxWidth:Dimension.width100,
+    maxWidth: Dimension.width100,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
-    minHeight:Dimension.height50
+    minHeight: Dimension.height50
   },
   selectedTabTxt: {
     fontFamily: Dimension.CustomMediumFont,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     backgroundColor: '#fff',
     flex: 8,
-   borderRadius: 4,
+    borderRadius: 4,
     borderWidth: 1,
     borderColor: Colors.BoxBorderColor,
     paddingHorizontal: Dimension.padding10,
@@ -105,8 +105,8 @@ const styles = StyleSheet.create({
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
     height: Dimension.margin35,
-    width:"90%",
-   
+    width: "90%",
+
     // flex: 8,
   },
   seacrhIcon: {
@@ -133,18 +133,19 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColo: Colors.grayShade13,
     paddingHorizontal: Dimension.padding10,
-    paddingVertical: Dimension.padding8,
+    paddingVertical: Dimension.padding9,
     height: Dimension.height35,
   },
   filterIcon: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
     marginLeft: Dimension.margin5,
-    marginTop:Dimension.margin5
+    marginTop: Dimension.margin5
   },
   filtertxt: {
     fontSize: Dimension.font12,
     color: Colors.FontColor,
+    marginTop: Dimension.margin2,
     fontFamily: Dimension.CustomMediumFont,
   },
   selectAllBtn: {

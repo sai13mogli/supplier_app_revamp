@@ -1,10 +1,10 @@
-;import { Dimensions, StyleSheet } from 'react-native';
+; import { Dimensions, StyleSheet } from 'react-native';
 import Colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
 
 
 const styles = StyleSheet.create({
-   
+
     userNameCss: {
         fontSize: Dimension.font16,
         color: Colors.WhiteColor,
@@ -23,37 +23,37 @@ const styles = StyleSheet.create({
         fontSize: Dimension.font10,
         color: Colors.WhiteColor,
         fontFamily: Dimension.CustomRegularFont,
-        justifyContent:"flex-end",
-        alignContent:"flex-end",
-        marginTop:Dimension.margin3
-       
+        justifyContent: "flex-end",
+        alignContent: "flex-end",
+        marginTop: Dimension.margin4
+
     },
-    topWrap:{
-        paddingHorizontal:Dimension.padding15,
-        paddingTop:Dimension.padding50,
-        paddingBottom:Dimension.padding25
+    topWrap: {
+        paddingHorizontal: Dimension.padding15,
+        paddingTop: Dimension.padding50,
+        paddingBottom: Dimension.padding25
     },
     companyName: {
         fontSize: Dimension.font12,
         color: Colors.WhiteColor,
         fontFamily: Dimension.CustomSemiBoldFont,
-       
-    },
-    profileTabWrapper:{
-        borderRadius:4,
-        backgroundColor:Colors.grayShade3,
-        paddingHorizontal:Dimension.padding10,
-        paddingVertical:Dimension.padding15,
-        marginHorizontal:Dimension.margin15,
-marginTop:Dimension.margin30,
 
     },
- 
- 
-   
+    profileTabWrapper: {
+        borderRadius: 4,
+        backgroundColor: Colors.grayShade3,
+        paddingHorizontal: Dimension.padding10,
+        paddingVertical: Dimension.padding15,
+        marginHorizontal: Dimension.margin15,
+        marginTop: Dimension.margin30,
+
+    },
+
+
+
     profileTabWrap: {
-        padding:Dimension.padding10,
-        marginVertical:Dimension.margin5,
+        padding: Dimension.padding10,
+        marginVertical: Dimension.margin5,
         borderRadius: 4,
         flexDirection: "row",
         justifyContent: "space-between",
@@ -61,9 +61,9 @@ marginTop:Dimension.margin30,
         alignItems: "center"
     },
     varsionWrap: {
-      
+
         marginTop: Dimension.margin20,
-        
+
         marginHorizontal: Dimension.margin15,
         paddingHorizontal: Dimension.padding15,
         paddingVertical: Dimension.padding15,
@@ -95,9 +95,9 @@ marginTop:Dimension.margin30,
         fontSize: Dimension.font14,
         color: Colors.headerTxtColor,
         fontFamily: Dimension.CustomRegularFont,
-       // marginTop: Dimension.margin8
+        // marginTop: Dimension.margin8
     },
-    AppversionNumber:{
+    AppversionNumber: {
         fontSize: Dimension.font14,
         color: Colors.headerTxtColor,
         fontFamily: Dimension.CustomBoldFont,

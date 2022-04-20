@@ -57,7 +57,6 @@ const Billing = (props) => {
                   borderColor={colors.grayShade1}
                   TextFontSize={Dimension.font14}
                 >
-
                 </CustomButton>
               </View>
           }
@@ -107,18 +106,13 @@ const Billing = (props) => {
                   </Text>
                 </View>
               </TouchableOpacity>
-
             </View>
-
             <FlatList
               data={BillingAddressData}
               renderItem={renderItems}
               keyExtractor={(item, index) => index.toString()}
             />
-
           </ScrollView>
-
-
       }
       <View style={styles.bottombtnWrap}>
         <CustomButton
@@ -127,7 +121,7 @@ const Billing = (props) => {
           TextColor={colors.WhiteColor}
           TextFontSize={Dimension.font16}
           title={'Next'}
-          onPress={() => props.navigation.navigate('Pickup')}
+          onPress={() => props.navigation.navigate('Pickup', { name: 'pickup', })}
         />
       </View>
 

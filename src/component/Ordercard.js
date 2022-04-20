@@ -178,7 +178,6 @@ const Ordercard = props => {
           }
         });
       } catch (err) {
-        //To handle permission related issue
         console.warn(err);
       }
     } else {
@@ -199,7 +198,6 @@ const Ordercard = props => {
           }
         });
       } catch (err) {
-        //To handle permission related issue
         console.warn(err);
       }
     } else {
@@ -208,8 +206,7 @@ const Ordercard = props => {
   };
 
   const downloadPDF = async (isPO, pdfUrl, isInvoice) => {
-    //Main function to download the image
-    let date = new Date(); //To add the time suffix in filename
+    let date = new Date();
 
     try {
       let image_URL = '';
