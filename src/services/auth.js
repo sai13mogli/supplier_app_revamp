@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { BASE_URL } from '../redux/constants/index';
+import {BASE_URL} from '../redux/constants/index';
 
 const AUTH = 'https://supplierapiqa.moglilabs.com/';
 
@@ -15,7 +15,8 @@ export const loginWithOtp = data => axios.post(`${AUTH}auth/otpLogin`, data);
 
 export const verifyOtp = data => axios.post(`${AUTH}util/verifyOtp`, data);
 
-export const forgotPassword = data => axios.get(`${AUTH}auth/forgotPassword?key=${data.email}`);
+export const forgotPassword = data =>
+  axios.get(`${AUTH}auth/forgotPassword?key=${data.email}`);
 
 export const loginWithGoogle = data =>
   axios.post(`${AUTH}auth/googleLogin`, data);
@@ -39,3 +40,5 @@ export const setUserPassword = async password =>
       },
     },
   );
+
+export const rmLogin = data => axios.post(`${AUTH}auth/rmLogin`, data);

@@ -43,6 +43,9 @@ const OrdersScreen = props => {
   const OrderStatus = useSelector(state =>
     state.ordersReducer.getIn(['orders', 'status']),
   );
+  const OrderStage = useSelector(state =>
+    state.ordersReducer.getIn(['orders', 'orderStage']),
+  );
   const OrderData = useSelector(state =>
     state.ordersReducer.getIn(['orders', 'data']),
   );
@@ -83,7 +86,7 @@ const OrdersScreen = props => {
   const [bulkDownloadItems, setBulkDownloadItems] = useState([]);
   const [initLoader, setInitLoader] = useState(true);
 
-  const OPTIONS = [
+  const COMMON_OPTIONS = [
     {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
     {
       label: 'Fulfilled Orders',
@@ -94,6 +97,20 @@ const OrdersScreen = props => {
       label: 'Cancelled Orders',
       key: 'Cancelled',
       value: 'Cancelled',
+    },
+    {
+      label: 'Returned Orders',
+      key: 'Returned',
+      value: 'Returned',
+    },
+  ];
+
+  const ONLINE_OPTIONS = [
+    {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
+    {
+      label: 'Fulfilled Orders',
+      key: 'Fulfilled_Orders',
+      value: 'Fulfilled_Orders',
     },
     {
       label: 'Returned Orders',
@@ -134,6 +151,7 @@ const OrdersScreen = props => {
       profileData.verificationStatus < 10 &&
       initLoader
     ) {
+      console.log('ordersscreen');
       props.navigation.push('Profile');
       setInitLoader(false);
     }
@@ -172,6 +190,14 @@ const OrdersScreen = props => {
       keyboardDidShowListener.remove();
     };
   }, []);
+
+  const getOptions = () => {
+    if (!profileData.enterpriseFlag) {
+      return ONLINE_OPTIONS;
+    } else {
+      return COMMON_OPTIONS;
+    }
+  };
 
   const fetchOrdersFunc = (
     page,
@@ -230,6 +256,9 @@ const OrdersScreen = props => {
         shipmentUrl={item.shipmentUrl}
         podUrl={item.podUrl}
         selectItemData={selectItemData}
+        OrderStage={OrderStage}
+        remark={item.remark}
+        source={item.source}
       />
     );
   };
@@ -621,7 +650,7 @@ const OrdersScreen = props => {
             setSelectedType(text);
             changeTab(TABS[text][0]);
           }}
-          items={OPTIONS}
+          items={getOptions()}
           enabled={true}
           isFromOrders={true}
         />
