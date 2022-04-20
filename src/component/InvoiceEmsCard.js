@@ -1,38 +1,14 @@
 import {
   View,
   Text,
-  Image,
   StyleSheet,
-  TouchableOpacity,
   Dimensions,
-  ActivityIndicator,
-  PermissionsAndroid,
   TextInput,
 } from 'react-native';
-import React, {useState, useEffect, useCallback} from 'react';
-import {getImageUrl, markOutForOrderApi} from '../services/orders';
+import React, { useState, } from 'react';
 import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
-import Modal from 'react-native-modal';
-import {acceptOrder, getpoChallan, rejectOrder} from '../services/orders';
-import Toast from 'react-native-toast-message';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import RNFetchBlob from 'rn-fetch-blob';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import PackNowModal from '../component/PackNowModal';
-import RejectModal from '../component/RejectModal';
-import MarkOutForDeliveryModal from '../component/MarkOutForDeliveryModal';
-import ViewLSPModal from '../component/ViewLSPModal';
-import SplitHistoryModal from '../component/SplitHistoryModal';
-import ProofOfDeliveryModal from '../component/ProofOfDeliveryModal';
-import AcceptModal from './AcceptModal';
-import AddView from './AddView';
-import SplitQuantityModal from './SplitQuantityModal';
-import {useNavigation} from '@react-navigation/native';
-import {colors} from 'react-native-elements';
-
-const deviceWidth = Dimensions.get('window').width;
 
 const InvoiceCard = props => {
   const {
@@ -53,14 +29,14 @@ const InvoiceCard = props => {
 
   const calculatePrice = text => {
     setQuantity(text);
-    const {taxPercentage, transferPrice} = props;
+    const { taxPercentage, transferPrice } = props;
     let Price = transferPrice * text;
     let percentage = (Price / 100) * taxPercentage + text * transferPrice;
     setAmount(percentage);
   };
 
   const calculateHsn = text => {
-    const {transferPrice} = props;
+    const { transferPrice } = props;
     let Price = transferPrice * quantity;
     let percentage = (Price / 100) * text + quantity * transferPrice;
     setAmount(percentage);
@@ -86,7 +62,7 @@ const InvoiceCard = props => {
             style={styles.checkboxDesign}></CustomeIcon>
           <View style={styles.rightPart}>
             <Text style={styles.productName}>{productName}</Text>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <View style={{}}>
                 <Text style={styles.TitleLightTxt}>
                   Moglix HSN- <Text style={styles.TitleBoldTxt}>{hsn}</Text>
@@ -96,7 +72,7 @@ const InvoiceCard = props => {
                 </Text>
               </View>
 
-              <View style={{marginLeft:Dimension.margin30}}>
+              <View style={{ marginLeft: Dimension.margin30 }}>
                 <Text style={styles.TitleLightTxt}>
                   Total Price -{' '}
                   <Text style={styles.TitleBoldTxt}>
@@ -138,7 +114,7 @@ const InvoiceCard = props => {
                   {quantity}
                 </TextInput>
               </View>
-              <View style={{flexDirection: 'column'}}>
+              <View style={{ flexDirection: 'column' }}>
                 <Text style={styles.TitleLightTxt}>HSN Tax %</Text>
                 <TextInput
                   style={styles.wrapInput}
@@ -164,18 +140,9 @@ const InvoiceCard = props => {
           <Text
             style={[
               styles.TitleBoldTxt,
-              {
-               // marginLeft: Dimension.margin10,
-               // fontSize: 10,
-               // marginTop: Dimension.margin13,
-                //marginBottom: Dimension.margin10,
-              },
             ]}>
             PO ID -{' '}
-            <Text style={[styles.TitleBoldTxt, 
-              {
-               // fontSize: 10
-                }]}>
+            <Text style={styles.TitleBoldTxt}>
               {orderRef}
             </Text>
           </Text>
@@ -205,7 +172,7 @@ const InvoiceCard = props => {
     <>
       {renderOrderHeaderDetail()}
 
-      <View style={[styles.orderCardwrap, {marginTop: Dimension.margin10}]}>
+      <View style={[styles.orderCardwrap, { marginTop: Dimension.margin10 }]}>
         {renderOrderDetails()}
       </View>
     </>
@@ -233,11 +200,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.DisableStateColor,
     borderRadius: 3,
     //height: 60,
-   // marginLeft: Dimension.margin10,
+    // marginLeft: Dimension.margin10,
     //marginRight: Dimension.margin10,
-    marginHorizontal:Dimension.margin10,
-    paddingHorizontal:Dimension.padding10,
-    paddingVertical:Dimension.padding8
+    marginHorizontal: Dimension.margin10,
+    paddingHorizontal: Dimension.padding10,
+    paddingVertical: Dimension.padding8
   },
   sectionText: {
     fontSize: Dimension.font10,
@@ -248,10 +215,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     //marginTop: Dimension.margin10,
     //marginRight: Dimension.margin10,
-   // marginLeft: Dimension.margin315,
-   // marginBottom: Dimension.margin164,
+    // marginLeft: Dimension.margin315,
+    // marginBottom: Dimension.margin164,
     right: 0,
-    top:0,
+    top: 0,
     zIndex: 9999,
   },
   borderWrap: {
@@ -269,10 +236,10 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomMediumFont,
     color: Colors.FontColor,
-    backgroundColor:"#fff",
-    paddingTop:0,
-    paddingBottom:0,
-    paddingHorizontal:Dimension.padding10
+    backgroundColor: "#fff",
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingHorizontal: Dimension.padding10
   },
   msnName: {
     fontSize: Dimension.font12,
@@ -288,7 +255,7 @@ const styles = StyleSheet.create({
     // marginLeft: Dimension.margin15,
     // marginRight: Dimension.margin11,
     //backgroundColor:"#000",
-    width:"90%"
+    width: "90%"
   },
   textMeasure: {
     fontSize: Dimension.font12,
@@ -445,8 +412,8 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
   },
-  LeftpartModal: {flex: 1},
-  orderCardwrapInnerModal: {paddingHorizontal: Dimension.padding15},
+  LeftpartModal: { flex: 1 },
+  orderCardwrapInnerModal: { paddingHorizontal: Dimension.padding15 },
   rupeeSign: {
     fontFamily: Dimension.CustomRobotoBold,
     fontSize: Dimension.font12,
