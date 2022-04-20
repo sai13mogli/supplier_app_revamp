@@ -482,10 +482,11 @@ const UploadInvoiceOMSScreen = props => {
               disabled={field.disabled}
             />
           )).toList()}
-        </View>
+        
         {Documents.map(_ => renderInputText(_))
           .toList()
           .toArray()}
+          </View>
         <ActionSheet
           id="action_sheet"
           onBeforeShow={data => {

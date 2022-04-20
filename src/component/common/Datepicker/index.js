@@ -111,7 +111,7 @@ const CustomeDatePicker = props => {
             )}
             editable={false}
             // value={date}
-            underlineColorAndroid={'transparent'}
+           // underlineColorAndroid={'transparent'}
             selectionColor={'#3c3c3c'}
             disabled={props.disabled}
             onFocus={handleFocus}
@@ -122,14 +122,18 @@ const CustomeDatePicker = props => {
             errorStyle={styles.errorText}
             disabledInputStyle={styles.disabledInputStyle}
             errorMessage={props.showError ? props.errorMessage : null}
-          />
-          <View style={{ flexDirection: "row" }}>
-            <Text style={styles.placeholderCss}>{text || 'Select Date'}</Text>
-            <CustomeIcon
+            rightIcon={<CustomeIcon
               name={'calendar'}
               size={Dimension.font20}
               color={colors.FontColor}
-            />
+            />}
+            rightIconContainerStyle={
+             styles.iconStyle
+            }
+          />
+          <View style={{ flexDirection: "row" }}>
+            <Text style={styles.placeholderCss}>{text || 'Select Date'}</Text>
+            
           </View>
         </View>
 

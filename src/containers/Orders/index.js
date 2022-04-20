@@ -26,6 +26,7 @@ import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
 import Toast from 'react-native-toast-message';
 import BulkActionsModal from '../../component/BulkActionsModal';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -109,7 +110,7 @@ const OrdersScreen = props => {
       { label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE' },
       { label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP' },
       { label: 'Pickup', key: 'PICKUP' },
-      { label: 'Upload     Invoice', key: 'UPLOAD_INVOICE' },
+      { label: 'Upload Invoice', key: 'UPLOAD_INVOICE' },
       { label: 'Packed', key: 'PACKED' },
       { label: 'Shipment', key: 'SHIPMENT' },
       { label: 'Mark Shipped/Delivered', key: 'MARK_SHIPPED' },
@@ -435,10 +436,10 @@ const OrdersScreen = props => {
       return (
         <View style={styles.emptyWrap}>
           <Image
-            source={require('../../assets/images/pending_approval.png')}
-            style={{ width: 300, height: 200 }}
+            source={require('../../assets/images/profilePending.png')}
+            style={{ width: 350, height: 300 }}
           />
-          <Text style={styles.emptyTxt}>
+          <Text style={styles.profilependingTxt}>
             Your profile is incomplete, please complete your profile, To get
             started
           </Text>
@@ -454,7 +455,7 @@ const OrdersScreen = props => {
             source={require('../../assets/images/pending_approval.png')}
             style={{ width: 300, height: 200 }}
           />
-          <Text style={styles.emptyTxt}>
+          <Text style={styles.profilependingTxt}>
             Your profile is currently in approval pending stage Once approved
             you will start receiving orders
           </Text>
@@ -642,7 +643,7 @@ const OrdersScreen = props => {
             style={{ paddingBottom: 380 }}
             contentContainerStyle={{
               paddingBottom: 380,
-              backgroundColor: '#fff',
+              backgroundColor: Colors.grayShade1,
             }}
             removeClippedSubviews={true}
             maxToRenderPerBatch={5}
@@ -729,7 +730,12 @@ const OrdersScreen = props => {
                     <Text style={styles.filtertxt}>Filters</Text>
                     <CustomeIcon
                       name={'filter-line'}
-                      style={styles.filterIcon}></CustomeIcon>
+                      style={styles.filterIcon}>
+                    </CustomeIcon>
+                    {/* <Image
+            source={require('../../assets/images/filterLine.png')}
+            style={{ width:Dimension.width16, height:Dimension.height16}}
+          /> */}
                   </TouchableOpacity>
                 </View>
               ) : null}

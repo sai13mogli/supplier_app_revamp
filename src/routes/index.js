@@ -12,6 +12,7 @@ import {navigationRef} from '../generic/navigator';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Dimension from '../Theme/Dimension';
+import colors from '../Theme/Colors';
 import CustomeIcon from '../component/common/CustomeIcon';
 import {
   APP_STACK_SCREENS,
@@ -85,6 +86,17 @@ const Routes = props => {
             tabBarIcon(focused, color, route, rest),
           lazy: false,
           safeAreaInsets: {bottom: 0},
+          tabBarStyle: {
+            paddingTop: Dimension.padding10,
+            paddingBottom:Dimension.padding18,
+           borderWidth: 0,
+            borderColor: colors.WhiteColor,
+           // borderTopLeftRadius: 16,
+            //borderTopRightRadius: 16,
+            backgroundColor: "#fff",
+            height: Platform.OS === 'ios'? 85:80,
+            borderBottomWidth: 0,
+          },
         })}
         tabBarOptions={tabBarOptions}>
         {BOTTOM_TAB_SCREENS.map((screen, key) => (
@@ -222,8 +234,12 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font10,
     fontFamily: Dimension.CustomMediumFont,
     marginTop: Dimension.margin4,
+    color:colors.eyeIcon
   },
-  iconAlignment: {alignItems: 'center', alignSelf: 'center'},
+  iconAlignment: {alignItems: 'center', alignSelf: 'center',
+  //paddingTop:Dimension.padding10,
+ // paddingBottom:Dimension.padding20
+},
 });
 const tabBarOptions = {
   activeTintColor: '#D9232D',
