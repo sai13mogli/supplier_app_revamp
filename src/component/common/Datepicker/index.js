@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Button,
@@ -11,30 +11,21 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
-import {Input} from 'react-native-elements';
+import { Input, } from 'react-native-elements';
 import CustomeIcon from '../CustomeIcon';
 import styles from './styles';
 
 const CustomeDatePicker = props => {
-  const {
-    onChange,
-    onPress,
-    display,
-    label,
-    title,
-    isImp,
-    value,
-    activeFilter,
-    fromCategoryBrand,
-    fileUpload,
-  } = props;
+  const { onChange, onPress, display, label, title, isImp, value, activeFilter } =
+    props;
   const [date, setDate] = useState(new Date());
   const [isFocused, setIsFocused] = useState(false);
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [text, setText] = useState(value || 'Select Date');
+  const [text, setText] = useState('Select Date');
 
   const onchangeDate = (event, selectedDate) => {
+    console.log('event', event);
     const currentDate = selectedDate;
     setShow(Platform.OS === 'ios');
     if (event.type != 'dismissed') {
@@ -70,7 +61,6 @@ const CustomeDatePicker = props => {
     setShow(true);
     setMode(currentMode);
   };
-
   const handleFocus = () => {
     setIsFocused(true);
     if (props.handleFocus) {
@@ -97,50 +87,70 @@ const CustomeDatePicker = props => {
     showMode('date');
   };
 
-  const renderDateTimePicker = () => {
-    return (
-      <>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.labelStyle}>{label}</Text>
-          {isImp ? <Text style={styles.starIcon}>*</Text> : null}
-        </View>
+  return (
+    <>
 
-        <View>
-          <TouchableOpacity
-            style={styles.inputContainerStyle}
-            onPress={showDatepicker}>
+      {/* <Text style={styles.labelStyle}>{label}</Text>
+        {isImp ? <Text style={styles.starIcon}>*</Text> : null}
+      </View>
+
+      <View> */}
+
+
+      <TouchableOpacity
+        // style={styles.inputContainerStyle}
+        onPress={showDatepicker}>
+        <View style={{ flexDirection: "row" }}>
+          <Input
+            {...props}
+            label={() => (
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.labelStyle}>{props.label}</Text>
+                {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
+              </View>
+            )}
+            editable={false}
+            // value={date}
+            underlineColorAndroid={'transparent'}
+            selectionColor={'#3c3c3c'}
+            disabled={props.disabled}
+            onFocus={handleFocus}
+            onBlur={() => handleBlur(true)}
+            containerStyle={styles.WrapperStyle}
+            inputContainerStyle={styles.inputContainerStyle}
+            inputStyle={styles.inputStyle}
+            errorStyle={styles.errorText}
+            disabledInputStyle={styles.disabledInputStyle}
+            errorMessage={props.showError ? props.errorMessage : null}
+          />
+          <View style={{ flexDirection: "row" }}>
             <Text style={styles.placeholderCss}>{text || 'Select Date'}</Text>
             <CustomeIcon
               name={'calendar'}
               size={Dimension.font20}
               color={colors.FontColor}
             />
-          </TouchableOpacity>
-
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display={display}
-              onChange={onchangeDate}
-            />
-          )}
+          </View>
         </View>
-      </>
-    );
-  };
 
-  if (fromCategoryBrand) {
-    if (fileUpload == 3) {
-      return renderDateTimePicker();
-    } else {
-      return null;
-    }
-  } else {
-    return renderDateTimePicker();
-  }
+
+      </TouchableOpacity>
+
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={mode}
+          is24Hour={true}
+          display={display}
+          onChange={onchangeDate}
+        />
+      )}
+
+    </>
+  );
 };
 
 export default CustomeDatePicker;
+
+/*Created by Aakash*/

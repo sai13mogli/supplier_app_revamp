@@ -1,11 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {OrderedMap} from 'immutable';
+import React, { useState, useEffect } from 'react';
+import { OrderedMap } from 'immutable';
 import {
   View,
-  StyleSheet,
   Text,
   TouchableOpacity,
-  Modal,
   ScrollView,
   FlatList,
 } from 'react-native';
@@ -16,13 +14,13 @@ import colors from '../../../Theme/Colors';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import FileUpload from '../../../component/common/FileUpload';
-import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
+import ActionSheet, { SheetManager } from 'react-native-actions-sheet';
 import Header from '../../../component/common/Header';
 import CustomeDatePicker from '../../../component/common/Datepicker';
-import {getInvoiceOMSDetails, uploadOMSInvoice} from '../../../services/orders';
+import { getInvoiceOMSDetails } from '../../../services/orders';
 import styles from './style';
 import InvoiceOmsCard from '../../../component/InvoiceOmsCard';
-import {BASE_URL} from '../../../redux/constants';
+import { BASE_URL } from '../../../redux/constants';
 import RNFetchBlob from 'rn-fetch-blob';
 
 
@@ -36,8 +34,7 @@ const UploadInvoiceOMSScreen = props => {
   const [uploadInvoice, setUploadInvoice] = useState({});
   const [uploadInvoiceError, setuploadInvoiceError] = useState(false);
   const [supplierInvoiceTotal, setSupplierInvoiceTotal] = useState('');
-  const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] =
-    useState(false);
+  const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] = useState(false);
   const [poTotal, setPoTotal] = useState(0);
   const [poTotalError, setpoTotalError] = useState(false);
   const [uploadDisabled, setUploadDisabled] = useState(false);
@@ -264,7 +261,7 @@ const UploadInvoiceOMSScreen = props => {
       let payload = {
         supplierId: await AsyncStorage.getItem('userId'),
       };
-      const {data} = await getInvoiceOMSDetails(payload);
+      const { data } = await getInvoiceOMSDetails(payload);
       if (data.success) {
         setOmsUploadList(data?.data);
         setLoading(false);
@@ -274,11 +271,7 @@ const UploadInvoiceOMSScreen = props => {
     }
   };
 
-  const initialValue = 0;
-  // const sumWithInitial = poTotalPrice.reduce(
-  //     (previousValue, currentValue) => previousValue.price + currentValue.price,
-  //     initialValue
-  // );
+
 
   const selectItemId = (podId, totalPrice, keys) => {
     let currentItemIds = [...bulkItemIds];
@@ -320,7 +313,7 @@ const UploadInvoiceOMSScreen = props => {
     }
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     let list = Object.values(item)?.[0];
     let keys = Object.keys(item)?.[0];
 
@@ -334,10 +327,9 @@ const UploadInvoiceOMSScreen = props => {
         TpUnit={list.transfer_price}
         productName={list.product_name}
         bulkItemIds={bulkItemIds}
-        // poTotalPrice={totalTaxes}
+        actionCTA={item.actionCTA}
         keys={keys}
         totalKeys={totalKeys}
-        // setTotalPrice={setPoTotalPrice}
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
       />
@@ -350,7 +342,7 @@ const UploadInvoiceOMSScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             // source={require('../../assets/images/emptyOrders.png')}
-            style={{width: 300, height: 200}}
+            style={{ width: 300, height: 200 }}
           />
           <Text style={styles.emptyTxt}>No Data Available</Text>
         </View>
@@ -462,12 +454,12 @@ const UploadInvoiceOMSScreen = props => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Header
         showBack
         navigation={props.navigation}
         showText={'Upload Invoice'}
-        //rightIconName={'business-details'}
+      //rightIconName={'business-details'}
       />
 
       <ScrollView style={styles.ContainerCss}>
@@ -479,14 +471,14 @@ const UploadInvoiceOMSScreen = props => {
           onEndReachedThreshold={0.9}
           showsVerticalScrollIndicator={false}
         />
-        <View style={{marginTop:Dimension.margin30}}>
-        {FORM_FIELDS.map((field, fieldKey) => (
-          <field.component
-            {...field}
-            key={fieldKey}
-            disabled={field.disabled}
-          />
-        )).toList()}
+        <View style={{ marginTop: Dimension.margin30 }}>
+          {FORM_FIELDS.map((field, fieldKey) => (
+            <field.component
+              {...field}
+              key={fieldKey}
+              disabled={field.disabled}
+            />
+          )).toList()}
         </View>
         {Documents.map(_ => renderInputText(_))
           .toList()
@@ -505,8 +497,8 @@ const UploadInvoiceOMSScreen = props => {
           </View>
         </ActionSheet>
       </ScrollView>
-      <View style={[styles.bottombtnWrap, {flexDirection: 'row'}]}>
-        <View style={{marginRight: 15, flex: 1}}>
+      <View style={[styles.bottombtnWrap, { flexDirection: 'row' }]}>
+        <View style={{ marginRight: 15, flex: 1 }}>
           <CustomButton
             buttonColor={colors.WhiteColor}
             borderColor={colors.transparent}
@@ -516,7 +508,7 @@ const UploadInvoiceOMSScreen = props => {
             onPress={onCancel}
           />
         </View>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <CustomButton
             buttonColor={colors.BrandColor}
             borderColor={colors.BrandColor}
