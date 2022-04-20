@@ -3,39 +3,16 @@ import {
     Text,
     Image,
     StyleSheet,
-    TouchableOpacity,
     Dimensions,
-    ActivityIndicator,
-    PermissionsAndroid,
 } from 'react-native';
-import React, { useState, useEffect, useCallback } from 'react';
-import { getImageUrl, markOutForOrderApi } from '../services/orders';
+import React, { useState, useEffect } from 'react';
+import { getImageUrl } from '../services/orders';
 import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
-import Modal from 'react-native-modal';
-import {
-    acceptOrder,
-    getpoChallan,
-    rejectOrder,
-    createManifestApi,
-} from '../services/orders';
-import Toast from 'react-native-toast-message';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import RNFetchBlob from 'rn-fetch-blob';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import PackNowModal from '../component/PackNowModal';
-import RejectModal from '../component/RejectModal';
-import MarkOutForDeliveryModal from '../component/MarkOutForDeliveryModal';
-import ViewLSPModal from '../component/ViewLSPModal';
-import SplitHistoryModal from '../component/SplitHistoryModal';
-import ProofOfDeliveryModal from '../component/ProofOfDeliveryModal';
-import AcceptModal from './AcceptModal';
-import AddView from './AddView';
-import SplitQuantityModal from './SplitQuantityModal';
+
 import { useNavigation } from '@react-navigation/native'
 
-const deviceWidth = Dimensions.get('window').width;
 
 const InvoiceOmsCard = props => {
     const {
@@ -47,19 +24,15 @@ const InvoiceOmsCard = props => {
         productName,
         taxpercent,
         actionCTA,
-        itemId,
         bulkItemIds,
         selectItemId,
         keys
 
     } = props;
 
-    const [orderImage, setOrderImage] = useState(null);
     const [showMoreTxt, setShowMoreTxt] = useState(false);
-    const [lengthMore, setLengthMore] = useState(false);
-
-    const { navigate } = useNavigation();
-    const navigation = useNavigation();
+    const [showMoreCTA, setShowMoreCTA] = useState(false);
+    const [invoiceImage, setInvoiceImage] = useState(null);
 
     useEffect(() => {
         fetchImage();
@@ -81,33 +54,9 @@ const InvoiceOmsCard = props => {
                 data.productBO.productPartDetails[msn].images[0].links.medium);
         let validUrl = imageUrl.split('/');
         if (!validUrl.includes('null')) {
-            setOrderImage(imageUrl);
+            setInvoiceImage(imageUrl);
         }
     };
-
-    const getTime = (time, acceptrejectOrder) => {
-        let months = [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sept',
-            'Oct',
-            'Nov',
-            'Dec',
-        ];
-        let date = new Date(Number(time));
-        if (acceptrejectOrder) {
-            return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-        }
-        return `${months[date.getMonth()]} ${date.getDate()},${date.getFullYear()}`;
-    };
-
-
 
     const toggleShowMoreTxt = () => {
         setShowMoreTxt(!showMoreTxt);
@@ -140,10 +89,23 @@ const InvoiceOmsCard = props => {
                         }}></CustomeIcon>
 
                     <View style={styles.leftpart}>
-                        <Image
-                            source={require('../assets/images/Prd.png')}
-                            style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
-                        />
+                        {
+                            invoiceImage ?
+                                <Image
+                                    // source={{
+                                    //   uri:
+                                    //     orderImage ||
+                                    //     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+                                    // }}
+                                    source={{ uri: invoiceImage }}
+                                    style={styles.imgStyle}
+                                /> :
+                                <Image
+                                    source={require('../assets/images/default_image.png')}
+                                    style={styles.imgStyle}
+                                />
+
+                        }
                         <View style={styles.quantityTxt}>
                             <Text style={styles.TitleLightTxt}>
                                 Qty - <Text style={styles.TitleBoldTxt}>{quantity}</Text>
@@ -158,11 +120,11 @@ const InvoiceOmsCard = props => {
                             {msn}
                         </Text>
                         <View style={styles.productnameWrap}>
-                        <Text style={styles.productName}
-                numberOfLines={showMoreTxt ? undefined : 1}>{productName}</Text>
-                        <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
-                            {showMoreTxt ? 'Read less' : 'Read more'}
-                        </Text>
+                            <Text style={styles.productName}
+                                numberOfLines={showMoreTxt ? undefined : 1}>{productName}</Text>
+                            <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
+                                {showMoreTxt ? 'Read less' : 'Read more'}
+                            </Text>
                         </View>
 
                         <View style={{ flexDirection: 'row' }}>
@@ -226,14 +188,14 @@ const styles = StyleSheet.create({
         // color: Colors.BrandColor,
         fontFamily: Dimension.CustomSemiBoldFont,
     },
-    productnameWrap:{
+    productnameWrap: {
         marginBottom: Dimension.margin10,
     },
     productName: {
         fontSize: Dimension.font12,
         color: Colors.FontColor,
         fontFamily: Dimension.CustomRegularFont,
-       
+
         marginTop: Dimension.margin5,
     },
     readMoretxt: {
@@ -297,6 +259,22 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
     },
+    imgStyleModal: {
+        borderRadius: 4,
+        backgroundColor: Colors.WhiteColor,
+        padding: 2,
+        width: 250,
+        height: 250,
+        alignSelf: 'center',
+    },
+    imgStyle: {
+        borderRadius: 4,
+        backgroundColor: Colors.WhiteColor,
+        padding: 2,
+        width: Dimension.width50,
+        height: Dimension.height50,
+        //alignSelf:'center'
+    },
     leftpart: {
         flex: 2,
         marginRight: Dimension.margin12,
@@ -329,7 +307,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         paddingVertical: Dimension.padding5,
-      },
+    },
     modalContainer: {
         backgroundColor: Colors.WhiteColor,
         borderTopLeftRadius: 20,

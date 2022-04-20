@@ -153,6 +153,7 @@ const Dimension = {
   padding5: normalize(5),
   padding6: normalize(6),
   padding8: normalize(8),
+  padding9: normalize(9),
   padding10: normalize(10),
   padding12: normalize(12),
   padding13: normalize(13),

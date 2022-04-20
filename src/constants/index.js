@@ -100,7 +100,7 @@ export const ADDRESSES_TAB_SCREENS = [
     idx: 0,
   },
   {
-    name: 'PickUp',
+    name: 'Pickup',
     key: 'pickup',
     component: PickedUp,
     ref: createRef(),
@@ -276,7 +276,7 @@ export const MORE_TABS = [
     icon: 'questionnaire-line',
   },
 ];
-
+//pushe
 export const PRIVACY_TABS = [
   {
     route: '',
@@ -290,7 +290,7 @@ export const PRIVACY_TABS = [
     route: '',
     onPress: () => {
       Linking.openURL(
-        'https://suppliercentralqa.moglilabs.com/files/privacy.pdf',
+        'https://www.moglix.com/privacy',
       );
     },
     title: 'Privacy Policy',

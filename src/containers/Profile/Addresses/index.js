@@ -7,8 +7,6 @@ import Tabs from '../../../component/common/Tabs'
 
 
 const Addresses = props => {
-
-
   return (
     <>
       <Header
@@ -21,24 +19,8 @@ const Addresses = props => {
     </>
   );
 };
-const styles = StyleSheet.create({
-  tabText: {
-    fontSize: Dimension.font15,
-    height: 60,
-    width: '100%',
-    fontFamily: Dimension.CustomRobotoBold,
-    marginTop: 0,
-  },
 
-  tabBar: {
-    backgroundColor: '#fff',
-  },
-  iconAlignment: {
-    backgroundColor: '#fff',
-    width: '100%',
-    flex: 1,
-  },
-});
+
 
 
 export default Addresses;

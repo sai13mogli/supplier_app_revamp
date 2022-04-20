@@ -10,6 +10,7 @@ import {
   TextInput,
   BackHandler,
   Keyboard,
+  Dimensions,
 } from 'react-native';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
@@ -124,7 +125,7 @@ const OrdersScreen = props => {
       {label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE'},
       {label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP'},
       {label: 'Pickup', key: 'PICKUP'},
-      {label: 'Upload Invoice', key: 'UPLOAD_INVOICE'},
+      {label: 'Upload     Invoice', key: 'UPLOAD_INVOICE'},
       {label: 'Packed', key: 'PACKED'},
       {label: 'Shipment', key: 'SHIPMENT'},
       {label: 'Mark Shipped/Delivered', key: 'MARK_SHIPPED'},
@@ -259,6 +260,7 @@ const OrdersScreen = props => {
         OrderStage={OrderStage}
         remark={item.remark}
         source={item.source}
+        statusText={item.statusText}
       />
     );
   };
@@ -403,11 +405,8 @@ const OrdersScreen = props => {
       <ScrollView
         horizontal={true}
         ref={scrollRef}
-        style={{
-          padding: Dimension.padding10,
-          flexDirection: 'row',
-          backgroundColor: colors.grayShade7,
-        }}>
+        style={styles.TopTabWrap}
+        contentContainerStyle={{paddingBottom: Dimension.padding30}}>
         {TABS[selectedType].map((tab, tabIndex) => (
           <TouchableOpacity
             onPress={() => {
@@ -636,15 +635,10 @@ const OrdersScreen = props => {
         TextColor={colors.WhiteColor}
         borderColor={colors.WhiteColor}
       /> */}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          padding: 15,
-        }}>
+      <View style={styles.topHeaderWrap}>
         <DropDown
           title={'Orders'}
-          label={'Orders'}
+          // label={'Orders'}
           selectedValue={selectedType}
           onValueChange={text => {
             setSelectedType(text);

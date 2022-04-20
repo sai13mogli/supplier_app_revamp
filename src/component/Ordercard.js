@@ -73,6 +73,7 @@ const Ordercard = props => {
     OrderStage,
     remark,
     source,
+    statusText,
   } = props;
 
   const [invoiceLoading, setInvoiceLoading] = useState(false);
@@ -181,7 +182,6 @@ const Ordercard = props => {
           }
         });
       } catch (err) {
-        //To handle permission related issue
         console.warn(err);
       }
     } else {
@@ -202,7 +202,6 @@ const Ordercard = props => {
           }
         });
       } catch (err) {
-        //To handle permission related issue
         console.warn(err);
       }
     } else {
@@ -211,8 +210,7 @@ const Ordercard = props => {
   };
 
   const downloadPDF = async (isPO, pdfUrl, isInvoice) => {
-    //Main function to download the image
-    let date = new Date(); //To add the time suffix in filename
+    let date = new Date();
 
     try {
       let image_URL = '';
@@ -622,7 +620,10 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD INVOICE</Text>
             {invoiceLoading && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_PO_EMS' ? (
@@ -641,7 +642,10 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
             {poLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : cta == 'REMAP_INVOICE' ? (
@@ -661,7 +665,10 @@ const Ordercard = props => {
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>REMAP INVOICE</Text>
             {poLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : cta == 'MAP_PO_TO_INVOICE' ? (
@@ -683,7 +690,10 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
             {poLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_PO_OMS' ? (
@@ -723,7 +733,10 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD POD COPY</Text>
             {podLoader && (
-              <ActivityIndicator color={'red'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_DEBIT_NOTE' ? (
@@ -741,7 +754,10 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD DEBIT NOTE</Text>
             {debitLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : cta == 'MAP_INVOICE' ? (
@@ -770,7 +786,10 @@ const Ordercard = props => {
             ]}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
             {invoiceLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY' ? (
@@ -1015,7 +1034,10 @@ const Ordercard = props => {
             disabled={manifestLoader}>
             <Text style={styles.rejectCtaTxt}>Create Manifest</Text>
             {manifestLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_SHIPMENT_LABEL' ? (
@@ -1033,7 +1055,10 @@ const Ordercard = props => {
             disabled={manifestLoader}>
             <Text style={styles.rejectCtaTxt}>Download Shipment Label</Text>
             {manifestLoader && (
-              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
             )}
           </TouchableOpacity>
         ) : null}
@@ -1042,18 +1067,18 @@ const Ordercard = props => {
     // }
   };
 
-  const renderPartialCTAs = (url, fromCTA, podurl) => {
+  const renderPartialCTAs = (url, fromCTA, podUrl = '') => {
     return (actionCTA || []).map((_, i) => {
       if (i < 2) {
-        return renderCTAs(_, url, fromCTA, true, podurl);
+        return renderCTAs(_, url, fromCTA, true, podUrl);
       }
     });
   };
 
-  const renderFurtherCTAs = (url, fromCTA, podurl) => {
+  const renderFurtherCTAs = (url, fromCTA, podUrl = '') => {
     return (actionCTA || []).map((_, i) => {
       if (i > 1) {
-        return renderCTAs(_, url, fromCTA, true, podurl);
+        return renderCTAs(_, url, fromCTA, true, podUrl);
       }
     });
   };
@@ -1179,16 +1204,22 @@ const Ordercard = props => {
               }}></CustomeIcon>
           ) : null}
           <View style={[fromModal ? styles.LeftpartModal : styles.leftpart]}>
-            <Image
-              // source={{
-              //   uri:
-              //     orderImage ||
-              //     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
-              // }}
-              source={require('../assets/images/Prd.png')}
-              style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
-            />
-
+            {orderImage ? (
+              <Image
+                // source={{
+                //   uri:
+                //     orderImage ||
+                //     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+                // }}
+                source={{uri: orderImage}}
+                style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/default_image.png')}
+                style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
+              />
+            )}
             {!fromModal ? (
               <View style={styles.quantityTxt}>
                 <Text style={styles.TitleLightTxt}>
@@ -1233,7 +1264,7 @@ const Ordercard = props => {
                 <Text style={styles.TotalamounTxt}>
                   {' '}
                   <Text style={styles.rupeeSign}>₹ </Text>
-                  {Math.floor(totalAmount)}
+                  {Math.floor(totalAmount)} Including
                 </Text>
                 <Text style={styles.taxpercentageTxt}>{taxPercentage}%</Text>
               </View>
@@ -1280,6 +1311,8 @@ const Ordercard = props => {
                   ? 'Dropship'
                   : shipmentMode == 3
                   ? 'Door Delivery'
+                  : shipmentMode == 1
+                  ? 'Oneshipe'
                   : shipmentType}
               </Text>
               {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
@@ -1318,7 +1351,7 @@ const Ordercard = props => {
                   fontWeight: 'bold',
                   color: '#000',
                 }}>
-                Supplier Rejected
+                {statusText}
               </Text>
               <Text
                 style={{
@@ -1459,7 +1492,6 @@ const Ordercard = props => {
           shipmentType={shipmentType}
           displayCalendar={displayCalendar}
           setDisplayCalendar={setDisplayCalendar}
-          pickupDate={pickupDate}
         />
       )}
       {addViewModal && (

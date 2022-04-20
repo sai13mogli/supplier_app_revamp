@@ -5,6 +5,7 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {Input, Icon} from 'react-native-elements';
 import Dimension from '../../Theme/Dimension';
@@ -70,6 +71,7 @@ const FloatingLabelInputField = props => {
               ? styles.MultiinputContainerStyle
               : styles.inputContainerStyle
           }
+          
           inputStyle={styles.inputStyle}
           labelStyle={styles.labelStyle}
           rightIconContainerStyle={
@@ -121,7 +123,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.FontColor,
     borderRadius: 4,
-    paddingHorizontal: Dimension.padding12,
+    
     height: Dimension.height40,
     paddingBottom: 0,
   },
@@ -145,8 +147,8 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-
-    paddingLeft: 0,
+    paddingLeft:Dimension.padding12,
+    paddingRight:Dimension.padding12,
   },
   iconStyle: {
     width: Dimension.width24,
@@ -162,12 +164,13 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
   },
   disabledInputStyle: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-
-    paddingLeft: 0,
+    paddingLeft:Dimension.padding12,
+    paddingRight:Dimension.padding12,
     backgroundColor: colors.DisableStateColor,
+    //paddingHorizontal: Dimension.padding12,
   },
 });
 

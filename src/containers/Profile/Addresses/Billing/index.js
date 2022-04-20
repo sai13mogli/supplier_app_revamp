@@ -10,8 +10,6 @@ import styles from './styles';
 import { STATE_STATUS } from '../../../../redux/constants';
 
 const Billing = (props) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [billing, setBilling] = useState("Billing")
   const addressesDetailsStatus = useSelector(state => state.profileReducer.addressesDetails.status || STATE_STATUS.FETCHING);
   const profileData = useSelector(state => state.profileReducer.data || {});
@@ -59,7 +57,6 @@ const Billing = (props) => {
                   borderColor={colors.grayShade1}
                   TextFontSize={Dimension.font14}
                 >
-
                 </CustomButton>
               </View>
           }
@@ -83,12 +80,13 @@ const Billing = (props) => {
 
         </View>
 
+
       </View>
     </View>
   )
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 0.9, }}>
       {
         addressesDetailsStatus == STATE_STATUS.FETCHING ? (
           <ActivityIndicator style={{ alignSelf: 'center', marginTop: 150 }} />
@@ -108,9 +106,7 @@ const Billing = (props) => {
                   </Text>
                 </View>
               </TouchableOpacity>
-
             </View>
-
             <FlatList
               data={BillingAddressData}
               renderItem={renderItems}
@@ -118,6 +114,17 @@ const Billing = (props) => {
             />
           </ScrollView>
       }
+      <View style={styles.bottombtnWrap}>
+        <CustomButton
+          buttonColor={colors.BrandColor}
+          borderColor={colors.BrandColor}
+          TextColor={colors.WhiteColor}
+          TextFontSize={Dimension.font16}
+          title={'Next'}
+          onPress={() => props.navigation.navigate('Pickup', { name: 'pickup', })}
+        />
+      </View>
+
     </View>
 
   );
