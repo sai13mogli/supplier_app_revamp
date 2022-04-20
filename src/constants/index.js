@@ -278,17 +278,11 @@ export const MORE_TABS = [
 ];
 
 export const PRIVACY_TABS = [
-
-  {
-    route: 'Settings',
-    title: 'Settings',
-    icon: 'settings-3-line',
-  },
   {
     route: '',
-    // onPress: () => {
-    //   Linking.openURL('https://suppliercentralqa.moglilabs.com/#home');
-    // },
+    onPress: () => {
+      Linking.openURL('https://suppliercentralqa.moglilabs.com/#home');
+    },
     title: 'About Us',
     icon: 'team-line',
   },
