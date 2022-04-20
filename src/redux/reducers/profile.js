@@ -39,19 +39,25 @@ export const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         status: STATE_STATUS.FETCHING,
-        data: {},
+        // data: {},
       };
     case PROFILE_ACTIONS.FETCHED_PROFILE:
       return {
         ...state,
         status: STATE_STATUS.FETCHED,
-        data: payload.data,
+        data: {...state.data, ...payload.data},
       };
     case PROFILE_ACTIONS.FAILED_FETCH_PROFILE:
       return {
         ...state,
         status: STATE_STATUS.FAILED_FETCH,
-        data: {},
+        // data: {},
+      };
+
+    case PROFILE_ACTIONS.SET_RM_DATA:
+      return {
+        ...state,
+        data: {...state.data, ...payload.data},
       };
 
     case PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS:

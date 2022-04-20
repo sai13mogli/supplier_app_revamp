@@ -3,6 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ActivityIndicator, Image, ImageBackground, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {setShipmentType} from '../../../redux/actions/orders';
+import {fetchedProfile, setRmData} from '../../../redux/actions/profile';
+import {rmLogin} from '../../../services/auth';
 
 const SplashScreen = props => {
   const dispatch = useDispatch();
@@ -13,7 +15,17 @@ const SplashScreen = props => {
 
   const checkAuthState = async () => {
     const token = await AsyncStorage.getItem('token');
+    const rmToken = await AsyncStorage.getItem('rmToken');
     const onlineShipmentMode = await AsyncStorage.getItem('onlineShipmentMode');
+    if (rmToken) {
+      const {data} = await rmLogin({
+        token: rmToken,
+      });
+      if (data.success) {
+        dispatch(setRmData(data.data));
+      }
+    }
+
     if (token || onlineShipmentMode) {
       if (onlineShipmentMode) {
         dispatch(setShipmentType(onlineShipmentMode));

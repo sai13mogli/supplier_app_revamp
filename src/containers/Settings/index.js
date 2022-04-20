@@ -17,6 +17,8 @@ const SettingsScreen = props => {
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('userId');
     await AsyncStorage.removeItem('fcmToken');
+    await AsyncStorage.removeItem('onlineFlag');
+    await AsyncStorage.removeItem('enterpriseFlag');
     props.route.params.setIsLoggedIn(false);
     dispatch(logout(token));
   };
