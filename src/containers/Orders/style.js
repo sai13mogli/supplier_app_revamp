@@ -142,6 +142,13 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin5,
     marginTop: Dimension.margin5
   },
+  filterApplied: {
+    height: Dimension.height8,
+    width: Dimension.width8,
+    borderRadius: 100 / 2,
+    left: Dimension.margin20,
+    backgroundColor: Colors.BrandColor
+  },
   filtertxt: {
     fontSize: Dimension.font12,
     color: Colors.FontColor,

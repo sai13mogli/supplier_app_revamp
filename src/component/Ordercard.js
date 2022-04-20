@@ -1165,6 +1165,14 @@ const Ordercard = props => {
   //   }
   // };
 
+  const isReadMore = descriptionText => {
+    if (descriptionText && descriptionText.length > 60) {
+      return {readMore: true, text: descriptionText.slice(0, 60)};
+    } else {
+      return {readMore: false, text: descriptionText};
+    }
+  };
+
   const renderOrderDetails = (fromModal, fromCTA) => {
     return (
       <>
@@ -1240,20 +1248,24 @@ const Ordercard = props => {
             </Text>
             <View style={styles.productnameWrap}>
               {!fromModal ? (
-                <Text
-                  onTextLayout={onTextLayout}
-                  numberOfLines={showMoreTxt ? undefined : 1}
-                  style={styles.productName}>
-                  {productName}
+                <Text onTextLayout={onTextLayout} style={styles.productName}>
+                  {showMoreTxt ? productName : isReadMore(productName).text}
+                  {isReadMore(productName).readMore && !showMoreTxt
+                    ? '...'
+                    : ''}
+                  {lengthMore &&
+                  !fromModal &&
+                  isReadMore(productName).readMore ? (
+                    <Text
+                      onPress={toggleShowMoreTxt}
+                      style={styles.readMoretxt}>
+                      {showMoreTxt ? ' Read less' : ' Read more'}
+                    </Text>
+                  ) : null}
                 </Text>
               ) : (
                 <Text style={styles.productName}>{productName}</Text>
               )}
-              {lengthMore && !fromModal ? (
-                <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
-                  {showMoreTxt ? 'Read less' : 'Read more'}
-                </Text>
-              ) : null}
             </View>
             {fromModal ? (
               <View

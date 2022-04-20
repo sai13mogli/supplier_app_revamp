@@ -665,6 +665,16 @@ const OrdersScreen = props => {
   //   console.log(e, e && e.nativeEvent && e.nativeEvent.key);
   // };
 
+  const isFilterApplied = () => {
+    return (
+      (Object.keys(appliedFilter) && Object.keys(appliedFilter).length) ||
+      pickupFromDate ||
+      pickupToDate ||
+      poFromDate ||
+      poToDate
+    );
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
       {/* <CustomButton
@@ -804,6 +814,9 @@ const OrdersScreen = props => {
                     style={styles.filterBtn}
                     onPress={() => setOrdersFiltersModal(true)}>
                     <Text style={styles.filtertxt}>Filters</Text>
+                    {isFilterApplied() ? (
+                      <View style={styles.filterApplied}></View>
+                    ) : null}
                     <CustomeIcon
                       name={'filter-line'}
                       style={styles.filterIcon}></CustomeIcon>
