@@ -276,7 +276,7 @@ export const MORE_TABS = [
     icon: 'questionnaire-line',
   },
 ];
-
+//pushe
 export const PRIVACY_TABS = [
   {
     route: '',
