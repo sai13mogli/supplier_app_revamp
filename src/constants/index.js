@@ -7,6 +7,7 @@ import DashboardScreen from '../containers/Dashboard';
 import SupportScreen from '../containers/Support';
 import MoreScreen from '../containers/More';
 import SettingsScreen from '../containers/Settings';
+import AboutUsScreen from '../containers/AboutUs';
 import DocumentsScreen from '../containers/Profile/Documents';
 import BusinessDetails from '../containers/Profile/BusinessDetails';
 import Addresses from '../containers/Profile/Addresses';
@@ -149,6 +150,10 @@ export const APP_STACK_SCREENS = [
     component: SettingsScreen,
   },
   {
+    name: 'About Us',
+    component: AboutUsScreen,
+  },
+  {
     name: 'Documents',
     component: DocumentsScreen,
   },
@@ -279,12 +284,13 @@ export const MORE_TABS = [
 //pushe
 export const PRIVACY_TABS = [
   {
-    route: '',
-    onPress: () => {
-      Linking.openURL('https://suppliercentralqa.moglilabs.com/#home');
-    },
+    route: 'About Us',
     title: 'About Us',
     icon: 'team-line',
+    // onPress: () => {
+    //   Linking.openURL('https://suppliercentralqa.moglilabs.com/#home');
+    // },
+
   },
   {
     route: '',

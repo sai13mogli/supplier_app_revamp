@@ -94,6 +94,8 @@ const Dimension = {
   margin200: normalize(200),
 
   height5: normalize(5),
+  height6: normalize(6),
+  height8: normalize(8),
   height10: normalize(10),
   height11: normalize(11),
   height15: normalize(15),
@@ -240,6 +242,9 @@ const Dimension = {
   width10: normalize(10),
   width8: normalize(8),
   width5: normalize(5),
+  width6: normalize(6),
+  width7: normalize(7),
+  width8: normalize(8),
   width12: normalize(12),
   width14: normalize(14),
   width16: normalize(16),

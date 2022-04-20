@@ -727,6 +727,12 @@ const OrdersScreen = props => {
                     style={styles.filterBtn}
                     onPress={() => setOrdersFiltersModal(true)}>
                     <Text style={styles.filtertxt}>Filters</Text>
+                    {
+                      appliedFilter ?
+                        <View style={styles.filterApplied}></View> : null
+                    }
+
+
                     <CustomeIcon
                       name={'filter-line'}
                       style={styles.filterIcon}></CustomeIcon>

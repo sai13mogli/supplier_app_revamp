@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
-import {Text, View, ScrollView, TouchableOpacity,StatusBar,ImageBackground} from 'react-native';
-import {MORE_TABS, PRIVACY_TABS} from '../../constants';
+import React, { useEffect } from 'react';
+import { Text, View, ScrollView, TouchableOpacity, StatusBar, ImageBackground } from 'react-native';
+import { MORE_TABS, PRIVACY_TABS } from '../../constants';
 
 
 import styles from './style';
@@ -71,31 +71,31 @@ const MoreScreen = props => {
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <ScrollView>
-      {/* <StatusBar
+        {/* <StatusBar
         translucent
         backgroundColor="transparent"
         barStyle={"light-content"}
       /> */}
-      <ImageBackground
-        source={require('../../assets/images/MenuBG.png')}
-        resizeMode="cover" //style={{flex:1}}
-      >
-        <View style={styles.topWrap}>
+        <ImageBackground
+          source={require('../../assets/images/MenuBG.png')}
+          resizeMode="cover" //style={{flex:1}}
+        >
+          <View style={styles.topWrap}>
 
-        
-        <Text style={styles.userNameCss}>{userInfo.contactName} </Text>
-         <Text style={styles.UserEmail}> {userInfo.phone}  |  {userInfo.email}</Text>
-         <View style={{flexDirection:"row"}}>
-         <Text style={styles.companyName}> Moglix Supplier Since </Text>
-         <Text style={styles.dateTxt}>
-          {getTime(profileData.createdAt)}
-        </Text>
-         </View>
-        
-    
-    </View>
+
+            <Text style={styles.userNameCss}>{userInfo.contactName} </Text>
+            <Text style={styles.UserEmail}> {userInfo.phone}  |  {userInfo.email}</Text>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={styles.companyName}> Moglix Supplier Since </Text>
+              <Text style={styles.dateTxt}>
+                {getTime(profileData.createdAt)}
+              </Text>
+            </View>
+
+
+          </View>
         </ImageBackground>
-        
+
         <View style={styles.profileTabWrapper}>
           {MORE_TABS.map((tab, tabIndex) => (
             <View>
@@ -109,13 +109,13 @@ const MoreScreen = props => {
                     })
                     : tab.onPress()
                 }>
-                <View style={{flexDirection:"row"}}>
+                <View style={{ flexDirection: "row" }}>
                   <CustomeIcon
                     name={tab.icon}
                     color={Colors.headerTxtColor}
                     size={Dimension.font18}></CustomeIcon>
-                
-                
+
+
                   <Text style={styles.tabTitle}>{tab.title}</Text>
                 </View>
 
@@ -142,15 +142,15 @@ const MoreScreen = props => {
                     : tab.onPress()
                 }>
                 <View style={{ flexDirection: 'row' }}>
-                 
-                    <CustomeIcon
-                      name={tab.icon}
-                      color={Colors.headerTxtColor}
-                      size={Dimension.font18}></CustomeIcon>
-                  
-                  
-                    <Text style={styles.tabTitle}>{tab.title}</Text>
-                  
+
+                  <CustomeIcon
+                    name={tab.icon}
+                    color={Colors.headerTxtColor}
+                    size={Dimension.font18}></CustomeIcon>
+
+
+                  <Text style={styles.tabTitle}>{tab.title}</Text>
+
                 </View>
 
                 <CustomeIcon
@@ -169,13 +169,13 @@ const MoreScreen = props => {
               color={Colors.headerTxtColor}
               size={Dimension.font18}>
 
-              </CustomeIcon>
+            </CustomeIcon>
 
             <View
-              style={{ flexDirection: 'column',}}>
+              style={{ flexDirection: 'column', }}>
               <Text
                 style={[styles.versionText,]}>
-                App Version <Text  style={[styles.AppversionNumber,]}> {VersionCheck.getCurrentVersion()} </Text>
+                App Version <Text style={[styles.AppversionNumber,]}> {VersionCheck.getCurrentVersion()} </Text>
               </Text>
               {/* <Text
               style={[styles.versionText, {marginLeft: Dimension.margin10}]}>

@@ -121,7 +121,8 @@ const Billing = (props) => {
           TextColor={colors.WhiteColor}
           TextFontSize={Dimension.font16}
           title={'Next'}
-          onPress={() => props.navigation.navigate('Pickup', { name: 'pickup', })}
+
+        // onPress={() => props.navigation.navigate('Pickup', { name: 'pickup', })}
         />
       </View>
 
