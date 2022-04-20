@@ -377,8 +377,8 @@ const OrdersScreen = props => {
         horizontal={true}
         ref={scrollRef}
         style={styles.TopTabWrap}
-        contentContainerStyle={{paddingBottom:Dimension.padding30}}
-        >
+        contentContainerStyle={{ paddingBottom: Dimension.padding30 }}
+      >
         {TABS[selectedType].map((tab, tabIndex) => (
           <TouchableOpacity
             onPress={() => {
@@ -611,7 +611,7 @@ const OrdersScreen = props => {
         style={styles.topHeaderWrap}>
         <DropDown
           title={'Orders'}
-         // label={'Orders'}
+          // label={'Orders'}
           selectedValue={selectedType}
           onValueChange={text => {
             setSelectedType(text);

@@ -381,6 +381,7 @@ const UploadInvoiceOMSScreen = props => {
       // && (supplierInvoiceTotal != poTotal)
     ) {
       try {
+        setLoading(true)
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
         const url = `${BASE_URL}api/order/oms/mapInvoice`;
         const userId = await AsyncStorage.getItem('userId');
@@ -423,6 +424,7 @@ const UploadInvoiceOMSScreen = props => {
         );
         const res = await response.json();
         if (res.success) {
+          setLoading(false)
           Toast.show({
             type: 'success',
             text2: res.message,
@@ -431,6 +433,7 @@ const UploadInvoiceOMSScreen = props => {
           });
           props.navigation.goBack();
         } else if (res.success == false) {
+          setLoading(false)
           Toast.show({
             type: 'success',
             text2: res.message,
@@ -509,6 +512,9 @@ const UploadInvoiceOMSScreen = props => {
           />
         </View>
         <View style={{ flex: 1 }}>
+          {/* {rejectLoader && (
+              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+            )} */}
           <CustomButton
             buttonColor={colors.BrandColor}
             borderColor={colors.BrandColor}
