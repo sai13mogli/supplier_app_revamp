@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import {Input, Icon} from 'react-native-elements';
+import { Input, Icon } from 'react-native-elements';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 import CustomeIcon from './CustomeIcon';
@@ -35,7 +35,7 @@ const FileUpload = props => {
   if (fileUpload == 2 || fileUpload == 3) {
     return (
       <TouchableOpacity onPress={onPress}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <Text style={styles.labelStyle}>{label}</Text>
           {isImp ? <Text style={styles.starIcon}>*</Text> : null}
         </View>
@@ -43,7 +43,7 @@ const FileUpload = props => {
           {!value ? (
             <Text style={styles.placeholderCss}>Tap to upload</Text>
           ) : (
-            <View style={{flexDirection: 'row', width: '85%'}}>
+            <View style={{ flexDirection: 'row', width: '85%' }}>
               <Text style={styles.inputStyle} numberOfLines={1}>
                 {value}
               </Text>
@@ -62,7 +62,7 @@ const FileUpload = props => {
             <ActivityIndicator
               size={'small'}
               color={'red'}
-              style={{marginRight: 4}}
+              style={{ marginRight: 4 }}
             />
           ) : showDoc ? (
             <TouchableOpacity onPress={() => openDoc(id)}>
@@ -83,7 +83,7 @@ const FileUpload = props => {
           )}
         </View>
         {errorState ? (
-          <Text style={{color: 'red', fontSize: 12}}>{errorText}</Text>
+          <Text style={styles.errText}>{errorText}</Text>
         ) : null}
       </TouchableOpacity>
     );
@@ -96,7 +96,11 @@ const styles = StyleSheet.create({
     marginBottom: Dimension.margin10,
     paddingHorizontal: 0,
   },
-
+  errText: {
+    fontSize: Dimension.font10,
+    color: colors.BrandColor,
+    fontFamily: Dimension.CustomMediumFont,
+  },
   inputContainerStyle: {
     borderWidth: 1,
     borderColor: colors.FontColor,

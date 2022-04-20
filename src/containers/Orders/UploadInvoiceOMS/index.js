@@ -22,7 +22,7 @@ import styles from './style';
 import InvoiceOmsCard from '../../../component/InvoiceOmsCard';
 import { BASE_URL } from '../../../redux/constants';
 import RNFetchBlob from 'rn-fetch-blob';
-
+import Toast from 'react-native-toast-message';
 
 const UploadInvoiceOMSScreen = props => {
   const [loading, setLoading] = useState(false);
@@ -60,7 +60,6 @@ const UploadInvoiceOMSScreen = props => {
       },
       isImp: true,
       errorState: uploadInvoiceError,
-      onBlur: () => onUploadInvoiceBlur(),
       errorText: 'Please upload Invoice',
       placeholder: 'Tap to Upload',
     },
@@ -238,10 +237,10 @@ const UploadInvoiceOMSScreen = props => {
         value={value}
         documents={documents}
         showDoc={showDoc}
-        onRemove={onRemove}
         id={id}
         fId={fId}
         fileUpload={2}
+        onBlur={onUploadInvoiceBlur}
         errorState={errorState}
         errorText={errorText}
         onPress={() => onPress(id)}
@@ -423,8 +422,10 @@ const UploadInvoiceOMSScreen = props => {
           ],
         );
         const res = await response.json();
+        console.log("Res===>", res);
         if (res.success) {
           setLoading(false)
+          alert(res.message)
           Toast.show({
             type: 'success',
             text2: res.message,
@@ -433,6 +434,7 @@ const UploadInvoiceOMSScreen = props => {
           });
           props.navigation.goBack();
         } else if (res.success == false) {
+          alert(res.message)
           setLoading(false)
           Toast.show({
             type: 'success',
@@ -448,6 +450,7 @@ const UploadInvoiceOMSScreen = props => {
       onInvoiceNumberBlur();
       onSupplierInvoiceBlur();
       onInvoiceDateBlur();
+      onUploadInvoiceBlur();
       // alert("please select date")
     }
   };
