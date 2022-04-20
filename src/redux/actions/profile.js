@@ -249,3 +249,12 @@ export const setToken = token => {
     },
   };
 };
+
+export const setRmData = data => {
+  return {
+    type: PROFILE_ACTIONS.SET_RM_DATA,
+    payload: {
+      data,
+    },
+  };
+};

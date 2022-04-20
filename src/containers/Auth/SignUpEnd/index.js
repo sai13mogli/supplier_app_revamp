@@ -6,7 +6,7 @@ import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import DropDown from '../../../component/common/DropDown';
 import MultiSelectInput from '../../../component/common/MultiSelectInput';
 import {getGstDetails} from '../../../services/profile';
-import {signUp} from '../../../services/auth';
+import {signUp, rmLogin} from '../../../services/auth';
 import CustomButton from '../../../component/common/Button';
 import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
@@ -17,6 +17,7 @@ import {useDispatch} from 'react-redux';
 import {setShipmentType} from '../../../redux/actions/orders';
 import {setMasterAction} from '../../../redux/actions/master';
 import Toast from 'react-native-toast-message';
+import {fetchedProfile, setRmData} from '../../../redux/actions/profile';
 
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
@@ -156,14 +157,19 @@ const SignUpEndScreen = props => {
     }
   };
 
-  const onLogin = async data => {
-    await AsyncStorage.setItem('token', data.data.token);
-    await AsyncStorage.setItem('userId', JSON.stringify(data.data.userId));
-    // await AsyncStorage.setItem(
-    //   'onlineShipmentMode',
-    //   data.data.onlineShipmentMode,
-    // );
-    // dispatch(setShipmentType(data.data.onlineShipmentMode));
+  const onLogin = async signUpdata => {
+    await AsyncStorage.setItem('token', signUpdata.data.token);
+    await AsyncStorage.setItem(
+      'userId',
+      JSON.stringify(signUpdata.data.userId),
+    );
+    await AsyncStorage.setItem('rmToken', signUpdata.data.rmToken);
+    const {data} = await rmLogin({
+      token: signUpdata.data.rmToken,
+    });
+    if (data.success) {
+      dispatch(setRmData(data.data));
+    }
     dispatch(setMasterAction(props.route.params.setIsLoggedIn));
     setShowCreatePass(true);
   };

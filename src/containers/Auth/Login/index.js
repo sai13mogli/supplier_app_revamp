@@ -17,6 +17,7 @@ import {
   loginWithPass,
   loginWithGoogle,
   sendOtpForLogin,
+  rmLogin,
 } from '../../../services/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginOtpModal from '../../../component/LoginOtpModal';
@@ -32,7 +33,11 @@ import {useDispatch} from 'react-redux';
 import {setShipmentType} from '../../../redux/actions/orders';
 import {setMasterAction} from '../../../redux/actions/master';
 import ForgotPasswordModal from '../../../component/ForgotPasswordModal';
-import {setToken} from '../../../redux/actions/profile';
+import {
+  fetchedProfile,
+  setRmData,
+  setToken,
+} from '../../../redux/actions/profile';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const phoneRegex = '^[1-9][0-9]{9}$';
@@ -99,16 +104,23 @@ const LoginScreen = props => {
     });
   }, []);
 
-  const onLogin = async data => {
+  const onLogin = async logindata => {
     setOtpModal(false);
-    dispatch(setToken(data.data.token));
-    await AsyncStorage.setItem('token', data.data.token);
-    await AsyncStorage.setItem('userId', JSON.stringify(data.data.userId));
+    dispatch(setToken(logindata.data.token));
+    await AsyncStorage.setItem('token', logindata.data.token);
+    await AsyncStorage.setItem('userId', JSON.stringify(logindata.data.userId));
     await AsyncStorage.setItem(
       'onlineShipmentMode',
-      data.data.onlineShipmentMode,
+      logindata.data.onlineShipmentMode,
     );
-    dispatch(setShipmentType(data.data.onlineShipmentMode));
+    await AsyncStorage.setItem('rmToken', logindata.data.rmToken);
+    const {data} = await rmLogin({
+      token: logindata.data.rmToken,
+    });
+    if (data.success) {
+      dispatch(setRmData(data.data));
+    }
+    dispatch(setShipmentType(logindata.data.onlineShipmentMode));
     dispatch(setMasterAction(props.route.params.setIsLoggedIn));
     props.route.params.setIsLoggedIn(true);
   };

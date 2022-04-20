@@ -1,13 +1,25 @@
+<<<<<<< HEAD
 import React, { useEffect } from 'react';
 import { Text, View, ScrollView, TouchableOpacity, StatusBar, ImageBackground } from 'react-native';
 import { MORE_TABS, PRIVACY_TABS } from '../../constants';
-
+=======
+import React, {useEffect} from 'react';
+import {
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  StatusBar,
+  ImageBackground,
+} from 'react-native';
+import {MORE_TABS, PRIVACY_TABS} from '../../constants';
+>>>>>>> 2c494ccd2ccb6ed6e1ca24a049599427dc302164
 
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import Dimension from '../../Theme/Dimension';
 import Colors from '../../Theme/Colors';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchBusinessDetails,
   fetchProfile,
@@ -16,8 +28,8 @@ import {
   fetchAddressDetails,
   logout,
 } from '../../redux/actions/profile';
-import { fetchCategoriesBrands } from '../../redux/actions/categorybrand';
-import { STATE_STATUS } from '../../redux/constants';
+import {fetchCategoriesBrands} from '../../redux/actions/categorybrand';
+import {STATE_STATUS} from '../../redux/constants';
 import VersionCheck from 'react-native-version-check';
 
 const MoreScreen = props => {
@@ -42,6 +54,7 @@ const MoreScreen = props => {
       dispatch(fetchTdsInfoDetails());
       dispatch(fetchProfile());
       dispatch(fetchCategoriesBrands());
+      console.log('morescreen');
     }
   }, []);
 
@@ -69,7 +82,7 @@ const MoreScreen = props => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView>
         {/* <StatusBar
         translucent
@@ -81,18 +94,30 @@ const MoreScreen = props => {
           resizeMode="cover" //style={{flex:1}}
         >
           <View style={styles.topWrap}>
+<<<<<<< HEAD
 
 
             <Text style={styles.userNameCss}>{userInfo.contactName} </Text>
             <Text style={styles.UserEmail}> {userInfo.phone}  |  {userInfo.email}</Text>
             <View style={{ flexDirection: "row" }}>
+=======
+            <Text style={styles.userNameCss}>{userInfo.contactName} </Text>
+            <Text style={styles.UserEmail}>
+              {' '}
+              {userInfo.phone} | {userInfo.email}
+            </Text>
+            <View style={{flexDirection: 'row'}}>
+>>>>>>> 2c494ccd2ccb6ed6e1ca24a049599427dc302164
               <Text style={styles.companyName}> Moglix Supplier Since </Text>
               <Text style={styles.dateTxt}>
                 {getTime(profileData.createdAt)}
               </Text>
             </View>
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2c494ccd2ccb6ed6e1ca24a049599427dc302164
           </View>
         </ImageBackground>
 
@@ -105,17 +130,24 @@ const MoreScreen = props => {
                 onPress={() =>
                   tab.route
                     ? props.navigation.navigate(`${tab.route}`, {
-                      setIsLoggedIn: props.setIsLoggedIn,
-                    })
+                        setIsLoggedIn: props.setIsLoggedIn,
+                      })
                     : tab.onPress()
                 }>
+<<<<<<< HEAD
                 <View style={{ flexDirection: "row" }}>
+=======
+                <View style={{flexDirection: 'row'}}>
+>>>>>>> 2c494ccd2ccb6ed6e1ca24a049599427dc302164
                   <CustomeIcon
                     name={tab.icon}
                     color={Colors.headerTxtColor}
                     size={Dimension.font18}></CustomeIcon>
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2c494ccd2ccb6ed6e1ca24a049599427dc302164
                   <Text style={styles.tabTitle}>{tab.title}</Text>
                 </View>
 
@@ -137,20 +169,28 @@ const MoreScreen = props => {
                 onPress={() =>
                   tab.route
                     ? props.navigation.navigate(`${tab.route}`, {
-                      setIsLoggedIn: props.setIsLoggedIn,
-                    })
+                        setIsLoggedIn: props.setIsLoggedIn,
+                      })
                     : tab.onPress()
                 }>
+<<<<<<< HEAD
                 <View style={{ flexDirection: 'row' }}>
 
+=======
+                <View style={{flexDirection: 'row'}}>
+>>>>>>> 2c494ccd2ccb6ed6e1ca24a049599427dc302164
                   <CustomeIcon
                     name={tab.icon}
                     color={Colors.headerTxtColor}
                     size={Dimension.font18}></CustomeIcon>
 
+<<<<<<< HEAD
 
                   <Text style={styles.tabTitle}>{tab.title}</Text>
 
+=======
+                  <Text style={styles.tabTitle}>{tab.title}</Text>
+>>>>>>> 2c494ccd2ccb6ed6e1ca24a049599427dc302164
                 </View>
 
                 <CustomeIcon
@@ -163,12 +203,13 @@ const MoreScreen = props => {
         </View>
 
         <View style={styles.varsionWrap}>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <CustomeIcon
               name={'smartphone-line'}
               color={Colors.headerTxtColor}
-              size={Dimension.font18}>
+              size={Dimension.font18}></CustomeIcon>
 
+<<<<<<< HEAD
             </CustomeIcon>
 
             <View
@@ -176,6 +217,15 @@ const MoreScreen = props => {
               <Text
                 style={[styles.versionText,]}>
                 App Version <Text style={[styles.AppversionNumber,]}> {VersionCheck.getCurrentVersion()} </Text>
+=======
+            <View style={{flexDirection: 'column'}}>
+              <Text style={[styles.versionText]}>
+                App Version{' '}
+                <Text style={[styles.AppversionNumber]}>
+                  {' '}
+                  {VersionCheck.getCurrentVersion()}{' '}
+                </Text>
+>>>>>>> 2c494ccd2ccb6ed6e1ca24a049599427dc302164
               </Text>
               {/* <Text
               style={[styles.versionText, {marginLeft: Dimension.margin10}]}>
