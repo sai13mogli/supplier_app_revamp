@@ -400,6 +400,54 @@ const OrdersScreen = props => {
     });
   };
 
+  const getTabs = (tab, tabIndex, selectedType) => {
+    if (selectedType == 'Open_Orders') {
+      if (tab.key == 'PENDING_ACCEPTANCE') {
+        if (profileData.enterpriseFlag) {
+          return profileData.enterpriseFlag;
+        }
+      } else if (tab.key == 'SCHEDULED_PICKUP') {
+        return true;
+      } else if (tab.key == 'PICKUP') {
+        if (
+          (profileData.enterpriseFlag || profileData.onlineFlag) &&
+          profileData.onlineshipmentMode == 'ONESHIP'
+        ) {
+          return true;
+        }
+      } else if (tab.key == 'UPLOAD_INVOICE') {
+        if (
+          (profileData.enterpriseFlag || profileData.onlineFlag) &&
+          profileData.onlineshipmentMode == 'DROPSHIP'
+        ) {
+          return true;
+        }
+      } else if (tab.key == 'PACKED') {
+        if (
+          profileData.onlineFlag &&
+          profileData.onlineshipmentMode == 'DROPSHIP'
+        ) {
+          return true;
+        }
+      } else if (tab.key == 'SHIPMENT') {
+        return true;
+      } else if (tab.key == 'MARK_SHIPPED') {
+        if (
+          (profileData.enterpriseFlag || profileData.onlineFlag) &&
+          profileData.onlineshipmentMode == 'DROPSHIP'
+        ) {
+          return true;
+        }
+      }
+    } else if (selectedType == 'Fulfilled_Orders') {
+      return true;
+    } else if (selectedType == 'Cancelled') {
+      return true;
+    } else {
+      return true;
+    }
+  };
+
   const renderHeaderComponent = () => {
     return (
       <ScrollView
@@ -407,27 +455,29 @@ const OrdersScreen = props => {
         ref={scrollRef}
         style={styles.TopTabWrap}
         contentContainerStyle={{paddingBottom: Dimension.padding30}}>
-        {TABS[selectedType].map((tab, tabIndex) => (
-          <TouchableOpacity
-            onPress={() => {
-              changeTab(tab);
-            }}
-            style={
-              selectedTab == tab.key
-                ? styles.selectedTabCss
-                : styles.Unselectedtabcss
-            }
-            key={tabIndex}>
-            <Text
+        {TABS[selectedType].map((tab, tabIndex) =>
+          getTabs(tab, tabIndex, selectedType) ? (
+            <TouchableOpacity
+              onPress={() => {
+                changeTab(tab);
+              }}
               style={
                 selectedTab == tab.key
-                  ? styles.selectedTabTxt
-                  : styles.UnselectedtabTxt
-              }>
-              {tab.label} ({tabData.get(tab.key)})
-            </Text>
-          </TouchableOpacity>
-        ))}
+                  ? styles.selectedTabCss
+                  : styles.Unselectedtabcss
+              }
+              key={tabIndex}>
+              <Text
+                style={
+                  selectedTab == tab.key
+                    ? styles.selectedTabTxt
+                    : styles.UnselectedtabTxt
+                }>
+                {tab.label} ({tabData.get(tab.key)})
+              </Text>
+            </TouchableOpacity>
+          ) : null,
+        )}
       </ScrollView>
     );
   };
