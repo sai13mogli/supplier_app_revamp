@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -14,10 +14,10 @@ import {
 } from 'react-native';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
-import { STATE_STATUS } from '../../redux/constants';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrders, fetchTabCount } from '../../redux/actions/orders';
-import { getImageUrl, acceptBulk } from '../../services/orders';
+import {STATE_STATUS} from '../../redux/constants';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchOrders, fetchTabCount} from '../../redux/actions/orders';
+import {getImageUrl, acceptBulk} from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
@@ -26,7 +26,7 @@ import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
 import Toast from 'react-native-toast-message';
 import BulkActionsModal from '../../component/BulkActionsModal';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -92,7 +92,7 @@ const OrdersScreen = props => {
   const [initLoader, setInitLoader] = useState(true);
 
   const COMMON_OPTIONS = [
-    { label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders' },
+    {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
     {
       label: 'Fulfilled Orders',
       key: 'Fulfilled_Orders',
@@ -111,7 +111,7 @@ const OrdersScreen = props => {
   ];
 
   const ONLINE_OPTIONS = [
-    { label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders' },
+    {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
     {
       label: 'Fulfilled Orders',
       key: 'Fulfilled_Orders',
@@ -126,19 +126,19 @@ const OrdersScreen = props => {
 
   const TABS = {
     Open_Orders: [
-      { label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE' },
-      { label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP' },
-      { label: 'Pickup', key: 'PICKUP' },
-      { label: 'Upload Invoice', key: 'UPLOAD_INVOICE' },
-      { label: 'Packed', key: 'PACKED' },
-      { label: 'Shipment', key: 'SHIPMENT' },
-      { label: 'Mark Shipped/Delivered', key: 'MARK_SHIPPED' },
+      {label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE'},
+      {label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP'},
+      {label: 'Pickup', key: 'PICKUP'},
+      {label: 'Upload Invoice', key: 'UPLOAD_INVOICE'},
+      {label: 'Packed', key: 'PACKED'},
+      {label: 'Shipment', key: 'SHIPMENT'},
+      {label: 'Mark Shipped/Delivered', key: 'MARK_SHIPPED'},
     ],
-    Fulfilled_Orders: [{ label: 'Fulfilled', key: 'FULFILLED' }],
-    Cancelled: [{ label: 'Cancelled', key: 'CANCELLED' }],
+    Fulfilled_Orders: [{label: 'Fulfilled', key: 'FULFILLED'}],
+    Cancelled: [{label: 'Cancelled', key: 'CANCELLED'}],
     Returned: [
-      { label: 'Return Pending', key: 'RETURN_PENDING' },
-      { label: 'Return Done', key: 'RETURN_DONE' },
+      {label: 'Return Pending', key: 'RETURN_PENDING'},
+      {label: 'Return Done', key: 'RETURN_DONE'},
     ],
   };
 
@@ -226,7 +226,7 @@ const OrdersScreen = props => {
     );
   };
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     return (
       <Ordercard
         key={index}
@@ -289,7 +289,7 @@ const OrdersScreen = props => {
 
   //selectedFilter
   const selectFilter = term => {
-    let currentFilters = { ...appliedFilter };
+    let currentFilters = {...appliedFilter};
     if (
       currentFilters[initialFilter] &&
       currentFilters[initialFilter].includes(term)
@@ -458,7 +458,7 @@ const OrdersScreen = props => {
         horizontal={true}
         ref={scrollRef}
         style={styles.TopTabWrap}
-        contentContainerStyle={{ paddingBottom: Dimension.padding30 }}>
+        contentContainerStyle={{paddingBottom: Dimension.padding30}}>
         {TABS[selectedType].map((tab, tabIndex) =>
           getTabs(tab, tabIndex, selectedType) ? (
             <TouchableOpacity
@@ -491,12 +491,7 @@ const OrdersScreen = props => {
       return (
         <View
           style={{
-            flex: 1,
-            //backgroundColor:"#ccc",
-            justifyContent: 'center',
-            alignContent: 'center',
-            height: '100%',
-            padding: Dimension.padding20,
+            padding: 100,
           }}>
           <ActivityIndicator
             //style={{alignSelf: 'center'}}
@@ -518,7 +513,7 @@ const OrdersScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             source={require('../../assets/images/profilePending.png')}
-            style={{ width: 350, height: 300 }}
+            style={{width: 350, height: 300}}
           />
           <Text style={styles.profilependingTxt}>
             Your profile is incomplete, please complete your profile, To get
@@ -534,7 +529,7 @@ const OrdersScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             source={require('../../assets/images/pending_approval.png')}
-            style={{ width: 300, height: 200 }}
+            style={{width: 300, height: 200}}
           />
           <Text style={styles.profilependingTxt}>
             Your profile is currently in approval pending stage Once approved
@@ -551,7 +546,7 @@ const OrdersScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             source={require('../../assets/images/emptyOrders.png')}
-            style={{ width: 300, height: 200 }}
+            style={{width: 300, height: 200}}
           />
           <Text style={styles.emptyTxt}>No Data Available</Text>
         </View>
@@ -632,7 +627,7 @@ const OrdersScreen = props => {
   const onBulkAccept = async () => {
     try {
       setBulkAcceptLoader(true);
-      const { data } = await acceptBulk({
+      const {data} = await acceptBulk({
         supplierId: await AsyncStorage.getItem('userId'),
         itemIds: bulkItemIds,
       });
@@ -680,7 +675,7 @@ const OrdersScreen = props => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.grayShade7 }}>
+    <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
       {/* <CustomButton
         title={'Open Notifications'}
         buttonColor={'dodgerblue'}
@@ -712,23 +707,35 @@ const OrdersScreen = props => {
           enabled={true}
           isFromOrders={true}
         />
-        <TouchableOpacity onPress={() => props.navigation.navigate('Notification')}
-          style={{position:"relative",paddingLeft:Dimension.padding8,marginTop:Dimension.margin15}}
-          >
-            <CustomeIcon
-          name={'notification-3-line'}
-          size={Dimension.font20}
-          color={colors.FontColor}>
-
-          </CustomeIcon>
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate('Notification')}
+          style={{
+            position: 'relative',
+            paddingLeft: Dimension.padding8,
+            marginTop: Dimension.margin15,
+          }}>
+          <CustomeIcon
+            name={'notification-3-line'}
+            size={Dimension.font20}
+            color={colors.FontColor}></CustomeIcon>
           <View style={styles.reddot}></View>
-          </TouchableOpacity>
+        </TouchableOpacity>
       </View>
       {tabStatus == STATE_STATUS.FETCHING ? (
-        <ActivityIndicator
-          color={colors.BrandColor}
-          style={{ alignSelf: 'center', margin: 12 }}
-        />
+        <View
+          style={{
+            flex: 1,
+            height: Dimensions.get('window').height,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 50,
+          }}>
+          <ActivityIndicator
+            color={colors.BrandColor}
+            style={{alignSelf: 'center', margin: 12}}
+            size={'large'}
+          />
+        </View>
       ) : (
         <>
           {renderHeaderComponent()}
@@ -741,14 +748,14 @@ const OrdersScreen = props => {
             // ListHeaderComponent={renderHeaderComponent}
             ListFooterComponent={renderFooterComponent}
             onEndReachedThreshold={0.9}
-            style={{ paddingBottom: 380 }}
+            style={{paddingBottom: 380}}
             contentContainerStyle={{
               paddingBottom: 380,
               backgroundColor: Colors.grayShade1,
             }}
             removeClippedSubviews={true}
             maxToRenderPerBatch={5}
-            onEndReached={({ distanceFromEnd }) => {
+            onEndReached={({distanceFromEnd}) => {
               if (!onEndReachedCalledDuringMomentum.current) {
                 endReachedFetchListing();
                 onEndReachedCalledDuringMomentum.current = true;
@@ -834,8 +841,7 @@ const OrdersScreen = props => {
                     ) : null}
                     <CustomeIcon
                       name={'filter-line'}
-                      style={styles.filterIcon}>
-                    </CustomeIcon>
+                      style={styles.filterIcon}></CustomeIcon>
                     {/* <Image
             source={require('../../assets/images/filterLine.png')}
             style={{ width:Dimension.width16, height:Dimension.height16}}
@@ -917,7 +923,7 @@ const OrdersScreen = props => {
                     <ActivityIndicator
                       size={'small'}
                       color={'white'}
-                      style={{ marginRight: 4 }}
+                      style={{marginRight: 4}}
                     />
                   )}
                 </TouchableOpacity>
@@ -925,9 +931,9 @@ const OrdersScreen = props => {
             ) : null}
 
             {selectedTab == 'SHIPMENT' &&
-              bulkItemIds &&
-              bulkItemIds.length &&
-              bulkActionsModal ? (
+            bulkItemIds &&
+            bulkItemIds.length &&
+            bulkActionsModal ? (
               <BulkActionsModal
                 bulkActionsModal={bulkActionsModal}
                 setBulkActionsModal={setBulkActionsModal}
