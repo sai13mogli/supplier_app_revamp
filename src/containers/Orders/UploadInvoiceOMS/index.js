@@ -1,12 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { OrderedMap } from 'immutable';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {OrderedMap} from 'immutable';
+import {View, Text, TouchableOpacity, ScrollView, FlatList} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dimension from '../../../Theme/Dimension';
@@ -14,13 +8,13 @@ import colors from '../../../Theme/Colors';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import FileUpload from '../../../component/common/FileUpload';
-import ActionSheet, { SheetManager } from 'react-native-actions-sheet';
+import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import Header from '../../../component/common/Header';
 import CustomeDatePicker from '../../../component/common/Datepicker';
-import { getInvoiceOMSDetails } from '../../../services/orders';
+import {getInvoiceOMSDetails} from '../../../services/orders';
 import styles from './style';
 import InvoiceOmsCard from '../../../component/InvoiceOmsCard';
-import { BASE_URL } from '../../../redux/constants';
+import {BASE_URL} from '../../../redux/constants';
 import RNFetchBlob from 'rn-fetch-blob';
 import Toast from 'react-native-toast-message';
 
@@ -34,7 +28,8 @@ const UploadInvoiceOMSScreen = props => {
   const [uploadInvoice, setUploadInvoice] = useState({});
   const [uploadInvoiceError, setuploadInvoiceError] = useState(false);
   const [supplierInvoiceTotal, setSupplierInvoiceTotal] = useState('');
-  const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] = useState(false);
+  const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] =
+    useState(false);
   const [poTotal, setPoTotal] = useState(0);
   const [poTotalError, setpoTotalError] = useState(false);
   const [uploadDisabled, setUploadDisabled] = useState(false);
@@ -260,7 +255,7 @@ const UploadInvoiceOMSScreen = props => {
       let payload = {
         supplierId: await AsyncStorage.getItem('userId'),
       };
-      const { data } = await getInvoiceOMSDetails(payload);
+      const {data} = await getInvoiceOMSDetails(payload);
       if (data.success) {
         setOmsUploadList(data?.data);
         setLoading(false);
@@ -269,8 +264,6 @@ const UploadInvoiceOMSScreen = props => {
       console.log(error);
     }
   };
-
-
 
   const selectItemId = (podId, totalPrice, keys) => {
     let currentItemIds = [...bulkItemIds];
@@ -312,7 +305,7 @@ const UploadInvoiceOMSScreen = props => {
     }
   };
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     let list = Object.values(item)?.[0];
     let keys = Object.keys(item)?.[0];
 
@@ -341,7 +334,7 @@ const UploadInvoiceOMSScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             // source={require('../../assets/images/emptyOrders.png')}
-            style={{ width: 300, height: 200 }}
+            style={{width: 300, height: 200}}
           />
           <Text style={styles.emptyTxt}>No Data Available</Text>
         </View>
@@ -380,7 +373,7 @@ const UploadInvoiceOMSScreen = props => {
       // && (supplierInvoiceTotal != poTotal)
     ) {
       try {
-        setLoading(true)
+        setLoading(true);
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
         const url = `${BASE_URL}api/order/oms/mapInvoice`;
         const userId = await AsyncStorage.getItem('userId');
@@ -422,10 +415,10 @@ const UploadInvoiceOMSScreen = props => {
           ],
         );
         const res = await response.json();
-        console.log("Res===>", res);
+        console.log('Res===>', res);
         if (res.success) {
-          setLoading(false)
-          alert(res.message)
+          setLoading(false);
+
           Toast.show({
             type: 'success',
             text2: res.message,
@@ -434,10 +427,9 @@ const UploadInvoiceOMSScreen = props => {
           });
           props.navigation.goBack();
         } else if (res.success == false) {
-          alert(res.message)
-          setLoading(false)
+          setLoading(false);
           Toast.show({
-            type: 'success',
+            type: 'error',
             text2: res.message,
             visibilityTime: 2000,
             autoHide: true,
@@ -460,12 +452,12 @@ const UploadInvoiceOMSScreen = props => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Header
         showBack
         navigation={props.navigation}
         showText={'Upload Invoice'}
-      //rightIconName={'business-details'}
+        //rightIconName={'business-details'}
       />
 
       <ScrollView style={styles.ContainerCss}>
@@ -477,7 +469,7 @@ const UploadInvoiceOMSScreen = props => {
           onEndReachedThreshold={0.9}
           showsVerticalScrollIndicator={false}
         />
-        <View style={{ marginTop: Dimension.margin30 }}>
+        <View style={{marginTop: Dimension.margin30}}>
           {FORM_FIELDS.map((field, fieldKey) => (
             <field.component
               {...field}
@@ -503,8 +495,8 @@ const UploadInvoiceOMSScreen = props => {
           </View>
         </ActionSheet>
       </ScrollView>
-      <View style={[styles.bottombtnWrap, { flexDirection: 'row' }]}>
-        <View style={{ marginRight: 15, flex: 1 }}>
+      <View style={[styles.bottombtnWrap, {flexDirection: 'row'}]}>
+        <View style={{marginRight: 15, flex: 1}}>
           <CustomButton
             buttonColor={colors.WhiteColor}
             borderColor={colors.transparent}
@@ -514,7 +506,7 @@ const UploadInvoiceOMSScreen = props => {
             onPress={onCancel}
           />
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           {/* {rejectLoader && (
               <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
             )} */}

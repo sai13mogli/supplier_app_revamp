@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { OrderedMap } from 'immutable';
+import React, {useState, useEffect} from 'react';
+import {OrderedMap} from 'immutable';
 import RNFetchBlob from 'rn-fetch-blob';
 import {
   View,
@@ -17,10 +17,10 @@ import colors from '../../../Theme/Colors';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import FileUpload from '../../../component/common/FileUpload';
-import ActionSheet, { SheetManager } from 'react-native-actions-sheet';
+import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import Header from '../../../component/common/Header';
 import CustomeDatePicker from '../../../component/common/Datepicker';
-import { BASE_URL } from '../../../redux/constants';
+import {BASE_URL} from '../../../redux/constants';
 import Toast from 'react-native-toast-message';
 
 const InvoiceEMSFormDetailScreen = props => {
@@ -312,7 +312,6 @@ const InvoiceEMSFormDetailScreen = props => {
     },
   });
 
-
   // const getTax = (taxPercentage) => {
   //   setTaxPercentage(taxPercentage)
   // }
@@ -336,7 +335,7 @@ const InvoiceEMSFormDetailScreen = props => {
   const calculateTotalFreight = text => {
     // setTaxPercentage(taxPercentage)
     let percentage = (text / 100) * taxPercentage;
-    console.log("ok===>", taxPercentage);
+    console.log('ok===>', taxPercentage);
     setBaseAmount(text);
     let total = percentage + text;
     setTotal(total);
@@ -509,6 +508,10 @@ const InvoiceEMSFormDetailScreen = props => {
   };
 
   const onsubmit = async () => {
+    // props.navigation.navigate('Orders', {
+    //   selectedTab: 'UPLOAD_INVOICE',
+    // });
+
     if (
       invoiceNumber &&
       invoiceNumber.length &&
@@ -523,7 +526,7 @@ const InvoiceEMSFormDetailScreen = props => {
       uploadInvoice.name
     ) {
       try {
-        setLoading(true)
+        setLoading(true);
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
         const url = `${BASE_URL}api/order/mapDropshipInvoice`;
 
@@ -614,9 +617,9 @@ const InvoiceEMSFormDetailScreen = props => {
           ],
         );
         const res = await response.json();
-        console.log("Respose===>", res, JSON.stringify(payload));
+        console.log('Respose===>', res, JSON.stringify(payload));
         if (res.success) {
-          setLoading(false)
+          setLoading(false);
           Toast.show({
             type: 'success',
             text2: res.message,
@@ -624,11 +627,11 @@ const InvoiceEMSFormDetailScreen = props => {
             autoHide: true,
           });
 
-          props.navigation.navigate('Orders');
+          // props.navigation.navigate('Orders');
         } else if (res.success == false) {
           setLoading(false);
           Toast.show({
-            type: 'success',
+            type: 'error',
             text2: res.message,
             visibilityTime: 2000,
             autoHide: true,
@@ -704,8 +707,8 @@ const InvoiceEMSFormDetailScreen = props => {
         </ActionSheet>
       </ScrollView>
 
-      <View style={[styles.bottombtnWrap, { flexDirection: 'row' }]}>
-        <View style={{ marginRight: 15, flex: 1 }}>
+      <View style={[styles.bottombtnWrap, {flexDirection: 'row'}]}>
+        <View style={{marginRight: 15, flex: 1}}>
           <CustomButton
             buttonColor={colors.WhiteColor}
             borderColor={colors.transparent}
@@ -715,7 +718,7 @@ const InvoiceEMSFormDetailScreen = props => {
             onPress={onCancel}
           />
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <CustomButton
             buttonColor={colors.BrandColor}
             borderColor={colors.BrandColor}
