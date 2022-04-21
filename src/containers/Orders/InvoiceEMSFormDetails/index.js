@@ -615,6 +615,7 @@ const InvoiceEMSFormDetailScreen = props => {
           ],
         );
         const res = await response.json();
+        console.log("Res===>", res);
         if (res.success) {
           setLoading(false)
           Toast.show({
