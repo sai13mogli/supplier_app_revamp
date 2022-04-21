@@ -17,6 +17,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.grayShade1,
 
   },
+  reddot:{
+    width:Dimension.width8,
+    height:Dimension.height8,
+    borderRadius:Dimension.width10,
+    backgroundColor:Colors.BrandColor,
+    position:"absolute",
+    top:Dimension.padding2,
+    right:0
+  },
   TopTabWrap: {
     paddingHorizontal: Dimension.padding10,
     flexDirection: 'row',

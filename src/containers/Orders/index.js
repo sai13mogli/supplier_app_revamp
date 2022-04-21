@@ -712,6 +712,17 @@ const OrdersScreen = props => {
           enabled={true}
           isFromOrders={true}
         />
+        <TouchableOpacity onPress={() => props.navigation.navigate('Notification')}
+          style={{position:"relative",paddingLeft:Dimension.padding8,marginTop:Dimension.margin15}}
+          >
+            <CustomeIcon
+          name={'notification-3-line'}
+          size={Dimension.font20}
+          color={colors.FontColor}>
+
+          </CustomeIcon>
+          <View style={styles.reddot}></View>
+          </TouchableOpacity>
       </View>
       {tabStatus == STATE_STATUS.FETCHING ? (
         <ActivityIndicator

@@ -284,7 +284,10 @@ const NotificationScreen = props => {
   return (
     <>
       <View style={styles.ContainerCss}>
-        <Header showText={'Notifications'} rightIconName={'notification'} />
+        <Header showText={'Notifications'} 
+        rightIconName={'notification'}
+        fromnotification={true}
+        />
         {notifications && notifications.length ? (
           <View
             style={{
