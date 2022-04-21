@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
   errText: {
     fontSize: Dimension.font10,
     color: colors.BrandColor,
+    bottom: Dimension.margin5,
     fontFamily: Dimension.CustomMediumFont,
   },
   inputContainerStyle: {

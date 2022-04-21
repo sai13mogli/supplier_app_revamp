@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,14 +7,13 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {Input, Icon} from 'react-native-elements';
+import { Input, Icon } from 'react-native-elements';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 
 const FloatingLabelInputField = props => {
   const [isFocused, setIsFocused] = useState(false);
 
-  let inputRef = useRef();
   const handleFocus = () => {
     setIsFocused(true);
     if (props.handleFocus) {
@@ -28,6 +27,7 @@ const FloatingLabelInputField = props => {
       handleFocus();
     }
   }, []);
+
 
   const handleBlur = runOnBlur => {
     if (props.hideLabel) {
@@ -53,7 +53,7 @@ const FloatingLabelInputField = props => {
         <Input
           {...props}
           label={() => (
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <Text style={styles.labelStyle}>{props.label}</Text>
               {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
             </View>
@@ -71,7 +71,7 @@ const FloatingLabelInputField = props => {
               ? styles.MultiinputContainerStyle
               : styles.inputContainerStyle
           }
-          
+
           inputStyle={styles.inputStyle}
           labelStyle={styles.labelStyle}
           rightIconContainerStyle={
@@ -80,7 +80,7 @@ const FloatingLabelInputField = props => {
           errorStyle={styles.errorText}
           disabledInputStyle={styles.disabledInputStyle}
           errorMessage={props.showError ? props.errorMessage : null}
-          // errorStyle={}
+        // errorStyle={}
         />
         {/* ) */}
       </TouchableOpacity>
@@ -102,7 +102,6 @@ const FloatingLabelInputField = props => {
 
 const styles = StyleSheet.create({
   WrapperStyle: {
-    //marginBottom: Dimension.margin10,
     paddingHorizontal: 0,
   },
   labelStyle: {
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.FontColor,
     borderRadius: 4,
-    
+
     height: Dimension.height40,
     paddingBottom: 0,
   },
@@ -147,8 +146,8 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-    paddingLeft:Dimension.padding12,
-    paddingRight:Dimension.padding12,
+    paddingLeft: Dimension.padding12,
+    paddingRight: Dimension.padding12,
   },
   iconStyle: {
     width: Dimension.width24,
@@ -167,8 +166,8 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-    paddingLeft:Dimension.padding12,
-    paddingRight:Dimension.padding12,
+    paddingLeft: Dimension.padding12,
+    paddingRight: Dimension.padding12,
     backgroundColor: colors.DisableStateColor,
     //paddingHorizontal: Dimension.padding12,
   },
