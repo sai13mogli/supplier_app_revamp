@@ -773,6 +773,7 @@ const Ordercard = props => {
                 quantity,
                 totalAmount,
                 taxPercentage,
+                selectedTab
               })
             }
             style={[

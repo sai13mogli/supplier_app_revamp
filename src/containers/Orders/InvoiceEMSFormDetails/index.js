@@ -66,6 +66,7 @@ const InvoiceEMSFormDetailScreen = props => {
   const [misTotal, setMisTotal] = useState('');
   const [fId, setFId] = useState(null);
 
+
   const Documents = new OrderedMap({
     upload_invoice: {
       id: 'uploadInvoice',
@@ -313,9 +314,9 @@ const InvoiceEMSFormDetailScreen = props => {
   });
 
 
-  // const getTax = (taxPercentage) => {
-  //   setTaxPercentage(taxPercentage)
-  // }
+  const getTax = (taxPercentage) => {
+    setTaxPercentage(taxPercentage)
+  }
 
   const onUploadInvoiceBlur = () => {
     if (uploadInvoice && uploadInvoice.name) {
@@ -335,8 +336,9 @@ const InvoiceEMSFormDetailScreen = props => {
 
   const calculateTotalFreight = text => {
     // setTaxPercentage(taxPercentage)
-    let percentage = (text / 100) * taxPercentage;
     console.log("ok===>", taxPercentage);
+    let percentage = (text / 100) * taxPercentage;
+
     setBaseAmount(text);
     let total = percentage + text;
     setTotal(total);
@@ -509,6 +511,11 @@ const InvoiceEMSFormDetailScreen = props => {
   };
 
   const onsubmit = async () => {
+
+    props.navigation.navigate('Orders', {
+      selectedTab: 'UPLOAD_INVOICE',
+    });
+
     if (
       invoiceNumber &&
       invoiceNumber.length &&
@@ -527,9 +534,9 @@ const InvoiceEMSFormDetailScreen = props => {
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
         const url = `${BASE_URL}api/order/mapDropshipInvoice`;
 
-        let totalInvoiceAmount =
-          invoiceAmount + (totalAmount + 7) ||
-          invoiceAmount + (totalAmount - 7);
+        // let totalInvoiceAmount =
+        //   invoiceAmount + (totalAmount + 7) ||
+        //   invoiceAmount + (totalAmount - 7);
         let payload = {
           supplierId: await AsyncStorage.getItem('userId'),
           invoiceNumber: invoiceNumber,
@@ -550,11 +557,11 @@ const InvoiceEMSFormDetailScreen = props => {
           igstApplicable: true,
           countryCode: 356,
           frieght: {
-            charge: '',
-            hsn: '',
-            tax: '',
-            totalAmount: null,
-            remarks: '',
+            charge: baseAmount,
+            hsn: baseAmount ? hsn : '',
+            tax: baseAmount ? taxPercentage : '',
+            totalAmount: baseAmount ? total : '',
+            remarks: addComment,
             countryCode: 356,
             igst: null,
             cgst: 0,
@@ -562,10 +569,10 @@ const InvoiceEMSFormDetailScreen = props => {
             vatAmount: 0,
           },
           loading: {
-            charge: '',
-            hsn: '',
-            tax: '',
-            totalAmount: null,
+            charge: loadingBaseAmount,
+            hsn: loadingBaseAmount ? hsn : '',
+            tax: loadingBaseAmount ? taxPercentage : '',
+            totalAmount: loadingBaseAmount ? loadingTotal : '',
             countryCode: 356,
             igst: null,
             cgst: 0,
@@ -573,10 +580,10 @@ const InvoiceEMSFormDetailScreen = props => {
             vatAmount: 0,
           },
           misc: {
-            charge: '',
-            hsn: '',
-            tax: '',
-            totalAmount: null,
+            charge: misBaseAmount,
+            hsn: misBaseAmount ? hsn : '',
+            tax: misBaseAmount ? taxPercentage : '',
+            totalAmount: misBaseAmount ? misTotal : '',
             countryCode: 356,
             igst: null,
             cgst: 0,
@@ -624,15 +631,15 @@ const InvoiceEMSFormDetailScreen = props => {
             autoHide: true,
           });
 
-          props.navigation.navigate('Orders');
         } else if (res.success == false) {
           setLoading(false);
           Toast.show({
-            type: 'success',
+            type: 'error',
             text2: res.message,
             visibilityTime: 2000,
             autoHide: true,
           });
+
         }
       } catch (err) {
         setLoading(false);
