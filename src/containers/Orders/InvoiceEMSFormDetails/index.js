@@ -65,6 +65,7 @@ const InvoiceEMSFormDetailScreen = props => {
   const [misBaseAmount, setMisBaseAmount] = useState('');
   const [misTotal, setMisTotal] = useState('');
   const [fId, setFId] = useState(null);
+  const [dummyState, setDummyState] = useState("");
 
 
   const Documents = new OrderedMap({
@@ -313,6 +314,10 @@ const InvoiceEMSFormDetailScreen = props => {
     },
   });
 
+  useEffect(() => {
+    console.log("taxPercentage", taxPercentage);
+  })
+
   // const getTax = (taxPercentage) => {
   //   setTaxPercentage(taxPercentage)
   // }
@@ -335,10 +340,12 @@ const InvoiceEMSFormDetailScreen = props => {
 
   const calculateTotalFreight = text => {
     // setTaxPercentage(taxPercentage)
-    let percentage = (text / 100) * taxPercentage;
-    console.log('ok===>', taxPercentage);
-    setBaseAmount(text);
-    let total = percentage + text;
+    let percentage = (taxPercentage / 100)
+    let totalPrice = percentage * Number(text)
+    // setDummyState(totalPrice)
+    console.log('ok===>', percentage, taxPercentage, totalPrice, baseAmount);
+    // setBaseAmount(text);
+    let total = (baseAmount + totalPrice);
     setTotal(total);
   };
 

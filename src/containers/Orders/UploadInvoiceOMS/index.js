@@ -28,8 +28,7 @@ const UploadInvoiceOMSScreen = props => {
   const [uploadInvoice, setUploadInvoice] = useState({});
   const [uploadInvoiceError, setuploadInvoiceError] = useState(false);
   const [supplierInvoiceTotal, setSupplierInvoiceTotal] = useState('');
-  const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] =
-    useState(false);
+  const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] = useState(false);
   const [poTotal, setPoTotal] = useState(0);
   const [poTotalError, setpoTotalError] = useState(false);
   const [uploadDisabled, setUploadDisabled] = useState(false);
@@ -312,6 +311,7 @@ const UploadInvoiceOMSScreen = props => {
     return (
       <InvoiceOmsCard
         msn={list.product_msn}
+        // fetchOrdersFunc={fetchOrdersFunc}
         quantity={list.quantity}
         taxpercent={list.tax_percent}
         podId={list.item_id}
@@ -418,7 +418,15 @@ const UploadInvoiceOMSScreen = props => {
         console.log('Res===>', res);
         if (res.success) {
           setLoading(false);
-
+          fetchOrdersFunc(0, '', selectedTab, shipmentType, {
+            pickupFromDate: '',
+            pickupToDate: '',
+            poFromDate: '',
+            poToDate: '',
+            orderType: [],
+            deliveryType: [],
+            orderRefs: [],
+          });
           Toast.show({
             type: 'success',
             text2: res.message,
