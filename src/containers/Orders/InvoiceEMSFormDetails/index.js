@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { OrderedMap } from 'immutable';
+import React, {useState, useEffect} from 'react';
+import {OrderedMap} from 'immutable';
 import RNFetchBlob from 'rn-fetch-blob';
 import {
   View,
@@ -17,10 +17,10 @@ import colors from '../../../Theme/Colors';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import FileUpload from '../../../component/common/FileUpload';
-import ActionSheet, { SheetManager } from 'react-native-actions-sheet';
+import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import Header from '../../../component/common/Header';
 import CustomeDatePicker from '../../../component/common/Datepicker';
-import { BASE_URL } from '../../../redux/constants';
+import {BASE_URL} from '../../../redux/constants';
 import Toast from 'react-native-toast-message';
 
 const InvoiceEMSFormDetailScreen = props => {
@@ -65,8 +65,6 @@ const InvoiceEMSFormDetailScreen = props => {
   const [misBaseAmount, setMisBaseAmount] = useState('');
   const [misTotal, setMisTotal] = useState('');
   const [fId, setFId] = useState(null);
-  const [dummyState, setDummyState] = useState("");
-
 
   const Documents = new OrderedMap({
     upload_invoice: {
@@ -175,8 +173,9 @@ const InvoiceEMSFormDetailScreen = props => {
       errorMessage: 'Enter valid base amount',
       showError: baseAmountError,
       value: baseAmount,
-      onChangeText: text => calculateTotalFreight(text),
+      onChangeText: text => setBaseAmount(text),
       component: FloatingLabelInputField,
+      onBlur: () => calculateTotalFreight(),
     },
     hsn: {
       title: 'HSN',
@@ -185,9 +184,9 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'HSN',
       errorMessage: 'Enter valid hsn',
       showError: hsnError,
-      value: baseAmount ? hsn : '',
-      onChangeText: text => (baseAmount ? setHsn(text) : ''),
+      value: total ? hsn : '',
       component: FloatingLabelInputField,
+      disabled: true,
     },
     taxPercentage: {
       title: 'Tax%',
@@ -196,9 +195,9 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'Tax',
       errorMessage: 'Enter valid tax',
       showError: taxError,
-      value: baseAmount ? String(taxPercentage) : '',
-      onChangeText: text => setTaxPercentage(text),
+      value: total ? String(taxPercentage) : '',
       component: FloatingLabelInputField,
+      disabled: true,
     },
     total: {
       title: 'Total',
@@ -208,8 +207,8 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'Total',
       errorMessage: 'Enter valid total',
       value: total,
-      onChangeText: text => setTotal(text),
       component: FloatingLabelInputField,
+      disabled: true,
     },
     addComment: {
       title: 'Add Comment',
@@ -231,8 +230,9 @@ const InvoiceEMSFormDetailScreen = props => {
       errorMessage: 'Enter valid base amount',
       showError: baseAmountError,
       value: loadingBaseAmount,
-      onChangeText: text => calculateLoadingCharges(text),
+      onChangeText: text => setloadingBaseAmount(text),
       component: FloatingLabelInputField,
+      onBlur: () => calculateLoadingCharges(),
     },
     loadingHsn: {
       title: 'HSN',
@@ -241,9 +241,9 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'HSN',
       errorMessage: 'Enter valid hsn',
       showError: hsnError,
-      value: loadingBaseAmount ? hsn : '',
-      onChangeText: text => (loadingBaseAmount ? setHsn(text) : ''),
+      value: loadingTotal ? hsn : '',
       component: FloatingLabelInputField,
+      disabled: true,
     },
     loadingTax: {
       title: 'Tax%',
@@ -252,9 +252,9 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'Tax',
       errorMessage: 'Enter valid tax',
       showError: taxError,
-      value: loadingBaseAmount ? String(taxPercentage) : '',
-      onChangeText: text => setTaxPercentage(text),
+      value: loadingTotal ? String(taxPercentage) : '',
       component: FloatingLabelInputField,
+      disabled: true,
     },
     loadingTotal: {
       title: 'Total',
@@ -264,8 +264,8 @@ const InvoiceEMSFormDetailScreen = props => {
       errorMessage: 'Enter valid total',
       keyboardType: 'number-pad',
       value: loadingTotal,
-      onChangeText: text => setloadingTotal(text),
       component: FloatingLabelInputField,
+      disabled: true,
     },
     misBaseAmount: {
       title: 'Base Amount',
@@ -276,8 +276,9 @@ const InvoiceEMSFormDetailScreen = props => {
       errorMessage: 'Enter valid base amount',
       showError: baseAmountError,
       value: misBaseAmount,
-      onChangeText: text => calculateMiscCharges(text),
+      onChangeText: text => setMisBaseAmount(text),
       component: FloatingLabelInputField,
+      onBlur: () => calculateMiscCharges(),
     },
     misHsn: {
       title: 'HSN',
@@ -286,9 +287,9 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'HSN',
       errorMessage: 'Enter valid hsn',
       showError: hsnError,
-      value: misBaseAmount ? hsn : '',
-      onChangeText: text => (misBaseAmount ? setHsn(text) : ''),
+      value: misTotal ? hsn : '',
       component: FloatingLabelInputField,
+      disabled: true,
     },
     misTax: {
       title: 'Tax%',
@@ -297,9 +298,9 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'Tax',
       errorMessage: 'Enter valid tax',
       showError: taxError,
-      value: misBaseAmount ? String(taxPercentage) : '',
-      onChangeText: text => setTaxPercentage(text),
+      value: misTotal ? String(taxPercentage) : '',
       component: FloatingLabelInputField,
+      disabled: true,
     },
     misTotal: {
       title: 'Total',
@@ -311,12 +312,13 @@ const InvoiceEMSFormDetailScreen = props => {
       value: misTotal,
       onChangeText: text => setMisTotal(text),
       component: FloatingLabelInputField,
+      disabled: true,
     },
   });
 
   useEffect(() => {
-    console.log("taxPercentage", taxPercentage);
-  })
+    console.log('taxPercentage', taxPercentage);
+  });
 
   // const getTax = (taxPercentage) => {
   //   setTaxPercentage(taxPercentage)
@@ -338,30 +340,63 @@ const InvoiceEMSFormDetailScreen = props => {
     }
   };
 
-  const calculateTotalFreight = text => {
-    // setTaxPercentage(taxPercentage)
-    let percentage = (taxPercentage / 100)
-    let totalPrice = percentage * Number(text)
-    // setDummyState(totalPrice)
-    console.log('ok===>', percentage, taxPercentage, totalPrice, baseAmount);
-    // setBaseAmount(text);
-    let total = (baseAmount + totalPrice);
-    setTotal(total);
+  const calculateTotalFreight = () => {
+    setHsn(
+      props && props.route && props.route.params && props.route.params.hsn,
+    );
+    setTaxPercentage(
+      props &&
+        props.route &&
+        props.route.params &&
+        props.route.params.taxPercentage,
+    );
+    let total = Number(baseAmount) + Number((taxPercentage * baseAmount) / 100);
+    setTotal(`${total}`);
+  };
+
+  const calculateTotalLoadingCharges = () => {
+    setHsn(
+      props && props.route && props.route.params && props.route.params.hsn,
+    );
+    setTaxPercentage(
+      props &&
+        props.route &&
+        props.route.params &&
+        props.route.params.taxPercentage,
+    );
+    let total = Number(baseAmount) + Number((taxPercentage * baseAmount) / 100);
+    setTotal(`${total}`);
   };
 
   const calculateLoadingCharges = text => {
-    setloadingBaseAmount(text);
-    let percentage = (text / 100) * taxPercentage;
-
-    let total = percentage + text;
-    setloadingTotal(total);
+    setHsn(
+      props && props.route && props.route.params && props.route.params.hsn,
+    );
+    setTaxPercentage(
+      props &&
+        props.route &&
+        props.route.params &&
+        props.route.params.taxPercentage,
+    );
+    let total =
+      Number(loadingBaseAmount) +
+      Number((taxPercentage * loadingBaseAmount) / 100);
+    setloadingTotal(`${total}`);
   };
 
-  const calculateMiscCharges = text => {
-    setMisBaseAmount(text);
-    let percentage = (text / 100) * taxPercentage;
-    let total = percentage + text;
-    setMisTotal(total);
+  const calculateMiscCharges = () => {
+    setHsn(
+      props && props.route && props.route.params && props.route.params.hsn,
+    );
+    setTaxPercentage(
+      props &&
+        props.route &&
+        props.route.params &&
+        props.route.params.taxPercentage,
+    );
+    let total =
+      Number(misBaseAmount) + Number((taxPercentage * misBaseAmount) / 100);
+    setMisTotal(`${total}`);
   };
 
   const onInvoiceNumberBlur = () => {
@@ -516,9 +551,6 @@ const InvoiceEMSFormDetailScreen = props => {
   };
 
   const onsubmit = async () => {
-
-
-
     if (
       invoiceNumber &&
       invoiceNumber.length &&
@@ -563,7 +595,7 @@ const InvoiceEMSFormDetailScreen = props => {
             charge: baseAmount,
             hsn: baseAmount ? hsn : '',
             tax: baseAmount ? taxPercentage : '',
-            totalAmount: baseAmount ? total : '',
+            totalAmount: total,
             remarks: addComment,
             countryCode: 356,
             igst: null,
@@ -636,7 +668,6 @@ const InvoiceEMSFormDetailScreen = props => {
           props.navigation.navigate('Orders', {
             selectedTab: 'UPLOAD_INVOICE',
           });
-
         } else if (res.success == false) {
           setLoading(false);
           Toast.show({
@@ -645,7 +676,6 @@ const InvoiceEMSFormDetailScreen = props => {
             visibilityTime: 2000,
             autoHide: true,
           });
-
         }
       } catch (err) {
         setLoading(false);
@@ -717,8 +747,8 @@ const InvoiceEMSFormDetailScreen = props => {
         </ActionSheet>
       </ScrollView>
 
-      <View style={[styles.bottombtnWrap, { flexDirection: 'row' }]}>
-        <View style={{ marginRight: 15, flex: 1 }}>
+      <View style={[styles.bottombtnWrap, {flexDirection: 'row'}]}>
+        <View style={{marginRight: 15, flex: 1}}>
           <CustomButton
             buttonColor={colors.WhiteColor}
             borderColor={colors.transparent}
@@ -728,7 +758,7 @@ const InvoiceEMSFormDetailScreen = props => {
             onPress={onCancel}
           />
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <CustomButton
             buttonColor={colors.BrandColor}
             borderColor={colors.BrandColor}
