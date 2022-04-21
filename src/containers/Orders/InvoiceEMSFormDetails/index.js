@@ -623,10 +623,8 @@ const InvoiceEMSFormDetailScreen = props => {
             visibilityTime: 2000,
             autoHide: true,
           });
-          props.navigation.reset({
-            index: 0,
-            routes: [{ name: 'HomeApp' }],
-          });
+
+          props.navigation.navigate('Orders');
         } else if (res.success == false) {
           setLoading(false);
           Toast.show({

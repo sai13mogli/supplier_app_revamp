@@ -1123,47 +1123,10 @@ const Ordercard = props => {
     props.setLoadingTabs(true);
   };
 
-  // const renderOrderCTAs = (invoiceUrl, fromCTA, podUrl) => {
-  //   return (
-  //     <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
-  //       {renderPartialCTAs(invoiceUrl, fromCTA, podUrl)}
-  //       {!showMoreCTA ? renderFurtherCTAs(invoiceUrl, fromCTA, podUrl) : null}
-  //     </View>
-  //   );
-  // };
 
-  // const renderReason = () => {
-  //   return (
-  //     <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
-  //       <Text
-  //         style={{
-  //           fontSize: 12,
-  //           fontWeight: 'bold',
-  //           color: '#000',
-  //         }}>
-  //         Supplier Rejected
-  //       </Text>
-  //       <Text
-  //         style={{
-  //           fontSize: 12,
-  //           fontWeight: 'bold',
-  //           color: '#000',
-  //         }}>
-  //         Remark - {remark}
-  //       </Text>
-  //     </View>
-  //   );
-  // };
 
-  // const renderOrdersStageCTAs = (invoiceUrl, fromCTA, podUrl) => {
-  //   if (OrderStage == 'CANCELLED' && source == 1) {
-  //     return renderOrderCTAs(invoiceUrl, fromCTA, podUrl);
-  //   } else if (OrderStage == 'CANCELLED' && source == 2) {
-  //     return renderReason();
-  //   } else {
-  //     return renderOrderCTAs(invoiceUrl, fromCTA, podUrl);
-  //   }
-  // };
+
+
 
   const isReadMore = descriptionText => {
     if (descriptionText && descriptionText.length > 60) {
