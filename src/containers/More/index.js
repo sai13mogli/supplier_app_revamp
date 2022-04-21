@@ -94,7 +94,7 @@ const MoreScreen = props => {
               {userInfo.phone} | {userInfo.email}
             </Text>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.companyName}> Moglix Supplier Since </Text>
+              <Text style={styles.companyName}> Moglix Supplier </Text>
               <Text style={styles.dateTxt}>
                 {getTime(profileData.createdAt)}
               </Text>

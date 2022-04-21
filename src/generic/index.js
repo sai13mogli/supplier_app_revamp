@@ -2,7 +2,8 @@
 import React from 'react';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import Dimension from '../Theme/Dimension';
-import colors from "../Theme/Colors"
+import colors from "../Theme/Colors";
+import CustomeIcon from '../component/common/CustomeIcon';
 
 
 
@@ -13,68 +14,60 @@ import colors from "../Theme/Colors"
 
 
 export const toastConfig = {
-  view_cart_toast: ({text1, text2, onPress, ...rest}) => (
-    <View style={styles.cartTstView}>
-      <View style={styles.cartInrView}>
-        <Text style={styles.text}>{text2}</Text>
-        <TouchableOpacity onPress={onPress} style={styles.cartView}>
-          <Text style={styles.text3}>VIEW CART</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  ),
+ 
   success: ({text1, text2, onPress, ...rest}) => (
     <View style={styles.successView}>
       <Text style={styles.successText}>{text2}</Text>
+      <CustomeIcon name={'close'} size={Dimension.font16} color={colors.WhiteColor}></CustomeIcon>
+
     </View>
   ),
   error: ({text1, text2, onPress, ...rest}) => (
     <View style={styles.errorView}>
       <Text style={styles.errorText}>{text2}</Text>
+      <CustomeIcon name={'close'} size={Dimension.font16} color={colors.WhiteColor}></CustomeIcon>
+
     </View>
   ),
 };
 
 const styles = StyleSheet.create({
   
-  text: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-    fontFamily: Dimension.CustomBoldFont,
-  },
-  text3: {
-    color: colors.WhiteColor,
-    fontSize: 12,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
   successText: {
     color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginTop: Dimension.margin18,
-    marginLeft: Dimension.margin10,
-    fontFamily: Dimension.CustomBoldFont,
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomRegularFont,
+    marginRight:Dimension.margin15
   },
   errorText: {
     color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginTop: Dimension.margin18,
-    marginLeft: Dimension.margin10,
-    fontFamily: Dimension.CustomBoldFont,
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomRegularFont,
+    marginRight:Dimension.margin15
   },
   successView: {
-    height: 53,
-    width: '95%',
-    backgroundColor: colors.WhiteColor,
-    borderRadius: 5,
+    //height: 53,
+    width: '85%',
+    backgroundColor: 'rgba(0,0,0,.7)',
+    borderRadius: 4,
+    paddingHorizontal:Dimension.padding15,
+    paddingVertical:Dimension.padding10,
+    borderLeftColor:colors.SuccessStateColor,
+    borderLeftWidth:7,
+    flexDirection:"row",
+    justifyContent:"space-between"
   },
   errorView: {
-    height: 53,
-    width: '95%',
-    backgroundColor: colors.error,
-    borderRadius: 5,
+    //height: 53,
+    width: '85%',
+    backgroundColor: 'rgba(0,0,0,.7)',
+    borderRadius: 4,
+    paddingHorizontal:Dimension.padding15,
+    paddingVertical:Dimension.padding10,
+    borderLeftColor:colors.BrandColor,
+    borderLeftWidth:7,
+    flexDirection:"row",
+    justifyContent:"space-between"
+
   },
 });

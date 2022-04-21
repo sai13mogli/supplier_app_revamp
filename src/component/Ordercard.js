@@ -1323,14 +1323,16 @@ const Ordercard = props => {
           : 
           (
             
-            <View style={{flex: 1, flexDirection: 'row', }}>
+            <View style={{flex: 1,}}>
+              <View style={{flexDirection: 'row',}}>
               <Text
                 style={styles.cancelStatusTxt}>
                 {statusText} 
               </Text>
               <TouchableOpacity style={{marginLeft:Dimension.margin10}} onPress={() => settooltip1(!tooltip1)}>
-                 <Image source={require('../assets/images/tooltipIcon.png')} style={{width: 24, height: 24}}></Image>
+                 <Image source={require('../assets/images/tooltipIcon.png')} style={{width: 20, height: 20}}></Image>
              </TouchableOpacity>
+             </View>
             {tooltip1 && (
               <View style={styles.tooltipWrap}>
                 <View style={styles.arrow}></View>
@@ -1809,8 +1811,9 @@ const styles = StyleSheet.create({
     marginTop: Dimension.margin10,
     position: 'relative',
     borderRadius: 4,
-    marginHorizontal: Dimension.margin15,
-    padding: Dimension.padding15,
+    //marginHorizontal: Dimension.margin15,
+    padding: Dimension.padding8,
+    alignSelf:"flex-start"
   },
   arrow: {
     borderLeftColor: '#fff',
@@ -1822,7 +1825,7 @@ const styles = StyleSheet.create({
     width: 0,
     height: 0,
     position: 'absolute',
-    right: 15,
+    left: 80,
     top: -8,
   },
 });

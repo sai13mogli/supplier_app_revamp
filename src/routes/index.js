@@ -22,6 +22,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import Toast from 'react-native-toast-message';
 import {toastConfig} from '../generic/index';
+//import {toastConfig} from '../generic/navigator';
 
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

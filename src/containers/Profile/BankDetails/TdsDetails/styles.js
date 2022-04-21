@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
   },
   ContainerCss: {
     backgroundColor: Colors.WhiteColor,
-    paddingHorizontal: Dimension.padding15
+    paddingHorizontal: Dimension.padding15,
+    marginTop:Dimension.margin25
   },
   remove: {
     borderWidth: 0.9,

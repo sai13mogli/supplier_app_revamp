@@ -67,7 +67,9 @@ const OrdersScreen = props => {
 
   const [loadingTabs, setLoadingTabs] = useState(true);
   const [selectedType, setSelectedType] = useState('Open_Orders');
-  const [selectedTab, setSelectedTab] = useState('PENDING_ACCEPTANCE');
+  const [selectedTab, setSelectedTab] = useState(
+    props.route.params.selectedTab || 'PENDING_ACCEPTANCE',
+  );
   const onEndReachedCalledDuringMomentum = useRef(true);
   const [inputValue, setInputValue] = useState('');
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
@@ -126,7 +128,7 @@ const OrdersScreen = props => {
       {label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE'},
       {label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP'},
       {label: 'Pickup', key: 'PICKUP'},
-      {label: 'Upload     Invoice', key: 'UPLOAD_INVOICE'},
+      {label: 'Upload Invoice', key: 'UPLOAD_INVOICE'},
       {label: 'Packed', key: 'PACKED'},
       {label: 'Shipment', key: 'SHIPMENT'},
       {label: 'Mark Shipped/Delivered', key: 'MARK_SHIPPED'},
