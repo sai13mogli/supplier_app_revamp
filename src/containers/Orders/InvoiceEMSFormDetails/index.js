@@ -22,8 +22,11 @@ import Header from '../../../component/common/Header';
 import CustomeDatePicker from '../../../component/common/Datepicker';
 import { BASE_URL } from '../../../redux/constants';
 import Toast from 'react-native-toast-message';
+import { fetchOrders, fetchTabCount } from '../../../redux/actions/orders';
+import { useDispatch, useSelector } from 'react-redux';
 
 const InvoiceEMSFormDetailScreen = props => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [totalAmount, setTotalAmount] = useState(
     props?.route?.params?.totalAmount,
@@ -319,10 +322,6 @@ const InvoiceEMSFormDetailScreen = props => {
   useEffect(() => {
     console.log('taxPercentage', taxPercentage);
   });
-
-  // const getTax = (taxPercentage) => {
-  //   setTaxPercentage(taxPercentage)
-  // }
 
   const onUploadInvoiceBlur = () => {
     if (uploadInvoice && uploadInvoice.name) {
@@ -659,6 +658,12 @@ const InvoiceEMSFormDetailScreen = props => {
         console.log('Respose===>', res, JSON.stringify(payload));
         if (res.success) {
           setLoading(false);
+          dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
+            fetchTabCount({
+              supplierId: await AsyncStorage.getItem('userId'),
+              tabRef,
+              onlineShipmentMode,
+            }));
           Toast.show({
             type: 'success',
             text2: res.message,
