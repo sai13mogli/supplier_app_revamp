@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
   starIcon: {
     color: colors.BrandColor,
     fontSize: Dimension.font10,
-
     fontFamily: Dimension.CustomMediumFont,
   },
 
@@ -122,7 +121,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.FontColor,
     borderRadius: 4,
-
     height: Dimension.height40,
     paddingBottom: 0,
   },
@@ -152,10 +150,10 @@ const styles = StyleSheet.create({
   iconStyle: {
     width: Dimension.width24,
     height: Dimension.height24,
-    paddingRight: 0,
+    marginRight: Dimension.padding10,
   },
   iconBtnstyle: {
-    paddingRight: 0,
+    marginRight: Dimension.padding10,
   },
   errorText: {
     fontSize: Dimension.font10,

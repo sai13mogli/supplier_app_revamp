@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { OrderedMap } from 'immutable';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-} from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dimension from '../../../Theme/Dimension';
@@ -34,7 +28,8 @@ const UploadInvoiceOMSScreen = props => {
   const [uploadInvoice, setUploadInvoice] = useState({});
   const [uploadInvoiceError, setuploadInvoiceError] = useState(false);
   const [supplierInvoiceTotal, setSupplierInvoiceTotal] = useState('');
-  const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] = useState(false);
+  const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] =
+    useState(false);
   const [poTotal, setPoTotal] = useState(0);
   const [poTotalError, setpoTotalError] = useState(false);
   const [uploadDisabled, setUploadDisabled] = useState(false);
@@ -270,8 +265,6 @@ const UploadInvoiceOMSScreen = props => {
     }
   };
 
-
-
   const selectItemId = (podId, totalPrice, keys) => {
     let currentItemIds = [...bulkItemIds];
     let currentPrice = [...poTotalPrice];
@@ -380,7 +373,7 @@ const UploadInvoiceOMSScreen = props => {
       // && (supplierInvoiceTotal != poTotal)
     ) {
       try {
-        setLoading(true)
+        setLoading(true);
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
         const url = `${BASE_URL}api/order/oms/mapInvoice`;
         const userId = await AsyncStorage.getItem('userId');
@@ -422,10 +415,10 @@ const UploadInvoiceOMSScreen = props => {
           ],
         );
         const res = await response.json();
-        console.log("Res===>", res);
+        console.log('Res===>', res);
         if (res.success) {
-          setLoading(false)
-          alert(res.message)
+          setLoading(false);
+
           Toast.show({
             type: 'success',
             text2: res.message,
@@ -434,10 +427,9 @@ const UploadInvoiceOMSScreen = props => {
           });
           props.navigation.goBack();
         } else if (res.success == false) {
-          alert(res.message)
-          setLoading(false)
+          setLoading(false);
           Toast.show({
-            type: 'success',
+            type: 'error',
             text2: res.message,
             visibilityTime: 2000,
             autoHide: true,
@@ -485,10 +477,11 @@ const UploadInvoiceOMSScreen = props => {
               disabled={field.disabled}
             />
           )).toList()}
+
+          {Documents.map(_ => renderInputText(_))
+            .toList()
+            .toArray()}
         </View>
-        {Documents.map(_ => renderInputText(_))
-          .toList()
-          .toArray()}
         <ActionSheet
           id="action_sheet"
           onBeforeShow={data => {

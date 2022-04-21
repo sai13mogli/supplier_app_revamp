@@ -100,6 +100,7 @@ const Ordercard = props => {
   const [debitLoader, setDebitLoader] = useState(false);
   const { navigate } = useNavigation();
   const navigation = useNavigation();
+  const [tooltip1, settooltip1] = useState(false);
 
   useEffect(() => {
     fetchImage();
@@ -1312,31 +1313,36 @@ const Ordercard = props => {
               : { flexDirection: 'row', flex: 1, marginTop: Dimension.margin15 }
           }>
           {/* {renderOrdersStageCTAs(invoiceUrl, fromCTA, podUrl)} */}
-          {OrderStage !== 'CANCELLED' ? (
-            <View style={{ flex: 9, flexDirection: 'row', flexWrap: 'wrap' }}>
+         {OrderStage !== 'CANCELLED' ? (
+            <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
               {renderPartialCTAs(invoiceUrl, fromCTA, podUrl)}
               {!showMoreCTA
                 ? renderFurtherCTAs(invoiceUrl, fromCTA, podUrl)
                 : null}
             </View>
-          ) : (
-            <View style={{ flex: 9, flexDirection: 'row', flexWrap: 'wrap' }}>
+          ) 
+          : 
+          (
+            
+            <View style={{flex: 1,}}>
+              <View style={{flexDirection: 'row',}}>
               <Text
-                style={{
-                  fontSize: 12,
-                  fontWeight: 'bold',
-                  color: '#000',
-                }}>
-                {statusText}
+                style={styles.cancelStatusTxt}>
+                {statusText} 
               </Text>
+              <TouchableOpacity style={{marginLeft:Dimension.margin10}} onPress={() => settooltip1(!tooltip1)}>
+                 <Image source={require('../assets/images/tooltipIcon.png')} style={{width: 20, height: 20}}></Image>
+             </TouchableOpacity>
+             </View>
+            {tooltip1 && (
+              <View style={styles.tooltipWrap}>
+                <View style={styles.arrow}></View>
               <Text
-                style={{
-                  fontSize: 12,
-                  fontWeight: 'bold',
-                  color: '#000',
-                }}>
-                Remark - {remark}
+                style={styles.remarkTxt}>
+                 {remark}
               </Text>
+              </View>
+            )}
             </View>
           )}
 
@@ -1790,6 +1796,38 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     padding: Dimension.padding15,
+  },
+  cancelStatusTxt:{
+    fontSize:Dimension.font12,
+    fontFamily:Dimension.CustomMediumFont,
+    color:Colors.FontColor
+  },
+  remarkTxt:{
+    fontSize:Dimension.font12,
+    fontFamily:Dimension.CustomMediumFont,
+    color:Colors.WhiteColor
+  },
+  tooltipWrap: {
+    backgroundColor: '#000',
+    marginTop: Dimension.margin10,
+    position: 'relative',
+    borderRadius: 4,
+    //marginHorizontal: Dimension.margin15,
+    padding: Dimension.padding8,
+    alignSelf:"flex-start"
+  },
+  arrow: {
+    borderLeftColor: '#fff',
+    borderBottomColor: '#000',
+    borderRightColor: '#fff',
+    borderLeftWidth: 5,
+    borderRightWidth: 5,
+    borderBottomWidth: 8,
+    width: 0,
+    height: 0,
+    position: 'absolute',
+    left: 80,
+    top: -8,
   },
 });
 export default React.memo(Ordercard);

@@ -5,7 +5,8 @@ import Dimension from '../../../../Theme/Dimension';
 const styles = StyleSheet.create({
   ContainerCss:{
     backgroundColor:Colors.WhiteColor,
-    paddingHorizontal:Dimension.padding15
+    paddingHorizontal:Dimension.padding15,
+    marginTop:Dimension.margin15
   },
  wrap:{
    borderWidth:1,

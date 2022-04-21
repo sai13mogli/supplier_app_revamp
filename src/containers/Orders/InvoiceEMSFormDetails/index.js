@@ -313,10 +313,9 @@ const InvoiceEMSFormDetailScreen = props => {
     },
   });
 
-
-  const getTax = (taxPercentage) => {
-    setTaxPercentage(taxPercentage)
-  }
+  // const getTax = (taxPercentage) => {
+  //   setTaxPercentage(taxPercentage)
+  // }
 
   const onUploadInvoiceBlur = () => {
     if (uploadInvoice && uploadInvoice.name) {
@@ -336,9 +335,8 @@ const InvoiceEMSFormDetailScreen = props => {
 
   const calculateTotalFreight = text => {
     // setTaxPercentage(taxPercentage)
-    console.log("ok===>", taxPercentage);
     let percentage = (text / 100) * taxPercentage;
-
+    console.log('ok===>', taxPercentage);
     setBaseAmount(text);
     let total = percentage + text;
     setTotal(total);
@@ -512,9 +510,7 @@ const InvoiceEMSFormDetailScreen = props => {
 
   const onsubmit = async () => {
 
-    props.navigation.navigate('Orders', {
-      selectedTab: 'UPLOAD_INVOICE',
-    });
+
 
     if (
       invoiceNumber &&
@@ -530,7 +526,7 @@ const InvoiceEMSFormDetailScreen = props => {
       uploadInvoice.name
     ) {
       try {
-        setLoading(true)
+        setLoading(true);
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
         const url = `${BASE_URL}api/order/mapDropshipInvoice`;
 
@@ -621,14 +617,17 @@ const InvoiceEMSFormDetailScreen = props => {
           ],
         );
         const res = await response.json();
-        console.log("Respose===>", res, JSON.stringify(payload));
+        console.log('Respose===>', res, JSON.stringify(payload));
         if (res.success) {
-          setLoading(false)
+          setLoading(false);
           Toast.show({
             type: 'success',
             text2: res.message,
             visibilityTime: 2000,
             autoHide: true,
+          });
+          props.navigation.navigate('Orders', {
+            selectedTab: 'UPLOAD_INVOICE',
           });
 
         } else if (res.success == false) {
