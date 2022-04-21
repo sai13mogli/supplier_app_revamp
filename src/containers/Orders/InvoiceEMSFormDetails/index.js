@@ -342,7 +342,7 @@ const InvoiceEMSFormDetailScreen = props => {
     // setTaxPercentage(taxPercentage)
     let percentage = (taxPercentage / 100)
     let totalPrice = percentage * Number(text)
-    // setDummyState(totalPrice)
+
     console.log('ok===>', percentage, taxPercentage, totalPrice, baseAmount);
     // setBaseAmount(text);
     let total = (baseAmount + totalPrice);
