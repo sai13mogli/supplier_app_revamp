@@ -595,15 +595,15 @@ const Ordercard = props => {
           <TouchableOpacity
             // disabled={acceptLoader}
             onPress={() => setDisplayCalendar(true)}
-            style={styles.acceptCtabtn}>
-            <Text style={styles.acceptCtaTxt}>CHOOSE PICKUP</Text>
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>CHOOSE PICKUP DATE</Text>
           </TouchableOpacity>
         ) : cta == 'EMS_PICKUP_DATE' ? (
           <TouchableOpacity
             // disabled={acceptLoader}
             onPress={() => setDisplayCalendar(true)}
-            style={styles.acceptCtabtn}>
-            <Text style={styles.acceptCtaTxt}>RESCHEDULE PICKUP</Text>
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>RESCHEDULE PICKUP DATE</Text>
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_INVOICE' ? (
           <TouchableOpacity
