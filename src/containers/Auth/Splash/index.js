@@ -17,18 +17,23 @@ const SplashScreen = props => {
     const token = await AsyncStorage.getItem('token');
     const rmToken = await AsyncStorage.getItem('rmToken');
     const onlineShipmentMode = await AsyncStorage.getItem('onlineShipmentMode');
-    if (rmToken) {
-      const {data} = await rmLogin({
-        token: rmToken,
-      });
-      if (data.success) {
-        dispatch(setRmData(data.data));
-      }
-    }
 
     if (token || onlineShipmentMode) {
       if (onlineShipmentMode) {
         dispatch(setShipmentType(onlineShipmentMode));
+      }
+      if (rmToken) {
+        const {data} = await rmLogin({
+          token: rmToken,
+        });
+        if (data.success) {
+          await AsyncStorage.setItem(
+            'onlineShipmentMode',
+            data.data.onlineShipmentMode,
+          );
+          dispatch(setShipmentType(data.data.onlineShipmentMode));
+          dispatch(setRmData(data.data));
+        }
       }
       props.route.params.setIsLoggedIn(true);
     } else {
