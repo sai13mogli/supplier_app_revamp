@@ -61,6 +61,7 @@ const CustomeDatePicker = props => {
     setShow(true);
     setMode(currentMode);
   };
+
   const handleFocus = () => {
     setIsFocused(true);
     if (props.handleFocus) {

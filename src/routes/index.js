@@ -21,6 +21,7 @@ import {
 } from '../constants/index';
 import {useDispatch, useSelector} from 'react-redux';
 import Toast from 'react-native-toast-message';
+import {toastConfig} from '../generic/index';
 
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -221,7 +222,8 @@ const Routes = props => {
           </>
         )}
       </AppStack.Navigator>
-      <Toast ref={ref => Toast.setRef(ref)} />
+      {/* <Toast ref={ref => Toast.setRef(ref)} /> */}
+      <Toast config={toastConfig} ref={ref => Toast.setRef(ref)} />
     </NavigationContainer>
   );
 };

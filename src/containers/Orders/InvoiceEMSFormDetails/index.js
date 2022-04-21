@@ -96,7 +96,6 @@ const InvoiceEMSFormDetailScreen = props => {
       },
       isImp: false,
       errorState: uploadEwayBillError,
-      onBlur: () => onUploadEwayBlur(),
       errorText: 'Please upload E-way Bill',
       placeholder: 'Tap to Upload',
       setUpload: uploadEwayBill && uploadEwayBill.setUpload,
@@ -314,10 +313,9 @@ const InvoiceEMSFormDetailScreen = props => {
   });
 
 
-  const getTax = (taxPercentage) => {
-    alert("hi")
-    setTaxPercentage(taxPercentage)
-  }
+  // const getTax = (taxPercentage) => {
+  //   setTaxPercentage(taxPercentage)
+  // }
 
   const onUploadInvoiceBlur = () => {
     if (uploadInvoice && uploadInvoice.name) {
@@ -336,7 +334,7 @@ const InvoiceEMSFormDetailScreen = props => {
   };
 
   const calculateTotalFreight = text => {
-    setTaxPercentage(taxPercentage)
+    // setTaxPercentage(taxPercentage)
     let percentage = (text / 100) * taxPercentage;
     console.log("ok===>", taxPercentage);
     setBaseAmount(text);
@@ -474,6 +472,7 @@ const InvoiceEMSFormDetailScreen = props => {
         documents={documents}
         showDoc={showDoc}
         onRemove={onRemove}
+        onBlur={onUploadInvoiceBlur}
         id={id}
         fId={fId}
         fileUpload={2}
@@ -520,8 +519,8 @@ const InvoiceEMSFormDetailScreen = props => {
       ewayBillNumber.length &&
       ewayDate &&
       ewayDate.length &&
-      uploadInvoice == '' &&
-      uploadEwayBill
+      uploadInvoice &&
+      uploadInvoice.name
     ) {
       try {
         setLoading(true)
@@ -615,7 +614,7 @@ const InvoiceEMSFormDetailScreen = props => {
           ],
         );
         const res = await response.json();
-        console.log("Res===>", res);
+        console.log("Respose===>", res, JSON.stringify(payload));
         if (res.success) {
           setLoading(false)
           Toast.show({
@@ -624,13 +623,10 @@ const InvoiceEMSFormDetailScreen = props => {
             visibilityTime: 2000,
             autoHide: true,
           });
-          props.navigation.reset({
-            index: 0,
-            routes: [{ name: 'HomeApp' }],
-          });
+
+          props.navigation.navigate('Orders');
         } else if (res.success == false) {
           setLoading(false);
-          alert(res.message);
           Toast.show({
             type: 'success',
             text2: res.message,
@@ -647,6 +643,7 @@ const InvoiceEMSFormDetailScreen = props => {
       onInvoiceAmountBlur();
       onInvoiceDateBlur();
       onEwayDateDateBlur();
+      onUploadInvoiceBlur();
     }
   };
 
