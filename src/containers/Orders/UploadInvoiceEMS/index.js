@@ -32,6 +32,7 @@ const UploadInvoiceScreen = props => {
   const [invoiceList, setInvoiceList] = useState([]);
 
   let EmsOmsFlag = actionCTA;
+  console.log("List=====>", invoiceList);
 
   useEffect(() => {
     if (EmsOmsFlag.includes('MAP_INVOICE')) {
@@ -40,6 +41,7 @@ const UploadInvoiceScreen = props => {
   }, []);
 
   const selectItemId = itemId => {
+
     let currentItemIds = [...bulkItemIds];
     if (currentItemIds.includes(itemId)) {
       currentItemIds = currentItemIds.filter(_ => _ != itemId);
@@ -112,7 +114,6 @@ const UploadInvoiceScreen = props => {
         showBack
         navigation={props.navigation}
         showText={'Upload Invoice'}
-      // rightIconName={'business-details'}
       />
       <FlatList
         data={invoiceList}

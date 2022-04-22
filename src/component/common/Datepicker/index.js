@@ -16,8 +16,7 @@ import CustomeIcon from '../CustomeIcon';
 import styles from './styles';
 
 const CustomeDatePicker = props => {
-  const { onChange, onPress, display, label, title, isImp, value, activeFilter } =
-    props;
+  const { display, value, activeFilter } = props;
   const [date, setDate] = useState(new Date());
   const [isFocused, setIsFocused] = useState(false);
   const [mode, setMode] = useState('date');
@@ -51,11 +50,11 @@ const CustomeDatePicker = props => {
     }
   }, []);
 
-  useEffect(() => {
-    if (activeFilter) {
-      setText(value);
-    }
-  }, [activeFilter]);
+  // useEffect(() => {
+  //   if (activeFilter) {
+  //     setText(value);
+  //   }
+  // }, [activeFilter]);
 
   const showMode = currentMode => {
     setShow(true);
@@ -90,16 +89,7 @@ const CustomeDatePicker = props => {
 
   return (
     <>
-
-      {/* <Text style={styles.labelStyle}>{label}</Text>
-        {isImp ? <Text style={styles.starIcon}>*</Text> : null}
-      </View>
-
-      <View> */}
-
-
       <TouchableOpacity
-        // style={styles.inputContainerStyle}
         onPress={showDatepicker}>
         <View style={{ flexDirection: "row" }}>
           <Input
@@ -111,8 +101,6 @@ const CustomeDatePicker = props => {
               </View>
             )}
             editable={false}
-            // value={date}
-           // underlineColorAndroid={'transparent'}
             selectionColor={'#3c3c3c'}
             disabled={props.disabled}
             onFocus={handleFocus}
@@ -129,12 +117,12 @@ const CustomeDatePicker = props => {
               color={colors.FontColor}
             />}
             rightIconContainerStyle={
-             styles.iconStyle
+              styles.iconStyle
             }
           />
           <View style={{ flexDirection: "row" }}>
             <Text style={styles.placeholderCss}>{text || 'Select Date'}</Text>
-            
+
           </View>
         </View>
 

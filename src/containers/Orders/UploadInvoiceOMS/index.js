@@ -58,7 +58,6 @@ const UploadInvoiceOMSScreen = props => {
         doc: uploadInvoice,
       },
       isImp: true,
-      errorState: uploadInvoiceError,
       errorText: 'Please upload Invoice',
       placeholder: 'Tap to Upload',
     },
@@ -104,7 +103,7 @@ const UploadInvoiceOMSScreen = props => {
       label: 'Invoice Date',
       placeholder: 'Invoice Date',
       errorMessage: 'Enter valid Invoice date',
-      showError: invoiceDateError,
+      showError: invoiceDate ? null : invoiceDateError,
       value: invoiceDate,
       onBlur: () => onInvoiceDateBlur(),
       onChange: invoiceDate => setInvoiceDate(invoiceDate),
@@ -141,6 +140,7 @@ const UploadInvoiceOMSScreen = props => {
       setInvoiceNumberError(true);
     }
   };
+
   const onSupplierInvoiceBlur = () => {
     if (
       supplierInvoiceTotal != poTotal &&
@@ -164,6 +164,7 @@ const UploadInvoiceOMSScreen = props => {
   const onUploadInvoiceBlur = () => {
     if (uploadInvoice && uploadInvoice.name) {
       setuploadInvoiceError(false);
+      alert("hi")
     } else {
       setuploadInvoiceError(true);
     }
@@ -205,19 +206,6 @@ const UploadInvoiceOMSScreen = props => {
     }
   };
 
-  const onRemove = id => {
-    switch (id) {
-      case 'uploadInvoice':
-        setUploadInvoice({});
-        break;
-      case 'uploadEwayBill':
-        setUploadEwayBill({});
-        break;
-      default:
-        break;
-    }
-  };
-
   const renderInputText = ({
     id,
     title,
@@ -240,7 +228,7 @@ const UploadInvoiceOMSScreen = props => {
         fId={fId}
         fileUpload={2}
         onBlur={onUploadInvoiceBlur}
-        errorState={errorState}
+        errorState={value ? null : errorState}
         errorText={errorText}
         onPress={() => onPress(id)}
         disabled={uploadDisabled}
@@ -557,9 +545,6 @@ const UploadInvoiceOMSScreen = props => {
           />
         </View>
         <View style={{ flex: 1 }}>
-          {/* {rejectLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
-            )} */}
           <CustomButton
             buttonColor={colors.BrandColor}
             borderColor={colors.BrandColor}
