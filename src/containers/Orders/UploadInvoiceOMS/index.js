@@ -164,7 +164,6 @@ const UploadInvoiceOMSScreen = props => {
   const onUploadInvoiceBlur = () => {
     if (uploadInvoice && uploadInvoice.name) {
       setuploadInvoiceError(false);
-      alert("hi")
     } else {
       setuploadInvoiceError(true);
     }
@@ -366,7 +365,6 @@ const UploadInvoiceOMSScreen = props => {
       uploadInvoice &&
       uploadInvoice.name &&
       supplierInvoiceTotal.length
-      // && (supplierInvoiceTotal != poTotal)
     ) {
       try {
         setLoading(true);
@@ -452,7 +450,7 @@ const UploadInvoiceOMSScreen = props => {
           Toast.show({
             type: 'success',
             text2: res.message,
-            visibilityTime: 2000,
+            visibilityTime: 4000,
             autoHide: true,
           });
           props.navigation.goBack();

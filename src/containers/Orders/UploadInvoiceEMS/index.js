@@ -32,7 +32,6 @@ const UploadInvoiceScreen = props => {
   const [invoiceList, setInvoiceList] = useState([]);
 
   let EmsOmsFlag = actionCTA;
-  console.log("List=====>", invoiceList);
 
   useEffect(() => {
     if (EmsOmsFlag.includes('MAP_INVOICE')) {

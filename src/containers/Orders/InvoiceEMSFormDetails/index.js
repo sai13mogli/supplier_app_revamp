@@ -642,7 +642,7 @@ const InvoiceEMSFormDetailScreen = props => {
           Toast.show({
             type: 'success',
             text2: res.message,
-            visibilityTime: 2000,
+            visibilityTime: 4000,
             autoHide: true,
           });
           props.navigation.navigate('Orders', {
