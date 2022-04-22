@@ -261,7 +261,6 @@ const UploadInvoiceOMSScreen = props => {
     let currentItemIds = [...bulkItemIds];
     let currentPrice = [...poTotalPrice];
     let currentKeys = [...totalKeys];
-    console.log("Aakash===>", podId);
     setPodId(podId)
     if (currentItemIds.includes(podId)) {
       currentItemIds = currentItemIds.filter(_ => _ != podId);
@@ -283,6 +282,7 @@ const UploadInvoiceOMSScreen = props => {
     if (filterData.length > 0) {
       const index = poTotalPrice.findIndex(x => x.id === filterData[0].id);
       let priceList = [...poTotalPrice];
+
       priceList.splice(index, 1);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
@@ -292,6 +292,7 @@ const UploadInvoiceOMSScreen = props => {
         price: totalPrice,
       };
       let priceList = [...poTotalPrice];
+      console.log("Aakash===>", priceList);
       priceList.push(row);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
@@ -442,22 +443,12 @@ const UploadInvoiceOMSScreen = props => {
         console.log('Res===>', res);
         if (res.success) {
           setLoading(false);
-          // fetchOrdersFunc(0, '', selectedTab, shipmentType, {
-          //   pickupFromDate: '',
-          //   pickupToDate: '',
-          //   poFromDate: '',
-          //   poToDate: '',
-          //   orderType: [],
-          //   deliveryType: [],
-          //   orderRefs: [],
-          // });
-          // fetchTabCountFunc(selectedTab, shipmentType);
-          dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
-            fetchTabCount({
-              supplierId: await AsyncStorage.getItem('userId'),
-              tabRef,
-              onlineShipmentMode,
-            }));
+          // dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
+          //   fetchTabCount({
+          //     supplierId: await AsyncStorage.getItem('userId'),
+          //     tabRef,
+          //     onlineShipmentMode,
+          //   }));
           Toast.show({
             type: 'success',
             text2: res.message,
@@ -470,7 +461,7 @@ const UploadInvoiceOMSScreen = props => {
           Toast.show({
             type: 'error',
             text2: res.message,
-            visibilityTime: 2000,
+            visibilityTime: 5000,
             autoHide: true,
           });
         }
