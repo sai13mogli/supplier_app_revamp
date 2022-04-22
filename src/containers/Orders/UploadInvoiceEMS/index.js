@@ -20,6 +20,9 @@ const UploadInvoiceScreen = props => {
   const [taxPercentage, setTaxPercentage] = useState(
     props?.route?.params?.taxPercentage,
   );
+  const [selectedTab, setSelectedTab] = useState(
+    props.route.params.selectedTab || 'PENDING_ACCEPTANCE',
+  );
   const [quantity, setquantity] = useState(props?.route?.params?.quantity);
   const [warehouseId, setwarehouseId] = useState(
     props?.route?.params?.warehouseId,
@@ -79,6 +82,7 @@ const UploadInvoiceScreen = props => {
         productName={item.productName}
         totalAmount={item.orderInfo.totalAmount}
         taxPercentage={item.taxPercentage}
+        selectedTab={selectedTab}
         itemId={item.itemId}
         bulkItemIds={bulkItemIds}
         setBulkItemIds={setBulkItemIds}
@@ -149,6 +153,7 @@ const UploadInvoiceScreen = props => {
               hsn,
               totalAmount,
               taxPercentage,
+              selectedTab,
             })
           }
         />

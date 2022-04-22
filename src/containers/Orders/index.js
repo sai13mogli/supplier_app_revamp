@@ -26,6 +26,7 @@ import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
 import Toast from 'react-native-toast-message';
 import BulkActionsModal from '../../component/BulkActionsModal';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const OrdersScreen = props => {
   const profileStatus = useSelector(
     state => (state.profileReducer || {}).status || STATE_STATUS.UNFETCHED,
   );
+
   const profileData = useSelector(state => state.profileReducer.data || {});
   const scrollRef = useRef(null);
   const tabStatus = useSelector(state =>
@@ -66,7 +68,9 @@ const OrdersScreen = props => {
 
   const [loadingTabs, setLoadingTabs] = useState(true);
   const [selectedType, setSelectedType] = useState('Open_Orders');
-  const [selectedTab, setSelectedTab] = useState('PENDING_ACCEPTANCE');
+  const [selectedTab, setSelectedTab] = useState(
+    props.route.params.selectedTab || 'PENDING_ACCEPTANCE',
+  );
   const onEndReachedCalledDuringMomentum = useRef(true);
   const [inputValue, setInputValue] = useState('');
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
@@ -125,7 +129,7 @@ const OrdersScreen = props => {
       {label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE'},
       {label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP'},
       {label: 'Pickup', key: 'PICKUP'},
-      {label: 'Upload     Invoice', key: 'UPLOAD_INVOICE'},
+      {label: 'Upload Invoice', key: 'UPLOAD_INVOICE'},
       {label: 'Packed', key: 'PACKED'},
       {label: 'Shipment', key: 'SHIPMENT'},
       {label: 'Mark Shipped/Delivered', key: 'MARK_SHIPPED'},
@@ -487,12 +491,7 @@ const OrdersScreen = props => {
       return (
         <View
           style={{
-            flex: 1,
-            //backgroundColor:"#ccc",
-            justifyContent: 'center',
-            alignContent: 'center',
-            height: '100%',
-            padding: Dimension.padding20,
+            padding: 100,
           }}>
           <ActivityIndicator
             //style={{alignSelf: 'center'}}
@@ -513,10 +512,10 @@ const OrdersScreen = props => {
       return (
         <View style={styles.emptyWrap}>
           <Image
-            source={require('../../assets/images/pending_approval.png')}
-            style={{width: 300, height: 200}}
+            source={require('../../assets/images/profilePending.png')}
+            style={{width: 350, height: 300}}
           />
-          <Text style={styles.emptyTxt}>
+          <Text style={styles.profilependingTxt}>
             Your profile is incomplete, please complete your profile, To get
             started
           </Text>
@@ -532,7 +531,7 @@ const OrdersScreen = props => {
             source={require('../../assets/images/pending_approval.png')}
             style={{width: 300, height: 200}}
           />
-          <Text style={styles.emptyTxt}>
+          <Text style={styles.profilependingTxt}>
             Your profile is currently in approval pending stage Once approved
             you will start receiving orders
           </Text>
@@ -708,12 +707,35 @@ const OrdersScreen = props => {
           enabled={true}
           isFromOrders={true}
         />
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate('Notification')}
+          style={{
+            position: 'relative',
+            paddingLeft: Dimension.padding8,
+            marginTop: Dimension.margin15,
+          }}>
+          <CustomeIcon
+            name={'notification-3-line'}
+            size={Dimension.font20}
+            color={colors.FontColor}></CustomeIcon>
+          <View style={styles.reddot}></View>
+        </TouchableOpacity>
       </View>
       {tabStatus == STATE_STATUS.FETCHING ? (
-        <ActivityIndicator
-          color={colors.BrandColor}
-          style={{alignSelf: 'center', margin: 12}}
-        />
+        <View
+          style={{
+            flex: 1,
+            height: Dimensions.get('window').height,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 50,
+          }}>
+          <ActivityIndicator
+            color={colors.BrandColor}
+            style={{alignSelf: 'center', margin: 12}}
+            size={'large'}
+          />
+        </View>
       ) : (
         <>
           {renderHeaderComponent()}
@@ -729,7 +751,7 @@ const OrdersScreen = props => {
             style={{paddingBottom: 380}}
             contentContainerStyle={{
               paddingBottom: 380,
-              backgroundColor: '#fff',
+              backgroundColor: Colors.grayShade1,
             }}
             removeClippedSubviews={true}
             maxToRenderPerBatch={5}
@@ -820,6 +842,10 @@ const OrdersScreen = props => {
                     <CustomeIcon
                       name={'filter-line'}
                       style={styles.filterIcon}></CustomeIcon>
+                    {/* <Image
+            source={require('../../assets/images/filterLine.png')}
+            style={{ width:Dimension.width16, height:Dimension.height16}}
+          /> */}
                   </TouchableOpacity>
                 </View>
               ) : null}

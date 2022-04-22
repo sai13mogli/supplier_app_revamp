@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import colors from '../../Theme/Colors';
 import CustomeIcon from './CustomeIcon';
 import {Header, HeaderProps, Icon} from 'react-native-elements';
@@ -30,10 +30,25 @@ const AppHeader = props => {
       //rightContainerStyle={{flex:1}}
       centerContainerStyle={{paddingLeft: Dimension.padding10}}
       rightComponent={
+        <View style={{flexDirection:"row"}}> 
         <CustomeIcon
           name={props.rightIconName}
           size={Dimension.font20}
           color={colors.FontColor}></CustomeIcon>
+          {!props.fromnotification &&
+          <TouchableOpacity onPress={() => props.navigation.navigate('Notification')}
+          style={{position:"relative",paddingLeft:Dimension.padding8}}
+          >
+            <CustomeIcon
+          name={'notification-3-line'}
+          size={Dimension.font20}
+          color={colors.FontColor}>
+
+          </CustomeIcon>
+          <View style={styles.reddot}></View>
+          </TouchableOpacity>
+      }
+          </View>
       }
     />
   );
@@ -48,6 +63,15 @@ const styles = StyleSheet.create({
     //marginLeft:Dimension.margin10
   },
   leftSection: {flexDirection: 'row'},
+  reddot:{
+    width:Dimension.width8,
+    height:Dimension.height8,
+    borderRadius:Dimension.width10,
+    backgroundColor:colors.BrandColor,
+    position:"absolute",
+    top:Dimension.padding2,
+    right:0
+  }
 });
 
 export default AppHeader;

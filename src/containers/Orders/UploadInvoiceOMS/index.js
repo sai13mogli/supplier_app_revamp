@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { OrderedMap } from 'immutable';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-} from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import FileUpload from '../../../component/common/FileUpload';
@@ -23,10 +18,14 @@ import InvoiceOmsCard from '../../../component/InvoiceOmsCard';
 import { BASE_URL } from '../../../redux/constants';
 import RNFetchBlob from 'rn-fetch-blob';
 import Toast from 'react-native-toast-message';
+import { fetchOrders, fetchTabCount } from '../../../redux/actions/orders';
+
 
 const UploadInvoiceOMSScreen = props => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [itemRef, setitemRef] = useState(props?.route?.params?.itemRef);
+  const [podId, setPodId] = useState(props?.route?.params?.itemRef);
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [invoiceNumberError, setInvoiceNumberError] = useState(false);
   const [invoiceDate, setInvoiceDate] = useState('');
@@ -270,13 +269,12 @@ const UploadInvoiceOMSScreen = props => {
     }
   };
 
-
-
   const selectItemId = (podId, totalPrice, keys) => {
     let currentItemIds = [...bulkItemIds];
     let currentPrice = [...poTotalPrice];
     let currentKeys = [...totalKeys];
-
+    console.log("Aakash===>", podId);
+    setPodId(podId)
     if (currentItemIds.includes(podId)) {
       currentItemIds = currentItemIds.filter(_ => _ != podId);
     } else {
@@ -319,6 +317,8 @@ const UploadInvoiceOMSScreen = props => {
     return (
       <InvoiceOmsCard
         msn={list.product_msn}
+        // fetchOrdersFunc={fetchOrdersFunc}
+        // fetchTabCountFunc={fetchTabCountFunc}
         quantity={list.quantity}
         taxpercent={list.tax_percent}
         podId={list.item_id}
@@ -380,10 +380,39 @@ const UploadInvoiceOMSScreen = props => {
       // && (supplierInvoiceTotal != poTotal)
     ) {
       try {
-        setLoading(true)
+        setLoading(true);
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
         const url = `${BASE_URL}api/order/oms/mapInvoice`;
         const userId = await AsyncStorage.getItem('userId');
+        console.log("Paylod====>",
+          [
+            {
+              name: 'invoiceNumber',
+              data: String(invoiceNumber),
+            },
+            {
+              name: 'supplierId',
+              data: String(userId),
+            },
+            {
+              name: 'itemLists',
+              data: String(podId),
+            },
+            {
+              name: 'invoiceTotal',
+              data: String(supplierInvoiceTotal),
+            },
+            {
+              name: 'invoiceDate',
+              data: getMinDate(invoiceDate),
+            },
+            {
+              name: 'file',
+              filename: uploadInvoice.name,
+              type: uploadInvoice.type,
+              data: RNFetchBlob.wrap(uploadInvoice.uri),
+            },
+          ]);
         const response = await RNFetchBlob.fetch(
           'POST',
           url,
@@ -403,7 +432,7 @@ const UploadInvoiceOMSScreen = props => {
             },
             {
               name: 'itemLists',
-              data: String(itemRef),
+              data: String(podId),
             },
             {
               name: 'invoiceTotal',
@@ -422,10 +451,25 @@ const UploadInvoiceOMSScreen = props => {
           ],
         );
         const res = await response.json();
-        console.log("Res===>", res);
+        console.log('Res===>', res);
         if (res.success) {
-          setLoading(false)
-          alert(res.message)
+          setLoading(false);
+          // fetchOrdersFunc(0, '', selectedTab, shipmentType, {
+          //   pickupFromDate: '',
+          //   pickupToDate: '',
+          //   poFromDate: '',
+          //   poToDate: '',
+          //   orderType: [],
+          //   deliveryType: [],
+          //   orderRefs: [],
+          // });
+          // fetchTabCountFunc(selectedTab, shipmentType);
+          dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
+            fetchTabCount({
+              supplierId: await AsyncStorage.getItem('userId'),
+              tabRef,
+              onlineShipmentMode,
+            }));
           Toast.show({
             type: 'success',
             text2: res.message,
@@ -434,10 +478,9 @@ const UploadInvoiceOMSScreen = props => {
           });
           props.navigation.goBack();
         } else if (res.success == false) {
-          alert(res.message)
-          setLoading(false)
+          setLoading(false);
           Toast.show({
-            type: 'success',
+            type: 'error',
             text2: res.message,
             visibilityTime: 2000,
             autoHide: true,
@@ -451,7 +494,6 @@ const UploadInvoiceOMSScreen = props => {
       onSupplierInvoiceBlur();
       onInvoiceDateBlur();
       onUploadInvoiceBlur();
-      // alert("please select date")
     }
   };
 
@@ -465,7 +507,6 @@ const UploadInvoiceOMSScreen = props => {
         showBack
         navigation={props.navigation}
         showText={'Upload Invoice'}
-      //rightIconName={'business-details'}
       />
 
       <ScrollView style={styles.ContainerCss}>
@@ -485,10 +526,11 @@ const UploadInvoiceOMSScreen = props => {
               disabled={field.disabled}
             />
           )).toList()}
+
+          {Documents.map(_ => renderInputText(_))
+            .toList()
+            .toArray()}
         </View>
-        {Documents.map(_ => renderInputText(_))
-          .toList()
-          .toArray()}
         <ActionSheet
           id="action_sheet"
           onBeforeShow={data => {

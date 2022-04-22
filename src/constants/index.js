@@ -51,11 +51,17 @@ export const BOTTOM_TAB_SCREENS = [
     inactiveIcon: 'flag-2-line',
   },
   {
-    name: 'Notification',
-    component: NotificationScreen,
-    activeIcon: 'notification-3-line',
-    inactiveIcon: 'notification-3-line',
+    name: 'Profile',
+    component: ProfileScreen,
+    activeIcon: 'account-pin-box-line',
+    inactiveIcon: 'account-pin-box-line',
   },
+  // {
+  //   name: 'Notification',
+  //   component: NotificationScreen,
+  //   activeIcon: 'notification-3-line',
+  //   inactiveIcon: 'notification-3-line',
+  // },
   {
     name: 'More',
     component: MoreScreen,

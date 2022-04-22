@@ -22,8 +22,11 @@ import Header from '../../../component/common/Header';
 import CustomeDatePicker from '../../../component/common/Datepicker';
 import { BASE_URL } from '../../../redux/constants';
 import Toast from 'react-native-toast-message';
+import { fetchOrders, fetchTabCount } from '../../../redux/actions/orders';
+import { useDispatch, useSelector } from 'react-redux';
 
 const InvoiceEMSFormDetailScreen = props => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [totalAmount, setTotalAmount] = useState(
     props?.route?.params?.totalAmount,
@@ -173,8 +176,9 @@ const InvoiceEMSFormDetailScreen = props => {
       errorMessage: 'Enter valid base amount',
       showError: baseAmountError,
       value: baseAmount,
-      onChangeText: text => calculateTotalFreight(text),
+      onChangeText: text => setBaseAmount(text),
       component: FloatingLabelInputField,
+      onBlur: () => calculateTotalFreight(),
     },
     hsn: {
       title: 'HSN',
@@ -183,9 +187,9 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'HSN',
       errorMessage: 'Enter valid hsn',
       showError: hsnError,
-      value: baseAmount ? hsn : '',
-      onChangeText: text => (baseAmount ? setHsn(text) : ''),
+      value: total ? hsn : '',
       component: FloatingLabelInputField,
+      disabled: true,
     },
     taxPercentage: {
       title: 'Tax%',
@@ -194,9 +198,9 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'Tax',
       errorMessage: 'Enter valid tax',
       showError: taxError,
-      value: baseAmount ? String(taxPercentage) : '',
-      onChangeText: text => setTaxPercentage(text),
+      value: total ? String(taxPercentage) : '',
       component: FloatingLabelInputField,
+      disabled: true,
     },
     total: {
       title: 'Total',
@@ -206,8 +210,8 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'Total',
       errorMessage: 'Enter valid total',
       value: total,
-      onChangeText: text => setTotal(text),
       component: FloatingLabelInputField,
+      disabled: true,
     },
     addComment: {
       title: 'Add Comment',
@@ -229,8 +233,9 @@ const InvoiceEMSFormDetailScreen = props => {
       errorMessage: 'Enter valid base amount',
       showError: baseAmountError,
       value: loadingBaseAmount,
-      onChangeText: text => calculateLoadingCharges(text),
+      onChangeText: text => setloadingBaseAmount(text),
       component: FloatingLabelInputField,
+      onBlur: () => calculateLoadingCharges(),
     },
     loadingHsn: {
       title: 'HSN',
@@ -239,9 +244,9 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'HSN',
       errorMessage: 'Enter valid hsn',
       showError: hsnError,
-      value: loadingBaseAmount ? hsn : '',
-      onChangeText: text => (loadingBaseAmount ? setHsn(text) : ''),
+      value: loadingTotal ? hsn : '',
       component: FloatingLabelInputField,
+      disabled: true,
     },
     loadingTax: {
       title: 'Tax%',
@@ -250,9 +255,9 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'Tax',
       errorMessage: 'Enter valid tax',
       showError: taxError,
-      value: loadingBaseAmount ? String(taxPercentage) : '',
-      onChangeText: text => setTaxPercentage(text),
+      value: loadingTotal ? String(taxPercentage) : '',
       component: FloatingLabelInputField,
+      disabled: true,
     },
     loadingTotal: {
       title: 'Total',
@@ -262,8 +267,8 @@ const InvoiceEMSFormDetailScreen = props => {
       errorMessage: 'Enter valid total',
       keyboardType: 'number-pad',
       value: loadingTotal,
-      onChangeText: text => setloadingTotal(text),
       component: FloatingLabelInputField,
+      disabled: true,
     },
     misBaseAmount: {
       title: 'Base Amount',
@@ -274,8 +279,9 @@ const InvoiceEMSFormDetailScreen = props => {
       errorMessage: 'Enter valid base amount',
       showError: baseAmountError,
       value: misBaseAmount,
-      onChangeText: text => calculateMiscCharges(text),
+      onChangeText: text => setMisBaseAmount(text),
       component: FloatingLabelInputField,
+      onBlur: () => calculateMiscCharges(),
     },
     misHsn: {
       title: 'HSN',
@@ -284,9 +290,9 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'HSN',
       errorMessage: 'Enter valid hsn',
       showError: hsnError,
-      value: misBaseAmount ? hsn : '',
-      onChangeText: text => (misBaseAmount ? setHsn(text) : ''),
+      value: misTotal ? hsn : '',
       component: FloatingLabelInputField,
+      disabled: true,
     },
     misTax: {
       title: 'Tax%',
@@ -295,9 +301,9 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'Tax',
       errorMessage: 'Enter valid tax',
       showError: taxError,
-      value: misBaseAmount ? String(taxPercentage) : '',
-      onChangeText: text => setTaxPercentage(text),
+      value: misTotal ? String(taxPercentage) : '',
       component: FloatingLabelInputField,
+      disabled: true,
     },
     misTotal: {
       title: 'Total',
@@ -309,13 +315,13 @@ const InvoiceEMSFormDetailScreen = props => {
       value: misTotal,
       onChangeText: text => setMisTotal(text),
       component: FloatingLabelInputField,
+      disabled: true,
     },
   });
 
-
-  // const getTax = (taxPercentage) => {
-  //   setTaxPercentage(taxPercentage)
-  // }
+  useEffect(() => {
+    console.log('taxPercentage', taxPercentage);
+  });
 
   const onUploadInvoiceBlur = () => {
     if (uploadInvoice && uploadInvoice.name) {
@@ -333,28 +339,63 @@ const InvoiceEMSFormDetailScreen = props => {
     }
   };
 
-  const calculateTotalFreight = text => {
-    // setTaxPercentage(taxPercentage)
-    let percentage = (text / 100) * taxPercentage;
-    console.log("ok===>", taxPercentage);
-    setBaseAmount(text);
-    let total = percentage + text;
-    setTotal(total);
+  const calculateTotalFreight = () => {
+    setHsn(
+      props && props.route && props.route.params && props.route.params.hsn,
+    );
+    setTaxPercentage(
+      props &&
+      props.route &&
+      props.route.params &&
+      props.route.params.taxPercentage,
+    );
+    let total = Number(baseAmount) + Number((taxPercentage * baseAmount) / 100);
+    setTotal(`${total}`);
   };
+
+  // const calculateTotalLoadingCharges = () => {
+  //   setHsn(
+  //     props && props.route && props.route.params && props.route.params.hsn,
+  //   );
+  //   setTaxPercentage(
+  //     props &&
+  //       props.route &&
+  //       props.route.params &&
+  //       props.route.params.taxPercentage,
+  //   );
+  //   let total = Number(baseAmount) + Number((taxPercentage * baseAmount) / 100);
+  //   setTotal(`${total}`);
+  // };
 
   const calculateLoadingCharges = text => {
-    setloadingBaseAmount(text);
-    let percentage = (text / 100) * taxPercentage;
-
-    let total = percentage + text;
-    setloadingTotal(total);
+    setHsn(
+      props && props.route && props.route.params && props.route.params.hsn,
+    );
+    setTaxPercentage(
+      props &&
+      props.route &&
+      props.route.params &&
+      props.route.params.taxPercentage,
+    );
+    let total =
+      Number(loadingBaseAmount) +
+      Number((taxPercentage * loadingBaseAmount) / 100);
+    setloadingTotal(`${total}`);
   };
 
-  const calculateMiscCharges = text => {
-    setMisBaseAmount(text);
-    let percentage = (text / 100) * taxPercentage;
-    let total = percentage + text;
-    setMisTotal(total);
+  const calculateMiscCharges = () => {
+    setHsn(
+      props && props.route && props.route.params && props.route.params.hsn,
+    );
+    setTaxPercentage(
+      props &&
+      props.route &&
+      props.route.params &&
+      props.route.params.taxPercentage,
+    );
+    let total =
+      Number(misBaseAmount) + Number((taxPercentage * misBaseAmount) / 100);
+    setMisTotal(`${total}`);
   };
 
   const onInvoiceNumberBlur = () => {
@@ -523,13 +564,13 @@ const InvoiceEMSFormDetailScreen = props => {
       uploadInvoice.name
     ) {
       try {
-        setLoading(true)
+        setLoading(true);
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
         const url = `${BASE_URL}api/order/mapDropshipInvoice`;
 
-        let totalInvoiceAmount =
-          invoiceAmount + (totalAmount + 7) ||
-          invoiceAmount + (totalAmount - 7);
+        // let totalInvoiceAmount =
+        //   invoiceAmount + (totalAmount + 7) ||
+        //   invoiceAmount + (totalAmount - 7);
         let payload = {
           supplierId: await AsyncStorage.getItem('userId'),
           invoiceNumber: invoiceNumber,
@@ -550,11 +591,11 @@ const InvoiceEMSFormDetailScreen = props => {
           igstApplicable: true,
           countryCode: 356,
           frieght: {
-            charge: '',
-            hsn: '',
-            tax: '',
-            totalAmount: null,
-            remarks: '',
+            charge: baseAmount,
+            hsn: baseAmount ? hsn : '',
+            tax: baseAmount ? taxPercentage : '',
+            totalAmount: total,
+            remarks: addComment,
             countryCode: 356,
             igst: null,
             cgst: 0,
@@ -562,10 +603,10 @@ const InvoiceEMSFormDetailScreen = props => {
             vatAmount: 0,
           },
           loading: {
-            charge: '',
-            hsn: '',
-            tax: '',
-            totalAmount: null,
+            charge: loadingBaseAmount,
+            hsn: loadingBaseAmount ? hsn : '',
+            tax: loadingBaseAmount ? taxPercentage : '',
+            totalAmount: loadingBaseAmount ? loadingTotal : '',
             countryCode: 356,
             igst: null,
             cgst: 0,
@@ -573,10 +614,10 @@ const InvoiceEMSFormDetailScreen = props => {
             vatAmount: 0,
           },
           misc: {
-            charge: '',
-            hsn: '',
-            tax: '',
-            totalAmount: null,
+            charge: misBaseAmount,
+            hsn: misBaseAmount ? hsn : '',
+            tax: misBaseAmount ? taxPercentage : '',
+            totalAmount: misBaseAmount ? misTotal : '',
             countryCode: 356,
             igst: null,
             cgst: 0,
@@ -614,23 +655,28 @@ const InvoiceEMSFormDetailScreen = props => {
           ],
         );
         const res = await response.json();
-        console.log("Respose===>", res, JSON.stringify(payload));
+        console.log('Respose===>', res, JSON.stringify(payload));
         if (res.success) {
-          setLoading(false)
+          setLoading(false);
+          dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
+            fetchTabCount({
+              supplierId: await AsyncStorage.getItem('userId'),
+              tabRef,
+              onlineShipmentMode,
+            }));
           Toast.show({
             type: 'success',
             text2: res.message,
             visibilityTime: 2000,
             autoHide: true,
           });
-          props.navigation.reset({
-            index: 0,
-            routes: [{ name: 'HomeApp' }],
+          props.navigation.navigate('Orders', {
+            selectedTab: 'UPLOAD_INVOICE',
           });
         } else if (res.success == false) {
           setLoading(false);
           Toast.show({
-            type: 'success',
+            type: 'error',
             text2: res.message,
             visibilityTime: 2000,
             autoHide: true,

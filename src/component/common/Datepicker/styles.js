@@ -4,7 +4,7 @@ import colors from "../../../Theme/Colors"
 
 const styles = StyleSheet.create({
   WrapperStyle: {
-    marginBottom: Dimension.margin10,
+    //marginBottom: Dimension.margin10,
     paddingHorizontal: 0,
   },
 
@@ -12,16 +12,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.FontColor,
     borderRadius: 4,
-    paddingHorizontal: Dimension.padding12,
     height: Dimension.height40,
     paddingBottom: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: Dimension.margin10,
-    backgroundColor: colors.WhiteColor,
-    textAlignVertical: 'center',
-    paddingVertical: Dimension.padding12,
-    marginBottom: Dimension.margin20
   },
   placeholderCss: {
     fontSize: Dimension.font14,
@@ -42,30 +34,36 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
   },
   inputStyle: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-
-    paddingLeft: 0,
+    paddingLeft:Dimension.padding12,
+    paddingRight:Dimension.padding12,
   },
   iconStyle: {
     width: Dimension.width24,
     height: Dimension.height24,
-    paddingRight: 0,
+    marginRight: Dimension.padding10,
   },
   errorText: {
     fontSize: Dimension.font10,
     color: colors.BrandColor,
     fontFamily: Dimension.CustomMediumFont,
-    bottom: 20
+    //bottom: 20
+  },
+  errorText: {
+    fontSize: Dimension.font10,
+    color: colors.BrandColor,
+    fontFamily: Dimension.CustomMediumFont,
   },
   disabledInputStyle: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-
-    paddingLeft: 0,
+    paddingLeft:Dimension.padding12,
+    paddingRight:Dimension.padding12,
     backgroundColor: colors.DisableStateColor,
+    //paddingHorizontal: Dimension.padding12,
   },
 });
 

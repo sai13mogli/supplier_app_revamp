@@ -15,7 +15,8 @@ const styles = StyleSheet.create({
   },
   ContainerCss: {
     backgroundColor: Colors.WhiteColor,
-    padding: Dimension.padding15
+    padding: Dimension.padding15,
+    marginTop:Dimension.margin25
   },
   addnewtxt: {
     fontSize: Dimension.font14,

@@ -2,6 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 //import { Scale } from '../../CommonConfig';
 import Dimension from '../../Theme/Dimension';
 import Colors from '../../Theme/Colors';
+//import { colors } from 'react-native-elements';
 
 const styles = StyleSheet.create({
   wrapperView: {
@@ -15,6 +16,15 @@ const styles = StyleSheet.create({
     padding: Dimension.padding15,
     backgroundColor: Colors.grayShade1,
 
+  },
+  reddot:{
+    width:Dimension.width8,
+    height:Dimension.height8,
+    borderRadius:Dimension.width10,
+    backgroundColor:Colors.BrandColor,
+    position:"absolute",
+    top:Dimension.padding2,
+    right:0
   },
   TopTabWrap: {
     paddingHorizontal: Dimension.padding10,
@@ -36,7 +46,7 @@ const styles = StyleSheet.create({
     maxWidth: Dimension.width100,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
-    minHeight: Dimension.height50
+   minHeight: Dimension.height50
   },
   selectedTabCss: {
     backgroundColor: Colors.FontColor,
@@ -47,7 +57,7 @@ const styles = StyleSheet.create({
     maxWidth: Dimension.width100,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
-    minHeight: Dimension.height50
+   minHeight: Dimension.height50
   },
   selectedTabTxt: {
     fontFamily: Dimension.CustomMediumFont,
@@ -131,16 +141,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.FontColor,
     borderRadius: 4,
-    backgroundColo: Colors.grayShade13,
     paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding9,
     height: Dimension.height35,
+    backgroundColor:Colors.grayShade1
   },
   filterIcon: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font16,
     color: Colors.FontColor,
     marginLeft: Dimension.margin5,
-    marginTop: Dimension.margin5
+    marginTop: Dimension.margin2
   },
   filterApplied: {
     height: Dimension.height8,
@@ -204,13 +214,19 @@ const styles = StyleSheet.create({
   },
   footerWrap: {
     backgroundColor: '#fff',
-    paddingTop: Dimension.padding10,
+    paddingTop: Dimension.padding12,
     borderTopLeftRadius: 10,
-    borderTopRightadius: 10,
+    borderTopRightRadius: 10,
     position: 'absolute',
     flex: 1,
     width: '100%',
     bottom: 0,
+  },
+  profilependingTxt:{
+   fontSize:Dimension.font12,
+   fontFamily:Dimension.CustomMediumFont,
+   color:Colors.FontColor ,
+   paddingVertical: Dimension.padding30,
   },
 });
 
