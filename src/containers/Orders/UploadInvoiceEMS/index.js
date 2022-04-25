@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, Image } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Text, View, FlatList, Image} from 'react-native';
 import Header from '../../../component/common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../../../component/common/Button';
-import { getInvoiceEMSDetails } from '../../../services/orders';
+import {getInvoiceEMSDetails} from '../../../services/orders';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import styles from './style';
@@ -60,7 +60,7 @@ const UploadInvoiceScreen = props => {
         supplierId: await AsyncStorage.getItem('userId'),
         orderRef: orderRef,
       };
-      const { data } = await getInvoiceEMSDetails(payload);
+      const {data} = await getInvoiceEMSDetails(payload);
       if (data.success) {
         setInvoiceList(data?.data?.itemList);
         setLoading(false);
@@ -70,7 +70,7 @@ const UploadInvoiceScreen = props => {
     }
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     return (
       <InvoiceEmsCard
         msn={item.productMsn}
@@ -97,7 +97,7 @@ const UploadInvoiceScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             // source={require('../../assets/images/emptyOrders.png')}
-            style={{ width: 300, height: 200 }}
+            style={{width: 300, height: 200}}
           />
           <Text style={styles.emptyTxt}>No Data Available</Text>
         </View>
@@ -112,7 +112,8 @@ const UploadInvoiceScreen = props => {
         showBack
         navigation={props.navigation}
         showText={'Upload Invoice'}
-      // rightIconName={'business-details'}
+        showBell
+        // rightIconName={'business-details'}
       />
       <FlatList
         data={invoiceList}

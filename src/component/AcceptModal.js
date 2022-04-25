@@ -6,17 +6,17 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { acceptOrder } from '../services/orders';
+import {acceptOrder} from '../services/orders';
 import Toast from 'react-native-toast-message';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 const deviceWidth = Dimensions.get('window').width;
 import CustomeIcon from './common/CustomeIcon';
-import moment from "moment";
+import moment from 'moment';
 
 const AcceptModal = props => {
   const {
@@ -63,7 +63,7 @@ const AcceptModal = props => {
         itemId: `${itemId}`,
         pickupDate: day.dateString.split('-').reverse().join('-'),
       };
-      const { data } = await acceptOrder(payload);
+      const {data} = await acceptOrder(payload);
       if (data && data.success) {
         fetchOrdersFunc(0, '', selectedTab, shipmentType, {
           pickupFromDate: '',
@@ -134,6 +134,7 @@ const AcceptModal = props => {
   };
 
   const getMaxDate = () => {
+    console.log('pickupDate', pickupDate);
     let mutatedate = new Date(Number(pickupDate) + 1 * 24 * 60 * 60 * 1000);
     let mutateMonth;
 
@@ -148,6 +149,7 @@ const AcceptModal = props => {
         ? `0${Number(mutatedate.getDate())}`
         : `${Number(mutatedate.getDate())}`;
     let date = mutatedate.getFullYear() + '-' + mutateMonth + '-' + currdate;
+    console.log('maxdate', date);
     return date;
   };
 
@@ -162,7 +164,7 @@ const AcceptModal = props => {
         setDisplayCalendar(false);
       }}
       coverScreen={true}
-      style={{ padding: 0, margin: 0 }}
+      style={{padding: 0, margin: 0}}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
       onBackdropPress={() => setDisplayCalendar(false)}
@@ -212,7 +214,7 @@ const AcceptModal = props => {
           <TouchableOpacity style={styles.rejectCtabtn} onPress={onAccept}>
             <Text style={styles.rejectCtaTxt}>ACCEPT</Text>
             {acceptLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         </View>

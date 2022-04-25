@@ -25,7 +25,12 @@ const SettingsScreen = props => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      <AppHeader showText={'Settings'} navigation={props.navigation} showBack />
+      <AppHeader
+        showText={'Settings'}
+        navigation={props.navigation}
+        showBack
+        showBell
+      />
       <View style={styles.bgWrapper}>
         <Text style={styles.headingtxt}>SMS PREFERENCES</Text>
         <View

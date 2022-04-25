@@ -117,6 +117,7 @@ const CategoryScreen = props => {
         <>
           <Header
             showBack
+            showBell
             navigation={props.navigation}
             showText={'Category & Brand'}
             rightIconName={'category--brand'}></Header>

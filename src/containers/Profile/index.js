@@ -85,7 +85,12 @@ const ProfileScreen = props => {
 
   return (
     <View style={{flex: 1}}>
-      <Header showText={'My Profile'} navigation={props.navigation} showBack />
+      <Header
+        showText={'My Profile'}
+        navigation={props.navigation}
+        showBack
+        showBell
+      />
       {profileStatus == STATE_STATUS.FETCHING ? (
         <ActivityIndicator
           style={{alignSelf: 'center', margin: Dimension.margin12}}

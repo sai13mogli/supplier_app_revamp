@@ -583,6 +583,7 @@ const CategoryBrandScreen = props => {
     <View style={{flex: 1}}>
       <Header
         showBack
+        showBell
         navigation={props.navigation}
         showText={'Category & Brand'}
         rightIconName={'category--brand'}></Header>

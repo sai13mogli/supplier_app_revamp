@@ -1143,28 +1143,9 @@ const DocumentsScreen = props => {
     }
   };
 
-  return (
-    <View style={{flex: 1}}>
-      <Header
-        showBack
-        navigation={props.navigation}
-        showText={'Documents'}
-        rightIconName={'single-product-upload'}
-      />
-      <ScrollView style={styles.ContainerCss}>
-        {Documents.map(_ => renderInputText(_))
-          .toList()
-          .toArray()}
-        {!uploadDisabled ? noteText() : null}
-        {!uploadDisabled ? (
-          <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
-            title={'By registering you agree to our'}
-          />
-        ) : null}
-      </ScrollView>
-      {!uploadDisabled ? (
+  const renderSubmit = () => {
+    if (!uploadDisabled) {
+      return (
         <View style={styles.bottombtnWrap}>
           <CustomButton
             title="SUBMIT"
@@ -1182,7 +1163,47 @@ const DocumentsScreen = props => {
             onPress={() => setConfirmModal(true)}
           />
         </View>
-      ) : null}
+      );
+    } else {
+      return null;
+    }
+  };
+
+  const renderAgree = () => {
+    if (!uploadDisabled) {
+      return (
+        <Checkbox
+          checked={isSelected}
+          onPress={() => setSelection(!isSelected)}
+          title={'By registering you agree to our'}
+        />
+      );
+    } else {
+      return null;
+    }
+  };
+
+  return (
+    <View style={{flex: 1}}>
+      <Header
+        showBack
+        showBell
+        navigation={props.navigation}
+        showText={'Documents'}
+        rightIconName={'single-product-upload'}
+      />
+      <ScrollView style={styles.ContainerCss}>
+        {Documents.map(_ => renderInputText(_))
+          .toList()
+          .toArray()}
+        {!uploadDisabled ? noteText() : null}
+        {profileData && profileData.verificationStatus !== 15
+          ? renderAgree()
+          : null}
+      </ScrollView>
+      {profileData && profileData.verificationStatus !== 15
+        ? renderSubmit()
+        : null}
 
       <ActionSheet
         id="action_sheet"

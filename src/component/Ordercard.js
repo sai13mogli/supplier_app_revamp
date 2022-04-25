@@ -8,8 +8,8 @@ import {
   ActivityIndicator,
   PermissionsAndroid,
 } from 'react-native';
-import React, { useState, useEffect, useCallback } from 'react';
-import { getImageUrl, markOutForOrderApi, getItemInfo } from '../services/orders';
+import React, {useState, useEffect, useCallback} from 'react';
+import {getImageUrl, markOutForOrderApi, getItemInfo} from '../services/orders';
 import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
@@ -33,7 +33,7 @@ import ProofOfDeliveryModal from '../component/ProofOfDeliveryModal';
 import AcceptModal from './AcceptModal';
 import AddView from './AddView';
 import SplitQuantityModal from './SplitQuantityModal';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -98,7 +98,7 @@ const Ordercard = props => {
   const [shipmentLoader, setShipmentLoader] = useState(false);
   const [podLoader, setPodLoader] = useState(false);
   const [debitLoader, setDebitLoader] = useState(false);
-  const { navigate } = useNavigation();
+  const {navigate} = useNavigation();
   const navigation = useNavigation();
   const [tooltip1, settooltip1] = useState(false);
 
@@ -110,7 +110,7 @@ const Ordercard = props => {
   }, []);
 
   const fetchImage = async () => {
-    const { data } = await getImageUrl(msn);
+    const {data} = await getImageUrl(msn);
     let imageUrl =
       'https://cdn.moglix.com/' +
       (data &&
@@ -222,7 +222,7 @@ const Ordercard = props => {
         if (!isInvoice) {
           setPoLoader(true);
         }
-        const { data } = await getpoChallan(orderRef);
+        const {data} = await getpoChallan(orderRef);
         if (data && data.success) {
           //Image URL which we want to download
           image_URL = data.responseMessage;
@@ -240,7 +240,7 @@ const Ordercard = props => {
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
       //fs: To get the directory path in which we want our image to download
-      const { config, fs } = RNFetchBlob;
+      const {config, fs} = RNFetchBlob;
       let PictureDir =
         Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
       let options = {
@@ -258,7 +258,7 @@ const Ordercard = props => {
         },
       };
       config(options)
-        .fetch('GET', image_URL, { 'Cache-Control': 'no-store' })
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
         .then(res => {
           //Showing alert after successful downloading
           setInvoiceLoading(false);
@@ -305,7 +305,7 @@ const Ordercard = props => {
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
       //fs: To get the directory path in which we want our image to download
-      const { config, fs } = RNFetchBlob;
+      const {config, fs} = RNFetchBlob;
       let PictureDir =
         Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
       let options = {
@@ -323,7 +323,7 @@ const Ordercard = props => {
         },
       };
       config(options)
-        .fetch('GET', image_URL, { 'Cache-Control': 'no-store' })
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
         .then(res => {
           //Showing alert after successful downloading
           setShipmentLoader(false);
@@ -356,7 +356,7 @@ const Ordercard = props => {
   const createManifest = async () => {
     try {
       setManifestLoader(true);
-      const { data } = await createManifestApi({
+      const {data} = await createManifestApi({
         supplierId: await AsyncStorage.getItem('userId'),
         itemList: [`${itemId}`],
         source: 0,
@@ -429,7 +429,7 @@ const Ordercard = props => {
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
       //fs: To get the directory path in which we want our image to download
-      const { config, fs } = RNFetchBlob;
+      const {config, fs} = RNFetchBlob;
       let PictureDir =
         Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
       let options = {
@@ -447,7 +447,7 @@ const Ordercard = props => {
         },
       };
       config(options)
-        .fetch('GET', image_URL, { 'Cache-Control': 'no-store' })
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
         .then(res => {
           //Showing alert after successful downloading
           setPodLoader(false);
@@ -473,14 +473,14 @@ const Ordercard = props => {
   const getDebitNoteUrl = async () => {
     try {
       setDebitLoader(true);
-      const { data } = await getItemInfo(supplierId, `${itemRef}`);
+      const {data} = await getItemInfo(supplierId, `${itemRef}`);
       if (data.success) {
         getDebitNoteFn(
           data &&
-          data.data &&
-          data.data.records &&
-          data.data.records[0] &&
-          data.data.records[0].dnUrl,
+            data.data &&
+            data.data.records &&
+            data.data.records[0] &&
+            data.data.records[0].dnUrl,
         );
       } else {
         setDebitLoader(false);
@@ -529,7 +529,7 @@ const Ordercard = props => {
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
       //fs: To get the directory path in which we want our image to download
-      const { config, fs } = RNFetchBlob;
+      const {config, fs} = RNFetchBlob;
       let PictureDir =
         Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
       let options = {
@@ -547,7 +547,7 @@ const Ordercard = props => {
         },
       };
       config(options)
-        .fetch('GET', image_URL, { 'Cache-Control': 'no-store' })
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
         .then(res => {
           //Showing alert after successful downloading
           setDebitLoader(false);
@@ -577,17 +577,23 @@ const Ordercard = props => {
         {cta == 'REJECT' ? (
           <TouchableOpacity
             disabled={rejectLoader}
-            onPress={() => setRejectModal(true)}
+            onPress={() => {
+              setIsOrderVisible(false);
+              setRejectModal(true);
+            }}
             style={styles.rejectCtabtn}>
             <Text style={styles.rejectCtaTxt}>{cta}</Text>
             {rejectLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         ) : cta == 'ACCEPT' ? (
           <TouchableOpacity
             // disabled={acceptLoader}
-            onPress={() => setDisplayCalendar(true)}
+            onPress={() => {
+              setIsOrderVisible(false);
+              setDisplayCalendar(true);
+            }}
             style={styles.acceptCtabtn}>
             <Text style={styles.acceptCtaTxt}>{cta}</Text>
           </TouchableOpacity>
@@ -623,7 +629,7 @@ const Ordercard = props => {
             {invoiceLoading && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -645,7 +651,7 @@ const Ordercard = props => {
             {poLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -668,7 +674,7 @@ const Ordercard = props => {
             {poLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -693,7 +699,7 @@ const Ordercard = props => {
             {poLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -715,7 +721,7 @@ const Ordercard = props => {
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -736,7 +742,7 @@ const Ordercard = props => {
             {podLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -757,7 +763,7 @@ const Ordercard = props => {
             {debitLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -774,7 +780,7 @@ const Ordercard = props => {
                 quantity,
                 totalAmount,
                 taxPercentage,
-                selectedTab
+                selectedTab,
               })
             }
             style={[
@@ -790,7 +796,7 @@ const Ordercard = props => {
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -809,7 +815,7 @@ const Ordercard = props => {
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -828,7 +834,7 @@ const Ordercard = props => {
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -849,7 +855,7 @@ const Ordercard = props => {
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -924,7 +930,7 @@ const Ordercard = props => {
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -947,7 +953,7 @@ const Ordercard = props => {
           </>
         ) : cta == 'MAP_INVOICE_PENDING' ? (
           <>
-            <View style={{ flexDirection: 'column', flex: 35 }}>
+            <View style={{flexDirection: 'column', flex: 35}}>
               <TouchableOpacity
                 disabled={true}
                 style={[
@@ -1002,7 +1008,7 @@ const Ordercard = props => {
           </>
         ) : cta == 'CREATE_MANIFEST_DISABLED' ? (
           <>
-            <View style={{ flexDirection: 'column', flex: 0, flexBasis: '50%' }}>
+            <View style={{flexDirection: 'column', flex: 0, flexBasis: '50%'}}>
               <TouchableOpacity
                 disabled={true}
                 style={[
@@ -1038,7 +1044,7 @@ const Ordercard = props => {
             {manifestLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -1059,7 +1065,7 @@ const Ordercard = props => {
             {manifestLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             )}
           </TouchableOpacity>
@@ -1094,7 +1100,7 @@ const Ordercard = props => {
   };
 
   const onMarkForDelivery = async () => {
-    const { data } = await markOutForOrderApi(supplierId, itemId);
+    const {data} = await markOutForOrderApi(supplierId, itemId);
     if (data.success) {
       fetchOrdersFunc(0, '', selectedTab, shipmentType, {
         pickupFromDate: '',
@@ -1125,16 +1131,11 @@ const Ordercard = props => {
     props.setLoadingTabs(true);
   };
 
-
-
-
-
-
   const isReadMore = descriptionText => {
     if (descriptionText && descriptionText.length > 60) {
-      return { readMore: true, text: descriptionText.slice(0, 60) };
+      return {readMore: true, text: descriptionText.slice(0, 60)};
     } else {
-      return { readMore: false, text: descriptionText };
+      return {readMore: false, text: descriptionText};
     }
   };
 
@@ -1148,7 +1149,7 @@ const Ordercard = props => {
               : styles.orderCardwrapInner,
           ]}>
           {!fromModal &&
-            (selectedTab == 'PENDING_ACCEPTANCE' || selectedTab == 'SHIPMENT') ? (
+          (selectedTab == 'PENDING_ACCEPTANCE' || selectedTab == 'SHIPMENT') ? (
             <CustomeIcon
               name={
                 (bulkItemIds || []).includes(itemId)
@@ -1164,10 +1165,10 @@ const Ordercard = props => {
               onPress={() =>
                 selectedTab == 'SHIPMENT'
                   ? selectItemData({
-                    itemId,
-                    shipmentUrl,
-                    invoiceUrl: podUrl || invoiceUrl,
-                  })
+                      itemId,
+                      shipmentUrl,
+                      invoiceUrl: podUrl || invoiceUrl,
+                    })
                   : selectItemId(itemId)
               }
               style={{
@@ -1184,7 +1185,7 @@ const Ordercard = props => {
                 //     orderImage ||
                 //     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
                 // }}
-                source={{ uri: orderImage }}
+                source={{uri: orderImage}}
                 style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
               />
             ) : (
@@ -1205,8 +1206,8 @@ const Ordercard = props => {
             <Text
               style={[
                 fromModal
-                  ? { color: Colors.FontColor }
-                  : { color: Colors.BrandColor },
+                  ? {color: Colors.FontColor}
+                  : {color: Colors.BrandColor},
                 styles.msnName,
               ]}>
               {msn}
@@ -1219,8 +1220,8 @@ const Ordercard = props => {
                     ? '...'
                     : ''}
                   {lengthMore &&
-                    !fromModal &&
-                    isReadMore(productName).readMore ? (
+                  !fromModal &&
+                  isReadMore(productName).readMore ? (
                     <Text
                       onPress={toggleShowMoreTxt}
                       style={styles.readMoretxt}>
@@ -1246,8 +1247,8 @@ const Ordercard = props => {
                 <Text style={styles.taxpercentageTxt}>{taxPercentage}%</Text>
               </View>
             ) : null}
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ marginRight: Dimension.margin20 }}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{marginRight: Dimension.margin20}}>
                 <Text style={styles.TitleLightTxt}>
                   PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
                 </Text>
@@ -1281,16 +1282,16 @@ const Ordercard = props => {
                 </Text>
               </View>
             </View>
-            <View style={{ flexDirection: 'row', marginTop: Dimension.margin10 }}>
+            <View style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
               <Text style={styles.GstWrapTxt}>{orderTypeString}</Text>
               <Text style={styles.shipmentModeWrap}>
                 {shipmentMode == 2
                   ? 'Dropship'
                   : shipmentMode == 3
-                    ? 'Door Delivery'
-                    : shipmentMode == 1
-                      ? 'Oneshipe'
-                      : shipmentType}
+                  ? 'Door Delivery'
+                  : shipmentMode == 1
+                  ? 'Oneshipe'
+                  : shipmentType}
               </Text>
               {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
               <Text style={styles.shipmentModeStringWrap}>
@@ -1303,51 +1304,46 @@ const Ordercard = props => {
           style={
             fromModal
               ? {
-                flexDirection: 'row',
-                flex: 1,
-                marginTop: Dimension.margin30,
-                padding: Dimension.padding15,
-                borderTopColor: Colors.grayShade1,
-                borderTopWidth: 1,
-              }
-              : { flexDirection: 'row', flex: 1, marginTop: Dimension.margin15 }
+                  flexDirection: 'row',
+                  flex: 1,
+                  marginTop: Dimension.margin30,
+                  padding: Dimension.padding15,
+                  borderTopColor: Colors.grayShade1,
+                  borderTopWidth: 1,
+                }
+              : {flexDirection: 'row', flex: 1, marginTop: Dimension.margin15}
           }>
           {/* {renderOrdersStageCTAs(invoiceUrl, fromCTA, podUrl)} */}
-         {OrderStage !== 'CANCELLED' ? (
+          {OrderStage !== 'CANCELLED' ? (
             <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
               {renderPartialCTAs(invoiceUrl, fromCTA, podUrl)}
               {!showMoreCTA
                 ? renderFurtherCTAs(invoiceUrl, fromCTA, podUrl)
                 : null}
             </View>
-          ) 
-          : 
-          (
-            
-            <View style={{flex: 1,}}>
-              <View style={{flexDirection: 'row',}}>
-              <Text
-                style={styles.cancelStatusTxt}>
-                {statusText} 
-              </Text>
-              <TouchableOpacity style={{marginLeft:Dimension.margin10}} onPress={() => settooltip1(!tooltip1)}>
-                 <Image source={require('../assets/images/tooltipIcon.png')} style={{width: 20, height: 20}}></Image>
-             </TouchableOpacity>
-             </View>
-            {tooltip1 && (
-              <View style={styles.tooltipWrap}>
-                <View style={styles.arrow}></View>
-              <Text
-                style={styles.remarkTxt}>
-                 {remark}
-              </Text>
+          ) : (
+            <View style={{flex: 1}}>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.cancelStatusTxt}>{statusText}</Text>
+                <TouchableOpacity
+                  style={{marginLeft: Dimension.margin10}}
+                  onPress={() => settooltip1(!tooltip1)}>
+                  <Image
+                    source={require('../assets/images/tooltipIcon.png')}
+                    style={{width: 20, height: 20}}></Image>
+                </TouchableOpacity>
               </View>
-            )}
+              {tooltip1 && (
+                <View style={styles.tooltipWrap}>
+                  <View style={styles.arrow}></View>
+                  <Text style={styles.remarkTxt}>{remark}</Text>
+                </View>
+              )}
             </View>
           )}
 
           {actionCTA && actionCTA.length > 2 ? (
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <TouchableOpacity
                 onPress={toggleMoreCTAs}
                 style={styles.showMoreCta}>
@@ -1378,7 +1374,7 @@ const Ordercard = props => {
               setIsOrderVisible(false);
             }}
             coverScreen={true}
-            style={{ padding: 0, margin: 0 }}
+            style={{padding: 0, margin: 0}}
             deviceWidth={deviceWidth}
             hasBackdrop={true}
             onBackdropPress={() => setIsOrderVisible(false)}
@@ -1474,6 +1470,7 @@ const Ordercard = props => {
           shipmentType={shipmentType}
           displayCalendar={displayCalendar}
           setDisplayCalendar={setDisplayCalendar}
+          pickupDate={pickupDate}
         />
       )}
       {addViewModal && (
@@ -1766,8 +1763,8 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin10,
     paddingVertical: Dimension.padding6,
   },
-  LeftpartModal: { flex: 1 },
-  orderCardwrapInnerModal: { paddingHorizontal: Dimension.padding15 },
+  LeftpartModal: {flex: 1},
+  orderCardwrapInnerModal: {paddingHorizontal: Dimension.padding15},
   rupeeSign: {
     fontFamily: Dimension.CustomRobotoBold,
     fontSize: Dimension.font12,
@@ -1797,15 +1794,15 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     padding: Dimension.padding15,
   },
-  cancelStatusTxt:{
-    fontSize:Dimension.font12,
-    fontFamily:Dimension.CustomMediumFont,
-    color:Colors.FontColor
+  cancelStatusTxt: {
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    color: Colors.FontColor,
   },
-  remarkTxt:{
-    fontSize:Dimension.font12,
-    fontFamily:Dimension.CustomMediumFont,
-    color:Colors.WhiteColor
+  remarkTxt: {
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    color: Colors.WhiteColor,
   },
   tooltipWrap: {
     backgroundColor: '#000',
@@ -1814,7 +1811,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     //marginHorizontal: Dimension.margin15,
     padding: Dimension.padding8,
-    alignSelf:"flex-start"
+    alignSelf: 'flex-start',
   },
   arrow: {
     borderLeftColor: '#fff',

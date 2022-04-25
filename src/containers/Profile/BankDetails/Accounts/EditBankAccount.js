@@ -236,6 +236,7 @@ const EditBankAccount = props => {
         <>
             <Header
                 showBack
+                showBell
                 navigation={props.navigation}
                 showText={editID ? 'Edit Bank Account' : 'Add Bank Account'}
                 rightIconName={'bank-details'}>

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
-  ImageBackground
+  ImageBackground,
 } from 'react-native';
 import React, {useState, useCallback} from 'react';
 import Modal from 'react-native-modal';
@@ -30,6 +30,7 @@ const Productcard = props => {
     shipmentModeString,
     taxPercentage,
     msn,
+    orderImage,
   } = props;
   const [showMoreTxt, setShowMoreTxt] = useState(false);
   const [lengthMore, setLengthMore] = useState(false);
@@ -61,17 +62,18 @@ const Productcard = props => {
       <View style={styles.orderCardwrapInnerModal}>
         <View style={styles.LeftpartModal}>
           <ImageBackground
-           source={require('../assets/images/rectanglebg.png')}
-           style={{width:62,height:62,padding:2}}
-          >
-        <Image
-           
-           source={require('../assets/images/Prd.png')}
-           style={styles.imgStyleModal}
-         />
-            
+            source={require('../assets/images/rectanglebg.png')}
+            style={{width: 62, height: 62, padding: 2}}>
+            {orderImage ? (
+              <Image source={{uri: orderImage}} style={styles.imgStyleModal} />
+            ) : (
+              <Image
+                source={require('../assets/images/default_image.png')}
+                style={styles.imgStyleModal}
+              />
+            )}
           </ImageBackground>
-          
+
           <View style={styles.quantityTxt}>
             <Text style={styles.TitleLightTxt}>
               Qty - <Text style={styles.TitleBoldTxt}>{quantity}</Text>
@@ -89,14 +91,13 @@ const Productcard = props => {
             {productName}
           </Text>
           {lengthMore ? (
-            <Text 
-            //onPress={toggleShowMoreTxt} 
-            style={styles.readMoretxt}>
+            <Text
+              //onPress={toggleShowMoreTxt}
+              style={styles.readMoretxt}>
               {showMoreTxt ? 'Read less' : 'Read more'}
             </Text>
           ) : null}
-          <View
-            style={{flexDirection: 'row', marginBottom: Dimension.margin5,}}>
+          <View style={{flexDirection: 'row', marginBottom: Dimension.margin5}}>
             <Text style={styles.TotalamounTxt}>
               {' '}
               <Text style={styles.rupeeSign}>₹ </Text>
@@ -245,20 +246,17 @@ const styles = StyleSheet.create({
   LeftpartModal: {
     flex: 2,
     marginRight: Dimension.margin12,
- 
   },
   rightPart: {
     flex: 8,
- 
   },
   orderCardwrapInnerModal: {
     padding: Dimension.padding12,
     flexDirection: 'row',
     flex: 1,
-    borderWidth:1,
-    borderColor:Colors.BoxBorderColor,
-    borderRadius:8,
-    
+    borderWidth: 1,
+    borderColor: Colors.BoxBorderColor,
+    borderRadius: 8,
   },
   rupeeSign: {
     fontFamily: Dimension.CustomRobotoBold,

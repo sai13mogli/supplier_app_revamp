@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { OrderedMap } from 'immutable';
+import React, {useState, useEffect} from 'react';
+import {OrderedMap} from 'immutable';
 import RNFetchBlob from 'rn-fetch-blob';
 import {
   View,
@@ -17,13 +17,13 @@ import colors from '../../../Theme/Colors';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import FileUpload from '../../../component/common/FileUpload';
-import ActionSheet, { SheetManager } from 'react-native-actions-sheet';
+import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import Header from '../../../component/common/Header';
 import CustomeDatePicker from '../../../component/common/Datepicker';
-import { BASE_URL } from '../../../redux/constants';
+import {BASE_URL} from '../../../redux/constants';
 import Toast from 'react-native-toast-message';
-import { fetchOrders, fetchTabCount } from '../../../redux/actions/orders';
-import { useDispatch, useSelector } from 'react-redux';
+import {fetchOrders, fetchTabCount} from '../../../redux/actions/orders';
+import {useDispatch, useSelector} from 'react-redux';
 
 const InvoiceEMSFormDetailScreen = props => {
   const dispatch = useDispatch();
@@ -345,9 +345,9 @@ const InvoiceEMSFormDetailScreen = props => {
     );
     setTaxPercentage(
       props &&
-      props.route &&
-      props.route.params &&
-      props.route.params.taxPercentage,
+        props.route &&
+        props.route.params &&
+        props.route.params.taxPercentage,
     );
     let total = Number(baseAmount) + Number((taxPercentage * baseAmount) / 100);
     setTotal(`${total}`);
@@ -373,9 +373,9 @@ const InvoiceEMSFormDetailScreen = props => {
     );
     setTaxPercentage(
       props &&
-      props.route &&
-      props.route.params &&
-      props.route.params.taxPercentage,
+        props.route &&
+        props.route.params &&
+        props.route.params.taxPercentage,
     );
     let total =
       Number(loadingBaseAmount) +
@@ -389,9 +389,9 @@ const InvoiceEMSFormDetailScreen = props => {
     );
     setTaxPercentage(
       props &&
-      props.route &&
-      props.route.params &&
-      props.route.params.taxPercentage,
+        props.route &&
+        props.route.params &&
+        props.route.params.taxPercentage,
     );
     let total =
       Number(misBaseAmount) + Number((taxPercentage * misBaseAmount) / 100);
@@ -658,12 +658,14 @@ const InvoiceEMSFormDetailScreen = props => {
         console.log('Respose===>', res, JSON.stringify(payload));
         if (res.success) {
           setLoading(false);
-          dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
+          dispatch(
+            fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
             fetchTabCount({
               supplierId: await AsyncStorage.getItem('userId'),
               tabRef,
               onlineShipmentMode,
-            }));
+            }),
+          );
           Toast.show({
             type: 'success',
             text2: res.message,
@@ -706,6 +708,7 @@ const InvoiceEMSFormDetailScreen = props => {
       }}>
       <Header
         showBack
+        showBell
         navigation={props.navigation}
         showText={'Upload Invoice'}
         rightIconName={'business-details'}></Header>
@@ -752,8 +755,8 @@ const InvoiceEMSFormDetailScreen = props => {
         </ActionSheet>
       </ScrollView>
 
-      <View style={[styles.bottombtnWrap, { flexDirection: 'row' }]}>
-        <View style={{ marginRight: 15, flex: 1 }}>
+      <View style={[styles.bottombtnWrap, {flexDirection: 'row'}]}>
+        <View style={{marginRight: 15, flex: 1}}>
           <CustomButton
             buttonColor={colors.WhiteColor}
             borderColor={colors.transparent}
@@ -763,7 +766,7 @@ const InvoiceEMSFormDetailScreen = props => {
             onPress={onCancel}
           />
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <CustomButton
             buttonColor={colors.BrandColor}
             borderColor={colors.BrandColor}

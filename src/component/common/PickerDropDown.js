@@ -23,7 +23,7 @@ const PickerDropDown = props => {
         <Picker
           selectedValue={value}
           onValueChange={onValueChange}
-          style={styles.pickerStyle}
+          style={disabled ? styles.disabledpickerStyle : styles.pickerStyle}
           enabled={enabled || disabled}>
           <Picker.Item
             key={'noKey'}
@@ -83,6 +83,14 @@ const styles = StyleSheet.create({
   },
   pickerStyle: {
     backgroundColor: colors.WhiteColor,
+    fontSize: Dimension.font14,
+    color: colors.FontColor,
+    fontWeight: 'normal',
+    fontFamily: Dimension.CustomRegularFont,
+    //height:40
+  },
+  disabledpickerStyle: {
+    backgroundColor: colors.DisableStateColor,
     fontSize: Dimension.font14,
     color: colors.FontColor,
     fontWeight: 'normal',
