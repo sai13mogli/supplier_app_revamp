@@ -86,7 +86,7 @@ const UploadInvoiceOMSScreen = props => {
     },
     supplierInvoiceTotal: {
       title: 'Supplier Invoice Total',
-      isImp: false,
+      isImp: true,
       keyboardType: 'number-pad',
       label: 'Supplier Invoice Total',
       placeholder: 'Supplier Invoice Total',
@@ -276,7 +276,7 @@ const UploadInvoiceOMSScreen = props => {
     }
     setTotalKeys(currentKeys);
     setBulkItemIds(currentItemIds);
-
+    console.log("Aakash===>", priceList);
     let filterData = poTotalPrice.filter(item => item.id == podId);
     if (filterData.length > 0) {
       const index = poTotalPrice.findIndex(x => x.id === filterData[0].id);
@@ -291,7 +291,7 @@ const UploadInvoiceOMSScreen = props => {
         price: totalPrice,
       };
       let priceList = [...poTotalPrice];
-      console.log("Aakash===>", priceList);
+
       priceList.push(row);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
@@ -442,11 +442,13 @@ const UploadInvoiceOMSScreen = props => {
         if (res.success) {
           setLoading(false);
           // dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
+          // dispatch(
           //   fetchTabCount({
           //     supplierId: await AsyncStorage.getItem('userId'),
           //     tabRef,
           //     onlineShipmentMode,
-          //   }));
+          //   }),
+          // );
           Toast.show({
             type: 'success',
             text2: res.message,

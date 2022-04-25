@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Dimensions,
   View,
@@ -9,17 +9,17 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import {getImageUrl, getSplitHistory} from '../services/orders';
+import { getImageUrl, getSplitHistory } from '../services/orders';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import CustomeDatePicker from '../component/common/Datepicker';
 import FileUpload from '../component/common/FileUpload';
-import {OrderedMap} from 'immutable';
+import { OrderedMap } from 'immutable';
 import DocumentPicker from 'react-native-document-picker';
 import CustomButton from '../component/common/Button';
 import RNFetchBlob from 'rn-fetch-blob';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BASE_URL} from '../redux/constants';
+import { BASE_URL } from '../redux/constants';
 import Productcard from './Productcard';
 import CustomeIcon from './common/CustomeIcon';
 const deviceWidth = Dimensions.get('window').width;
@@ -65,7 +65,8 @@ const ProofOfDeliveryModal = props => {
       label: 'Pickup Date',
       placeholder: '',
       errorMessage: 'Enter valid pickup date',
-      value: orderPickupDate,
+      value: orderPickupDate ? null : orderPickupDateError,
+      onBlur: () => onOrderPickUpDateBlur(),
       onChange: date => setOrderPickupDate(date),
       component: CustomeDatePicker,
     },
@@ -80,13 +81,14 @@ const ProofOfDeliveryModal = props => {
       loading: false,
       //showDoc: true,
       fileUpload: 2,
-      errorState: podFileError,
+      errorState: podFile.name ? null : podFileError,
       errorText: 'Please upload POD File',
       onPress: onPress,
       disabled: false,
       uploadDocument: d => {
         console.log(d);
       },
+      onBlur: () => onUploadPodFileBlur(),
       setUpload: d => {
         console.log(d);
       },
@@ -121,7 +123,7 @@ const ProofOfDeliveryModal = props => {
   }, []);
 
   const fetchImage = async () => {
-    const {data} = await getImageUrl(msn);
+    const { data } = await getImageUrl(msn);
     let imageUrl =
       'https://cdn.moglix.com/' +
       (data &&
@@ -137,27 +139,23 @@ const ProofOfDeliveryModal = props => {
     }
   };
 
-  const getTime = (time, acceptrejectOrder) => {
-    let months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    let date = new Date(Number(time));
-    if (acceptrejectOrder) {
-      return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+  const onOrderPickUpDateBlur = () => {
+    if (orderPickupDate && orderPickupDate.length) {
+      setOrderPickupDateError(false);
+    } else {
+      setOrderPickupDateError(true);
     }
-    return `${months[date.getMonth()]} ${date.getDate()},${date.getFullYear()}`;
   };
+
+  const onUploadPodFileBlur = () => {
+    if (podFile && podFile.name) {
+      setPodFileError(false);
+    } else {
+      setPodFileError(true);
+    }
+  };
+
+
   const renderOrderDetails = () => {
     return (
       <Productcard
@@ -180,42 +178,55 @@ const ProofOfDeliveryModal = props => {
     );
   };
   const onMarkDelivered = async () => {
-    setLoading(true);
-    let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-    const url = `${BASE_URL}api/order/deliveryDone`;
-    const response = await RNFetchBlob.fetch(
-      'POST',
-      url,
-      {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `${token}`,
-      },
-      [
-        {
-          name: 'deliveryDate',
-          data: orderPickupDate.split('-').reverse().join('-'),
-        },
-        {
-          name: 'source',
-          data: '0',
-        },
-        {
-          name: 'itemId',
-          data: `${itemId}`,
-        },
-        {
-          name: 'file',
-          filename: podFile.name,
-          type: podFile.type,
-          data: RNFetchBlob.wrap(podFile.uri),
-        },
-      ],
-    );
+    if (
+      orderPickupDate &&
+      orderPickupDate.length
+    ) {
+      try {
+        setLoading(true);
+        let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+        const url = `${BASE_URL}api/order/deliveryDone`;
+        const response = await RNFetchBlob.fetch(
+          'POST',
+          url,
+          {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `${token}`,
+          },
+          [
+            {
+              name: 'deliveryDate',
+              data: orderPickupDate.split('-').reverse().join('-'),
+            },
+            {
+              name: 'source',
+              data: '0',
+            },
+            {
+              name: 'itemId',
+              data: `${itemId}`,
+            },
+            {
+              name: 'file',
+              filename: podFile.name,
+              type: podFile.type,
+              data: RNFetchBlob.wrap(podFile.uri),
+            },
+          ],
+        );
 
-    const res = await response.json();
-    setLoading(false);
-    setModal(false);
-    props.onProofOfDeliveryDone();
+        const res = await response.json();
+        setLoading(false);
+        setModal(false);
+        props.onProofOfDeliveryDone();
+      }
+      catch (err) {
+        setLoading(false);
+      }
+    } else {
+      onOrderPickUpDateBlur();
+      onUploadPodFileBlur();
+    }
   };
 
   return (
@@ -229,7 +240,7 @@ const ProofOfDeliveryModal = props => {
         setModal(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 0}}
+      style={{ padding: 0, margin: 0 }}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
       onBackdropPress={() => setModal(false)}
@@ -250,7 +261,7 @@ const ProofOfDeliveryModal = props => {
           <Text style={styles.headerTxt}>PROOF OF DELIVERY</Text>
         </View>
         <>
-          <View style={{paddingHorizontal: Dimension.padding15}}>
+          <View style={{ paddingHorizontal: Dimension.padding15 }}>
             {renderOrderDetails()}
           </View>
         </>
@@ -261,7 +272,7 @@ const ProofOfDeliveryModal = props => {
           )).toList()}
         </View>
         <View style={styles.bottomAction}>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <CustomButton
               title="CANCEL"
               buttonColor={Colors.WhiteColor}
@@ -273,7 +284,7 @@ const ProofOfDeliveryModal = props => {
               }}
             />
           </View>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <CustomButton
               title="MARK DELIVERED"
               loading={loading}

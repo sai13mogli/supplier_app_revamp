@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 
@@ -51,10 +51,18 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     backgroundColor: Colors.WhiteColor,
   },
+  titleWrap: {
+    height: Dimension.height28,
+    backgroundColor: Colors.NudgeColor1,
+
+
+  },
+
   TitleLightTxt: {
-    fontSize: Dimension.font10,
+    fontSize: Dimension.font12,
     backgroundColor: Colors.NudgeColor1,
     textAlign: 'center',
+    marginTop: Dimension.margin8,
     color: Colors.blackColor,
     fontFamily: Dimension.CustomRegularFont,
     // marginBottom: Dimension.margin5,

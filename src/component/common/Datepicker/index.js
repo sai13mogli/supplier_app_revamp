@@ -120,10 +120,10 @@ const CustomeDatePicker = props => {
               styles.iconStyle
             }
           />
-          <View style={{ flexDirection: "row" }}>
+          {/* <View style={{ flexDirection: "row" }}>
             <Text style={styles.placeholderCss}>{text || 'Select Date'}</Text>
 
-          </View>
+          </View> */}
         </View>
 
 
