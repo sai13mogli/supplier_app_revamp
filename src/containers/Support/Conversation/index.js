@@ -504,6 +504,7 @@ const Conversation = props => {
       <View style={styles.ContainerCss}>
         <Header
           showBack
+          showBell
           navigation={props.navigation}
           showText={
             ticketConversation && ticketConversation.ticket

@@ -9,7 +9,12 @@ import Colors from '../../Theme/Colors';
 const AboutUsScreen = props => {
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <AppHeader showText={'About Us'} navigation={props.navigation} showBack />
+      <AppHeader
+        showText={'About Us'}
+        navigation={props.navigation}
+        showBack
+        showBell={false}
+      />
       <Text style={styles.nrmtxt}>
         Moglix Supplier Central App is designed for Suppliers currently doing
         business with Moglix as well as for interested manufacturers, traders

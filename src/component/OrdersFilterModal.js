@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-native-modal';
 import {
   orderFiltersTypeData,
@@ -16,14 +16,14 @@ import {
 } from '../redux/constants/orders';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchPOs} from '../redux/actions/orders';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPOs } from '../redux/actions/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {STATE_STATUS} from '../redux/constants';
+import { STATE_STATUS } from '../redux/constants';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomeDatePicker from '../component/common/Datepicker/index';
 import CustomeIcon from './common/CustomeIcon';
-import {Tooltip} from 'react-native-elements';
+import { Tooltip } from 'react-native-elements';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -61,6 +61,8 @@ const OrdersFilterModal = props => {
     state.ordersReducer.getIn(['tabItemCounts', 'data']),
   );
 
+
+
   useEffect(() => {
     if (activeFilter == 'orderRefs') {
       fetchPOIdsFunc();
@@ -82,6 +84,9 @@ const OrdersFilterModal = props => {
     if (activeFilter == 'orderRefs') {
       let poIds = [];
       let arr = poData.toArray();
+      console.log('====================================');
+      console.log("PoData====>", arr);
+      console.log('====================================');
       (arr || []).forEach((ele, idx) => {
         ele.forEach((_, i) => {
           if (i < 1) {
@@ -91,7 +96,7 @@ const OrdersFilterModal = props => {
       });
 
       return (
-        <View style={{height: deviceHeight}}>
+        <View style={{ height: deviceHeight }}>
           <ScrollView>
             {poIds.map((_, i) => (
               <TouchableOpacity
@@ -100,13 +105,13 @@ const OrdersFilterModal = props => {
                 <CustomeIcon
                   name={
                     appliedFilter[initialFilter] &&
-                    appliedFilter[initialFilter].includes(_)
+                      appliedFilter[initialFilter].includes(_)
                       ? 'checkbox-tick'
                       : 'checkbox-blank'
                   }
                   color={
                     appliedFilter[initialFilter] &&
-                    appliedFilter[initialFilter].includes(_)
+                      appliedFilter[initialFilter].includes(_)
                       ? Colors.BrandColor
                       : Colors.blackColor
                   }
@@ -141,7 +146,7 @@ const OrdersFilterModal = props => {
       );
     } else {
       return (
-        <View style={{height: deviceHeight}}>
+        <View style={{ height: deviceHeight }}>
           <ScrollView>
             <>
               {orderfiltersData[activeFilter].map((_, i) => (
@@ -151,13 +156,13 @@ const OrdersFilterModal = props => {
                   <CustomeIcon
                     name={
                       appliedFilter[initialFilter] &&
-                      appliedFilter[initialFilter].includes(_.key)
+                        appliedFilter[initialFilter].includes(_.key)
                         ? 'checkbox-tick'
                         : 'checkbox-blank'
                     }
                     color={
                       appliedFilter[initialFilter] &&
-                      appliedFilter[initialFilter].includes(_.key)
+                        appliedFilter[initialFilter].includes(_.key)
                         ? Colors.BrandColor
                         : Colors.blackColor
                     }
@@ -193,11 +198,11 @@ const OrdersFilterModal = props => {
                       What is Delivery Type
                     </Text>
                     <TouchableOpacity
-                      style={{flex: 0.5, alignItems: 'flex-end'}}
+                      style={{ flex: 0.5, alignItems: 'flex-end' }}
                       onPress={() => settooltip1(!tooltip1)}>
                       <Image
                         source={require('../assets/images/tooltipIcon.png')}
-                        style={{width: 24, height: 24}}></Image>
+                        style={{ width: 24, height: 24 }}></Image>
                     </TouchableOpacity>
 
                     {/* <Tooltip
@@ -331,13 +336,13 @@ const OrdersFilterModal = props => {
         setOrdersFiltersModal(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 0, width: '100%', height: '100%'}}
+      style={{ padding: 0, margin: 0, width: '100%', height: '100%' }}
       deviceWidth={deviceWidth}
       deviceHeight={deviceHeight}
       hasBackdrop={true}
       onBackdropPress={() => setOrdersFiltersModal(false)}
       onBackButtonPress={() => setOrdersFiltersModal(false)}>
-      <View style={{height: deviceHeight, width: deviceWidth}}>
+      <View style={{ height: deviceHeight, width: deviceWidth }}>
         <View style={styles.headerWrap}>
           <CustomeIcon
             name={'arrow-back'}

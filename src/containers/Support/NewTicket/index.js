@@ -243,6 +243,7 @@ const NewTicket = props => {
         showBack
         navigation={props.navigation}
         showText={'New Ticket'}
+        showBell
         // rightIconName={'category--brand'}
       />
       <ScrollView style={styles.ContainerCss}>

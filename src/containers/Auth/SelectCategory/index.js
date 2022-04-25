@@ -187,6 +187,7 @@ const SelectCategoryScreen = props => {
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <Header
         showBack
+        showBell
         navigation={props.navigation}
         showText={'Category & Brand'}
         rightIconName={'category--brand'}></Header>

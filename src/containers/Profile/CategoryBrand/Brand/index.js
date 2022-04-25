@@ -73,6 +73,7 @@ const BrandScreen = props => {
     <>
       <Header
         showBack
+        showBell
         navigation={props.navigation}
         showText={'Brand Selection'}
         rightIconName={'category--brand'}

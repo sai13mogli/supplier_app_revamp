@@ -26,6 +26,7 @@ const Billing = props => {
   const addressesResponse = useSelector(
     state => state.profileReducer.addressesDetails || [],
   );
+
   const addressesData = addressesResponse?.data;
   const dispatch = useDispatch();
 
@@ -74,21 +75,23 @@ const Billing = props => {
             </View>
           )}
 
-          <View style={{flex: 1}}>
-            <CustomButton
-              title={'EDIT'}
-              buttonColor={colors.WhiteColor}
-              onPress={() =>
-                props.navigation.navigate('EditAddress', {
-                  editID: item.id,
-                  addressesDetails: item,
-                })
-              }
-              TextColor={colors.BrandColor}
-              borderColor={colors.BrandColor}
-              TextFontSize={Dimension.font14}
-            />
-          </View>
+          {profileData && profileData.verificationStatus !== 15 ? (
+            <View style={{flex: 1}}>
+              <CustomButton
+                title={'EDIT'}
+                buttonColor={colors.WhiteColor}
+                onPress={() =>
+                  props.navigation.navigate('EditAddress', {
+                    editID: item.id,
+                    addressesDetails: item,
+                  })
+                }
+                TextColor={colors.BrandColor}
+                borderColor={colors.BrandColor}
+                TextFontSize={Dimension.font14}
+              />
+            </View>
+          ) : null}
         </View>
       </View>
     </View>
@@ -108,14 +111,16 @@ const Billing = props => {
               onPress={() =>
                 props.navigation.navigate('EditAddress', {tabState: billing})
               }>
-              <View style={{flexDirection: 'row'}}>
-                <CustomeIcon
-                  name={'add-circle'}
-                  size={Dimension.font18}
-                  color={colors.BrandColor}
-                />
-                <Text style={styles.addnewtxt}>Add new</Text>
-              </View>
+              {profileData && profileData.verificationStatus !== 15 ? (
+                <View style={{flexDirection: 'row'}}>
+                  <CustomeIcon
+                    name={'add-circle'}
+                    size={Dimension.font18}
+                    color={colors.BrandColor}
+                  />
+                  <Text style={styles.addnewtxt}>Add new</Text>
+                </View>
+              ) : null}
             </TouchableOpacity>
           </View>
           <FlatList
@@ -125,16 +130,18 @@ const Billing = props => {
           />
         </ScrollView>
       )}
-      <View style={styles.bottombtnWrap}>
-        <CustomButton
-          buttonColor={colors.BrandColor}
-          borderColor={colors.BrandColor}
-          TextColor={colors.WhiteColor}
-          TextFontSize={Dimension.font16}
-          title={'Next'}
-          onPress={() => props.onItemPress(1)}
-        />
-      </View>
+      {profileData && profileData.verificationStatus !== 15 ? (
+        <View style={styles.bottombtnWrap}>
+          <CustomButton
+            buttonColor={colors.BrandColor}
+            borderColor={colors.BrandColor}
+            TextColor={colors.WhiteColor}
+            TextFontSize={Dimension.font16}
+            title={'Next'}
+            onPress={() => props.onItemPress(1)}
+          />
+        </View>
+      ) : null}
     </View>
   );
 };

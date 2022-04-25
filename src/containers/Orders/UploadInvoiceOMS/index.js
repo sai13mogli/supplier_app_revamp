@@ -276,7 +276,6 @@ const UploadInvoiceOMSScreen = props => {
     }
     setTotalKeys(currentKeys);
     setBulkItemIds(currentItemIds);
-    console.log("Aakash===>", priceList);
     let filterData = poTotalPrice.filter(item => item.id == podId);
     if (filterData.length > 0) {
       const index = poTotalPrice.findIndex(x => x.id === filterData[0].id);
@@ -442,13 +441,13 @@ const UploadInvoiceOMSScreen = props => {
         if (res.success) {
           setLoading(false);
           // dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
-          // dispatch(
-          //   fetchTabCount({
-          //     supplierId: await AsyncStorage.getItem('userId'),
-          //     tabRef,
-          //     onlineShipmentMode,
-          //   }),
+          // dispatch(fetchTabCount({
+          //   supplierId: await AsyncStorage.getItem('userId'),
+          //   tabRef,
+          //   onlineShipmentMode,
+          // }),
           // );
+
           Toast.show({
             type: 'success',
             text2: res.message,

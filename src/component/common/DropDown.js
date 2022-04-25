@@ -43,6 +43,8 @@ const DropDown = props => {
           style={
             props.isFromOrders
               ? styles.withoutBGPickerStyle
+              : !enabled
+              ? styles.disabledpickerStyle
               : styles.pickerStyle
           }>
           <Text
@@ -138,6 +140,13 @@ const styles = StyleSheet.create({
   },
   pickerStyle: {
     backgroundColor: colors.WhiteColor,
+    fontSize: Dimension.font14,
+    color: colors.FontColor,
+    fontWeight: 'normal',
+    fontFamily: Dimension.CustomRegularFont,
+  },
+  disabledpickerStyle: {
+    backgroundColor: colors.DisableStateColor,
     fontSize: Dimension.font14,
     color: colors.FontColor,
     fontWeight: 'normal',

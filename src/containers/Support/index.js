@@ -10,7 +10,7 @@ const SupportScreen = props => {
   return (
     <>
       <View style={{flex: 1}}>
-        <Header showText={'Support'} navigation={props.navigation} />
+        <Header showText={'Support'} navigation={props.navigation} showBell />
         <TicketsList navigation={props.navigation} />
       </View>
       <View style={styles.BottomWrap}>

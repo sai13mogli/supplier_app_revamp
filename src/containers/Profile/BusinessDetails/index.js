@@ -36,6 +36,15 @@ const BusinessDetailsScreen = props => {
   const businessDetailsError = useSelector(
     state => state.profileReducer.businessDetails.error || '',
   );
+
+  const verificationStatus = useSelector(
+    state => ((state.profileReducer || {}).data || {}).verificationStatus,
+  );
+
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
+
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [legalEntityName, setlegalEntityName] = useState(
@@ -86,6 +95,8 @@ const BusinessDetailsScreen = props => {
   const [phoneVerified, setPhoneVerified] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
   const [updateError, setUpdateError] = useState(false);
+  const [phoneEdit, setPhoneEdit] = useState(false);
+  const [emailEdit, setEmailEdit] = useState(false);
 
   const FORM_FIELDS = new OrderedMap({
     legalEntityName: {
@@ -200,7 +211,7 @@ const BusinessDetailsScreen = props => {
       component: PickerDropDown,
       items: cities,
       // enabled: true,
-      disabled: props.route.params && !props.route.params.disabled,
+      disabled: props.route.params && props.route.params.disabled,
     },
     phone: {
       title: 'Phone',
@@ -215,7 +226,7 @@ const BusinessDetailsScreen = props => {
       keyboardType: 'number-pad',
       onChangeText: text => setphone(text),
       component: FloatingLabelInputField,
-      disabled: false,
+      disabled: !phoneEdit,
       extraView: () => getExtraView(),
       isfromLogin: true,
     },
@@ -230,7 +241,7 @@ const BusinessDetailsScreen = props => {
       onBlur: () => onEmailBlur(),
       onChangeText: text => setemail(text),
       component: FloatingLabelInputField,
-      disabled: false,
+      disabled: !emailEdit,
       extraView: () => getExtraViewEmail(),
       isfromLogin: true,
     },
@@ -313,6 +324,13 @@ const BusinessDetailsScreen = props => {
       });
     }
   }, [businessDetailsStatus]);
+
+  useEffect(() => {
+    if (props.route.params && props.route.params.disabled) {
+      setPhoneEdit(false);
+      setEmailEdit(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (pincode && pincode.length && pincode.length == 6) {
@@ -510,7 +528,15 @@ const BusinessDetailsScreen = props => {
   };
 
   const getExtraView = () => {
-    if (phoneVerified) {
+    if (!phoneEdit) {
+      return (
+        <TouchableOpacity onPress={() => setPhoneEdit(true)}>
+          <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+            EDIT
+          </Text>
+        </TouchableOpacity>
+      );
+    } else if (phoneVerified) {
       return (
         <CustomeIcon
           name={'right-tick-line'}
@@ -543,13 +569,20 @@ const BusinessDetailsScreen = props => {
   };
 
   const getExtraViewEmail = () => {
-    if (emailVerified) {
+    if (!emailEdit) {
+      return (
+        <TouchableOpacity onPress={() => setEmailEdit(true)}>
+          <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+            EDIT
+          </Text>
+        </TouchableOpacity>
+      );
+    } else if (emailVerified) {
       return (
         <CustomeIcon
           name={'right-tick-line'}
           color={Colors.SuccessStateColor}
-          size={Dimension.font20}>
-         </CustomeIcon>
+          size={Dimension.font20}></CustomeIcon>
       );
     } else {
       if (sendOtpEmail) {
@@ -590,6 +623,7 @@ const BusinessDetailsScreen = props => {
     <View style={{flex: 1}}>
       <Header
         showBack
+        showBell
         navigation={props.navigation}
         showText={'Business Details'}
         rightIconName={'business-details'}></Header>
@@ -611,7 +645,11 @@ const BusinessDetailsScreen = props => {
           //visible={true}
           onLogin={onLogin}
           onClose={() => setOtpModal(false)}
-          email={type == 6 ? phone : email}
+          email={
+            type == 6
+              ? profileData && profileData.phone
+              : profileData && profileData.email
+          }
           frombusinessDetails={true}
           type={type}
           phoneVerified={phoneVerified}
@@ -623,17 +661,19 @@ const BusinessDetailsScreen = props => {
         />
         {/* )} */}
       </ScrollView>
-      <View style={styles.bottombtnWrap}>
-        <CustomButton
-          buttonColor={colors.BrandColor}
-          borderColor={colors.BrandColor}
-          TextColor={colors.WhiteColor}
-          TextFontSize={Dimension.font16}
-          title={'Submit'}
-          loading={loading}
-          onPress={onSubmit}
-        />
-      </View>
+      {verificationStatus !== 15 ? (
+        <View style={styles.bottombtnWrap}>
+          <CustomButton
+            buttonColor={colors.BrandColor}
+            borderColor={colors.BrandColor}
+            TextColor={colors.WhiteColor}
+            TextFontSize={Dimension.font16}
+            title={'Submit'}
+            loading={loading}
+            onPress={onSubmit}
+          />
+        </View>
+      ) : null}
     </View>
   );
 };

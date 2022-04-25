@@ -270,6 +270,7 @@ const EditAddress = props => {
         <>
             <Header
                 showBack
+                showBell
                 navigation={props.navigation}
                 showText={editID ? 'Edit Address' : 'Add Address'}
                 rightIconName={'business-details'}>
