@@ -69,12 +69,11 @@ const InvoiceEMSFormDetailScreen = props => {
   const [misTotal, setMisTotal] = useState('');
   const [fId, setFId] = useState(null);
 
-  const Documents = new OrderedMap({
+  const UploadInvoice = new OrderedMap({
     upload_invoice: {
       id: 'uploadInvoice',
       title: 'Upload Invoice',
       state: uploadInvoice,
-      errorState: uploadInvoiceError,
       value: uploadInvoice.name,
       disabled: false,
       documents: {
@@ -86,18 +85,20 @@ const InvoiceEMSFormDetailScreen = props => {
       errorText: 'Please upload Invoice',
       placeholder: 'Tap to Upload',
     },
+  });
+
+  const UploadEwayBill = new OrderedMap({
     upload_eway_bill: {
       id: 'uploadEwayBill',
       title: 'Upload E-way Bill',
       state: uploadEwayBill,
       value: uploadEwayBill.name,
-      errorState: uploadEwayBillError,
       disabled: false,
       documents: {
         name: uploadEwayBill && uploadEwayBill.name,
         doc: uploadEwayBill,
       },
-      isImp: false,
+      isImp: true,
       errorState: uploadEwayBillError,
       errorText: 'Please upload E-way Bill',
       placeholder: 'Tap to Upload',
@@ -124,7 +125,7 @@ const InvoiceEMSFormDetailScreen = props => {
       label: 'Invoice Date',
       placeholder: 'Invoice Date',
       errorMessage: 'Enter valid Invoice date',
-      showError: invoiceDateError,
+      showError: invoiceDate ? null : invoiceDateError,
       value: invoiceDate,
       onBlur: () => onInvoiceDateBlur(),
       onChange: invoiceDate => setInvoiceDate(invoiceDate),
@@ -145,13 +146,13 @@ const InvoiceEMSFormDetailScreen = props => {
     },
     ewayBillNumber: {
       title: 'E-way Bill Number',
-      isImp: true,
+      isImp: false,
       label: 'E-way Bill Number',
       placeholder: 'E-way Bill Number',
       errorMessage: 'Enter valid e-way Bill number *(12) digit',
       value: ewayBillNumber,
       showError: ewayBillNumberError,
-      onBlur: () => onEwayBillNumberBlur(),
+      // onBlur: () => onEwayBillNumberBlur(),
       onChangeText: text => setEwayBillNumber(text),
       component: FloatingLabelInputField,
     },
@@ -353,20 +354,6 @@ const InvoiceEMSFormDetailScreen = props => {
     setTotal(`${total}`);
   };
 
-  // const calculateTotalLoadingCharges = () => {
-  //   setHsn(
-  //     props && props.route && props.route.params && props.route.params.hsn,
-  //   );
-  //   setTaxPercentage(
-  //     props &&
-  //       props.route &&
-  //       props.route.params &&
-  //       props.route.params.taxPercentage,
-  //   );
-  //   let total = Number(baseAmount) + Number((taxPercentage * baseAmount) / 100);
-  //   setTotal(`${total}`);
-  // };
-
   const calculateLoadingCharges = text => {
     setHsn(
       props && props.route && props.route.params && props.route.params.hsn,
@@ -467,6 +454,7 @@ const InvoiceEMSFormDetailScreen = props => {
       }
     }
   };
+
   const setFormState = data => {
     switch (fId) {
       case 'uploadInvoice':
@@ -475,19 +463,6 @@ const InvoiceEMSFormDetailScreen = props => {
       case 'uploadEwayBill':
         setUploadEwayBill(data);
 
-        break;
-      default:
-        break;
-    }
-  };
-
-  const onRemove = id => {
-    switch (id) {
-      case 'uploadInvoice':
-        setUploadInvoice({});
-        break;
-      case 'uploadEwayBill':
-        setUploadEwayBill({});
         break;
       default:
         break;
@@ -512,12 +487,11 @@ const InvoiceEMSFormDetailScreen = props => {
         value={value}
         documents={documents}
         showDoc={showDoc}
-        onRemove={onRemove}
-        onBlur={onUploadInvoiceBlur}
+        onBlur={{onUploadInvoiceBlur, onUploadEwayBlur}}
         id={id}
         fId={fId}
         fileUpload={2}
-        errorState={errorState}
+        errorState={value ? null : errorState}
         errorText={errorText}
         onPress={() => onPress(id)}
         disabled={uploadDisabled}
@@ -556,10 +530,8 @@ const InvoiceEMSFormDetailScreen = props => {
       invoiceDate &&
       invoiceAmount &&
       invoiceAmount.length &&
-      ewayBillNumber &&
-      ewayBillNumber.length &&
-      ewayDate &&
-      ewayDate.length &&
+      // ewayBillNumber ? (ewayDate &&
+      //   ewayDate.length) : null &&
       uploadInvoice &&
       uploadInvoice.name
     ) {
@@ -626,6 +598,7 @@ const InvoiceEMSFormDetailScreen = props => {
           },
           invoiceTotal: invoiceAmount,
         };
+        console.log('Payload====>', payload);
 
         const response = await RNFetchBlob.fetch(
           'POST',
@@ -658,18 +631,16 @@ const InvoiceEMSFormDetailScreen = props => {
         console.log('Respose===>', res, JSON.stringify(payload));
         if (res.success) {
           setLoading(false);
-          dispatch(
-            fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
-            fetchTabCount({
-              supplierId: await AsyncStorage.getItem('userId'),
-              tabRef,
-              onlineShipmentMode,
-            }),
-          );
+          // dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
+          //   fetchTabCount({
+          //     supplierId: await AsyncStorage.getItem('userId'),
+          //     tabRef,
+          //     onlineShipmentMode,
+          //   }));
           Toast.show({
             type: 'success',
             text2: res.message,
-            visibilityTime: 2000,
+            visibilityTime: 4000,
             autoHide: true,
           });
           props.navigation.navigate('Orders', {
@@ -680,7 +651,7 @@ const InvoiceEMSFormDetailScreen = props => {
           Toast.show({
             type: 'error',
             text2: res.message,
-            visibilityTime: 2000,
+            visibilityTime: 5000,
             autoHide: true,
           });
         }
@@ -689,11 +660,12 @@ const InvoiceEMSFormDetailScreen = props => {
       }
     } else {
       onInvoiceNumberBlur();
-      onEwayBillNumberBlur();
+      // onEwayBillNumberBlur();
       onInvoiceAmountBlur();
       onInvoiceDateBlur();
-      onEwayDateDateBlur();
+      ewayBillNumber ? onEwayDateDateBlur() : null;
       onUploadInvoiceBlur();
+      onUploadEwayBlur();
     }
   };
 
@@ -715,11 +687,7 @@ const InvoiceEMSFormDetailScreen = props => {
       <ScrollView style={styles.ContainerCss}>
         {FORM_FIELDS.map((field, fieldKey) => (
           <View>
-            {fieldKey == 'baseAmount' ? (
-              <Text style={styles.middleTxt}>
-                Freight Charges (if Applicable)
-              </Text>
-            ) : fieldKey == 'loadingBaseAmount' ? (
+            {fieldKey == 'loadingBaseAmount' ? (
               <Text style={styles.middleTxt}>
                 Loading Charges (if Applicable)
               </Text>
@@ -727,6 +695,19 @@ const InvoiceEMSFormDetailScreen = props => {
               <Text style={styles.middleTxt}>
                 Misc. Charges (if Applicable)
               </Text>
+            ) : fieldKey == 'ewayBillNumber' ? (
+              UploadInvoice.map(_ => renderInputText(_))
+                .toList()
+                .toArray()
+            ) : fieldKey == 'baseAmount' ? (
+              <>
+                {UploadEwayBill.map(_ => renderInputText(_))
+                  .toList()
+                  .toArray()}
+                <Text style={styles.middleTxt}>
+                  Freight Charges (if Applicable)
+                </Text>
+              </>
             ) : null}
 
             <field.component
@@ -737,9 +718,6 @@ const InvoiceEMSFormDetailScreen = props => {
           </View>
         )).toList()}
 
-        {Documents.map(_ => renderInputText(_))
-          .toList()
-          .toArray()}
         <ActionSheet
           id="action_sheet"
           onBeforeShow={data => {
@@ -826,7 +804,7 @@ const styles = StyleSheet.create({
   ContainerCss: {
     backgroundColor: colors.WhiteColor,
     paddingHorizontal: Dimension.padding5,
-    paddingVertical: Dimension.padding20,
+    // paddingVertical: Dimension.padding5,
   },
   middleTxt: {
     fontSize: Dimension.font12,

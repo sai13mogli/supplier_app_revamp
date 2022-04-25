@@ -138,7 +138,7 @@ const Billing = props => {
             TextColor={colors.WhiteColor}
             TextFontSize={Dimension.font16}
             title={'Next'}
-            onPress={() => props.setActiveTab('pickup')}
+            onPress={() => props.onItemPress(1)}
           />
         </View>
       ) : null}

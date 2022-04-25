@@ -58,7 +58,6 @@ const UploadInvoiceOMSScreen = props => {
         doc: uploadInvoice,
       },
       isImp: true,
-      errorState: uploadInvoiceError,
       errorText: 'Please upload Invoice',
       placeholder: 'Tap to Upload',
     },
@@ -104,7 +103,7 @@ const UploadInvoiceOMSScreen = props => {
       label: 'Invoice Date',
       placeholder: 'Invoice Date',
       errorMessage: 'Enter valid Invoice date',
-      showError: invoiceDateError,
+      showError: invoiceDate ? null : invoiceDateError,
       value: invoiceDate,
       onBlur: () => onInvoiceDateBlur(),
       onChange: invoiceDate => setInvoiceDate(invoiceDate),
@@ -141,6 +140,7 @@ const UploadInvoiceOMSScreen = props => {
       setInvoiceNumberError(true);
     }
   };
+
   const onSupplierInvoiceBlur = () => {
     if (
       supplierInvoiceTotal != poTotal &&
@@ -205,19 +205,6 @@ const UploadInvoiceOMSScreen = props => {
     }
   };
 
-  const onRemove = id => {
-    switch (id) {
-      case 'uploadInvoice':
-        setUploadInvoice({});
-        break;
-      case 'uploadEwayBill':
-        setUploadEwayBill({});
-        break;
-      default:
-        break;
-    }
-  };
-
   const renderInputText = ({
     id,
     title,
@@ -240,7 +227,7 @@ const UploadInvoiceOMSScreen = props => {
         fId={fId}
         fileUpload={2}
         onBlur={onUploadInvoiceBlur}
-        errorState={errorState}
+        errorState={value ? null : errorState}
         errorText={errorText}
         onPress={() => onPress(id)}
         disabled={uploadDisabled}
@@ -273,7 +260,6 @@ const UploadInvoiceOMSScreen = props => {
     let currentItemIds = [...bulkItemIds];
     let currentPrice = [...poTotalPrice];
     let currentKeys = [...totalKeys];
-    console.log("Aakash===>", podId);
     setPodId(podId)
     if (currentItemIds.includes(podId)) {
       currentItemIds = currentItemIds.filter(_ => _ != podId);
@@ -295,6 +281,7 @@ const UploadInvoiceOMSScreen = props => {
     if (filterData.length > 0) {
       const index = poTotalPrice.findIndex(x => x.id === filterData[0].id);
       let priceList = [...poTotalPrice];
+
       priceList.splice(index, 1);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
@@ -304,6 +291,7 @@ const UploadInvoiceOMSScreen = props => {
         price: totalPrice,
       };
       let priceList = [...poTotalPrice];
+      console.log("Aakash===>", priceList);
       priceList.push(row);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
@@ -377,7 +365,6 @@ const UploadInvoiceOMSScreen = props => {
       uploadInvoice &&
       uploadInvoice.name &&
       supplierInvoiceTotal.length
-      // && (supplierInvoiceTotal != poTotal)
     ) {
       try {
         setLoading(true);
@@ -454,26 +441,16 @@ const UploadInvoiceOMSScreen = props => {
         console.log('Res===>', res);
         if (res.success) {
           setLoading(false);
-          // fetchOrdersFunc(0, '', selectedTab, shipmentType, {
-          //   pickupFromDate: '',
-          //   pickupToDate: '',
-          //   poFromDate: '',
-          //   poToDate: '',
-          //   orderType: [],
-          //   deliveryType: [],
-          //   orderRefs: [],
-          // });
-          // fetchTabCountFunc(selectedTab, shipmentType);
-          dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
-            fetchTabCount({
-              supplierId: await AsyncStorage.getItem('userId'),
-              tabRef,
-              onlineShipmentMode,
-            }));
+          // dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
+          //   fetchTabCount({
+          //     supplierId: await AsyncStorage.getItem('userId'),
+          //     tabRef,
+          //     onlineShipmentMode,
+          //   }));
           Toast.show({
             type: 'success',
             text2: res.message,
-            visibilityTime: 2000,
+            visibilityTime: 4000,
             autoHide: true,
           });
           props.navigation.goBack();
@@ -482,7 +459,7 @@ const UploadInvoiceOMSScreen = props => {
           Toast.show({
             type: 'error',
             text2: res.message,
-            visibilityTime: 2000,
+            visibilityTime: 5000,
             autoHide: true,
           });
         }
@@ -557,9 +534,6 @@ const UploadInvoiceOMSScreen = props => {
           />
         </View>
         <View style={{ flex: 1 }}>
-          {/* {rejectLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
-            )} */}
           <CustomButton
             buttonColor={colors.BrandColor}
             borderColor={colors.BrandColor}

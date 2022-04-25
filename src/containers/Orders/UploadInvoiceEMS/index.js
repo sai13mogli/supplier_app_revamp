@@ -40,6 +40,7 @@ const UploadInvoiceScreen = props => {
   }, []);
 
   const selectItemId = itemId => {
+
     let currentItemIds = [...bulkItemIds];
     if (currentItemIds.includes(itemId)) {
       currentItemIds = currentItemIds.filter(_ => _ != itemId);
