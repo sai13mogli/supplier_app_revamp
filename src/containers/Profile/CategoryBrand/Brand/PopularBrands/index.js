@@ -93,7 +93,10 @@ const PopularBrandsScreen = props => {
       businessNature: businessNature,
       isDocumentRequired: item.isDocumentRequired,
       confirmed: true,
+      isDeleted: '4',
+      localbrand: true,
     };
+    console.log(currbrand);
     let brandObj = (userBrands || []).find(_ => _.brandCode == currbrand.code);
     if (brandObj && brandObj.brandCode) {
       dispatch(removeBrand(currbrand));

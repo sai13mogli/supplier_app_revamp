@@ -134,8 +134,7 @@ const AcceptModal = props => {
   };
 
   const getMaxDate = () => {
-    console.log('pickupDate', pickupDate);
-    let mutatedate = new Date(Number(pickupDate) + 1 * 24 * 60 * 60 * 1000);
+    let mutatedate = new Date(Number(pickupDate) + 2 * 24 * 60 * 60 * 1000);
     let mutateMonth;
 
     if (mutatedate.getMonth() + 1 < 10) {

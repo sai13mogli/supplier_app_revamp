@@ -151,6 +151,7 @@ export const categorybrandReducer = (state = initialState, action) => {
         brandName: payload.obj.name || '',
         isDocumentRequired: payload.obj.isDocumentRequired,
         confirmed: payload.obj.confirmed,
+        localbrand: payload.obj.localbrand || false,
       };
       return {
         ...state,
@@ -195,7 +196,8 @@ export const categorybrandReducer = (state = initialState, action) => {
         brandListingUrl: `${_.brandListingUrl}` || '',
         brandName: _.brandName || '',
         isDocumentRequired: _.isDocumentRequired || 0,
-        confirmed: true,
+        confirmed: _.confirmed || false,
+        localbrand: _.localbrand || false,
       }));
       return {
         ...state,

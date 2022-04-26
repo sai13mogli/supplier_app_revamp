@@ -418,6 +418,8 @@ const CategoryBrandScreen = props => {
         brandListingUrl: brandUrl,
         brandName: brand && brand.name,
         isDocumentRequired: currBrand.isDocumentRequired,
+        confirmed: currBrand.confirmed,
+        localbrand: currBrand.localbrand,
       };
       let currbrands = ([...userBrands] || []).filter(
         _ => _.brandCode !== brand.code,
@@ -431,6 +433,7 @@ const CategoryBrandScreen = props => {
         }
         return 0;
       });
+      console.log(currbrands, currBrandObj);
       dispatch(updateBrandData(currbrands));
     }
     setModalVisible(false);
@@ -530,16 +533,18 @@ const CategoryBrandScreen = props => {
   const onNext = async () => {
     setNextLoader(true);
     try {
-      let mutatebrands = (userBrands || []).map((_, i) => ({
-        supplierId: _.supplierId,
-        brandCode: _.brandCode,
-        fileKey: _.fileKey || '',
-        businessNature: _.businessNature || '1',
-        expiryDate: _.expiryDate || '',
-        isDeleted: _.isDeleted || '0',
-        isRaiseRequest: _.isRaiseRequest || 'false',
-        brandListingUrl: _.brandListingUrl || '',
-      }));
+      let mutatebrands = (userBrands || [])
+        .filter((item, idx) => item.localbrand)
+        .map((_, i) => ({
+          supplierId: _.supplierId,
+          brandCode: _.brandCode,
+          fileKey: _.fileKey || '',
+          businessNature: _.businessNature || '1',
+          expiryDate: _.expiryDate || '',
+          isDeleted: _.isDeleted || '0',
+          isRaiseRequest: _.isRaiseRequest || 'false',
+          brandListingUrl: _.brandListingUrl || '',
+        }));
 
       let categoryIds = ([...selectedCategories] || []).map((_, i) => _.id);
       let payloadObj = {
@@ -635,25 +640,16 @@ const CategoryBrandScreen = props => {
                           <Text style={styles.ApprovedStatus}>Approved</Text>
                         ) : (
                           <Text style={styles.pendingStatus}>
-                            {_.isDeleted == '4'
-                              ? 'Approval Pending'
-                              : 'Pending'}
+                            {_.isDeleted == '4' && _.localbrand
+                              ? 'Pending'
+                              : 'Approval Pending'}
                           </Text>
                         )}
                       </View>
                       {/* //onPress={() => openModal(_)} */}
 
                       <View style={{flex: 1}}>
-                        <TouchableOpacity
-                          style={styles.ArrowBtn}
-                          onPress={() => openModal(_)}>
-                          <CustomeIcon
-                            name={'arrow-right-line'}
-                            size={Dimension.font28}
-                            color={colors.FontColor}></CustomeIcon>
-                        </TouchableOpacity>
-                        {/* {(_.isDeleted == '0' || _.isDeleted == '4') &&
-                        _.isDocumentRequired ? (
+                        {_.isDeleted == '4' && _.localbrand ? (
                           <TouchableOpacity
                             onPress={() => openModal(_)}
                             style={styles.fillBtn}>
@@ -662,8 +658,15 @@ const CategoryBrandScreen = props => {
                             </Text>
                           </TouchableOpacity>
                         ) : (
-                          
-                        )} */}
+                          <TouchableOpacity
+                            style={styles.ArrowBtn}
+                            onPress={() => openModal(_)}>
+                            <CustomeIcon
+                              name={'arrow-right-line'}
+                              size={Dimension.font28}
+                              color={colors.FontColor}></CustomeIcon>
+                          </TouchableOpacity>
+                        )}
                       </View>
                     </TouchableOpacity>
                   ))}
@@ -707,13 +710,18 @@ const CategoryBrandScreen = props => {
 
                       <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Status</Text>
-                        <Text style={styles.pendingStatus}>Pending</Text>
+
+                        <Text style={styles.pendingStatus}>
+                          {_.isDeleted == '2' && _.localbrand
+                            ? 'Pending'
+                            : 'Approval Pending'}
+                        </Text>
                       </View>
 
                       <View style={{flex: 1}}>
                         {_.isDeleted == '2' &&
                         _.isRaiseRequest == 'true' &&
-                        _.isDocumentRequired ? (
+                        _.localbrand ? (
                           <TouchableOpacity
                             onPress={() => openModal(_)}
                             style={styles.fillBtn}>
