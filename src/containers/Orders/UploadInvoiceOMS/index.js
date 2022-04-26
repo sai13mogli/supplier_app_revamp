@@ -43,6 +43,7 @@ const UploadInvoiceOMSScreen = props => {
   const [totalKeys, setTotalKeys] = useState([]);
   const [totalKeysValues, setTotalKeysValues] = useState([]);
   const [fId, setFId] = useState(null);
+  const [podIdList, setPodIdList] = useState([]);
   const [actionCTA, setaAtionCTA] = useState(props?.route?.params?.actionCTA);
 
   const Documents = new OrderedMap({
@@ -284,6 +285,10 @@ const UploadInvoiceOMSScreen = props => {
       priceList.splice(index, 1);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
+      var arr = [...podIdList]
+      const podindex = arr.findIndex(x => x == podId);
+      arr.splice(podindex, 1);
+      setPodIdList(arr)
     } else {
       let row = {
         id: podId,
@@ -294,6 +299,10 @@ const UploadInvoiceOMSScreen = props => {
       priceList.push(row);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
+      var arr = [...podIdList]
+      arr.push(podId)
+      setPodIdList(arr)
+
     }
   };
 
@@ -315,7 +324,7 @@ const UploadInvoiceOMSScreen = props => {
         bulkItemIds={bulkItemIds}
         actionCTA={item.actionCTA}
         keys={keys}
-        totalKeys={totalKeys}
+        // totalKeys={totalKeys}
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
       />
@@ -382,7 +391,7 @@ const UploadInvoiceOMSScreen = props => {
             },
             {
               name: 'itemLists',
-              data: String(podId),
+              data: podIdList.length > 1 ? podIdList : String(podId)
             },
             {
               name: 'invoiceTotal',
@@ -418,7 +427,7 @@ const UploadInvoiceOMSScreen = props => {
             },
             {
               name: 'itemLists',
-              data: String(podId),
+              data: podIdList.length > 1 ? podIdList : String(podId)
             },
             {
               name: 'invoiceTotal',

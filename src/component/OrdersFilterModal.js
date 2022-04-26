@@ -84,9 +84,6 @@ const OrdersFilterModal = props => {
     if (activeFilter == 'orderRefs') {
       let poIds = [];
       let arr = poData.toArray();
-      console.log('====================================');
-      console.log("PoData====>", arr);
-      console.log('====================================');
       (arr || []).forEach((ele, idx) => {
         ele.forEach((_, i) => {
           if (i < 1) {
