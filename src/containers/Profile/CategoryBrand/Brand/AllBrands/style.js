@@ -7,7 +7,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding20,
     position: 'relative',
-    backgroundColor:"#fff"
+    backgroundColor:"#fff",
+    marginTop:Dimension.margin15
   },
 
   leftPart: {

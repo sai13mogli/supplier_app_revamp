@@ -190,8 +190,9 @@ const RejectModal = props => {
             color={Colors.FontColor}
             onPress={() => setRejectModal(false)}></CustomeIcon>
         </View>
-        <View style={{paddingHorizontal: Dimension.padding15}}>
+        <View style={{paddingHorizontal: Dimension.padding15,marginBottom:Dimension.margin10}}>
           {renderOrderDetails()}
+        </View>
           <ScrollView
             style={{
               height: 250,
@@ -204,6 +205,7 @@ const RejectModal = props => {
               selectedValue={reason}
               onSelect={text => setReason(text)}
             />
+            <View style={{paddingHorizontal: Dimension.padding15,marginBottom:Dimension.margin10}}>
             {reason == 'Other' ? (
               <FloatingLabelInputField
                 title={'Specify a reason'}
@@ -213,8 +215,9 @@ const RejectModal = props => {
                 onChangeText={text => setReasonText(text)}
               />
             ) : null}
+            </View>
           </ScrollView>
-        </View>
+        
         <View style={styles.btnWrap}>
           <TouchableOpacity
             style={styles.cancelBtn}
