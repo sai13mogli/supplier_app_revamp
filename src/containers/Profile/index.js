@@ -17,6 +17,7 @@ import {
   fetchBankDetails,
   fetchTdsInfoDetails,
   fetchAddressDetails,
+  setNavigation,
 } from '../../redux/actions/profile';
 import {fetchCategoriesBrands} from '../../redux/actions/categorybrand';
 
@@ -28,6 +29,7 @@ import Colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import {STATE_STATUS} from '../../redux/constants';
+import {fetchNotifications} from '../../redux/actions/notifications';
 
 const ProfileScreen = props => {
   const {navigate} = useNavigation();
@@ -64,7 +66,7 @@ const ProfileScreen = props => {
       dispatch(fetchBankDetails());
       dispatch(fetchTdsInfoDetails());
       dispatch(fetchCategoriesBrands());
-      console.log('profilescreen');
+      dispatch(fetchNotifications(0));
     }
   }, []);
 

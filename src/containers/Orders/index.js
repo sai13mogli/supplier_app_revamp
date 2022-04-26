@@ -27,6 +27,7 @@ import OrdersFilterModal from '../../component/OrdersFilterModal';
 import Toast from 'react-native-toast-message';
 import BulkActionsModal from '../../component/BulkActionsModal';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {fetchProfile, setNavigation} from '../../redux/actions/profile';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -36,6 +37,12 @@ const OrdersScreen = props => {
   );
 
   const profileData = useSelector(state => state.profileReducer.data || {});
+  const navigateProfile = useSelector(
+    state => state.profileReducer.navigateProfile || false,
+  );
+  const notifications = useSelector(
+    state => state.notificationsReducer.data || [],
+  );
   const scrollRef = useRef(null);
   const tabStatus = useSelector(state =>
     state.ordersReducer.getIn(['tabCounts', 'status']),
@@ -151,14 +158,17 @@ const OrdersScreen = props => {
   }, [tabStatus]);
 
   useEffect(() => {
+    console.log(profileStatus, navigateProfile);
     if (
       profileStatus == STATE_STATUS.FETCHED &&
       profileData.verificationStatus < 10 &&
-      initLoader
+      initLoader &&
+      props.navigation.getState().history.length <= 1 &&
+      navigateProfile
     ) {
-      console.log('ordersscreen');
-      props.navigation.push('Profile');
+      dispatch(setNavigation(false));
       setInitLoader(false);
+      props.navigation.push('Profile');
     }
   }, [profileStatus]);
 
@@ -674,6 +684,20 @@ const OrdersScreen = props => {
     );
   };
 
+  const renderUnreadIcon = () => {
+    let notificationsArr = ([...notifications] || []).map(_ => _.data);
+    let flatArr = [];
+    if (notificationsArr && notificationsArr.length) {
+      flatArr = notificationsArr.flat();
+    }
+    let unread = (flatArr || []).find(_ => !_.readStatus);
+    if (unread) {
+      return <View style={styles.reddot}></View>;
+    } else {
+      return <></>;
+    }
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
       {/* <CustomButton
@@ -718,7 +742,7 @@ const OrdersScreen = props => {
             name={'notification-3-line'}
             size={Dimension.font20}
             color={colors.FontColor}></CustomeIcon>
-          <View style={styles.reddot}></View>
+          {renderUnreadIcon()}
         </TouchableOpacity>
       </View>
       {tabStatus == STATE_STATUS.FETCHING ? (

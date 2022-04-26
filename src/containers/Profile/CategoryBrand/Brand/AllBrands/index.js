@@ -80,6 +80,7 @@ const AllBrandsScreen = props => {
   const [initLoader, setInitLoader] = useState(true);
   const onEndReachedCalledDuringMomentum = useRef(true);
   const [supplierId, setSupplierId] = useState('');
+  const [showAlphabets, setShowAlphabets] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -93,7 +94,19 @@ const AllBrandsScreen = props => {
     if (allBrandsStatus == STATE_STATUS.FETCHED && loader && !initLoader) {
       setLoader(false);
     }
+    if (allBrandsStatus == STATE_STATUS.FETCHED && allbrands.length == 0) {
+      setShowAlphabets(false);
+    }
+    if (allBrandsStatus == STATE_STATUS.FETCHED && allbrands.length) {
+      setShowAlphabets(true);
+    }
   }, [allBrandsStatus]);
+
+  useEffect(() => {
+    if (inputValue.length == 0) {
+      fetchListingData(64);
+    }
+  }, [inputValue]);
 
   const fetchSupplierId = async () => {
     let supplierId = await AsyncStorage.getItem('userId');
@@ -128,17 +141,6 @@ const AllBrandsScreen = props => {
       pageNo: 64,
     };
     dispatch(fetchBrandSearchResultByAlphabet(fetchListingObj));
-  };
-
-  const debouncedSave = useRef(
-    debounce(text => {
-      fetchListingData(64, text);
-    }, 500),
-  ).current;
-
-  const onSearchText = text => {
-    setInputValue(text);
-    debouncedSave(text);
   };
 
   const renderAlphabet = ({item, index}) => {
@@ -265,7 +267,9 @@ const AllBrandsScreen = props => {
           <View style={styles.leftPart}>
             <MultiSelect
               value={inputValue}
-              onChangeText={onSearchText}
+              onChangeText={value => {
+                setInputValue(value);
+              }}
               placeholder={'Search'}
               placeholderTextColor={Colors.eyeIcon}
               blurOnSubmit={true}
@@ -277,6 +281,10 @@ const AllBrandsScreen = props => {
               }}
               onEndReachedThreshold={0.9}
               ListFooterComponent={renderFooter}
+              onSubmitEditing={() => {
+                fetchListingData(64, inputValue);
+              }}
+              returnKeyType={'search'}
               // onEndReached={({distanceFromEnd}) => {
               //   console.log(
               //     'onEndReached',
@@ -303,14 +311,16 @@ const AllBrandsScreen = props => {
               // updateCellsBatchingPeriod={2}
             />
           </View>
-          <View style={styles.AlphabetWrap}>
-            <FlatList
-              data={ALPHABETS}
-              renderItem={renderAlphabet}
-              keyExtractor={(item, index) => `${index}-item`}
-              contentContainerStyle={{paddingBottom: 380}}
-            />
-          </View>
+          {showAlphabets ? (
+            <View style={styles.AlphabetWrap}>
+              <FlatList
+                data={ALPHABETS}
+                renderItem={renderAlphabet}
+                keyExtractor={(item, index) => `${index}-item`}
+                contentContainerStyle={{paddingBottom: 380}}
+              />
+            </View>
+          ) : null}
         </View>
       </>
     );

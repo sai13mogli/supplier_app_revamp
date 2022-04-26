@@ -3,9 +3,28 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import colors from '../../Theme/Colors';
 import CustomeIcon from './CustomeIcon';
 import {Header, HeaderProps, Icon} from 'react-native-elements';
+import {useSelector} from 'react-redux';
 
 import Dimension from '../../Theme/Dimension';
 const AppHeader = props => {
+  const notifications = useSelector(
+    state => state.notificationsReducer.data || [],
+  );
+
+  const renderUnreadIcon = () => {
+    let notificationsArr = ([...notifications] || []).map(_ => _.data);
+    let flatArr = [];
+    if (notificationsArr && notificationsArr.length) {
+      flatArr = notificationsArr.flat();
+    }
+    let unread = (flatArr || []).find(_ => !_.readStatus);
+    if (unread) {
+      return <View style={styles.reddot}></View>;
+    } else {
+      return <></>;
+    }
+  };
+
   return (
     <Header
       backgroundColor="#fff"
@@ -44,7 +63,7 @@ const AppHeader = props => {
                   name={'notification-3-line'}
                   size={Dimension.font20}
                   color={colors.FontColor}></CustomeIcon>
-                <View style={styles.reddot}></View>
+                {renderUnreadIcon()}
               </TouchableOpacity>
             )}
           </View>

@@ -143,11 +143,16 @@ const CategoryBrandScreen = props => {
       // label: 'Nature of Business',
       errorMessage: 'Enter valid nature of business',
       selectedValue: natureOfBusiness,
-      onValueChange: text => setnatureOfBusiness(text),
+      onValueChange: text => setTextBusinessNature(text),
       component: PickerDropDown,
       enabled: true,
       value: natureOfBusiness,
       items: [
+        {
+          label: 'Nature of Business',
+          value: 0,
+        },
+
         {
           label: 'Trader',
           value: 1,
@@ -391,6 +396,12 @@ const CategoryBrandScreen = props => {
       key: 'brandCertificate',
       errorState: false,
     });
+  };
+
+  const setTextBusinessNature = text => {
+    if (text !== 0) {
+      setnatureOfBusiness(text);
+    }
   };
 
   const onSubmit = raiseRequest => {

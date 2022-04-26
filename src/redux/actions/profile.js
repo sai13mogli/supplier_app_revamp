@@ -258,3 +258,12 @@ export const setRmData = data => {
     },
   };
 };
+
+export const setNavigation = data => {
+  return {
+    type: PROFILE_ACTIONS.SET_NAVIGATION,
+    payload: {
+      data,
+    },
+  };
+};

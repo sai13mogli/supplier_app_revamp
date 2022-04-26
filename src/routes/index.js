@@ -90,13 +90,13 @@ const Routes = props => {
           safeAreaInsets: {bottom: 0},
           tabBarStyle: {
             paddingTop: Dimension.padding10,
-            paddingBottom:Dimension.padding18,
-           borderWidth: 0,
+            paddingBottom: Dimension.padding18,
+            borderWidth: 0,
             borderColor: colors.WhiteColor,
-           // borderTopLeftRadius: 16,
+            // borderTopLeftRadius: 16,
             //borderTopRightRadius: 16,
-            backgroundColor: "#fff",
-            height: Platform.OS === 'ios'? 85:80,
+            backgroundColor: '#fff',
+            height: Platform.OS === 'ios' ? 85 : 80,
             borderBottomWidth: 0,
           },
         })}
@@ -104,7 +104,7 @@ const Routes = props => {
         {BOTTOM_TAB_SCREENS.map((screen, key) => (
           <Tab.Screen
             key={key}
-            // lazy={true}
+            lazy={false}
             params={{setIsLoggedIn}}
             initialParams={{
               setIsLoggedIn,
@@ -237,12 +237,14 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font10,
     fontFamily: Dimension.CustomMediumFont,
     marginTop: Dimension.margin4,
-    color:colors.eyeIcon
+    color: colors.eyeIcon,
   },
-  iconAlignment: {alignItems: 'center', alignSelf: 'center',
-  //paddingTop:Dimension.padding10,
- // paddingBottom:Dimension.padding20
-},
+  iconAlignment: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    //paddingTop:Dimension.padding10,
+    // paddingBottom:Dimension.padding20
+  },
 });
 const tabBarOptions = {
   activeTintColor: '#D9232D',

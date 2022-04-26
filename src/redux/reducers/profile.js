@@ -5,6 +5,7 @@ const initialState = {
   status: STATE_STATUS.UNFETCHED,
   data: [],
   token: '',
+  navigateProfile: true,
   businessDetails: {
     status: STATE_STATUS.UNFETCHED,
     data: {},
@@ -58,6 +59,12 @@ export const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         data: {...state.data, ...payload.data},
+      };
+
+    case PROFILE_ACTIONS.SET_NAVIGATION:
+      return {
+        ...state,
+        navigateProfile: payload.data,
       };
 
     case PROFILE_ACTIONS.FETCH_BUSINESS_DETAILS:
@@ -349,34 +356,7 @@ export const profileReducer = (state = initialState, action) => {
 
     case PROFILE_ACTIONS.LOGOUT:
       return {
-        status: STATE_STATUS.UNFETCHED,
-        data: [],
-        token: payload.token,
-        businessDetails: {
-          status: STATE_STATUS.UNFETCHED,
-          data: {},
-          error: null,
-        },
-        addressesDetails: {
-          status: STATE_STATUS.UNFETCHED,
-          data: {},
-          error: null,
-        },
-        bankDetails: {
-          status: STATE_STATUS.UNFETCHED,
-          data: {},
-          error: null,
-        },
-        tdsInfoDetails: {
-          status: STATE_STATUS.UNFETCHED,
-          data: {},
-          error: null,
-        },
-        categoryBrandDetails: {
-          status: STATE_STATUS.UNFETCHED,
-          data: {},
-          error: null,
-        },
+        ...initialState,
       };
     case PROFILE_ACTIONS.SET_TOKEN:
       return {

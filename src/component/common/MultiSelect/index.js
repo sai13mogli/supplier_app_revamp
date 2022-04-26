@@ -86,6 +86,7 @@ const MultiSelect = props => {
     windowSize,
     initialNumToRender,
     updateCellsBatchingPeriod,
+    onSubmitEditing,
   } = props;
 
   useEffect(() => {
@@ -202,7 +203,8 @@ const MultiSelect = props => {
             value={value}
             blurOnSubmit={blurOnSubmit}
             placeholder={placeholder}
-            style={styles.SearchInputCss}></TextInput>
+            style={styles.SearchInputCss}
+            onSubmitEditing={onSubmitEditing}></TextInput>
           <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
         </View>
       ) : null}
