@@ -1073,16 +1073,27 @@ const DocumentsScreen = props => {
 
   const noteText = () => (
     <>
-      <Text style={styles.Notetxt}>Note</Text>
+      <Text style={styles.Notetxt}>NOTE :</Text>
       {signature && signature.title && signature.value ? (
+        <>
+         <View style={styles.rowCss}>
+          <View style={styles.bullet}></View>
+          <Text style={styles.NoteData}>
+          Please ensure that the image of the signature is
+          of an authorised signatory (as endorsed by the tax authorities).
+          </Text>
+          </View>
+          <View style={styles.rowCss}>
+          <View style={styles.bullet}></View>
         <Text style={styles.NoteData}>
-          Please ensure that the im age of the signature is of the signature is
-          of an authorised signatory (as endorsed by the tax authorities).Sign
-          on a white background,scan the signature and upload.
+          Sign on a white background,scan the signature and upload.
         </Text>
+        </View>
+        </>
       ) : (
         noteArr.map((_, i) => (
-          <View key={i}>
+          <View key={i} style={styles.rowCss}>
+            <View style={styles.bullet}></View>
             <Text style={styles.NoteData}>{_.note}</Text>
           </View>
         ))
@@ -1172,11 +1183,14 @@ const DocumentsScreen = props => {
   const renderAgree = () => {
     if (!uploadDisabled) {
       return (
+        <>
         <Checkbox
           checked={isSelected}
           onPress={() => setSelection(!isSelected)}
           title={'By registering you agree to our'}
         />
+        <Text style={styles.termsText}>Terms & Condition</Text>
+        </>
       );
     } else {
       return null;

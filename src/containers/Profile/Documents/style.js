@@ -22,15 +22,35 @@ const styles = StyleSheet.create({
   Notetxt:{
     fontSize:Dimension.font14,
     color:Colors.BrandColor,
-    fontFamily:Dimension.CustomMediumFont,
+    fontFamily:Dimension.CustomSemiBoldFont,
     marginBottom:Dimension.margin5
 
   },
   NoteData:{
-    fontSize:Dimension.font14,
+    fontSize:Dimension.font13,
     color:Colors.FontColor,
     fontFamily:Dimension.CustomMediumFont,
     
+  },
+  bullet: {
+    height: Dimension.height5,
+    width: Dimension.width5,
+    borderRadius: Dimension.width5,
+    backgroundColor: Colors.blackColor,
+    marginRight: Dimension.margin8,
+    justifyContent:"center",
+    alignSelf:"center"
+  },
+  rowCss:{
+    flexDirection:"row",
+    marginBottom:Dimension.margin5
+  },
+  termsText:{
+    fontSize:Dimension.font14,
+    color:Colors.BrandColor,
+    fontFamily:Dimension.CustomMediumFont,
+    marginTop:Dimension.margin5,
+    marginLeft:Dimension.margin25
   },
   bottombtnWrap:{
     padding:Dimension.padding15,

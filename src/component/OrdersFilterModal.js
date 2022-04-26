@@ -92,8 +92,8 @@ const OrdersFilterModal = props => {
       });
 
       return (
-        <View style={{height: 200}}>
-          <ScrollView>
+        //<View style={{}}>
+          <ScrollView contentContainerStyle={{paddingBottom:200}}>
             {poIds.map((_, i) => (
               <TouchableOpacity
                 onPress={() => selectFilter(_)}
@@ -138,7 +138,7 @@ const OrdersFilterModal = props => {
               </TouchableOpacity>
             ))}
           </ScrollView>
-        </View>
+       // </View>
       );
     } else {
       return (

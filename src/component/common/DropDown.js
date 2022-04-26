@@ -36,7 +36,11 @@ const DropDown = props => {
       <TouchableOpacity
         disabled={!enabled}
         style={
-          props.isFromOrders ? styles.withoutborderPicker : styles.pickerWrapper
+          props.isFromOrders 
+          ? styles.withoutborderPicker 
+          : !enabled
+          ? styles.DisabledpickerWrapper
+          : styles.pickerWrapper
         }
         onPress={() => setIsVisible(true)}>
         <View
@@ -135,8 +139,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     borderColor: colors.FontColor,
-    padding: 10,
+    padding: Dimension.padding10,
     position: 'relative',
+  },
+  DisabledpickerWrapper: {
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: colors.FontColor,
+    padding: Dimension.padding10,
+    position: 'relative',
+    backgroundColor:colors.DisableStateColor,
   },
   pickerStyle: {
     backgroundColor: colors.WhiteColor,
