@@ -45,23 +45,18 @@ export const BOTTOM_TAB_SCREENS = [
     inactiveIcon: 'file-list-2-line',
   },
   {
-    name: 'Support',
-    component: SupportScreen,
-    activeIcon: 'flag-2-line',
-    inactiveIcon: 'flag-2-line',
-  },
-  {
     name: 'Profile',
     component: ProfileScreen,
     activeIcon: 'account-pin-box-line',
     inactiveIcon: 'account-pin-box-line',
   },
-  // {
-  //   name: 'Notification',
-  //   component: NotificationScreen,
-  //   activeIcon: 'notification-3-line',
-  //   inactiveIcon: 'notification-3-line',
-  // },
+  {
+    name: 'Support',
+    component: SupportScreen,
+    activeIcon: 'flag-2-line',
+    inactiveIcon: 'flag-2-line',
+  },
+
   {
     name: 'More',
     component: MoreScreen,

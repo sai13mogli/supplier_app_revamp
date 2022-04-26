@@ -1,14 +1,14 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AppHeader from '../../component/common/Header';
 import Dimension from '../../Theme/Dimension';
 import Colors from '../../Theme/Colors';
 
 const AboutUsScreen = props => {
   return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <AppHeader
         showText={'About Us'}
         navigation={props.navigation}
@@ -27,6 +27,7 @@ const AboutUsScreen = props => {
           <Text style={styles.textDesign}>New to Moglix business? </Text>
         </View>
         {'\n'}
+        <View style={styles.bullet}></View>
         <Text>
           Register yourself by furnishing your personal details, GSTIN, pickup
           address, and mandatory Documents. Our team will verify your profile
@@ -44,11 +45,11 @@ const AboutUsScreen = props => {
         Login your account with your email or phone number or registered Google
         account. View order summary and take actions directly from the
         dashboard. {'\n'} {'\n'}If you are an{' '}
-        <Text style={{color: 'blue'}}>enterprise Supplier</Text>, you can
+        <Text style={{ color: 'blue' }}>enterprise Supplier</Text>, you can
         acknowledge your orders and request for pickup reschedule in case of
         stock outs. You have the complete visibility of your orders now. {'\n'}
         {'\n'}
-        If you are an <Text style={{color: 'blue'}}>online Supplier</Text>, you
+        If you are an <Text style={{ color: 'blue' }}>online Supplier</Text>, you
         can request for pickup reschedule in case of stock outs (oneship
         orders). You can process your dropship orders, all the way from New to
         Delivery.{'\n'}
@@ -84,6 +85,14 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     color: 'black',
   },
+  bullet: {
+    height: Dimension.height8,
+    width: Dimension.width8,
+    borderRadius: 100 / 2,
+    left: Dimension.margin20,
+    backgroundColor: Colors.blackColor,
+    marginRight: Dimension.margin10
+  }
 });
 
 export default AboutUsScreen;

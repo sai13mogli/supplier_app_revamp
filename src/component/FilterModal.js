@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
-import {filtersTypeData, filtersData} from '../redux/constants/support';
+import { filtersTypeData, filtersData } from '../redux/constants/support';
 import {
   Text,
   View,
@@ -113,7 +113,7 @@ const FilterModal = props => {
         props.setFiltersModal(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 0}}
+      style={{ padding: 0, margin: 0 }}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
       onBackdropPress={() => props.setFiltersModal(false)}

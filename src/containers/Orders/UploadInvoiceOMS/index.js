@@ -43,6 +43,7 @@ const UploadInvoiceOMSScreen = props => {
   const [totalKeys, setTotalKeys] = useState([]);
   const [totalKeysValues, setTotalKeysValues] = useState([]);
   const [fId, setFId] = useState(null);
+  const [podIdList, setPodIdList] = useState([]);
   const [actionCTA, setaAtionCTA] = useState(props?.route?.params?.actionCTA);
 
   const Documents = new OrderedMap({
@@ -86,7 +87,7 @@ const UploadInvoiceOMSScreen = props => {
     },
     supplierInvoiceTotal: {
       title: 'Supplier Invoice Total',
-      isImp: false,
+      isImp: true,
       keyboardType: 'number-pad',
       label: 'Supplier Invoice Total',
       placeholder: 'Supplier Invoice Total',
@@ -276,7 +277,6 @@ const UploadInvoiceOMSScreen = props => {
     }
     setTotalKeys(currentKeys);
     setBulkItemIds(currentItemIds);
-
     let filterData = poTotalPrice.filter(item => item.id == podId);
     if (filterData.length > 0) {
       const index = poTotalPrice.findIndex(x => x.id === filterData[0].id);
@@ -285,16 +285,24 @@ const UploadInvoiceOMSScreen = props => {
       priceList.splice(index, 1);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
+      var arr = [...podIdList]
+      const podindex = arr.findIndex(x => x == podId);
+      arr.splice(podindex, 1);
+      setPodIdList(arr)
     } else {
       let row = {
         id: podId,
         price: totalPrice,
       };
       let priceList = [...poTotalPrice];
-      console.log("Aakash===>", priceList);
+
       priceList.push(row);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
+      var arr = [...podIdList]
+      arr.push(podId)
+      setPodIdList(arr)
+
     }
   };
 
@@ -316,7 +324,7 @@ const UploadInvoiceOMSScreen = props => {
         bulkItemIds={bulkItemIds}
         actionCTA={item.actionCTA}
         keys={keys}
-        totalKeys={totalKeys}
+        // totalKeys={totalKeys}
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
       />
@@ -383,7 +391,7 @@ const UploadInvoiceOMSScreen = props => {
             },
             {
               name: 'itemLists',
-              data: String(podId),
+              data: podIdList.length > 1 ? podIdList : String(podId)
             },
             {
               name: 'invoiceTotal',
@@ -419,7 +427,7 @@ const UploadInvoiceOMSScreen = props => {
             },
             {
               name: 'itemLists',
-              data: String(podId),
+              data: podIdList.length > 1 ? podIdList : String(podId)
             },
             {
               name: 'invoiceTotal',
@@ -442,11 +450,13 @@ const UploadInvoiceOMSScreen = props => {
         if (res.success) {
           setLoading(false);
           // dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
-          //   fetchTabCount({
-          //     supplierId: await AsyncStorage.getItem('userId'),
-          //     tabRef,
-          //     onlineShipmentMode,
-          //   }));
+          // dispatch(fetchTabCount({
+          //   supplierId: await AsyncStorage.getItem('userId'),
+          //   tabRef,
+          //   onlineShipmentMode,
+          // }),
+          // );
+
           Toast.show({
             type: 'success',
             text2: res.message,

@@ -125,9 +125,13 @@ const UploadInvoiceScreen = props => {
         showsVerticalScrollIndicator={false}
       />
       <View>
-        <Text style={styles.TitleLightTxt}>
-          Please select the product to start filling invoice details
-        </Text>
+        <View style={styles.titleWrap}>
+          <Text style={styles.TitleLightTxt}>
+            Please select the product to start filling invoice details
+          </Text>
+
+        </View>
+
       </View>
       <View style={styles.bottombtnWrap}>
         <CustomButton

@@ -26,7 +26,6 @@ import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
 import Toast from 'react-native-toast-message';
 import BulkActionsModal from '../../component/BulkActionsModal';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {fetchProfile, setNavigation} from '../../redux/actions/profile';
 
 const OrdersScreen = props => {
@@ -775,7 +774,7 @@ const OrdersScreen = props => {
             style={{paddingBottom: 380}}
             contentContainerStyle={{
               paddingBottom: 380,
-              backgroundColor: Colors.grayShade1,
+              backgroundColor: colors.grayShade1,
             }}
             removeClippedSubviews={true}
             maxToRenderPerBatch={5}
