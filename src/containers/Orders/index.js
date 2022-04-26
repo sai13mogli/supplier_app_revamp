@@ -96,6 +96,7 @@ const OrdersScreen = props => {
   const [bulkActionsModal, setBulkActionsModal] = useState(false);
   const [bulkDownloadItems, setBulkDownloadItems] = useState([]);
   const [initLoader, setInitLoader] = useState(true);
+  const [isFilterApplied, setIsFilterApplied] = useState(false);
 
   const COMMON_OPTIONS = [
     {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
@@ -157,7 +158,6 @@ const OrdersScreen = props => {
   }, [tabStatus]);
 
   useEffect(() => {
-    console.log(profileStatus, navigateProfile);
     if (
       profileStatus == STATE_STATUS.FETCHED &&
       profileData.verificationStatus < 10 &&
@@ -601,7 +601,8 @@ const OrdersScreen = props => {
   //applied filters api hit
   const applyFilters = () => {
     setOrdersFiltersModal(false);
-    console.log(appliedFilter, 'appliedFilter hai boss!!');
+    checkFilters();
+
     fetchOrdersFunc(0, inputValue, selectedTab, shipmentType, {
       pickupFromDate: pickupFromDate,
       pickupToDate: pickupToDate,
@@ -615,6 +616,7 @@ const OrdersScreen = props => {
 
   //reset filters api hit
   const resetFilters = () => {
+    setIsFilterApplied(false);
     setPickupFromDate('');
     setPickupToDate('');
     setPoFromDate('');
@@ -673,14 +675,27 @@ const OrdersScreen = props => {
   //   console.log(e, e && e.nativeEvent && e.nativeEvent.key);
   // };
 
-  const isFilterApplied = () => {
-    return (
-      (Object.keys(appliedFilter) && Object.keys(appliedFilter).length) ||
+  const getAppliedFilter = obj => {
+    for (let property in obj) {
+      if (obj[property] && obj[property].length) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const checkFilters = () => {
+    if (
+      getAppliedFilter(appliedFilter) ||
       pickupFromDate ||
       pickupToDate ||
       poFromDate ||
       poToDate
-    );
+    ) {
+      setIsFilterApplied(true);
+    } else {
+      setIsFilterApplied(false);
+    }
   };
 
   const renderUnreadIcon = () => {
@@ -859,7 +874,7 @@ const OrdersScreen = props => {
                     style={styles.filterBtn}
                     onPress={() => setOrdersFiltersModal(true)}>
                     <Text style={styles.filtertxt}>Filters</Text>
-                    {isFilterApplied() ? (
+                    {isFilterApplied ? (
                       <View style={styles.filterApplied}></View>
                     ) : null}
                     <CustomeIcon
