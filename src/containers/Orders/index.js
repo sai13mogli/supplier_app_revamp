@@ -423,15 +423,16 @@ const OrdersScreen = props => {
         return true;
       } else if (tab.key == 'PICKUP') {
         if (
-          (profileData.enterpriseFlag || profileData.onlineFlag) &&
-          profileData.onlineShipmentMode == 'ONESHIP'
+          (profileData.enterpriseFlag) || (profileData.onlineFlag &&
+          profileData.onlineShipmentMode == 'ONESHIP')
         ) {
           return true;
         }
       } else if (tab.key == 'UPLOAD_INVOICE') {
         if (
-          (profileData.enterpriseFlag || profileData.onlineFlag) &&
-          profileData.onlineShipmentMode == 'DROPSHIP'
+          profileData.enterpriseFlag ||
+          (profileData.onlineFlag &&
+            profileData.onlineShipmentMode == 'DROPSHIP')
         ) {
           return true;
         }
@@ -443,11 +444,17 @@ const OrdersScreen = props => {
           return true;
         }
       } else if (tab.key == 'SHIPMENT') {
-        return true;
+        if (
+          profileData.onlineFlag &&
+          profileData.onlineShipmentMode == 'DROPSHIP'
+        ) {
+          return true;
+        }
       } else if (tab.key == 'MARK_SHIPPED') {
         if (
-          (profileData.enterpriseFlag || profileData.onlineFlag) &&
-          profileData.onlineShipmentMode == 'DROPSHIP'
+          profileData.enterpriseFlag ||
+          (profileData.onlineFlag &&
+            profileData.onlineShipmentMode == 'DROPSHIP')
         ) {
           return true;
         }
