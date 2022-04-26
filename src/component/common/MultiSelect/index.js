@@ -111,7 +111,10 @@ const MultiSelect = props => {
                 businessNature: businessNature,
                 isDocumentRequired: customeListNow[item].isDocumentRequired,
                 confirmed: props.fromAllBrands && props.notSure ? true : false,
+                isDeleted: '4',
+                localbrand: true,
               };
+              console.log(brandObj);
               dispatch(addBrand(brandObj));
             }
             if (props.fromCategory) {
@@ -130,6 +133,8 @@ const MultiSelect = props => {
                 supplierId: await AsyncStorage.getItem('userId'),
                 businessNature: businessNature,
                 isDocumentRequired: customeListNow[item].isDocumentRequired,
+                isDeleted: '4',
+                localbrand: true,
               };
               dispatch(removeBrand(brandObj));
             }

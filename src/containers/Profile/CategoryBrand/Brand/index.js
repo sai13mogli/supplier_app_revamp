@@ -45,7 +45,8 @@ const BrandScreen = props => {
     currbrands = (currbrands || []).map(_ => ({
       ..._,
       brandName: _.brandName || _.brandCode,
-      confirmed: true,
+      confirmed: _.confirmed || false,
+      localbrand: _.localbrand || false,
     }));
     dispatch(addMultipleBrands(currbrands));
     props.navigation.navigate('CategoryBrand');

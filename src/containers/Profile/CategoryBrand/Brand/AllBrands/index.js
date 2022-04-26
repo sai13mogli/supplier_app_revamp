@@ -231,6 +231,7 @@ const AllBrandsScreen = props => {
           name: inputValue,
           isDocumentRequired: 1,
           confirmed: false,
+          localbrand: true,
         }),
       );
       Toast.show({
