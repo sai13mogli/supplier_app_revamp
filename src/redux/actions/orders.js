@@ -1,4 +1,4 @@
-import { ORDERS_ACTIONS } from '../constants/orders';
+import {ORDERS_ACTIONS} from '../constants/orders';
 
 export const fetchOrders = (
   page,
@@ -61,11 +61,11 @@ export const failedFetchTabCount = error => {
   };
 };
 
-export const fetchPOs = ({ supplierId, tabRef }) => {
+export const fetchPOs = ({supplierId, tabRef, onlineShipmentMode}) => {
   return {
     type: ORDERS_ACTIONS.FETCH_PO,
     payload: {
-      onlineShipmentMode: '',
+      onlineShipmentMode,
       supplierId,
       tabRef,
     },
