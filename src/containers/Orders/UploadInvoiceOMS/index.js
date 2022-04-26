@@ -295,7 +295,6 @@ const UploadInvoiceOMSScreen = props => {
         price: totalPrice,
       };
       let priceList = [...poTotalPrice];
-
       priceList.push(row);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
