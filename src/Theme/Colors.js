@@ -42,6 +42,7 @@ const Colors = {
   grayShade15: '#707070',
   grayshade16: '#FAFAFA',
 
+  tabLightViolet: '#E0E2FF',
   headerTxtColor: '#3C3C3C',
   blackColor: '#000',
   PendingStateColor: '#D97023',

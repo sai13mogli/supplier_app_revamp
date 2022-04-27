@@ -1,5 +1,5 @@
-import { createRef } from 'react';
-import { Linking } from 'react-native';
+import React, {createRef} from 'react';
+import {Linking} from 'react-native';
 import HomeScreen from '../containers/Home';
 import ProfileScreen from '../containers/Profile';
 import OrdersScreen from '../containers/Orders';
@@ -19,8 +19,10 @@ import BankDetails from '../containers/Profile/BankDetails';
 import CategoryBrand from '../containers/Profile/CategoryBrand';
 import SelectCategoryScreen from '../containers/Auth/SelectCategory';
 import NotificationScreen from '../containers/Notification';
+import TicketsList from '../containers/Support/TicketsList';
+import FAQS from '../containers/Support/FAQS';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
-import { OrderedMap } from 'immutable';
+import {OrderedMap} from 'immutable';
 import Accounts from '../containers/Profile/BankDetails/Accounts';
 import TdsDetails from '../containers/Profile/BankDetails/TdsDetails';
 import PickedUp from '../containers/Profile/Addresses/PickedUp';
@@ -90,6 +92,23 @@ export const TOP_BRANDS_SCREENS = [
   {
     name: 'AllBrands',
     component: AllBrandsScreen,
+  },
+];
+
+export const SUPPORT_TAB_SCREENS = [
+  {
+    name: "FAQ's",
+    key: 'faqs',
+    component: FAQS,
+    ref: createRef(),
+    idx: 0,
+  },
+  {
+    name: 'Support Tickets',
+    key: 'supportTicket',
+    component: TicketsList,
+    ref: createRef(),
+    idx: 1,
   },
 ];
 
@@ -291,14 +310,11 @@ export const PRIVACY_TABS = [
     // onPress: () => {
     //   Linking.openURL('https://suppliercentralqa.moglilabs.com/#home');
     // },
-
   },
   {
     route: '',
     onPress: () => {
-      Linking.openURL(
-        'https://www.moglix.com/privacy',
-      );
+      Linking.openURL('https://www.moglix.com/privacy');
     },
     title: 'Privacy Policy',
     icon: 'file-user-line',

@@ -3,15 +3,22 @@ import {Text, View} from 'react-native';
 import CustomButton from '../../component/common/Button';
 import Colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
-import TicketsList from './TicketsList';
 import Header from '../../component/common/Header';
+import {SUPPORT_TAB_SCREENS} from '../../constants';
+import Tabs from '../../component/common/Tabs';
 import styles from './style';
+
 const SupportScreen = props => {
   return (
     <>
       <View style={{flex: 1}}>
         <Header showText={'Support'} navigation={props.navigation} showBell />
-        <TicketsList navigation={props.navigation} />
+        <Tabs
+          hideScroll
+          data={SUPPORT_TAB_SCREENS.map(_ => ({..._}))}
+          navigation={props.navigation}
+        />
+        {/* <TicketsList navigation={props.navigation} /> */}
       </View>
       <View style={styles.BottomWrap}>
         <CustomButton

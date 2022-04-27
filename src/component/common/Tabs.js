@@ -131,8 +131,8 @@ const Tabs = props => {
             justifyContent: 'space-evenly',
             flex: 1,
             flexDirection: 'row',
-            borderBottomColor:colors.placeholderColor,
-             borderBottomWidth:1
+            borderBottomColor: colors.placeholderColor,
+            borderBottomWidth: 1,
           }}>
           {data.map((item, index) => {
             return (
@@ -237,8 +237,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    borderBottomColor:colors.placeholderColor,
-    borderBottomWidth:1
+    borderBottomColor: colors.placeholderColor,
+    borderBottomWidth: 1,
   },
 
   tabContainer: {
