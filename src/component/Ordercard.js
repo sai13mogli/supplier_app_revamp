@@ -101,6 +101,8 @@ const Ordercard = props => {
   const {navigate} = useNavigation();
   const navigation = useNavigation();
   const [tooltip1, settooltip1] = useState(false);
+  const [remapInvoiceToolTip, setRemapInvoiceToolTip] = useState(false);
+  const [isOmsPickupDate, setIsOmsPickupDate] = useState(false);
 
   useEffect(() => {
     fetchImage();
@@ -600,9 +602,16 @@ const Ordercard = props => {
         ) : cta == 'OMS_PICKUP_DATE' ? (
           <TouchableOpacity
             // disabled={acceptLoader}
-            onPress={() => setDisplayCalendar(true)}
+            onPress={() => {
+              setIsOmsPickupDate(true);
+              setDisplayCalendar(true);
+            }}
             style={styles.DownloadPoBtn}>
-            <Text style={styles.rejectCtaTxt}>CHOOSE PICKUP DATE</Text>
+            <Text style={styles.rejectCtaTxt}>
+              {selectedTab == 'PACKED'
+                ? 'RESCHEDULE PICKUP DATE'
+                : ' CHOOSE PICKUP DATE'}
+            </Text>
           </TouchableOpacity>
         ) : cta == 'EMS_PICKUP_DATE' ? (
           <TouchableOpacity
@@ -670,7 +679,23 @@ const Ordercard = props => {
               })
             }
             style={styles.DownloadPoBtn}>
-            <Text style={styles.rejectCtaTxt}>REMAP INVOICE</Text>
+            <Text style={styles.rejectCtaTxt}>REUPLOAD INVOICE</Text>
+            {/* <Text numberOfLines={2} style={styles.shipmentLbelTxt}>
+              Invoice Rejected
+            </Text>
+            <TouchableOpacity
+              style={{marginLeft: Dimension.margin10}}
+              onPress={() => setRemapInvoiceToolTip(!remapInvoiceToolTip)}>
+              <Image
+                source={require('../assets/images/tooltipIcon.png')}
+                style={{width: 20, height: 20}}></Image>
+            </TouchableOpacity>
+            {remapInvoiceToolTip && (
+              <View style={styles.tooltipWrap}>
+                <View style={styles.arrow}></View>
+                <Text style={styles.remarkTxt}>{remark}</Text>
+              </View>
+            )} */}
             {poLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -926,7 +951,7 @@ const Ordercard = props => {
                 flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>PROOF OF DELIVERY</Text>
+            <Text style={styles.rejectCtaTxt}>UPLOAD PROOF OF DELIVERY</Text>
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -1294,9 +1319,11 @@ const Ordercard = props => {
                   : shipmentType}
               </Text>
               {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
-              <Text style={styles.shipmentModeStringWrap}>
-                {shipmentModeString}
-              </Text>
+              {pickupDate !== null ? (
+                <Text style={styles.shipmentModeStringWrap}>
+                  {shipmentModeString}
+                </Text>
+              ) : null}
             </View>
           </View>
         </View>
@@ -1325,13 +1352,15 @@ const Ordercard = props => {
             <View style={{flex: 1}}>
               <View style={{flexDirection: 'row'}}>
                 <Text style={styles.cancelStatusTxt}>{statusText}</Text>
-                <TouchableOpacity
-                  style={{marginLeft: Dimension.margin10}}
-                  onPress={() => settooltip1(!tooltip1)}>
-                  <Image
-                    source={require('../assets/images/tooltipIcon.png')}
-                    style={{width: 20, height: 20}}></Image>
-                </TouchableOpacity>
+                {statusText !== 'Supplier Denied' ? (
+                  <TouchableOpacity
+                    style={{marginLeft: Dimension.margin10}}
+                    onPress={() => settooltip1(!tooltip1)}>
+                    <Image
+                      source={require('../assets/images/tooltipIcon.png')}
+                      style={{width: 20, height: 20}}></Image>
+                  </TouchableOpacity>
+                ) : null}
               </View>
               {tooltip1 && (
                 <View style={styles.tooltipWrap}>
@@ -1471,6 +1500,7 @@ const Ordercard = props => {
           displayCalendar={displayCalendar}
           setDisplayCalendar={setDisplayCalendar}
           pickupDate={pickupDate}
+          isOmsPickupDate={isOmsPickupDate}
         />
       )}
       {addViewModal && (

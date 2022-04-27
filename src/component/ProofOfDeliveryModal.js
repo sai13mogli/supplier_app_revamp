@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   Dimensions,
   View,
@@ -9,17 +9,17 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { getImageUrl, getSplitHistory } from '../services/orders';
+import {getImageUrl, getSplitHistory} from '../services/orders';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import CustomeDatePicker from '../component/common/Datepicker';
 import FileUpload from '../component/common/FileUpload';
-import { OrderedMap } from 'immutable';
+import {OrderedMap} from 'immutable';
 import DocumentPicker from 'react-native-document-picker';
 import CustomButton from '../component/common/Button';
 import RNFetchBlob from 'rn-fetch-blob';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BASE_URL } from '../redux/constants';
+import {BASE_URL} from '../redux/constants';
 import Productcard from './Productcard';
 import CustomeIcon from './common/CustomeIcon';
 const deviceWidth = Dimensions.get('window').width;
@@ -65,10 +65,11 @@ const ProofOfDeliveryModal = props => {
       label: 'Pickup Date',
       placeholder: '',
       errorMessage: 'Enter valid pickup date',
-      value: orderPickupDate ? null : orderPickupDateError,
+      value: orderPickupDate,
       onBlur: () => onOrderPickUpDateBlur(),
       onChange: date => setOrderPickupDate(date),
       component: CustomeDatePicker,
+      showError: orderPickupDate ? null : orderPickupDateError,
     },
     podFile: {
       label: 'Upload POD File',
@@ -123,7 +124,7 @@ const ProofOfDeliveryModal = props => {
   }, []);
 
   const fetchImage = async () => {
-    const { data } = await getImageUrl(msn);
+    const {data} = await getImageUrl(msn);
     let imageUrl =
       'https://cdn.moglix.com/' +
       (data &&
@@ -155,7 +156,6 @@ const ProofOfDeliveryModal = props => {
     }
   };
 
-
   const renderOrderDetails = () => {
     return (
       <Productcard
@@ -178,10 +178,7 @@ const ProofOfDeliveryModal = props => {
     );
   };
   const onMarkDelivered = async () => {
-    if (
-      orderPickupDate &&
-      orderPickupDate.length
-    ) {
+    if (orderPickupDate && orderPickupDate.length) {
       try {
         setLoading(true);
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
@@ -219,8 +216,7 @@ const ProofOfDeliveryModal = props => {
         setLoading(false);
         setModal(false);
         props.onProofOfDeliveryDone();
-      }
-      catch (err) {
+      } catch (err) {
         setLoading(false);
       }
     } else {
@@ -240,7 +236,7 @@ const ProofOfDeliveryModal = props => {
         setModal(false);
       }}
       coverScreen={true}
-      style={{ padding: 0, margin: 0 }}
+      style={{padding: 0, margin: 0}}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
       onBackdropPress={() => setModal(false)}
@@ -258,10 +254,10 @@ const ProofOfDeliveryModal = props => {
           />
         </View>
         <View style={styles.headerTxtWrap}>
-          <Text style={styles.headerTxt}>PROOF OF DELIVERY</Text>
+          <Text style={styles.headerTxt}>UPLOAD PROOF OF DELIVERY</Text>
         </View>
         <>
-          <View style={{ paddingHorizontal: Dimension.padding15 }}>
+          <View style={{paddingHorizontal: Dimension.padding15}}>
             {renderOrderDetails()}
           </View>
         </>
@@ -272,7 +268,7 @@ const ProofOfDeliveryModal = props => {
           )).toList()}
         </View>
         <View style={styles.bottomAction}>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <CustomButton
               title="CANCEL"
               buttonColor={Colors.WhiteColor}
@@ -284,7 +280,7 @@ const ProofOfDeliveryModal = props => {
               }}
             />
           </View>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <CustomButton
               title="MARK DELIVERED"
               loading={loading}

@@ -28,6 +28,7 @@ const AcceptModal = props => {
     shipmentType,
     setDisplayCalendar,
     pickupDate,
+    isOmsPickupDate,
   } = props;
   const [day, setDay] = useState({
     dateString: '',
@@ -134,7 +135,13 @@ const AcceptModal = props => {
   };
 
   const getMaxDate = () => {
-    let mutatedate = new Date(Number(pickupDate) + 2 * 24 * 60 * 60 * 1000);
+    let daysCount = 2;
+    if (isOmsPickupDate) {
+      daysCount = 5;
+    }
+    let mutatedate = new Date(
+      Number(pickupDate) + daysCount * 24 * 60 * 60 * 1000,
+    );
     let mutateMonth;
 
     if (mutatedate.getMonth() + 1 < 10) {
