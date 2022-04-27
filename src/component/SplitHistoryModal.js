@@ -261,6 +261,10 @@ const SplitHistoryModal = props => {
           <Text style={styles.BottomDataTitle}>Item Breakdown</Text>
           <View style={{flexDirection: 'row'}}>
             <View style={{paddingTop: Dimension.padding12}}>
+              <View style={styles.leftStepsPart}>
+                <View style={styles.circle}></View>
+                <View style={styles.line}></View>
+              </View>
               {((history || {}).children || []).map((_, k) => (
                 <View style={styles.leftStepsPart}>
                   <View style={styles.circle}></View>
@@ -271,11 +275,22 @@ const SplitHistoryModal = props => {
               ))}
             </View>
             <View style={styles.rightStepsPart}>
+              <View style={styles.RedItemWrap}>
+                <Text style={styles.PoText}>
+                  PO Item ID -{' '}
+                  <Text style={styles.PoBoldText}>{history.itemId}</Text>
+                </Text>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.PoText}>{history.itemQty} Qty. </Text>
+                  <Text
+                    style={[styles.PoText, {paddingLeft: Dimension.padding5}]}>
+                    | {history.itemStatus}
+                  </Text>
+                </View>
+              </View>
               {((history || {}).children || []).map((_, k) => (
                 //<View key={k} style={styles.RedItemWrap}>
-                <View
-                  key={k}
-                  style={k == 0 ? styles.RedItemWrap : styles.ItemWrap}>
+                <View key={k} style={styles.ItemWrap}>
                   <Text style={styles.PoText}>
                     PO ITem ID -{' '}
                     <Text style={styles.PoBoldText}>{_.itemId}</Text>

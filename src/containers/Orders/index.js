@@ -264,6 +264,7 @@ const OrdersScreen = props => {
         setLoadingTabs={setLoadingTabs}
         itemId={item.itemId}
         invoiceUrl={item.invoiceUrl}
+        manifestId={item.manifestId}
         bulkItemIds={bulkItemIds}
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
@@ -423,8 +424,9 @@ const OrdersScreen = props => {
         return true;
       } else if (tab.key == 'PICKUP') {
         if (
-          (profileData.enterpriseFlag) || (profileData.onlineFlag &&
-          profileData.onlineShipmentMode == 'ONESHIP')
+          profileData.enterpriseFlag ||
+          (profileData.onlineFlag &&
+            profileData.onlineShipmentMode == 'ONESHIP')
         ) {
           return true;
         }
@@ -468,6 +470,18 @@ const OrdersScreen = props => {
     }
   };
 
+  const textRenderer = label => {
+    let isSlash = label.includes('/');
+    let chunks = [];
+    if (isSlash) {
+      chunks = label.split('/');
+      return chunks.join('/\n');
+    } else {
+      chunks = label.split(' ');
+      return chunks.join('\n');
+    }
+  };
+
   const renderHeaderComponent = () => {
     return (
       <ScrollView
@@ -493,7 +507,7 @@ const OrdersScreen = props => {
                     ? styles.selectedTabTxt
                     : styles.UnselectedtabTxt
                 }>
-                {tab.label} ({tabData.get(tab.key)})
+                {textRenderer(tab.label)} ({tabData.get(tab.key)})
               </Text>
             </TouchableOpacity>
           ) : null,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, Image } from 'react-native';
+import { Text, View, FlatList, Image, ActivityIndicator } from 'react-native';
 import Header from '../../../component/common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../../../component/common/Button';
@@ -23,7 +23,7 @@ const UploadInvoiceScreen = props => {
   const [selectedTab, setSelectedTab] = useState(
     props.route.params.selectedTab || 'PENDING_ACCEPTANCE',
   );
-  const [quantity, setquantity] = useState(props?.route?.params?.quantity);
+  const [quantity, setQuantity] = useState(props?.route?.params?.quantity);
   const [warehouseId, setwarehouseId] = useState(
     props?.route?.params?.warehouseId,
   );
@@ -32,12 +32,13 @@ const UploadInvoiceScreen = props => {
   const [invoiceList, setInvoiceList] = useState([]);
 
   let EmsOmsFlag = actionCTA;
-
+  let tax = global.hsn
   useEffect(() => {
-    if (EmsOmsFlag.includes('MAP_INVOICE')) {
+    if (EmsOmsFlag.includes('MAP_INVOICE') || EmsOmsFlag.includes('REMAP_INVOICE')) {
       fetchInvoiceEMSDetails();
     }
   }, []);
+
 
   const selectItemId = itemId => {
 
@@ -78,6 +79,8 @@ const UploadInvoiceScreen = props => {
         orderRef={item.orderRef}
         productUom={item.productUom}
         quantity={item.quantity}
+        selectedValue={(value) => setTaxPercentage(value)}
+        UpdatedQuntity={(value) => setQuantity(value)}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
@@ -114,16 +117,20 @@ const UploadInvoiceScreen = props => {
         navigation={props.navigation}
         showText={'Upload Invoice'}
         showBell
-      // rightIconName={'business-details'}
       />
-      <FlatList
-        data={invoiceList}
-        renderItem={renderItem}
-        ListEmptyComponent={renderListEmptyComponent}
-        keyExtractor={(item, index) => `${index}-item`}
-        onEndReachedThreshold={0.9}
-        showsVerticalScrollIndicator={false}
-      />
+      {
+        invoiceList ?
+          <FlatList
+            data={invoiceList}
+            renderItem={renderItem}
+            ListEmptyComponent={renderListEmptyComponent}
+            keyExtractor={(item, index) => `${index}-item`}
+            onEndReachedThreshold={0.9}
+            showsVerticalScrollIndicator={false}
+          /> :
+          <ActivityIndicator style={{ alignSelf: 'center', marginTop: 150 }} />
+      }
+
       <View>
         <View style={styles.titleWrap}>
           <Text style={styles.TitleLightTxt}>
@@ -150,17 +157,20 @@ const UploadInvoiceScreen = props => {
           TextFontSize={Dimension.font16}
           title={'CONTINUE'}
           loading={loading}
-          onPress={() =>
+          onPress={() => {
             props.navigation.navigate('InvoiceEMSFormDetails', {
               orderRef,
               itemRef,
               warehouseId,
               quantity,
               hsn,
-              totalAmount,
               taxPercentage,
+              totalAmount,
+              tax,
               selectedTab,
             })
+
+          }
           }
         />
       </View>

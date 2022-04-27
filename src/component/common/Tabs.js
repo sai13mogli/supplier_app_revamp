@@ -171,6 +171,7 @@ const Tabs = props => {
       <Animated.FlatList
         ref={flatListRef}
         data={props.data}
+        scrollEnabled={!props.hideScroll}
         keyExtractor={item => item.key}
         horizontal
         showsHorizontalScrollIndicator={false}

@@ -64,6 +64,7 @@ const Ordercard = props => {
     bulkItemIds,
     setBulkItemIds,
     selectItemId,
+    manifestId,
     shipmentType,
     shipmentUrl,
     warehouseId,
@@ -1010,9 +1011,9 @@ const Ordercard = props => {
               ]}>
               <Text style={styles.disabledBtntxt}>Pack Order</Text>
             </TouchableOpacity>
-            {/* <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
-              Shipment lable not created
-            </Text> */}
+            <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
+              Invoice not created
+            </Text>
           </>
         ) : cta == 'PACK_ORDER_INVOICE_DISABLED' ? (
           <>
