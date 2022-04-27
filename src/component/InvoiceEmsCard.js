@@ -9,6 +9,9 @@ import React, { useState, } from 'react';
 import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
+import PickerDropDown from '../component/common/PickerDropDown';
+import { OrderedMap } from 'immutable';
+import FloatingLabelInputField from '../component/common/FloatingInput';
 
 const InvoiceCard = props => {
   const {
@@ -16,19 +19,101 @@ const InvoiceCard = props => {
     productUom,
     orderRef,
     transferPrice,
-    hsn,
-    taxPercentage,
+    // hsn,
     productName,
     itemId,
     bulkItemIds,
   } = props;
 
-  const [quantity, setQuantity] = useState(props.quantity);
+  const [taxPercentage, setTaxPercentage] = useState(props?.taxPercentage);
+  const [hsnError, setHsnError] = useState(false);
+  const [hsn, setHsn] = useState(props?.hsn);
+  const [quantity, setQuantity] = useState(props?.quantity);
   const [totalAmount, settotalAmount] = useState(props.totalAmount);
   const [amount, setAmount] = useState(props.totalAmount);
+  console.log('====================================');
+  console.log("qnty===>", quantity);
+  console.log('====================================');
+  const FORM_FIELDS = new OrderedMap({
+
+    HSN: {
+      title: 'HSN',
+      isImp: true,
+      label: 'HSN',
+      placeholder: 'HSN',
+      errorMessage: 'Enter valid hsn',
+      showError: hsnError,
+      value: hsn,
+      keyboardType: 'number-pad',
+      onChangeText: text => setHsn(text),
+      component: FloatingLabelInputField,
+      // onBlur: () => onPincodeBlur(),
+      editable: (bulkItemIds || []).includes(itemId) ? true : false,
+    },
+    qnty: {
+      title: 'Qty',
+      isImp: false,
+      label: 'Qty',
+      placeholder: 'Qty',
+      errorMessage: 'Enter valid Qty',
+      showError: hsnError,
+      value: String(quantity),
+      keyboardType: 'number-pad',
+      onChangeText: text => calculatePrice(text),
+      component: FloatingLabelInputField,
+      // onBlur: () => onPincodeBlur(),
+      editable: (bulkItemIds || []).includes(itemId) ? true : false,
+    },
+    hsn_tax: {
+      title: 'HSN Tax%',
+      isImp: false,
+      // disabled: (bulkItemIds || []).includes(itemId) ? true : false,
+      errorMessage: 'Enter valid hsn',
+      onValueChange: text => calculateHsn(text),
+      component: PickerDropDown,
+      enabled: true,
+      value: taxPercentage,
+      items: [
+        {
+          label: '0.00',
+          value: 0.00,
+        },
+        {
+          label: '0.10',
+          value: 0.10,
+        },
+        {
+          label: '0.25',
+          value: 0.25,
+        },
+        {
+          label: '3.00',
+          value: 3.00,
+        },
+        {
+          label: '5.00',
+          value: 5.00,
+        },
+        {
+          label: '12.00',
+          value: 12.00,
+        },
+        {
+          label: '18.00',
+          value: 18.00,
+        },
+        {
+          label: '28.00',
+          value: 28.00,
+        },
+      ],
+    },
+
+  });
 
   const calculatePrice = text => {
     setQuantity(text);
+    props.UpdatedQuntity(text)
     const { taxPercentage, transferPrice } = props;
     let Price = transferPrice * text;
     let percentage = (Price / 100) * taxPercentage + text * transferPrice;
@@ -36,6 +121,8 @@ const InvoiceCard = props => {
   };
 
   const calculateHsn = text => {
+    props.selectedValue(text)
+    setTaxPercentage(text)
     const { transferPrice } = props;
     let Price = transferPrice * quantity;
     let percentage = (Price / 100) * text + quantity * transferPrice;
@@ -89,8 +176,11 @@ const InvoiceCard = props => {
                 </Text>
               </View>
             </View>
+
+
             <View style={styles.borderWrap}>
-              <View style={styles.qtyView}>
+
+              {/* <View style={styles.qtyView}>
                 <Text style={styles.TitleLightTxt}>HSN</Text>
                 <TextInput
                   style={styles.wrapInput}
@@ -101,8 +191,8 @@ const InvoiceCard = props => {
                   }>
                   <Text style={styles.textMeasure}>{hsn}</Text>
                 </TextInput>
-              </View>
-              <View style={styles.qtyView}>
+              </View> */}
+              {/* <View style={styles.qtyView}>
                 <Text style={styles.TitleLightTxt}>Qty</Text>
                 <TextInput
                   style={styles.wrapInput}
@@ -113,10 +203,21 @@ const InvoiceCard = props => {
                   }>
                   {quantity}
                 </TextInput>
-              </View>
-              <View style={{ flexDirection: 'column' }}>
-                <Text style={styles.TitleLightTxt}>HSN Tax %</Text>
-                <TextInput
+              </View> */}
+              <View style={{
+                // flexDirection: 'row',
+                // paddingHorizontal: 120,
+                width: Dimension.width100,
+                // height: Dimension.height40
+              }}>
+                {FORM_FIELDS.map((field, fieldKey) => (
+                  <field.component
+                    {...field}
+                    key={fieldKey}
+                    disabled={field.disabled}
+                  />
+                )).toList()}
+                {/* <TextInput
                   style={styles.wrapInput}
                   onChangeText={text => calculateHsn(text)}
                   keyboardType={'number-pad'}
@@ -124,7 +225,7 @@ const InvoiceCard = props => {
                     (bulkItemIds || []).includes(itemId) ? true : false
                   }>
                   {taxPercentage}
-                </TextInput>
+                </TextInput> */}
               </View>
             </View>
           </View>
