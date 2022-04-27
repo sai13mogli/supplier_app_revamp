@@ -56,9 +56,7 @@ const InvoiceEMSFormDetailScreen = props => {
   const [baseAmount, setBaseAmount] = useState('');
   const [baseAmountError, setBaseAmountError] = useState(false);
   const [hsnError, sethsnError] = useState(false);
-  const [taxPercentage, setTaxPercentage] = useState(
-    props?.route?.params?.taxPercentage,
-  );
+  const [taxPercentage, setTaxPercentage] = useState(props?.route?.params?.taxPercentage);
   const [taxError, setTaxError] = useState(false);
   const [total, setTotal] = useState('');
   const [commentError, setCommentError] = useState(false);
@@ -68,6 +66,8 @@ const InvoiceEMSFormDetailScreen = props => {
   const [misBaseAmount, setMisBaseAmount] = useState('');
   const [misTotal, setMisTotal] = useState('');
   const [fId, setFId] = useState(null);
+
+
 
   const UploadInvoice = new OrderedMap({
     upload_invoice: {
@@ -199,7 +199,7 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'Tax',
       errorMessage: 'Enter valid tax',
       showError: taxError,
-      value: total ? String(taxPercentage) : '',
+      value: baseAmount ? String(taxPercentage) : '',
       component: FloatingLabelInputField,
       disabled: true,
     },
@@ -256,7 +256,7 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'Tax',
       errorMessage: 'Enter valid tax',
       showError: taxError,
-      value: loadingTotal ? String(taxPercentage) : '',
+      value: loadingBaseAmount ? String(taxPercentage) : '',
       component: FloatingLabelInputField,
       disabled: true,
     },
@@ -302,7 +302,7 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'Tax',
       errorMessage: 'Enter valid tax',
       showError: taxError,
-      value: misTotal ? String(taxPercentage) : '',
+      value: misBaseAmount ? String(taxPercentage) : '',
       component: FloatingLabelInputField,
       disabled: true,
     },
@@ -320,9 +320,7 @@ const InvoiceEMSFormDetailScreen = props => {
     },
   });
 
-  useEffect(() => {
-    console.log('taxPercentage', taxPercentage);
-  });
+
 
   const onUploadInvoiceBlur = () => {
     if (uploadInvoice && uploadInvoice.name) {
@@ -408,17 +406,17 @@ const InvoiceEMSFormDetailScreen = props => {
     }
   };
 
-  const onEwayBillNumberBlur = () => {
-    if (
-      ewayBillNumber &&
-      ewayBillNumber.length &&
-      ewayBillNumber.length == 12
-    ) {
-      setEwayBillNumberError(false);
-    } else {
-      setEwayBillNumberError(true);
-    }
-  };
+  // const onEwayBillNumberBlur = () => {
+  //   if (
+  //     ewayBillNumber &&
+  //     ewayBillNumber.length &&
+  //     ewayBillNumber.length == 12
+  //   ) {
+  //     setEwayBillNumberError(false);
+  //   } else {
+  //     setEwayBillNumberError(true);
+  //   }
+  // };
 
   const onInvoiceAmountBlur = () => {
     if (invoiceAmount && invoiceAmount.length) {
@@ -532,6 +530,7 @@ const InvoiceEMSFormDetailScreen = props => {
       invoiceAmount.length &&
       uploadInvoice &&
       uploadInvoice.name
+
     ) {
       try {
         setLoading(true);
@@ -552,7 +551,7 @@ const InvoiceEMSFormDetailScreen = props => {
           orderRef: orderRef,
           itemLists: [
             {
-              quantity: quantity,
+              quantity: String(quantity),
               hsnPercentage: String(taxPercentage),
               itemRef: itemRef,
               hsn: hsn,
@@ -626,7 +625,7 @@ const InvoiceEMSFormDetailScreen = props => {
           ],
         );
         const res = await response.json();
-        console.log('Respose===>', res, JSON.stringify(payload));
+        console.log('Respose===>', response, res);
         if (res.success) {
           setLoading(false);
           // dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
@@ -657,13 +656,14 @@ const InvoiceEMSFormDetailScreen = props => {
         setLoading(false);
       }
     } else {
+
       onInvoiceNumberBlur();
-      // onEwayBillNumberBlur();
-      onInvoiceAmountBlur();
       onInvoiceDateBlur();
-      ewayBillNumber ? onEwayDateDateBlur() : null;
+      onInvoiceAmountBlur();
       onUploadInvoiceBlur();
-      onUploadEwayBlur();
+      // onEwayBillNumberBlur();
+      // onEwayDateDateBlur();
+      // onUploadEwayBlur();
     }
   };
 

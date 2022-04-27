@@ -1,9 +1,10 @@
-import {View, Text, StyleSheet} from 'react-native';
-import React, {useEffect} from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
 import colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import CustomeIcon from './CustomeIcon';
+
 const PickerDropDown = props => {
   const {
     placeholder,
