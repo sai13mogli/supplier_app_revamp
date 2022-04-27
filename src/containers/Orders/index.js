@@ -264,6 +264,7 @@ const OrdersScreen = props => {
         setLoadingTabs={setLoadingTabs}
         itemId={item.itemId}
         invoiceUrl={item.invoiceUrl}
+        manifestId={item.manifestId}
         bulkItemIds={bulkItemIds}
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
