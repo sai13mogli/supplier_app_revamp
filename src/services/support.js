@@ -58,6 +58,16 @@ export const closeTicket = async id =>
     },
   });
 
+export const searchFaqs = async (selectedTab, search) =>
+  axios.get(
+    `${BASE_URL}searchapi/ticket/faq?searchString=${search}&topic=${selectedTab}`,
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
 export const reOpen = async id =>
   axios.get(`${BASE_URL}api/ticket/reOpen`, {
     params: {Id: id},
