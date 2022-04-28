@@ -680,9 +680,28 @@ const Ordercard = props => {
                 />
               )}
             </TouchableOpacity>
-            <Text style={[styles.shipmentLbelTxt, { marginLeft: Dimension.margin8 }]}>
-              Invoice Rejected
-            </Text>
+            <View style={{ flexDirection: 'row', marginTop: Dimension.margin5 }}>
+              <Text style={[styles.shipmentLbelTxt, { marginLeft: Dimension.margin8 }]}>
+                Invoice Rejected
+              </Text>
+              <TouchableOpacity
+                style={{ marginLeft: -Dimension.margin50 }}
+                onPress={() => settooltip1(!tooltip1)}>
+                <Image
+                  source={require('../assets/images/tooltipIcon.png')}
+                  style={{ width: 20, height: 20 }}></Image>
+              </TouchableOpacity>
+
+            </View>
+            <View style={{ flex: 1, }}>
+              {tooltip1 && (
+                <View style={styles.tooltipWrap}>
+                  <View style={styles.arrow}></View>
+                  <Text style={styles.remarkTxt}>{remark}</Text>
+                </View>
+              )}
+            </View>
+
           </View>
         ) : cta == 'MAP_PO_TO_INVOICE' ? (
           <TouchableOpacity
