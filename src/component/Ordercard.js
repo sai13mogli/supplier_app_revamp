@@ -64,6 +64,7 @@ const Ordercard = props => {
     bulkItemIds,
     setBulkItemIds,
     selectItemId,
+    manifestId,
     shipmentType,
     shipmentUrl,
     warehouseId,
@@ -101,6 +102,8 @@ const Ordercard = props => {
   const { navigate } = useNavigation();
   const navigation = useNavigation();
   const [tooltip1, settooltip1] = useState(false);
+  const [remapInvoiceToolTip, setRemapInvoiceToolTip] = useState(false);
+  const [isOmsPickupDate, setIsOmsPickupDate] = useState(false);
 
   useEffect(() => {
     fetchImage();
@@ -600,9 +603,16 @@ const Ordercard = props => {
         ) : cta == 'OMS_PICKUP_DATE' ? (
           <TouchableOpacity
             // disabled={acceptLoader}
-            onPress={() => setDisplayCalendar(true)}
+            onPress={() => {
+              setIsOmsPickupDate(true);
+              setDisplayCalendar(true);
+            }}
             style={styles.DownloadPoBtn}>
-            <Text style={styles.rejectCtaTxt}>CHOOSE PICKUP DATE</Text>
+            <Text style={styles.rejectCtaTxt}>
+              {selectedTab == 'PACKED'
+                ? 'RESCHEDULE PICKUP DATE'
+                : ' CHOOSE PICKUP DATE'}
+            </Text>
           </TouchableOpacity>
         ) : cta == 'EMS_PICKUP_DATE' ? (
           <TouchableOpacity
@@ -656,53 +666,44 @@ const Ordercard = props => {
             )}
           </TouchableOpacity>
         ) : cta == 'REMAP_INVOICE' ? (
-          <View style={{ flexDirection: 'column', flex: 35 }}>
+          <TouchableOpacity
+            disabled={poLoader}
+            onPress={() =>
+              navigation.navigate('UploadInvoiceEMS', {
+                orderRef,
+                actionCTA,
+                itemRef,
+                warehouseId,
+                hsn,
+                quantity,
+                totalAmount,
+              })
+            }
+            style={styles.DownloadPoBtn}>
+            <Text style={styles.rejectCtaTxt}>REUPLOAD INVOICE</Text>
+            {/* <Text numberOfLines={2} style={styles.shipmentLbelTxt}>
+              Invoice Rejected
+            </Text>
             <TouchableOpacity
-              disabled={poLoader}
-              onPress={() =>
-                navigation.navigate('UploadInvoiceEMS', {
-                  orderRef,
-                  actionCTA,
-                  itemRef,
-                  warehouseId,
-                  hsn,
-                  taxPercentage,
-                  quantity,
-                  totalAmount,
-                })
-              }
-              style={styles.DownloadPoBtn}>
-              <Text style={styles.rejectCtaTxt}>REUPLOAD INVOICE</Text>
-              {poLoader && (
-                <ActivityIndicator
-                  color={Colors.FontColor}
-                  style={{ alignSelf: 'center' }}
-                />
-              )}
+              style={{marginLeft: Dimension.margin10}}
+              onPress={() => setRemapInvoiceToolTip(!remapInvoiceToolTip)}>
+              <Image
+                source={require('../assets/images/tooltipIcon.png')}
+                style={{width: 20, height: 20}}></Image>
             </TouchableOpacity>
-            <View style={{ flexDirection: 'row', marginTop: Dimension.margin5 }}>
-              <Text style={[styles.shipmentLbelTxt, { marginLeft: Dimension.margin8 }]}>
-                Invoice Rejected
-              </Text>
-              <TouchableOpacity
-                style={{ marginLeft: -Dimension.margin50 }}
-                onPress={() => settooltip1(!tooltip1)}>
-                <Image
-                  source={require('../assets/images/tooltipIcon.png')}
-                  style={{ width: 20, height: 20 }}></Image>
-              </TouchableOpacity>
-
-            </View>
-            <View style={{ flex: 1, }}>
-              {tooltip1 && (
-                <View style={styles.tooltipWrap}>
-                  <View style={styles.arrow}></View>
-                  <Text style={styles.remarkTxt}>{remark}</Text>
-                </View>
-              )}
-            </View>
-
-          </View>
+            {remapInvoiceToolTip && (
+              <View style={styles.tooltipWrap}>
+                <View style={styles.arrow}></View>
+                <Text style={styles.remarkTxt}>{remark}</Text>
+              </View>
+            )} */}
+            {poLoader && (
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{ alignSelf: 'center' }}
+              />
+            )}
+          </TouchableOpacity>
         ) : cta == 'MAP_PO_TO_INVOICE' ? (
           <TouchableOpacity
             disabled={poLoader}
@@ -951,7 +952,7 @@ const Ordercard = props => {
                 flexBasis: actionCTA.length > 1 ? '48%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>PROOF OF DELIVERY</Text>
+            <Text style={styles.rejectCtaTxt}>UPLOAD PROOF OF DELIVERY</Text>
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -1010,9 +1011,9 @@ const Ordercard = props => {
               ]}>
               <Text style={styles.disabledBtntxt}>Pack Order</Text>
             </TouchableOpacity>
-            {/* <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
-              Shipment lable not created
-            </Text> */}
+            <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'blue' }}>
+              Invoice not created
+            </Text>
           </>
         ) : cta == 'PACK_ORDER_INVOICE_DISABLED' ? (
           <>
@@ -1319,9 +1320,11 @@ const Ordercard = props => {
                       : shipmentType}
               </Text>
               {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
-              <Text style={styles.shipmentModeStringWrap}>
-                {shipmentModeString}
-              </Text>
+              {pickupDate !== null ? (
+                <Text style={styles.shipmentModeStringWrap}>
+                  {shipmentModeString}
+                </Text>
+              ) : null}
             </View>
           </View>
         </View>
@@ -1350,13 +1353,15 @@ const Ordercard = props => {
             <View style={{ flex: 1 }}>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.cancelStatusTxt}>{statusText}</Text>
-                <TouchableOpacity
-                  style={{ marginLeft: Dimension.margin10 }}
-                  onPress={() => settooltip1(!tooltip1)}>
-                  <Image
-                    source={require('../assets/images/tooltipIcon.png')}
-                    style={{ width: 20, height: 20 }}></Image>
-                </TouchableOpacity>
+                {statusText !== 'Supplier Denied' ? (
+                  <TouchableOpacity
+                    style={{ marginLeft: Dimension.margin10 }}
+                    onPress={() => settooltip1(!tooltip1)}>
+                    <Image
+                      source={require('../assets/images/tooltipIcon.png')}
+                      style={{ width: 20, height: 20 }}></Image>
+                  </TouchableOpacity>
+                ) : null}
               </View>
               {tooltip1 && (
                 <View style={styles.tooltipWrap}>
@@ -1496,6 +1501,7 @@ const Ordercard = props => {
           displayCalendar={displayCalendar}
           setDisplayCalendar={setDisplayCalendar}
           pickupDate={pickupDate}
+          isOmsPickupDate={isOmsPickupDate}
         />
       )}
       {addViewModal && (
