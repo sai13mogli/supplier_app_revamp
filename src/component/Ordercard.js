@@ -7,6 +7,7 @@ import {
   Dimensions,
   ActivityIndicator,
   PermissionsAndroid,
+  ImageBackground
 } from 'react-native';
 import React, { useState, useEffect, useCallback } from 'react';
 import { getImageUrl, markOutForOrderApi, getItemInfo } from '../services/orders';
@@ -1212,20 +1213,33 @@ const Ordercard = props => {
           ) : null}
           <View style={[fromModal ? styles.LeftpartModal : styles.leftpart]}>
             {orderImage ? (
+              <ImageBackground
+              source={ fromModal 
+                ? require('../assets/images/bigRectngle.png') 
+                : require('../assets/images/rectanglebg.png') }
+              style={fromModal 
+              ? {width: 262, height: 262, padding: 2,justifyContent:"center",alignItems:"center",alignSelf:"center",marginBottom:Dimension.margin10}
+              :{ width: 62, height: 62, padding: 2}
+              }>
               <Image
-                // source={{
-                //   uri:
-                //     orderImage ||
-                //     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
-                // }}
                 source={{ uri: orderImage }}
                 style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
               />
+              </ImageBackground>
             ) : (
+              <ImageBackground
+              source={ fromModal 
+                ? require('../assets/images/bigRectngle.png') 
+                : require('../assets/images/rectanglebg.png') }
+            style={fromModal 
+              ? {width: 262, height: 262, padding: 2,justifyContent:"center",alignItems:"center",alignSelf:"center",marginBottom:Dimension.margin10}
+              :{ width: 62, height: 62, padding: 2}
+              }>
               <Image
                 source={require('../assets/images/default_image.png')}
                 style={[fromModal ? styles.imgStyleModal : styles.imgStyle]}
               />
+              </ImageBackground>
             )}
             {!fromModal ? (
               <View style={styles.quantityTxt}>
@@ -1672,8 +1686,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: Colors.WhiteColor,
     padding: 2,
-    width: Dimension.width50,
-    height: Dimension.height50,
+    width: 58,
+    height: 58,
     //alignSelf:'center'
   },
 
