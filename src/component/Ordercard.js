@@ -666,6 +666,7 @@ const Ordercard = props => {
             )}
           </TouchableOpacity>
         ) : cta == 'REMAP_INVOICE' ? (
+         <View style={{flexDirection:"column",flex:0,flexBasis:"50%"}}>
           <TouchableOpacity
             disabled={poLoader}
             onPress={() =>
@@ -683,7 +684,15 @@ const Ordercard = props => {
             }
             style={styles.DownloadPoBtn}>
             <Text style={styles.rejectCtaTxt}>REUPLOAD INVOICE</Text>
-            {/* <Text numberOfLines={2} style={styles.shipmentLbelTxt}>
+            {poLoader && (
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{ alignSelf: 'center' }}
+              />
+            )}
+          </TouchableOpacity>
+          <View style={{flexDirection:"row",flexBasis:"50%",marginTop:5}}>
+            <Text numberOfLines={2} style={styles.shipmentLbelTxt1}>
               Invoice Rejected
             </Text>
             <TouchableOpacity
@@ -693,19 +702,15 @@ const Ordercard = props => {
                 source={require('../assets/images/tooltipIcon.png')}
                 style={{width: 20, height: 20}}></Image>
             </TouchableOpacity>
+            </View>
             {remapInvoiceToolTip && (
-              <View style={styles.tooltipWrap}>
+              <View style={styles.tooltipWrap1}>
                 <View style={styles.arrow}></View>
                 <Text style={styles.remarkTxt}>{remark}</Text>
               </View>
-            )} */}
-            {poLoader && (
-              <ActivityIndicator
-                color={Colors.FontColor}
-                style={{ alignSelf: 'center' }}
-              />
+              
             )}
-          </TouchableOpacity>
+          </View>
         ) : cta == 'MAP_PO_TO_INVOICE' ? (
           <TouchableOpacity
             disabled={poLoader}
@@ -1707,6 +1712,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: Dimension.margin10,
+    marginTop: Dimension.margin10,
   },
   acceptCtaTxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
@@ -1721,6 +1727,7 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: Dimension.margin10,
   },
   rejectCtaTxt: {
     fontFamily: Dimension.CustomSemiBoldFont,
@@ -1768,6 +1775,13 @@ const styles = StyleSheet.create({
     color: Colors.BlueShade,
     fontSize: Dimension.font10,
     flexBasis: '100%',
+    marginTop: Dimension.margin5,
+  },
+  shipmentLbelTxt1: {
+    fontFamily: Dimension.CustomMediumFont,
+    color: Colors.BlueShade,
+    fontSize: Dimension.font10,
+    //flexBasis: '100%',
     marginTop: Dimension.margin5,
   },
   // DownloadPoBtn: {
@@ -1846,6 +1860,16 @@ const styles = StyleSheet.create({
     padding: Dimension.padding8,
     alignSelf: 'flex-start',
   },
+  tooltipWrap1: {
+    backgroundColor: '#000',
+    marginTop: Dimension.margin10,
+    position: 'relative',
+    borderRadius: 4,
+    //marginHorizontal: Dimension.margin15,
+    padding: Dimension.padding8,
+   // alignSelf: 'flex-start',
+  },
+
   arrow: {
     borderLeftColor: '#fff',
     borderBottomColor: '#000',

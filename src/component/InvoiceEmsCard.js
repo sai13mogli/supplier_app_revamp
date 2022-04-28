@@ -69,6 +69,7 @@ const InvoiceCard = props => {
       errorMessage: 'Enter valid hsn',
       onValueChange: text => calculateHsn(text),
       component: PickerDropDown,
+      fromUploadInvoive: true,
       enabled: true,
       value: taxPercentage,
       items: [
@@ -176,7 +177,7 @@ const InvoiceCard = props => {
             </View>
 
 
-            <View style={styles.borderWrap}>
+            {/* <View style={styles.borderWrap}> */}
 
               {/* <View style={styles.qtyView}>
                 <Text style={styles.TitleLightTxt}>HSN</Text>
@@ -203,17 +204,21 @@ const InvoiceCard = props => {
                 </TextInput>
               </View> */}
               <View style={{
-                // flexDirection: 'row',
+                flexDirection: 'row',
+                flex:1,
+                
                 // paddingHorizontal: 120,
-                width: Dimension.width100,
+               // width: Dimension.width10,
                 // height: Dimension.height40
               }}>
                 {FORM_FIELDS.map((field, fieldKey) => (
+                  <View style={{flex:1,marginRight:Dimension.margin25}}>
                   <field.component
                     {...field}
                     key={fieldKey}
                     disabled={field.disabled}
                   />
+                  </View>
                 )).toList()}
                 {/* <TextInput
                   style={styles.wrapInput}
@@ -225,7 +230,7 @@ const InvoiceCard = props => {
                   {taxPercentage}
                 </TextInput> */}
               </View>
-            </View>
+            {/* </View> */}
           </View>
         </View>
       </>

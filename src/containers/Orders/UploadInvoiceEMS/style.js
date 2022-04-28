@@ -52,20 +52,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WhiteColor,
   },
   titleWrap: {
-    height: Dimension.height28,
+    //height: Dimension.height28,
     backgroundColor: Colors.NudgeColor1,
-
+    paddingVertical:Dimension.padding10
 
   },
 
   TitleLightTxt: {
     fontSize: Dimension.font12,
-    backgroundColor: Colors.NudgeColor1,
     textAlign: 'center',
-    marginTop: Dimension.margin8,
     color: Colors.blackColor,
-    fontFamily: Dimension.CustomRegularFont,
-    // marginBottom: Dimension.margin5,
+    fontFamily: Dimension.CustomSemiBoldFont,
+    
   },
   sendOtptext: {
     fontSize: Dimension.font12,

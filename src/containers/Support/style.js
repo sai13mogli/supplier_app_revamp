@@ -161,10 +161,28 @@ const styles = StyleSheet.create({
     marginBottom: Dimension.margin15,
   },
   BottomWrap: {
-    borderTopWidth: 1,
-    borderTopColor: Colors.grayShade2,
-    padding: Dimension.padding15,
-    backgroundColor: Colors.WhiteColor,
+    // borderTopWidth: 1,
+    // borderTopColor: Colors.grayShade2,
+    // padding: Dimension.padding15,
+    // backgroundColor: Colors.WhiteColor,
+    position:"absolute",
+    bottom:Dimension.height40,
+    justifyContent:"center",
+    alignSelf:"center",
+    
+  },
+  ticketBtn:{
+    backgroundColor:Colors.BrandColor,
+    borderRadius:4,
+    padding:Dimension.padding10,
+    flexDirection:"row"
+
+  },
+  ticketBtnTxt:{
+    fontSize: Dimension.font14,
+    color: Colors.WhiteColor,
+    fontFamily: Dimension.CustomMediumFont,
+    marginLeft:Dimension.margin5
   },
 });
 

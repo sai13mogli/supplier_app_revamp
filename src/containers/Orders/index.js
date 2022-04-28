@@ -736,24 +736,7 @@ const OrdersScreen = props => {
 
   return (
     <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
-      {/* <CustomButton
-        title={'Open Notifications'}
-        buttonColor={'dodgerblue'}
-        iconName={'user'}
-        icon={() => (
-          <CustomeIcon
-            name={'add-box'}
-            size={Dimension.font22}
-            color={colors.BrandColor}
-          />
-        )}
-        showIcon
-        iconColor={'#fff'}
-        iconType={'font-awesome'}
-        onPress={() => props.navigation.navigate('Notification')}
-        TextColor={colors.WhiteColor}
-        borderColor={colors.WhiteColor}
-      /> */}
+      
       <View style={styles.topHeaderWrap}>
         <DropDown
           title={'Orders'}
@@ -770,9 +753,9 @@ const OrdersScreen = props => {
         <TouchableOpacity
           onPress={() => props.navigation.navigate('Notification')}
           style={{
-            position: 'relative',
+            //position: 'relative',
             paddingLeft: Dimension.padding8,
-            marginTop: Dimension.margin15,
+            marginTop: Dimension.margin20,
           }}>
           <CustomeIcon
             name={'notification-3-line'}
@@ -868,7 +851,7 @@ const OrdersScreen = props => {
                   }}
                   blurOnSubmit={true}
                   ellipsizeMode="tail"
-                  placeholderTextColor={Colors.FontColor}
+                  placeholderTextColor={Colors.eyeIcon}
                   numberOfLines={1}
                   style={styles.SearchInputCss}></TextInput>
                 <CustomeIcon

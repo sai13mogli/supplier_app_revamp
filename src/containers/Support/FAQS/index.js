@@ -7,6 +7,7 @@ import {
   FlatList,
   ActivityIndicator,
   TextInput,
+  Image
 } from 'react-native';
 import styles from './style';
 import {searchFaqs} from '../../../services/support';
@@ -69,12 +70,12 @@ const FAQS = props => {
     const regex = /(<([^>]+)>)/gi;
     return (
       <View style={styles.questionContainer}>
-        <Text style={{color: '#000'}}>{item.question}</Text>
+        <Text style={styles.questionTxt}>{item.question}</Text>
         {text.map((li, liI) =>
           liI == 0 ? null : (
             <View style={styles.liContainer} key={liI}>
               <View style={styles.liDot} />
-              <Text>{li.replace(regex, '')}</Text>
+              <Text style={styles.ansTxt}>{li.replace(regex, '')}</Text>
             </View>
           ),
         )}
@@ -87,8 +88,11 @@ const FAQS = props => {
   };
 
   return (
+    <>
     <View style={styles.container}>
-      <Text style={{color: '#000'}}>Have a Questiion ?</Text>
+
+    
+      <Text style={styles.headingTxt}>Have A Question ?</Text>
       <View style={styles.searchWrapper}>
         <TextInput
           placeholderTextColor={Colors.eyeIcon}
@@ -104,7 +108,7 @@ const FAQS = props => {
           name={'search'}
           style={styles.seacrhIcon}></CustomeIcon>
       </View>
-      <Text style={{color: '#000'}}>Topics</Text>
+      <Text style={styles.headingTxt}>Topics</Text>
       <ScrollView horizontal={true}>
         <View style={styles.tabContainer}>
           {TABS.map((tab, tabIndex) => (
@@ -126,6 +130,7 @@ const FAQS = props => {
           ))}
         </View>
       </ScrollView>
+      </View>
       {loader ? (
         <ActivityIndicator
           style={{alignSelf: 'center', padding: 12}}
@@ -135,16 +140,23 @@ const FAQS = props => {
         <FlatList
           renderItem={renderItem}
           data={data}
-          contentContainerStyle={{marginVertical: Dimension.margin4}}
+          contentContainerStyle={{paddingBottom:280}}
+          style={{marginHorizontal:Dimension.margin10,}}
           ListEmptyComponent={
-            <Text style={{alignSelf: 'center', padding: 12}}>
+            <View style={styles.EmptyChatWrap}>
+          <Image
+            source={require('../../../assets/images/EmptyChat.png')}
+            style={{height: Dimension.height250, width: Dimension.width150}}
+          />
+            <Text style={styles.EmptyBoldTxt}>
               No FAQ's found
             </Text>
+          </View>
           }
           keyExtractor={(item, index) => `${index}-item`}
         />
       )}
-    </View>
+    </>
   );
 };
 
