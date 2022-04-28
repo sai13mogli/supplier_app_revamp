@@ -609,7 +609,7 @@ const Ordercard = props => {
               setDisplayCalendar(true);
             }}
             style={styles.DownloadPoBtn}>
-            <Text style={styles.rejectCtaTxt}>
+            <Text style={[styles.rejectCtaTxt,{fontSize:Dimension.font11}]}>
               {selectedTab == 'PACKED'
                 ? 'RESCHEDULE PICKUP DATE'
                 : ' CHOOSE PICKUP DATE'}
@@ -620,7 +620,7 @@ const Ordercard = props => {
             // disabled={acceptLoader}
             onPress={() => setDisplayCalendar(true)}
             style={styles.DownloadPoBtn}>
-            <Text style={styles.rejectCtaTxt}>RESCHEDULE PICKUP DATE</Text>
+            <Text style={[styles.rejectCtaTxt,{fontSize:Dimension.font11}]}>RESCHEDULE PICKUP DATE</Text>
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_INVOICE' ? (
           <TouchableOpacity
