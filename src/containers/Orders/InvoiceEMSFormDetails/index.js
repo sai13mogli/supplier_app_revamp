@@ -528,9 +528,7 @@ const InvoiceEMSFormDetailScreen = props => {
       invoiceDate &&
       invoiceAmount &&
       invoiceAmount.length &&
-      uploadInvoice &&
-      uploadInvoice.name
-
+      uploadInvoice
     ) {
       try {
         setLoading(true);
@@ -595,7 +593,7 @@ const InvoiceEMSFormDetailScreen = props => {
           },
           invoiceTotal: invoiceAmount,
         };
-        console.log('Payload====>', payload);
+        console.log('Payload====>', payload, response);
 
         const response = await RNFetchBlob.fetch(
           'POST',
@@ -663,7 +661,9 @@ const InvoiceEMSFormDetailScreen = props => {
       onUploadInvoiceBlur();
       // onEwayBillNumberBlur();
       // onEwayDateDateBlur();
-      // onUploadEwayBlur();
+      if (ewayBillNumber) {
+        onUploadEwayBlur();
+      }
     }
   };
 

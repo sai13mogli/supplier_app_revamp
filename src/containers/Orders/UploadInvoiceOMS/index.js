@@ -323,7 +323,6 @@ const UploadInvoiceOMSScreen = props => {
         bulkItemIds={bulkItemIds}
         actionCTA={item.actionCTA}
         keys={keys}
-        // totalKeys={totalKeys}
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
       />

@@ -20,13 +20,13 @@ const UpdateNumberAndEmaiModal = props => {
     let interval = {};
     const [otp, setOtp] = useState('');
     const [otpError, setOtpError] = useState(false);
-    const [phone, setphone] = useState(props?.phone != undefined ? props.phone : '');
+    const [phone, setphone] = useState('');
     const [numberError, setNumberError] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [inputType, setInputType] = useState(true);
     const [timer, setTimer] = useState(0);
-    const [email, setEmail] = useState(props?.email != undefined ? props.email : '');
+    const [email, setEmail] = useState('');
 
     useEffect(() => {
         if (props.frombusinessDetails) {
@@ -162,10 +162,10 @@ const UpdateNumberAndEmaiModal = props => {
             <View style={styles.modalContainer}>
                 <View style={styles.topbdr}></View>
                 <View style={styles.ModalheadingWrapper}>
-                    {
-                        phone ? <Text style={styles.ModalHeading}>Update Phone Number</Text> :
-                            <Text style={styles.ModalHeading}>Update E-mail</Text>
-                    }
+                    <Text style={styles.ModalHeading}>Update Phone Number</Text>
+                    {/* :
+                            <Text style={styles.ModalHeading}>Update E-mail</Text> */}
+                    {/* } */}
 
                     <CustomeIcon
                         name={'close'}
@@ -187,7 +187,7 @@ const UpdateNumberAndEmaiModal = props => {
                                 : setNumberError(false)
                         }
                         keyboardType={'number-pad'}
-                        label={phone ? 'Phone Number' : 'Email'}
+                        label={'Phone Number'}
                         title={'Phone Number'}
                         isImp={true}
 

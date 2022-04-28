@@ -13,8 +13,9 @@ const styles = StyleSheet.create({
   topHeaderWrap: {
     flexDirection: 'row',
     justifyContent: "space-between",
-    padding: Dimension.padding15,
-    backgroundColor: Colors.grayShade1,
+    paddingHorizontal: Dimension.padding15,
+    paddingVertical:Dimension.padding20,
+    backgroundColor: Colors.grayShade12,
 
   },
   reddot:{

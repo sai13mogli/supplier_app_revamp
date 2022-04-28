@@ -4,6 +4,7 @@ import colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
 import { Picker } from '@react-native-picker/picker';
 import CustomeIcon from './CustomeIcon';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const PickerDropDown = props => {
   const {
@@ -18,14 +19,66 @@ const PickerDropDown = props => {
   } = props;
 
   return (
+     props.fromUploadInvoive ? (
     <>
       <Text style={styles.labelStyle}>{title}</Text>
+      <View style={styles.UIpickerWrapper}>
+        <Picker
+          selectedValue={value}
+          onValueChange={onValueChange}
+          style={styles.UIpickerStyle}
+          enabled={enabled || disabled}
+         itemStyle={styles.UIPickerItemStyle}
+          >
+          <Picker.Item
+            key={'noKey'}
+            label={label}
+            style={styles.UIPickerItemStyle}
+            value={false}
+            color={colors.FontColor}
+          fontFamily={Dimension.CustomRegularFont }
+          fontSize={Dimension.font12}
+          />
+          {items.map((value, idx) => {
+            return (
+              <Picker.Item
+                key={idx}
+                label={value.label}
+                value={value.value}
+                style={styles.UIPickerItemStyles}
+                color={colors.FontColor}
+          fontFamily={Dimension.CustomRegularFont }
+          fontSize={Dimension.font12}
+              />
+            );
+          })}
+        </Picker>
+        <View
+          style={
+            props.isFromOrders
+              ? styles.withoutBGiconWrapper
+              : styles.iconWrapper
+          }>
+          <CustomeIcon
+            name={'arrow-drop-down-line'}
+            size={Dimension.font26}
+            color={colors.FontColor}
+          />
+        </View>
+      </View>
+    </>
+     )
+    :(
+      <>
+       <Text style={styles.labelStyle}>{title}</Text>
       <View style={styles.pickerWrapper}>
         <Picker
           selectedValue={value}
           onValueChange={onValueChange}
           style={disabled ? styles.disabledpickerStyle : styles.pickerStyle}
-          enabled={enabled || disabled}>
+          enabled={enabled || disabled}
+          itemStyle={styles.PickerItemStyle}
+          >
           <Picker.Item
             key={'noKey'}
             label={label}
@@ -56,7 +109,8 @@ const PickerDropDown = props => {
           />
         </View>
       </View>
-    </>
+      </>
+    )
   );
 };
 
@@ -112,14 +166,6 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontFamily: Dimension.CustomRegularFont,
   },
-  labelStyle: {
-    fontSize: Dimension.font10,
-    color: colors.FontColor,
-    fontFamily: Dimension.CustomMediumFont,
-    marginLeft: Dimension.margin12,
-    marginBottom: Dimension.margin5,
-    fontWeight: 'normal',
-  },
   withoutborderPicker: {
     position: 'relative',
     paddingTop: Dimension.padding8,
@@ -131,6 +177,37 @@ const styles = StyleSheet.create({
     height: Dimension.height24,
     right: -Dimension.padding18,
     top: Dimension.padding6,
+  },
+
+  UIpickerWrapper:{
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: colors.FontColor,
+    padding: 1,
+    position: 'relative',
+    //marginBottom: Dimension.margin15,
+     height: Dimension.height40,
+    
+  },
+  // UIpickerStyle:{
+  //   backgroundColor: colors.WhiteColor,
+  //   fontSize: Dimension.font18,
+  //   color: colors.FontColor,
+  //   //fontWeight: 'normal',
+  //   fontFamily: Dimension.CustomRegularFont,
+  //   height: 0,
+  //   paddingTop:0,
+  //   paddingBottom:0,
+  //   paddingLeft:0,
+  //   paddingRight:0,
+  //   padding:0
+  // },
+  UIPickerItemStyle:{
+    backgroundColor:"#000",
+    color:Colors.WhiteColor,
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    paddingLeft:0,
   },
 });
 

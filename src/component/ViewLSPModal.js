@@ -42,6 +42,7 @@ const ViewLSPModal = props => {
     shipmentModeString,
     taxPercentage,
     totalAmount,
+    manifestId,
     supplierId,
   } = props;
 
@@ -74,6 +75,7 @@ const ViewLSPModal = props => {
       setLoading(false);
     }
   };
+
   const renderOrderDetails = () => {
     return (
       <Productcard
@@ -123,6 +125,37 @@ const ViewLSPModal = props => {
 
   const toggleShowMoreTxt = () => {
     setShowMoreTxt(!showMoreTxt);
+  };
+
+  const SHIPPER_NAME = {
+    1: 'Delhivery',
+    2: 'Go Javas',
+    3: 'DTDC',
+    4: 'Ecom Express',
+    5: 'Moglix',
+    6: 'Gati',
+    7: 'Blue Dart',
+    8: 'Safexpress',
+    9: 'GoPigeon',
+    10: 'FedEx',
+    11: 'GoPigen Surface',
+    12: 'Gati Express',
+    13: 'Gati Air',
+    14: 'TCI',
+    15: 'Holisol',
+    16: 'Delhivery Surface',
+    17: 'VRL logistics',
+    18: 'NuvoEx',
+    19: 'Pickrr',
+    20: 'Bluedart Surface',
+    21: 'Safexpress Bulk',
+    22: 'SpotOn',
+    23: 'Rivigo',
+    24: 'XpressBee Surface',
+    25: 'XpressBee Air',
+    26: 'Gati Kintetsu',
+    27: 'Bluedart Surface B2B',
+    28: 'Delhivery DFS',
   };
 
   return (
@@ -175,12 +208,16 @@ const ViewLSPModal = props => {
               <View style={styles.itemWrapInner}>
                 <Text style={styles.PoText}>
                   Shipper Name -{' '}
-                  <Text style={styles.PoBoldText}>{_.shipmentMode}</Text>
+                  <Text style={styles.PoBoldText}>
+                    {SHIPPER_NAME[_.shipperId]}
+                  </Text>
                 </Text>
-                <Text style={styles.PoText}>
-                  Manifest ID -{' '}
-                  <Text style={styles.PoBoldText}>{_.shipperId}</Text>
-                </Text>
+                {manifestId ? (
+                  <Text style={styles.PoText}>
+                    Manifest ID -{' '}
+                    <Text style={styles.PoBoldText}>{manifestId}</Text>
+                  </Text>
+                ) : null}
               </View>
               <View style={styles.itemWrapInner}>
                 <Text style={styles.PoText}>
