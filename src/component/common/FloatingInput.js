@@ -148,9 +148,10 @@ const styles = StyleSheet.create({
     paddingRight: Dimension.padding12,
   },
   iconStyle: {
-    width: Dimension.width24,
+    width: Dimension.width28,
     height: Dimension.height24,
     marginRight: Dimension.padding10,
+    //backgroundColor:"#ccc"
   },
   iconBtnstyle: {
     marginRight: Dimension.padding10,

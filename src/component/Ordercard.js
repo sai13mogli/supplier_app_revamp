@@ -1008,6 +1008,7 @@ const Ordercard = props => {
           </>
         ) : cta == 'PACK_ORDER_DISABLED' ? (
           <>
+          <View style={{flexDirection:"column",flexBasis:"50%"}}>
             <TouchableOpacity
               disabled={true}
               style={[
@@ -1019,9 +1020,10 @@ const Ordercard = props => {
               ]}>
               <Text style={styles.disabledBtntxt}>Pack Order</Text>
             </TouchableOpacity>
-            <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'blue' }}>
+            <Text style={styles.shipmentLbelTxt}>
               Invoice not created
             </Text>
+            </View>
           </>
         ) : cta == 'PACK_ORDER_INVOICE_DISABLED' ? (
           <>
