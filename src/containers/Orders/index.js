@@ -27,6 +27,7 @@ import OrdersFilterModal from '../../component/OrdersFilterModal';
 import Toast from 'react-native-toast-message';
 import BulkActionsModal from '../../component/BulkActionsModal';
 import {fetchProfile, setNavigation} from '../../redux/actions/profile';
+import Colors from '../../Theme/Colors';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -867,6 +868,7 @@ const OrdersScreen = props => {
                   }}
                   blurOnSubmit={true}
                   ellipsizeMode="tail"
+                  placeholderTextColor={Colors.FontColor}
                   numberOfLines={1}
                   style={styles.SearchInputCss}></TextInput>
                 <CustomeIcon
