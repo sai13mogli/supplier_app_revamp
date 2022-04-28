@@ -134,6 +134,7 @@ const CustomeDatePicker = props => {
           testID="dateTimePicker"
           value={date}
           mode={mode}
+          maximumDate={new Date()}
           is24Hour={true}
           display={display}
           onChange={onchangeDate}

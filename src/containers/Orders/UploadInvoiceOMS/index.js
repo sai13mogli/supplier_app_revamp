@@ -100,6 +100,7 @@ const UploadInvoiceOMSScreen = props => {
     },
     invoiceDate: {
       title: 'Invoice Date',
+      maximumDate: new Date(),
       isImp: true,
       label: 'Invoice Date',
       placeholder: 'Invoice Date',

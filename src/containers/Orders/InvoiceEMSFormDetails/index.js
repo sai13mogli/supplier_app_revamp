@@ -121,6 +121,7 @@ const InvoiceEMSFormDetailScreen = props => {
     invoiceDate: {
       title: 'Invoice Date',
       isImp: true,
+      maximumDate: new Date(),
       label: 'Invoice Date',
       placeholder: 'Invoice Date',
       errorMessage: 'Enter valid Invoice date',
@@ -158,6 +159,7 @@ const InvoiceEMSFormDetailScreen = props => {
     ewayDate: {
       title: 'E-way Date',
       isImp: false,
+      maximumDate: new Date(),
       label: 'E-way Date',
       placeholder: 'E-way Date',
       errorMessage: 'Enter valid e-way date',
