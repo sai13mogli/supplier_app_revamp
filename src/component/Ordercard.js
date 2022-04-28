@@ -677,6 +677,8 @@ const Ordercard = props => {
                 hsn,
                 quantity,
                 totalAmount,
+                taxPercentage,
+                selectedTab,
               })
             }
             style={styles.DownloadPoBtn}>

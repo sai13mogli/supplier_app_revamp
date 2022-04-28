@@ -40,6 +40,7 @@ const UploadInvoiceScreen = props => {
   }, []);
 
 
+
   const selectItemId = itemId => {
 
     let currentItemIds = [...bulkItemIds];

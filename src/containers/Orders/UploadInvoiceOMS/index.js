@@ -281,7 +281,6 @@ const UploadInvoiceOMSScreen = props => {
     if (filterData.length > 0) {
       const index = poTotalPrice.findIndex(x => x.id === filterData[0].id);
       let priceList = [...poTotalPrice];
-
       priceList.splice(index, 1);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
@@ -301,7 +300,6 @@ const UploadInvoiceOMSScreen = props => {
       var arr = [...podIdList]
       arr.push(podId)
       setPodIdList(arr)
-
     }
   };
 
@@ -312,8 +310,6 @@ const UploadInvoiceOMSScreen = props => {
     return (
       <InvoiceOmsCard
         msn={list.product_msn}
-        // fetchOrdersFunc={fetchOrdersFunc}
-        // fetchTabCountFunc={fetchTabCountFunc}
         quantity={list.quantity}
         taxpercent={list.tax_percent}
         podId={list.item_id}
@@ -425,7 +421,7 @@ const UploadInvoiceOMSScreen = props => {
             },
             {
               name: 'itemLists',
-              data: podIdList.length > 1 ? podIdList : String(podId)
+              data: podIdList.length > 1 ? podIdList.join(',') : String(podId)
             },
             {
               name: 'invoiceTotal',

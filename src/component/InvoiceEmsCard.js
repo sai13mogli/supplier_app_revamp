@@ -31,9 +31,7 @@ const InvoiceCard = props => {
   const [quantity, setQuantity] = useState(props?.quantity);
   const [totalAmount, settotalAmount] = useState(props.totalAmount);
   const [amount, setAmount] = useState(props.totalAmount);
-  console.log('====================================');
-  console.log("qnty===>", quantity);
-  console.log('====================================');
+
   const FORM_FIELDS = new OrderedMap({
 
     HSN: {

@@ -68,7 +68,6 @@ const InvoiceEMSFormDetailScreen = props => {
   const [fId, setFId] = useState(null);
 
 
-
   const UploadInvoice = new OrderedMap({
     upload_invoice: {
       id: 'uploadInvoice',
@@ -163,7 +162,7 @@ const InvoiceEMSFormDetailScreen = props => {
       placeholder: 'E-way Date',
       errorMessage: 'Enter valid e-way date',
       value: ewayDate,
-      showError: ewayDateError,
+      showError: ewayDate ? null : ewayDateError,
       onBlur: () => onEwayDateDateBlur(),
       onChange: ewayDate => setEwayDate(ewayDate),
       component: CustomeDatePicker,
@@ -529,8 +528,11 @@ const InvoiceEMSFormDetailScreen = props => {
       invoiceAmount &&
       invoiceAmount.length &&
       uploadInvoice
+      && uploadEwayBill
+      && uploadEwayBill.name
     ) {
       try {
+
         setLoading(true);
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
         const url = `${BASE_URL}api/order/mapDropshipInvoice`;
@@ -543,7 +545,7 @@ const InvoiceEMSFormDetailScreen = props => {
           invoiceNumber: invoiceNumber,
           invoiceDate: getMinDate(invoiceDate),
           source: 0,
-          ewayDate: getMinDate(ewayDate),
+          ewayDate: ewayBillNumber ? getMinDate(ewayDate) : "",
           ewayNumber: ewayBillNumber,
           warehouseId: warehouseId,
           orderRef: orderRef,
@@ -602,7 +604,7 @@ const InvoiceEMSFormDetailScreen = props => {
             'Content-Type': 'multipart/form-data',
             Authorization: `${token}`,
           },
-          [
+          ewayBillNumber ? [
             {
               name: 'dropshipInvoiceRequest',
               data: JSON.stringify(payload),
@@ -619,6 +621,18 @@ const InvoiceEMSFormDetailScreen = props => {
               filename: uploadEwayBill.name,
               type: uploadEwayBill.type,
               data: RNFetchBlob.wrap(uploadEwayBill.uri),
+            },
+          ] : [
+            {
+              name: 'dropshipInvoiceRequest',
+              data: JSON.stringify(payload),
+              type: 'application/json',
+            },
+            {
+              name: 'invoiceFile',
+              filename: uploadInvoice.name,
+              type: uploadInvoice.type,
+              data: RNFetchBlob.wrap(uploadInvoice.uri),
             },
           ],
         );
@@ -651,6 +665,7 @@ const InvoiceEMSFormDetailScreen = props => {
           });
         }
       } catch (err) {
+        console.log("Erreor", err);
         setLoading(false);
       }
     } else {
@@ -660,9 +675,10 @@ const InvoiceEMSFormDetailScreen = props => {
       onInvoiceAmountBlur();
       onUploadInvoiceBlur();
       // onEwayBillNumberBlur();
-      // onEwayDateDateBlur();
+
       if (ewayBillNumber) {
         onUploadEwayBlur();
+        onEwayDateDateBlur();
       }
     }
   };
