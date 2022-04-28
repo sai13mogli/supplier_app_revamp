@@ -175,52 +175,23 @@ const InvoiceCard = props => {
                 </Text>
               </View>
             </View>
-
-
-            {/* <View style={styles.borderWrap}> */}
-
-              {/* <View style={styles.qtyView}>
-                <Text style={styles.TitleLightTxt}>HSN</Text>
-                <TextInput
-                  style={styles.wrapInput}
-                  onChangeText={text => text}
-                  keyboardType={'number-pad'}
-                  editable={
-                    (bulkItemIds || []).includes(itemId) ? true : false
-                  }>
-                  <Text style={styles.textMeasure}>{hsn}</Text>
-                </TextInput>
-              </View> */}
-              {/* <View style={styles.qtyView}>
-                <Text style={styles.TitleLightTxt}>Qty</Text>
-                <TextInput
-                  style={styles.wrapInput}
-                  onChangeText={text => calculatePrice(text)}
-                  keyboardType={'number-pad'}
-                  editable={
-                    (bulkItemIds || []).includes(itemId) ? true : false
-                  }>
-                  {quantity}
-                </TextInput>
-              </View> */}
-              <View style={{
-                flexDirection: 'row',
-                flex:1,
-                
-                // paddingHorizontal: 120,
-               // width: Dimension.width10,
-                // height: Dimension.height40
-              }}>
-                {FORM_FIELDS.map((field, fieldKey) => (
-                  <View style={{flex:1,marginRight:Dimension.margin25}}>
+            <View style={{
+              flexDirection: 'row',
+              flex: 1,
+              // paddingHorizontal: -50,
+              // flexBasis: 10
+              // width: 120,
+            }}>
+              {FORM_FIELDS.map((field, fieldKey) => (
+                <View style={[fieldKey == "hsn_tax" ? { flex: 0.5, marginRight: -Dimension.margin1 } : { flex: 0.3, marginRight: Dimension.margin15, }]}>
                   <field.component
                     {...field}
                     key={fieldKey}
                     disabled={field.disabled}
                   />
-                  </View>
-                )).toList()}
-                {/* <TextInput
+                </View>
+              )).toList()}
+              {/* <TextInput
                   style={styles.wrapInput}
                   onChangeText={text => calculateHsn(text)}
                   keyboardType={'number-pad'}
@@ -229,7 +200,7 @@ const InvoiceCard = props => {
                   }>
                   {taxPercentage}
                 </TextInput> */}
-              </View>
+            </View>
             {/* </View> */}
           </View>
         </View>

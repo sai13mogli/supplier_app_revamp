@@ -11,7 +11,6 @@ import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
 
-import { useNavigation } from '@react-navigation/native'
 
 
 const InvoiceOmsCard = props => {
