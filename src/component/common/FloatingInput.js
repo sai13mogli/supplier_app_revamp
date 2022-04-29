@@ -75,7 +75,10 @@ const FloatingLabelInputField = props => {
           inputStyle={styles.inputStyle}
           labelStyle={styles.labelStyle}
           rightIconContainerStyle={
-            props.isfromLogin ? styles.iconBtnstyle : styles.iconStyle
+            props.isfromLogin 
+            ? props.disabled ? styles.disabledIconBtnStyle : styles.iconBtnstyle 
+            
+            : styles.iconStyle
           }
           errorStyle={styles.errorText}
           disabledInputStyle={styles.disabledInputStyle}
@@ -154,7 +157,12 @@ const styles = StyleSheet.create({
     //backgroundColor:"#ccc"
   },
   iconBtnstyle: {
-    marginRight: Dimension.padding10,
+    paddingRight: Dimension.padding10,
+    
+  },
+  disabledIconBtnStyle:{
+    backgroundColor:colors.DisableStateColor,
+    paddingRight: Dimension.padding10,
   },
   errorText: {
     fontSize: Dimension.font10,
@@ -168,6 +176,8 @@ const styles = StyleSheet.create({
     paddingLeft: Dimension.padding12,
     paddingRight: Dimension.padding12,
     backgroundColor: colors.DisableStateColor,
+    opacity:1,
+    padding:.1
     //paddingHorizontal: Dimension.padding12,
   },
 });

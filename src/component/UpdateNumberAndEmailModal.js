@@ -307,6 +307,7 @@ const UpdateNumberAndEmailModal = props => {
             title={type == 6 ? 'Phone Number' : 'Email ID'}
             isImp={true}
             extraView={() => (type == 6 ? getExtraView() : getExtraViewEmail())}
+            isfromLogin={true}
           />
 
           <FloatingInput
@@ -336,10 +337,12 @@ const UpdateNumberAndEmailModal = props => {
             )}
           />
 
-          <View style={styles.buttonWrap}>
+          
+        </View>
+        <View style={styles.buttonWrap}>
             <CustomButton
               title={'CANCEL'}
-              buttonColor={Colors.DisableStateColor}
+              buttonColor={Colors.WhiteColor}
               onPress={() => setUpdatePhoneOtpModal(false)}
               TextColor={Colors.blackColor}
               borderColor={Colors.WhiteColor}
@@ -358,12 +361,14 @@ const UpdateNumberAndEmailModal = props => {
               TextColor={
                 checkCommonValidation() ? Colors.WhiteColor : Colors.blackColor
               }
-              borderColor={Colors.WhiteColor}
+              borderColor={checkCommonValidation()
+                ? Colors.BrandColor
+                : Colors.DisableStateColor}
               TextFontSize={Dimension.font16}
             />
           </View>
-        </View>
       </View>
+      
     </Modal>
   );
 };
@@ -402,7 +407,7 @@ const styles = StyleSheet.create({
   ModalHeading: {
     fontSize: Dimension.font16,
     color: Colors.FontColor,
-    fontFamily: Dimension.CustomRobotoBold,
+    fontFamily: Dimension.CustomSemiBoldFont,
     marginBottom: Dimension.margin40,
   },
   ModalFormWrap: {
@@ -416,10 +421,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WhiteColor,
   },
   buttonWrap: {
-    marginVertical: Dimension.margin20,
+    marginTop: Dimension.margin20,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingHorizontal: Dimension.padding20,
+    padding: Dimension.padding15,
+    borderTopWidth: 1,
+    borderTopColor: Colors.grayShade2,
   },
   bottomTxt: {
     fontSize: Dimension.font14,
@@ -439,7 +446,6 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding8,
     paddingHorizontal: Dimension.padding10,
     borderRadius: 2,
-
     alignItems: 'center',
   },
   sendOtpBtnDisable: {
@@ -447,7 +453,6 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding8,
     paddingHorizontal: Dimension.padding10,
     borderRadius: 2,
-
     alignItems: 'center',
   },
   sendOtptext: {
