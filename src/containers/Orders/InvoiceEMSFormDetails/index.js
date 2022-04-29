@@ -68,7 +68,6 @@ const InvoiceEMSFormDetailScreen = props => {
   const [fId, setFId] = useState(null);
 
 
-
   const UploadInvoice = new OrderedMap({
     upload_invoice: {
       id: 'uploadInvoice',
@@ -122,6 +121,7 @@ const InvoiceEMSFormDetailScreen = props => {
     invoiceDate: {
       title: 'Invoice Date',
       isImp: true,
+      maximumDate: new Date(),
       label: 'Invoice Date',
       placeholder: 'Invoice Date',
       errorMessage: 'Enter valid Invoice date',
@@ -159,11 +159,12 @@ const InvoiceEMSFormDetailScreen = props => {
     ewayDate: {
       title: 'E-way Date',
       isImp: false,
+      maximumDate: new Date(),
       label: 'E-way Date',
       placeholder: 'E-way Date',
       errorMessage: 'Enter valid e-way date',
       value: ewayDate,
-      showError: ewayDateError,
+      showError: ewayDate ? null : ewayDateError,
       onBlur: () => onEwayDateDateBlur(),
       onChange: ewayDate => setEwayDate(ewayDate),
       component: CustomeDatePicker,
@@ -528,11 +529,12 @@ const InvoiceEMSFormDetailScreen = props => {
       invoiceDate &&
       invoiceAmount &&
       invoiceAmount.length &&
-      uploadInvoice &&
-      uploadInvoice.name
-
+      uploadInvoice
+      && uploadEwayBill
+      && uploadEwayBill.name
     ) {
       try {
+
         setLoading(true);
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
         const url = `${BASE_URL}api/order/mapDropshipInvoice`;
@@ -545,7 +547,7 @@ const InvoiceEMSFormDetailScreen = props => {
           invoiceNumber: invoiceNumber,
           invoiceDate: getMinDate(invoiceDate),
           source: 0,
-          ewayDate: getMinDate(ewayDate),
+          ewayDate: ewayBillNumber ? getMinDate(ewayDate) : "",
           ewayNumber: ewayBillNumber,
           warehouseId: warehouseId,
           orderRef: orderRef,
@@ -595,7 +597,7 @@ const InvoiceEMSFormDetailScreen = props => {
           },
           invoiceTotal: invoiceAmount,
         };
-        console.log('Payload====>', payload);
+        console.log('Payload====>', payload, response);
 
         const response = await RNFetchBlob.fetch(
           'POST',
@@ -604,7 +606,7 @@ const InvoiceEMSFormDetailScreen = props => {
             'Content-Type': 'multipart/form-data',
             Authorization: `${token}`,
           },
-          [
+          ewayBillNumber ? [
             {
               name: 'dropshipInvoiceRequest',
               data: JSON.stringify(payload),
@@ -621,6 +623,18 @@ const InvoiceEMSFormDetailScreen = props => {
               filename: uploadEwayBill.name,
               type: uploadEwayBill.type,
               data: RNFetchBlob.wrap(uploadEwayBill.uri),
+            },
+          ] : [
+            {
+              name: 'dropshipInvoiceRequest',
+              data: JSON.stringify(payload),
+              type: 'application/json',
+            },
+            {
+              name: 'invoiceFile',
+              filename: uploadInvoice.name,
+              type: uploadInvoice.type,
+              data: RNFetchBlob.wrap(uploadInvoice.uri),
             },
           ],
         );
@@ -653,6 +667,7 @@ const InvoiceEMSFormDetailScreen = props => {
           });
         }
       } catch (err) {
+        console.log("Erreor", err);
         setLoading(false);
       }
     } else {
@@ -662,8 +677,11 @@ const InvoiceEMSFormDetailScreen = props => {
       onInvoiceAmountBlur();
       onUploadInvoiceBlur();
       // onEwayBillNumberBlur();
-      // onEwayDateDateBlur();
-      // onUploadEwayBlur();
+
+      if (ewayBillNumber) {
+        onUploadEwayBlur();
+        onEwayDateDateBlur();
+      }
     }
   };
 

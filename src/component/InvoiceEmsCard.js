@@ -31,9 +31,7 @@ const InvoiceCard = props => {
   const [quantity, setQuantity] = useState(props?.quantity);
   const [totalAmount, settotalAmount] = useState(props.totalAmount);
   const [amount, setAmount] = useState(props.totalAmount);
-  console.log('====================================');
-  console.log("qnty===>", quantity);
-  console.log('====================================');
+
   const FORM_FIELDS = new OrderedMap({
 
     HSN: {
@@ -71,6 +69,7 @@ const InvoiceCard = props => {
       errorMessage: 'Enter valid hsn',
       onValueChange: text => calculateHsn(text),
       component: PickerDropDown,
+      fromUploadInvoive: true,
       enabled: true,
       value: taxPercentage,
       items: [
@@ -176,48 +175,23 @@ const InvoiceCard = props => {
                 </Text>
               </View>
             </View>
-
-
-            <View style={styles.borderWrap}>
-
-              {/* <View style={styles.qtyView}>
-                <Text style={styles.TitleLightTxt}>HSN</Text>
-                <TextInput
-                  style={styles.wrapInput}
-                  onChangeText={text => text}
-                  keyboardType={'number-pad'}
-                  editable={
-                    (bulkItemIds || []).includes(itemId) ? true : false
-                  }>
-                  <Text style={styles.textMeasure}>{hsn}</Text>
-                </TextInput>
-              </View> */}
-              {/* <View style={styles.qtyView}>
-                <Text style={styles.TitleLightTxt}>Qty</Text>
-                <TextInput
-                  style={styles.wrapInput}
-                  onChangeText={text => calculatePrice(text)}
-                  keyboardType={'number-pad'}
-                  editable={
-                    (bulkItemIds || []).includes(itemId) ? true : false
-                  }>
-                  {quantity}
-                </TextInput>
-              </View> */}
-              <View style={{
-                // flexDirection: 'row',
-                // paddingHorizontal: 120,
-                width: Dimension.width100,
-                // height: Dimension.height40
-              }}>
-                {FORM_FIELDS.map((field, fieldKey) => (
+            <View style={{
+              flexDirection: 'row',
+              flex: 1,
+              // paddingHorizontal: -50,
+              // flexBasis: 10
+              // width: 120,
+            }}>
+              {FORM_FIELDS.map((field, fieldKey) => (
+                <View style={[fieldKey == "hsn_tax" ? { flex: 0.5, marginRight: -Dimension.margin1 } : { flex: 0.3, marginRight: Dimension.margin15, }]}>
                   <field.component
                     {...field}
                     key={fieldKey}
                     disabled={field.disabled}
                   />
-                )).toList()}
-                {/* <TextInput
+                </View>
+              )).toList()}
+              {/* <TextInput
                   style={styles.wrapInput}
                   onChangeText={text => calculateHsn(text)}
                   keyboardType={'number-pad'}
@@ -226,8 +200,8 @@ const InvoiceCard = props => {
                   }>
                   {taxPercentage}
                 </TextInput> */}
-              </View>
             </View>
+            {/* </View> */}
           </View>
         </View>
       </>

@@ -138,25 +138,27 @@ const CategoryScreen = props => {
               style={styles.seacrhIcon}></CustomeIcon>
           </View>
           {renderRight()}
+          <View style={styles.bottomWrap}>
           <CustomButton
             title={`SUBMIT (${
               selectedCategories && selectedCategories.length
             })`}
             onPress={onSubmit}
             buttonColor={
-              selectedCategories.length ? Colors.BrandColor : 'dodgerblue'
+              selectedCategories.length ? Colors.BrandColor : Colors.DisableStateColor
             }
             disabled={selectedCategories.length ? false : true}
-            TextColor={Colors.WhiteColor}
-            borderColor={Colors.WhiteColor}
+            TextColor={selectedCategories.length ? Colors.WhiteColor : Colors.FontColor}
+            borderColor={selectedCategories.length ? Colors.BrandColor : Colors.DisableStateColor}
           />
+          </View>
         </>
       );
     }
     return renderLoader();
   };
 
-  return <View style={{flex: 1}}>{renderCategories()}</View>;
+  return <View style={{flex: 1,backgroundColor:"#fff"}}>{renderCategories()}</View>;
 };
 
 export default CategoryScreen;
