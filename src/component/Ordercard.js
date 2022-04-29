@@ -944,6 +944,22 @@ const Ordercard = props => {
               />
             )}
           </TouchableOpacity>
+        ) : cta == 'RAISE_TICKET' ? (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('NewTicket')}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
+
+                // flex: ctaLength.length ? 5 : 1,
+                // flexBasis: ctaLength.length ? '45%' : '100%',
+              },
+            ]}>
+            <Text style={styles.rejectCtaTxt}>RAISE TICKET</Text>
+          </TouchableOpacity>
         ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
