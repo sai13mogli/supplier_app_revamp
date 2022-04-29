@@ -19,6 +19,7 @@ import {
   getpoChallan,
   rejectOrder,
   createManifestApi,
+  manifestList,
 } from '../services/orders';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -104,6 +105,7 @@ const Ordercard = props => {
   const [tooltip1, settooltip1] = useState(false);
   const [remapInvoiceToolTip, setRemapInvoiceToolTip] = useState(false);
   const [isOmsPickupDate, setIsOmsPickupDate] = useState(false);
+  const [pickupchallanLoader, setPickupchallanLoader] = useState(false);
 
   useEffect(() => {
     fetchImage();
@@ -189,7 +191,7 @@ const Ordercard = props => {
         console.warn(err);
       }
     } else {
-      downloadPDF(fromPO, invoiceUrl);
+      downloadPDF(fromPO, invoiceUrl, isInvoice);
     }
   };
 
@@ -228,7 +230,7 @@ const Ordercard = props => {
         const {data} = await getpoChallan(orderRef);
         if (data && data.success) {
           //Image URL which we want to download
-          image_URL = data.responseMessage;
+          image_URL = data.data;
         }
       } else {
         //Image URL which we want to download
@@ -566,6 +568,106 @@ const Ordercard = props => {
       setDebitLoader(false);
       Toast.show({
         type: 'error',
+        text2: 'Something went wrong',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    }
+  };
+
+  const getManifestRecords = async manId => {
+    try {
+      setPickupchallanLoader(true);
+      let payload = {
+        createdFromDate: '',
+        createdToDate: '',
+        limit: '100',
+        manifestId: [`${manId}`],
+        page: 1,
+        shipperId: '',
+        sort: {
+          orderBy: 'createdDate',
+          orderDir: 'DESC',
+        },
+        supplierId: supplierId,
+      };
+      const {data} = await manifestList(payload);
+      if (data.success) {
+        let manObj = (data?.data?.records || []).find(
+          _ => _.manifestId == `${manId}`,
+        );
+        if (manObj.manifestUrl != null) {
+          downloadPickupChallan(manObj.manifestUrl);
+        } else {
+          setPickupchallanLoader(false);
+          Toast.show({
+            type: 'error',
+            text2: 'Manifest not found!',
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        }
+      } else {
+        setPickupchallanLoader(false);
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setPickupchallanLoader(false);
+    }
+  };
+
+  const downloadPickupChallan = async url => {
+    //Main function to download the image
+    let date = new Date(); //To add the time suffix in filename
+    try {
+      let image_URL = '';
+      //Image URL which we want to download
+      image_URL = url;
+      //Getting the extention of the file
+      let ext = getExtention(image_URL);
+      ext = '.' + ext[0];
+      //Get config and fs from RNFetchBlob
+      //config: To pass the downloading related options
+      //fs: To get the directory path in which we want our image to download
+      const {config, fs} = RNFetchBlob;
+      let PictureDir =
+        Platform.OS == 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+      let options = {
+        fileCache: true,
+        addAndroidDownloads: {
+          //Related to the Android only
+          useDownloadManager: true,
+          notification: true,
+          path:
+            PictureDir +
+            '/PDF_' +
+            Math.floor(date.getTime() + date.getSeconds() / 2) +
+            ext,
+          description: 'PDF',
+        },
+      };
+      config(options)
+        .fetch('GET', image_URL, {'Cache-Control': 'no-store'})
+        .then(res => {
+          //Showing alert after successful downloading
+          setPickupchallanLoader(false);
+          Toast.show({
+            type: 'success',
+            text2: 'Pickup Challan Downloaded',
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        });
+    } catch (error) {
+      setPickupchallanLoader(false);
+      Toast.show({
+        type: 'success',
         text2: 'Something went wrong',
         visibilityTime: 2000,
         autoHide: true,
@@ -1089,6 +1191,25 @@ const Ordercard = props => {
             disabled={manifestLoader}>
             <Text style={styles.rejectCtaTxt}>Download Shipment Label</Text>
             {manifestLoader && (
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
+            )}
+          </TouchableOpacity>
+        ) : cta == 'DOWNLOAD_MANIFEST' ? (
+          <TouchableOpacity
+            onPress={() => getManifestRecords(manifestId)}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%',
+              },
+            ]}
+            disabled={pickupchallanLoader}>
+            <Text style={styles.rejectCtaTxt}>PICKUP CHALLAN</Text>
+            {pickupchallanLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
                 style={{alignSelf: 'center'}}
