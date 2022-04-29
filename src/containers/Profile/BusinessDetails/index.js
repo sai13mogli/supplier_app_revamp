@@ -20,6 +20,7 @@ import LoginOtpModal from '../../../component/LoginOtpModal';
 import UpdateNumberAndEmailModal from '../../../component/UpdateNumberAndEmailModal';
 import PickerDropDown from '../../../component/common/PickerDropDown';
 import Toast from 'react-native-toast-message';
+import CustomeIcon from '../../../component/common/CustomeIcon';
 
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
@@ -537,9 +538,13 @@ const BusinessDetailsScreen = props => {
             setType(6);
             setUpdatePhoneOtpModal(true);
           }}>
-          <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
+          {/* <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
             EDIT
-          </Text>
+          </Text> */}
+          <CustomeIcon
+          name={'edit-box'}
+          color={colors.FontColor}
+          size={Dimension.font20}></CustomeIcon>
         </TouchableOpacity>
       );
     } else if (phoneVerified) {
@@ -582,9 +587,10 @@ const BusinessDetailsScreen = props => {
             setType(5);
             setUpdatePhoneOtpModal(true);
           }}>
-          <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
-            EDIT
-          </Text>
+          <CustomeIcon
+          name={'edit-box'}
+          color={colors.FontColor}
+          size={Dimension.font20}></CustomeIcon>
         </TouchableOpacity>
       );
     } else if (emailVerified) {
