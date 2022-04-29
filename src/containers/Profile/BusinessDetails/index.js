@@ -674,28 +674,8 @@ const BusinessDetailsScreen = props => {
             updatePhoneOtpModal={updatePhoneOtpModal}
             setUpdatePhoneOtpModal={setUpdatePhoneOtpModal}
             type={type}
-            // phone={
-            //   type == 6
-            //     ? profileData && profileData.phone
-            //     : profileData && profileData.email
-            // }
-            // email={
-            //   type == 6
-            //     ? profileData && profileData.phone
-            //     : profileData && profileData.email
-            // }
-            // frombusinessDetails={true}
-            // type={type}
-            // phoneVerified={phoneVerified}
-            // setPhoneVerified={setPhoneVerified}
-            // emailVerified={emailVerified}
-            // setEmailVerified={setEmailVerified}
-            // setresendOtp={setResendOtp}
-            // setresendOtpEmail={setResendOtpEmail}
           />
         )}
-
-        {/* )} */}
       </ScrollView>
       {verificationStatus !== 15 ? (
         <View style={styles.bottombtnWrap}>

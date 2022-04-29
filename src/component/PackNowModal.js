@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   Dimensions,
   View,
@@ -10,10 +10,10 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { getImageUrl, getPackNow } from '../services/orders';
+import {getImageUrl, getPackNow, getLbh} from '../services/orders';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
-import { OrderedMap } from 'immutable';
+import {OrderedMap} from 'immutable';
 import CustomButton from '../component/common/Button';
 import FloatingLabelInputField from './common/FloatingInput';
 import CustomeIcon from './common/CustomeIcon';
@@ -24,7 +24,7 @@ const deviceHeight = Dimensions.get('window').height;
 const PackNowModal = props => {
   const [orderImage, setOrderImage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [noOfPackets, setNoOfPackets] = useState('');
+  const [noOfPackets, setNoOfPackets] = useState('1');
   const [noOfPacketsError, setNoOfPacketsError] = useState(false);
   const [weight, setWeight] = useState('');
   const [weightError, setWeightError] = useState(false);
@@ -101,7 +101,7 @@ const PackNowModal = props => {
       keyboardType: 'number-pad',
       onBlur: () => onweightBlur(),
       extraView: () => (
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{flexDirection: 'row'}}>
           <Text style={styles.InputRighttxt}>Kg</Text>
           <CustomeIcon
             name={'arrow-drop-down-line'}
@@ -122,7 +122,7 @@ const PackNowModal = props => {
       keyboardType: 'number-pad',
       onBlur: () => onheightBlur(),
       extraView: () => (
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{flexDirection: 'row'}}>
           <Text style={styles.InputRighttxt}>Cm</Text>
           <CustomeIcon
             name={'arrow-drop-down-line'}
@@ -204,7 +204,26 @@ const PackNowModal = props => {
 
   useEffect(() => {
     fetchImage();
+    fetchLbh();
   }, []);
+
+  const fetchLbh = async () => {
+    try {
+      let payload = {
+        msn,
+        qty: quantity,
+      };
+      const {data} = await getLbh(payload);
+      if (data && data.success) {
+        setHeight(data && data.data && data.data.height);
+        setLength(data && data.data && data.data.length);
+        setWeight(data && data.data && data.data.weight);
+        setWidth(data && data.data && data.data.width);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onPackNow = async () => {
     if (
@@ -220,7 +239,7 @@ const PackNowModal = props => {
       !widthError
     ) {
       setLoading(true);
-      const { data } = await getPackNow({
+      const {data} = await getPackNow({
         length,
         width,
         height,
@@ -239,7 +258,7 @@ const PackNowModal = props => {
   };
 
   const fetchImage = async () => {
-    const { data } = await getImageUrl(msn);
+    const {data} = await getImageUrl(msn);
     let imageUrl =
       'https://cdn.moglix.com/' +
       (data &&
@@ -255,8 +274,6 @@ const PackNowModal = props => {
     }
   };
 
-
-
   return (
     <Modal
       overlayPointerEvents={'auto'}
@@ -268,7 +285,7 @@ const PackNowModal = props => {
         setModal(false);
       }}
       coverScreen={true}
-      style={{ padding: 0, margin: 'auto', width: '100%', height: '100%' }}
+      style={{padding: 0, margin: 'auto', width: '100%', height: '100%'}}
       deviceWidth={deviceWidth}
       deviceHeight={deviceHeight}
       //height={'80%'}
@@ -292,7 +309,7 @@ const PackNowModal = props => {
         </View>
         <ScrollView>
           <>
-            <View style={{ paddingHorizontal: Dimension.padding15 }}>
+            <View style={{paddingHorizontal: Dimension.padding15}}>
               {renderOrderDetails()}
             </View>
           </>
@@ -304,7 +321,7 @@ const PackNowModal = props => {
           </View>
         </ScrollView>
         <View style={styles.bottomAction}>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <CustomButton
               title="RESET"
               buttonColor={Colors.WhiteColor}
@@ -325,7 +342,7 @@ const PackNowModal = props => {
               }}
             />
           </View>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <CustomButton
               title="PACK NOW"
               loading={loading}

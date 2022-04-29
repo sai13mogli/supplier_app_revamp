@@ -111,9 +111,9 @@ export const acceptOrder = async body =>
     },
   );
 
-export const getpoChallan = async orderRef =>
+export const getpoChallan = async (supplierId, orderRef) =>
   axios.get(`https://apigatewayqa.moglix.com/api/order/downloadPoChallan`, {
-    params: {countryId: 356, orderRef: orderRef},
+    params: {supplierId: supplierId, orderRef: orderRef},
     headers: {
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
@@ -304,6 +304,19 @@ export const bulkDownloadApi = async payload =>
 export const manifestList = async payload =>
   axios.post(
     `${BASE_URL}api/order/oms/manifestList`,
+    {
+      ...payload,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
+export const getLbh = async payload =>
+  axios.post(
+    `${BASE_URL}api/order/oms/fetchLbh`,
     {
       ...payload,
     },
