@@ -733,11 +733,11 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                // flex: actionCTA.length > 1 ? 5 : 1,
-                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '48%' : '100%',
                 height: Dimension.height33,
-                flex: ctaLength.length ? 4 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
+                // flex: ctaLength.length ? 4 : 1,
+                // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD INVOICE</Text>
@@ -755,11 +755,11 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                // flex: actionCTA.length > 1 ? 5 : 1,
-                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
-                height: Dimension.height34,
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
+                // flex: ctaLength.length ? 5 : 1,
+                // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
@@ -830,7 +830,8 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
@@ -848,11 +849,11 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                // flex: actionCTA.length > 1 ? 5 : 1,
-                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
-                height: Dimension.height33,
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
+                // flex: ctaLength.length ? 5 : 1,
+                // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
@@ -870,10 +871,11 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                // flex: actionCTA.length > 1 ? 5 : 1,
-                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
+                // flex: ctaLength.length ? 5 : 1,
+                // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD POD COPY</Text>
@@ -891,10 +893,12 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                // flex: actionCTA.length > 1 ? 5 : 1,
-                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
+
+                // flex: ctaLength.length ? 5 : 1,
+                // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>DOWNLOAD DEBIT NOTE</Text>
@@ -924,10 +928,12 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                // flex: actionCTA.length > 1 ? 5 : 1,
-                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
+
+                // flex: ctaLength.length ? 5 : 1,
+                // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>UPLOAD INVOICE</Text>
@@ -945,8 +951,9 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>MARK OUT FOR DELIVERY</Text>
@@ -964,8 +971,9 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>VIEW SPLIT HISTORY</Text>
@@ -983,10 +991,11 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                // flex: actionCTA.length > 1 ? 5 : 1,
-                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
+                // flex: ctaLength.length ? 5 : 1,
+                // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>VIEW LSP DETAILS</Text>
@@ -1004,8 +1013,9 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>PACK NOW</Text>
@@ -1018,8 +1028,9 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
               },
             ]}
             onPress={() => setAddViewModal(true)}>
@@ -1030,10 +1041,12 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                // flex: actionCTA.length > 1 ? 5 : 1,
-                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
+
+                // flex: ctaLength.length ? 5 : 1,
+                // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}
             onPress={() => setAddViewModal(true)}>
@@ -1044,10 +1057,12 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                // flex: actionCTA.length > 1 ? 5 : 1,
-                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
+
+                // flex: ctaLength.length ? 5 : 1,
+                // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}
             onPress={() => setSplitQuantityModal(true)}>
@@ -1060,8 +1075,9 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                flex: actionCTA.length > 1 ? 5 : 1,
-                flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>UPLOAD PROOF OF DELIVERY</Text>
@@ -1079,8 +1095,9 @@ const Ordercard = props => {
               style={[
                 styles.disabledbtn,
                 {
-                  flex: actionCTA.length > 1 ? 5 : 1,
-                  flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                  flex: ctaLength.length ? 5 : 1,
+                  flexBasis: ctaLength.length ? '48%' : '100%',
+                  height: Dimension.height33,
                 },
               ]}>
               <Text style={styles.disabledBtntxt}>Map PO to Invoice</Text>
@@ -1091,19 +1108,21 @@ const Ordercard = props => {
           </>
         ) : cta == 'MAP_INVOICE_PENDING' ? (
           <>
-            <View style={{flexDirection: 'column', flex: 35}}>
+            <View style={{flexDirection: 'column', flexBasis: '50%'}}>
               <TouchableOpacity
                 disabled={true}
                 style={[
                   styles.disabledbtn,
                   {
-                    // flex: actionCTA.length > 1 ? 5 : 1,
-                    // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
-                    flex: ctaLength.length ? 0 : 1,
-                    flexBasis: ctaLength.length ? '45%' : '100%',
+                    flex: ctaLength.length ? 5 : 1,
+                    flexBasis: ctaLength.length ? '48%' : '100%',
+                    height: Dimension.height33,
+
+                    // flex: ctaLength.length ? 0 : 1,
+                    // flexBasis: ctaLength.length ? '45%' : '100%',
                   },
                 ]}>
-                <Text style={styles.disabledBtntxt}>Upload Invoice</Text>
+                <Text style={styles.disabledBtntxt}>UPLOAD INVOICE</Text>
               </TouchableOpacity>
               <Text style={styles.shipmentLbelTxt}>
                 Invoice Approval pending
@@ -1118,8 +1137,9 @@ const Ordercard = props => {
                 style={[
                   styles.disabledbtn,
                   {
-                    flex: actionCTA.length > 1 ? 5 : 1,
-                    flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                    flex: ctaLength.length ? 5 : 1,
+                    flexBasis: ctaLength.length ? '48%' : '100%',
+                    height: Dimension.height33,
                   },
                 ]}>
                 <Text style={styles.disabledBtntxt}>Pack Order</Text>
@@ -1134,8 +1154,9 @@ const Ordercard = props => {
               style={[
                 styles.disabledbtn,
                 {
-                  flex: actionCTA.length > 1 ? 5 : 1,
-                  flexBasis: actionCTA.length > 1 ? '48%' : '100%',
+                  flex: ctaLength.length ? 5 : 1,
+                  flexBasis: ctaLength.length ? '48%' : '100%',
+                  height: Dimension.height33,
                 },
               ]}>
               <Text style={styles.disabledBtntxt}>Pack Order Invoice</Text>
@@ -1146,16 +1167,18 @@ const Ordercard = props => {
           </>
         ) : cta == 'CREATE_MANIFEST_DISABLED' ? (
           <>
-            <View style={{flexDirection: 'column', flex: 0, flexBasis: '50%'}}>
+            <View style={{flexDirection: 'column', flexBasis: '50%'}}>
               <TouchableOpacity
                 disabled={true}
                 style={[
                   styles.disabledbtn,
                   {
-                    // flex: actionCTA.length > 1 ? 5 : 1,
-                    // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
                     flex: ctaLength.length ? 5 : 1,
-                    flexBasis: ctaLength.length ? '45%' : '100%',
+                    flexBasis: ctaLength.length ? '48%' : '100%',
+                    height: Dimension.height33,
+
+                    // flex: ctaLength.length ? 5 : 1,
+                    // flexBasis: ctaLength.length ? '45%' : '100%',
                   },
                 ]}>
                 <Text style={styles.disabledBtntxt}>Create Manifest</Text>
@@ -1171,10 +1194,12 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
-                // flex: actionCTA.length > 1 ? 5 : 1,
-                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
-                flex: ctaLength.length ? 0 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
+
+                // flex: ctaLength.length ? 0 : 1,
+                // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}
             disabled={manifestLoader}>
@@ -1192,10 +1217,11 @@ const Ordercard = props => {
             style={[
               styles.DownloadPoBtn,
               {
+                // flex: ctaLength.length ? 5 : 1,
+                // flexBasis: ctaLength.length ? '49%' : '100%',
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '49%' : '100%',
-                // flex: actionCTA.length > 1 ? 5 : 1,
-                // flexBasis: actionCTA.length > 1 ? '50%' : '100%',
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
               },
             ]}
             disabled={manifestLoader}>
@@ -1214,7 +1240,8 @@ const Ordercard = props => {
               styles.DownloadPoBtn,
               {
                 flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
               },
             ]}
             disabled={pickupchallanLoader}>
@@ -1226,28 +1253,26 @@ const Ordercard = props => {
               />
             )}
           </TouchableOpacity>
-        ) : // :
-        // cta == 'VIEW_SHIPPED_DETAILS' ? (
-        //   <TouchableOpacity
-        //     onPress={() => getManifestRecords(manifestId)}
-        //     style={[
-        //       styles.DownloadPoBtn,
-        //       {
-        //         flex: ctaLength.length ? 5 : 1,
-        //         flexBasis: ctaLength.length ? '45%' : '100%',
-        //       },
-        //     ]}
-        //     disabled={pickupchallanLoader}>
-        //     <Text style={styles.rejectCtaTxt}>VIEW SHIPPED DETAILS</Text>
-        //     {pickupchallanLoader && (
-        //       <ActivityIndicator
-        //         color={Colors.FontColor}
-        //         style={{alignSelf: 'center'}}
-        //       />
-        //     )}
-        //   </TouchableOpacity>
-        // )
-        null}
+        ) : cta == 'VIEW_SHIPPED_DETAILS' ? (
+          <TouchableOpacity
+            // onPress={() => getManifestRecords(manifestId)}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '45%' : '100%',
+              },
+            ]}
+            disabled={pickupchallanLoader}>
+            <Text style={styles.rejectCtaTxt}>VIEW SHIPPED DETAILS</Text>
+            {/* {pickupchallanLoader && (
+              <ActivityIndicator
+                color={Colors.FontColor}
+                style={{alignSelf: 'center'}}
+              />
+            )} */}
+          </TouchableOpacity>
+        ) : null}
       </>
     );
     // }
@@ -1891,7 +1916,7 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: Dimension.margin10,
+    marginRight: Dimension.margin5,
     marginTop: Dimension.margin10,
   },
   acceptCtaTxt: {
@@ -1907,6 +1932,7 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding8,
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: Dimension.margin5,
     marginTop: Dimension.margin10,
   },
   rejectCtaTxt: {
@@ -1930,7 +1956,7 @@ const styles = StyleSheet.create({
     marginTop: Dimension.margin10,
     borderColor: Colors.grayShade15,
     borderWidth: 1,
-    marginHorizontal: Dimension.margin5,
+    marginRight: Dimension.margin5,
     flexDirection: 'row',
   },
   disabledbtn: {
@@ -1944,6 +1970,8 @@ const styles = StyleSheet.create({
     marginTop: Dimension.margin10,
     borderColor: Colors.BoxBorderColor,
     borderWidth: 1,
+    marginRight: Dimension.margin5,
+    flexDirection: 'row',
   },
   disabledBtntxt: {
     fontFamily: Dimension.CustomSemiBoldFont,

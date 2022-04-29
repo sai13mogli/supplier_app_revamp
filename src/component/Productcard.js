@@ -57,6 +57,19 @@ const Productcard = props => {
     let date = new Date(Number(time));
     return `${months[date.getMonth()]} ${date.getDate()},${date.getFullYear()}`;
   };
+
+  const isReadMore = descriptionText => {
+    if (descriptionText && descriptionText.length > 60) {
+      return {readMore: true, text: descriptionText.slice(0, 60)};
+    } else {
+      return {readMore: false, text: descriptionText};
+    }
+  };
+
+  const toggleShowMoreTxt = () => {
+    setShowMoreTxt(!showMoreTxt);
+  };
+
   return (
     <>
       <View style={styles.orderCardwrapInnerModal}>
@@ -84,19 +97,16 @@ const Productcard = props => {
           <Text style={[{color: Colors.BrandColor}, styles.msnName]}>
             {msn}
           </Text>
-          <Text
-            onTextLayout={onTextLayout}
-            numberOfLines={showMoreTxt ? undefined : 1}
-            style={styles.productName}>
-            {productName}
+
+          <Text onTextLayout={onTextLayout} style={styles.productName}>
+            {showMoreTxt ? productName : isReadMore(productName).text}
+            {isReadMore(productName).readMore && !showMoreTxt ? '...' : ''}
+            {lengthMore && isReadMore(productName).readMore ? (
+              <Text onPress={toggleShowMoreTxt} style={styles.readMoretxt}>
+                {showMoreTxt ? ' Read less' : ' Read more'}
+              </Text>
+            ) : null}
           </Text>
-          {lengthMore ? (
-            <Text
-              //onPress={toggleShowMoreTxt}
-              style={styles.readMoretxt}>
-              {showMoreTxt ? 'Read less' : 'Read more'}
-            </Text>
-          ) : null}
           <View style={{flexDirection: 'row', marginBottom: Dimension.margin5}}>
             <Text style={styles.TotalamounTxt}>
               {' '}
