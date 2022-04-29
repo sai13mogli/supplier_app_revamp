@@ -1,7 +1,7 @@
-import { OrderedMap } from 'immutable';
-import React, { useEffect, useState } from 'react';
-import { Text, ScrollView, View, TouchableOpacity } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import {OrderedMap} from 'immutable';
+import React, {useEffect, useState} from 'react';
+import {Text, ScrollView, View, TouchableOpacity} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import DropDown from '../../../component/common/DropDown';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import {
@@ -9,15 +9,15 @@ import {
   getGstDetails,
   sendOtpForVerification,
 } from '../../../services/profile';
-import { fetchUpdateBusinessDetails } from '../../../redux/actions/profile';
+import {fetchUpdateBusinessDetails} from '../../../redux/actions/profile';
 import CustomButton from '../../../component/common/Button';
-import { STATE_STATUS } from '../../../redux/constants';
+import {STATE_STATUS} from '../../../redux/constants';
 import styles from './style';
 import Header from '../../../component/common/Header';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import LoginOtpModal from '../../../component/LoginOtpModal';
-import UpdateNumberAndEmaiModal from '../../../component/UpdateNumberAndEmaiModal';
+import UpdateNumberAndEmailModal from '../../../component/UpdateNumberAndEmailModal';
 import PickerDropDown from '../../../component/common/PickerDropDown';
 import Toast from 'react-native-toast-message';
 
@@ -369,11 +369,11 @@ const BusinessDetailsScreen = props => {
 
   const onPincodeBlur = async () => {
     if (pincode && pincode.length == 6) {
-      const { data } = await getPincodeDetails(pincode);
+      const {data} = await getPincodeDetails(pincode);
       if (data.data && data.data.length) {
         setpincodeError(false);
-        setStates([{ value: data.data[0].state, label: data.data[0].state }]);
-        setCities(data.data.map(_ => ({ label: _.city, value: _.city })));
+        setStates([{value: data.data[0].state, label: data.data[0].state}]);
+        setCities(data.data.map(_ => ({label: _.city, value: _.city})));
         setstate(data.data[0].state);
         // if (data.data.length == 1) {
         setcity(data.data[0].city);
@@ -386,7 +386,7 @@ const BusinessDetailsScreen = props => {
 
   const onGstinBlur = async () => {
     if (gstin && gstin.length >= 15 && gstin.match(gstinRegex)) {
-      const { data } = await getGstDetails(gstin);
+      const {data} = await getGstDetails(gstin);
       if (!data.success) {
         setgstinError(true);
       } else {
@@ -507,7 +507,7 @@ const BusinessDetailsScreen = props => {
       } else {
         if (phone && phone.length && phone.length == 10) {
           initializeCounter(type);
-          const { data } = await sendOtpForVerification(type);
+          const {data} = await sendOtpForVerification(type);
           setOtpModal(true);
         } else {
           setphoneError(true);
@@ -520,7 +520,7 @@ const BusinessDetailsScreen = props => {
       } else {
         if (email && email.length && email.match(emailRegex)) {
           initializeCounter(type);
-          const { data } = await sendOtpForVerification(type);
+          const {data} = await sendOtpForVerification(type);
           setOtpModal(true);
         } else {
           setemailError(true);
@@ -532,8 +532,12 @@ const BusinessDetailsScreen = props => {
   const getExtraView = () => {
     if (!phoneEdit) {
       return (
-        <TouchableOpacity onPress={() => setUpdatePhoneOtpModal(true)}>
-          <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#000' }}>
+        <TouchableOpacity
+          onPress={() => {
+            setType(6);
+            setUpdatePhoneOtpModal(true);
+          }}>
+          <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
             EDIT
           </Text>
         </TouchableOpacity>
@@ -573,8 +577,12 @@ const BusinessDetailsScreen = props => {
   const getExtraViewEmail = () => {
     if (!emailEdit) {
       return (
-        <TouchableOpacity onPress={() => { setUpdatePhoneOtpModal(true) }}>
-          <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#000' }}>
+        <TouchableOpacity
+          onPress={() => {
+            setType(5);
+            setUpdatePhoneOtpModal(true);
+          }}>
+          <Text style={{fontSize: 12, fontWeight: 'bold', color: '#000'}}>
             EDIT
           </Text>
         </TouchableOpacity>
@@ -619,10 +627,10 @@ const BusinessDetailsScreen = props => {
     }
   };
 
-  const onLogin = () => { };
+  const onLogin = () => {};
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Header
         showBack
         showBell
@@ -635,10 +643,10 @@ const BusinessDetailsScreen = props => {
             {...field}
             key={fieldKey}
             disabled={field.disabled}
-          // enabled={field.enabled}
-          // enabled={
-          //   props.route.params.disabled ? false : true || field.enabled
-          // }
+            // enabled={field.enabled}
+            // enabled={
+            //   props.route.params.disabled ? false : true || field.enabled
+            // }
           />
         )).toList()}
         {/* {otpModal && ( */}
@@ -647,35 +655,11 @@ const BusinessDetailsScreen = props => {
           //visible={true}
           onLogin={onLogin}
           onClose={() => setOtpModal(false)}
-          email={type == 6
-            ? profileData && profileData.phone
-            : profileData && profileData.email
-          }
-          frombusinessDetails={true}
-          type={type}
-          phoneVerified={phoneVerified}
-          setPhoneVerified={setPhoneVerified}
-          emailVerified={emailVerified}
-          setEmailVerified={setEmailVerified}
-          setresendOtp={setResendOtp}
-          setresendOtpEmail={setResendOtpEmail}
-        />
-
-        <UpdateNumberAndEmaiModal
-          visible={updatePhoneOtpModal}
-          // onLogin={onLogin}
-          onClose={() => setUpdatePhoneOtpModal(false)}
-          phone={
+          email={
             type == 6
               ? profileData && profileData.phone
               : profileData && profileData.email
           }
-          // email={
-          //   type == 6
-          //     ? profileData && profileData.phone
-          //     : profileData && profileData.email
-          // }
-
           frombusinessDetails={true}
           type={type}
           phoneVerified={phoneVerified}
@@ -685,6 +669,32 @@ const BusinessDetailsScreen = props => {
           setresendOtp={setResendOtp}
           setresendOtpEmail={setResendOtpEmail}
         />
+        {updatePhoneOtpModal && (
+          <UpdateNumberAndEmailModal
+            updatePhoneOtpModal={updatePhoneOtpModal}
+            setUpdatePhoneOtpModal={setUpdatePhoneOtpModal}
+            type={type}
+            // phone={
+            //   type == 6
+            //     ? profileData && profileData.phone
+            //     : profileData && profileData.email
+            // }
+            // email={
+            //   type == 6
+            //     ? profileData && profileData.phone
+            //     : profileData && profileData.email
+            // }
+            // frombusinessDetails={true}
+            // type={type}
+            // phoneVerified={phoneVerified}
+            // setPhoneVerified={setPhoneVerified}
+            // emailVerified={emailVerified}
+            // setEmailVerified={setEmailVerified}
+            // setresendOtp={setResendOtp}
+            // setresendOtpEmail={setResendOtpEmail}
+          />
+        )}
+
         {/* )} */}
       </ScrollView>
       {verificationStatus !== 15 ? (
