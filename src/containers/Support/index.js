@@ -21,10 +21,14 @@ const SupportScreen = props => {
         />
         {/* <TicketsList navigation={props.navigation} /> */}
       </View>
-      <View style={styles.BottomWrap}  onPress={() => props.navigation.navigate('NewTicket')}>
-        
-        <TouchableOpacity style={styles.ticketBtn}>
-        <CustomeIcon name={'add-circle-line'} size={Dimension.font22} color={Colors.WhiteColor}></CustomeIcon>
+      <View style={styles.BottomWrap}>
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate('NewTicket')}
+          style={styles.ticketBtn}>
+          <CustomeIcon
+            name={'add-circle-line'}
+            size={Dimension.font22}
+            color={Colors.WhiteColor}></CustomeIcon>
           <Text style={styles.ticketBtnTxt}>Raise New Ticket</Text>
         </TouchableOpacity>
         {/* <CustomButton
