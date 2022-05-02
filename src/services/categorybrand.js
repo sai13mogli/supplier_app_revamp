@@ -22,3 +22,10 @@ export const addOrUpdateCategoryAndBrand = async data =>
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
   });
+
+export const deleteBrand = async data =>
+  axios.post(`${BASE_URL}/profile/deleteBrand`, data, {
+    headers: {
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
