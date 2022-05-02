@@ -6,34 +6,38 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
-import { OrderedMap } from 'immutable';
+import {OrderedMap} from 'immutable';
 import MultiSelectInput from '../../../component/common/MultiSelectInput';
 import Header from '../../../component/common/Header';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import styles from './style';
 import CustomeIcon from '../../../component/common/CustomeIcon';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import DropDown from '../../../component/common/DropDown';
 import FileUpload from '../../../component/common/FileUpload';
 import CustomeDatePicker from '../../../component/common/Datepicker';
 import Modal from 'react-native-modal';
 import CustomButton from '../../../component/common/Button';
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BASE_URL, STATE_STATUS } from '../../../redux/constants/index';
+import {BASE_URL, STATE_STATUS} from '../../../redux/constants/index';
 import {
   setSelectedCategories,
   updateBrandData,
   fetchCategoriesBrands,
+  deleteCurrBrand,
 } from '../../../redux/actions/categorybrand';
-import { addOrUpdateCategoryAndBrand } from '../../../services/categorybrand';
-import { getAllCategories } from '../../../services/auth';
-import { fetchProfile } from '../../../redux/actions/profile';
+import {
+  addOrUpdateCategoryAndBrand,
+  deleteBrand,
+} from '../../../services/categorybrand';
+import {getAllCategories} from '../../../services/auth';
+import {fetchProfile} from '../../../redux/actions/profile';
 import PickerDropDown from '../../../component/common/PickerDropDown';
 
 // import {uploadDocumentService} from '../../../services/documents';
@@ -92,6 +96,9 @@ const CategoryBrandScreen = props => {
   const [nextLoader, setNextLoader] = useState(false);
   const [isRaiseRequest, setIsRaiseRequest] = useState('false');
   const [isDeletedKey, setIsDeletedKey] = useState('');
+  const [currentBrand, setCurrentBrand] = useState({});
+  const [isVisible, setIsVisible] = useState(false);
+  const [deleteLoader, setDeleteLoader] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -244,12 +251,12 @@ const CategoryBrandScreen = props => {
   }, [userCategories]);
 
   const filterSelectedArr = async () => {
-    const { data } = await getAllCategories();
+    const {data} = await getAllCategories();
     let arr = [];
     (data.data || []).forEach(ele => {
       (userCategories || []).forEach(e => {
         if (ele.categoryCode == e) {
-          arr.push({ categoryCode: e, categoryName: ele.categoryName });
+          arr.push({categoryCode: e, categoryName: ele.categoryName});
         }
       });
     });
@@ -265,7 +272,7 @@ const CategoryBrandScreen = props => {
 
   const uploadDocu = async data => {
     let res = await uploadDocumentService(data);
-    let { resp } = res;
+    let {resp} = res;
 
     if (resp.error) {
       setErrorData();
@@ -311,7 +318,7 @@ const CategoryBrandScreen = props => {
     };
   };
 
-  const setDocument = ({ fileData, resp }) => {
+  const setDocument = ({fileData, resp}) => {
     setBrandCertificate({
       ...brandCertificate,
       title: fileData && fileData.name,
@@ -551,7 +558,7 @@ const CategoryBrandScreen = props => {
         categoryCode: [...categoryIds],
         brandList: [...mutatebrands],
       };
-      const { data } = await addOrUpdateCategoryAndBrand(payloadObj);
+      const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
       if (data && data.success) {
         setNextLoader(false);
         dispatch(fetchProfile());
@@ -595,8 +602,31 @@ const CategoryBrandScreen = props => {
   //   }
   // };
 
+  const flushBrand = async () => {
+    try {
+      let payloadObj = {
+        brandCode: currentBrand.brandCode,
+        businessNature: currentBrand.businessNature,
+        expiryDate: currentBrand.expiryDate,
+        fileKey: currentBrand.fileKey,
+        supplierId: currentBrand.supplierId,
+      };
+      setDeleteLoader(true);
+      let payload = [{...payloadObj}];
+      const {data} = await deleteBrand(payload);
+      if (data && data.success) {
+        setDeleteLoader(false);
+        setIsVisible(false);
+        dispatch(deleteCurrBrand(payloadObj));
+      }
+    } catch (error) {
+      setDeleteLoader(false);
+      console.log(error);
+    }
+  };
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Header
         showBack
         showBell
@@ -629,12 +659,12 @@ const CategoryBrandScreen = props => {
                     <TouchableOpacity
                       style={styles.BrandWrap}
                       onPress={() => openModal(_)}>
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Brand Name</Text>
                         <Text style={styles.brandNameTxt}>{_.brandName}</Text>
                       </View>
 
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Status</Text>
                         {_.isDeleted == '0' ? (
                           <Text style={styles.ApprovedStatus}>Approved</Text>
@@ -646,9 +676,24 @@ const CategoryBrandScreen = props => {
                           </Text>
                         )}
                       </View>
-                      {/* //onPress={() => openModal(_)} */}
 
-                      <View style={{ flex: 1 }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setCurrentBrand(_);
+                          setIsVisible(true);
+                        }}>
+                        {/* <Text
+                          style={{
+                            fontSize: 12,
+                            fontWeight: 'bold',
+                            color: '#000',
+                          }}>
+                          Delete
+                        </Text> */}
+                        <CustomeIcon name={'delete'} size={Dimension.font22} color={colors.FontColor}></CustomeIcon>
+                      </TouchableOpacity>
+
+                      <View style={{flex: 1}}>
                         {_.isDeleted == '4' && _.localbrand ? (
                           <TouchableOpacity
                             onPress={() => openModal(_)}
@@ -701,14 +746,14 @@ const CategoryBrandScreen = props => {
                     <TouchableOpacity
                       style={styles.BrandWrap}
                       onPress={() => openModal(_)}>
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Brand Name</Text>
                         <Text style={styles.brandNameTxt}>
                           {_.name || _.brandName}
                         </Text>
                       </View>
 
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Status</Text>
 
                         <Text style={styles.pendingStatus}>
@@ -718,10 +763,26 @@ const CategoryBrandScreen = props => {
                         </Text>
                       </View>
 
-                      <View style={{ flex: 1 }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setCurrentBrand(_);
+                          setIsVisible(true);
+                        }}>
+                        {/* <Text
+                          style={{
+                            fontSize: 12,
+                            fontWeight: 'bold',
+                            color: '#000',
+                          }}>
+                          Delete
+                        </Text> */}
+                        <CustomeIcon name={'delete'} size={Dimension.font22} color={colors.FontColor}></CustomeIcon>
+                      </TouchableOpacity>
+
+                      <View style={{flex: 1}}>
                         {_.isDeleted == '2' &&
-                          _.isRaiseRequest == 'true' &&
-                          _.localbrand ? (
+                        _.isRaiseRequest == 'true' &&
+                        _.localbrand ? (
                           <TouchableOpacity
                             onPress={() => openModal(_)}
                             style={styles.fillBtn}>
@@ -755,7 +816,7 @@ const CategoryBrandScreen = props => {
               // animating={true}
               size={'large'}
               color={'red'}
-              style={{ alignSelf: 'center' }}
+              style={{alignSelf: 'center'}}
             />
           </View>
         )}
@@ -777,7 +838,7 @@ const CategoryBrandScreen = props => {
         onBackdropPress={() => {
           setModalVisible(false);
         }}
-        style={{ padding: 0, margin: 0 }}>
+        style={{padding: 0, margin: 0}}>
         <View style={styles.modalContainer}>
           <View style={styles.TopWrap}>
             <View style={styles.topbdr}></View>
@@ -822,8 +883,8 @@ const CategoryBrandScreen = props => {
                   natureOfBusiness == 3
                     ? !checkCommonValidation()
                     : natureOfBusiness == 2
-                      ? !checkBusinessNatureValidation()
-                      : !checkValidation()
+                    ? !checkBusinessNatureValidation()
+                    : !checkValidation()
                 }
                 onPress={() => onSubmit(false)}
               />
@@ -852,8 +913,8 @@ const CategoryBrandScreen = props => {
                   natureOfBusiness == 3
                     ? !checkCommonValidationReqBrand()
                     : natureOfBusiness == 2
-                      ? !checkBusinessNatureReqBrandValidation()
-                      : !checkValidationReqBrand()
+                    ? !checkBusinessNatureReqBrandValidation()
+                    : !checkValidationReqBrand()
                 }
                 onPress={() => onSubmit(true)}
               />
@@ -861,6 +922,167 @@ const CategoryBrandScreen = props => {
           )}
         </View>
       </Modal>
+
+      <Modal
+        overlayPointerEvents={'auto'}
+        isVisible={modalVisible}
+        onTouchOutside={() => {
+          setModalVisible(false);
+        }}
+        onDismiss={() => {
+          setModalVisible(false);
+        }}
+        coverScreen={true}
+        deviceWidth={deviceWidth}
+        onBackButtonPress={() => {
+          setModalVisible(false);
+        }}
+        onBackdropPress={() => {
+          setModalVisible(false);
+        }}
+        style={{padding: 0, margin: 0}}>
+        <View style={styles.modalContainer}>
+          <View style={styles.TopWrap}>
+            <View style={styles.topbdr}></View>
+            <View style={styles.ModalheadingWrapper}>
+              <Text style={styles.ModalHeading}>{brand && brand.name}</Text>
+              <CustomeIcon
+                name={'close'}
+                size={Dimension.font22}
+                color={colors.FontColor}
+                onPress={() => setModalVisible(false)}></CustomeIcon>
+            </View>
+            <View style={styles.ModalFormWrap}>
+              {FORM_FIELDS.map((field, fieldKey) => (
+                <field.component
+                  fileUpload={natureOfBusiness}
+                  {...field}
+                  key={fieldKey}
+                  fromCategoryBrand={true}
+                />
+              )).toList()}
+            </View>
+          </View>
+          {isRaiseRequest == 'false' && isDeletedKey !== '2' ? (
+            <View style={styles.ModalBottomBtnWrap}>
+              <CustomButton
+                buttonColor={
+                  getButtonColor()
+                    ? colors.BrandColor
+                    : colors.DisableStateColor
+                }
+                borderColor={
+                  getButtonColor()
+                    ? colors.BrandColor
+                    : colors.DisableStateColor
+                }
+                TextColor={
+                  getButtonColor() ? colors.WhiteColor : colors.FontColor
+                }
+                TextFontSize={Dimension.font16}
+                title={'SUBMIT'}
+                disabled={
+                  natureOfBusiness == 3
+                    ? !checkCommonValidation()
+                    : natureOfBusiness == 2
+                    ? !checkBusinessNatureValidation()
+                    : !checkValidation()
+                }
+                onPress={() => onSubmit(false)}
+              />
+            </View>
+          ) : (
+            <View style={styles.ModalBottomBtnWrap}>
+              <CustomButton
+                buttonColor={
+                  getButtonColorReqBrand()
+                    ? colors.BrandColor
+                    : colors.DisableStateColor
+                }
+                borderColor={
+                  getButtonColorReqBrand()
+                    ? colors.BrandColor
+                    : colors.DisableStateColor
+                }
+                TextColor={
+                  getButtonColorReqBrand()
+                    ? colors.WhiteColor
+                    : colors.FontColor
+                }
+                TextFontSize={Dimension.font16}
+                title={'SUBMIT'}
+                disabled={
+                  natureOfBusiness == 3
+                    ? !checkCommonValidationReqBrand()
+                    : natureOfBusiness == 2
+                    ? !checkBusinessNatureReqBrandValidation()
+                    : !checkValidationReqBrand()
+                }
+                onPress={() => onSubmit(true)}
+              />
+            </View>
+          )}
+        </View>
+      </Modal>
+
+      <Modal
+        overlayPointerEvents={'auto'}
+        isVisible={isVisible}
+        onTouchOutside={() => {
+          setIsVisible(false);
+        }}
+        onDismiss={() => {
+          setIsVisible(false);
+        }}
+        coverScreen={true}
+        deviceWidth={deviceWidth}
+        onBackButtonPress={() => {
+          setIsVisible(false);
+        }}
+        onBackdropPress={() => {
+          setIsVisible(false);
+        }}
+        style={{padding: 0, margin: 0}}>
+        <View style={styles.modalContainer}>
+          <View style={styles.TopWrap}>
+            <View style={styles.topbdr}></View>
+            <View style={styles.ModalheadingWrapper}>
+              <Text style={styles.ModalHeading}>{brand && brand.name}</Text>
+              <CustomeIcon
+                name={'close'}
+                size={Dimension.font22}
+                color={colors.FontColor}
+                onPress={() => setIsVisible(false)}></CustomeIcon>
+              </View>
+              <Text style={styles.ModalHeading}>Are you sure you want to delete the brand?</Text>
+              </View> 
+                <View style={styles.DeleteBrndModalbottombtnWrap}>
+              <TouchableOpacity onPress={() => setIsVisible(false)} style={styles.cancelBtn}>
+                <Text
+                  style={styles.CancelTxt}>
+                  CANCEL
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.deleteBtn}
+                onPress={flushBrand}>
+                <Text
+                  style={styles.deleteBtnTxt}>
+                  CONFIRM
+                </Text>
+                {deleteLoader && (
+                  <ActivityIndicator
+                    color={'#fff'}
+                    style={{alignSelf: 'center'}}
+                  />
+                )}
+              </TouchableOpacity>
+              </View>
+            
+          
+        </View>
+      </Modal>
+
       <View style={styles.ModalBottomBtnWrap}>
         {/* <CustomButton
           buttonColor={
