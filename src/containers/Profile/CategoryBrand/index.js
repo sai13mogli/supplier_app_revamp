@@ -662,7 +662,7 @@ const CategoryBrandScreen = props => {
                             style={styles.ArrowBtn}
                             onPress={() => openModal(_)}>
                             <CustomeIcon
-                              name={'arrow-right-line'}
+                              name={'arrow-right-s-line'}
                               size={Dimension.font28}
                               color={colors.FontColor}></CustomeIcon>
                           </TouchableOpacity>
