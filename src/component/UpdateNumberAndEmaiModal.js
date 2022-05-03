@@ -6,6 +6,7 @@ import {
     Dimensions,
     TouchableOpacity,
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-native-modal';
 import { sendOtpForLogin, loginWithOtp } from '../services/auth';
 import { updateEmail, updatePhone } from '../services/profile';
@@ -27,6 +28,14 @@ const UpdateNumberAndEmaiModal = props => {
     const [inputType, setInputType] = useState(true);
     const [timer, setTimer] = useState(0);
     const [email, setEmail] = useState('');
+    const [phoneEdit, setPhoneEdit] = useState(false);
+    const [emailEdit, setEmailEdit] = useState(false);
+    const [phoneVerified, setPhoneVerified] = useState(false);
+    const [sendOtp, setSendOtp] = useState(false);
+    const [resendOtp, setResendOtp] = useState(false);
+    const businessDetails = useSelector(
+        state => state.profileReducer.businessDetails.data || {},
+    );
 
     useEffect(() => {
         if (props.frombusinessDetails) {
@@ -36,6 +45,25 @@ const UpdateNumberAndEmaiModal = props => {
             initializeCounter();
         }
     }, []);
+
+    useEffect(() => {
+        // if (props.route.params && props.route.params.disabled) {
+        setPhoneEdit(false);
+        setEmailEdit(false);
+        // }
+    }, []);
+
+    useEffect(() => {
+        if (
+            phone &&
+            phone.length &&
+            phone.length == 10 &&
+            phone !== (businessDetails.profile || {}).phone
+        ) {
+            setPhoneVerified(false);
+            setSendOtp(true);
+        }
+    }, [phone]);
 
     const initializeCounter = () => {
         setTimer(60);
@@ -51,44 +79,117 @@ const UpdateNumberAndEmaiModal = props => {
         }, 1000);
     };
 
-    const getExtraView = () => {
-        if (email && email.length && email.length == 10 && timer >= 1) {
+    // const getExtraView = () => {
+    //     if (email && email.length && email.length == 10 && timer >= 1) {
+    //         return (
+    //             <Text style={styles.sendOtptext}>
+    //                 00:{String(timer).length > 1 ? String(timer) : `0${timer}`}
+    //             </Text>
+    //         );
+    //     } else {
+    //         return (
+    //             <Text style={styles.sendOtptext} onPress={onSendOtp}>
+    //                 Resend OTP
+    //             </Text>
+    //         );
+    //     }
+    // };
+
+    const getExtraOTPView = (phone) => {
+        if (!phoneEdit) {
             return (
-                <Text style={styles.sendOtptext}>
-                    00:{String(timer).length > 1 ? String(timer) : `0${timer}`}
-                </Text>
+                <TouchableOpacity onPress={() => setPhoneEdit(true)}>
+                    <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#000' }}>
+                        EDIT
+                    </Text>
+                </TouchableOpacity>
+            );
+        } else if (phoneVerified) {
+            return (
+                <CustomeIcon
+                    name={'right-tick-line'}
+                    color={colors.SuccessStateColor}
+                    size={Dimension.font20}></CustomeIcon>
             );
         } else {
-            return (
-                <Text style={styles.sendOtptext} onPress={onSendOtp}>
-                    Resend OTP
-                </Text>
-            );
+            if (sendOtp) {
+                if (phone && phone.length && phone.length == 10 && timer >= 1) {
+                    return (
+                        <TouchableOpacity style={styles.setndOtpBtn}>
+                            <Text style={styles.sendOtptext}>
+                                00:{String(timer).length > 1 ? String(timer) : `0${timer}`}
+                            </Text>
+                        </TouchableOpacity>
+                    );
+                } else {
+                    return (
+                        <TouchableOpacity
+                            onPress={() => onSendOtp(6)}
+                            style={styles.setndOtpBtn}>
+                            <Text style={styles.sendOtptext}>
+                                {resendOtp ? 'Resend OTP' : 'Send OTP'}
+                            </Text>
+                        </TouchableOpacity>
+                    );
+                }
+            }
         }
     };
 
-    const onSendOtp = async () => {
-        if (!props.frombusinessDetails) {
-            initializeCounter();
-            const { data } = await sendOtpForLogin(props.email);
-            if (!data.success) {
-                setIsVisible(false);
-                Toast.show({
-                    type: 'error',
-                    text2: data.message,
-                    visibilityTime: 2000,
-                    autoHide: true,
-                });
+    // const onSendOtp = async () => {
+    //     if (!props.frombusinessDetails) {
+    //         initializeCounter();
+    //         const { data } = await sendOtpForLogin(props.email);
+    //         if (!data.success) {
+    //             setIsVisible(false);
+    //             Toast.show({
+    //                 type: 'error',
+    //                 text2: data.message,
+    //                 visibilityTime: 2000,
+    //                 autoHide: true,
+    //             });
 
-                // alert(data.message);
-                // props.onClose();
+    //             // alert(data.message);
+    //             // props.onClose();
+    //         } else {
+    //             setIsVisible(true);
+    //         }
+    //     } else {
+    //         setIsVisible(true);
+    //     }
+    // };
+
+    const onSendOtp = async type => {
+        if (type == 6) {
+            if (phone === (businessDetails.profile || {}).phone) {
+                setphoneError(true);
+                setPhoneErrorMsg('This phone number already registered with us.');
             } else {
-                setIsVisible(true);
+                if (phone && phone.length && phone.length == 10) {
+                    initializeCounter(type);
+                    const { data } = await sendOtpForVerification(type);
+                    setOtpModal(true);
+                } else {
+                    setphoneError(true);
+                }
             }
         } else {
-            setIsVisible(true);
+            if (email === (businessDetails.profile || {}).email) {
+                setemailError(true);
+                setEmailErrorMsg('This email ID already registered with us.');
+            } else {
+                if (email && email.length && email.match(emailRegex)) {
+                    initializeCounter(type);
+                    const { data } = await sendOtpForVerification(type);
+                    setOtpModal(true);
+                } else {
+                    setemailError(true);
+                }
+            }
         }
     };
+
+
 
     const onSubmit = async () => {
         setOtpError(false);
@@ -177,6 +278,8 @@ const UpdateNumberAndEmaiModal = props => {
 
                     <FloatingInput
                         value={phone}
+                        // disabled={!phoneEdit}
+                        extraView={() => getExtraOTPView(phone)}
                         errorMessage={'Invalid Phone Number'}
                         showError={numberError}
                         onChangeText={text => setphone(text)}
@@ -316,17 +419,16 @@ const styles = StyleSheet.create({
         marginLeft: Dimension.margin5,
     },
     setndOtpBtn: {
-        // backgroundColor: Colors.LightBrandColor,
-        // paddingVertical: Dimension.padding8,
-        // paddingHorizontal: Dimension.padding10,
-        // borderRadius: 2,
-        //alignItems: 'center',
+        backgroundColor: Colors.LightBrandColor,
+        paddingVertical: Dimension.padding8,
+        paddingHorizontal: Dimension.padding10,
+        borderRadius: 2,
+        alignItems: "center"
     },
     sendOtptext: {
-        fontSize: Dimension.font14,
+        fontSize: Dimension.font12,
         color: Colors.BrandColor,
-        fontFamily: Dimension.CustomSemiBoldFont,
-        marginLeft: Dimension.margin5,
+        fontFamily: Dimension.CustomRegularFont,
     },
 });
 
