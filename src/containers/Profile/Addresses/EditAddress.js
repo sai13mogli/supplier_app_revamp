@@ -50,8 +50,8 @@ const EditAddress = props => {
   const [pincode, setpincode] = useState(
     (props?.route?.params?.addressesDetails || {})?.pincode,
   );
-  const [state, setstate] = useState((businessDetails?.address || {})?.state);
-  const [city, setcity] = useState((businessDetails?.address || {})?.city);
+  const [state, setstate] = useState('');
+  const [city, setcity] = useState('');
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [phoneError, setphoneError] = useState(false);
