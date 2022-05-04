@@ -740,7 +740,8 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>DOWNLOAD INVOICE</Text>
+              <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon>
+            <Text style={styles.rejectCtaTxt}>INVOICE</Text>
             {invoiceLoading && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -762,7 +763,8 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
+              {/* <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon> */}
+            <Text style={styles.rejectCtaTxt}> DOWNLOAD PO</Text>
             {poLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -856,7 +858,8 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
+              <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon>
+            <Text style={styles.rejectCtaTxt}> PO</Text>
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -878,7 +881,8 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>DOWNLOAD POD COPY</Text>
+              <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon>
+            <Text style={styles.rejectCtaTxt}>POD COPY</Text>
             {podLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -901,7 +905,8 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>DOWNLOAD DEBIT NOTE</Text>
+              <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon>
+            <Text style={styles.rejectCtaTxt}>DEBIT NOTE</Text>
             {debitLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -1241,7 +1246,8 @@ const Ordercard = props => {
               },
             ]}
             disabled={manifestLoader}>
-            <Text style={styles.rejectCtaTxt}>Download Shipment Label</Text>
+              <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon>
+            <Text style={styles.rejectCtaTxt}>Shipment Label</Text>
             {manifestLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
