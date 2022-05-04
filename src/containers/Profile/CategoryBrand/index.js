@@ -682,14 +682,15 @@ const CategoryBrandScreen = props => {
                           setCurrentBrand(_);
                           setIsVisible(true);
                         }}>
-                        <Text
+                        {/* <Text
                           style={{
                             fontSize: 12,
                             fontWeight: 'bold',
                             color: '#000',
                           }}>
                           Delete
-                        </Text>
+                        </Text> */}
+                        <CustomeIcon name={'delete'} size={Dimension.font22} color={colors.FontColor}></CustomeIcon>
                       </TouchableOpacity>
 
                       <View style={{flex: 1}}>
@@ -706,7 +707,7 @@ const CategoryBrandScreen = props => {
                             style={styles.ArrowBtn}
                             onPress={() => openModal(_)}>
                             <CustomeIcon
-                              name={'arrow-right-line'}
+                              name={'arrow-right-s-line'}
                               size={Dimension.font28}
                               color={colors.FontColor}></CustomeIcon>
                           </TouchableOpacity>
@@ -767,14 +768,15 @@ const CategoryBrandScreen = props => {
                           setCurrentBrand(_);
                           setIsVisible(true);
                         }}>
-                        <Text
+                        {/* <Text
                           style={{
                             fontSize: 12,
                             fontWeight: 'bold',
                             color: '#000',
                           }}>
                           Delete
-                        </Text>
+                        </Text> */}
+                        <CustomeIcon name={'delete'} size={Dimension.font22} color={colors.FontColor}></CustomeIcon>
                       </TouchableOpacity>
 
                       <View style={{flex: 1}}>
@@ -1051,25 +1053,21 @@ const CategoryBrandScreen = props => {
                 size={Dimension.font22}
                 color={colors.FontColor}
                 onPress={() => setIsVisible(false)}></CustomeIcon>
-              <TouchableOpacity onPress={() => setIsVisible(false)}>
+              </View>
+              <Text style={styles.ModalHeading}>Are you sure you want to delete the brand?</Text>
+              </View> 
+                <View style={styles.DeleteBrndModalbottombtnWrap}>
+              <TouchableOpacity onPress={() => setIsVisible(false)} style={styles.cancelBtn}>
                 <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                    color: '#000',
-                  }}>
+                  style={styles.CancelTxt}>
                   CANCEL
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={{backgroundColor: 'red'}}
+                style={styles.deleteBtn}
                 onPress={flushBrand}>
                 <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                    color: '#000',
-                  }}>
+                  style={styles.deleteBtnTxt}>
                   CONFIRM
                 </Text>
                 {deleteLoader && (
@@ -1079,8 +1077,9 @@ const CategoryBrandScreen = props => {
                   />
                 )}
               </TouchableOpacity>
-            </View>
-          </View>
+              </View>
+            
+          
         </View>
       </Modal>
 

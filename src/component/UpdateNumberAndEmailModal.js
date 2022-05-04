@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -7,21 +7,21 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import {sendOtpForVerification} from '../services/profile';
-import {updateEmail, updatePhone} from '../services/profile';
+import { sendOtpForVerification } from '../services/profile';
+import { updateEmail, updatePhone } from '../services/profile';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import CustomButton from './common/Button';
 import CustomeIcon from './common/CustomeIcon';
 import FloatingInput from './common/FloatingInput';
 import Toast from 'react-native-toast-message';
-import {useDispatch} from 'react-redux';
-import {fetchBusinessDetails} from '../redux/actions/profile';
+import { useDispatch } from 'react-redux';
+import { fetchBusinessDetails } from '../redux/actions/profile';
 const phoneRegex = '^[1-9][0-9]{9}$';
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
 const UpdateNumberAndEmailModal = props => {
-  const {updatePhoneOtpModal, setUpdatePhoneOtpModal, type} = props;
+  const { updatePhoneOtpModal, setUpdatePhoneOtpModal, type } = props;
 
   let interval = {};
   const [phoneOtp, setPhoneOtp] = useState('');
@@ -169,7 +169,7 @@ const UpdateNumberAndEmailModal = props => {
 
   const onSendOtp = async () => {
     initializeCounter(type);
-    const {data} = await sendOtpForVerification(type);
+    const { data } = await sendOtpForVerification(type);
     if (data && !data.success) {
       if (type == 6) {
         setPhoneError(true);
@@ -189,7 +189,7 @@ const UpdateNumberAndEmailModal = props => {
           phone,
           otp: phoneOtp,
         };
-        const {data} = await updatePhone(payloadObj);
+        const { data } = await updatePhone(payloadObj);
         if (data && data.success) {
           setLoading(false);
           setUpdatePhoneOtpModal(false);
@@ -215,7 +215,7 @@ const UpdateNumberAndEmailModal = props => {
           email,
           otp: emailOtp,
         };
-        const {data} = await updateEmail(payloadObj);
+        const { data } = await updateEmail(payloadObj);
         if (data && data.success) {
           setLoading(false);
           setUpdatePhoneOtpModal(false);
@@ -271,7 +271,7 @@ const UpdateNumberAndEmailModal = props => {
       coverScreen={true}
       backdropOpacity={0.9}
       onRequestClose={() => setUpdatePhoneOtpModal(false)}
-      style={{padding: 0, margin: 0}}
+      style={{ padding: 0, margin: 0 }}
       overlayPointerEvents={'auto'}
       onTouchOutside={() => setUpdatePhoneOtpModal(false)}
       onDismiss={() => setUpdatePhoneOtpModal(false)}
@@ -337,38 +337,38 @@ const UpdateNumberAndEmailModal = props => {
             )}
           />
 
-          
+
         </View>
         <View style={styles.buttonWrap}>
-            <CustomButton
-              title={'CANCEL'}
-              buttonColor={Colors.WhiteColor}
-              onPress={() => setUpdatePhoneOtpModal(false)}
-              TextColor={Colors.blackColor}
-              borderColor={Colors.WhiteColor}
-              TextFontSize={Dimension.font16}
-            />
-            <CustomButton
-              loading={loading}
-              disabled={!checkCommonValidation()}
-              title={'UPDATE'}
-              buttonColor={
-                checkCommonValidation()
-                  ? Colors.BrandColor
-                  : Colors.DisableStateColor
-              }
-              onPress={onSubmit}
-              TextColor={
-                checkCommonValidation() ? Colors.WhiteColor : Colors.blackColor
-              }
-              borderColor={checkCommonValidation()
+          <CustomButton
+            title={'CANCEL'}
+            buttonColor={Colors.WhiteColor}
+            onPress={() => setUpdatePhoneOtpModal(false)}
+            TextColor={Colors.blackColor}
+            borderColor={Colors.WhiteColor}
+            TextFontSize={Dimension.font16}
+          />
+          <CustomButton
+            loading={loading}
+            disabled={!checkCommonValidation()}
+            title={'UPDATE'}
+            buttonColor={
+              checkCommonValidation()
                 ? Colors.BrandColor
-                : Colors.DisableStateColor}
-              TextFontSize={Dimension.font16}
-            />
-          </View>
+                : Colors.DisableStateColor
+            }
+            onPress={onSubmit}
+            TextColor={
+              checkCommonValidation() ? Colors.WhiteColor : Colors.blackColor
+            }
+            borderColor={checkCommonValidation()
+              ? Colors.BrandColor
+              : Colors.DisableStateColor}
+            TextFontSize={Dimension.font16}
+          />
+        </View>
       </View>
-      
+
     </Modal>
   );
 };
