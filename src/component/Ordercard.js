@@ -740,7 +740,11 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-              <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{marginRight: Dimension.margin5}}></CustomeIcon>
             <Text style={styles.rejectCtaTxt}>INVOICE</Text>
             {invoiceLoading && (
               <ActivityIndicator
@@ -763,7 +767,7 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-              {/* <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon> */}
+            {/* <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon> */}
             <Text style={styles.rejectCtaTxt}> DOWNLOAD PO</Text>
             {poLoader && (
               <ActivityIndicator
@@ -858,7 +862,11 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-              <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{marginRight: Dimension.margin5}}></CustomeIcon>
             <Text style={styles.rejectCtaTxt}> PO</Text>
             {invoiceLoader && (
               <ActivityIndicator
@@ -881,7 +889,11 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-              <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{marginRight: Dimension.margin5}}></CustomeIcon>
             <Text style={styles.rejectCtaTxt}>POD COPY</Text>
             {podLoader && (
               <ActivityIndicator
@@ -905,7 +917,11 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-              <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{marginRight: Dimension.margin5}}></CustomeIcon>
             <Text style={styles.rejectCtaTxt}>DEBIT NOTE</Text>
             {debitLoader && (
               <ActivityIndicator
@@ -1165,7 +1181,12 @@ const Ordercard = props => {
                 ]}>
                 <Text style={styles.disabledBtntxt}>Pack Order</Text>
               </TouchableOpacity>
-              <Text style={styles.shipmentLbelTxt}>Invoice not created</Text>
+              <Text style={styles.shipmentLbelTxt}>
+                Shipment not created yet.
+              </Text>
+              <Text style={styles.shipmentLbelTxt}>
+                Please check this tab after 5mins.
+              </Text>
             </View>
           </>
         ) : cta == 'PACK_ORDER_INVOICE_DISABLED' ? (
@@ -1246,7 +1267,11 @@ const Ordercard = props => {
               },
             ]}
             disabled={manifestLoader}>
-              <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{marginRight: Dimension.margin5}}></CustomeIcon>
             <Text style={styles.rejectCtaTxt}>Shipment Label</Text>
             {manifestLoader && (
               <ActivityIndicator
