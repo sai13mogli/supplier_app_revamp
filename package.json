@@ -42,6 +42,7 @@
     "react-native-multiple-select": "^0.5.7",
     "react-native-pager-view": "^5.4.11",
     "react-native-progress": "^5.0.0",
+    "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.10.2",
     "react-native-tab-view": "^3.1.1",
