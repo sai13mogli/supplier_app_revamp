@@ -109,6 +109,14 @@ const NotificationScreen = props => {
     } ${date.getHours() < 12 ? 'PM' : 'AM'}`;
   };
 
+  const getNotificationIcon = recordType => {
+    if (recordType == 17 || recordType == 18) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const renderItem = ({item, index}) => {
     return (
       <View
@@ -122,7 +130,11 @@ const NotificationScreen = props => {
           <View
             style={item.readStatus ? styles.iconWrap : styles.ActioniconWrap}>
             <CustomeIcon
-              name={item.readStatus ? 'support-line' : 'orders-line'}
+              name={
+                getNotificationIcon(item.recordType)
+                  ? 'support-line'
+                  : 'orders-line'
+              }
               // name={item.readStatus ? notificationsStatusIcon(item.recordType) : notificationsStatusIcon(item.recordType)}
               size={Dimension.font20}
               //color={Colors.eyeIcon}

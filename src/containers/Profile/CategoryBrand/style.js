@@ -155,6 +155,37 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
    // marginBottom: Dimension.margin5,
   },
+  DeleteBrndModalbottombtnWrap:{
+    flexDirection:"row",
+    padding: Dimension.padding15,
+    borderTopColor: Colors.grayShade2,
+    borderTopWidth: 1,
+    backgroundColor: Colors.WhiteColor,
+    marginTop:Dimension.margin30
+  },
+  cancelBtn:{
+    flex:1,
+    paddingVertical:Dimension.padding12,
+  borderRadius:4,
+  alignItems:"center"
+  },
+  CancelTxt:{
+    fontSize: Dimension.font16,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+  },
+  deleteBtn:{
+    flex:1,
+  backgroundColor:Colors.BrandColor,
+  paddingVertical:Dimension.padding12,
+  borderRadius:4,
+  alignItems:"center"
+  },
+  deleteBtnTxt:{
+    fontSize: Dimension.font16,
+    color: Colors.WhiteColor,
+    fontFamily: Dimension.CustomMediumFont,
+  },
 });
 
 export default styles;

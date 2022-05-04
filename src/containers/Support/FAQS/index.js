@@ -7,7 +7,7 @@ import {
   FlatList,
   ActivityIndicator,
   TextInput,
-  Image
+  Image,
 } from 'react-native';
 import styles from './style';
 import {searchFaqs} from '../../../services/support';
@@ -17,26 +17,30 @@ import CustomeIcon from '../../../component/common/CustomeIcon';
 
 const FAQS = props => {
   const [search, setSearch] = useState('');
-  const [selectedTab, setSelectedTab] = useState('Catalog Related');
+  const [selectedTab, setSelectedTab] = useState('Popular Queries');
   const [data, setData] = useState([]);
   const [loader, setLoader] = useState(true);
 
   const TABS = [
     {
-      title: 'Catalog Related',
-      key: 'Catalog Related',
+      title: 'Popular Queries',
+      key: 'Popular Queries',
+    },
+    {
+      title: 'Product/Catalog Listing Related',
+      key: 'Product/Catalog Listing Related',
     },
     {
       title: 'Order Related',
-      key: 'Order Related',
+      key: 'Order related',
     },
     {
-      title: 'Account Related',
-      key: 'Account Related',
+      title: 'Fees & Penalty Related',
+      key: 'Fees & Penalty related',
     },
     {
       title: 'Payment Related',
-      key: 'Payment Related',
+      key: 'Payment related',
     },
   ];
 
@@ -59,14 +63,7 @@ const FAQS = props => {
 
   const renderItem = ({item, index}) => {
     let text = item.answer;
-    text = text
-      .split('<ul>')
-      .join('')
-      .split('</li>')
-      .join('')
-      .split('</ul>')
-      .join('')
-      .split('<li>');
+    text = text.split('</p>').join('').split('<p>');
     const regex = /(<([^>]+)>)/gi;
     return (
       <View style={styles.questionContainer}>
@@ -89,47 +86,45 @@ const FAQS = props => {
 
   return (
     <>
-    <View style={styles.container}>
-
-    
-      <Text style={styles.headingTxt}>Have A Question ?</Text>
-      <View style={styles.searchWrapper}>
-        <TextInput
-          placeholderTextColor={Colors.eyeIcon}
-          onChangeText={onChangeText}
-          value={search}
-          // blurOnSubmit={blurOnSubmit}
-          placeholder={'Type your question here'}
-          style={styles.SearchInputCss}
-          onSubmitEditing={getFaqsData}
-        />
-        <CustomeIcon
-          onPress={getFaqsData}
-          name={'search'}
-          style={styles.seacrhIcon}></CustomeIcon>
-      </View>
-      <Text style={styles.headingTxt}>Topics</Text>
-      <ScrollView horizontal={true}>
-        <View style={styles.tabContainer}>
-          {TABS.map((tab, tabIndex) => (
-            <TouchableOpacity
-              style={
-                tab.key == selectedTab ? styles.activeTab : styles.inactiveTab
-              }
-              onPress={() => setSelectedTab(tab.key)}
-              key={tabIndex}>
-              <Text
-                style={
-                  tab.key == selectedTab
-                    ? styles.activeTabText
-                    : styles.inactiveTabText
-                }>
-                {tab.title}
-              </Text>
-            </TouchableOpacity>
-          ))}
+      <View style={styles.container}>
+        <Text style={styles.headingTxt}>Have A Question ?</Text>
+        <View style={styles.searchWrapper}>
+          <TextInput
+            placeholderTextColor={Colors.eyeIcon}
+            onChangeText={onChangeText}
+            value={search}
+            // blurOnSubmit={blurOnSubmit}
+            placeholder={'Type your question here'}
+            style={styles.SearchInputCss}
+            onSubmitEditing={getFaqsData}
+          />
+          <CustomeIcon
+            onPress={getFaqsData}
+            name={'search'}
+            style={styles.seacrhIcon}></CustomeIcon>
         </View>
-      </ScrollView>
+        <Text style={styles.headingTxt}>Topics</Text>
+        <ScrollView horizontal={true}>
+          <View style={styles.tabContainer}>
+            {TABS.map((tab, tabIndex) => (
+              <TouchableOpacity
+                style={
+                  tab.key == selectedTab ? styles.activeTab : styles.inactiveTab
+                }
+                onPress={() => setSelectedTab(tab.key)}
+                key={tabIndex}>
+                <Text
+                  style={
+                    tab.key == selectedTab
+                      ? styles.activeTabText
+                      : styles.inactiveTabText
+                  }>
+                  {tab.title}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
       </View>
       {loader ? (
         <ActivityIndicator
@@ -140,18 +135,16 @@ const FAQS = props => {
         <FlatList
           renderItem={renderItem}
           data={data}
-          contentContainerStyle={{paddingBottom:280}}
-          style={{marginHorizontal:Dimension.margin10,}}
+          contentContainerStyle={{paddingBottom: 280}}
+          style={{marginHorizontal: Dimension.margin10}}
           ListEmptyComponent={
             <View style={styles.EmptyChatWrap}>
-          <Image
-            source={require('../../../assets/images/EmptyChat.png')}
-            style={{height: Dimension.height250, width: Dimension.width150}}
-          />
-            <Text style={styles.EmptyBoldTxt}>
-              No FAQ's found
-            </Text>
-          </View>
+              <Image
+                source={require('../../../assets/images/EmptyChat.png')}
+                style={{height: Dimension.height250, width: Dimension.width150}}
+              />
+              <Text style={styles.EmptyBoldTxt}>No FAQ's found</Text>
+            </View>
           }
           keyExtractor={(item, index) => `${index}-item`}
         />

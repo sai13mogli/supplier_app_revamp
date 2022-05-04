@@ -4,7 +4,7 @@ import Dimension from '../../../../Theme/Dimension';
 const styles = StyleSheet.create({
   searchWrapper: {
     paddingHorizontal: Dimension.padding10,
-    marginBottom: Dimension.margin20,
+    marginVertical: Dimension.margin10,
     position: 'relative',
   },
 
@@ -31,6 +31,11 @@ const styles = StyleSheet.create({
     right: Dimension.padding15,
     fontSize: Dimension.font18,
     color: Colors.BrandColor,
+  },
+  bottomWrap:{
+    borderTopColor:Colors.BoxBorderColor,
+    padding:Dimension.padding10,
+    borderTopWidth:1
   },
 });
 

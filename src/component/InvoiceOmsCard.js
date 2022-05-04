@@ -4,6 +4,7 @@ import {
     Image,
     StyleSheet,
     Dimensions,
+    ImageBackground
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { getImageUrl } from '../services/orders';
@@ -90,19 +91,22 @@ const InvoiceOmsCard = props => {
                     <View style={styles.leftpart}>
                         {
                             invoiceImage ?
+                            <ImageBackground
+                                source={require('../assets/images/rectanglebg.png') }
+                                style={{ width: 62, height: 62, padding: 2}}>
                                 <Image
-                                    // source={{
-                                    //   uri:
-                                    //     orderImage ||
-                                    //     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
-                                    // }}
                                     source={{ uri: invoiceImage }}
                                     style={styles.imgStyle}
-                                /> :
+                                /> 
+                                </ImageBackground>:
+                                <ImageBackground
+                                source={require('../assets/images/rectanglebg.png') }
+                                style={{ width: 62, height: 62, padding: 2}}>
                                 <Image
                                     source={require('../assets/images/default_image.png')}
                                     style={styles.imgStyle}
                                 />
+                                </ImageBackground>
 
                         }
                         <View style={styles.quantityTxt}>
@@ -270,8 +274,8 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         backgroundColor: Colors.WhiteColor,
         padding: 2,
-        width: Dimension.width50,
-        height: Dimension.height50,
+        width: 58,
+        height: 58,
         //alignSelf:'center'
     },
     leftpart: {

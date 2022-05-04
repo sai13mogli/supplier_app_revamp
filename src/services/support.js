@@ -60,7 +60,9 @@ export const closeTicket = async id =>
 
 export const searchFaqs = async (selectedTab, search) =>
   axios.get(
-    `${BASE_URL}searchapi/ticket/faq?searchString=${search}&topic=${selectedTab}`,
+    `${BASE_URL}searchapi/ticket/faq?searchString=${search}&topic=${encodeURIComponent(
+      selectedTab,
+    )}`,
     {
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
