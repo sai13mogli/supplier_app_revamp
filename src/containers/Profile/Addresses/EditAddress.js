@@ -1,20 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {OrderedMap} from 'immutable';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { OrderedMap } from 'immutable';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import Header from '../../../component/common/Header';
 import DropDown from '../../../component/common/DropDown';
 import CustomButton from '../../../component/common/Button';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Checkbox from '../../../component/common/Checkbox/index';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
-import {STATE_STATUS} from '../../../redux/constants';
+import { STATE_STATUS } from '../../../redux/constants';
 import {
   fetchUpdateBillingAddress,
   fetchAddressDetails,
 } from '../../../redux/actions/profile';
-import {getPincodeDetails} from '../../../services/profile';
+import { getPincodeDetails } from '../../../services/profile';
 import Toast from 'react-native-toast-message';
 
 const EditAddress = props => {
@@ -25,6 +25,7 @@ const EditAddress = props => {
     state =>
       state.profileReducer.addressesDetails.status || STATE_STATUS.FETCHING,
   );
+  const profileData = useSelector(state => state.profileReducer.data || {});
   const addressesDetailsError = useSelector(
     state => state.profileReducer.addressesDetails.error || '',
   );
@@ -32,6 +33,7 @@ const EditAddress = props => {
   const [isSelected, setSelection] = useState(
     (props?.route?.params?.addressesDetails || {})?.default,
   );
+  const [sameAsbilling, setSameAsbilling] = useState('');
   const [editID, setEditID] = useState(props?.route?.params?.editID || '');
   const [phone, setPhone] = useState(
     (props?.route?.params?.addressesDetails || {})?.phone,
@@ -60,7 +62,22 @@ const EditAddress = props => {
   const [stateError, setstateError] = useState(false);
   const [cityError, setcityError] = useState(false);
   const [tabState, setTabState] = useState(props);
+  const addressesResponse = useSelector(
+    state => state.profileReducer.addressesDetails || [],
+  );
   const dispatch = useDispatch();
+
+  const addressesData = addressesResponse?.data;
+
+
+  const filterById = obj => {
+    if (obj.type == 3) {
+      return true;
+    }
+    return false;
+  };
+
+  let BillingAddressData = addressesData.filter(filterById);
 
   const FORM_FIELDS = new OrderedMap({
     phone: {
@@ -167,11 +184,11 @@ const EditAddress = props => {
 
   const onPincodeBlur = async () => {
     if (pincode && pincode.length == 6) {
-      const {data} = await getPincodeDetails(pincode);
+      const { data } = await getPincodeDetails(pincode);
       if (data.data && data.data.length) {
         setpincodeError(false);
-        setStates([{value: data.data[0].state, label: data.data[0].state}]);
-        setCities(data.data.map(_ => ({label: _.city, value: _.city})));
+        setStates([{ value: data.data[0].state, label: data.data[0].state }]);
+        setCities(data.data.map(_ => ({ label: _.city, value: _.city })));
         setstate(data.data[0].state);
         if (data.data.length) {
           setcity(data.data[0].city);
@@ -200,6 +217,15 @@ const EditAddress = props => {
       });
     }
   }, [addressesDetailsStatus]);
+
+  const callbillingAddress = (BillingAddressData) => {
+    setSameAsbilling(!sameAsbilling)
+    setPhone((BillingAddressData?.[0] || {})?.phone)
+    setaddress1((BillingAddressData?.[0] || {})?.address1)
+    setaddress2((BillingAddressData?.[0] || {})?.address2)
+    setpincode((BillingAddressData?.[0] || {})?.pincode)
+    setSelection((BillingAddressData?.[0] || {})?.default)
+  }
 
   const onPhoneBlur = () => {
     if (phone && phone.length == 10) {
@@ -292,13 +318,22 @@ const EditAddress = props => {
         navigation={props.navigation}
         showText={editID ? 'Edit Address' : 'Add Address'}
         rightIconName={'business-details'}></Header>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <ScrollView style={styles.ContainerCss}>
           {FORM_FIELDS.map((field, fieldKey) => (
             <field.component {...field} key={fieldKey} />
           )).toList()}
         </ScrollView>
       </View>
+      {
+        tabState?.route?.params?.tabState == 'PickedUp' ?
+          (<Checkbox
+            checked={sameAsbilling}
+            onPress={() => callbillingAddress(BillingAddressData)}
+            title={'Same as billing address'}
+          />) : (null)
+      }
+
       <Checkbox
         checked={isSelected}
         onPress={() => setSelection(!isSelected)}
