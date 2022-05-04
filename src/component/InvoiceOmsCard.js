@@ -91,21 +91,21 @@ const InvoiceOmsCard = props => {
                     <View style={styles.leftpart}>
                         {
                             invoiceImage ?
-                            <ImageBackground
-                                source={require('../assets/images/rectanglebg.png') }
-                                style={{ width: 62, height: 62, padding: 2}}>
-                                <Image
-                                    source={{ uri: invoiceImage }}
-                                    style={styles.imgStyle}
-                                /> 
-                                </ImageBackground>:
                                 <ImageBackground
-                                source={require('../assets/images/rectanglebg.png') }
-                                style={{ width: 62, height: 62, padding: 2}}>
-                                <Image
-                                    source={require('../assets/images/default_image.png')}
-                                    style={styles.imgStyle}
-                                />
+                                    source={require('../assets/images/rectanglebg.png')}
+                                    style={{ width: 62, height: 62, padding: 2 }}>
+                                    <Image
+                                        source={{ uri: invoiceImage }}
+                                        style={styles.imgStyle}
+                                    />
+                                </ImageBackground> :
+                                <ImageBackground
+                                    source={require('../assets/images/rectanglebg.png')}
+                                    style={{ width: 62, height: 62, padding: 2 }}>
+                                    <Image
+                                        source={require('../assets/images/default_image.png')}
+                                        style={styles.imgStyle}
+                                    />
                                 </ImageBackground>
 
                         }

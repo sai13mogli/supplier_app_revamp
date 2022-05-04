@@ -19,99 +19,99 @@ const PickerDropDown = props => {
   } = props;
 
   return (
-     props.fromUploadInvoive ? (
-    <>
-      <Text style={styles.labelStyle}>{title}</Text>
-      <View style={styles.UIpickerWrapper}>
-        <Picker
-          selectedValue={value}
-          onValueChange={onValueChange}
-          style={styles.UIpickerStyle}
-          enabled={enabled || disabled}
-         itemStyle={styles.UIPickerItemStyle}
-          >
-          <Picker.Item
-            key={'noKey'}
-            label={label}
-            style={styles.UIPickerItemStyle}
-            value={false}
-            color={colors.FontColor}
-          fontFamily={Dimension.CustomRegularFont }
-          fontSize={Dimension.font12}
-          />
-          {items.map((value, idx) => {
-            return (
-              <Picker.Item
-                key={idx}
-                label={value.label}
-                value={value.value}
-                style={styles.UIPickerItemStyles}
-                color={colors.FontColor}
-          fontFamily={Dimension.CustomRegularFont }
-          fontSize={Dimension.font12}
-              />
-            );
-          })}
-        </Picker>
-        <View
-          style={
-            props.isFromOrders
-              ? styles.withoutBGiconWrapper
-              : styles.iconWrapper
-          }>
-          <CustomeIcon
-            name={'arrow-drop-down-line'}
-            size={Dimension.font26}
-            color={colors.FontColor}
-          />
-        </View>
-      </View>
-    </>
-     )
-    :(
+    props.fromUploadInvoive ? (
       <>
-       <Text style={styles.labelStyle}>{title}</Text>
-      <View style={styles.pickerWrapper}>
-        <Picker
-          selectedValue={value}
-          onValueChange={onValueChange}
-          style={disabled ? styles.disabledpickerStyle : styles.pickerStyle}
-          enabled={enabled || disabled}
-          itemStyle={styles.PickerItemStyle}
+        <Text style={styles.labelStyle}>{title}</Text>
+        <View style={styles.UIpickerWrapper}>
+          <Picker
+            selectedValue={value}
+            onValueChange={onValueChange}
+            style={styles.UIpickerStyle}
+            enabled={enabled || disabled}
+            itemStyle={styles.UIPickerItemStyles}
           >
-          <Picker.Item
-            key={'noKey'}
-            label={label}
-            style={styles.PickerItemStyle}
-            value={false}
-          />
-          {items.map((value, idx) => {
-            return (
-              <Picker.Item
-                key={idx}
-                label={value.label}
-                value={value.value}
-                style={styles.PickerItemStyle}
-              />
-            );
-          })}
-        </Picker>
-        <View
-          style={
-            props.isFromOrders
-              ? styles.withoutBGiconWrapper
-              : disabled ?  styles.disabledBGiconWrapper
-              : styles.iconWrapper
-          }>
-          <CustomeIcon
-            name={'arrow-drop-down-line'}
-            size={Dimension.font26}
-            color={colors.FontColor}
-          />
+            <Picker.Item
+              key={'noKey'}
+              label={label}
+              style={styles.UIPickerItemStyles}
+              value={false}
+              color={colors.FontColor}
+              fontFamily={Dimension.CustomRegularFont}
+              fontSize={Dimension.font12}
+            />
+            {items.map((value, idx) => {
+              return (
+                <Picker.Item
+                  key={idx}
+                  label={value.label}
+                  value={value.value}
+                  style={styles.UIPickerItemStyles}
+                  color={colors.FontColor}
+                  fontFamily={Dimension.CustomRegularFont}
+                  fontSize={Dimension.font12}
+                />
+              );
+            })}
+          </Picker>
+          <View
+            style={
+              props.isFromOrders
+                ? styles.withoutBGiconWrapper
+                : styles.iconWrapper
+            }>
+            <CustomeIcon
+              name={'arrow-drop-down-line'}
+              size={Dimension.font26}
+              color={colors.FontColor}
+            />
+          </View>
         </View>
-      </View>
       </>
     )
+      : (
+        <>
+          <Text style={styles.labelStyle}>{title}</Text>
+          <View style={styles.pickerWrapper}>
+            <Picker
+              selectedValue={value}
+              onValueChange={onValueChange}
+              style={disabled ? styles.disabledpickerStyle : styles.pickerStyle}
+              enabled={enabled || disabled}
+              itemStyle={styles.PickerItemStyle}
+            >
+              <Picker.Item
+                key={'noKey'}
+                label={label}
+                style={styles.PickerItemStyle}
+                value={false}
+              />
+              {items.map((value, idx) => {
+                return (
+                  <Picker.Item
+                    key={idx}
+                    label={value.label}
+                    value={value.value}
+                    style={styles.PickerItemStyle}
+                  />
+                );
+              })}
+            </Picker>
+            <View
+              style={
+                props.isFromOrders
+                  ? styles.withoutBGiconWrapper
+                  : disabled ? styles.disabledBGiconWrapper
+                    : styles.iconWrapper
+              }>
+              <CustomeIcon
+                name={'arrow-drop-down-line'}
+                size={Dimension.font26}
+                color={colors.FontColor}
+              />
+            </View>
+          </View>
+        </>
+      )
   );
 };
 
@@ -123,12 +123,7 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin12,
     marginBottom: Dimension.margin5,
   },
-  starIcon: {
-    color: colors.BrandColor,
-    fontSize: Dimension.font10,
 
-    fontFamily: Dimension.CustomMediumFont,
-  },
   pickerWrapper: {
     borderWidth: 1,
     borderRadius: 4,
@@ -161,7 +156,7 @@ const styles = StyleSheet.create({
     top: Dimension.padding10,
     backgroundColor: colors.WhiteColor,
   },
-  disabledBGiconWrapper:{
+  disabledBGiconWrapper: {
     position: 'absolute',
     width: Dimension.width24,
     height: Dimension.height24,
@@ -175,11 +170,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontFamily: Dimension.CustomRegularFont,
   },
-  withoutborderPicker: {
-    position: 'relative',
-    paddingTop: Dimension.padding8,
-  },
-  withoutBGPickerStyle: {},
+
   withoutBGiconWrapper: {
     position: 'absolute',
     width: Dimension.width24,
@@ -188,35 +179,21 @@ const styles = StyleSheet.create({
     top: Dimension.padding6,
   },
 
-  UIpickerWrapper:{
+  UIpickerWrapper: {
     borderWidth: 1,
     borderRadius: 4,
     borderColor: colors.FontColor,
     padding: 1,
     position: 'relative',
-    //marginBottom: Dimension.margin15,
-     height: Dimension.height40,
-    
+    height: Dimension.height40,
+
   },
-  // UIpickerStyle:{
-  //   backgroundColor: colors.WhiteColor,
-  //   fontSize: Dimension.font18,
-  //   color: colors.FontColor,
-  //   //fontWeight: 'normal',
-  //   fontFamily: Dimension.CustomRegularFont,
-  //   height: 0,
-  //   paddingTop:0,
-  //   paddingBottom:0,
-  //   paddingLeft:0,
-  //   paddingRight:0,
-  //   padding:0
-  // },
-  UIPickerItemStyle:{
-    backgroundColor:"#000",
-    color:Colors.WhiteColor,
+  UIPickerItemStyles: {
+    backgroundColor: "#000",
+    color: Colors.WhiteColor,
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomMediumFont,
-    paddingLeft:0,
+    paddingLeft: 0,
   },
 });
 
