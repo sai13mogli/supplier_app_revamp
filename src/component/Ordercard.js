@@ -1544,7 +1544,7 @@ const Ordercard = props => {
                   : shipmentMode == 3
                   ? 'Door Delivery'
                   : shipmentMode == 1
-                  ? 'Oneshipe'
+                  ? 'Oneship'
                   : shipmentType}
               </Text>
               {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
