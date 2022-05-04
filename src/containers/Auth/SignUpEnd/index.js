@@ -133,12 +133,19 @@ const SignUpEndScreen = props => {
         setNextLoader(false);
         onLogin(data);
       } else {
-        Toast.show({
-          type: 'error',
-          text2: data.message,
-          visibilityTime: 2000,
-          autoHide: true,
-        });
+        let errors = (data.data || {}).errors || {};
+        let key =
+          Object.keys(errors) && Object.keys(errors).length
+            ? Object.keys(errors)[0]
+            : null;
+        if (key) {
+          Toast.show({
+            type: 'error',
+            text2: errors[key],
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        }
         setNextLoader(false);
       }
     } else {

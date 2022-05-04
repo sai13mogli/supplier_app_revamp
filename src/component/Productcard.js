@@ -111,7 +111,7 @@ const Productcard = props => {
             <Text style={styles.TotalamounTxt}>
               {' '}
               <Text style={styles.rupeeSign}>₹ </Text>
-              {Math.floor(totalAmount)}
+              {Math.floor(totalAmount)} Including
             </Text>
             <Text style={styles.taxpercentageTxt}>{taxPercentage}%</Text>
           </View>

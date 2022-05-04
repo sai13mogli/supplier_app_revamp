@@ -50,7 +50,8 @@ class App extends React.Component {
       .then(enabled => {
         if (enabled) {
           requestUserPermission();
-          notificationListener();
+          let notificationData = notificationListener();
+          this.handleOpenUrl(notificationData);
         }
       });
 
@@ -87,6 +88,7 @@ class App extends React.Component {
 
   handleOpenUrl(event) {
     if (event) {
+      console.log(event);
       Linking.canOpenURL(event.url).then(supported => {
         if (supported) {
           let input = event.url;
@@ -136,3 +138,17 @@ const styles = StyleSheet.create({
 });
 
 export default codePush(App);
+
+// let x =
+//   'https://www.suppliercentralqa.moglilabs.com/Profile/?parentTab=categoryAndBrands&childTab=Test';
+
+// let obj = {};
+// x.split('?')[1]
+//   .split('&')
+//   .map(_ => {
+//     if (_.split('=').length) {
+//       obj[_.split('=')[0]] = _.split('=')[1];
+//     }
+//   });
+
+// console.log(obj);

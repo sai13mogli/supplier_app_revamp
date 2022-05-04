@@ -44,6 +44,7 @@ const ViewLSPModal = props => {
     totalAmount,
     manifestId,
     supplierId,
+    selectedTab,
   } = props;
 
   useEffect(() => {
@@ -97,26 +98,26 @@ const ViewLSPModal = props => {
       />
     );
   };
-  const getTime = (time, acceptrejectOrder) => {
+  const getTime = time => {
     let months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec',
+      {numeric: '01', month: 'Jan'},
+      {numeric: '02', month: 'Feb'},
+      {numeric: '03', month: 'Mar'},
+      {numeric: '04', month: 'Apr'},
+      {numeric: '05', month: 'May'},
+      {numeric: '06', month: 'Jun'},
+      {numeric: '07', month: 'Jul'},
+      {numeric: '08', month: 'Aug'},
+      {numeric: '09', month: 'Sept'},
+      {numeric: '10', month: 'Oct'},
+      {numeric: '11', month: 'Nov'},
+      {numeric: '12', month: 'Dec'},
     ];
-    let date = new Date(Number(time));
-    if (acceptrejectOrder) {
-      return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-    }
-    return `${months[date.getMonth()]} ${date.getDate()},${date.getFullYear()}`;
+    let date = time.split(' ')[0];
+    let mutatemonth = date.split('-')[1];
+    let mutatedate = date.split('-')[2];
+    let currmonth = (months || []).find(_ => _.numeric == `${mutatemonth}`);
+    return `${mutatedate},${currmonth.month}`;
   };
 
   const onTextLayout = useCallback(e => {
@@ -209,23 +210,46 @@ const ViewLSPModal = props => {
                 <Text style={styles.PoText}>
                   Shipper Name -{' '}
                   <Text style={styles.PoBoldText}>
-                    {SHIPPER_NAME[_.shipperId]}
+                    {_.shipperId
+                      ? SHIPPER_NAME[_.shipperId]
+                      : 'Not assigned yet'}
                   </Text>
                 </Text>
-                {manifestId ? (
+                {/* {manifestId ? (
                   <Text style={styles.PoText}>
                     Manifest ID -{' '}
                     <Text style={styles.PoBoldText}>{manifestId}</Text>
                   </Text>
-                ) : null}
+                ) : null} */}
               </View>
               <View style={styles.itemWrapInner}>
-                <Text style={styles.PoText}>
+                {/* <Text style={styles.PoText}>
                   No. of packets -{' '}
                   <Text style={styles.PoBoldText}>{_.quantity}</Text>
-                </Text>
+                </Text> */}
+                {selectedTab == 'SHIPMENT' ? (
+                  <Text style={styles.PoText}>
+                    Packed By -{' '}
+                    <Text style={styles.PoBoldText}>
+                      {_.packedBy ? _.packedBy : 'Not assigned yet'}
+                    </Text>
+                  </Text>
+                ) : null}
+
+                {selectedTab == 'SHIPMENT' ? (
+                  <Text style={styles.PoText}>
+                    Packed On -{' '}
+                    <Text style={styles.PoBoldText}>
+                      {_.packedOn ? getTime(_.packedOn) : 'Not assigned yet'}
+                    </Text>
+                  </Text>
+                ) : null}
+
                 <Text style={styles.PoText}>
-                  AWB - <Text style={styles.PoBoldText}>{_.awbNumber}</Text>
+                  AWB -{' '}
+                  <Text style={styles.PoBoldText}>
+                    {_.awbNumber ? _.awbNumber : 'Not assigned yet'}
+                  </Text>
                 </Text>
               </View>
             </View>

@@ -739,7 +739,12 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>DOWNLOAD INVOICE</Text>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{ marginRight: Dimension.margin5 }}></CustomeIcon>
+            <Text style={styles.rejectCtaTxt}>INVOICE</Text>
             {invoiceLoading && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -761,7 +766,8 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
+            {/* <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon> */}
+            <Text style={styles.rejectCtaTxt}> DOWNLOAD PO</Text>
             {poLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -855,7 +861,12 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>DOWNLOAD PO</Text>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{ marginRight: Dimension.margin5 }}></CustomeIcon>
+            <Text style={styles.rejectCtaTxt}> PO</Text>
             {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -877,7 +888,12 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>DOWNLOAD POD COPY</Text>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{ marginRight: Dimension.margin5 }}></CustomeIcon>
+            <Text style={styles.rejectCtaTxt}>POD COPY</Text>
             {podLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -900,7 +916,12 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-            <Text style={styles.rejectCtaTxt}>DOWNLOAD DEBIT NOTE</Text>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{ marginRight: Dimension.margin5 }}></CustomeIcon>
+            <Text style={styles.rejectCtaTxt}>DEBIT NOTE</Text>
             {debitLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -1159,7 +1180,12 @@ const Ordercard = props => {
                 ]}>
                 <Text style={styles.disabledBtntxt}>Pack Order</Text>
               </TouchableOpacity>
-              <Text style={styles.shipmentLbelTxt}>Invoice not created</Text>
+              <Text style={styles.shipmentLbelTxt}>
+                Shipment not created yet.
+              </Text>
+              <Text style={styles.shipmentLbelTxt}>
+                Please check this tab after 5mins.
+              </Text>
             </View>
           </>
         ) : cta == 'PACK_ORDER_INVOICE_DISABLED' ? (
@@ -1240,7 +1266,12 @@ const Ordercard = props => {
               },
             ]}
             disabled={manifestLoader}>
-            <Text style={styles.rejectCtaTxt}>Download Shipment Label</Text>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{ marginRight: Dimension.margin5 }}></CustomeIcon>
+            <Text style={styles.rejectCtaTxt}>Shipment Label</Text>
             {manifestLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -1543,7 +1574,7 @@ const Ordercard = props => {
                   : shipmentMode == 3
                     ? 'Door Delivery'
                     : shipmentMode == 1
-                      ? 'Oneshipe'
+                      ? 'Oneship'
                       : shipmentType}
               </Text>
               {isVmi ? <Text style={styles.VMIWrap}>VMI</Text> : null}
