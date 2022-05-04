@@ -221,21 +221,8 @@ const ViewLSPModal = props => {
                     <Text style={styles.PoBoldText}>{manifestId}</Text>
                   </Text>
                 ) : null} */}
-              </View>
-              <View style={styles.itemWrapInner}>
-                {/* <Text style={styles.PoText}>
-                  No. of packets -{' '}
-                  <Text style={styles.PoBoldText}>{_.quantity}</Text>
-                </Text> */}
-                {selectedTab == 'SHIPMENT' ? (
-                  <Text style={styles.PoText}>
-                    Packed By -{' '}
-                    <Text style={styles.PoBoldText}>
-                      {_.packedBy ? _.packedBy : 'Not assigned yet'}
-                    </Text>
-                  </Text>
-                ) : null}
-
+                </View>
+                <View style={styles.itemWrapInner}>
                 {selectedTab == 'SHIPMENT' ? (
                   <Text style={styles.PoText}>
                     Packed On -{' '}
@@ -245,6 +232,25 @@ const ViewLSPModal = props => {
                   </Text>
                 ) : null}
 
+               
+              </View>
+              <View style={styles.itemWrapInner}>
+                {/* <Text style={styles.PoText}>
+                  No. of packets -{' '}
+                  <Text style={styles.PoBoldText}>{_.quantity}</Text>
+                </Text> */}
+                 {selectedTab == 'SHIPMENT' ? (
+                  <Text style={styles.PoText}>
+                    Packed By -{' '}
+                    <Text style={styles.PoBoldText}>
+                      {_.packedBy ? _.packedBy : 'Not assigned yet'}
+                     
+                    </Text>
+                  </Text>
+                ) : null}
+
+                </View>
+                <View style={styles.itemWrapInner}>
                 <Text style={styles.PoText}>
                   AWB -{' '}
                   <Text style={styles.PoBoldText}>
