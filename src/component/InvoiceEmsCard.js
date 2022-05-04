@@ -19,11 +19,12 @@ const InvoiceCard = props => {
     productUom,
     orderRef,
     transferPrice,
-    // hsn,
     productName,
     itemId,
     bulkItemIds,
+
   } = props;
+
 
   const [taxPercentage, setTaxPercentage] = useState(props?.taxPercentage);
   const [hsnError, setHsnError] = useState(false);
@@ -45,7 +46,6 @@ const InvoiceCard = props => {
       keyboardType: 'number-pad',
       onChangeText: text => setHsn(text),
       component: FloatingLabelInputField,
-      // onBlur: () => onPincodeBlur(),
       editable: (bulkItemIds || []).includes(itemId) ? true : false,
     },
     qnty: {
@@ -59,13 +59,11 @@ const InvoiceCard = props => {
       keyboardType: 'number-pad',
       onChangeText: text => calculatePrice(text),
       component: FloatingLabelInputField,
-      // onBlur: () => onPincodeBlur(),
       editable: (bulkItemIds || []).includes(itemId) ? true : false,
     },
     hsn_tax: {
       title: 'HSN Tax%',
       isImp: false,
-      // disabled: (bulkItemIds || []).includes(itemId) ? true : false,
       errorMessage: 'Enter valid hsn',
       onValueChange: text => calculateHsn(text),
       component: PickerDropDown,
@@ -144,7 +142,7 @@ const InvoiceCard = props => {
                 : Colors.FontColor
             }
             size={Dimension.font20}
-            onPress={() => selectItemId(itemId)}
+            onPress={() => selectItemId(itemId, props.totalAmount)}
             style={styles.checkboxDesign}></CustomeIcon>
           <View style={styles.rightPart}>
             <Text style={styles.productName}>{productName}</Text>
@@ -178,12 +176,10 @@ const InvoiceCard = props => {
             <View style={{
               flexDirection: 'row',
               flex: 1,
-              // paddingHorizontal: -50,
-              // flexBasis: 10
-              // width: 120,
+
             }}>
               {FORM_FIELDS.map((field, fieldKey) => (
-                <View style={[fieldKey == "hsn_tax" ? { flex: 0.5, marginRight: -Dimension.margin1 } : { flex: 0.3, marginRight: Dimension.margin15, }]}>
+                <View style={[fieldKey == "hsn_tax" ? { flex: 0.4, marginRight: Dimension.margin10 } : { flex: 0.3, marginRight: Dimension.margin15, }]}>
                   <field.component
                     {...field}
                     key={fieldKey}
@@ -209,8 +205,10 @@ const InvoiceCard = props => {
   };
 
   const renderOrderHeaderDetail = () => {
+
     return (
       <>
+
         <View style={styles.headerView}>
           <Text
             style={[
@@ -244,7 +242,7 @@ const InvoiceCard = props => {
 
   return (
     <>
-      {renderOrderHeaderDetail()}
+      {/* {renderOrderHeaderDetail()} */}
       <View style={[styles.orderCardwrap, { marginTop: Dimension.margin10 }]}>
         {renderOrderDetails()}
       </View>
