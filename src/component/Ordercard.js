@@ -228,7 +228,7 @@ const Ordercard = props => {
         if (!isInvoice) {
           setPoLoader(true);
         }
-        const {data} = await getpoChallan(orderRef);
+        const {data} = await getpoChallan(supplierId, orderRef);
         if (data && data.success) {
           //Image URL which we want to download
           image_URL = data.data;
@@ -1685,6 +1685,8 @@ const Ordercard = props => {
             {...props}
             setModal={setPackNow}
             isVisible={packNow}
+            msn={msn}
+            quantity={quantity}
           />
         )}
         {rejectModal && (

@@ -41,14 +41,15 @@ import {
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const phoneRegex = '^[1-9][0-9]{9}$';
-//
+//partsbigboss@gmail.com
+//default123
 
 const LoginScreen = props => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('partsbigboss@gmail.com');
-  const [password, setPassword] = useState('default123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [error, setError] = useState('');
@@ -216,7 +217,7 @@ const LoginScreen = props => {
   const logInWithGoogleToServer = async (token, googleemail) => {
     // this.setState({loading:true})
     const request = {
-      token: `${token}heh`,
+      token: `${token}`,
       source: Platform.OS === 'ios' ? 2 : 1,
       deviceToken: '',
     };

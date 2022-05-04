@@ -94,6 +94,7 @@ const DropDown = props => {
           style={
             props.isFromOrders
               ? styles.withoutBGiconWrapper
+              : !enabled ? styles.disabledBGiconWrapper
               : styles.iconWrapper
           }>
           <CustomeIcon
@@ -171,6 +172,14 @@ const styles = StyleSheet.create({
     right: Dimension.padding10,
     top: Dimension.padding10,
     backgroundColor: colors.WhiteColor,
+  },
+  disabledBGiconWrapper:{
+    position: 'absolute',
+    width: Dimension.width24,
+    height: Dimension.height24,
+    right: Dimension.padding10,
+    top: Dimension.padding10,
+    backgroundColor: colors.DisableStateColor,
   },
   PickerItemStyle: {
     fontSize: Dimension.font14,

@@ -188,3 +188,12 @@ export const addMultipleCategories = data => {
     },
   };
 };
+
+export const deleteCurrBrand = obj => {
+  return {
+    type: CATEGORY_BRAND_ACTIONS.DELETE_BRAND,
+    payload: {
+      obj,
+    },
+  };
+};
