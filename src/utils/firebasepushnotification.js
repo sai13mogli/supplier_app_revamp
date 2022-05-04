@@ -36,12 +36,14 @@ export const notificationListener = async () => {
       'Notification caused app to open from background state:',
       remoteMessage.notification,
     );
+    return remoteMessage.notification;
     // navigation.navigate(remoteMessage.data.type);
   });
 
   // app is in foreground
   messaging().onMessage(async remoteMessage => {
     console.log('received in foreground!!', remoteMessage);
+    return remoteMessage;
   });
 
   //app is in quit state
@@ -53,6 +55,7 @@ export const notificationListener = async () => {
           'Notification caused app to open from quit state:',
           remoteMessage.notification,
         );
+        return remoteMessage.notification;
       }
     });
 };
