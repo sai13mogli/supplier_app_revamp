@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
@@ -7,6 +7,7 @@ import {logout} from '../../redux/actions/profile';
 import Dimension from '../../Theme/Dimension';
 import Colors from '../../Theme/Colors';
 import CustomeIcon from '../../component/common/CustomeIcon';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const SettingsScreen = props => {
   const token = useSelector(state => (state.profileReducer || {}).token || '');
@@ -19,9 +20,18 @@ const SettingsScreen = props => {
     await AsyncStorage.removeItem('fcmToken');
     await AsyncStorage.removeItem('onlineFlag');
     await AsyncStorage.removeItem('enterpriseFlag');
+    const isSignedIn = await GoogleSignin.isSignedIn();
+    if (isSignedIn) {
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+    }
     props.route.params.setIsLoggedIn(false);
     dispatch(logout(token));
   };
+
+  useEffect(() => {
+    GoogleSignin.configure({});
+  }, []);
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>

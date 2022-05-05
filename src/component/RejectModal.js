@@ -18,7 +18,6 @@ import Toast from 'react-native-toast-message';
 import DropDown from '../component/common/DropDown';
 import CustomeIcon from './common/CustomeIcon';
 import Productcard from './Productcard';
-import PickerDropDown from './common/PickerDropDown';
 import DropDownModal from './DropDownModal';
 import FloatingLabelInputField from './common/FloatingInput';
 

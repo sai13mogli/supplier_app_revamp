@@ -309,6 +309,7 @@ const AllBrandsScreen = props => {
               allbrandsListing={true}
               // windowSize={30}
               initialNumToRender={18}
+              fetchListingData={() => fetchListingData(64, inputValue)}
               // updateCellsBatchingPeriod={2}
             />
           </View>

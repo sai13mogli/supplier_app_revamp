@@ -141,51 +141,52 @@ const styles = StyleSheet.create({
     padding: Dimension.padding15,
     backgroundColor: Colors.WhiteColor,
   },
-  NoBrandWrap:{
-    backgroundColor:Colors.DisableStateColor,
-    borderRadius:4,
-    width:"100%",
-    height:200,
-    justifyContent:"center",
-    alignItems:"center"
+  NoBrandWrap: {
+    backgroundColor: Colors.DisableStateColor,
+    borderRadius: 4,
+    width: '100%',
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  NoBrandTxt:{
+  NoBrandTxt: {
     fontSize: Dimension.font14,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomMediumFont,
-   // marginBottom: Dimension.margin5,
+    // marginBottom: Dimension.margin5,
   },
-  DeleteBrndModalbottombtnWrap:{
-    flexDirection:"row",
+  DeleteBrndModalbottombtnWrap: {
+    flexDirection: 'row',
     padding: Dimension.padding15,
     borderTopColor: Colors.grayShade2,
     borderTopWidth: 1,
     backgroundColor: Colors.WhiteColor,
-    marginTop:Dimension.margin30
+    marginTop: Dimension.margin30,
   },
-  cancelBtn:{
-    flex:1,
-    paddingVertical:Dimension.padding12,
-  borderRadius:4,
-  alignItems:"center"
+  cancelBtn: {
+    flex: 1,
+    paddingVertical: Dimension.padding12,
+    borderRadius: 4,
+    alignItems: 'center',
   },
-  CancelTxt:{
+  CancelTxt: {
     fontSize: Dimension.font16,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomMediumFont,
   },
-  deleteBtn:{
-    flex:1,
-  backgroundColor:Colors.BrandColor,
-  paddingVertical:Dimension.padding12,
-  borderRadius:4,
-  alignItems:"center"
+  deleteBtn: {
+    flex: 1,
+    backgroundColor: Colors.BrandColor,
+    paddingVertical: Dimension.padding12,
+    borderRadius: 4,
+    alignItems: 'center',
   },
-  deleteBtnTxt:{
+  deleteBtnTxt: {
     fontSize: Dimension.font16,
     color: Colors.WhiteColor,
     fontFamily: Dimension.CustomMediumFont,
   },
+  ModalCss: {padding: 0, margin: 0},
 });
 
 export default styles;

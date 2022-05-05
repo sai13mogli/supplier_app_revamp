@@ -9,12 +9,13 @@ export const fetchTickets = obj => {
   };
 };
 
-export const fetchedTickets = (page, data) => {
+export const fetchedTickets = (page, data, success) => {
   return {
     type: SUPPORT_ACTIONS.FETCHED_TICKETS,
     payload: {
       page,
       data,
+      success,
     },
   };
 };
@@ -25,5 +26,3 @@ export const failedFetchTickets = error => {
     error,
   };
 };
-
-

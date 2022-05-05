@@ -22,6 +22,9 @@ import colors from '../../../Theme/Colors';
 
 const TicketsList = props => {
   const ticketsList = useSelector(state => state.supportReducer.data || []);
+  const fetchStatus = useSelector(
+    state => state.supportReducer.success || false,
+  );
   const ticketsStatus = useSelector(
     state => state.supportReducer.status || STATE_STATUS.UNFETCHED,
   );
@@ -91,15 +94,19 @@ const TicketsList = props => {
     }
   };
 
-  const debouncedSave = useRef(
-    debounce(text => {
-      fetchTicketListing(1, text);
-    }, 800),
-  ).current;
+  // const debouncedSave = useRef(
+  //   debounce(text => {
+  //     fetchTicketListing(1, text);
+  //   }, 800),
+  // ).current;
 
   const onSearchText = text => {
     setInputValue(text);
-    debouncedSave(text);
+    // debouncedSave(text);
+  };
+
+  const onSubmitSearch = () => {
+    fetchTicketListing(1, inputValue);
   };
 
   const getDate = date => {
@@ -198,29 +205,41 @@ const TicketsList = props => {
 
   const listEmptyComponent = () => {
     if (ticketsStatus == STATE_STATUS.FETCHED) {
-      return (
-        <View style={styles.EmptyChatWrap}>
-          <Image
-            source={require('../../../assets/images/EmptyChat.png')}
-            style={{height: Dimension.height250, width: Dimension.width150}}
-          />
-          <Text style={styles.EmptyBoldTxt}>
-            Voila! You Have Not Raised Any Query Yet
-          </Text>
-          <Text style={styles.EmptyLightTxt}>
-            Click on below button as soon as you face any problem
-          </Text>
-          {/* <TouchableOpacity
-            onPress={() => props.navigation.navigate('NewTicket')}
-            style={styles.NewTicktbtn}>
-            <CustomeIcon
-              name={'add-circle'}
-              color={colors.WhiteColor}
-              size={Dimension.font20}></CustomeIcon>
-            <Text style={styles.NewTicktbtnTxt}>Raise new Ticket</Text>
-          </TouchableOpacity> */}
-        </View>
-      );
+      if (!fetchStatus) {
+        return (
+          <View style={styles.emptyWrap}>
+            <Image
+              source={require('../../../assets/images/emptyOrders.png')}
+              style={{width: 300, height: 200}}
+            />
+            <Text style={styles.emptyTxt}>No Search result found!</Text>
+          </View>
+        );
+      } else {
+        return (
+          <View style={styles.EmptyChatWrap}>
+            <Image
+              source={require('../../../assets/images/EmptyChat.png')}
+              style={{height: Dimension.height250, width: Dimension.width150}}
+            />
+            <Text style={styles.EmptyBoldTxt}>
+              Voila! You Have Not Raised Any Query Yet
+            </Text>
+            <Text style={styles.EmptyLightTxt}>
+              Click on below button as soon as you face any problem
+            </Text>
+            {/* <TouchableOpacity
+              onPress={() => props.navigation.navigate('NewTicket')}
+              style={styles.NewTicktbtn}>
+              <CustomeIcon
+                name={'add-circle'}
+                color={colors.WhiteColor}
+                size={Dimension.font20}></CustomeIcon>
+              <Text style={styles.NewTicktbtnTxt}>Raise new Ticket</Text>
+            </TouchableOpacity> */}
+          </View>
+        );
+      }
     }
     return null;
   };
@@ -238,8 +257,20 @@ const TicketsList = props => {
             value={inputValue}
             onChangeText={onSearchText}
             style={styles.SearchInputCss}
+            onSubmitEditing={event => {
+              if (inputValue && inputValue.length > 1) {
+                onSubmitSearch();
+              }
+            }}
           />
-          <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+          <CustomeIcon
+            name={'search'}
+            style={styles.seacrhIcon}
+            onPress={() => {
+              if (inputValue && inputValue.length > 1) {
+                onSubmitSearch();
+              }
+            }}></CustomeIcon>
         </View>
         <View style={styles.filterRowWrap}>
           <Text style={styles.ticketTxt}>Tickets</Text>

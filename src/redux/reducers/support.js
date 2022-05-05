@@ -10,6 +10,7 @@ const initialState = {
 
 export const supportReducer = (state = initialState, action) => {
   const {type, payload, error} = action;
+
   switch (type) {
     case SUPPORT_ACTIONS.FETCH_TICKETS:
       if (payload.page == 1) {
@@ -38,6 +39,7 @@ export const supportReducer = (state = initialState, action) => {
           status: STATE_STATUS.FETCHED,
           page: payload.page,
           data: payload.data.dataList,
+          success: payload.success,
         };
       } else {
         return {
@@ -45,6 +47,7 @@ export const supportReducer = (state = initialState, action) => {
           status: STATE_STATUS.FETCHED,
           page: payload.page,
           data: [...state.data, ...payload.data.dataList],
+          success: payload.success,
         };
       }
     case SUPPORT_ACTIONS.FAILED_FETCH_TICKETS:

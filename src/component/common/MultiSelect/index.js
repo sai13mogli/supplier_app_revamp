@@ -210,7 +210,14 @@ const MultiSelect = props => {
             placeholder={placeholder}
             style={styles.SearchInputCss}
             onSubmitEditing={onSubmitEditing}></TextInput>
-          <CustomeIcon name={'search'} style={styles.seacrhIcon}></CustomeIcon>
+          <CustomeIcon
+            name={'search'}
+            style={styles.seacrhIcon}
+            onPress={() => {
+              if (props.fromAllBrands) {
+                props.fetchListingData();
+              }
+            }}></CustomeIcon>
         </View>
       ) : null}
 

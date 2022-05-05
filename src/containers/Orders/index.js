@@ -736,7 +736,6 @@ const OrdersScreen = props => {
 
   return (
     <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
-      
       <View style={styles.topHeaderWrap}>
         <DropDown
           title={'Orders'}
@@ -855,6 +854,11 @@ const OrdersScreen = props => {
                   numberOfLines={1}
                   style={styles.SearchInputCss}></TextInput>
                 <CustomeIcon
+                  onPress={() => {
+                    if (inputValue && inputValue.length > 1) {
+                      onSubmitSearch();
+                    }
+                  }}
                   name={'search'}
                   style={styles.seacrhIcon}></CustomeIcon>
               </View>

@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native';
-import React, { useEffect } from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
 import colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
-import { Picker } from '@react-native-picker/picker';
+import {Picker} from '@react-native-picker/picker';
 import CustomeIcon from './CustomeIcon';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const PickerDropDown = props => {
   const {
@@ -18,8 +18,7 @@ const PickerDropDown = props => {
     disabled,
   } = props;
 
-  return (
-     props.fromUploadInvoive ? (
+  return props.fromUploadInvoive ? (
     <>
       <Text style={styles.labelStyle}>{title}</Text>
       <View style={styles.UIpickerWrapper}>
@@ -28,16 +27,16 @@ const PickerDropDown = props => {
           onValueChange={onValueChange}
           style={styles.UIpickerStyle}
           enabled={enabled || disabled}
-         itemStyle={styles.UIPickerItemStyle}
-          >
+          itemStyle={styles.UIPickerItemStyle}
+          mode={'dropdown'}>
           <Picker.Item
             key={'noKey'}
-            label={label}
+            label={label || title}
             style={styles.UIPickerItemStyle}
             value={false}
             color={colors.FontColor}
-          fontFamily={Dimension.CustomRegularFont }
-          fontSize={Dimension.font12}
+            fontFamily={Dimension.CustomRegularFont}
+            fontSize={Dimension.font12}
           />
           {items.map((value, idx) => {
             return (
@@ -47,8 +46,8 @@ const PickerDropDown = props => {
                 value={value.value}
                 style={styles.UIPickerItemStyles}
                 color={colors.FontColor}
-          fontFamily={Dimension.CustomRegularFont }
-          fontSize={Dimension.font12}
+                fontFamily={Dimension.CustomRegularFont}
+                fontSize={Dimension.font12}
               />
             );
           })}
@@ -67,10 +66,9 @@ const PickerDropDown = props => {
         </View>
       </View>
     </>
-     )
-    :(
-      <>
-       <Text style={styles.labelStyle}>{title}</Text>
+  ) : (
+    <>
+      <Text style={styles.labelStyle}>{title}</Text>
       <View style={styles.pickerWrapper}>
         <Picker
           selectedValue={value}
@@ -78,10 +76,10 @@ const PickerDropDown = props => {
           style={disabled ? styles.disabledpickerStyle : styles.pickerStyle}
           enabled={enabled || disabled}
           itemStyle={styles.PickerItemStyle}
-          >
+          mode={'dropdown'}>
           <Picker.Item
             key={'noKey'}
-            label={label}
+            label={label || title}
             style={styles.PickerItemStyle}
             value={false}
           />
@@ -100,7 +98,8 @@ const PickerDropDown = props => {
           style={
             props.isFromOrders
               ? styles.withoutBGiconWrapper
-              : disabled ?  styles.disabledBGiconWrapper
+              : disabled
+              ? styles.disabledBGiconWrapper
               : styles.iconWrapper
           }>
           <CustomeIcon
@@ -110,8 +109,7 @@ const PickerDropDown = props => {
           />
         </View>
       </View>
-      </>
-    )
+    </>
   );
 };
 
@@ -161,7 +159,7 @@ const styles = StyleSheet.create({
     top: Dimension.padding10,
     backgroundColor: colors.WhiteColor,
   },
-  disabledBGiconWrapper:{
+  disabledBGiconWrapper: {
     position: 'absolute',
     width: Dimension.width24,
     height: Dimension.height24,
@@ -188,15 +186,14 @@ const styles = StyleSheet.create({
     top: Dimension.padding6,
   },
 
-  UIpickerWrapper:{
+  UIpickerWrapper: {
     borderWidth: 1,
     borderRadius: 4,
     borderColor: colors.FontColor,
     padding: 1,
     position: 'relative',
     //marginBottom: Dimension.margin15,
-     height: Dimension.height40,
-    
+    height: Dimension.height40,
   },
   // UIpickerStyle:{
   //   backgroundColor: colors.WhiteColor,
@@ -211,12 +208,12 @@ const styles = StyleSheet.create({
   //   paddingRight:0,
   //   padding:0
   // },
-  UIPickerItemStyle:{
-    backgroundColor:"#000",
-    color:Colors.WhiteColor,
+  UIPickerItemStyle: {
+    backgroundColor: '#000',
+    color: Colors.WhiteColor,
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomMediumFont,
-    paddingLeft:0,
+    paddingLeft: 0,
   },
 });
 

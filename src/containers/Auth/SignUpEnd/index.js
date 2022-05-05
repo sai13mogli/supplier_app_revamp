@@ -127,6 +127,7 @@ const SignUpEndScreen = props => {
         natureOfBusiness,
         categoryCode: categoryCode.map(_ => _.id),
         gstIn: gstin,
+        rememberMe: true,
       };
       const {data} = await signUp(body);
       if (data.success) {
