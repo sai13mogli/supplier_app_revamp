@@ -115,6 +115,7 @@ const UploadInvoiceScreen = props => {
         quantity={item.quantity}
         selectedValue={(value) => setTaxPercentage(value)}
         UpdatedQuntity={(value) => setQuantity(value)}
+        UpdatedTotalPrice={(value) => { setTotalAmount(value), console.log("sds", value); }}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}

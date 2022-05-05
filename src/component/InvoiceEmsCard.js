@@ -22,7 +22,6 @@ const InvoiceCard = props => {
     productName,
     itemId,
     bulkItemIds,
-
   } = props;
 
 
@@ -30,7 +29,7 @@ const InvoiceCard = props => {
   const [hsnError, setHsnError] = useState(false);
   const [hsn, setHsn] = useState(props?.hsn);
   const [quantity, setQuantity] = useState(props?.quantity);
-  const [totalAmount, settotalAmount] = useState(props.totalAmount);
+  const [totalAmount, setTotalAmount] = useState(props.totalAmount);
   const [amount, setAmount] = useState(props.totalAmount);
 
   const FORM_FIELDS = new OrderedMap({
@@ -115,6 +114,7 @@ const InvoiceCard = props => {
     let Price = transferPrice * text;
     let percentage = (Price / 100) * taxPercentage + text * transferPrice;
     setAmount(percentage);
+    props.UpdatedTotalPrice(percentage)
   };
 
   const calculateHsn = text => {
@@ -124,6 +124,7 @@ const InvoiceCard = props => {
     let Price = transferPrice * quantity;
     let percentage = (Price / 100) * text + quantity * transferPrice;
     setAmount(percentage);
+    props.UpdatedTotalPrice(percentage)
   };
 
   const renderOrderDetails = () => {
@@ -187,62 +188,17 @@ const InvoiceCard = props => {
                   />
                 </View>
               )).toList()}
-              {/* <TextInput
-                  style={styles.wrapInput}
-                  onChangeText={text => calculateHsn(text)}
-                  keyboardType={'number-pad'}
-                  editable={
-                    (bulkItemIds || []).includes(itemId) ? true : false
-                  }>
-                  {taxPercentage}
-                </TextInput> */}
+
             </View>
-            {/* </View> */}
           </View>
         </View>
       </>
     );
   };
 
-  const renderOrderHeaderDetail = () => {
-
-    return (
-      <>
-
-        <View style={styles.headerView}>
-          <Text
-            style={[
-              styles.TitleBoldTxt,
-            ]}>
-            PO ID -{' '}
-            <Text style={styles.TitleBoldTxt}>
-              {orderRef}
-            </Text>
-          </Text>
-          <Text
-            style={[
-              styles.TitleBoldTxt,
-              {
-
-                marginTop: Dimension.margin10,
-              },
-            ]}>
-            Total Price -{' '}
-            <Text style={styles.TitleBoldTxt}>
-              ₹{Math.floor(totalAmount)}
-              {'   '} (Price Including Tax-
-              <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
-              <Text style={styles.TitleBoldTxt}> )</Text>
-            </Text>
-          </Text>
-        </View>
-      </>
-    );
-  };
 
   return (
     <>
-      {/* {renderOrderHeaderDetail()} */}
       <View style={[styles.orderCardwrap, { marginTop: Dimension.margin10 }]}>
         {renderOrderDetails()}
       </View>
