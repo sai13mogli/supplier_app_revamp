@@ -14,6 +14,8 @@ import {searchFaqs} from '../../../services/support';
 import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import CustomeIcon from '../../../component/common/CustomeIcon';
+import RenderHtml, {defaultSystemFonts}  from 'react-native-render-html';
+const systemFonts = [...defaultSystemFonts, 'Poppins-Regular']
 
 const FAQS = props => {
   const [search, setSearch] = useState('');
@@ -62,20 +64,41 @@ const FAQS = props => {
   };
 
   const renderItem = ({item, index}) => {
+    console.log(item);
     let text = item.answer;
-    text = text.split('</p>').join('').split('<p>');
-    const regex = /(<([^>]+)>)/gi;
+    const source = {
+      html: item.answer
+    };
+    const mixedStyles = {
+      whiteSpace: 'normal',
+      color: Colors.FontColor,
+      fontSize:Dimension.font12,
+      fontFamily:Dimension.CustomRegularFont
+    }
+  //  text = text.split('</p>').join('').split('<p>');
+  //  const regex = /(<([^>]+)>)/gi;
     return (
       <View style={styles.questionContainer}>
         <Text style={styles.questionTxt}>{item.question}</Text>
-        {text.map((li, liI) =>
+        <RenderHtml
+            //contentWidth={'300'}
+            source={source}
+            baseStyle ={mixedStyles}
+            systemFonts={systemFonts}
+            
+          />
+        {/* {text.map((li, liI) =>
           liI == 0 ? null : (
-            <View style={styles.liContainer} key={liI}>
-              <View style={styles.liDot} />
-              <Text style={styles.ansTxt}>{li.replace(regex, '')}</Text>
-            </View>
+            // <View style={styles.liContainer} key={liI}>
+            //   <View style={styles.liDot} />
+            //   <Text style={styles.ansTxt}>{li.replace(regex, '')}</Text>
+            // </View>
+            <RenderHtml
+            //contentWidth={width}
+            source={li}
+          />
           ),
-        )}
+        )} */}
       </View>
     );
   };

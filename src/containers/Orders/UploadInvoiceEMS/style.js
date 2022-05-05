@@ -51,10 +51,22 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     backgroundColor: Colors.WhiteColor,
   },
+  headerView: {
+    backgroundColor: Colors.DisableStateColor,
+    borderRadius: 3,
+    marginHorizontal: Dimension.margin10,
+    paddingHorizontal: Dimension.padding10,
+    paddingVertical: Dimension.padding8
+  },
+  TitleBoldTxt: {
+    fontSize: Dimension.font10,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomBoldFont,
+  },
   titleWrap: {
     //height: Dimension.height28,
     backgroundColor: Colors.NudgeColor1,
-    paddingVertical:Dimension.padding10
+    paddingVertical: Dimension.padding10
 
   },
 
@@ -63,7 +75,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Colors.blackColor,
     fontFamily: Dimension.CustomSemiBoldFont,
-    
+
   },
   sendOtptext: {
     fontSize: Dimension.font12,

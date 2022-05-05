@@ -41,7 +41,6 @@ const UploadInvoiceOMSScreen = props => {
   const [bulkItemIds, setBulkItemIds] = useState([]);
   const [poTotalPrice, setPoTotalPrice] = useState([]);
   const [totalKeys, setTotalKeys] = useState([]);
-  const [totalKeysValues, setTotalKeysValues] = useState([]);
   const [fId, setFId] = useState(null);
   const [podIdList, setPodIdList] = useState([]);
   const [actionCTA, setaAtionCTA] = useState(props?.route?.params?.actionCTA);
@@ -295,6 +294,7 @@ const UploadInvoiceOMSScreen = props => {
         price: totalPrice,
       };
       let priceList = [...poTotalPrice];
+
       priceList.push(row);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());

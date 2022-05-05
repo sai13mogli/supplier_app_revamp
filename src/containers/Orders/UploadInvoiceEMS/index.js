@@ -13,9 +13,8 @@ const UploadInvoiceScreen = props => {
   const [loading, setLoading] = useState(false);
   const [bulkItemIds, setBulkItemIds] = useState([]);
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
-  const [totalAmount, setTotalAmount] = useState(
-    props?.route?.params?.totalAmount,
-  );
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalPrice, setTotalPrice] = useState([]);
   const [hsn, sethsn] = useState(props?.route?.params?.hsn);
   const [taxPercentage, setTaxPercentage] = useState(
     props?.route?.params?.taxPercentage,
@@ -40,10 +39,20 @@ const UploadInvoiceScreen = props => {
   }, []);
 
 
+  const getTotalPrice = () => {
+    let price = 0;
+    price = totalPrice.reduce(function (sum, tax) {
+      return sum + tax.price;
+    }, 0);
+    return price;
+  };
 
-  const selectItemId = itemId => {
 
+
+  const selectItemId = (itemId, totalAmount) => {
     let currentItemIds = [...bulkItemIds];
+    let currentPrice = [...totalPrice];
+
     if (currentItemIds.includes(itemId)) {
       currentItemIds = currentItemIds.filter(_ => _ != itemId);
     } else {
@@ -55,6 +64,30 @@ const UploadInvoiceScreen = props => {
       }
     }
     setBulkItemIds(currentItemIds);
+    let filterData = totalPrice.filter(item => item.id == itemId);
+    if (filterData.length > 0) {
+      const index = totalPrice.findIndex(x => x.id === filterData[0].id);
+      let priceList = [...totalPrice];
+      priceList.splice(index, 1);
+      setTotalPrice(priceList);
+      setTotalAmount(getTotalPrice());
+      // var arr = [...podIdList]
+      // const podindex = arr.findIndex(x => x == podId);
+      // arr.splice(podindex, 1);
+      // setPodIdList(arr)
+    } else {
+      let row = {
+        id: itemId,
+        price: totalAmount,
+      };
+      let priceList = [...totalPrice];
+      priceList.push(row);
+      setTotalPrice(priceList);
+      setTotalAmount(getTotalPrice());
+      // var arr = [...podIdList]
+      // arr.push(podId)
+      // setPodIdList(arr)
+    }
   };
 
   const fetchInvoiceEMSDetails = async () => {
@@ -82,13 +115,15 @@ const UploadInvoiceScreen = props => {
         quantity={item.quantity}
         selectedValue={(value) => setTaxPercentage(value)}
         UpdatedQuntity={(value) => setQuantity(value)}
+        UpdatedTotalPrice={(value) => { setTotalAmount(value), console.log("sds", value); }}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
-        totalAmount={item.orderInfo.totalAmount}
+        totalAmount={item.itemTotal}
         taxPercentage={item.taxPercentage}
         selectedTab={selectedTab}
-        itemId={item.itemId}
+        itemId={item.id}
+        itemIndex={item}
         bulkItemIds={bulkItemIds}
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
@@ -111,6 +146,41 @@ const UploadInvoiceScreen = props => {
     return null;
   };
 
+  const renderOrderHeaderDetail = () => {
+
+    return (
+      <>
+
+        <View style={styles.headerView}>
+          <Text
+            style={[
+              styles.TitleBoldTxt,
+            ]}>
+            PO ID -{' '}
+            <Text style={styles.TitleBoldTxt}>
+              {orderRef}
+            </Text>
+          </Text>
+          <Text
+            style={[
+              styles.TitleBoldTxt,
+              {
+                marginTop: Dimension.margin10,
+              },
+            ]}>
+            Total Price -{' '}
+            <Text style={styles.TitleBoldTxt}>
+              ₹{getTotalPrice(totalAmount)}
+              {'   '} (Price Including Tax-
+              <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
+              <Text style={styles.TitleBoldTxt}> )</Text>
+            </Text>
+          </Text>
+        </View>
+      </>
+    );
+  };
+
   return (
     <View style={styles.outerView}>
       <Header
@@ -119,6 +189,7 @@ const UploadInvoiceScreen = props => {
         showText={'Upload Invoice'}
         showBell
       />
+      {renderOrderHeaderDetail()}
       {
         invoiceList ?
           <FlatList

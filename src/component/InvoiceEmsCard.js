@@ -19,17 +19,17 @@ const InvoiceCard = props => {
     productUom,
     orderRef,
     transferPrice,
-    // hsn,
     productName,
     itemId,
     bulkItemIds,
   } = props;
 
+
   const [taxPercentage, setTaxPercentage] = useState(props?.taxPercentage);
   const [hsnError, setHsnError] = useState(false);
   const [hsn, setHsn] = useState(props?.hsn);
   const [quantity, setQuantity] = useState(props?.quantity);
-  const [totalAmount, settotalAmount] = useState(props.totalAmount);
+  const [totalAmount, setTotalAmount] = useState(props.totalAmount);
   const [amount, setAmount] = useState(props.totalAmount);
 
   const FORM_FIELDS = new OrderedMap({
@@ -45,7 +45,6 @@ const InvoiceCard = props => {
       keyboardType: 'number-pad',
       onChangeText: text => setHsn(text),
       component: FloatingLabelInputField,
-      // onBlur: () => onPincodeBlur(),
       editable: (bulkItemIds || []).includes(itemId) ? true : false,
     },
     qnty: {
@@ -59,13 +58,11 @@ const InvoiceCard = props => {
       keyboardType: 'number-pad',
       onChangeText: text => calculatePrice(text),
       component: FloatingLabelInputField,
-      // onBlur: () => onPincodeBlur(),
       editable: (bulkItemIds || []).includes(itemId) ? true : false,
     },
     hsn_tax: {
       title: 'HSN Tax%',
       isImp: false,
-      // disabled: (bulkItemIds || []).includes(itemId) ? true : false,
       errorMessage: 'Enter valid hsn',
       onValueChange: text => calculateHsn(text),
       component: PickerDropDown,
@@ -117,6 +114,7 @@ const InvoiceCard = props => {
     let Price = transferPrice * text;
     let percentage = (Price / 100) * taxPercentage + text * transferPrice;
     setAmount(percentage);
+    props.UpdatedTotalPrice(percentage)
   };
 
   const calculateHsn = text => {
@@ -126,6 +124,7 @@ const InvoiceCard = props => {
     let Price = transferPrice * quantity;
     let percentage = (Price / 100) * text + quantity * transferPrice;
     setAmount(percentage);
+    props.UpdatedTotalPrice(percentage)
   };
 
   const renderOrderDetails = () => {
@@ -144,7 +143,7 @@ const InvoiceCard = props => {
                 : Colors.FontColor
             }
             size={Dimension.font20}
-            onPress={() => selectItemId(itemId)}
+            onPress={() => selectItemId(itemId, props.totalAmount)}
             style={styles.checkboxDesign}></CustomeIcon>
           <View style={styles.rightPart}>
             <Text style={styles.productName}>{productName}</Text>
@@ -178,12 +177,10 @@ const InvoiceCard = props => {
             <View style={{
               flexDirection: 'row',
               flex: 1,
-              // paddingHorizontal: -50,
-              // flexBasis: 10
-              // width: 120,
+
             }}>
               {FORM_FIELDS.map((field, fieldKey) => (
-                <View style={[fieldKey == "hsn_tax" ? { flex: 0.5, marginRight: -Dimension.margin1 } : { flex: 0.3, marginRight: Dimension.margin15, }]}>
+                <View style={[fieldKey == "hsn_tax" ? { flex: 0.4, marginRight: Dimension.margin10 } : { flex: 0.3, marginRight: Dimension.margin15, }]}>
                   <field.component
                     {...field}
                     key={fieldKey}
@@ -191,60 +188,17 @@ const InvoiceCard = props => {
                   />
                 </View>
               )).toList()}
-              {/* <TextInput
-                  style={styles.wrapInput}
-                  onChangeText={text => calculateHsn(text)}
-                  keyboardType={'number-pad'}
-                  editable={
-                    (bulkItemIds || []).includes(itemId) ? true : false
-                  }>
-                  {taxPercentage}
-                </TextInput> */}
+
             </View>
-            {/* </View> */}
           </View>
         </View>
       </>
     );
   };
 
-  const renderOrderHeaderDetail = () => {
-    return (
-      <>
-        <View style={styles.headerView}>
-          <Text
-            style={[
-              styles.TitleBoldTxt,
-            ]}>
-            PO ID -{' '}
-            <Text style={styles.TitleBoldTxt}>
-              {orderRef}
-            </Text>
-          </Text>
-          <Text
-            style={[
-              styles.TitleBoldTxt,
-              {
-
-                marginTop: Dimension.margin10,
-              },
-            ]}>
-            Total Price -{' '}
-            <Text style={styles.TitleBoldTxt}>
-              ₹{Math.floor(totalAmount)}
-              {'   '} (Price Including Tax-
-              <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
-              <Text style={styles.TitleBoldTxt}> )</Text>
-            </Text>
-          </Text>
-        </View>
-      </>
-    );
-  };
 
   return (
     <>
-      {renderOrderHeaderDetail()}
       <View style={[styles.orderCardwrap, { marginTop: Dimension.margin10 }]}>
         {renderOrderDetails()}
       </View>
