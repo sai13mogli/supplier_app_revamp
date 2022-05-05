@@ -28,6 +28,8 @@ import Toast from 'react-native-toast-message';
 import BulkActionsModal from '../../component/BulkActionsModal';
 import {fetchProfile, setNavigation} from '../../redux/actions/profile';
 import Colors from '../../Theme/Colors';
+import {requestUserPermission} from '../../utils/firebasepushnotification';
+import messaging from '@react-native-firebase/messaging';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -172,7 +174,72 @@ const OrdersScreen = props => {
     }
   }, [profileStatus]);
 
+  const getNotif = async () => {
+    await requestUserPermission();
+    await messaging()
+      .hasPermission()
+      .then(async enabled => {
+        if (enabled) {
+          messaging().setBackgroundMessageHandler(async remoteMessage => {
+            handleOpenUrl(remoteMessage, true);
+          });
+          //app is running in background
+          messaging().onNotificationOpenedApp(remoteMessage => {
+            handleOpenUrl(remoteMessage, true);
+            // navigation.navigate(remoteMessage.data.type);
+          });
+
+          // app is in foreground
+          messaging().onMessage(async remoteMessage => {
+            handleOpenUrl(remoteMessage, true);
+          });
+
+          //app is in quit state
+          messaging()
+            .getInitialNotification()
+            .then(remoteMessage => {
+              if (remoteMessage) {
+                handleOpenUrl(remoteMessage, true);
+              }
+            });
+        }
+      });
+  };
+
+  const handleOpenUrl = (event, fromNotification) => {
+    let obj = {};
+    let screen = '';
+    if (event && event.data) {
+      obj = JSON.parse(event.data.params) || {};
+      screen = event.data.screen;
+      console.log(screen, obj, 'dfewfwfwew', event, fromNotification);
+      if (screen == 'Orders') {
+        if (obj.parentTab) {
+          setSelectedType(obj.parentTab);
+        }
+        if (obj.childTab) {
+          setSelectedTab(obj.childTab);
+          fetchOrdersFunc(0, '', obj.childTab, shipmentType, {
+            pickupFromDate: '',
+            pickupToDate: '',
+            poFromDate: '',
+            poToDate: '',
+            orderType: [],
+            deliveryType: [],
+            orderRefs: [],
+          });
+          fetchTabCountFunc(obj.childTab, shipmentType);
+        }
+      } else {
+        props.navigation.push(screen, {
+          ...obj,
+        });
+      }
+    }
+  };
+
   useEffect(() => {
+    getNotif();
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
@@ -736,7 +803,6 @@ const OrdersScreen = props => {
 
   return (
     <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
-      
       <View style={styles.topHeaderWrap}>
         <DropDown
           title={'Orders'}

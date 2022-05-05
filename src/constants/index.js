@@ -166,6 +166,10 @@ export const APP_STACK_SCREENS = [
     component: ProfileScreen,
   },
   {
+    name: 'Support',
+    component: SupportScreen,
+  },
+  {
     name: 'Settings',
     component: SettingsScreen,
   },
