@@ -46,6 +46,11 @@ const PickedUp = props => {
     dispatch(fetchDeleteAddresses(data));
   };
 
+  const onsubmit = () => {
+    props.navigation.navigate("Profile")
+    dispatch(fetchProfile())
+  }
+
   const renderItems = ({ item }) => (
     <View style={{ flex: 1 }}>
       <View style={styles.wrap}>
@@ -138,10 +143,13 @@ const PickedUp = props => {
             TextColor={colors.WhiteColor}
             TextFontSize={Dimension.font16}
             title={'Submit'}
-            onPress={() => dispatch(fetchProfile())}
+            onPress={onsubmit}
+          // onPress={() => dispatch(fetchProfile())}
           />
+
         </View>
       ) : null}
+
     </View>
   );
 };
