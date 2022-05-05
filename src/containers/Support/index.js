@@ -18,6 +18,7 @@ const SupportScreen = props => {
           hideScroll
           data={SUPPORT_TAB_SCREENS.map(_ => ({..._}))}
           navigation={props.navigation}
+          route={props.route}
         />
         {/* <TicketsList navigation={props.navigation} /> */}
       </View>

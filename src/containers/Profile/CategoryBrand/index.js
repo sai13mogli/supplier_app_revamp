@@ -5,6 +5,7 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
@@ -39,6 +40,8 @@ import {
 import { getAllCategories } from '../../../services/auth';
 import { fetchProfile } from '../../../redux/actions/profile';
 import PickerDropDown from '../../../component/common/PickerDropDown';
+import PDFView from 'react-native-view-pdf';
+import PickerMenu from '../../../component/common/PickerMenu';
 
 // import {uploadDocumentService} from '../../../services/documents';
 const deviceWidth = Dimensions.get('window').width;
@@ -75,6 +78,7 @@ const CategoryBrandScreen = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [brandName, setBrandName] = useState('');
   const [natureOfBusiness, setnatureOfBusiness] = useState(1);
+  const [natureofBusinessLabel, setNatureofBusinessLabel] = useState('Trader');
   const [brandCertificate, setBrandCertificate] = useState({
     title: '',
     value: '',
@@ -99,6 +103,10 @@ const CategoryBrandScreen = props => {
   const [currentBrand, setCurrentBrand] = useState({});
   const [isVisible, setIsVisible] = useState(false);
   const [deleteLoader, setDeleteLoader] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [docModal, setDocModal] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+  const [isPDF, setIsPDF] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -147,19 +155,12 @@ const CategoryBrandScreen = props => {
     nature_of_business: {
       title: 'Nature of Business',
       isImp: true,
-      // label: 'Nature of Business',
       errorMessage: 'Enter valid nature of business',
-      selectedValue: natureOfBusiness,
-      onValueChange: text => setTextBusinessNature(text),
-      component: PickerDropDown,
-      enabled: true,
+      selectedValue: natureofBusinessLabel,
+      onValueChange: (text, label) => setTextBusinessNature(text, label),
+      component: PickerMenu,
       value: natureOfBusiness,
-      items: [
-        {
-          label: 'Nature of Business',
-          value: 0,
-        },
-
+      options: [
         {
           label: 'Trader',
           value: 1,
@@ -202,9 +203,14 @@ const CategoryBrandScreen = props => {
       closeDoc: brandCertificate && brandCertificate.closeDoc,
       fromCategoryBrand: true,
       uploadDocument: () => uploadFromFileExp(),
-      onPress: () => uploadFromFileExp(),
+      onPress:
+        brandCertificate && brandCertificate.showDoc
+          ? () => openDocView(brandCertificate && brandCertificate.value)
+          : () => uploadFromFileExp(),
       component: FileUpload,
       isImp: natureOfBusiness == 3 || natureOfBusiness == 2 ? true : false,
+      setUpload: true,
+      openDoc: () => openDocView(brandCertificate && brandCertificate.value),
     },
     date: {
       title: 'Date (If Applicable)',
@@ -229,6 +235,8 @@ const CategoryBrandScreen = props => {
       isDeletedKey: isDeletedKey,
     },
   });
+
+  console.log('nature of business', natureOfBusiness, natureofBusinessLabel);
 
   useEffect(() => {
     dispatch(fetchCategoriesBrands());
@@ -282,7 +290,6 @@ const CategoryBrandScreen = props => {
   };
 
   const uploadDocumentService = async data => {
-    // setLoader(true);
     const url = `${BASE_URL}profile/file/upload`;
     let token = `Bearer ${await AsyncStorage.getItem('token')}`;
     const response = await RNFetchBlob.fetch(
@@ -311,7 +318,7 @@ const CategoryBrandScreen = props => {
     );
 
     const res = await response.json();
-    // setLoader(false);
+
     return {
       resp: res,
       fileData: data,
@@ -324,7 +331,7 @@ const CategoryBrandScreen = props => {
       title: fileData && fileData.name,
       value: resp.data && resp.data.fileKey,
       loading: false,
-      showDoc: false,
+      showDoc: true,
       closeDoc: true,
     });
   };
@@ -405,9 +412,63 @@ const CategoryBrandScreen = props => {
     });
   };
 
-  const setTextBusinessNature = text => {
+  const openDocView = async fileKey => {
+    setLoader(true);
+    setDocModal(true);
+    var myrequest = new XMLHttpRequest();
+    myrequest.onreadystatechange = e => {
+      if (myrequest.readyState !== 4) {
+        return;
+      }
+
+      if (myrequest.status === 200) {
+      } else {
+        console.warn('error');
+      }
+    };
+    myrequest.open(
+      'GET',
+      `https://apigatewayqa.moglix.com/profile/file?download=0&key=${fileKey}`,
+    );
+    let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+    myrequest.setRequestHeader('Authorization', token);
+    myrequest.responseType = 'blob';
+    myrequest.send();
+    myrequest.onload = e => {
+      var response = myrequest.response;
+      var mimetype = myrequest.getResponseHeader('Content-Type');
+      var fields = mimetype.split(';');
+      var name = fields[0];
+      var isPdf = false;
+      if (name == 'application/pdf') {
+        isPdf = true;
+      }
+      if (response) {
+        setLoader(false);
+        // alert('success', JSON.stringify(response));
+        const fileReaderInstance = new FileReader();
+        fileReaderInstance.readAsDataURL(response);
+        fileReaderInstance.onload = () => {
+          var fileUrl = fileReaderInstance.result;
+
+          setImageUrl(fileUrl);
+          setIsPDF(false);
+          var fields = fileUrl.slice(37);
+          if (isPdf) {
+            setIsPDF(true);
+            setImageUrl(fields);
+          }
+        };
+      } else {
+        alert('error', JSON.stringify(response));
+      }
+    };
+  };
+
+  const setTextBusinessNature = (text, label) => {
     if (text !== 0) {
       setnatureOfBusiness(text);
+      setNatureofBusinessLabel(label);
     }
   };
 
@@ -690,7 +751,10 @@ const CategoryBrandScreen = props => {
                           }}>
                           Delete
                         </Text> */}
-                        <CustomeIcon name={'delete'} size={Dimension.font22} color={colors.FontColor}></CustomeIcon>
+                        <CustomeIcon
+                          name={'delete'}
+                          size={Dimension.font22}
+                          color={colors.FontColor}></CustomeIcon>
                       </TouchableOpacity>
 
                       <View style={{ flex: 1 }}>
@@ -776,7 +840,10 @@ const CategoryBrandScreen = props => {
                           }}>
                           Delete
                         </Text> */}
-                        <CustomeIcon name={'delete'} size={Dimension.font22} color={colors.FontColor}></CustomeIcon>
+                        <CustomeIcon
+                          name={'delete'}
+                          size={Dimension.font22}
+                          color={colors.FontColor}></CustomeIcon>
                       </TouchableOpacity>
 
                       <View style={{ flex: 1 }}>
@@ -1113,6 +1180,47 @@ const CategoryBrandScreen = props => {
           loading={nextLoader}
         />
       </View>
+      <Modal
+        overlayPointerEvents={'auto'}
+        isVisible={docModal}
+        // isVisible={true}
+        onTouchOutside={() => {
+          setDocModal(false);
+        }}
+        onDismiss={() => {
+          setDocModal(false);
+        }}
+        coverScreen={true}
+        // style={styles.modalbg}
+        deviceWidth={deviceWidth}
+        onBackButtonPress={() => {
+          setDocModal(false);
+        }}
+        onBackdropPress={() => {
+          setDocModal(false);
+        }}
+        style={styles.ModalCss}>
+        {loader ? (
+          <ActivityIndicator
+            size={'small'}
+            color={'white'}
+            style={{marginRight: 4}}
+          />
+        ) : isPDF ? (
+          <PDFView
+            style={{flex: 1}}
+            onError={error => console.log('onError', error)}
+            onLoad={() => console.log('PDF rendered from base 64 data')}
+            resource={`${imageUrl}`}
+            resourceType="base64"
+          />
+        ) : (
+          <Image
+            source={{uri: imageUrl}}
+            style={{height: '100%', width: '100%', flex: 1}}
+          />
+        )}
+      </Modal>
     </View>
   );
 };

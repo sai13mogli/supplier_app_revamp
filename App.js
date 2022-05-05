@@ -14,12 +14,6 @@ import codePush from 'react-native-code-push';
 import Toast from 'react-native-toast-message';
 import Modal from 'react-native-modal';
 import * as RootNavigation from './src/generic/navigator';
-import {
-  requestUserPermission,
-  notificationListener,
-} from './src/utils/firebasepushnotification';
-import messaging from '@react-native-firebase/messaging';
-
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -45,16 +39,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    messaging()
-      .hasPermission()
-      .then(enabled => {
-        if (enabled) {
-          requestUserPermission();
-          let notificationData = notificationListener();
-          this.handleOpenUrl(notificationData);
-        }
-      });
-
+    // this.getNotif();
     let urlListener = {};
     if (Platform.OS === 'android') {
       urlListener = Linking.addEventListener(
@@ -66,7 +51,7 @@ class App extends React.Component {
       Linking.getInitialURL()
         .then(url => {
           if (url) {
-            this.handleOpenUrl({url: url});
+            this.handleOpenUrl({url: url}, false);
           }
         })
         .catch(err => {
@@ -82,28 +67,46 @@ class App extends React.Component {
 
   getLinkingUrl(eventUrl) {
     if (Platform.OS === 'android') {
-      this.handleOpenUrl(eventUrl);
+      this.handleOpenUrl(eventUrl, false);
     }
   }
 
-  handleOpenUrl(event) {
-    if (event) {
-      console.log(event);
-      Linking.canOpenURL(event.url).then(supported => {
-        if (supported) {
-          let input = event.url;
-          if (
-            input.includes(
-              'https://www.suppliercentralqa.moglilabs.com/profile',
-            )
-          ) {
-            RootNavigation.navigate('Profile');
-          } else {
-            RootNavigation.navigate('Orders');
+  handleOpenUrl(event, fromNotification) {
+    let obj = {};
+    let screen = '';
+    if (!fromNotification) {
+      if (event) {
+        console.log(event);
+        Linking.canOpenURL(event.url).then(supported => {
+          if (supported) {
+            let input = event.url;
+            // 'https://www.suppliercentralqa.moglilabs.com/profile',
+            if (input.includes('?')) {
+              input
+                .split('?')[1]
+                .split('&')
+                .map(_ => {
+                  if (_.split('=').length) {
+                    obj[_.split('=')[0]] = _.split('=')[1];
+                  }
+                });
+              screen = input
+                .replace('https://www.suppliercentralqa.moglilabs.com/', '')
+                .split('?')[0];
+            } else {
+              screen = input.replace(
+                'https://www.suppliercentralqa.moglilabs.com/',
+                '',
+              );
+            }
+            setTimeout(() => {
+              RootNavigation.push(screen, {
+                ...obj,
+              });
+            });
           }
-          return;
-        }
-      });
+        });
+      }
     }
   }
 

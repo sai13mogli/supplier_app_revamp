@@ -27,6 +27,15 @@ const Tabs = props => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef();
 
+  useEffect(() => {
+    if (props.route && props.route.params && props.route.params.parentTab) {
+      if (props.route.params.parentTab == 'faqs') {
+      } else if (props.route.params.parentTab == 'supportTicket') {
+        onItemPress(1);
+      }
+    }
+  }, []);
+
   // const Indicator = ({measures, scrollX}) => {
   //   const inputRange = (props.data || []).map((_, i) => i * width);
 

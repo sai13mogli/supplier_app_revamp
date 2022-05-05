@@ -6,10 +6,9 @@ export const requestUserPermission = async () => {
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
   if (enabled) {
     console.log('Authorization status:', authStatus);
-    getFcmToken();
+    await getFcmToken();
   }
 };
 

@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 //import { Scale } from '../../CommonConfig';
 import Dimension from '../../Theme/Dimension';
 import Colors from '../../Theme/Colors';
@@ -12,20 +12,19 @@ const styles = StyleSheet.create({
   },
   topHeaderWrap: {
     flexDirection: 'row',
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     paddingHorizontal: Dimension.padding15,
-    paddingVertical:Dimension.padding20,
+    paddingVertical: Dimension.padding20,
     backgroundColor: Colors.grayShade12,
-
   },
-  reddot:{
-    width:Dimension.width8,
-    height:Dimension.height8,
-    borderRadius:Dimension.width10,
-    backgroundColor:Colors.BrandColor,
-    position:"absolute",
-    top:Dimension.padding2,
-    right:0
+  reddot: {
+    width: Dimension.width8,
+    height: Dimension.height8,
+    borderRadius: Dimension.width10,
+    backgroundColor: Colors.BrandColor,
+    position: 'absolute',
+    top: Dimension.padding2,
+    right: 0,
   },
   TopTabWrap: {
     paddingHorizontal: Dimension.padding10,
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
     maxWidth: Dimension.width100,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
-   minHeight: Dimension.height50
+    minHeight: Dimension.height50,
   },
   selectedTabCss: {
     backgroundColor: Colors.FontColor,
@@ -58,7 +57,7 @@ const styles = StyleSheet.create({
     maxWidth: Dimension.width100,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
-   minHeight: Dimension.height50
+    minHeight: Dimension.height50,
   },
   selectedTabTxt: {
     fontFamily: Dimension.CustomMediumFont,
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
     height: Dimension.margin35,
-    width: "90%",
+    width: '90%',
 
     // flex: 8,
   },
@@ -145,20 +144,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding9,
     height: Dimension.height35,
-    backgroundColor:Colors.grayShade1
+    backgroundColor: Colors.grayShade1,
   },
   filterIcon: {
     fontSize: Dimension.font16,
     color: Colors.FontColor,
     marginLeft: Dimension.margin5,
-    marginTop: Dimension.margin2
+    marginTop: Dimension.margin2,
   },
   filterApplied: {
     height: Dimension.height8,
     width: Dimension.width8,
     borderRadius: 100 / 2,
     left: Dimension.margin20,
-    backgroundColor: Colors.BrandColor
+    backgroundColor: Colors.BrandColor,
   },
   filtertxt: {
     fontSize: Dimension.font12,
@@ -223,11 +222,11 @@ const styles = StyleSheet.create({
     width: '100%',
     bottom: 0,
   },
-  profilependingTxt:{
-   fontSize:Dimension.font12,
-   fontFamily:Dimension.CustomMediumFont,
-   color:Colors.FontColor ,
-   paddingVertical: Dimension.padding30,
+  profilependingTxt: {
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    color: Colors.FontColor,
+    paddingVertical: Dimension.padding30,
   },
 });
 

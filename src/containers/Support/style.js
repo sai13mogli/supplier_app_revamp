@@ -165,24 +165,39 @@ const styles = StyleSheet.create({
     // borderTopColor: Colors.grayShade2,
     // padding: Dimension.padding15,
     // backgroundColor: Colors.WhiteColor,
-    position:"absolute",
-    bottom:Dimension.height40,
-    justifyContent:"center",
-    alignSelf:"center",
-    
+    position: 'absolute',
+    bottom: Dimension.height40,
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
-  ticketBtn:{
-    backgroundColor:Colors.BrandColor,
-    borderRadius:4,
-    padding:Dimension.padding10,
-    flexDirection:"row"
-
+  ticketBtn: {
+    backgroundColor: Colors.BrandColor,
+    borderRadius: 4,
+    padding: Dimension.padding10,
+    flexDirection: 'row',
   },
-  ticketBtnTxt:{
+  ticketBtnTxt: {
     fontSize: Dimension.font14,
     color: Colors.WhiteColor,
     fontFamily: Dimension.CustomMediumFont,
-    marginLeft:Dimension.margin5
+    marginLeft: Dimension.margin5,
+  },
+  emptyTxt: {
+    fontFamily: Dimension.CustomBoldFont,
+    fontSize: Dimension.font18,
+    color: Colors.FontColor,
+    paddingVertical: Dimension.padding30,
+    //alignSelf:"center"
+  },
+  emptyWrap: {
+    //alignContent:"center",
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    flex: 1,
+    height: '100%',
+    textAlignVertical: 'center',
+    marginTop: Dimension.margin60,
   },
 });
 

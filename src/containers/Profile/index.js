@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -32,10 +32,36 @@ import {STATE_STATUS} from '../../redux/constants';
 import {fetchNotifications} from '../../redux/actions/notifications';
 
 const ProfileScreen = props => {
+  const [initLoader, setInitLoader] = useState(true);
+
   const {navigate} = useNavigation();
   const dispatch = useDispatch();
   const profileStatus = useSelector(
     state => (state.profileReducer || {}).status || STATE_STATUS.UNFETCHED,
+  );
+
+  const businessStatus = useSelector(
+    state =>
+      ((state.profileReducer || {}).businessDetails || {}).status ||
+      STATE_STATUS.UNFETCHED,
+  );
+
+  const addressesStatus = useSelector(
+    state =>
+      ((state.profileReducer || {}).addressesDetails || {}).status ||
+      STATE_STATUS.UNFETCHED,
+  );
+
+  const bankStatus = useSelector(
+    state =>
+      ((state.profileReducer || {}).bankDetails || {}).status ||
+      STATE_STATUS.UNFETCHED,
+  );
+
+  const categoryBrandStatus = useSelector(
+    state =>
+      ((state.profileReducer || {}).categoryBrandDetails || {}).status ||
+      STATE_STATUS.UNFETCHED,
   );
 
   const profileData = useSelector(state => state.profileReducer.data || {});
@@ -69,6 +95,71 @@ const ProfileScreen = props => {
       dispatch(fetchNotifications(0));
     }
   }, []);
+
+  useEffect(() => {
+    if (
+      profileStatus == STATE_STATUS.FETCHED &&
+      props.route &&
+      props.route.params &&
+      props.route.params.parentTab == 'Documents' &&
+      initLoader
+    ) {
+      setInitLoader(false);
+      props.navigation.navigate(props.route.params.parentTab);
+    }
+  }, [profileStatus]);
+
+  useEffect(() => {
+    if (
+      businessStatus == STATE_STATUS.FETCHED &&
+      props.route &&
+      props.route.params &&
+      props.route.params.parentTab == 'BusinessDetails' &&
+      initLoader
+    ) {
+      setInitLoader(false);
+      props.navigation.navigate(props.route.params.parentTab);
+    }
+  }, [businessStatus]);
+
+  useEffect(() => {
+    if (
+      addressesStatus == STATE_STATUS.FETCHED &&
+      props.route &&
+      props.route.params &&
+      props.route.params.parentTab == 'Addresses' &&
+      initLoader
+    ) {
+      setInitLoader(false);
+      props.navigation.navigate(props.route.params.parentTab);
+    }
+  }, [addressesStatus]);
+
+  useEffect(() => {
+    if (
+      bankStatus == STATE_STATUS.FETCHED &&
+      props.route &&
+      props.route.params &&
+      props.route.params.parentTab == 'BankDetails' &&
+      initLoader
+    ) {
+      setInitLoader(false);
+      props.navigation.navigate(props.route.params.parentTab);
+    }
+  }, [bankStatus]);
+
+  useEffect(() => {
+    if (
+      categoryBrandStatus == STATE_STATUS.FETCHED &&
+      props.route &&
+      props.route.params &&
+      props.route.params.parentTab == 'CategoryBrand' &&
+      initLoader
+    ) {
+      setInitLoader(false);
+      props.navigation.navigate(props.route.params.parentTab);
+    }
+  }, [categoryBrandStatus]);
 
   const isCompleted = progress => {
     return profileData.verificationStatus >= progress;
