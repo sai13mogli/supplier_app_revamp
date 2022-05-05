@@ -11,29 +11,40 @@ const PickerMenu = props => {
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
   return (
+    <>
+    <View style={{ flexDirection: 'row' }}>
+              <Text style={styles.labelStyle}>{props.title}</Text>
+              {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
+            </View>
     <Menu
       visible={visible}
       anchor={
         <TouchableOpacity onPress={showMenu} style={styles.dropDownBtn}>
           <Text style={styles.qtVal}>{selectedValue}</Text>
           <CustomeIcon
-            name="arrow_down"
+            name="arrow-drop-down-line"
             size={24}
-            color={'#3c3c3c'}></CustomeIcon>
+            color={colors.FontColor}></CustomeIcon>
         </TouchableOpacity>
       }
-      onRequestClose={hideMenu}>
+      onRequestClose={hideMenu}
+      style={styles.dropDownWrap}
+      >
       {options.map((item, itemIndex) => (
         <MenuItem
           onPress={() => {
             onValueChange(item.value, item.label);
             hideMenu();
           }}
-          textStyle={styles.dropdownval}>
+          textStyle={styles.dropdownval}
+          style={styles.dropDowninnerWrap}
+          >
           {item.label}
         </MenuItem>
       ))}
+      
     </Menu>
+    </>
   );
 };
 
@@ -41,58 +52,76 @@ const styles = StyleSheet.create({
   dropDownBtn: {
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: colors.lightBlue,
+    borderColor: colors.FontColor,
     paddingHorizontal: Dimension.padding5,
-    paddingVertical: Dimension.padding3,
-    borderRadius: 6,
-    width: Dimension.width60,
+    paddingVertical: Dimension.padding10,
+    borderRadius: 4,
+    //width: Dimension.width60,
     justifyContent: 'space-between',
 
-    marginTop: Dimension.margin5,
+    //marginTop: Dimension.margin5,
+    marginBottom:Dimension.margin15,
+    height:Dimension.height40,
+  
+  },
+  starIcon: {
+    color: colors.BrandColor,
+    fontSize: Dimension.font10,
+    fontFamily: Dimension.CustomMediumFont,
   },
   dropDownWrap: {
-    position: 'absolute',
-    top: 40,
-    left: 0,
-    zIndex: 9999999999999,
+   
     borderWidth: 1,
-    borderColor: colors.ProductBorderColor,
+    borderColor: colors.eyeIcon,
     borderRadius: 4,
     backgroundColor: '#fff',
-    width: Dimension.width80,
+    width: '65%',
     shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.3,
     shadowRadius: 2,
     elevation: 3,
+   // marginTop:Dimension.margin20
+    
   },
   dropdownval: {
-    fontSize: Dimension.font14,
-    fontFamily: Dimension.CustomMediumFont,
-    color: colors.PrimaryTextColor,
-    padding: Dimension.padding8,
-    borderBottomColor: colors.ProductBorderColor,
-    borderBottomWidth: 1,
+    fontSize: Dimension.font12,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+    paddingLeft: Dimension.padding12,
+    paddingRight: Dimension.padding12,
+    borderBottomColor: colors.eyeIcon,
+    borderBottomWidth: .5,
+    width: '100%',
+    paddingVertical:Dimension.padding10,
+   
+    
   },
-  Adddropdownval: {
-    fontSize: Dimension.font14,
+  labelStyle: {
+    fontSize: Dimension.font10,
+    color: colors.FontColor,
     fontFamily: Dimension.CustomMediumFont,
-    color: colors.PrimaryTextColor,
-    padding: Dimension.padding8,
+    marginLeft: Dimension.margin12,
+    marginBottom: Dimension.margin5,
   },
-  qtTitle: {
-    fontSize: Dimension.font14,
-    fontFamily: Dimension.CustomMediumFont,
-    color: colors.PrimaryTextColor,
-    padding: Dimension.padding8,
-  },
+
   qtVal: {
-    fontSize: Dimension.font14,
-    fontFamily: Dimension.CustomMediumFont,
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomRegularFont,
     color: colors.PrimaryTextColor,
     textAlign: 'center',
     textAlignVertical: 'center',
-    paddingLeft: Dimension.padding5,
+    paddingLeft: Dimension.padding10,
+  },
+  errorText: {
+    fontSize: Dimension.font10,
+    color: colors.BrandColor,
+    fontFamily: Dimension.CustomMediumFont,
+  },
+  dropDowninnerWrap:{
+  
+  width:'100%',
+  //marginTop:Dimension.margin40
   },
 });
 
