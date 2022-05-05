@@ -13,7 +13,7 @@ function* fetchTickets({payload: {obj}}) {
     if (error) {
       yield put(failedFetchTickets(error));
     } else {
-      yield put(fetchedTickets(obj.page, data.data));
+      yield put(fetchedTickets(obj.page, data.data, data.success));
     }
   } catch (error) {
     yield put(failedFetchTickets(error));

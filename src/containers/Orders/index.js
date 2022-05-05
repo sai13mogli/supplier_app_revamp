@@ -921,6 +921,11 @@ const OrdersScreen = props => {
                   numberOfLines={1}
                   style={styles.SearchInputCss}></TextInput>
                 <CustomeIcon
+                  onPress={() => {
+                    if (inputValue && inputValue.length > 1) {
+                      onSubmitSearch();
+                    }
+                  }}
                   name={'search'}
                   style={styles.seacrhIcon}></CustomeIcon>
               </View>
