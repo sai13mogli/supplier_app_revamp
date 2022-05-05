@@ -1,4 +1,4 @@
-import {PROFILE_ACTIONS} from '../constants/profile';
+import { PROFILE_ACTIONS } from '../constants/profile';
 
 export const fetchProfile = () => {
   return {
@@ -21,6 +21,24 @@ export const failedFetchProfile = error => {
     error,
   };
 };
+
+
+export const saveAddressAction = () => {
+  console.log('====================================');
+  console.log("Calling");
+  console.log('====================================');
+  return {
+    type: PROFILE_ACTIONS.FETCH_SAVE_ADDRESS,
+
+  };
+}
+
+export const saveAddressFailed = () => {
+  return {
+    type: PROFILE_ACTIONS.FAILED_FETCH_SAVE_ADDRESS,
+    error,
+  };
+}
 
 export const fetchBusinessDetails = () => {
   return {
@@ -47,7 +65,7 @@ export const failedFetchBusinessDetails = error => {
 export const fetchUpdateBusinessDetails = formData => {
   return {
     type: PROFILE_ACTIONS.FETCH_UPDATE_BUSINESS_DETAILS,
-    payload: {formData},
+    payload: { formData },
   };
 };
 
@@ -72,7 +90,7 @@ export const failedFetchUpdateBusinessDetails = error => {
 export const fetchUpdateTDSDetails = formData => {
   return {
     type: PROFILE_ACTIONS.FETCH_UPDATE_TDS_DETAILS,
-    payload: {formData},
+    payload: { formData },
   };
 };
 
@@ -119,7 +137,7 @@ export const failedFetchAddressDetails = error => {
 export const fetchDeleteAddresses = formData => {
   return {
     type: PROFILE_ACTIONS.FETCH_DELETE_ADDRESSES,
-    payload: {formData},
+    payload: { formData },
   };
 };
 
@@ -143,7 +161,7 @@ export const failedFetchDeleteAddresses = error => {
 export const fetchUpdateBillingAddress = formData => {
   return {
     type: PROFILE_ACTIONS.FETCH_UPDATE_BILLING_ADDRESS,
-    payload: {formData},
+    payload: { formData },
   };
 };
 
@@ -211,7 +229,7 @@ export const failedFetchTdsInfoDetails = error => {
 export const fetchUpdateBankDetails = formData => {
   return {
     type: PROFILE_ACTIONS.FETCH_UPDATE_BANK_DETAILS,
-    payload: {formData},
+    payload: { formData },
   };
 };
 
