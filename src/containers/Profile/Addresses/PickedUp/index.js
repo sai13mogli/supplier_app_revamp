@@ -136,20 +136,20 @@ const PickedUp = props => {
           />
         </ScrollView>
       )}
-      {/* {profileData && profileData.verificationStatus !== 15 ? ( */}
-      <View style={styles.bottombtnWrap}>
-        <CustomButton
-          buttonColor={colors.BrandColor}
-          borderColor={colors.BrandColor}
-          TextColor={colors.WhiteColor}
-          TextFontSize={Dimension.font16}
-          title={'Submit'}
-          onPress={onsubmit}
+      {profileData && profileData.verificationStatus !== 15 ? (
+        <View style={styles.bottombtnWrap}>
+          <CustomButton
+            buttonColor={colors.BrandColor}
+            borderColor={colors.BrandColor}
+            TextColor={colors.WhiteColor}
+            TextFontSize={Dimension.font16}
+            title={'Submit'}
+            onPress={onsubmit}
 
-        />
+          />
 
-      </View>
-
+        </View>
+      ) : null}
 
     </View>
   );
