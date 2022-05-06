@@ -186,6 +186,7 @@ const EditAddress = props => {
     if (pincode && pincode.length == 6) {
       const { data } = await getPincodeDetails(pincode);
       if (data.data && data.data.length) {
+        console.log("Data===>", data);
         setpincodeError(false);
         setStates([{ value: data.data[0].state, label: data.data[0].state }]);
         setCities(data.data.map(_ => ({ label: _.city, value: _.city })));

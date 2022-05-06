@@ -67,7 +67,6 @@ const InvoiceEMSFormDetailScreen = props => {
   const [misTotal, setMisTotal] = useState('');
   const [fId, setFId] = useState(null);
 
-
   const UploadInvoice = new OrderedMap({
     upload_invoice: {
       id: 'uploadInvoice',
@@ -597,47 +596,61 @@ const InvoiceEMSFormDetailScreen = props => {
           },
           invoiceTotal: invoiceAmount,
         };
-        console.log('Payload====>', payload, response);
+        console.log('Payload====>', payload);
+        let invoiceFile = {
+          name: 'invoiceFile',
+          filename: uploadInvoice.name,
+          type: uploadInvoice.type,
+          data: RNFetchBlob.wrap(uploadInvoice.uri),
+        }
+        let ewayFile = {
+          name: 'ewayBillFile',
+          filename: uploadEwayBill.name,
+          type: uploadEwayBill.type,
+          data: RNFetchBlob.wrap(uploadEwayBill.uri),
+        }
 
-        const response = await RNFetchBlob.fetch(
-          'POST',
-          url,
-          {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `${token}`,
-          },
-          ewayBillNumber ? [
-            {
-              name: 'dropshipInvoiceRequest',
-              data: JSON.stringify(payload),
-              type: 'application/json',
-            },
-            {
-              name: 'invoiceFile',
-              filename: uploadInvoice.name,
-              type: uploadInvoice.type,
-              data: RNFetchBlob.wrap(uploadInvoice.uri),
-            },
-            {
-              name: 'ewayBillFile',
-              filename: uploadEwayBill.name,
-              type: uploadEwayBill.type,
-              data: RNFetchBlob.wrap(uploadEwayBill.uri),
-            },
-          ] : [
-            {
-              name: 'dropshipInvoiceRequest',
-              data: JSON.stringify(payload),
-              type: 'application/json',
-            },
-            {
-              name: 'invoiceFile',
-              filename: uploadInvoice.name,
-              type: uploadInvoice.type,
-              data: RNFetchBlob.wrap(uploadInvoice.uri),
-            },
-          ],
-        );
+        props.navigation.navigate('InvoiceDetail', { data: payload, invoiceFileData: invoiceFile, ewayFileData: ewayFile })
+
+        // const response = await RNFetchBlob.fetch(
+        //   'POST',
+        //   url,
+        //   {
+        //     'Content-Type': 'multipart/form-data',
+        //     Authorization: `${token}`,
+        //   },
+        //   ewayBillNumber ? [
+        //     {
+        //       name: 'dropshipInvoiceRequest',
+        //       data: JSON.stringify(payload),
+        //       type: 'application/json',
+        //     },
+        //     {
+        //       name: 'invoiceFile',
+        //       filename: uploadInvoice.name,
+        //       type: uploadInvoice.type,
+        //       data: RNFetchBlob.wrap(uploadInvoice.uri),
+        //     },
+        //     {
+        //       name: 'ewayBillFile',
+        //       filename: uploadEwayBill.name,
+        //       type: uploadEwayBill.type,
+        //       data: RNFetchBlob.wrap(uploadEwayBill.uri),
+        //     },
+        //   ] : [
+        //     {
+        //       name: 'dropshipInvoiceRequest',
+        //       data: JSON.stringify(payload),
+        //       type: 'application/json',
+        //     },
+        //     {
+        //       name: 'invoiceFile',
+        //       filename: uploadInvoice.name,
+        //       type: uploadInvoice.type,
+        //       data: RNFetchBlob.wrap(uploadInvoice.uri),
+        //     },
+        //   ],
+        // );
         const res = await response.json();
         console.log('Respose===>', response, res);
         if (res.success) {
@@ -654,9 +667,9 @@ const InvoiceEMSFormDetailScreen = props => {
             visibilityTime: 4000,
             autoHide: true,
           });
-          props.navigation.navigate('Orders', {
-            selectedTab: 'UPLOAD_INVOICE',
-          });
+          // props.navigation.navigate('Orders', {
+          //   selectedTab: 'UPLOAD_INVOICE',
+          // });
         } else if (res.success == false) {
           setLoading(false);
           Toast.show({
@@ -766,7 +779,7 @@ const InvoiceEMSFormDetailScreen = props => {
             borderColor={colors.BrandColor}
             TextColor={colors.WhiteColor}
             TextFontSize={Dimension.font16}
-            title={'SUBMIT'}
+            title={'CONTINUE'}
             loading={loading}
             onPress={onsubmit}
           />

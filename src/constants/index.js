@@ -1,5 +1,5 @@
-import React, {createRef} from 'react';
-import {Linking} from 'react-native';
+import React, { createRef } from 'react';
+import { Linking } from 'react-native';
 import HomeScreen from '../containers/Home';
 import ProfileScreen from '../containers/Profile';
 import OrdersScreen from '../containers/Orders';
@@ -22,7 +22,7 @@ import NotificationScreen from '../containers/Notification';
 import TicketsList from '../containers/Support/TicketsList';
 import FAQS from '../containers/Support/FAQS';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
-import {OrderedMap} from 'immutable';
+import { OrderedMap } from 'immutable';
 import Accounts from '../containers/Profile/BankDetails/Accounts';
 import TdsDetails from '../containers/Profile/BankDetails/TdsDetails';
 import PickedUp from '../containers/Profile/Addresses/PickedUp';
@@ -37,6 +37,7 @@ import EditAddress from '../containers/Profile/Addresses/EditAddress';
 import EditBankAccount from '../containers/Profile/BankDetails/Accounts/EditBankAccount';
 import UploadInvoiceScreen from '../containers/Orders/UploadInvoiceEMS';
 import UploadInvoiceOMSScreen from '../containers/Orders/UploadInvoiceOMS';
+import InvoiceDetailScreen from '../containers/Orders/InvoiceDetail';
 import InvoiceEMSFormDetailScreen from '../containers/Orders/InvoiceEMSFormDetails';
 
 export const BOTTOM_TAB_SCREENS = [
@@ -244,6 +245,10 @@ export const APP_STACK_SCREENS = [
   {
     name: 'UploadInvoiceOMS',
     component: UploadInvoiceOMSScreen,
+  },
+  {
+    name: 'InvoiceDetail',
+    component: InvoiceDetailScreen,
   },
 ];
 

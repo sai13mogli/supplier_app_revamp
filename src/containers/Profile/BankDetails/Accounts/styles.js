@@ -27,6 +27,14 @@ const styles = StyleSheet.create({
     marginTop: Dimension.margin1,
     textTransform: "uppercase"
   },
+  addbank: {
+    fontSize: Dimension.font14,
+    color: Colors.BrandColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+    marginLeft: Dimension.margin5,
+    marginTop: Dimension.margin1,
+    textTransform: "uppercase"
+  },
   TopWrap: {
     flexDirection: 'row',
     justifyContent: 'space-between',

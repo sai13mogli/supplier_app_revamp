@@ -98,8 +98,8 @@ export const setSaveAddress = async () =>
     },
   });
 
-export const setSaveBankDetail = async () =>
-  axios.get(`${BASE_URL}profile/submitAddress`, {
+export const setSaveBankDetail = async data =>
+  axios.post(`${BASE_URL}profile/updateBankAccount`, data, {
     headers: {
       userId: await AsyncStorage.getItem('userId'),
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
@@ -111,7 +111,7 @@ export const getPincodeDetails = async pin =>
 
 export const getIfscCodeDetails = async ifscCode =>
   axios.get(
-    `https://supplierapiqa.moglilabs.com/util/validateifscCode?ifscCode=${ifscCode}`,
+    `https://supplierapiqa.moglilabs.com/util/bankDetails?ifsc=${ifscCode}`,
   );
 
 export const getGstDetails = async gstin =>

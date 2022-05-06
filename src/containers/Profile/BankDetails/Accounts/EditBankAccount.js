@@ -20,13 +20,13 @@ const EditBankAccount = props => {
     const bankDetailsStatus = useSelector(state => (state.profileReducer.bankDetails.status || STATE_STATUS.FETCHING));
     const bankDetailsError = useSelector(state => state.profileReducer.bankDetails.error || '',);
     const [loading, setLoading] = useState(false);
-    const [editID, setEditID] = useState(bankDetails.id || '');
+    const [editID, setEditID] = useState(bankDetails.id);
     const [accountHolderName, setAccountHolderName] = useState(bankDetails.accountHolderName);
     const [accountNumber, setAccountNumber] = useState(bankDetails.accountNumber);
     const [ifscCode, setIfscCode] = useState(bankDetails.ifscCode);
-    const [branch, setBranch] = useState(bankDetails.branch);
+    const [branch, setBranch] = useState((bankDetails || {})?.branch);
     const [accountType, setAccountType] = useState(bankDetails.accountType);
-    const [bankName, setBankName] = useState(bankDetails.bankName);
+    const [bankName, setBankName] = useState('');
     const [accountHolderNameError, setaccountHolderNameError] = useState(false);
     const [accountNumberError, setaccountNumberError] = useState(false);
     const [ifscCodeError, setifscCodeError] = useState(false);
@@ -71,6 +71,7 @@ const EditBankAccount = props => {
             errorMessage: 'Enter valid ifsc code',
             showError: ifscCodeError,
             value: ifscCode,
+            maxLength: 11,
             onBlur: () => onIfscCodeBlur(),
             onChangeText: text => setIfscCode(text),
             component: FloatingLabelInputField,
@@ -160,17 +161,28 @@ const EditBankAccount = props => {
     };
 
     const onIfscCodeBlur = async () => {
+
         if (ifscCode && ifscCode.length >= 11 && ifscCode.match(ifscCodeRegex)) {
             const { data } = await getIfscCodeDetails(ifscCode);
-            if (!data.success) {
-                setifscCodeError(true);
-            } else {
+            if (data.data.result) {
+                setifscCodeError(false);
+                setBranch(data?.data?.result?.branch)
+                setBankName(data?.data?.result?.bank)
+            }
+            else if (data.success == false) {
+                setifscCodeError(data?.message);
+            }
+            else {
                 setifscCodeError(false);
             }
-        } else {
-            setifscCodeError(true);
         }
     };
+
+    useEffect(() => {
+        if (ifscCode && ifscCode.length && ifscCode.length == 11) {
+            onIfscCodeBlur();
+        }
+    }, [ifscCode]);
 
 
     const onBranchBlur = () => {
@@ -206,21 +218,42 @@ const EditBankAccount = props => {
 
         ) {
             setLoading(true);
-            const data = {
-                id: '',
-                accountHolderName: accountHolderName,
-                accountNumber: accountNumber,
-                accountType: accountType,
-                ifscCode: ifscCode,
-                branch: branch,
-                bankName: bankName,
-                city: 'delhi',
-                currencyType: '2',
-                countryCode: '217',
-                businessType: 'businessType',
+            if (editID) {
+                const data = {
+                    id: editID,
+                    accountHolderName: accountHolderName,
+                    accountNumber: accountNumber,
+                    accountType: accountType,
+                    ifscCode: ifscCode,
+                    branch: branch,
+                    bankName: bankName,
+                    city: 'delhi',
+                    currencyType: '2',
+                    countryCode: '217',
+                    businessType: 'businessType',
 
-            };
-            dispatch(fetchUpdateBankDetails(data));
+                };
+                dispatch(fetchUpdateBankDetails(data));
+
+            } else {
+                const data = {
+                    id: '',
+                    accountHolderName: accountHolderName,
+                    accountNumber: accountNumber,
+                    accountType: accountType,
+                    ifscCode: ifscCode,
+                    branch: branch,
+                    bankName: bankName,
+                    city: 'delhi',
+                    currencyType: '2',
+                    countryCode: '217',
+                    businessType: 'businessType',
+
+                };
+                dispatch(fetchUpdateBankDetails(data));
+
+            }
+
         } else {
             onHolderNameBlur();
             onAccountNumberBlur();

@@ -92,6 +92,11 @@ const Dimension = {
   margin170: normalize(170),
   margin180: normalize(180),
   margin200: normalize(200),
+  margin350: normalize(350),
+  margin400: normalize(400),
+  margin450: normalize(450),
+  margin500: normalize(500),
+
 
   height5: normalize(5),
   height6: normalize(6),
