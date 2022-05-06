@@ -39,6 +39,7 @@ const UploadInvoiceScreen = props => {
   }, []);
 
 
+
   const getTotalPrice = () => {
     let price = 0;
 
@@ -77,6 +78,7 @@ const UploadInvoiceScreen = props => {
       // const podindex = arr.findIndex(x => x == podId);
       // arr.splice(podindex, 1);
       // setPodIdList(arr)
+
     } else {
       let row = {
         id: itemId,
@@ -149,7 +151,13 @@ const UploadInvoiceScreen = props => {
   };
 
   const renderOrderHeaderDetail = () => {
-    console.log("Log===>", totalPrice);
+
+
+
+    let arrSum = totalPrice.length > 0 ? totalPrice.reduce(function (sum, tax) {
+      return sum + tax.price;
+    }, 0) : 0;
+    console.log("Invoice===>", arrSum);
     return (
       <>
 
@@ -172,7 +180,7 @@ const UploadInvoiceScreen = props => {
             ]}>
             Total Price -{' '}
             <Text style={styles.TitleBoldTxt}>
-              ₹{getTotalPrice(totalAmount)}
+              ₹{arrSum}
               {'   '} (Price Including Tax-
               <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
               <Text style={styles.TitleBoldTxt}> )</Text>
