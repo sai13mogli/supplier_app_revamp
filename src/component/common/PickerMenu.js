@@ -6,44 +6,41 @@ import Dimension from '../../Theme/Dimension';
 import CustomeIcon from '../../component/common/CustomeIcon';
 
 const PickerMenu = props => {
-  const {options, onValueChange, selectedValue} = props;
+  const {options, onValueChange, selectedValue, title, isImp} = props;
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
   return (
     <>
-    <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.labelStyle}>{props.title}</Text>
-              {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
-            </View>
-    <Menu
-      visible={visible}
-      anchor={
-        <TouchableOpacity onPress={showMenu} style={styles.dropDownBtn}>
-          <Text style={styles.qtVal}>{selectedValue}</Text>
-          <CustomeIcon
-            name="arrow-drop-down-line"
-            size={24}
-            color={colors.FontColor}></CustomeIcon>
-        </TouchableOpacity>
-      }
-      onRequestClose={hideMenu}
-      style={styles.dropDownWrap}
-      >
-      {options.map((item, itemIndex) => (
-        <MenuItem
-          onPress={() => {
-            onValueChange(item.value, item.label);
-            hideMenu();
-          }}
-          textStyle={styles.dropdownval}
-          style={styles.dropDowninnerWrap}
-          >
-          {item.label}
-        </MenuItem>
-      ))}
-      
-    </Menu>
+      <View style={{flexDirection: 'row'}}>
+        <Text style={styles.labelStyle}>{title}</Text>
+        {isImp ? <Text style={styles.starIcon}>*</Text> : null}
+      </View>
+      <Menu
+        visible={visible}
+        anchor={
+          <TouchableOpacity onPress={showMenu} style={styles.dropDownBtn}>
+            <Text style={styles.qtVal}>{selectedValue}</Text>
+            <CustomeIcon
+              name="arrow-drop-down-line"
+              size={24}
+              color={colors.FontColor}></CustomeIcon>
+          </TouchableOpacity>
+        }
+        onRequestClose={hideMenu}
+        style={styles.dropDownWrap}>
+        {options.map((item, itemIndex) => (
+          <MenuItem
+            onPress={() => {
+              onValueChange(item.value, item.label);
+              hideMenu();
+            }}
+            textStyle={styles.dropdownval}
+            style={styles.dropDowninnerWrap}>
+            {item.label}
+          </MenuItem>
+        ))}
+      </Menu>
     </>
   );
 };
@@ -60,9 +57,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
 
     //marginTop: Dimension.margin5,
-    marginBottom:Dimension.margin15,
-    height:Dimension.height40,
-  
+    marginBottom: Dimension.margin15,
+    height: Dimension.height40,
   },
   starIcon: {
     color: colors.BrandColor,
@@ -70,7 +66,6 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
   },
   dropDownWrap: {
-   
     borderWidth: 1,
     borderColor: colors.eyeIcon,
     borderRadius: 4,
@@ -81,8 +76,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 2,
     elevation: 3,
-   // marginTop:Dimension.margin20
-    
+    // marginTop:Dimension.margin20
   },
   dropdownval: {
     fontSize: Dimension.font12,
@@ -91,11 +85,9 @@ const styles = StyleSheet.create({
     paddingLeft: Dimension.padding12,
     paddingRight: Dimension.padding12,
     borderBottomColor: colors.eyeIcon,
-    borderBottomWidth: .5,
+    borderBottomWidth: 0.5,
     width: '100%',
-    paddingVertical:Dimension.padding10,
-   
-    
+    paddingVertical: Dimension.padding10,
   },
   labelStyle: {
     fontSize: Dimension.font10,
@@ -118,10 +110,9 @@ const styles = StyleSheet.create({
     color: colors.BrandColor,
     fontFamily: Dimension.CustomMediumFont,
   },
-  dropDowninnerWrap:{
-  
-  width:'100%',
-  //marginTop:Dimension.margin40
+  dropDowninnerWrap: {
+    width: '100%',
+    //marginTop:Dimension.margin40
   },
 });
 
