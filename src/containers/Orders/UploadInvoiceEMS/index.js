@@ -13,7 +13,7 @@ const UploadInvoiceScreen = props => {
   const [loading, setLoading] = useState(false);
   const [bulkItemIds, setBulkItemIds] = useState([]);
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
-  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalAmount, setTotalAmount] = useState([]);
   const [totalPrice, setTotalPrice] = useState([]);
   const [hsn, sethsn] = useState(props?.route?.params?.hsn);
   const [taxPercentage, setTaxPercentage] = useState(
@@ -47,6 +47,7 @@ const UploadInvoiceScreen = props => {
     }, 0);
     return price;
   };
+
 
 
 
@@ -116,7 +117,7 @@ const UploadInvoiceScreen = props => {
         quantity={item.quantity}
         selectedValue={(value) => setTaxPercentage(value)}
         UpdatedQuntity={(value) => setQuantity(value)}
-        UpdatedTotalPrice={(value) => { setTotalAmount(String(value)), console.log("sds", value); }}
+        UpdatedTotalPrice={(value) => { setTotalAmount(String(value)), console.log("sds", value) }}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
@@ -148,7 +149,7 @@ const UploadInvoiceScreen = props => {
   };
 
   const renderOrderHeaderDetail = () => {
-
+    console.log("Log===>", totalPrice);
     return (
       <>
 
@@ -171,7 +172,7 @@ const UploadInvoiceScreen = props => {
             ]}>
             Total Price -{' '}
             <Text style={styles.TitleBoldTxt}>
-              ₹{getTotalPrice()}
+              ₹{getTotalPrice(totalAmount)}
               {'   '} (Price Including Tax-
               <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
               <Text style={styles.TitleBoldTxt}> )</Text>

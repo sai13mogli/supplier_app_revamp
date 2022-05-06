@@ -11,11 +11,13 @@ import styles from './styles';
 import CustomButton from '../../../../component/common/Button';
 import TDSEditModal from '../../../../component/common/TDSEditModal';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { saveBankDetailAction } from '../../../../redux/actions/profile';
-import { fetchProfile } from '../../../../redux/actions/profile';
+import { fetchUpdateBankDetails } from '../../../../redux/actions/profile';
 
 const TdsDetails = (props) => {
   const profileData = useSelector(state => state.profileReducer.data || {});
+  const bankDetails = useSelector(
+    state => state.profileReducer.bankDetails.data || {},
+  );
   const tdsInfoDetails = useSelector(
     state => state.profileReducer.tdsInfoDetails.data || [],
   );
@@ -25,7 +27,6 @@ const TdsDetails = (props) => {
   const { navigate } = useNavigation()
   const navigation = useNavigation()
   const dispatch = useDispatch();
-
 
   const _updateSections = activeSections => {
     setTdsInfoList(activeSections);
@@ -145,8 +146,26 @@ const TdsDetails = (props) => {
   };
 
   const onSubmit = () => {
-    props.navigation.navigate("Profile")
-    dispatch(fetchProfile());
+
+    if (bankDetails) {
+      const data = {
+        id: bankDetails?.id,
+        accountHolderName: bankDetails.accountHolderName,
+        accountNumber: bankDetails.accountNumber,
+        accountType: bankDetails.accountType,
+        ifscCode: bankDetails.ifscCode,
+        branch: bankDetails.branch,
+        bankName: bankDetails.bankName,
+        city: 'delhi',
+        currencyType: '2',
+        countryCode: '217',
+        businessType: 'businessType',
+      };
+      dispatch(fetchUpdateBankDetails(data));
+      props.navigation.navigate("Profile")
+    } else {
+      alert("bank detail not found")
+    }
 
     // dispatch(saveBankDetailAction())
   }
@@ -175,7 +194,7 @@ const TdsDetails = (props) => {
             borderColor={colors.BrandColor}
             TextColor={colors.WhiteColor}
             TextFontSize={Dimension.font16}
-            title={'Next'}
+            title={'Submit'}
             onPress={onSubmit}
           />
         </View>

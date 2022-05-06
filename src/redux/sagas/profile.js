@@ -117,7 +117,9 @@ function* fetchUpdateBankDetails({ payload: { formData } }) {
       if (data.status == 400 || data.data.errors) {
         yield put(failedFetchUpdateBillingAddress(data.data.errors));
       } else {
+        yield put(fetchProfile());
         yield put(fetchedUpdateBankDetails(formData, data.data));
+
       }
     }
   } catch (error) {
