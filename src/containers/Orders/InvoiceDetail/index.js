@@ -24,75 +24,75 @@ const InvoiceDetailScreen = props => {
     console.log("props====>", props?.route?.params?.data?.ewayNumber);
 
     const onsubmit = async () => {
-
-        try {
-
-            setLoading(true);
-            let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-            const url = `${BASE_URL}api/order/mapDropshipInvoice`;
-
-            // let totalInvoiceAmount =
-            //   invoiceAmount + (totalAmount + 7) ||
-            //   invoiceAmount + (totalAmount - 7);
-
-            // console.log('Payload====>', payload, response);
-
-            const response = await RNFetchBlob.fetch(
-                'POST',
-                url,
-                {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `${token}`,
-                },
-                props?.route?.params?.data?.ewayNumber ? [
+        if (!isSelected) {
+            Toast.show({
+                type: 'error',
+                text2: 'Kindly Accept Terms & Conditions',
+                visibilityTime: 2000,
+                autoHide: true,
+            });
+            try {
+                setLoading(true);
+                let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+                const url = `${BASE_URL}api/order/mapDropshipInvoice`;
+                const response = await RNFetchBlob.fetch(
+                    'POST',
+                    url,
                     {
-                        name: 'dropshipInvoiceRequest',
-                        data: JSON.stringify(props?.route?.params?.data),
-                        type: 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `${token}`,
                     },
-                    props?.route?.params?.invoiceFileData,
-                    props?.route?.params?.ewayFileData,
-                ] : [
-                    {
-                        name: 'dropshipInvoiceRequest',
-                        data: JSON.stringify(props?.route?.params?.data),
-                        type: 'application/json',
-                    },
-                    props?.route?.params?.invoiceFileData,
-                ],
-            );
-            const res = await response.json();
-            console.log('Respose===>', response, res);
-            if (res.success) {
+                    props?.route?.params?.data?.ewayNumber ? [
+                        {
+                            name: 'dropshipInvoiceRequest',
+                            data: JSON.stringify(props?.route?.params?.data),
+                            type: 'application/json',
+                        },
+                        props?.route?.params?.invoiceFileData,
+                        props?.route?.params?.ewayFileData,
+                    ] : [
+                        {
+                            name: 'dropshipInvoiceRequest',
+                            data: JSON.stringify(props?.route?.params?.data),
+                            type: 'application/json',
+                        },
+                        props?.route?.params?.invoiceFileData,
+                    ],
+                );
+                const res = await response.json();
+                console.log('Respose===>', response, res);
+                if (res.success) {
+                    setLoading(false);
+                    // dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
+                    //   fetchTabCount({
+                    //     supplierId: await AsyncStorage.getItem('userId'),
+                    //     tabRef,
+                    //     onlineShipmentMode,
+                    //   }));
+                    Toast.show({
+                        type: 'success',
+                        text2: res.message,
+                        visibilityTime: 4000,
+                        autoHide: true,
+                    });
+                    props.navigation.navigate('Orders', {
+                        selectedTab: 'UPLOAD_INVOICE',
+                    });
+                } else if (res.success == false) {
+                    setLoading(false);
+                    Toast.show({
+                        type: 'error',
+                        text2: res.message,
+                        visibilityTime: 5000,
+                        autoHide: true,
+                    });
+                }
+            } catch (err) {
+                console.log("Erreor", err);
                 setLoading(false);
-                // dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
-                //   fetchTabCount({
-                //     supplierId: await AsyncStorage.getItem('userId'),
-                //     tabRef,
-                //     onlineShipmentMode,
-                //   }));
-                Toast.show({
-                    type: 'success',
-                    text2: res.message,
-                    visibilityTime: 4000,
-                    autoHide: true,
-                });
-                props.navigation.navigate('Orders', {
-                    selectedTab: 'UPLOAD_INVOICE',
-                });
-            } else if (res.success == false) {
-                setLoading(false);
-                Toast.show({
-                    type: 'error',
-                    text2: res.message,
-                    visibilityTime: 5000,
-                    autoHide: true,
-                });
             }
-        } catch (err) {
-            console.log("Erreor", err);
-            setLoading(false);
         }
+
 
     };
 

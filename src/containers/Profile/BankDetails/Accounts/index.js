@@ -12,22 +12,24 @@ const Accounts = props => {
     state => state.profileReducer.bankDetails.data || {},
   );
   const profileData = useSelector(state => state.profileReducer.data || {});
-
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={styles.ContainerCss}>
-        <TouchableOpacity
-          onPress={() => {
-            props.navigation.navigate('EditBankAccount', {
+        {
+          (bankDetails && bankDetails.id) ? null :
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate('EditBankAccount', {
 
-            });
-          }}>
-          {/* {
-            profileData ? null : */}
-          <Text style={styles.addbank}>Add bank account</Text>
-          {/* } */}
+                });
+              }}>
 
-        </TouchableOpacity>
+              <Text style={styles.addbank}>Add bank account</Text>
+
+
+            </TouchableOpacity>
+        }
+
         {
           profileData ?
             <View style={styles.pendingBox}>
