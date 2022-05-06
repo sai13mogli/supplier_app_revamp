@@ -118,6 +118,7 @@ function* fetchUpdateBankDetails({ payload: { formData } }) {
         yield put(failedFetchUpdateBillingAddress(data.data.errors));
       } else {
         yield put(fetchProfile());
+        yield put(fetchTdsInfoDetails())
         yield put(fetchedUpdateBankDetails(formData, data.data));
 
       }

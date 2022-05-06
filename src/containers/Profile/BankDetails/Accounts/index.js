@@ -31,7 +31,7 @@ const Accounts = props => {
         }
 
         {
-          profileData ?
+          (bankDetails && bankDetails.id) ?
             <View style={styles.pendingBox}>
               <View style={styles.pendingWrap}>
                 <Text style={styles.Pendingtxt}>

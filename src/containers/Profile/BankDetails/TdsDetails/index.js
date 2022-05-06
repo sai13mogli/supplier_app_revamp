@@ -95,7 +95,7 @@ const TdsDetails = (props) => {
             <Text style={styles.yesNotxt}>
               {section.lastToLastYearItr == 1 ? 'Yes'
                 : section.lastToLastYearItr == 0 ? 'No'
-                  : section.lastToLastYearItr == "" ? "-"
+                  : section.lastToLastYearItr == "" ? "dccjsd"
                     : null}
             </Text>
           </View>
