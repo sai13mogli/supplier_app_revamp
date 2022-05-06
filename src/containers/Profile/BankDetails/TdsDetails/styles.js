@@ -8,8 +8,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: Dimension.padding10,
-    borderBottomColor:Colors.grayShade3,
-    borderBottomWidth:1
+    borderBottomColor: Colors.grayShade3,
+    borderBottomWidth: 1
   },
   sectionView: {
     //paddingVertical: 80,
@@ -17,21 +17,21 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1
   },
-  HeadinngInnerTxt:{
-    fontFamily:Dimension.CustomMediumFont,
-    fontSize:Dimension.font12,
-    color:Colors.FontColor,
-    marginHorizontal:Dimension.margin10,
-    borderRightColor:Colors.grayShade3,
-    borderRightWidth:1,
-    flex:8  
+  HeadinngInnerTxt: {
+    fontFamily: Dimension.CustomMediumFont,
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    marginHorizontal: Dimension.margin10,
+    borderRightColor: Colors.grayShade3,
+    borderRightWidth: 1,
+    flex: 8
   },
-  yesNotxt:{
-    fontFamily:Dimension.CustomMediumFont,
-    fontSize:Dimension.font12,
-    color:Colors.FontColor,
-    marginHorizontal:Dimension.margin10,
-    flex:1
+  yesNotxt: {
+    fontFamily: Dimension.CustomMediumFont,
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    marginHorizontal: Dimension.margin10,
+    flex: 1
   },
   addnewtxt: {
     fontSize: Dimension.font14,
@@ -40,12 +40,13 @@ const styles = StyleSheet.create({
     marginLeft: Dimension.margin5,
     alignSelf: 'center',
     marginTop: Dimension.margin1,
-    textTransform:"uppercase"
+    textTransform: "uppercase"
   },
   bottombtnWrap: {
     padding: Dimension.padding15,
     borderTopColor: Colors.grayShade2,
     borderTopWidth: 1,
+    marginBottom: Dimension.margin50,
     backgroundColor: Colors.WhiteColor
   },
   type: {
@@ -59,10 +60,10 @@ const styles = StyleSheet.create({
   iconStyle: {
     flexDirection: 'row',
     alignSelf: 'flex-end',
-    position:"absolute",
+    position: "absolute",
     right: 30,
-    top:15,
-   zIndex:999
+    top: 15,
+    zIndex: 999
   },
   edit: {
     fontSize: Dimension.font16,
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
   ContainerCss: {
     backgroundColor: Colors.WhiteColor,
     paddingHorizontal: Dimension.padding15,
-    marginTop:Dimension.margin25
+    marginTop: Dimension.margin25
   },
   remove: {
     borderWidth: 0.9,
@@ -107,16 +108,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.BrandColor,
     marginHorizontal: Dimension.margin10,
   },
-  AccordianHeaderWrap:{
- 
-  paddingVertical: Dimension.padding10,
-  flexDirection: 'row',
-  justifyContent: 'space-between',
+  AccordianHeaderWrap: {
+
+    paddingVertical: Dimension.padding10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  AccordianheadingTxt:{
-    color:Colors.FontColor,
-    fontSize:Dimension.font14,
-    fontFamily:Dimension.CustomBoldFont
+  AccordianheadingTxt: {
+    color: Colors.FontColor,
+    fontSize: Dimension.font14,
+    fontFamily: Dimension.CustomBoldFont
   },
 
 });

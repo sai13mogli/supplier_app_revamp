@@ -90,6 +90,22 @@ export const setUpdateBillingAddress = async data =>
     },
   });
 
+export const setSaveAddress = async () =>
+  axios.get(`${BASE_URL}profile/submitAddress`, {
+    headers: {
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
+
+export const setSaveBankDetail = async () =>
+  axios.get(`${BASE_URL}profile/submitAddress`, {
+    headers: {
+      userId: await AsyncStorage.getItem('userId'),
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
+
 export const getPincodeDetails = async pin =>
   axios.get(`https://supplierapiqa.moglilabs.com/util/getStateCity?pin=${pin}`);
 

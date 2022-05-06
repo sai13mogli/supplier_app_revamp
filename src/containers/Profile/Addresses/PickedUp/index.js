@@ -15,7 +15,7 @@ import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
 import { STATE_STATUS } from '../../../../redux/constants';
-import { fetchProfile } from '../../../../redux/actions/profile';
+import { saveAddressAction } from '../../../../redux/actions/profile';
 
 const PickedUp = props => {
   const profileData = useSelector(state => state.profileReducer.data || {});
@@ -46,9 +46,10 @@ const PickedUp = props => {
     dispatch(fetchDeleteAddresses(data));
   };
 
-  const onsubmit = () => {
+  const onSubmit = () => {
     props.navigation.navigate("Profile")
-    dispatch(fetchProfile())
+
+    dispatch(saveAddressAction())
   }
 
   const renderItems = ({ item }) => (
@@ -143,8 +144,8 @@ const PickedUp = props => {
             TextColor={colors.WhiteColor}
             TextFontSize={Dimension.font16}
             title={'Submit'}
-            onPress={onsubmit}
-          // onPress={() => dispatch(fetchProfile())}
+            onPress={onSubmit}
+
           />
 
         </View>

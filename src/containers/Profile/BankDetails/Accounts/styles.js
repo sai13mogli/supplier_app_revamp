@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   ContainerCss: {
     backgroundColor: Colors.WhiteColor,
     padding: Dimension.padding15,
-    marginTop:Dimension.margin25
+    marginTop: Dimension.margin25
   },
   addnewtxt: {
     fontSize: Dimension.font14,
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     padding: Dimension.padding15,
     borderTopColor: Colors.grayShade2,
     borderTopWidth: 1,
+    marginBottom: Dimension.margin50,
     backgroundColor: Colors.WhiteColor
   },
   submit: {

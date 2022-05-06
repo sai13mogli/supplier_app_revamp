@@ -41,6 +41,7 @@ const UploadInvoiceScreen = props => {
 
   const getTotalPrice = () => {
     let price = 0;
+
     price = totalPrice.reduce(function (sum, tax) {
       return sum + tax.price;
     }, 0);
@@ -115,7 +116,7 @@ const UploadInvoiceScreen = props => {
         quantity={item.quantity}
         selectedValue={(value) => setTaxPercentage(value)}
         UpdatedQuntity={(value) => setQuantity(value)}
-        UpdatedTotalPrice={(value) => { setTotalAmount(value), console.log("sds", value); }}
+        UpdatedTotalPrice={(value) => { setTotalAmount(String(value)), console.log("sds", value); }}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
@@ -170,7 +171,7 @@ const UploadInvoiceScreen = props => {
             ]}>
             Total Price -{' '}
             <Text style={styles.TitleBoldTxt}>
-              ₹{getTotalPrice(totalAmount)}
+              ₹{getTotalPrice()}
               {'   '} (Price Including Tax-
               <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
               <Text style={styles.TitleBoldTxt}> )</Text>
@@ -180,6 +181,8 @@ const UploadInvoiceScreen = props => {
       </>
     );
   };
+
+
 
   return (
     <View style={styles.outerView}>
