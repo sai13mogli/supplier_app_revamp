@@ -1150,7 +1150,14 @@ const DocumentsScreen = props => {
       } else {
         setSubmitLoader(false);
         setConfirmModal(false);
-        dispatch(fetchProfile());
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+
+        // dispatch(fetchProfile());
         props.navigation.goBack();
       }
     } catch (error) {
