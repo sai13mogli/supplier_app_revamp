@@ -46,6 +46,10 @@ const ProfileScreen = props => {
       STATE_STATUS.UNFETCHED,
   );
 
+  const businessData = useSelector(
+    state => ((state.profileReducer || {}).businessDetails || {}).data,
+  );
+
   const addressesStatus = useSelector(
     state =>
       ((state.profileReducer || {}).addressesDetails || {}).status ||
@@ -86,14 +90,15 @@ const ProfileScreen = props => {
 
   useEffect(() => {
     if (profileStatus !== STATE_STATUS.FETCHED) {
-      dispatch(fetchProfile());
       dispatch(fetchAddressDetails());
       dispatch(fetchBusinessDetails());
       dispatch(fetchBankDetails());
       dispatch(fetchTdsInfoDetails());
       dispatch(fetchCategoriesBrands());
       dispatch(fetchNotifications(0));
+      dispatch(fetchProfile());
     }
+    console.log('params hai', props.route.params);
   }, []);
 
   useEffect(() => {
@@ -107,10 +112,18 @@ const ProfileScreen = props => {
       setInitLoader(false);
       props.navigation.navigate(props.route.params.parentTab);
     }
-  }, [profileStatus]);
+  }, [profileStatus, profileStatus]);
 
   useEffect(() => {
+    console.log(
+      profileStatus == STATE_STATUS.FETCHED,
+      props.route,
+      props.route.params,
+      props.route.params.parentTab == 'BusinessDetails',
+      initLoader,
+    );
     if (
+      profileStatus == STATE_STATUS.FETCHED &&
       businessStatus == STATE_STATUS.FETCHED &&
       props.route &&
       props.route.params &&
@@ -120,10 +133,11 @@ const ProfileScreen = props => {
       setInitLoader(false);
       props.navigation.navigate(props.route.params.parentTab);
     }
-  }, [businessStatus]);
+  }, [businessStatus, profileStatus]);
 
   useEffect(() => {
     if (
+      profileStatus == STATE_STATUS.FETCHED &&
       addressesStatus == STATE_STATUS.FETCHED &&
       props.route &&
       props.route.params &&
@@ -133,10 +147,11 @@ const ProfileScreen = props => {
       setInitLoader(false);
       props.navigation.navigate(props.route.params.parentTab);
     }
-  }, [addressesStatus]);
+  }, [addressesStatus, profileStatus]);
 
   useEffect(() => {
     if (
+      profileStatus == STATE_STATUS.FETCHED &&
       bankStatus == STATE_STATUS.FETCHED &&
       props.route &&
       props.route.params &&
@@ -146,10 +161,11 @@ const ProfileScreen = props => {
       setInitLoader(false);
       props.navigation.navigate(props.route.params.parentTab);
     }
-  }, [bankStatus]);
+  }, [bankStatus, profileStatus]);
 
   useEffect(() => {
     if (
+      profileStatus == STATE_STATUS.FETCHED &&
       categoryBrandStatus == STATE_STATUS.FETCHED &&
       props.route &&
       props.route.params &&
@@ -159,7 +175,7 @@ const ProfileScreen = props => {
       setInitLoader(false);
       props.navigation.navigate(props.route.params.parentTab);
     }
-  }, [categoryBrandStatus]);
+  }, [categoryBrandStatus, profileStatus]);
 
   const isCompleted = progress => {
     return profileData.verificationStatus >= progress;

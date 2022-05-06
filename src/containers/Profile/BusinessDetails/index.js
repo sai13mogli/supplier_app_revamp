@@ -29,8 +29,9 @@ const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const BusinessDetailsScreen = props => {
   let interval = {};
   const businessDetails = useSelector(
-    state => state.profileReducer.businessDetails.data || {},
+    state => ((state.profileReducer || {}).businessDetails || {}).data || {},
   );
+
   const businessDetailsStatus = useSelector(
     state =>
       state.profileReducer.businessDetails.status || STATE_STATUS.FETCHING,
@@ -329,6 +330,7 @@ const BusinessDetailsScreen = props => {
   }, [businessDetailsStatus]);
 
   useEffect(() => {
+    console.log(businessDetails, 'businessdetails');
     if (props.route.params && props.route.params.disabled) {
       setPhoneEdit(false);
       setEmailEdit(false);
@@ -542,9 +544,9 @@ const BusinessDetailsScreen = props => {
             EDIT
           </Text> */}
           <CustomeIcon
-          name={'edit-box'}
-          color={colors.FontColor}
-          size={Dimension.font20}></CustomeIcon>
+            name={'edit-box'}
+            color={colors.FontColor}
+            size={Dimension.font20}></CustomeIcon>
         </TouchableOpacity>
       );
     } else if (phoneVerified) {
@@ -588,9 +590,9 @@ const BusinessDetailsScreen = props => {
             setUpdatePhoneOtpModal(true);
           }}>
           <CustomeIcon
-          name={'edit-box'}
-          color={colors.FontColor}
-          size={Dimension.font20}></CustomeIcon>
+            name={'edit-box'}
+            color={colors.FontColor}
+            size={Dimension.font20}></CustomeIcon>
         </TouchableOpacity>
       );
     } else if (emailVerified) {

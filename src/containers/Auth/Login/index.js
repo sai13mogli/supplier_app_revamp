@@ -203,14 +203,25 @@ const LoginScreen = props => {
       } else {
         setOtpModal(true);
       }
+    } else {
+      if (email && email.length && email.match(emailRegex)) {
+        Toast.show({
+          type: 'error',
+          text2: 'Please enter register mobile number',
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      }
     }
   };
 
   const loginViaOtp = () => {
-    if (email && email.length && email.match(phoneRegex) && email.length) {
+    if (email && email.length && email.match(phoneRegex)) {
+      return false;
+    } else if (email && email.length && email.match(emailRegex)) {
       return false;
     } else {
-      true;
+      return true;
     }
   };
 

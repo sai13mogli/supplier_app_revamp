@@ -11,6 +11,7 @@ import {
   BackHandler,
   Keyboard,
   Dimensions,
+  Linking,
 } from 'react-native';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
@@ -30,6 +31,7 @@ import {fetchProfile, setNavigation} from '../../redux/actions/profile';
 import Colors from '../../Theme/Colors';
 import {requestUserPermission} from '../../utils/firebasepushnotification';
 import messaging from '@react-native-firebase/messaging';
+import * as RootNavigation from '../../generic/navigator';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -170,6 +172,7 @@ const OrdersScreen = props => {
     ) {
       dispatch(setNavigation(false));
       setInitLoader(false);
+      console.log('lodu lalit!!');
       props.navigation.push('Profile');
     }
   }, [profileStatus]);
@@ -181,17 +184,17 @@ const OrdersScreen = props => {
       .then(async enabled => {
         if (enabled) {
           messaging().setBackgroundMessageHandler(async remoteMessage => {
-            handleOpenUrl(remoteMessage, true);
+            handleOpenUrl(remoteMessage, true, '');
           });
           //app is running in background
           messaging().onNotificationOpenedApp(remoteMessage => {
-            handleOpenUrl(remoteMessage, true);
+            handleOpenUrl(remoteMessage, true, '');
             // navigation.navigate(remoteMessage.data.type);
           });
 
           // app is in foreground
           messaging().onMessage(async remoteMessage => {
-            handleOpenUrl(remoteMessage, true);
+            handleOpenUrl(remoteMessage, true, '');
           });
 
           //app is in quit state
@@ -199,21 +202,57 @@ const OrdersScreen = props => {
             .getInitialNotification()
             .then(remoteMessage => {
               if (remoteMessage) {
-                handleOpenUrl(remoteMessage, true);
+                handleOpenUrl(remoteMessage, true, '');
               }
             });
         }
       });
+
+    try {
+      let deepLinkData = await AsyncStorage.getItem('@deepLinkUrl');
+      deepLinkData = JSON.parse(deepLinkData);
+      if (deepLinkData) {
+        const {screen, obj} = deepLinkData;
+        if (screen) {
+          handleOpenUrl(obj, false, screen);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleOpenUrl = (event, fromNotification) => {
+  const handleOpenUrl = async (event, fromNotification, deepLinkScreen) => {
     let obj = {};
     let screen = '';
-    if (event && event.data) {
+    if (event && event.data && fromNotification) {
       obj = JSON.parse(event.data.params) || {};
       screen = event.data.screen;
-      console.log(screen, obj, 'dfewfwfwew', event, fromNotification);
       if (screen == 'Orders') {
+        if (obj.parentTab) {
+          setSelectedType(obj.parentTab);
+        }
+        if (obj.childTab) {
+          setSelectedTab(obj.childTab);
+          fetchOrdersFunc(0, '', obj.childTab, shipmentType, {
+            pickupFromDate: '',
+            pickupToDate: '',
+            poFromDate: '',
+            poToDate: '',
+            orderType: [],
+            deliveryType: [],
+            orderRefs: [],
+          });
+          // fetchTabCountFunc(obj.childTab, shipmentType);
+        }
+      } else {
+        props.navigation.push(screen, {
+          ...obj,
+        });
+      }
+    } else {
+      obj = event;
+      if (deepLinkScreen == 'Orders') {
         if (obj.parentTab) {
           setSelectedType(obj.parentTab);
         }
@@ -231,10 +270,10 @@ const OrdersScreen = props => {
           fetchTabCountFunc(obj.childTab, shipmentType);
         }
       } else {
-        props.navigation.push(screen, {
-          ...obj,
-        });
+        console.log(deepLinkScreen, obj, 'hehehe');
+        props.navigation.push(deepLinkScreen, {...obj});
       }
+      await AsyncStorage.removeItem('@deepLinkUrl');
     }
   };
 
@@ -363,6 +402,7 @@ const OrdersScreen = props => {
     fetchTabCountFunc(val.key, shipmentType);
     setLoadingTabs(true);
     setSelectAll(false);
+    resetFilters(true);
   };
 
   //selectedFilter
@@ -704,22 +744,24 @@ const OrdersScreen = props => {
   };
 
   //reset filters api hit
-  const resetFilters = () => {
+  const resetFilters = fromChangeTab => {
     setIsFilterApplied(false);
     setPickupFromDate('');
     setPickupToDate('');
     setPoFromDate('');
     setPoToDate('');
     setActiveFilter('orderRefs');
-    fetchOrdersFunc(0, '', selectedTab, shipmentType, {
-      pickupFromDate: '',
-      pickupToDate: '',
-      poFromDate: '',
-      poToDate: '',
-      orderType: [],
-      deliveryType: [],
-      orderRefs: [],
-    });
+    if (!fromChangeTab) {
+      fetchOrdersFunc(0, '', selectedTab, shipmentType, {
+        pickupFromDate: '',
+        pickupToDate: '',
+        poFromDate: '',
+        poToDate: '',
+        orderType: [],
+        deliveryType: [],
+        orderRefs: [],
+      });
+    }
     setAppliedFilter({});
     setOrdersFiltersModal(false);
   };
@@ -877,7 +919,7 @@ const OrdersScreen = props => {
             initialNumToRender={5}
           />
 
-          {ordersfiltersModal && (
+          {/* {ordersfiltersModal && (
             <OrdersFilterModal
               ordersfiltersModal={ordersfiltersModal}
               setOrdersFiltersModal={setOrdersFiltersModal}
@@ -900,7 +942,7 @@ const OrdersScreen = props => {
               setPoToDate={setPoToDate}
               resetFilters={resetFilters}
             />
-          )}
+          )} */}
           <View style={styles.footerWrap}>
             <View style={styles.footerSearchWrap}>
               <View style={styles.searchWrapper}>
@@ -929,22 +971,7 @@ const OrdersScreen = props => {
                   name={'search'}
                   style={styles.seacrhIcon}></CustomeIcon>
               </View>
-              {/* <TextInput
-              blurOnSubmit={true}
-              style={{color: '#000'}}
-              placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
-              placeholderTextColor={'#888'}
-              selectionColor={'#888'}
-              returnKeyType={'search'}
-              onChangeText={onSearchText}
-              onFocus={() => console.log('onFocus!!')}
-              value={inputValue}
-              onSubmitEditing={event => {
-                if (inputValue && inputValue.length > 1) {
-                  onSubmitSearch();
-                }
-              }}
-            /> */}
+
               {!isKeyboardVisible ? (
                 <View style={styles.filterBtnWrap}>
                   <TouchableOpacity
@@ -1065,4 +1092,4 @@ const OrdersScreen = props => {
   );
 };
 
-export default OrdersScreen;
+export default React.memo(OrdersScreen);

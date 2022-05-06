@@ -370,7 +370,7 @@ const DocumentsScreen = props => {
     try {
       let res = await uploadDocumentService(data);
       let {resp} = res;
-      if (resp.error) {
+      if (!resp.success) {
         setErrorData();
       } else {
         setDocument(res);
@@ -615,7 +615,7 @@ const DocumentsScreen = props => {
     }
   };
 
-  const setErrorData = () => {
+  const setErrorData = msg => {
     switch (fId) {
       case 'pancard':
         setPancard({
@@ -681,40 +681,44 @@ const DocumentsScreen = props => {
 
   //upload document logic
   const uploadDocumentService = async data => {
-    // setLoader(true);
-    let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-    const url = `${BASE_URL}profile/file/upload`;
-    const response = await RNFetchBlob.fetch(
-      'POST',
-      url,
-      {
-        'Content-Type': 'multipart/form-data',
-        Authorization: token,
-      },
-      [
+    try {
+      console.log('Uploading......');
+      let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+      const url = `${BASE_URL}profile/file/upload`;
+      const response = await RNFetchBlob.fetch(
+        'POST',
+        url,
         {
-          name: 'key',
-          data: data.key,
+          'Content-Type': 'multipart/form-data',
+          Authorization: token,
         },
-        {
-          name: 'code',
-          data: '',
-        },
-        {
-          name: 'file',
-          filename: data.name,
-          type: data.type,
-          data: RNFetchBlob.wrap(data.uri),
-        },
-      ],
-    );
+        [
+          {
+            name: 'key',
+            data: data.key,
+          },
+          {
+            name: 'code',
+            data: '',
+          },
+          {
+            name: 'file',
+            filename: data.name,
+            type: data.type,
+            data: RNFetchBlob.wrap(data.uri),
+          },
+        ],
+      );
 
-    const res = await response.json();
-    // setLoader(false);
-    return {
-      resp: res,
-      fileData: data,
-    };
+      const res = await response.json();
+      console.log('Uploading......', res);
+      return {
+        resp: res,
+        fileData: data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //openSelection
@@ -1076,19 +1080,19 @@ const DocumentsScreen = props => {
       <Text style={styles.Notetxt}>NOTE :</Text>
       {signature && signature.title && signature.value ? (
         <>
-         <View style={styles.rowCss}>
-          <View style={styles.bullet}></View>
-          <Text style={styles.NoteData}>
-          Please ensure that the image of the signature is
-          of an authorised signatory (as endorsed by the tax authorities).
-          </Text>
+          <View style={styles.rowCss}>
+            <View style={styles.bullet}></View>
+            <Text style={styles.NoteData}>
+              Please ensure that the image of the signature is of an authorised
+              signatory (as endorsed by the tax authorities).
+            </Text>
           </View>
           <View style={styles.rowCss}>
-          <View style={styles.bullet}></View>
-        <Text style={styles.NoteData}>
-          Sign on a white background,scan the signature and upload.
-        </Text>
-        </View>
+            <View style={styles.bullet}></View>
+            <Text style={styles.NoteData}>
+              Sign on a white background,scan the signature and upload.
+            </Text>
+          </View>
         </>
       ) : (
         noteArr.map((_, i) => (
@@ -1184,12 +1188,12 @@ const DocumentsScreen = props => {
     if (!uploadDisabled) {
       return (
         <>
-        <Checkbox
-          checked={isSelected}
-          onPress={() => setSelection(!isSelected)}
-          title={'By registering you agree to our'}
-        />
-        <Text style={styles.termsText}>Terms & Condition</Text>
+          <Checkbox
+            checked={isSelected}
+            onPress={() => setSelection(!isSelected)}
+            title={'By registering you agree to our'}
+          />
+          <Text style={styles.termsText}>Terms & Condition</Text>
         </>
       );
     } else {

@@ -14,6 +14,7 @@ import codePush from 'react-native-code-push';
 import Toast from 'react-native-toast-message';
 import Modal from 'react-native-modal';
 import * as RootNavigation from './src/generic/navigator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -47,17 +48,17 @@ class App extends React.Component {
         this.getLinkingUrl.bind(this),
       );
     }
-    setTimeout(() => {
-      Linking.getInitialURL()
-        .then(url => {
-          if (url) {
-            this.handleOpenUrl({url: url}, false);
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }, 1500);
+
+    Linking.getInitialURL()
+      .then(url => {
+        if (url) {
+          this.handleOpenUrl({url: url}, false);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
     return urlListener;
   }
 
@@ -72,6 +73,7 @@ class App extends React.Component {
   }
 
   handleOpenUrl(event, fromNotification) {
+    console.log('handle hora hai!!');
     let obj = {};
     let screen = '';
     if (!fromNotification) {
@@ -99,11 +101,22 @@ class App extends React.Component {
                 '',
               );
             }
-            setTimeout(() => {
-              RootNavigation.push(screen, {
-                ...obj,
-              });
-            });
+            // if (screen == 'Orders') {
+            console.log(screen, obj, 'app.js');
+            AsyncStorage.setItem(
+              '@deepLinkUrl',
+              JSON.stringify({
+                screen,
+                obj,
+              }),
+            );
+            // } else {
+            //   setTimeout(() => {
+            //     RootNavigation.push(screen, {
+            //       ...obj,
+            //     });
+            //   });
+            // }
           }
         });
       }
