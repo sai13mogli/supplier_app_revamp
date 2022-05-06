@@ -182,10 +182,7 @@ const UploadInvoiceScreen = props => {
     );
   };
 
-  useEffect(() => {
-    console.log("toatla", totalAmount);
 
-  })
 
   return (
     <View style={styles.outerView}>

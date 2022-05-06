@@ -8,11 +8,14 @@ import { useNavigation } from '@react-navigation/native'
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import { fetchUpdateTDSDetails } from '../../../../redux/actions/profile';
 import styles from './styles';
-import DotCheckbox from '../../../../component/common/Checkbox';
+import CustomButton from '../../../../component/common/Button';
 import TDSEditModal from '../../../../component/common/TDSEditModal';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { saveBankDetailAction } from '../../../../redux/actions/profile';
+import { fetchProfile } from '../../../../redux/actions/profile';
 
 const TdsDetails = (props) => {
+  const profileData = useSelector(state => state.profileReducer.data || {});
   const tdsInfoDetails = useSelector(
     state => state.profileReducer.tdsInfoDetails.data || [],
   );
@@ -138,9 +141,15 @@ const TdsDetails = (props) => {
 
   const onPressNext = (value) => {
     setModalVisible(false)
-    console.log("logger====>", value);
     dispatch(fetchUpdateTDSDetails(value));
   };
+
+  const onSubmit = () => {
+    props.navigation.navigate("Profile")
+    dispatch(fetchProfile());
+
+    // dispatch(saveBankDetailAction())
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -154,12 +163,23 @@ const TdsDetails = (props) => {
           renderContent={_renderContent}
           onChange={_updateSections}
           touchableComponent={TouchableOpacity}
-          //style={{borderWidth:1,borderColor:"#000"}}
           renderFooter={() => (
             <View style={{ height: 1, backgroundColor: colors.BoxBorderColor, marginVertical: Dimension.padding10 }}></View>
           )}
         />
       </ScrollView>
+      {profileData && profileData.verificationStatus !== 15 ? (
+        <View style={styles.bottombtnWrap}>
+          <CustomButton
+            buttonColor={colors.BrandColor}
+            borderColor={colors.BrandColor}
+            TextColor={colors.WhiteColor}
+            TextFontSize={Dimension.font16}
+            title={'Next'}
+            onPress={onSubmit}
+          />
+        </View>
+      ) : null}
       {modalVisible && <TDSEditModal
         header={section.financialyear}
         panNumber={section.panNumber}
@@ -173,7 +193,6 @@ const TdsDetails = (props) => {
         visible={modalVisible}
         transparent={true}
         onPressNext={onPressNext}
-        // onClose={() => setModalVisible(true)}
         onPress={() => { setModalVisible(!modalVisible) }}
       />}
     </View>

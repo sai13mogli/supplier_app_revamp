@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {Text, View, FlatList, ScrollView, TouchableOpacity} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import colors from '../../../../Theme/Colors';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, } from 'react-redux';
 import Dimension from '../../../../Theme/Dimension';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
+import CustomButton from '../../../../component/common/Button';
 import styles from './styles';
 
 const Accounts = props => {
@@ -13,7 +14,7 @@ const Accounts = props => {
   const profileData = useSelector(state => state.profileReducer.data || {});
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <ScrollView style={styles.ContainerCss}>
         <View style={styles.pendingBox}>
           <View style={styles.pendingWrap}>
@@ -27,7 +28,7 @@ const Accounts = props => {
                     editID: bankDetails.id,
                   });
                 }}>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <CustomeIcon
                     name={'edit-box'}
                     size={Dimension.font16}
@@ -64,19 +65,32 @@ const Accounts = props => {
                 {bankDetails.accountType == 1
                   ? 'Current'
                   : bankDetails.accountType == 2
-                  ? 'Saving'
-                  : bankDetails.accountType == 3
-                  ? 'Joint'
-                  : ''}
+                    ? 'Saving'
+                    : bankDetails.accountType == 3
+                      ? 'Joint'
+                      : ''}
               </Text>
               <Text style={styles.Detailtxt}>{bankDetails.ifscCode}</Text>
               <Text style={styles.Detailtxt}>{bankDetails.bankName}</Text>
               <Text style={styles.Detailtxt}>{bankDetails.branch}</Text>
-              <Text style={styles.Detailtxt}>{/* {bankDetails.bra} */}</Text>
+              <Text style={styles.Detailtxt}>{/* {bankDetails.} */}</Text>
             </View>
           </View>
         </View>
       </ScrollView>
+      {profileData && profileData.verificationStatus !== 15 ? (
+        <View style={styles.bottombtnWrap}>
+          <CustomButton
+            buttonColor={colors.BrandColor}
+            borderColor={colors.BrandColor}
+            TextColor={colors.WhiteColor}
+            TextFontSize={Dimension.font16}
+            title={'Next'}
+            onPress={() => props.onItemPress(1)}
+          />
+        </View>
+      ) : null
+      }
     </View>
   );
 };

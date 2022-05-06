@@ -24,11 +24,22 @@ export const failedFetchProfile = error => {
 
 
 export const saveAddressAction = () => {
-  console.log('====================================');
-  console.log("Calling");
-  console.log('====================================');
   return {
     type: PROFILE_ACTIONS.FETCH_SAVE_ADDRESS,
+
+  };
+}
+
+export const saveBankDetailAction = () => {
+  return {
+    type: PROFILE_ACTIONS.FETCH_SAVE_BANK_DETAILS,
+
+  };
+}
+
+export const saveBankDetailFailed = () => {
+  return {
+    type: PROFILE_ACTIONS.FAILED_FETCH_SAVE_BANK_DETAILS,
 
   };
 }

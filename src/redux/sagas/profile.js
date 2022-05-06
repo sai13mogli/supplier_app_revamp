@@ -15,9 +15,9 @@ import {
   setBankDetails,
   setDeleteAddress,
   setUpdateTDSDetails,
-  setSaveAddress
+  setSaveAddress,
+  setSaveBankDetail
 } from '../../services/profile';
-// actions
 import {
   fetchAddressDetails,
   fetchTdsInfoDetails,
@@ -44,9 +44,9 @@ import {
   fetchProfile,
   fetchBusinessDetails,
   saveAddressFailed,
+  saveBankDetailFailed,
 } from '../actions/profile';
 import * as RootNavigation from '../../routes/RootNavigation';
-import { setShipmentType } from '../actions/orders';
 
 const shipmentModes = {
   2: 'ONESHIP',
@@ -64,15 +64,6 @@ function* fetchBusinessDetail() {
         yield put(failedFetchBusinessDetails(data.data.errors));
       } else {
         yield put(fetchedBusinessDetails(data.data));
-        // if (data.data && data.data.businessNature) {
-        //   yield put(setShipmentType(shipmentModes[data.data.businessNature]));
-        //   yield call(
-        //     AsyncStorage.setItem(
-        //       'onlineShipmentMode',
-        //       shipmentModes[data.data.businessNature],
-        //     ),
-        //   );
-        // }
       }
     }
   } catch (error) {
@@ -198,12 +189,8 @@ function* fetchUpdateBillingAddress({ payload: { formData } }) {
 }
 
 function* saveAddressAction() {
-  console.log('====================================');
-  console.log(" ye call ho rha hai");
-  console.log('====================================');
   try {
     const { data, error } = yield call(setSaveAddress);
-    console.log("Err", error);
     if (error) {
       yield put(saveAddressFailed(error));
     } else {
@@ -211,13 +198,30 @@ function* saveAddressAction() {
         yield put(saveAddressFailed(data.data.errors));
       } else {
         yield put(fetchProfile());
-
       }
     }
   } catch (error) {
     yield put(saveAddressFailed(error));
   }
 }
+
+
+// function* saveBankDetailAction() {
+//   try {
+//     const { data, error } = yield call(setSaveBankDetail);
+//     if (error) {
+//       yield put(saveBankDetailFailed(error));
+//     } else {
+//       if (data.status == 400 || data.data.errors) {
+//         yield put(saveBankDetailFailed(data.data.errors));
+//       } else {
+//         yield put(fetchProfile());
+//       }
+//     }
+//   } catch (error) {
+//     yield put(saveBankDetailFailed(error));
+//   }
+// }
 
 function* fetchBankDetails() {
   try {
@@ -271,4 +275,8 @@ export default fork(function* () {
     PROFILE_ACTIONS.FETCH_SAVE_ADDRESS,
     saveAddressAction,
   );
+  // yield takeEvery(
+  //   PROFILE_ACTIONS.FETCH_SAVE_BANK_DETAILS,
+  //   saveBankDetailAction,
+  // );
 });
