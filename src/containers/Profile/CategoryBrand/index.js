@@ -1204,11 +1204,11 @@ const CategoryBrandScreen = props => {
           <ActivityIndicator
             size={'small'}
             color={'white'}
-            style={{marginRight: 4}}
+            style={{ marginRight: 4 }}
           />
         ) : isPDF ? (
           <PDFView
-            style={{flex: 1}}
+            style={{ flex: 1 }}
             onError={error => console.log('onError', error)}
             onLoad={() => console.log('PDF rendered from base 64 data')}
             resource={`${imageUrl}`}
@@ -1216,8 +1216,8 @@ const CategoryBrandScreen = props => {
           />
         ) : (
           <Image
-            source={{uri: imageUrl}}
-            style={{height: '100%', width: '100%', flex: 1}}
+            source={{ uri: imageUrl }}
+            style={{ height: '100%', width: '100%', flex: 1 }}
           />
         )}
       </Modal>

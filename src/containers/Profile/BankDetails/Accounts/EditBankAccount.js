@@ -253,7 +253,6 @@ const EditBankAccount = props => {
                 dispatch(fetchUpdateBankDetails(data));
 
             }
-
         } else {
             onHolderNameBlur();
             onAccountNumberBlur();
@@ -264,7 +263,6 @@ const EditBankAccount = props => {
         }
     };
 
-    //hhh
     return (
         <>
             <Header

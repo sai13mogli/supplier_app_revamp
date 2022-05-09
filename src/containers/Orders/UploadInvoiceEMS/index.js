@@ -119,7 +119,7 @@ const UploadInvoiceScreen = props => {
         quantity={item.quantity}
         selectedValue={(value) => setTaxPercentage(value)}
         UpdatedQuntity={(value) => setQuantity(value)}
-        UpdatedTotalPrice={(value) => { setTotalAmount(String(value)), console.log("sds", value) }}
+        UpdatedTotalPrice={(value) => { setTotalAmount(String(value)) }}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
@@ -152,12 +152,10 @@ const UploadInvoiceScreen = props => {
 
   const renderOrderHeaderDetail = () => {
 
-
-
     let arrSum = totalPrice.length > 0 ? totalPrice.reduce(function (sum, tax) {
       return sum + tax.price;
     }, 0) : 0;
-    console.log("Invoice===>", arrSum);
+
     return (
       <>
 

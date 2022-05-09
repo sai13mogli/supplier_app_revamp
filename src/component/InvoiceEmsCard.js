@@ -10,6 +10,7 @@ import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
 import PickerDropDown from '../component/common/PickerDropDown';
+import PickerMenu from '../component/common/PickerMenu';
 import { OrderedMap } from 'immutable';
 import FloatingLabelInputField from '../component/common/FloatingInput';
 
@@ -24,7 +25,7 @@ const InvoiceCard = props => {
     bulkItemIds,
   } = props;
 
-
+  const [taxPercentageLabel, setTaxPercentageLabel] = useState(props?.taxPercentage);
   const [taxPercentage, setTaxPercentage] = useState(props?.taxPercentage);
   const [hsnError, setHsnError] = useState(false);
   const [hsn, setHsn] = useState(props?.hsn);
@@ -64,12 +65,13 @@ const InvoiceCard = props => {
       title: 'HSN Tax%',
       isImp: false,
       errorMessage: 'Enter valid hsn',
-      onValueChange: text => calculateHsn(text),
-      component: PickerDropDown,
+      onValueChange: (text, label) => calculateHsn(text, label),
+      component: PickerMenu,
       fromUploadInvoive: true,
       enabled: true,
+      selectedValue: taxPercentageLabel,
       value: taxPercentage,
-      items: [
+      options: [
         {
           label: '0.00',
           value: 0.00,
@@ -107,6 +109,8 @@ const InvoiceCard = props => {
 
   });
 
+
+
   const calculatePrice = text => {
     setQuantity(text);
     props.UpdatedQuntity(text)
@@ -117,9 +121,10 @@ const InvoiceCard = props => {
     props.UpdatedTotalPrice(percentage)
   };
 
-  const calculateHsn = text => {
+  const calculateHsn = (text, label) => {
     props.selectedValue(text)
     setTaxPercentage(text)
+    setTaxPercentageLabel(label)
     const { transferPrice } = props;
     let Price = transferPrice * quantity;
     let percentage = (Price / 100) * text + quantity * transferPrice;
@@ -180,7 +185,7 @@ const InvoiceCard = props => {
 
             }}>
               {FORM_FIELDS.map((field, fieldKey) => (
-                <View style={[fieldKey == "hsn_tax" ? { flex: 0.4, marginRight: Dimension.margin10 } : { flex: 0.3, marginRight: Dimension.margin15, }]}>
+                <View style={[fieldKey == "hsn_tax" ? { flex: 0.4, marginRight: Dimension.margin10 } : { flex: 0.4, marginRight: Dimension.margin8, }]}>
                   <field.component
                     {...field}
                     key={fieldKey}
