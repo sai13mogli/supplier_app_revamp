@@ -7,26 +7,26 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
-import { OrderedMap } from 'immutable';
+import {OrderedMap} from 'immutable';
 import MultiSelectInput from '../../../component/common/MultiSelectInput';
 import Header from '../../../component/common/Header';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import styles from './style';
 import CustomeIcon from '../../../component/common/CustomeIcon';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import DropDown from '../../../component/common/DropDown';
 import FileUpload from '../../../component/common/FileUpload';
 import CustomeDatePicker from '../../../component/common/Datepicker';
 import Modal from 'react-native-modal';
 import CustomButton from '../../../component/common/Button';
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BASE_URL, STATE_STATUS } from '../../../redux/constants/index';
+import {BASE_URL, STATE_STATUS} from '../../../redux/constants/index';
 import {
   setSelectedCategories,
   updateBrandData,
@@ -37,8 +37,8 @@ import {
   addOrUpdateCategoryAndBrand,
   deleteBrand,
 } from '../../../services/categorybrand';
-import { getAllCategories } from '../../../services/auth';
-import { fetchProfile } from '../../../redux/actions/profile';
+import {getAllCategories} from '../../../services/auth';
+import {fetchProfile} from '../../../redux/actions/profile';
 import PickerDropDown from '../../../component/common/PickerDropDown';
 import PDFView from 'react-native-view-pdf';
 import PickerMenu from '../../../component/common/PickerMenu';
@@ -259,12 +259,12 @@ const CategoryBrandScreen = props => {
   }, [userCategories]);
 
   const filterSelectedArr = async () => {
-    const { data } = await getAllCategories();
+    const {data} = await getAllCategories();
     let arr = [];
     (data.data || []).forEach(ele => {
       (userCategories || []).forEach(e => {
         if (ele.categoryCode == e) {
-          arr.push({ categoryCode: e, categoryName: ele.categoryName });
+          arr.push({categoryCode: e, categoryName: ele.categoryName});
         }
       });
     });
@@ -280,7 +280,7 @@ const CategoryBrandScreen = props => {
 
   const uploadDocu = async data => {
     let res = await uploadDocumentService(data);
-    let { resp } = res;
+    let {resp} = res;
 
     if (resp.error) {
       setErrorData();
@@ -325,7 +325,7 @@ const CategoryBrandScreen = props => {
     };
   };
 
-  const setDocument = ({ fileData, resp }) => {
+  const setDocument = ({fileData, resp}) => {
     setBrandCertificate({
       ...brandCertificate,
       title: fileData && fileData.name,
@@ -472,6 +472,12 @@ const CategoryBrandScreen = props => {
     }
   };
 
+  console.log(
+    natureOfBusiness,
+    natureofBusinessLabel,
+    'nature of business hai boss!!',
+  );
+
   const onSubmit = raiseRequest => {
     let currBrand = (userBrands || []).find(_ => _.brandCode == brand.code);
     if (currBrand) {
@@ -527,7 +533,27 @@ const CategoryBrandScreen = props => {
     setBrandUrl(brand.brandListingUrl);
     setIsRaiseRequest(brand.isRaiseRequest);
     setIsDeletedKey(brand.isDeleted);
+    getNatureOfBusiness(parseInt(brand.businessNature) || 1);
     setModalVisible(true);
+  };
+
+  const getNatureOfBusiness = nb => {
+    switch (nb) {
+      case 1:
+        setNatureofBusinessLabel('Trader');
+        break;
+      case 2:
+        setNatureofBusinessLabel('Manufacturer');
+      case 3:
+        setNatureofBusinessLabel('Authorised Dealer');
+      case 4:
+        setNatureofBusinessLabel('Service');
+      case 5:
+        setNatureofBusinessLabel('Export');
+
+      default:
+        break;
+    }
   };
 
   const checkCommonValidation = () => {
@@ -619,7 +645,7 @@ const CategoryBrandScreen = props => {
         categoryCode: [...categoryIds],
         brandList: [...mutatebrands],
       };
-      const { data } = await addOrUpdateCategoryAndBrand(payloadObj);
+      const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
       if (data && data.success) {
         setNextLoader(false);
         dispatch(fetchProfile());
@@ -673,8 +699,8 @@ const CategoryBrandScreen = props => {
         supplierId: currentBrand.supplierId,
       };
       setDeleteLoader(true);
-      let payload = [{ ...payloadObj }];
-      const { data } = await deleteBrand(payload);
+      let payload = [{...payloadObj}];
+      const {data} = await deleteBrand(payload);
       if (data && data.success) {
         setDeleteLoader(false);
         setIsVisible(false);
@@ -687,7 +713,7 @@ const CategoryBrandScreen = props => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Header
         showBack
         showBell
@@ -720,12 +746,12 @@ const CategoryBrandScreen = props => {
                     <TouchableOpacity
                       style={styles.BrandWrap}
                       onPress={() => openModal(_)}>
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Brand Name</Text>
                         <Text style={styles.brandNameTxt}>{_.brandName}</Text>
                       </View>
 
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Status</Text>
                         {_.isDeleted == '0' ? (
                           <Text style={styles.ApprovedStatus}>Approved</Text>
@@ -757,7 +783,7 @@ const CategoryBrandScreen = props => {
                           color={colors.FontColor}></CustomeIcon>
                       </TouchableOpacity>
 
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         {_.isDeleted == '4' && _.localbrand ? (
                           <TouchableOpacity
                             onPress={() => openModal(_)}
@@ -810,14 +836,14 @@ const CategoryBrandScreen = props => {
                     <TouchableOpacity
                       style={styles.BrandWrap}
                       onPress={() => openModal(_)}>
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Brand Name</Text>
                         <Text style={styles.brandNameTxt}>
                           {_.name || _.brandName}
                         </Text>
                       </View>
 
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         <Text style={styles.brandTitleTxt}>Status</Text>
 
                         <Text style={styles.pendingStatus}>
@@ -846,10 +872,10 @@ const CategoryBrandScreen = props => {
                           color={colors.FontColor}></CustomeIcon>
                       </TouchableOpacity>
 
-                      <View style={{ flex: 1 }}>
+                      <View style={{flex: 1}}>
                         {_.isDeleted == '2' &&
-                          _.isRaiseRequest == 'true' &&
-                          _.localbrand ? (
+                        _.isRaiseRequest == 'true' &&
+                        _.localbrand ? (
                           <TouchableOpacity
                             onPress={() => openModal(_)}
                             style={styles.fillBtn}>
@@ -883,7 +909,7 @@ const CategoryBrandScreen = props => {
               // animating={true}
               size={'large'}
               color={'red'}
-              style={{ alignSelf: 'center' }}
+              style={{alignSelf: 'center'}}
             />
           </View>
         )}
@@ -905,7 +931,7 @@ const CategoryBrandScreen = props => {
         onBackdropPress={() => {
           setModalVisible(false);
         }}
-        style={{ padding: 0, margin: 0 }}>
+        style={{padding: 0, margin: 0}}>
         <View style={styles.modalContainer}>
           <View style={styles.TopWrap}>
             <View style={styles.topbdr}></View>
@@ -950,8 +976,8 @@ const CategoryBrandScreen = props => {
                   natureOfBusiness == 3
                     ? !checkCommonValidation()
                     : natureOfBusiness == 2
-                      ? !checkBusinessNatureValidation()
-                      : !checkValidation()
+                    ? !checkBusinessNatureValidation()
+                    : !checkValidation()
                 }
                 onPress={() => onSubmit(false)}
               />
@@ -980,8 +1006,8 @@ const CategoryBrandScreen = props => {
                   natureOfBusiness == 3
                     ? !checkCommonValidationReqBrand()
                     : natureOfBusiness == 2
-                      ? !checkBusinessNatureReqBrandValidation()
-                      : !checkValidationReqBrand()
+                    ? !checkBusinessNatureReqBrandValidation()
+                    : !checkValidationReqBrand()
                 }
                 onPress={() => onSubmit(true)}
               />
@@ -1007,7 +1033,7 @@ const CategoryBrandScreen = props => {
         onBackdropPress={() => {
           setModalVisible(false);
         }}
-        style={{ padding: 0, margin: 0 }}>
+        style={{padding: 0, margin: 0}}>
         <View style={styles.modalContainer}>
           <View style={styles.TopWrap}>
             <View style={styles.topbdr}></View>
@@ -1052,8 +1078,8 @@ const CategoryBrandScreen = props => {
                   natureOfBusiness == 3
                     ? !checkCommonValidation()
                     : natureOfBusiness == 2
-                      ? !checkBusinessNatureValidation()
-                      : !checkValidation()
+                    ? !checkBusinessNatureValidation()
+                    : !checkValidation()
                 }
                 onPress={() => onSubmit(false)}
               />
@@ -1082,8 +1108,8 @@ const CategoryBrandScreen = props => {
                   natureOfBusiness == 3
                     ? !checkCommonValidationReqBrand()
                     : natureOfBusiness == 2
-                      ? !checkBusinessNatureReqBrandValidation()
-                      : !checkValidationReqBrand()
+                    ? !checkBusinessNatureReqBrandValidation()
+                    : !checkValidationReqBrand()
                 }
                 onPress={() => onSubmit(true)}
               />
@@ -1109,7 +1135,7 @@ const CategoryBrandScreen = props => {
         onBackdropPress={() => {
           setIsVisible(false);
         }}
-        style={{ padding: 0, margin: 0 }}>
+        style={{padding: 0, margin: 0}}>
         <View style={styles.modalContainer}>
           <View style={styles.TopWrap}>
             <View style={styles.topbdr}></View>
@@ -1121,32 +1147,26 @@ const CategoryBrandScreen = props => {
                 color={colors.FontColor}
                 onPress={() => setIsVisible(false)}></CustomeIcon>
             </View>
-            <Text style={styles.ModalHeading}>Are you sure you want to delete the brand?</Text>
+            <Text style={styles.ModalHeading}>
+              Are you sure you want to delete the brand?
+            </Text>
           </View>
           <View style={styles.DeleteBrndModalbottombtnWrap}>
-            <TouchableOpacity onPress={() => setIsVisible(false)} style={styles.cancelBtn}>
-              <Text
-                style={styles.CancelTxt}>
-                CANCEL
-              </Text>
-            </TouchableOpacity>
             <TouchableOpacity
-              style={styles.deleteBtn}
-              onPress={flushBrand}>
-              <Text
-                style={styles.deleteBtnTxt}>
-                CONFIRM
-              </Text>
+              onPress={() => setIsVisible(false)}
+              style={styles.cancelBtn}>
+              <Text style={styles.CancelTxt}>CANCEL</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.deleteBtn} onPress={flushBrand}>
+              <Text style={styles.deleteBtnTxt}>CONFIRM</Text>
               {deleteLoader && (
                 <ActivityIndicator
                   color={'#fff'}
-                  style={{ alignSelf: 'center' }}
+                  style={{alignSelf: 'center'}}
                 />
               )}
             </TouchableOpacity>
           </View>
-
-
         </View>
       </Modal>
 

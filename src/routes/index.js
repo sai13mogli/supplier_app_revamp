@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,6 +14,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Dimension from '../Theme/Dimension';
 import colors from '../Theme/Colors';
 import CustomeIcon from '../component/common/CustomeIcon';
+import analytics from '@react-native-firebase/analytics';
 import {
   APP_STACK_SCREENS,
   AUTH_STACK_SCREENS,
@@ -54,6 +55,7 @@ const navOptionHandler = () => ({
 
 const Routes = props => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const routeNameRef = useRef();
 
   const tabBarIcon = (focused, color, route, rest) => {
     let currentScreen = BOTTOM_TAB_SCREENS.find(
@@ -166,12 +168,29 @@ const Routes = props => {
       }}
     />
   );
+  // alert(currentRouteName);
 
   return (
     <NavigationContainer
       ref={navigationRef}
       linking={linking}
-      fallback={fallbackComponent}>
+      fallback={fallbackComponent}
+      onReady={() => {
+        routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+      }}
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef.current.getCurrentRoute().name;
+
+        if (previousRouteName !== currentRouteName) {
+         
+          await analytics().logScreenView({
+            screen_name: currentRouteName,
+            screen_class: currentRouteName,
+          });
+        }
+        routeNameRef.current = currentRouteName;
+      }}>
       <AppStack.Navigator
         screenOptions={{
           headerShown: false,

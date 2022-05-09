@@ -172,7 +172,6 @@ const OrdersScreen = props => {
     ) {
       dispatch(setNavigation(false));
       setInitLoader(false);
-      console.log('lodu lalit!!');
       props.navigation.push('Profile');
     }
   }, [profileStatus]);
