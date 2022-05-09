@@ -27,7 +27,7 @@ const InvoiceDetailScreen = props => {
         if (!isSelected) {
             Toast.show({
                 type: 'error',
-                text2: 'Kindly Accept Terms & Conditions',
+                text2: 'Please select the checkbox first to proceed.',
                 visibilityTime: 2000,
                 autoHide: true,
             });

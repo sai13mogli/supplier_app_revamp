@@ -24,7 +24,14 @@ const Accounts = props => {
                 });
               }}>
 
-              <Text style={styles.addbank}>Add bank account</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <CustomeIcon
+                  name={'add-circle'}
+                  size={Dimension.font18}
+                  color={colors.BrandColor}
+                />
+                <Text style={styles.addbank}>Add bank</Text>
+              </View>
 
 
             </TouchableOpacity>

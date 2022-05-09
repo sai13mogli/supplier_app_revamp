@@ -21,6 +21,7 @@ const TdsDetails = (props) => {
   const tdsInfoDetails = useSelector(
     state => state.profileReducer.tdsInfoDetails.data || [],
   );
+
   const [tdsInfoList, setTdsInfoList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [section, setSectionList] = useState([]);
@@ -167,7 +168,6 @@ const TdsDetails = (props) => {
       alert("bank detail not found")
     }
 
-    // dispatch(saveBankDetailAction())
   }
 
   return (
