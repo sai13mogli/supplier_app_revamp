@@ -29,9 +29,9 @@ const styles = StyleSheet.create({
   },
   addbank: {
     fontSize: Dimension.font14,
+    alignSelf: 'flex-end',
     color: Colors.BrandColor,
     fontFamily: Dimension.CustomSemiBoldFont,
-    marginLeft: Dimension.margin5,
     marginTop: Dimension.margin1,
     textTransform: "uppercase"
   },

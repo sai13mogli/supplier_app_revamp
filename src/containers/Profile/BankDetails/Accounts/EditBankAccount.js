@@ -253,7 +253,6 @@ const EditBankAccount = props => {
                 dispatch(fetchUpdateBankDetails(data));
 
             }
-
         } else {
             onHolderNameBlur();
             onAccountNumberBlur();
@@ -264,7 +263,6 @@ const EditBankAccount = props => {
         }
     };
 
-    //hhh
     return (
         <>
             <Header
@@ -274,12 +272,7 @@ const EditBankAccount = props => {
                 showText={editID ? 'Edit Bank Account' : 'Add Bank Account'}
                 rightIconName={'bank-details'}>
             </Header>
-            <View style={styles.TopWrap}>
-                <Text style={styles.Pageheading}>
-                    01 Account
-                </Text>
 
-            </View>
             <View style={{ flex: 1 }}>
                 <ScrollView style={styles.ContainerCss}>
                     {FORM_FIELDS.map((field, fieldKey) => (
