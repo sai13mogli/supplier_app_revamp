@@ -15,6 +15,7 @@ const UploadInvoiceScreen = props => {
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
   const [totalAmount, setTotalAmount] = useState([]);
   const [totalPrice, setTotalPrice] = useState([]);
+  const [headerSum, setHeaderSum] = useState([])
   const [hsn, sethsn] = useState(props?.route?.params?.hsn);
   const [taxPercentage, setTaxPercentage] = useState(
     props?.route?.params?.taxPercentage,
@@ -53,6 +54,8 @@ const UploadInvoiceScreen = props => {
 
 
   const selectItemId = (itemId, totalAmount) => {
+
+
     let currentItemIds = [...bulkItemIds];
     let currentPrice = [...totalPrice];
 
@@ -74,6 +77,7 @@ const UploadInvoiceScreen = props => {
       priceList.splice(index, 1);
       setTotalPrice(priceList);
       setTotalAmount(getTotalPrice());
+
       // var arr = [...podIdList]
       // const podindex = arr.findIndex(x => x == podId);
       // arr.splice(podindex, 1);
@@ -110,6 +114,16 @@ const UploadInvoiceScreen = props => {
     }
   };
 
+  const calculateHeaderSum = (value) => {
+    let arrSum = totalPrice.length > 0 ? totalPrice.reduce(function (sum, tax) {
+      return sum + tax.price;
+    }, 0) : 0;
+
+    let totalSum = arrSum + value
+
+    console.log("totalAmoubt", totalSum);
+  }
+
   const renderItem = ({ item }) => {
     return (
       <InvoiceEmsCard
@@ -119,7 +133,7 @@ const UploadInvoiceScreen = props => {
         quantity={item.quantity}
         selectedValue={(value) => setTaxPercentage(value)}
         UpdatedQuntity={(value) => setQuantity(value)}
-        UpdatedTotalPrice={(value) => { setTotalAmount(String(value)) }}
+        UpdatedTotalPrice={(value) => { calculateHeaderSum(value), console.log("skkds====>", value); }}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
@@ -152,9 +166,7 @@ const UploadInvoiceScreen = props => {
 
   const renderOrderHeaderDetail = () => {
 
-    // let arrSum = totalPrice.length > 0 ? totalPrice.reduce(function (sum, tax) {
-    //   return sum + tax.price;
-    // }, 0) : 0;
+
 
     return (
       <>
