@@ -85,7 +85,7 @@ const TdsDetails = (props) => {
             <Text style={styles.yesNotxt}>
               {section.lastYearItr == 1 ? 'Yes' :
                 section.lastYearItr == 0 ? "No" :
-                  section.lastYearItr == "" ? "-" : null}
+                  section.lastYearItr == 2 ? "-" : null}
             </Text>
           </View>
           <View style={styles.wrap}>
@@ -95,7 +95,7 @@ const TdsDetails = (props) => {
             <Text style={styles.yesNotxt}>
               {section.lastToLastYearItr == 1 ? 'Yes'
                 : section.lastToLastYearItr == 0 ? 'No'
-                  : section.lastToLastYearItr == "" ? "dccjsd"
+                  : section.lastToLastYearItr == 2 ? "-"
                     : null}
             </Text>
           </View>
@@ -107,7 +107,7 @@ const TdsDetails = (props) => {
             <Text style={styles.yesNotxt}>
               {section.lastYearTdsTcs == 1 ? 'Yes' :
                 section.lastYearTdsTcs == 0 ? 'No' :
-                  section.lastYearTdsTcs == "" ? "-"
+                  section.lastYearTdsTcs == 2 ? "-"
                     : null}
             </Text>
           </View>
@@ -119,7 +119,7 @@ const TdsDetails = (props) => {
             <Text style={styles.yesNotxt}>
               {section.lastToLastYearTdsTcs == 1 ? 'Yes'
                 : section.lastToLastYearTdsTcs == 0 ? 'No' :
-                  section.lastToLastYearTdsTcs == "" ? "-"
+                  section.lastToLastYearTdsTcs == 2 ? "-"
                     : null}
             </Text>
           </View>
@@ -131,7 +131,7 @@ const TdsDetails = (props) => {
             <Text style={styles.yesNotxt}>
               {section.financialYearTurnover == 1 ? 'Yes'
                 : section.financialYearTurnover == 0 ? 'No'
-                  : section.financialYearTurnover == "" ? "-"
+                  : section.financialYearTurnover == 2 ? "-"
                     : null}
             </Text>
           </View>

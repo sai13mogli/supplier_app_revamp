@@ -152,9 +152,9 @@ const UploadInvoiceScreen = props => {
 
   const renderOrderHeaderDetail = () => {
 
-    let arrSum = totalPrice.length > 0 ? totalPrice.reduce(function (sum, tax) {
-      return sum + tax.price;
-    }, 0) : 0;
+    // let arrSum = totalPrice.length > 0 ? totalPrice.reduce(function (sum, tax) {
+    //   return sum + tax.price;
+    // }, 0) : 0;
 
     return (
       <>
@@ -178,7 +178,7 @@ const UploadInvoiceScreen = props => {
             ]}>
             Total Price -{' '}
             <Text style={styles.TitleBoldTxt}>
-              ₹{arrSum}
+              ₹{getTotalPrice(totalAmount)}
               {'   '} (Price Including Tax-
               <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
               <Text style={styles.TitleBoldTxt}> )</Text>
