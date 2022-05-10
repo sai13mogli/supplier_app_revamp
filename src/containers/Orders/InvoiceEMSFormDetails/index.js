@@ -120,7 +120,7 @@ const InvoiceEMSFormDetailScreen = props => {
     invoiceDate: {
       title: 'Invoice Date',
       isImp: true,
-      maximumDate: new Date(),
+      maxdate: new Date(),
       label: 'Invoice Date',
       placeholder: 'Invoice Date',
       errorMessage: 'Enter valid Invoice date',
@@ -158,7 +158,7 @@ const InvoiceEMSFormDetailScreen = props => {
     ewayDate: {
       title: 'E-way Date',
       isImp: false,
-      maximumDate: new Date(),
+      maxdate: new Date(),
       label: 'E-way Date',
       placeholder: 'E-way Date',
       errorMessage: 'Enter valid e-way date',
@@ -533,14 +533,7 @@ const InvoiceEMSFormDetailScreen = props => {
       && uploadEwayBill.name
     ) {
       try {
-
         setLoading(true);
-        let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-        const url = `${BASE_URL}api/order/mapDropshipInvoice`;
-
-        // let totalInvoiceAmount =
-        //   invoiceAmount + (totalAmount + 7) ||
-        //   invoiceAmount + (totalAmount - 7);
         let payload = {
           supplierId: await AsyncStorage.getItem('userId'),
           invoiceNumber: invoiceNumber,
@@ -611,75 +604,8 @@ const InvoiceEMSFormDetailScreen = props => {
         }
 
         props.navigation.navigate('InvoiceDetail', { data: payload, invoiceFileData: invoiceFile, ewayFileData: ewayFile })
-
-        // const response = await RNFetchBlob.fetch(
-        //   'POST',
-        //   url,
-        //   {
-        //     'Content-Type': 'multipart/form-data',
-        //     Authorization: `${token}`,
-        //   },
-        //   ewayBillNumber ? [
-        //     {
-        //       name: 'dropshipInvoiceRequest',
-        //       data: JSON.stringify(payload),
-        //       type: 'application/json',
-        //     },
-        //     {
-        //       name: 'invoiceFile',
-        //       filename: uploadInvoice.name,
-        //       type: uploadInvoice.type,
-        //       data: RNFetchBlob.wrap(uploadInvoice.uri),
-        //     },
-        //     {
-        //       name: 'ewayBillFile',
-        //       filename: uploadEwayBill.name,
-        //       type: uploadEwayBill.type,
-        //       data: RNFetchBlob.wrap(uploadEwayBill.uri),
-        //     },
-        //   ] : [
-        //     {
-        //       name: 'dropshipInvoiceRequest',
-        //       data: JSON.stringify(payload),
-        //       type: 'application/json',
-        //     },
-        //     {
-        //       name: 'invoiceFile',
-        //       filename: uploadInvoice.name,
-        //       type: uploadInvoice.type,
-        //       data: RNFetchBlob.wrap(uploadInvoice.uri),
-        //     },
-        //   ],
-        // );
-        const res = await response.json();
-        console.log('Respose===>', response, res);
-        if (res.success) {
-          setLoading(false);
-          // dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
-          //   fetchTabCount({
-          //     supplierId: await AsyncStorage.getItem('userId'),
-          //     tabRef,
-          //     onlineShipmentMode,
-          //   }));
-          Toast.show({
-            type: 'success',
-            text2: res.message,
-            visibilityTime: 4000,
-            autoHide: true,
-          });
-          // props.navigation.navigate('Orders', {
-          //   selectedTab: 'UPLOAD_INVOICE',
-          // });
-        } else if (res.success == false) {
-          setLoading(false);
-          Toast.show({
-            type: 'error',
-            text2: res.message,
-            visibilityTime: 5000,
-            autoHide: true,
-          });
-        }
-      } catch (err) {
+      }
+      catch (err) {
         console.log("Erreor", err);
         setLoading(false);
       }
@@ -690,7 +616,6 @@ const InvoiceEMSFormDetailScreen = props => {
       onInvoiceAmountBlur();
       onUploadInvoiceBlur();
       // onEwayBillNumberBlur();
-
       if (ewayBillNumber) {
         onUploadEwayBlur();
         onEwayDateDateBlur();
