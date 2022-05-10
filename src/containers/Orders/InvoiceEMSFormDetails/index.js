@@ -625,6 +625,7 @@ const InvoiceEMSFormDetailScreen = props => {
 
   const onCancel = () => {
     props.navigation.goBack();
+    //props.navigation.navigate('InvoiceDetail')
   };
 
   return (

@@ -14,6 +14,7 @@ import Checkbox from '../../../component/common/Checkbox/index';
 import Header from '../../../component/common/Header';
 import { BASE_URL } from '../../../redux/constants';
 import Toast from 'react-native-toast-message';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
 const InvoiceDetailScreen = props => {
@@ -112,39 +113,66 @@ const InvoiceDetailScreen = props => {
                 showText={'Invoice Detail'}
                 rightIconName={'business-details'}></Header>
             <ScrollView style={styles.ContainerCss}>
-                <Text style={styles.modalText}>
-                    please go though below points to ensure quick invoice approval
+                <Text style={styles.boldTxt}>Please go through below points to ensure quick invoice approval:</Text>
+                <View style={styles.row}>
+                    <Text style={styles.numberWrap}>01</Text>
+                    <Text style={styles.modalText}>
+                Company name should be Mogli Labs (India) Pvt Ltd.
                 </Text>
-
+                </View>
+                
+                <View style={styles.row}>
+                    <Text style={styles.numberWrap}>02</Text>
                 <Text style={styles.modalText}>
-                    please go though below points to ensure quick invoice approval
+                Ensure that Moglix GSTIN is properly mentioned on the invoice.
                 </Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.numberWrap}>03</Text>
                 <Text style={styles.modalText}>
-                    please go though below points to ensure quick invoice approval
+                Mogli labs PAN on invoice is mandatory where “Total invoice amount” (incl. tax) is more than or equal to Rs. 2 Lacs
                 </Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.numberWrap}>04</Text>
                 <Text style={styles.modalText}>
-                    please go though below points to ensure quick invoice approval
+                Each Tax Invoice is signed & stamped properly by the supplier.
                 </Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.numberWrap}>05</Text>
                 <Text style={styles.modalText}>
-                    please go though below points to ensure quick invoice approval
+                GST type is verified with the GSTIN (If seller & Moglix have same Business place -CGST & SGST otherwise IGST)
                 </Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.numberWrap}>06</Text>
                 <Text style={styles.modalText}>
-                    please go though below points to ensure quick invoice approval
+                Clear Invoice copy is uploaded on SCM ensuring that no data is getting cropped.
                 </Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.numberWrap}>07</Text>
                 <Text style={styles.modalText}>
-                    please go though below points to ensure quick invoice approval
+                Invoicing amount in SCM & Supplier Tax Invoice amount should be exactly the same. Note: (We do not accept invoice with TCS charged by vendor)
                 </Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.numberWrap}>08</Text>
                 <Text style={styles.modalText}>
-                    please go though below points to ensure quick invoice approval
+                The Invoice Number mentioned on the Tax Invoice & Invoice Number uploaded on SCM should be exactly the same. Also, invoice number should not exceed 16 characters, containing alphabets or numerals or special characters.
                 </Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.numberWrap}>09</Text>
                 <Text style={styles.modalText}>
-                    please go though below points to ensure quick invoice approval
+                The Invoice date & financial year should be correct
                 </Text>
-
+                </View>
                 <Checkbox
                     checked={isSelected}
                     onPress={() => setSelection(!isSelected)}
-                    title={'I have validated all the above metioned points'}
+                    title={'I have validated all the above mentioned points'}
                 />
             </ScrollView>
 
@@ -177,12 +205,18 @@ const InvoiceDetailScreen = props => {
 };
 
 const styles = StyleSheet.create({
-
-    modalText: {
+    ContainerCss:{paddingHorizontal:Dimension.padding15,backgroundColor:colors.WhiteColor,overflow:"visible"},
+    boldTxt:{
         fontSize: Dimension.font14,
         color: colors.FontColor,
-        fontFamily: Dimension.CustomRegularFont,
+        fontFamily: Dimension.CustomMediumFont,
         marginVertical: Dimension.margin15
+    },
+    modalText: {
+        fontSize: Dimension.font12,
+        color: colors.FontColor,
+        fontFamily: Dimension.CustomRegularFont,
+        //marginVertical: Dimension.margin15
     },
     bottombtnWrap: {
         padding: Dimension.padding15,
@@ -191,7 +225,11 @@ const styles = StyleSheet.create({
         backgroundColor: colors.WhiteColor,
     },
 
-
+    row:{flexDirection:"row",marginBottom:Dimension.margin10,width:"92%"},
+    numberWrap:{width:Dimension.width20,fontSize: Dimension.font12,
+        color: colors.FontColor,
+        fontFamily: Dimension.CustomMediumFont,borderRadius:2,
+    backgroundColor:'#DDDDDD',textAlign:'center',marginRight:Dimension.margin8,textAlignVertical:"center",paddingVertical:Dimension.padding4,height:Dimension.height20}
 
 
 
