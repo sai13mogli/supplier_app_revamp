@@ -18,7 +18,6 @@ const InvoiceCard = props => {
   const {
     selectItemId,
     productUom,
-    orderRef,
     transferPrice,
     productName,
     itemId,

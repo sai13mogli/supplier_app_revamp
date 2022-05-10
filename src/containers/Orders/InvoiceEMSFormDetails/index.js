@@ -533,7 +533,7 @@ const InvoiceEMSFormDetailScreen = props => {
       && uploadEwayBill.name
     ) {
       try {
-        setLoading(true);
+        // setLoading(true);
         let payload = {
           supplierId: await AsyncStorage.getItem('userId'),
           invoiceNumber: invoiceNumber,
