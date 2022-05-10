@@ -105,7 +105,7 @@ export const SUPPORT_TAB_SCREENS = [
     idx: 0,
   },
   {
-    name: 'Support Tickets',
+    name: 'Tickets',
     key: 'supportTicket',
     component: TicketsList,
     ref: createRef(),

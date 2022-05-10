@@ -94,6 +94,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding15,
     marginTop: Dimension.margin25
   },
+  addtds: {
+    fontSize: Dimension.font14,
+    color: Colors.BrandColor,
+    fontFamily: Dimension.CustomSemiBoldFont,
+    marginTop: Dimension.margin1,
+    textTransform: "uppercase"
+  },
   remove: {
     borderWidth: 0.9,
     top: 33,

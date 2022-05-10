@@ -45,18 +45,25 @@ const TdsDetails = (props) => {
         <Text style={styles.AccordianheadingTxt}>
           Year {section.financialyear}
         </Text>
-        {showEdit == true ?
-          <TouchableOpacity
-            style={styles.iconStyle}
-            onPress={() => {
-              onPresEdit(section);
-            }}>
-            <CustomeIcon name={'edit-box'} size={Dimension.font16} color={colors.BrandColor} />
-            <Text style={styles.addnewtxt}>
-              Edit
-            </Text>
-          </TouchableOpacity>
-          : null}
+        {
+          profileData && profileData.verificationStatus !== 15
+            ?
+            <>
+              {showEdit == true ?
+                <TouchableOpacity
+                  style={styles.iconStyle}
+                  onPress={() => {
+                    onPresEdit(section);
+                  }}>
+                  <CustomeIcon name={'edit-box'} size={Dimension.font16} color={colors.BrandColor} />
+                  <Text style={styles.addnewtxt}>
+                    Edit
+                  </Text>
+                </TouchableOpacity>
+                : null}
+            </> : null
+        }
+
         <MaterialCommunityIcon
 
           name={iconName}
@@ -173,19 +180,38 @@ const TdsDetails = (props) => {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView indicatorStyle="white" style={styles.ContainerCss}>
-        <Accordion
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 80, position: "relative" }}
-          sections={tdsInfoDetails || []}
-          activeSections={tdsInfoList}
-          renderHeader={_renderHeader}
-          renderContent={_renderContent}
-          onChange={_updateSections}
-          touchableComponent={TouchableOpacity}
-          renderFooter={() => (
-            <View style={{ height: 1, backgroundColor: colors.BoxBorderColor, marginVertical: Dimension.padding10 }}></View>
-          )}
-        />
+        {
+          (tdsInfoDetails) ? null :
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+              <CustomeIcon
+                name={'add-circle'}
+                size={Dimension.font18}
+                color={colors.BrandColor}
+              />
+              <Text style={styles.addtds}>Add tds</Text>
+            </View>
+        }
+
+        {
+          (tdsInfoDetails) ?
+            <Accordion
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 80, position: "relative" }}
+              sections={tdsInfoDetails || []}
+              activeSections={tdsInfoList}
+              renderHeader={_renderHeader}
+              renderContent={_renderContent}
+              onChange={_updateSections}
+              touchableComponent={TouchableOpacity}
+              renderFooter={() => (
+                <View style={{ height: 1, backgroundColor: colors.BoxBorderColor, marginVertical: Dimension.padding10 }}></View>
+              )}
+            /> : null
+        }
+
+
+
+
       </ScrollView>
       {profileData && profileData.verificationStatus !== 15 ? (
         <View style={styles.bottombtnWrap}>
