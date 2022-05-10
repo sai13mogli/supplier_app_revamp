@@ -42,7 +42,7 @@ const DocumentTermsConditionModal = props => {
                 }}>
                 <View style={styles.modalContainer}>
                     <View style={styles.ModalheadingWrapper}>
-                        <Text style={styles.ModalHeading}>Terms and Coditions</Text>
+                        <Text style={styles.ModalHeading}>Terms and Conditions</Text>
                         <TouchableOpacity
                             onPress={onPress}
                         ><CustomeIcon
@@ -88,21 +88,25 @@ const DocumentTermsConditionModal = props => {
 const styles = StyleSheet.create({
     wrapView: {
         flexDirection: 'row',
-        marginBottom: Dimension.margin16,
-        alignSelf: 'center',
+        marginBottom: Dimension.margin12,
+        //alignSelf: 'center',
+        marginHorizontal:Dimension.padding15,
+        borderBottomColor:colors.BoxBorderColor,
+        borderBottomWidth:1,
+        paddingVertical:2
     },
     terms: {
-        fontSize: Dimension.font16,
+        fontSize: Dimension.font12,
         color: colors.BrandColor,
-        marginLeft: Dimension.margin5,
+        marginLeft:Dimension.margin5,
         fontFamily: Dimension.CustomMediumFont,
     },
     enterPrice: {
-        fontSize: Dimension.font16,
+        fontSize: Dimension.font12,
         color: colors.FontColor,
         fontFamily: Dimension.CustomMediumFont,
-        marginBottom: Dimension.margin40,
-        alignSelf: 'center',
+       
+        
     },
     modalContainer: {
         backgroundColor: colors.WhiteColor,
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
         width: '100%',
         marginTop: 'auto',
-        paddingTop: Dimension.padding20,
+        paddingVertical: Dimension.padding20,
     },
     bottombtnWrap: {
         padding: Dimension.padding15,
@@ -122,10 +126,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: Dimension.padding15,
-        marginBottom: Dimension.margin20
+        
     },
     ModalHeading: {
-        fontSize: Dimension.font16,
+        fontSize: Dimension.font14,
         color: colors.FontColor,
         fontFamily: Dimension.CustomSemiBoldFont,
         marginBottom: Dimension.margin20,

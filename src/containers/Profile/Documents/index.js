@@ -1209,7 +1209,8 @@ const DocumentsScreen = props => {
 
         </>
       );
-    } else {
+   }
+     else {
       return null;
     }
   };
@@ -1228,6 +1229,7 @@ const DocumentsScreen = props => {
           .toList()
           .toArray()}
         {!uploadDisabled ? noteText() : null}
+       
         {
           profileData && profileData.verificationStatus !== 15
             ?
