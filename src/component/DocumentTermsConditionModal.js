@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Modal, ScrollView, FlatList } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Modal, Linking, FlatList } from "react-native";
 import { useDispatch } from 'react-redux';
 import { forgotPassword } from '../services/auth';
 import Dimension from "../Theme/Dimension";
@@ -9,7 +9,7 @@ import CustomeIcon from '../component/common/CustomeIcon';
 import FloatingInput from './common/FloatingInput';
 import Toast from 'react-native-toast-message';
 
-const ForgotPasswordModal = props => {
+const DocumentTermsConditionModal = props => {
 
     const [email, setEmail] = useState('');
     const [isVisible, setIsVisible] = useState(false);
@@ -23,36 +23,7 @@ const ForgotPasswordModal = props => {
         visible
     } = props;
 
-    const onContinue = async () => {
 
-        setEmalError(false);
-        if (email && email.length) {
-            setLoading(true);
-            let payload = {
-                email: email
-            };
-            const { data } = await forgotPassword(payload);
-            if (data.success) {
-                setLoading(false);
-                setIsVisible(true);
-                props.onContinue(data);
-                console.log("data===>", data);
-                Toast.show({
-                    type: 'success',
-                    text2: data.message,
-                    visibilityTime: 5000,
-                    autoHide: true,
-                });
-            } else {
-                setLoading(false);
-                setIsVisible(true);
-                alert('Invalid Email!');
-            }
-
-        } else {
-            setEmalError(true);
-        }
-    };
 
     return (
         <Modal
@@ -71,7 +42,7 @@ const ForgotPasswordModal = props => {
                 }}>
                 <View style={styles.modalContainer}>
                     <View style={styles.ModalheadingWrapper}>
-                        <Text style={styles.ModalHeading}>Forgot Password{props.header}</Text>
+                        <Text style={styles.ModalHeading}>Terms and Coditions</Text>
                         <TouchableOpacity
                             onPress={onPress}
                         ><CustomeIcon
@@ -81,35 +52,32 @@ const ForgotPasswordModal = props => {
                             />
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.flotingWarp}>
-                        <FloatingInput
-                            value={email}
-                            errorMessage={'Type the Registered email id to retrieve the password reset link'}
-                            showError={emalError}
-                            onChangeText={text => setEmail(text)}
-                            onBlur={() =>
-                                !email || (email && email.length)
-                                    ? setEmalError(true)
-                                    : setEmalError(false)
-                            }
-                            label={'Email'}
-                            title={'Email'}
-                            isImp={true}
+                    <View style={styles.wrapView}>
+                        <Text style={styles.enterPrice}>for ENTERPRISE(OFFLINE)</Text>
+                        <TouchableOpacity
+                            onPress={() => Linking.openURL('https://suppliercentralqa.moglilabs.com/files/enterprise-supplier-aggrement.pdf')}
+                        ><Text style={styles.terms}>Terms & Condition</Text>
+                        </TouchableOpacity>
 
-                        />
                     </View>
+                    <View style={styles.wrapView}>
+                        <Text style={styles.enterPrice}>for ONLINE(RETAIL)</Text>
+                        <TouchableOpacity
+                            onPress={() => Linking.openURL('https://suppliercentralqa.moglilabs.com/files/supplier-aggrement.pdf')}
+                        ><Text style={styles.terms}>Terms & Condition</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.wrapView}>
+                        <Text style={styles.enterPrice}>for ABFRL</Text>
+                        <TouchableOpacity
+                            onPress={() => Linking.openURL('https://suppliercentralqa.moglilabs.com/files/abg-supplier-aggrement.pdf')}
+                        ><Text style={styles.terms}>Terms & Condition</Text>
+                        </TouchableOpacity>
+
+                    </View>
+
                 </View>
-                <View style={styles.bottombtnWrap}>
-                    <CustomButton
-                        buttonColor={colors.BrandColor}
-                        borderColor={colors.BrandColor}
-                        TextColor={colors.WhiteColor}
-                        TextFontSize={Dimension.font16}
-                        title={'Continue'}
-                        loading={loading}
-                        onPress={onContinue}
-                    />
-                </View>
+
 
             </View>
         </Modal>
@@ -118,19 +86,23 @@ const ForgotPasswordModal = props => {
 };
 
 const styles = StyleSheet.create({
-    container: {
+    wrapView: {
+        flexDirection: 'row',
+        marginBottom: Dimension.margin16,
+        alignSelf: 'center',
     },
-    flotingWarp: {
-        paddingHorizontal: Dimension.padding15,
-        marginBottom: Dimension.margin25,
+    terms: {
+        fontSize: Dimension.font16,
+        color: colors.BrandColor,
+        marginLeft: Dimension.margin5,
+        fontFamily: Dimension.CustomMediumFont,
     },
-    Email: {
+    enterPrice: {
         fontSize: Dimension.font16,
         color: colors.FontColor,
-        fontFamily: Dimension.CustomRegularFont,
+        fontFamily: Dimension.CustomMediumFont,
         marginBottom: Dimension.margin40,
         alignSelf: 'center',
-        marginHorizontal: Dimension.margin30
     },
     modalContainer: {
         backgroundColor: colors.WhiteColor,
@@ -161,5 +133,5 @@ const styles = StyleSheet.create({
 
 });
 
-export default ForgotPasswordModal;
+export default DocumentTermsConditionModal;
 

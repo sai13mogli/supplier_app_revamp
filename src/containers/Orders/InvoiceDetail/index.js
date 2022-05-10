@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import RNFetchBlob from 'rn-fetch-blob';
 import {
     View,
@@ -21,17 +21,22 @@ const InvoiceDetailScreen = props => {
 
     const [loading, setLoading] = useState(false);
     const [isSelected, setSelection] = useState(false);
+    const scrollRef = useRef();
 
     console.log("props====>", props?.route?.params?.data?.ewayNumber);
 
+    const moveToBottom = () => {
+        scrollRef.current?.scrollTo({
+            y: 20,
+            x: 0,
+            animated: true,
+        });
+    }
+
+
     const onsubmit = async () => {
-        if (!isSelected) {
-            Toast.show({
-                type: 'error',
-                text2: 'Please select the checkbox first to proceed.',
-                visibilityTime: 2000,
-                autoHide: true,
-            });
+        if (isSelected) {
+
             try {
                 setLoading(true);
                 let token = `Bearer ${await AsyncStorage.getItem('token')}`;
@@ -64,12 +69,6 @@ const InvoiceDetailScreen = props => {
                 console.log('Respose===>', response, res);
                 if (res.success) {
                     setLoading(false);
-                    // dispatch(fetchOrders(page, search, orderStage, onlineShipmentMode, filters),
-                    //   fetchTabCount({
-                    //     supplierId: await AsyncStorage.getItem('userId'),
-                    //     tabRef,
-                    //     onlineShipmentMode,
-                    //   }));
                     Toast.show({
                         type: 'success',
                         text2: res.message,
@@ -92,6 +91,14 @@ const InvoiceDetailScreen = props => {
                 console.log("Erreor", err);
                 setLoading(false);
             }
+        } else {
+            moveToBottom()
+            Toast.show({
+                type: 'error',
+                text2: 'Please select the checkbox first to proceed.',
+                visibilityTime: 2000,
+                autoHide: true,
+            });
         }
 
 
@@ -112,7 +119,7 @@ const InvoiceDetailScreen = props => {
                 navigation={props.navigation}
                 showText={'Invoice Detail'}
                 rightIconName={'business-details'}></Header>
-            <ScrollView style={styles.ContainerCss}>
+            <ScrollView style={styles.ContainerCss} ref={scrollRef}>
                 <Text style={styles.boldTxt}>Please go through below points to ensure quick invoice approval:</Text>
                 <View style={styles.row}>
                     <Text style={styles.numberWrap}>01</Text>
