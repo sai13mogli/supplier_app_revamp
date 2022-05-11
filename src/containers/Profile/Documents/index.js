@@ -1,4 +1,4 @@
-import React, {useState, useEffect, createRef} from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import {
   ScrollView,
   Text,
@@ -9,27 +9,28 @@ import {
   Dimensions,
   StyleSheet,
 } from 'react-native';
-import {OrderedMap, setIn} from 'immutable';
+import { OrderedMap, setIn } from 'immutable';
 import CustomeIcon from '../../../component/common/CustomeIcon';
 import FileUpload from '../../../component/common/FileUpload';
-import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import ActionSheet, { SheetManager } from 'react-native-actions-sheet';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
 import styles from './style';
-import {authToken, BASE_URL} from '../../../redux/constants/index';
+import { authToken, BASE_URL } from '../../../redux/constants/index';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import CustomButton from '../../../component/common/Button';
 import Modal from 'react-native-modal';
 import PDFView from 'react-native-view-pdf';
 import Checkbox from '../../../component/common/Checkbox/index';
-import {submitProfile, getDocuments} from '../../../services/documents';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchProfile} from '../../../redux/actions/profile';
+import { submitProfile, getDocuments } from '../../../services/documents';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProfile } from '../../../redux/actions/profile';
 import Header from '../../../component/common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import DocumentTermsConditionModal from '../../../component/DocumentTermsConditionModal';
 const deviceWidth = Dimensions.get('window').width;
 
 const DocumentsScreen = props => {
@@ -93,6 +94,7 @@ const DocumentsScreen = props => {
     setUpload: true,
   });
   const [corpCertificateError, setCorpCertificateError] = useState(false);
+  const [showTermsCondition, setShowTermsCondition] = useState(false);
   const [addressProof, setAddressProof] = useState({
     title: '',
     value: '',
@@ -297,7 +299,7 @@ const DocumentsScreen = props => {
   });
 
   const noteArr = [
-    {id: '0', note: 'Each document file should not exceed more than 2MB'},
+    { id: '0', note: 'Each document file should not exceed more than 2MB' },
     {
       id: '1',
       note: 'Please ensure the Image of a signature is on a white background',
@@ -369,7 +371,7 @@ const DocumentsScreen = props => {
   const uploadDocument = async data => {
     try {
       let res = await uploadDocumentService(data);
-      let {resp} = res;
+      let { resp } = res;
       if (!resp.success) {
         setErrorData();
       } else {
@@ -383,7 +385,7 @@ const DocumentsScreen = props => {
   const fetchDocuments = async () => {
     try {
       let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-      const {data} = await getDocuments(token);
+      const { data } = await getDocuments(token);
       setDocumentsData(data);
     } catch (error) {
       console.log('err', error);
@@ -527,7 +529,7 @@ const DocumentsScreen = props => {
     }
   };
 
-  const setDocument = ({fileData, resp}) => {
+  const setDocument = ({ fileData, resp }) => {
     switch (resp.data && resp.data.key) {
       case 'panCard':
         setPancard({
@@ -1135,7 +1137,7 @@ const DocumentsScreen = props => {
     try {
       setSubmitLoader(true);
       let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-      const {data} = await submitProfile(token);
+      const { data } = await submitProfile(token);
       if (data && data.success) {
         setSubmitLoader(false);
         setConfirmModal(false);
@@ -1200,16 +1202,21 @@ const DocumentsScreen = props => {
             onPress={() => setSelection(!isSelected)}
             title={'By registering you agree to our'}
           />
-          <Text style={styles.termsText}>Terms & Condition</Text>
+          <TouchableOpacity
+            onPress={() => setShowTermsCondition(true)}>
+            <Text style={styles.termsText}>Terms & Condition</Text>
+          </TouchableOpacity>
+
         </>
       );
-    } else {
+   }
+     else {
       return null;
     }
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Header
         showBack
         showBell
@@ -1222,10 +1229,24 @@ const DocumentsScreen = props => {
           .toList()
           .toArray()}
         {!uploadDisabled ? noteText() : null}
-        {profileData && profileData.verificationStatus !== 15
-          ? renderAgree()
-          : null}
+       
+        {
+          profileData && profileData.verificationStatus !== 15
+            ?
+            renderAgree()
+            : null
+        }
       </ScrollView>
+      {showTermsCondition && (
+        <DocumentTermsConditionModal
+          visible={showTermsCondition}
+          transparent={true}
+          onClose={() => setShowTermsCondition(false)}
+          onPress={() => {
+            setShowTermsCondition(!showTermsCondition);
+          }}
+        />
+      )}
       {profileData && profileData.verificationStatus !== 15
         ? renderSubmit()
         : null}
@@ -1268,11 +1289,11 @@ const DocumentsScreen = props => {
           <ActivityIndicator
             size={'small'}
             color={'white'}
-            style={{marginRight: 4}}
+            style={{ marginRight: 4 }}
           />
         ) : isPDF ? (
           <PDFView
-            style={{flex: 1}}
+            style={{ flex: 1 }}
             onError={error => console.log('onError', error)}
             onLoad={() => console.log('PDF rendered from base 64 data')}
             resource={`${imageUrl}`}
@@ -1283,8 +1304,8 @@ const DocumentsScreen = props => {
           //   No Image Found!!
           // </Text>
           <Image
-            source={{uri: imageUrl}}
-            style={{height: '100%', width: '100%', flex: 1}}
+            source={{ uri: imageUrl }}
+            style={{ height: '100%', width: '100%', flex: 1 }}
           />
         )}
       </Modal>
@@ -1316,7 +1337,7 @@ const DocumentsScreen = props => {
             profile
           </Text>
           <View style={styles.ModalBtnWrap}>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <CustomButton
                 title="CANCEL"
                 buttonColor={colors.WhiteColor}
@@ -1325,7 +1346,7 @@ const DocumentsScreen = props => {
                 TextFontSize={Dimension.font16}
                 onPress={() => setConfirmModal(false)}></CustomButton>
             </View>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <CustomButton
                 title="CONFIRM"
                 buttonColor={colors.BrandColor}

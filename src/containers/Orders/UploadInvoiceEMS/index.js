@@ -120,7 +120,7 @@ const UploadInvoiceScreen = props => {
     }, 0) : 0;
 
     let totalSum = arrSum + value
-
+    setHeaderSum(totalSum)
     console.log("totalAmoubt", totalSum);
   }
 
@@ -133,7 +133,7 @@ const UploadInvoiceScreen = props => {
         quantity={item.quantity}
         selectedValue={(value) => setTaxPercentage(value)}
         UpdatedQuntity={(value) => setQuantity(value)}
-        UpdatedTotalPrice={(value) => { calculateHeaderSum(value), console.log("skkds====>", value); }}
+        UpdatedTotalPrice={(value) => { calculateHeaderSum(value), console.log("value====>", value); }}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
@@ -190,7 +190,7 @@ const UploadInvoiceScreen = props => {
             ]}>
             Total Price -{' '}
             <Text style={styles.TitleBoldTxt}>
-              ₹{getTotalPrice(totalAmount)}
+              ₹{headerSum}
               {'   '} (Price Including Tax-
               <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
               <Text style={styles.TitleBoldTxt}> )</Text>

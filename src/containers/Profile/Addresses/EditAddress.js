@@ -209,7 +209,8 @@ const EditAddress = props => {
       addressesDetailsStatus == STATE_STATUS.FAILED_UPDATE
     ) {
       setLoading(false);
-      alert(addressesDetailsError.state);
+      console.log("ssg", addressesDetailsError);
+      // alert(addressesDetailsError.state);
       Toast.show({
         type: 'error',
         text2: addressesDetailsError && addressesDetailsError.state,

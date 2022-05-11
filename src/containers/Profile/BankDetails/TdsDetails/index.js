@@ -21,6 +21,7 @@ const TdsDetails = (props) => {
   const tdsInfoDetails = useSelector(
     state => state.profileReducer.tdsInfoDetails.data || [],
   );
+
   const [tdsInfoList, setTdsInfoList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [section, setSectionList] = useState([]);
@@ -44,18 +45,25 @@ const TdsDetails = (props) => {
         <Text style={styles.AccordianheadingTxt}>
           Year {section.financialyear}
         </Text>
-        {showEdit == true ?
-          <TouchableOpacity
-            style={styles.iconStyle}
-            onPress={() => {
-              onPresEdit(section);
-            }}>
-            <CustomeIcon name={'edit-box'} size={Dimension.font16} color={colors.BrandColor} />
-            <Text style={styles.addnewtxt}>
-              Edit
-            </Text>
-          </TouchableOpacity>
-          : null}
+        {
+          profileData && profileData.verificationStatus !== 15
+            ?
+            <>
+              {showEdit == true ?
+                <TouchableOpacity
+                  style={styles.iconStyle}
+                  onPress={() => {
+                    onPresEdit(section);
+                  }}>
+                  <CustomeIcon name={'edit-box'} size={Dimension.font16} color={colors.BrandColor} />
+                  <Text style={styles.addnewtxt}>
+                    Edit
+                  </Text>
+                </TouchableOpacity>
+                : null}
+            </> : null
+        }
+
         <MaterialCommunityIcon
 
           name={iconName}
@@ -167,7 +175,6 @@ const TdsDetails = (props) => {
       alert("bank detail not found")
     }
 
-    // dispatch(saveBankDetailAction())
   }
 
   return (

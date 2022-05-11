@@ -36,10 +36,11 @@ const ForgotPasswordModal = props => {
                 setLoading(false);
                 setIsVisible(true);
                 props.onContinue(data);
+                console.log("data===>", data);
                 Toast.show({
                     type: 'success',
                     text2: data.message,
-                    visibilityTime: 2000,
+                    visibilityTime: 5000,
                     autoHide: true,
                 });
             } else {

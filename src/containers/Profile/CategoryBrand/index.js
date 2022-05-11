@@ -203,10 +203,9 @@ const CategoryBrandScreen = props => {
       closeDoc: brandCertificate && brandCertificate.closeDoc,
       fromCategoryBrand: true,
       uploadDocument: () => uploadFromFileExp(),
-      onPress:
-        brandCertificate && brandCertificate.showDoc
-          ? () => openDocView(brandCertificate && brandCertificate.value)
-          : () => uploadFromFileExp(),
+      onPress: brandCertificate && brandCertificate.showDoc
+        ? () => openDocView(brandCertificate && brandCertificate.value)
+        : () => uploadFromFileExp(),
       component: FileUpload,
       isImp: natureOfBusiness == 3 || natureOfBusiness == 2 ? true : false,
       setUpload: true,

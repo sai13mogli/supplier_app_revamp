@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
   },
   addbank: {
     fontSize: Dimension.font14,
-    alignSelf: 'flex-end',
     color: Colors.BrandColor,
     fontFamily: Dimension.CustomSemiBoldFont,
     marginTop: Dimension.margin1,

@@ -16,7 +16,7 @@ import CustomeIcon from '../CustomeIcon';
 import styles from './styles';
 
 const CustomeDatePicker = props => {
-  const { display, value, activeFilter } = props;
+  const { display, value, activeFilter, maxdate } = props;
   const [date, setDate] = useState(new Date());
   const [isFocused, setIsFocused] = useState(false);
   const [mode, setMode] = useState('date');
@@ -134,7 +134,7 @@ const CustomeDatePicker = props => {
           testID="dateTimePicker"
           value={date}
           mode={mode}
-          maximumDate={new Date()}
+          maximumDate={maxdate}
           is24Hour={true}
           display={display}
           onChange={onchangeDate}

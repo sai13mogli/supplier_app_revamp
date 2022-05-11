@@ -288,6 +288,7 @@ const LoginScreen = props => {
         )).toList()}
         {error ? <Text style={styles.errorTxt}>{error}</Text> : null}
         <TouchableOpacity
+          style={styles.fotgotTxt}
           onPress={() => setShowForgotPass(true)}
         >
           <Text style={styles.fotgotTxt}>Forgot Password</Text>
