@@ -5,7 +5,8 @@ const styles = StyleSheet.create({
 Wrapper:{
   marginTop:Dimension.margin20,
   flexDirection:"row",
-  backgroundColor:"#fff"
+  backgroundColor:"#fff",
+  paddingVertical: Dimension.padding20,
   },
   activeBackground: {
    backgroundColor:Colors.grayShade1,

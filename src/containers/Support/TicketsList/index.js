@@ -292,7 +292,7 @@ const TicketsList = props => {
           onEndReachedThreshold={0.9}
           ListFooterComponent={renderFooter}
           style={{paddingBottom: 380}}
-          contentContainerStyle={{paddingBottom: 380}}
+          contentContainerStyle={{paddingBottom: 580}}
           removeClippedSubviews={true}
           maxToRenderPerBatch={10}
           onEndReached={({distanceFromEnd}) => {

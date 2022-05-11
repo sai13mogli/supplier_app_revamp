@@ -82,9 +82,14 @@ const FloatingLabelInputField = props => {
               : styles.iconStyle
           }
           errorStyle={styles.errorText}
-          disabledInputStyle={styles.disabledInputStyle}
+          disabledInputStyle={
+            props.isfrmBD
+              ? styles.disabledInputStylewithwhiteBG
+              : styles.disabledInputStyle
+          }
           errorMessage={props.showError ? props.errorMessage : null}
           // errorStyle={}
+          multiline={props.IsMultiline ? true : false}
         />
         {/* ) */}
       </TouchableOpacity>
@@ -135,6 +140,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding12,
     height: Dimension.height90,
     paddingBottom: 0,
+    //flexWrap: "wrap",
   },
   labelStyle: {
     fontSize: Dimension.font10,
@@ -179,6 +185,16 @@ const styles = StyleSheet.create({
     opacity: 1,
     padding: 0.1,
     //paddingHorizontal: Dimension.padding12,
+  },
+  disabledInputStylewithwhiteBG: {
+    fontSize: Dimension.font12,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+    paddingLeft: Dimension.padding12,
+    paddingRight: Dimension.padding12,
+    backgroundColor: colors.WhiteColor,
+    opacity: 1,
+    padding: 0.1,
   },
 });
 
