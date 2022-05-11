@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from '../redux/constants/index';
+import {BASE_URL} from '../redux/constants/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const getBusinessDetails = async () =>
@@ -129,7 +129,7 @@ export const getCategoriesBrands = async () =>
 
 export const sendOtpForVerification = async type =>
   axios.get(`${BASE_URL}profile/sendOtp`, {
-    params: { type: type },
+    params: {type: type},
     headers: {
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
@@ -142,9 +142,15 @@ export const updatePhone = async data =>
     },
   });
 
-
 export const updateEmail = async data =>
   axios.post(`${BASE_URL}profile/updateEmail`, data, {
+    headers: {
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });
+
+export const sendVerificationEmail = async () =>
+  axios.get(`${BASE_URL}profile/sendVerificationMail`, {
     headers: {
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },

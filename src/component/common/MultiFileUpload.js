@@ -26,14 +26,17 @@ const MultiFileUpload = props => {
     <View>
       {docsList.map((doc, docKey) => (
         <View style={styles.fileOutWrap}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View
+            style={{flexDirection: 'row', alignItems: 'center', width: '60%'}}>
             <View style={styles.IconWrap}>
               <CustomeIcon
                 name={'orders-line'}
                 size={Dimension.font22}
                 color={Colors.eyeIcon}></CustomeIcon>
             </View>
-            <Text style={styles.DocumentName}>{doc.name}</Text>
+            <Text numberOfLines={1} style={styles.DocumentName}>
+              {doc.name}
+            </Text>
           </View>
 
           <CustomeIcon

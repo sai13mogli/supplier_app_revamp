@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Dimensions,
   ScrollView,
+  Image,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import {getAllCategories} from '../../../../services/auth';
@@ -21,6 +22,7 @@ import {
 import styles from './style';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import Checkbox from '../../../../component/common/Checkbox/index';
+import Dimension from '../../../../Theme/Dimension';
 
 const CategoryScreen = props => {
   const [inputValue, setInputValue] = useState('');
@@ -90,15 +92,19 @@ const CategoryScreen = props => {
           {(categories || [])
             .filter((_, i) => _.label.includes(inputValue))
             .map((item, i) => (
-              <Checkbox
-                checked={
-                  (selectedCategories || []).find(_ => _.id == item.id)
-                    ? true
-                    : false
-                }
-                onPress={() => updateCategory(item)}
-                title={item.label}
-              />
+              <>
+                <Checkbox
+                  isImage
+                  checked={
+                    (selectedCategories || []).find(_ => _.id == item.id)
+                      ? true
+                      : false
+                  }
+                  onPress={() => updateCategory(item)}
+                  title={item.label}
+                  image={item.id}
+                />
+              </>
             ))}
           {(categories || []).filter((_, i) => _.label.includes(inputValue))
             .length ? null : (
@@ -139,18 +145,26 @@ const CategoryScreen = props => {
           </View>
           {renderRight()}
           <View style={styles.bottomWrap}>
-          <CustomButton
-            title={`SUBMIT (${
-              selectedCategories && selectedCategories.length
-            })`}
-            onPress={onSubmit}
-            buttonColor={
-              selectedCategories.length ? Colors.BrandColor : Colors.DisableStateColor
-            }
-            disabled={selectedCategories.length ? false : true}
-            TextColor={selectedCategories.length ? Colors.WhiteColor : Colors.FontColor}
-            borderColor={selectedCategories.length ? Colors.BrandColor : Colors.DisableStateColor}
-          />
+            <CustomButton
+              title={`SUBMIT (${
+                selectedCategories && selectedCategories.length
+              })`}
+              onPress={onSubmit}
+              buttonColor={
+                selectedCategories.length
+                  ? Colors.BrandColor
+                  : Colors.DisableStateColor
+              }
+              disabled={selectedCategories.length ? false : true}
+              TextColor={
+                selectedCategories.length ? Colors.WhiteColor : Colors.FontColor
+              }
+              borderColor={
+                selectedCategories.length
+                  ? Colors.BrandColor
+                  : Colors.DisableStateColor
+              }
+            />
           </View>
         </>
       );
@@ -158,7 +172,9 @@ const CategoryScreen = props => {
     return renderLoader();
   };
 
-  return <View style={{flex: 1,backgroundColor:"#fff"}}>{renderCategories()}</View>;
+  return (
+    <View style={{flex: 1, backgroundColor: '#fff'}}>{renderCategories()}</View>
+  );
 };
 
 export default CategoryScreen;

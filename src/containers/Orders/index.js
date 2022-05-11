@@ -163,7 +163,6 @@ const OrdersScreen = props => {
         upButtonHandler(index + 1);
       }
     }
-
   }, [tabStatus]);
 
   useEffect(() => {
@@ -187,7 +186,7 @@ const OrdersScreen = props => {
       .then(async enabled => {
         if (enabled) {
           messaging().setBackgroundMessageHandler(async remoteMessage => {
-            handleOpenUrl(remoteMessage, true, '');
+            showToastNotification(remoteMessage);
           });
           //app is running in background
           messaging().onNotificationOpenedApp(remoteMessage => {
@@ -197,7 +196,9 @@ const OrdersScreen = props => {
 
           // app is in foreground
           messaging().onMessage(async remoteMessage => {
-            handleOpenUrl(remoteMessage, true, '');
+            showToastNotification(remoteMessage);
+
+            // handleOpenUrl(remoteMessage, true, '');
           });
 
           //app is in quit state
@@ -223,6 +224,15 @@ const OrdersScreen = props => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const showToastNotification = remoteMsg => {
+    Toast.show({
+      type: 'success',
+      text2: `${remoteMsg.data.title} \n ${remoteMsg.data.body}`,
+      visibilityTime: 5000,
+      autoHide: true,
+    });
   };
 
   const handleOpenUrl = async (event, fromNotification, deepLinkScreen) => {
@@ -273,7 +283,6 @@ const OrdersScreen = props => {
           fetchTabCountFunc(obj.childTab, shipmentType);
         }
       } else {
-        console.log(deepLinkScreen, obj, 'hehehe');
         props.navigation.push(deepLinkScreen, { ...obj });
       }
       await AsyncStorage.removeItem('@deepLinkUrl');
@@ -871,9 +880,7 @@ const OrdersScreen = props => {
         </View>
       ) : (
         <>
-          {
-            renderHeaderComponent()
-          }
+          {renderHeaderComponent()}
           <FlatList
             data={OrderData.toArray()}
             // stickyHeaderIndices={[0]}

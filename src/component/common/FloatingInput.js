@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import { Input, Icon } from 'react-native-elements';
+import {Input, Icon} from 'react-native-elements';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 
@@ -27,7 +27,6 @@ const FloatingLabelInputField = props => {
       handleFocus();
     }
   }, []);
-
 
   const handleBlur = runOnBlur => {
     if (props.hideLabel) {
@@ -52,12 +51,14 @@ const FloatingLabelInputField = props => {
       ) : ( */}
         <Input
           {...props}
+          numberOfLines={props.numberOfLines || 1}
           label={() => (
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{flexDirection: 'row'}}>
               <Text style={styles.labelStyle}>{props.label}</Text>
               {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
             </View>
           )}
+          returnKeyType={props.returnKeyType || 'done'}
           value={typeof props.value == 'function' ? getValue : props.value}
           rightIcon={props.extraView ? props.extraView() : null}
           //underlineColorAndroid={'transparent'}
@@ -71,19 +72,24 @@ const FloatingLabelInputField = props => {
               ? styles.MultiinputContainerStyle
               : styles.inputContainerStyle
           }
-
           inputStyle={styles.inputStyle}
           labelStyle={styles.labelStyle}
           rightIconContainerStyle={
-            props.isfromLogin 
-            ? props.disabled ? styles.disabledIconBtnStyle : styles.iconBtnstyle 
-            
-            : styles.iconStyle
+            props.isfromLogin
+              ? props.disabled
+                ? styles.disabledIconBtnStyle
+                : styles.iconBtnstyle
+              : styles.iconStyle
           }
           errorStyle={styles.errorText}
-          disabledInputStyle={styles.disabledInputStyle}
+          disabledInputStyle={
+            props.isfrmBD
+              ? styles.disabledInputStylewithwhiteBG
+              : styles.disabledInputStyle
+          }
           errorMessage={props.showError ? props.errorMessage : null}
-        // errorStyle={}
+          // errorStyle={}
+          multiline={props.IsMultiline ? true : false}
         />
         {/* ) */}
       </TouchableOpacity>
@@ -134,6 +140,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding12,
     height: Dimension.height90,
     paddingBottom: 0,
+    //flexWrap: "wrap",
   },
   labelStyle: {
     fontSize: Dimension.font10,
@@ -158,10 +165,9 @@ const styles = StyleSheet.create({
   },
   iconBtnstyle: {
     paddingRight: Dimension.padding10,
-    
   },
-  disabledIconBtnStyle:{
-    backgroundColor:colors.DisableStateColor,
+  disabledIconBtnStyle: {
+    backgroundColor: colors.DisableStateColor,
     paddingRight: Dimension.padding10,
   },
   errorText: {
@@ -176,9 +182,19 @@ const styles = StyleSheet.create({
     paddingLeft: Dimension.padding12,
     paddingRight: Dimension.padding12,
     backgroundColor: colors.DisableStateColor,
-    opacity:1,
-    padding:.1
+    opacity: 1,
+    padding: 0.1,
     //paddingHorizontal: Dimension.padding12,
+  },
+  disabledInputStylewithwhiteBG: {
+    fontSize: Dimension.font12,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+    paddingLeft: Dimension.padding12,
+    paddingRight: Dimension.padding12,
+    backgroundColor: colors.WhiteColor,
+    opacity: 1,
+    padding: 0.1,
   },
 });
 

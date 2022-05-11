@@ -7,6 +7,7 @@ import {
   Dimensions,
   ScrollView,
   TextInput,
+  Image,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -20,6 +21,7 @@ import styles from './style';
 import Checkbox from '../../../../../component/common/Checkbox/index';
 import CustomeIcon from '../../../../../component/common/CustomeIcon';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Dimension from '../../../../../Theme/Dimension';
 
 const PopularBrandsScreen = props => {
   const brands = useSelector(
@@ -80,6 +82,16 @@ const PopularBrandsScreen = props => {
               ? styles.activeBackground
               : styles.inactiveBackground,
           ]}>
+          <Image
+            source={{
+              uri: `https://cdnx1.moglix.com/suppliercentral/${_.id}.png`,
+            }}
+            style={{
+              height: Dimension.height28,
+              width: Dimension.height28,
+              marginLeft: Dimension.margin5,
+            }}
+          />
           <Text style={styles.categoryText}>{_.label}</Text>
         </View>
       </TouchableOpacity>

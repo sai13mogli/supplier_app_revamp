@@ -14,8 +14,9 @@ import {searchFaqs} from '../../../services/support';
 import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import CustomeIcon from '../../../component/common/CustomeIcon';
-import RenderHtml, {defaultSystemFonts}  from 'react-native-render-html';
-const systemFonts = [...defaultSystemFonts, 'Poppins-Regular']
+import RenderHtml, {defaultSystemFonts} from 'react-native-render-html';
+//import ULElement from 'react-native-render-html/lib/typescript/elements/ULElement';
+const systemFonts = [...defaultSystemFonts, 'Poppins-Regular'];
 
 const FAQS = props => {
   const [search, setSearch] = useState('');
@@ -41,14 +42,13 @@ const FAQS = props => {
       key: 'Order related',
     },
     {
-      title: 'Payment Related',
-      key: 'Payment related',
-    },
-    {
       title: 'Fees & Penalty Related',
       key: 'Fees & Penalty related',
     },
-    
+    {
+      title: 'Payment Related',
+      key: 'Payment related',
+    },
   ];
 
   useEffect(() => {
@@ -72,26 +72,30 @@ const FAQS = props => {
     console.log(item);
     let text = item.answer;
     const source = {
-      html: item.answer
+      html: item.answer,
     };
     const mixedStyles = {
       whiteSpace: 'normal',
       color: Colors.FontColor,
-      fontSize:Dimension.font12,
-      fontFamily:Dimension.CustomRegularFont
-    }
-  //  text = text.split('</p>').join('').split('<p>');
-  //  const regex = /(<([^>]+)>)/gi;
+      fontSize: Dimension.font12,
+      fontFamily: Dimension.CustomRegularFont,
+    };
+    const mixedStyles1 = {
+      paddingLeft: 0,
+      marginLeft: 0,
+      backgroundColor: '#000',
+    };
+    //  text = text.split('</p>').join('').split('<p>');
+    //  const regex = /(<([^>]+)>)/gi;
     return (
       <View style={styles.questionContainer}>
         <Text style={styles.questionTxt}>{item.question}</Text>
         <RenderHtml
-            //contentWidth={'300'}
-            source={source}
-            baseStyle ={mixedStyles}
-            systemFonts={systemFonts}
-            
-          />
+          //contentWidth={'300'}
+          source={source}
+          baseStyle={mixedStyles}
+          systemFonts={systemFonts}
+        />
         {/* {text.map((li, liI) =>
           liI == 0 ? null : (
             // <View style={styles.liContainer} key={liI}>
@@ -168,8 +172,8 @@ const FAQS = props => {
           ListEmptyComponent={
             <View style={styles.EmptyChatWrap}>
               <Image
-                source={require('../../../assets/images/EmptyChat.png')}
-                style={{height: Dimension.height250, width: Dimension.width150}}
+                source={require('../../../assets/images/emptyOrders.png')}
+                style={{height: Dimension.height150, width: Dimension.width150}}
               />
               <Text style={styles.EmptyBoldTxt}>No FAQ's found</Text>
             </View>
