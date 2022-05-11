@@ -284,30 +284,30 @@ const ProfileScreen = props => {
                 </View>
               </View>
             </View>
-            {/* {profileData && profileData.isEmailVerified ? null : ( */}
-            <View style={styles.UserEmailVerfyWrap}>
-              <View style={{flex: 6, marginRight: Dimension.margin10}}>
-                <Text style={styles.UserEmailVerfyBoldTxt}>
-                  A verification link has been sent on your email.
-                </Text>
-                <Text style={styles.UserEmailVerfylightTxt}>
-                  Link is active for 24 hours only.
-                </Text>
-              </View>
+            {profileData && profileData.isEmailVerified ? null : (
+              <View style={styles.UserEmailVerfyWrap}>
+                <View style={{flex: 6, marginRight: Dimension.margin10}}>
+                  <Text style={styles.UserEmailVerfyBoldTxt}>
+                    A verification link has been sent on your email.
+                  </Text>
+                  <Text style={styles.UserEmailVerfylightTxt}>
+                    Link is active for 24 hours only.
+                  </Text>
+                </View>
 
-              <View style={{flex: 3}}>
-                <CustomButton
-                  title={'OPEN MAIL'}
-                  loading={openemailLoader}
-                  loadingColor={Colors.WhiteColor}
-                  onPress={() => sendVerificationMail()}
-                  TextColor={Colors.WhiteColor}
-                  buttonColor={Colors.FontColor}
-                  borderColor={Colors.FontColor}
-                  TextFontSize={Dimension.font12}></CustomButton>
+                <View style={{flex: 3}}>
+                  <CustomButton
+                    title={'VERIFY EMAIL'}
+                    loading={openemailLoader}
+                    loadingColor={Colors.WhiteColor}
+                    onPress={() => sendVerificationMail()}
+                    TextColor={Colors.WhiteColor}
+                    buttonColor={Colors.FontColor}
+                    borderColor={Colors.FontColor}
+                    TextFontSize={Dimension.font10}></CustomButton>
+                </View>
               </View>
-            </View>
-            {/* )} */}
+            )}
           </View>
 
           <View style={styles.profileBottomWrap}>

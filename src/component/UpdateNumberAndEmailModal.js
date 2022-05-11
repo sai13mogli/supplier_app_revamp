@@ -16,12 +16,18 @@ import CustomeIcon from './common/CustomeIcon';
 import FloatingInput from './common/FloatingInput';
 import Toast from 'react-native-toast-message';
 import {useDispatch} from 'react-redux';
-import {fetchBusinessDetails} from '../redux/actions/profile';
+import {fetchBusinessDetails, fetchProfile} from '../redux/actions/profile';
 const phoneRegex = '^[1-9][0-9]{9}$';
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
 const UpdateNumberAndEmailModal = props => {
-  const {updatePhoneOtpModal, setUpdatePhoneOtpModal, type, setphone} = props;
+  const {
+    updatePhoneOtpModal,
+    setUpdatePhoneOtpModal,
+    type,
+    setphone,
+    setemail,
+  } = props;
 
   let interval = {};
   const [phoneOtp, setPhoneOtp] = useState('');
@@ -201,6 +207,7 @@ const UpdateNumberAndEmailModal = props => {
             autoHide: true,
           });
           dispatch(fetchBusinessDetails());
+          dispatch(fetchProfile());
           setphone(phone);
         } else {
           setLoading(false);
@@ -228,6 +235,7 @@ const UpdateNumberAndEmailModal = props => {
             autoHide: true,
           });
           dispatch(fetchBusinessDetails());
+          dispatch(fetchProfile());
           setemail(email);
         } else {
           setLoading(false);
