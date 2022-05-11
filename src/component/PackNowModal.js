@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Dimensions,
   View,
@@ -10,12 +10,13 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import {getImageUrl, getPackNow, getLbh} from '../services/orders';
+import { getImageUrl, getPackNow, getLbh } from '../services/orders';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
-import {OrderedMap} from 'immutable';
+import { OrderedMap } from 'immutable';
 import CustomButton from '../component/common/Button';
 import FloatingLabelInputField from './common/FloatingInput';
+import FloatingInputDropdown from './FloatingInputDropdown';
 import CustomeIcon from './common/CustomeIcon';
 import Productcard from './Productcard';
 const deviceWidth = Dimensions.get('window').width;
@@ -27,6 +28,10 @@ const PackNowModal = props => {
   const [noOfPackets, setNoOfPackets] = useState('1');
   const [noOfPacketsError, setNoOfPacketsError] = useState(false);
   const [weight, setWeight] = useState('');
+  const [weightLabel, setWeightLabel] = useState('Gm');
+  const [heightLabel, setHeightLabel] = useState('Cm');
+  const [lenghtLabel, setLenghtLabel] = useState('Cm');
+  const [widthLabel, setWidthLabel] = useState('Cm');
   const [weightError, setWeightError] = useState(false);
   const [height, setHeight] = useState('');
   const [heightError, setHeightError] = useState(false);
@@ -93,71 +98,168 @@ const PackNowModal = props => {
       title: 'Weight',
       label: 'Weight',
       isImp: true,
-      value: weight,
       onChangeText: text => setWeight(text),
-      component: FloatingLabelInputField,
+      component: FloatingInputDropdown,
       errorMessage: 'Enter Weight',
       showError: weightError,
       keyboardType: 'number-pad',
       onBlur: () => onweightBlur(),
+      onValueChange: (text, label) => setWeigthValue(text, label),
+      selectedValue: weightLabel,
+      value: weight,
+      options: [
+        {
+          label: 'Gm',
+          value: 1,
+        },
+        {
+          label: 'Kg',
+          value: 2,
+        },
+        {
+          label: 'Lb',
+          value: 3,
+        },
+
+      ],
       extraView: () => (
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.InputRighttxt}>Kg</Text>
-          <CustomeIcon
-            name={'arrow-drop-down-line'}
-            color={Colors.FontColor}
-            size={Dimension.font16}></CustomeIcon>
-        </View>
+        <View />
       ),
     },
     height: {
       title: 'Height',
       label: 'Height',
       isImp: true,
-      value: height,
       onChangeText: text => setHeight(text),
-      component: FloatingLabelInputField,
+      component: FloatingInputDropdown,
       errorMessage: 'Enter Height',
       showError: heightError,
       keyboardType: 'number-pad',
       onBlur: () => onheightBlur(),
+      onValueChange: (text, label) => setHeightValue(text, label),
+      selectedValue: heightLabel,
+      value: height,
+      options: [
+        {
+          label: 'Cm',
+          value: 1,
+        },
+        {
+          label: 'm',
+          value: 2,
+        },
+        {
+          label: 'Km',
+          value: 3,
+        },
+        {
+          label: 'Ft',
+          value: 4,
+        },
+        {
+          label: 'In',
+          value: 5,
+        },
+
+      ],
       extraView: () => (
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.InputRighttxt}>Cm</Text>
-          <CustomeIcon
-            name={'arrow-drop-down-line'}
-            color={Colors.FontColor}
-            size={Dimension.font16}></CustomeIcon>
-        </View>
+        <View />
       ),
     },
     length: {
       title: 'Length',
       label: 'Length',
       isImp: true,
-      value: length,
       onChangeText: text => setLength(text),
-      component: FloatingLabelInputField,
+      component: FloatingInputDropdown,
       errorMessage: 'Enter Length',
       showError: lengthError,
       keyboardType: 'number-pad',
       onBlur: () => onlengthBlur(),
-      //   extraView: () => getExtraView(),
+      onValueChange: (text, label) => setLengthValue(text, label),
+      selectedValue: lenghtLabel,
+      value: length,
+      options: [
+        {
+          label: 'Cm',
+          value: 1,
+        },
+        {
+          label: 'm',
+          value: 2,
+        },
+        {
+          label: 'Km',
+          value: 3,
+        },
+        {
+          label: 'Ft',
+          value: 4,
+        },
+        {
+          label: 'In',
+          value: 5,
+        },
+
+      ],
+      extraView: () => (
+        <View />
+      ),
     },
     width: {
       title: 'Width',
       label: 'Width',
       isImp: true,
-      value: width,
       onChangeText: text => setWidth(text),
-      component: FloatingLabelInputField,
+      component: FloatingInputDropdown,
       errorMessage: 'Enter Width',
       showError: widthError,
       keyboardType: 'number-pad',
       onBlur: () => onwidthBlur(),
-      //   extraView: () => getExtraView(),
+      onValueChange: (text, label) => setWidthValue(text, label),
+      selectedValue: widthLabel,
+      value: width,
+      options: [
+        {
+          label: 'Cm',
+          value: 1,
+        },
+        {
+          label: 'm',
+          value: 2,
+        },
+        {
+          label: 'Km',
+          value: 3,
+        },
+        {
+          label: 'Ft',
+          value: 4,
+        },
+        {
+          label: 'In',
+          value: 5,
+        },
+
+      ],
+      extraView: () => (
+        <View />
+      ),
     },
   });
+
+  const setWeigthValue = (text, label) => {
+    setWeightLabel(label)
+  };
+  const setHeightValue = (text, label) => {
+    setHeightLabel(label)
+  };
+  const setLengthValue = (text, label) => {
+    setLenghtLabel(label)
+  };
+  const setWidthValue = (text, label) => {
+    setWidthLabel(label)
+  };
   const renderOrderDetails = () => {
     return (
       <Productcard
@@ -213,7 +315,7 @@ const PackNowModal = props => {
         msn,
         qty: quantity,
       };
-      const {data} = await getLbh(payload);
+      const { data } = await getLbh(payload);
       if (data && data.success) {
         setHeight(data && data.data && data.data.height);
         setLength(data && data.data && data.data.length);
@@ -239,7 +341,7 @@ const PackNowModal = props => {
       !widthError
     ) {
       setLoading(true);
-      const {data} = await getPackNow({
+      const { data } = await getPackNow({
         length,
         width,
         height,
@@ -258,7 +360,7 @@ const PackNowModal = props => {
   };
 
   const fetchImage = async () => {
-    const {data} = await getImageUrl(msn);
+    const { data } = await getImageUrl(msn);
     let imageUrl =
       'https://cdn.moglix.com/' +
       (data &&
@@ -285,7 +387,7 @@ const PackNowModal = props => {
         setModal(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 'auto', width: '100%', height: '100%'}}
+      style={{ padding: 0, margin: 'auto', width: '100%', height: '100%' }}
       deviceWidth={deviceWidth}
       deviceHeight={deviceHeight}
       //height={'80%'}
@@ -309,7 +411,7 @@ const PackNowModal = props => {
         </View>
         <ScrollView>
           <>
-            <View style={{paddingHorizontal: Dimension.padding15}}>
+            <View style={{ paddingHorizontal: Dimension.padding15 }}>
               {renderOrderDetails()}
             </View>
           </>
@@ -321,7 +423,7 @@ const PackNowModal = props => {
           </View>
         </ScrollView>
         <View style={styles.bottomAction}>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <CustomButton
               title="RESET"
               buttonColor={Colors.WhiteColor}
@@ -342,7 +444,7 @@ const PackNowModal = props => {
               }}
             />
           </View>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <CustomButton
               title="PACK NOW"
               loading={loading}
