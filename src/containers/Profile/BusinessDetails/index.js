@@ -684,6 +684,8 @@ const BusinessDetailsScreen = props => {
             updatePhoneOtpModal={updatePhoneOtpModal}
             setUpdatePhoneOtpModal={setUpdatePhoneOtpModal}
             type={type}
+            setphone={setphone}
+            setemail={setemail}
           />
         )}
       </ScrollView>
