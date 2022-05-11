@@ -1209,7 +1209,8 @@ const DocumentsScreen = props => {
 
         </>
       );
-    } else {
+   }
+     else {
       return null;
     }
   };
@@ -1228,6 +1229,7 @@ const DocumentsScreen = props => {
           .toList()
           .toArray()}
         {!uploadDisabled ? noteText() : null}
+       
         {
           profileData && profileData.verificationStatus !== 15
             ?
@@ -1330,7 +1332,7 @@ const DocumentsScreen = props => {
           <Text style={styles.ModalHeading}>Confirm Submission</Text>
           <Text style={styles.Modaltext}>
             By confirming the submission of all the details you agree that all
-            the details are true and no false details are provided.Once
+            the details are true and no false details are provided. Once
             validated you'll receive an email regarding the status of your
             profile
           </Text>

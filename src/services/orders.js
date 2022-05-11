@@ -111,6 +111,19 @@ export const acceptOrder = async body =>
     },
   );
 
+export const changeOmsPickupDate = async body =>
+  axios.post(
+    `${BASE_URL}api/order/oms/changePickupDate`,
+    {
+      ...body,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+    },
+  );
+
 export const getpoChallan = async (supplierId, orderRef) =>
   axios.get(`https://apigatewayqa.moglix.com/api/order/downloadPoChallan`, {
     params: {supplierId: supplierId, orderRef: orderRef},

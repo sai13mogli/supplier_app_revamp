@@ -29,6 +29,10 @@ const FAQS = props => {
       key: 'Popular Queries',
     },
     {
+      title: 'Account Related',
+      key: 'Account Related',
+    },
+    {
       title: 'Product/Catalog Listing Related',
       key: 'Product/Catalog Listing Related',
     },
@@ -37,13 +41,14 @@ const FAQS = props => {
       key: 'Order related',
     },
     {
-      title: 'Fees & Penalty Related',
-      key: 'Fees & Penalty related',
-    },
-    {
       title: 'Payment Related',
       key: 'Payment related',
     },
+    {
+      title: 'Fees & Penalty Related',
+      key: 'Fees & Penalty related',
+    },
+    
   ];
 
   useEffect(() => {
