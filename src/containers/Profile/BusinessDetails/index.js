@@ -233,6 +233,7 @@ const BusinessDetailsScreen = props => {
       disabled: !phoneEdit,
       extraView: () => getExtraView(),
       isfromLogin: true,
+      isfrmBD:true
     },
     email: {
       title: 'Email',
@@ -248,6 +249,7 @@ const BusinessDetailsScreen = props => {
       disabled: !emailEdit,
       extraView: () => getExtraViewEmail(),
       isfromLogin: true,
+      isfrmBD:true
     },
     tan: {
       title: 'TAN',
