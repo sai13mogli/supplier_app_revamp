@@ -30,9 +30,13 @@ import Dimension from '../../Theme/Dimension';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import {STATE_STATUS} from '../../redux/constants';
 import {fetchNotifications} from '../../redux/actions/notifications';
+import {sendVerificationEmail} from '../../services/profile';
+import Toast from 'react-native-toast-message';
+import {openInbox} from 'react-native-email-link';
 
 const ProfileScreen = props => {
   const [initLoader, setInitLoader] = useState(true);
+  const [openemailLoader, setOpenEmailLoader] = useState(false);
 
   const {navigate} = useNavigation();
   const dispatch = useDispatch();
@@ -192,6 +196,26 @@ const ProfileScreen = props => {
     }
   };
 
+  const sendVerificationMail = async () => {
+    try {
+      setOpenEmailLoader(true);
+      const {data} = await sendVerificationEmail();
+      if (data && data.success) {
+        setOpenEmailLoader(false);
+        openInbox();
+      } else {
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={{flex: 1}}>
       <Header
@@ -260,28 +284,30 @@ const ProfileScreen = props => {
                 </View>
               </View>
             </View>
-            {profileData && profileData.isEmailVerified ? null : (
-              <View style={styles.UserEmailVerfyWrap}>
-                <View style={{flex: 6, marginRight: Dimension.margin10}}>
-                  <Text style={styles.UserEmailVerfyBoldTxt}>
-                    A verification link has been sent on your email.
-                  </Text>
-                  <Text style={styles.UserEmailVerfylightTxt}>
-                    Link is active for 24 hours only.
-                  </Text>
-                </View>
-
-                <View style={{flex: 3}}>
-                  <CustomButton
-                    title={'OPEN MAIL'}
-                    onPress={() => Linking.openURL('mailto:')}
-                    TextColor={Colors.WhiteColor}
-                    buttonColor={Colors.FontColor}
-                    borderColor={Colors.FontColor}
-                    TextFontSize={Dimension.font12}></CustomButton>
-                </View>
+            {/* {profileData && profileData.isEmailVerified ? null : ( */}
+            <View style={styles.UserEmailVerfyWrap}>
+              <View style={{flex: 6, marginRight: Dimension.margin10}}>
+                <Text style={styles.UserEmailVerfyBoldTxt}>
+                  A verification link has been sent on your email.
+                </Text>
+                <Text style={styles.UserEmailVerfylightTxt}>
+                  Link is active for 24 hours only.
+                </Text>
               </View>
-            )}
+
+              <View style={{flex: 3}}>
+                <CustomButton
+                  title={'OPEN MAIL'}
+                  loading={openemailLoader}
+                  loadingColor={Colors.WhiteColor}
+                  onPress={() => sendVerificationMail()}
+                  TextColor={Colors.WhiteColor}
+                  buttonColor={Colors.FontColor}
+                  borderColor={Colors.FontColor}
+                  TextFontSize={Dimension.font12}></CustomButton>
+              </View>
+            </View>
+            {/* )} */}
           </View>
 
           <View style={styles.profileBottomWrap}>

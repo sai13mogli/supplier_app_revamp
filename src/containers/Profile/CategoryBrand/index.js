@@ -203,9 +203,10 @@ const CategoryBrandScreen = props => {
       closeDoc: brandCertificate && brandCertificate.closeDoc,
       fromCategoryBrand: true,
       uploadDocument: () => uploadFromFileExp(),
-      onPress: brandCertificate && brandCertificate.showDoc
-        ? () => openDocView(brandCertificate && brandCertificate.value)
-        : () => uploadFromFileExp(),
+      onPress:
+        brandCertificate && brandCertificate.showDoc
+          ? () => openDocView(brandCertificate && brandCertificate.value)
+          : () => uploadFromFileExp(),
       component: FileUpload,
       isImp: natureOfBusiness == 3 || natureOfBusiness == 2 ? true : false,
       setUpload: true,
@@ -220,6 +221,8 @@ const CategoryBrandScreen = props => {
       value: expiryDate,
       onChange: date => setExpiryDate(date),
       component: CustomeDatePicker,
+      fromCategoryBrand: true,
+      natureOfBusiness: natureOfBusiness,
     },
     brand_url: {
       title: 'Brand URL (If Applicable)',
@@ -1223,11 +1226,11 @@ const CategoryBrandScreen = props => {
           <ActivityIndicator
             size={'small'}
             color={'white'}
-            style={{ marginRight: 4 }}
+            style={{marginRight: 4}}
           />
         ) : isPDF ? (
           <PDFView
-            style={{ flex: 1 }}
+            style={{flex: 1}}
             onError={error => console.log('onError', error)}
             onLoad={() => console.log('PDF rendered from base 64 data')}
             resource={`${imageUrl}`}
@@ -1235,8 +1238,8 @@ const CategoryBrandScreen = props => {
           />
         ) : (
           <Image
-            source={{ uri: imageUrl }}
-            style={{ height: '100%', width: '100%', flex: 1 }}
+            source={{uri: imageUrl}}
+            style={{height: '100%', width: '100%', flex: 1}}
           />
         )}
       </Modal>
