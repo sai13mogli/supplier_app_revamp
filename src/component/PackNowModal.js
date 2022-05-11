@@ -21,7 +21,29 @@ import CustomeIcon from './common/CustomeIcon';
 import Productcard from './Productcard';
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
+const options = [
+  {
+    label: 'Cm',
+    value: 'Cm',
+  },
+  {
+    label: 'm',
+    value: 'm',
+  },
+  {
+    label: 'Km',
+    value: 'Km',
+  },
+  {
+    label: 'Ft',
+    value: 'Ft',
+  },
+  {
+    label: 'In',
+    value: 'In',
+  },
 
+]
 const PackNowModal = props => {
   const [orderImage, setOrderImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -39,6 +61,7 @@ const PackNowModal = props => {
   const [lengthError, setLengthError] = useState(false);
   const [width, setWidth] = useState('');
   const [widthError, setWidthError] = useState(false);
+
 
   const onnoOfPacketsBlur = () => {
     if (noOfPackets && noOfPackets.length) {
@@ -80,6 +103,39 @@ const PackNowModal = props => {
     }
   };
 
+  const unitWeightConversion = (weights, weightLabels) => {
+    switch (weightLabels) {
+      case ("Kg"):
+        let kiloGram = weights * 1000
+        return kiloGram
+      case ("Lb"):
+        let pondWeight = weights * 0.0022046
+        return pondWeight
+      default:
+        return weights;
+    }
+  }
+
+  const unitConversion = (heights, heightLabels) => {
+
+    switch (heightLabels) {
+      case ("m"):
+        let meterValue = heights * 100
+        return meterValue
+      case ("Km"):
+        let kilometer = heights * 100000
+        return kilometer
+      case ("Ft"):
+        let feet = heights * 30.48
+        return feet
+      case ("In"):
+        let Inches = heights * 2.54
+        return Inches
+      default:
+        return heights;
+    }
+  }
+
   const FORM_FIELDS = new OrderedMap({
     noOfPackets: {
       title: 'No. Of Packets',
@@ -92,13 +148,11 @@ const PackNowModal = props => {
       showError: noOfPacketsError,
       keyboardType: 'number-pad',
       onBlur: () => onnoOfPacketsBlur(),
-      //   extraView: () => getExtraView(),
     },
     weight: {
       title: 'Weight',
       label: 'Weight',
       isImp: true,
-      onChangeText: text => setWeight(text),
       component: FloatingInputDropdown,
       errorMessage: 'Enter Weight',
       showError: weightError,
@@ -110,15 +164,15 @@ const PackNowModal = props => {
       options: [
         {
           label: 'Gm',
-          value: 1,
+          value: 'Gm',
         },
         {
           label: 'Kg',
-          value: 2,
+          value: 'Kg',
         },
         {
           label: 'Lb',
-          value: 3,
+          value: 'Lb',
         },
 
       ],
@@ -138,30 +192,8 @@ const PackNowModal = props => {
       onBlur: () => onheightBlur(),
       onValueChange: (text, label) => setHeightValue(text, label),
       selectedValue: heightLabel,
-      value: height,
-      options: [
-        {
-          label: 'Cm',
-          value: 1,
-        },
-        {
-          label: 'm',
-          value: 2,
-        },
-        {
-          label: 'Km',
-          value: 3,
-        },
-        {
-          label: 'Ft',
-          value: 4,
-        },
-        {
-          label: 'In',
-          value: 5,
-        },
-
-      ],
+      value: unitConversion(height, heightLabel),
+      options: options,
       extraView: () => (
         <View />
       ),
@@ -179,29 +211,7 @@ const PackNowModal = props => {
       onValueChange: (text, label) => setLengthValue(text, label),
       selectedValue: lenghtLabel,
       value: length,
-      options: [
-        {
-          label: 'Cm',
-          value: 1,
-        },
-        {
-          label: 'm',
-          value: 2,
-        },
-        {
-          label: 'Km',
-          value: 3,
-        },
-        {
-          label: 'Ft',
-          value: 4,
-        },
-        {
-          label: 'In',
-          value: 5,
-        },
-
-      ],
+      options: options,
       extraView: () => (
         <View />
       ),
@@ -219,29 +229,7 @@ const PackNowModal = props => {
       onValueChange: (text, label) => setWidthValue(text, label),
       selectedValue: widthLabel,
       value: width,
-      options: [
-        {
-          label: 'Cm',
-          value: 1,
-        },
-        {
-          label: 'm',
-          value: 2,
-        },
-        {
-          label: 'Km',
-          value: 3,
-        },
-        {
-          label: 'Ft',
-          value: 4,
-        },
-        {
-          label: 'In',
-          value: 5,
-        },
-
-      ],
+      options: options,
       extraView: () => (
         <View />
       ),
@@ -341,16 +329,18 @@ const PackNowModal = props => {
       !widthError
     ) {
       setLoading(true);
+
       const { data } = await getPackNow({
-        length,
-        width,
-        height,
-        weight,
+        length: unitConversion(length, lenghtLabel),
+        width: unitConversion(width, weightLabel),
+        height: unitConversion(height, heightLabel),
+        weight: unitWeightConversion(weight, weightLabel),
         packetNo: noOfPackets,
         source: 0,
         itemId,
         supplierId,
       });
+      console.log("Order====>", data);
       if (data.success) {
         setModal(false);
         onPackNowSuccess();

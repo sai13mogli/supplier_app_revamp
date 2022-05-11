@@ -19,7 +19,17 @@ const TdsDetails = (props) => {
     state => state.profileReducer.bankDetails.data || {},
   );
   const tdsInfoDetails = useSelector(
-    state => state.profileReducer.tdsInfoDetails.data || [],
+    state => state.profileReducer.tdsInfoDetails.data || [{
+      financialYearTurnover: null,
+      financialyear: "2022-23",
+      id: "",
+      lastToLastYearItr: null,
+      lastToLastYearTdsTcs: null,
+      lastYearItr: null,
+      lastYearTdsTcs: null,
+      panNumber: "",
+      previousFinancialYear: "2021-22",
+    }],
   );
 
   const [tdsInfoList, setTdsInfoList] = useState([]);
@@ -46,7 +56,7 @@ const TdsDetails = (props) => {
           Year {section.financialyear}
         </Text>
         {
-          profileData && profileData.verificationStatus !== 15
+          profileData && profileData.verificationStatus < 10
             ?
             <>
               {showEdit == true ?
@@ -183,7 +193,17 @@ const TdsDetails = (props) => {
         <Accordion
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 80, position: "relative" }}
-          sections={tdsInfoDetails || []}
+          sections={tdsInfoDetails && tdsInfoDetails.length ? tdsInfoDetails : [{
+            financialYearTurnover: null,
+            financialyear: "2022-23",
+            id: "",
+            lastToLastYearItr: null,
+            lastToLastYearTdsTcs: null,
+            lastYearItr: null,
+            lastYearTdsTcs: null,
+            panNumber: "",
+            previousFinancialYear: "2021-22",
+          }]}
           activeSections={tdsInfoList}
           renderHeader={_renderHeader}
           renderContent={_renderContent}

@@ -494,28 +494,7 @@ const OrdersScreen = props => {
     }
   }, [bulkItemIds]);
 
-  // const selectItemId = itemId => {
 
-  //   let currentItemIds = [...bulkItemIds];
-  //   if (currentItemIds.includes(itemId)) {
-  //     currentItemIds = currentItemIds.filter(_ => _ != itemId);
-  //   } else {
-  //     if (currentItemIds) {
-  //       currentItemIds.push(itemId);
-  //     } else {
-  //       currentItemIds = [];
-  //       currentItemIds.push(itemId);
-  //     }
-  //   }
-  //   setBulkItemIds(currentItemIds);
-  // };
-
-  // const handleScroll = (event) => {
-  //   this.setState({ hideScroll: false });
-  //   if (event.nativeEvent.contentOffset.x >= 10) {
-  //     this.setState({ hideScroll: true });
-  //   }
-  // };
 
   const upButtonHandler = tabIndex => {
     scrollRef.current.scrollTo({
@@ -893,8 +872,7 @@ const OrdersScreen = props => {
       ) : (
         <>
           {
-            profileData && profileData.verificationStatus !== 15 ? null :
-              renderHeaderComponent()
+            renderHeaderComponent()
           }
           <FlatList
             data={OrderData.toArray()}
@@ -925,30 +903,6 @@ const OrdersScreen = props => {
             initialNumToRender={5}
           />
 
-          {/* {ordersfiltersModal && (
-            <OrdersFilterModal
-              ordersfiltersModal={ordersfiltersModal}
-              setOrdersFiltersModal={setOrdersFiltersModal}
-              activeFilter={activeFilter}
-              setActiveFilter={setActiveFilter}
-              selectedTab={selectedTab}
-              appliedFilter={appliedFilter}
-              setAppliedFilter={setAppliedFilter}
-              initialFilter={initialFilter}
-              setInitialFilter={setInitialFilter}
-              selectFilter={selectFilter}
-              applyFilters={applyFilters}
-              pickupFromDate={pickupFromDate || appliedFilter['pickupFromDate']}
-              pickupToDate={pickupToDate || appliedFilter['pickupToDate']}
-              setPickupFromDate={setPickupFromDate}
-              setPickupToDate={setPickupToDate}
-              poFromDate={poFromDate || appliedFilter['poFromDate']}
-              poToDate={poToDate || appliedFilter['poToDate']}
-              setPoFromDate={setPoFromDate}
-              setPoToDate={setPoToDate}
-              resetFilters={resetFilters}
-            />
-          )} */}
           <View style={styles.footerWrap}>
             <View style={styles.footerSearchWrap}>
               <View style={styles.searchWrapper}>
