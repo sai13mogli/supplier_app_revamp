@@ -116,12 +116,6 @@ const styles = StyleSheet.create({
         marginTop: 'auto',
         paddingVertical: Dimension.padding20,
     },
-    bottombtnWrap: {
-        padding: Dimension.padding15,
-        borderTopColor: colors.grayShade2,
-        borderTopWidth: 1,
-        backgroundColor: colors.WhiteColor
-    },
     ModalheadingWrapper: {
         flexDirection: 'row',
         justifyContent: 'space-between',

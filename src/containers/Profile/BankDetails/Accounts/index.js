@@ -20,7 +20,6 @@ const Accounts = props => {
             <TouchableOpacity
               onPress={() => {
                 props.navigation.navigate('EditBankAccount', {
-
                 });
               }}>
 
