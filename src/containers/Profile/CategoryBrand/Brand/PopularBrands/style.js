@@ -2,10 +2,11 @@ import {StyleSheet} from 'react-native';
 import Colors from '../../../../../Theme/Colors';
 import Dimension from '../../../../../Theme/Dimension';
 const styles = StyleSheet.create({
-  Wrapper: {
-    marginTop: Dimension.margin20,
-    flexDirection: 'row',
-    backgroundColor: '#fff',
+Wrapper:{
+  marginTop:Dimension.margin20,
+  flexDirection:"row",
+  backgroundColor:"#fff",
+  paddingVertical: Dimension.padding20,
   },
   activeBackground: {
     backgroundColor: Colors.grayShade1,

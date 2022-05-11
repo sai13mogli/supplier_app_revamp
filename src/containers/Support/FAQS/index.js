@@ -15,6 +15,7 @@ import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import CustomeIcon from '../../../component/common/CustomeIcon';
 import RenderHtml, {defaultSystemFonts}  from 'react-native-render-html';
+//import ULElement from 'react-native-render-html/lib/typescript/elements/ULElement';
 const systemFonts = [...defaultSystemFonts, 'Poppins-Regular']
 
 const FAQS = props => {
@@ -78,7 +79,13 @@ const FAQS = props => {
       whiteSpace: 'normal',
       color: Colors.FontColor,
       fontSize:Dimension.font12,
-      fontFamily:Dimension.CustomRegularFont
+      fontFamily:Dimension.CustomRegularFont,
+      
+    }
+    const mixedStyles1={
+      paddingLeft:0,
+      marginLeft:0,
+      backgroundColor:"#000"
     }
   //  text = text.split('</p>').join('').split('<p>');
   //  const regex = /(<([^>]+)>)/gi;
@@ -90,6 +97,7 @@ const FAQS = props => {
             source={source}
             baseStyle ={mixedStyles}
             systemFonts={systemFonts}
+            
             
           />
         {/* {text.map((li, liI) =>
