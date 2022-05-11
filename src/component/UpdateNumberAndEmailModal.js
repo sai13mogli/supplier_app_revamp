@@ -21,7 +21,7 @@ const phoneRegex = '^[1-9][0-9]{9}$';
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
 const UpdateNumberAndEmailModal = props => {
-  const {updatePhoneOtpModal, setUpdatePhoneOtpModal, type} = props;
+  const {updatePhoneOtpModal, setUpdatePhoneOtpModal, type, setphone} = props;
 
   let interval = {};
   const [phoneOtp, setPhoneOtp] = useState('');
@@ -189,6 +189,7 @@ const UpdateNumberAndEmailModal = props => {
           phone,
           otp: phoneOtp,
         };
+
         const {data} = await updatePhone(payloadObj);
         if (data && data.success) {
           setLoading(false);
@@ -200,6 +201,7 @@ const UpdateNumberAndEmailModal = props => {
             autoHide: true,
           });
           dispatch(fetchBusinessDetails());
+          setphone(phone);
         } else {
           setLoading(false);
           if (data.message == 'Invalid OTP!') {
@@ -226,6 +228,7 @@ const UpdateNumberAndEmailModal = props => {
             autoHide: true,
           });
           dispatch(fetchBusinessDetails());
+          setemail(email);
         } else {
           setLoading(false);
           if (data.message == 'Invalid OTP!') {

@@ -6,12 +6,12 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { acceptOrder } from '../services/orders';
+import {acceptOrder, changeOmsPickupDate} from '../services/orders';
 import Toast from 'react-native-toast-message';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 const deviceWidth = Dimensions.get('window').width;
@@ -58,35 +58,82 @@ const AcceptModal = props => {
 
   const onAccept = async () => {
     try {
-      setAcceptLoader(true);
-      let payload = {
-        supplierId: await AsyncStorage.getItem('userId'),
-        itemId: `${itemId}`,
-        pickupDate: day.dateString.split('-').reverse().join('-'),
-      };
-      const { data } = await acceptOrder(payload);
-      if (data && data.success) {
-        fetchOrdersFunc(0, '', selectedTab, shipmentType, {
-          pickupFromDate: '',
-          pickupToDate: '',
-          poFromDate: '',
-          poToDate: '',
-          orderType: [],
-          deliveryType: [],
-          orderRefs: [],
-        });
-        fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
-        props.setLoadingTabs(true);
-        setAcceptLoader(false);
+      if (isOmsPickupDate) {
+        setAcceptLoader(true);
+        let payloadOms = {
+          supplierId: await AsyncStorage.getItem('userId'),
+          itemId: `${itemId}`,
+          pickupDate: day.dateString,
+          source: 0,
+        };
+        console.log(payloadOms.pickupDate);
+        const {data} = await changeOmsPickupDate(payloadOms);
+        if (data && data.success) {
+          fetchOrdersFunc(0, '', selectedTab, shipmentType, {
+            pickupFromDate: '',
+            pickupToDate: '',
+            poFromDate: '',
+            poToDate: '',
+            orderType: [],
+            deliveryType: [],
+            orderRefs: [],
+          });
+          fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
+          props.setLoadingTabs(true);
+          setAcceptLoader(false);
+          Toast.show({
+            type: 'success',
+            text2: data.message,
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        } else {
+          setAcceptLoader(false);
+          setDisplayCalendar(false);
+          Toast.show({
+            type: 'error',
+            text2: data.message,
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        }
       } else {
-        setAcceptLoader(false);
-        setDisplayCalendar(false);
-        Toast.show({
-          type: 'error',
-          text2: data.message,
-          visibilityTime: 2000,
-          autoHide: true,
-        });
+        setAcceptLoader(true);
+        let payload = {
+          supplierId: await AsyncStorage.getItem('userId'),
+          itemId: `${itemId}`,
+          pickupDate: day.dateString.split('-').reverse().join('-'),
+        };
+        const {data} = await acceptOrder(payload);
+        if (data && data.success) {
+          fetchOrdersFunc(0, '', selectedTab, shipmentType, {
+            pickupFromDate: '',
+            pickupToDate: '',
+            poFromDate: '',
+            poToDate: '',
+            orderType: [],
+            deliveryType: [],
+            orderRefs: [],
+          });
+          fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
+          props.setLoadingTabs(true);
+          setAcceptLoader(false);
+          Toast.show({
+            type: 'success',
+            text2: data.message,
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        } else {
+          setAcceptLoader(false);
+          setDisplayCalendar(false);
+          Toast.show({
+            type: 'error',
+            text2: data.message,
+            visibilityTime: 2000,
+            autoHide: true,
+          });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -170,7 +217,7 @@ const AcceptModal = props => {
         setDisplayCalendar(false);
       }}
       coverScreen={true}
-      style={{ padding: 0, margin: 0 }}
+      style={{padding: 0, margin: 0}}
       deviceWidth={deviceWidth}
       hasBackdrop={true}
       onBackdropPress={() => setDisplayCalendar(false)}
@@ -220,7 +267,7 @@ const AcceptModal = props => {
           <TouchableOpacity style={styles.rejectCtabtn} onPress={onAccept}>
             <Text style={styles.rejectCtaTxt}>ACCEPT</Text>
             {acceptLoader && (
-              <ActivityIndicator color={'#fff'} style={{ alignSelf: 'center' }} />
+              <ActivityIndicator color={'#fff'} style={{alignSelf: 'center'}} />
             )}
           </TouchableOpacity>
         </View>
