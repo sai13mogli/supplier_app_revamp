@@ -13,9 +13,10 @@ const UploadInvoiceScreen = props => {
   const [loading, setLoading] = useState(false);
   const [bulkItemIds, setBulkItemIds] = useState([]);
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
-  const [totalAmount, setTotalAmount] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
   const [totalPrice, setTotalPrice] = useState([]);
-  const [headerSum, setHeaderSum] = useState([])
+  const [headerSum, setHeaderSum] = useState(0)
+  const [totalSum, setTotalSum] = useState(0)
   const [hsn, sethsn] = useState(props?.route?.params?.hsn);
   const [taxPercentage, setTaxPercentage] = useState(
     props?.route?.params?.taxPercentage,
@@ -55,9 +56,8 @@ const UploadInvoiceScreen = props => {
 
   const selectItemId = (itemId, totalAmount) => {
 
-
+    console.log("TotalAmoaunr====>", totalAmount);
     let currentItemIds = [...bulkItemIds];
-    let currentPrice = [...totalPrice];
 
     if (currentItemIds.includes(itemId)) {
       currentItemIds = currentItemIds.filter(_ => _ != itemId);
@@ -76,13 +76,9 @@ const UploadInvoiceScreen = props => {
       let priceList = [...totalPrice];
       priceList.splice(index, 1);
       setTotalPrice(priceList);
-      setTotalAmount(getTotalPrice());
-
-      // var arr = [...podIdList]
-      // const podindex = arr.findIndex(x => x == podId);
-      // arr.splice(podindex, 1);
-      // setPodIdList(arr)
-
+      // setTotalSum(totalSum - totalAmount)
+      console.log("setHeaderSum====>", totalSum, totalAmount);
+      // setTotalAmount(getTotalPrice());
     } else {
       let row = {
         id: itemId,
@@ -91,10 +87,10 @@ const UploadInvoiceScreen = props => {
       let priceList = [...totalPrice];
       priceList.push(row);
       setTotalPrice(priceList);
-      setTotalAmount(getTotalPrice());
-      // var arr = [...podIdList]
-      // arr.push(podId)
-      // setPodIdList(arr)
+      // setTotalSum(totalSum + totalAmount)
+      // setTotalAmount(getTotalPrice());
+      console.log("setHeaderSum2====>", totalSum, totalAmount);
+
     }
   };
 
@@ -120,6 +116,7 @@ const UploadInvoiceScreen = props => {
     }, 0) : 0;
 
     let totalSum = arrSum + value
+    console.log("totalSum===>", totalSum);
     setHeaderSum(totalSum)
     console.log("totalAmoubt", totalSum);
   }
@@ -133,7 +130,7 @@ const UploadInvoiceScreen = props => {
         quantity={item.quantity}
         selectedValue={(value) => setTaxPercentage(value)}
         UpdatedQuntity={(value) => setQuantity(value)}
-        UpdatedTotalPrice={(value) => { calculateHeaderSum(value), console.log("value====>", value); }}
+        UpdatedTotalPrice={(value) => (value)}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
@@ -190,7 +187,7 @@ const UploadInvoiceScreen = props => {
             ]}>
             Total Price -{' '}
             <Text style={styles.TitleBoldTxt}>
-              ₹{headerSum}
+              ₹{getTotalPrice(totalAmount)}
               {'   '} (Price Including Tax-
               <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
               <Text style={styles.TitleBoldTxt}> )</Text>
