@@ -299,6 +299,8 @@ const NotificationScreen = props => {
         <Header
           showText={'Notifications'}
           rightIconName={'notification'}
+          showBack
+          navigation={props.navigation}
           fromnotification={true}
         />
         {notifications && notifications.length ? (

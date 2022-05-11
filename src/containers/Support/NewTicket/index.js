@@ -125,6 +125,9 @@ const NewTicket = props => {
       onChangeText: text => setexplainQuery(text),
       showError: explainQueryError,
       IsMultiline: true,
+      numberOfLines: 5,
+      returnKeyType: 'next',
+      returnKeyLabel: 'Enter',
     },
   });
 
