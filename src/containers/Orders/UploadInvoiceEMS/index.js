@@ -11,6 +11,7 @@ import InvoiceEmsCard from '../../../component/InvoiceEmsCard';
 
 const UploadInvoiceScreen = props => {
   const [loading, setLoading] = useState(false);
+  const [invoiceLoader, setInvoiceLoader] = useState(false);
   const [bulkItemIds, setBulkItemIds] = useState([]);
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -34,10 +35,13 @@ const UploadInvoiceScreen = props => {
 
   let EmsOmsFlag = actionCTA;
   let tax = global.hsn
+
   useEffect(() => {
+    setInvoiceLoader(true)
     if (EmsOmsFlag.includes('MAP_INVOICE') || EmsOmsFlag.includes('REMAP_INVOICE')) {
       fetchInvoiceEMSDetails();
     }
+
   }, []);
 
 
@@ -50,8 +54,6 @@ const UploadInvoiceScreen = props => {
     }, 0);
     return price;
   };
-
-
 
 
   const selectItemId = (itemId, totalAmount) => {
@@ -104,6 +106,7 @@ const UploadInvoiceScreen = props => {
       if (data.success) {
         setInvoiceList(data?.data?.itemList);
         setLoading(false);
+        setInvoiceLoader(false)
       }
     } catch (error) {
       console.log(error);
@@ -139,6 +142,7 @@ const UploadInvoiceScreen = props => {
         selectedTab={selectedTab}
         itemId={item.id}
         itemIndex={item}
+
         bulkItemIds={bulkItemIds}
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
@@ -161,13 +165,11 @@ const UploadInvoiceScreen = props => {
     return null;
   };
 
+
+
   const renderOrderHeaderDetail = () => {
-
-
-
     return (
       <>
-
         <View style={styles.headerView}>
           <Text
             style={[
@@ -210,7 +212,12 @@ const UploadInvoiceScreen = props => {
       />
       {renderOrderHeaderDetail()}
       {
-        invoiceList ?
+        invoiceLoader ? (
+          <ActivityIndicator
+            style={{ alignSelf: 'center', padding: 12 }}
+            color={colors.BrandColor}
+          />
+        ) :
           <FlatList
             data={invoiceList}
             renderItem={renderItem}
@@ -218,8 +225,8 @@ const UploadInvoiceScreen = props => {
             keyExtractor={(item, index) => `${index}-item`}
             onEndReachedThreshold={0.9}
             showsVerticalScrollIndicator={false}
-          /> :
-          <ActivityIndicator style={{ alignSelf: 'center', marginTop: 150 }} />
+          />
+
       }
 
       <View>
