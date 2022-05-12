@@ -117,7 +117,7 @@ const InvoiceCard = props => {
     let Price = transferPrice * text;
     let percentage = (Price / 100) * taxPercentage + text * transferPrice;
     setAmount(percentage);
-    props.UpdatedTotalPrice(percentage)
+    // props.UpdatedTotalPrice(percentage)
   };
 
   const calculateHsn = (text, label) => {
@@ -128,7 +128,7 @@ const InvoiceCard = props => {
     let Price = transferPrice * quantity;
     let percentage = (Price / 100) * text + quantity * transferPrice;
     setAmount(percentage);
-    props.UpdatedTotalPrice(percentage)
+    // props.UpdatedTotalPrice(percentage)
   };
 
   const renderOrderDetails = () => {

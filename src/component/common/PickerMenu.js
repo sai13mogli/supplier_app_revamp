@@ -1,18 +1,18 @@
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
-import {Menu, MenuItem, MenuDivider} from 'react-native-material-menu';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
 import CustomeIcon from '../../component/common/CustomeIcon';
 
 const PickerMenu = props => {
-  const {options, onValueChange, selectedValue, title, isImp} = props;
+  const { options, onValueChange, selectedValue, title, isImp } = props;
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
   return (
     <>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{ flexDirection: 'row' }}>
         <Text style={styles.labelStyle}>{title}</Text>
         {isImp ? <Text style={styles.starIcon}>*</Text> : null}
       </View>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: '65%',
     shadowColor: 'rgba(0,0,0,0.5)',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 2,
     elevation: 3,
@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
   },
   dropDowninnerWrap: {
     width: '100%',
-    //marginTop:Dimension.margin40
   },
 });
 
