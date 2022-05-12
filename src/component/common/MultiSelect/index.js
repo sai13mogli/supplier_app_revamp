@@ -200,26 +200,9 @@ const MultiSelect = props => {
   };
   return (
     <>
-      {!props.fromBrand ? (
-        <View style={styles.searchWrapper}>
-          <TextInput
-            placeholderTextColor={placeholderTextColor}
-            onChangeText={onChangeText}
-            value={value}
-            blurOnSubmit={blurOnSubmit}
-            placeholder={placeholder}
-            style={styles.SearchInputCss}
-            onSubmitEditing={onSubmitEditing}></TextInput>
-          <CustomeIcon
-            name={'search'}
-            style={styles.seacrhIcon}
-            onPress={() => {
-              if (props.fromAllBrands) {
-                props.fetchListingData();
-              }
-            }}></CustomeIcon>
-        </View>
-      ) : null}
+      {/* {!props.fromBrand ? (
+        
+      ) : null} */}
 
       <FlatList
         keyExtractor={(item, index) => index.toString()}
