@@ -126,10 +126,7 @@ const Routes = props => {
   };
 
   const linking = {
-    prefixes: [
-      'https://www.suppliercentralqa.moglilabs.com',
-      'www.suppliercentralqa.moglilabs.com://',
-    ],
+    prefixes: ['https://www.supplier.moglix.com', 'www.supplier.moglix.com://'],
     config: {
       initialRouteName: 'HomeApp',
       screens: {
@@ -183,7 +180,6 @@ const Routes = props => {
         const currentRouteName = navigationRef.current.getCurrentRoute().name;
 
         if (previousRouteName !== currentRouteName) {
-         
           await analytics().logScreenView({
             screen_name: currentRouteName,
             screen_class: currentRouteName,

@@ -24,7 +24,7 @@
                 android:name="android.intent.category.BROWSABLE"/>
 
                 <!-- Accepts URIs that begin with "example://gizmos” -->
-                <data android:scheme="https" android:host="www.suppliercentralqa.moglilabs.com"/>
+                <data android:scheme="https" android:host="www.supplier.moglix.com"/>
                 <data android:scheme="http"/>
             </intent-filter>
         </activity>

@@ -3,11 +3,9 @@ import {
   Dimensions,
   View,
   Text,
-  TouchableOpacity,
   ScrollView,
   StyleSheet,
   Image,
-  ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { getImageUrl, getPackNow, getLbh } from '../services/orders';

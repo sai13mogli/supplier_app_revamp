@@ -264,6 +264,29 @@ const AllBrandsScreen = props => {
   const brandListing = () => {
     return (
       <>
+        <View style={styles.searchWrapper}>
+          <TextInput
+            value={inputValue}
+            onChangeText={value => {
+              setInputValue(value);
+            }}
+            placeholder={'Search'}
+            placeholderTextColor={Colors.eyeIcon}
+            blurOnSubmit={true}
+            style={styles.SearchInputCss}
+            onSubmitEditing={() => {
+              fetchListingData(64, inputValue);
+            }}
+          />
+          <CustomeIcon
+            name={'search'}
+            style={styles.seacrhIcon}
+            onPress={() => {
+              if (props.fromAllBrands) {
+                props.fetchListingData();
+              }
+            }}></CustomeIcon>
+        </View>
         <View style={styles.Wrapper}>
           <View style={styles.leftPart}>
             <MultiSelect

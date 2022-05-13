@@ -48,7 +48,6 @@ const MoreScreen = props => {
       dispatch(fetchTdsInfoDetails());
       dispatch(fetchProfile());
       dispatch(fetchCategoriesBrands());
-      console.log('morescreen');
     }
   }, []);
 

@@ -82,7 +82,6 @@ class App extends React.Component {
         Linking.canOpenURL(event.url).then(supported => {
           if (supported) {
             let input = event.url;
-            // 'https://www.suppliercentralqa.moglilabs.com/profile',
             if (input.includes('?')) {
               input
                 .split('?')[1]
@@ -93,13 +92,10 @@ class App extends React.Component {
                   }
                 });
               screen = input
-                .replace('https://www.suppliercentralqa.moglilabs.com/', '')
+                .replace('https://www.supplier.moglix.com/', '')
                 .split('?')[0];
             } else {
-              screen = input.replace(
-                'https://www.suppliercentralqa.moglilabs.com/',
-                '',
-              );
+              screen = input.replace('https://www.supplier.moglix.com/', '');
             }
             // if (screen == 'Orders') {
             console.log(screen, obj, 'app.js');

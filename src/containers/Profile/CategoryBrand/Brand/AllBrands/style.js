@@ -7,8 +7,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding20,
     position: 'relative',
-    backgroundColor:"#fff",
-    marginTop:Dimension.margin15
+    backgroundColor: '#fff',
+    marginTop: Dimension.margin5,
+  },
+  searchWrapper: {
+    marginBottom: Dimension.margin20,
+    position: 'relative',
+  },
+
+  SearchInputCss: {
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: Colors.BoxBorderColor,
+    paddingHorizontal: Dimension.padding10,
+    paddingVertical: Dimension.padding10,
+  },
+  seacrhIcon: {
+    position: 'absolute',
+    top: Dimension.padding12,
+    right: Dimension.padding10,
+    fontSize: Dimension.font18,
+    color: Colors.FontColor,
   },
 
   leftPart: {
@@ -17,7 +39,7 @@ const styles = StyleSheet.create({
   },
   AlphabetWrap: {
     flex: 0.1,
-    top: Dimension.padding60,
+    // top: Dimension.padding60,
     right: Dimension.padding10,
   },
   categoryText: {
@@ -39,8 +61,8 @@ const styles = StyleSheet.create({
   },
   searchWrapper: {
     paddingHorizontal: Dimension.padding10,
-    marginVertical: Dimension.margin20,
     position: 'relative',
+    marginTop: Dimension.margin28,
   },
 
   SearchInputCss: {
@@ -68,24 +90,24 @@ const styles = StyleSheet.create({
     color: Colors.BrandColor,
   },
 
-  NoBrandWrap:{
-borderWidth:1,
-borderColor:Colors.BoxBorderColor,
-borderRadius:4,
-paddingHorizontal:Dimension.padding15,
-paddingVertical:Dimension.padding20,
-flexDirection:"row",
-justifyContent:"space-between"
+  NoBrandWrap: {
+    borderWidth: 1,
+    borderColor: Colors.BoxBorderColor,
+    borderRadius: 4,
+    paddingHorizontal: Dimension.padding15,
+    paddingVertical: Dimension.padding20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  NoDataTxt:{
-    fontSize:Dimension.font12,
-      color:Colors.FontColor,
-      fontFamily:Dimension.CustomRegularFont,
+  NoDataTxt: {
+    fontSize: Dimension.font12,
+    color: Colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
   },
-  addBrandTxt:{
-    fontSize:Dimension.font12,
-    color:Colors.BrandColor,
-    fontFamily:Dimension.CustomMediumFont,
+  addBrandTxt: {
+    fontSize: Dimension.font12,
+    color: Colors.BrandColor,
+    fontFamily: Dimension.CustomMediumFont,
   },
 });
 

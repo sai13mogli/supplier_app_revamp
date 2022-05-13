@@ -21,16 +21,30 @@ const TdsDetails = (props) => {
   const tdsInfoDetails = useSelector(
     state => state.profileReducer.tdsInfoDetails.data || [{
       financialYearTurnover: null,
-      financialyear: "2022-23",
+      financialyear: getCurrentFinancialYear(),
       id: "",
       lastToLastYearItr: null,
       lastToLastYearTdsTcs: null,
       lastYearItr: null,
       lastYearTdsTcs: null,
       panNumber: "",
-      previousFinancialYear: "2021-22",
+      previousFinancialYear: getCurrentFinancialYear(),
     }],
   );
+
+  const getCurrentFinancialYear = () => {
+    var fiscalyear = "";
+    var today = new Date();
+    if ((today.getMonth() + 1) <= 3) {
+      fiscalyear = (today.getFullYear() - 1) + "-" + today.getFullYear()
+    } else {
+      fiscalyear = today.getFullYear() + "-" + (today.getFullYear() + 1)
+    }
+    return fiscalyear
+  }
+  // fiscalyear = (today.getFullYear() - 1) + "-" + today.getFullYear()
+  console.log("ok===>", tdsInfoDetails);
+
 
   const [tdsInfoList, setTdsInfoList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -195,14 +209,14 @@ const TdsDetails = (props) => {
           contentContainerStyle={{ paddingBottom: 80, position: "relative" }}
           sections={tdsInfoDetails && tdsInfoDetails.length ? tdsInfoDetails : [{
             financialYearTurnover: null,
-            financialyear: "2022-23",
+            financialyear: getCurrentFinancialYear(),
             id: "",
             lastToLastYearItr: null,
             lastToLastYearTdsTcs: null,
             lastYearItr: null,
             lastYearTdsTcs: null,
             panNumber: "",
-            previousFinancialYear: "2021-22",
+            previousFinancialYear: getCurrentFinancialYear(),
           }]}
           activeSections={tdsInfoList}
           renderHeader={_renderHeader}

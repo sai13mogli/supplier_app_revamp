@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { OrderedMap } from 'immutable';
-import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dimension from '../../../Theme/Dimension';
@@ -24,6 +24,7 @@ import { fetchOrders, fetchTabCount } from '../../../redux/actions/orders';
 const UploadInvoiceOMSScreen = props => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [omsLoading, setOmsLoading] = useState(false);
   const [itemRef, setitemRef] = useState(props?.route?.params?.itemRef);
   const [podId, setPodId] = useState(props?.route?.params?.itemRef);
   const [invoiceNumber, setInvoiceNumber] = useState('');
@@ -129,6 +130,7 @@ const UploadInvoiceOMSScreen = props => {
   let EmsOmsFlag = actionCTA;
 
   useEffect(() => {
+    setOmsLoading(true)
     if (EmsOmsFlag.includes('MAP_PO_TO_INVOICE')) {
       fetchInvoiceOMSDetails();
     }
@@ -250,6 +252,7 @@ const UploadInvoiceOMSScreen = props => {
       const { data } = await getInvoiceOMSDetails(payload);
       if (data.success) {
         setOmsUploadList(data?.data);
+        setOmsLoading(false)
         setLoading(false);
       }
     } catch (error) {
@@ -492,14 +495,22 @@ const UploadInvoiceOMSScreen = props => {
       />
 
       <ScrollView style={styles.ContainerCss}>
-        <FlatList
-          data={OmsUploadList.records}
-          renderItem={renderItem}
-          ListEmptyComponent={renderListEmptyComponent}
-          keyExtractor={(item, index) => `${index}-item`}
-          onEndReachedThreshold={0.9}
-          showsVerticalScrollIndicator={false}
-        />
+        {
+          omsLoading ? (
+            <ActivityIndicator
+              style={{ alignSelf: 'center', padding: 12 }}
+              color={colors.BrandColor}
+            />
+          ) :
+            <FlatList
+              data={OmsUploadList.records}
+              renderItem={renderItem}
+              ListEmptyComponent={renderListEmptyComponent}
+              keyExtractor={(item, index) => `${index}-item`}
+              onEndReachedThreshold={0.9}
+              showsVerticalScrollIndicator={false}
+            />
+        }
         <View style={{ marginTop: Dimension.margin30 }}>
           {FORM_FIELDS.map((field, fieldKey) => (
             <field.component

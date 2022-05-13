@@ -7,9 +7,9 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import React, {useEffect, useState, useRef} from 'react';
-import {getAllCategories} from '../../../../services/auth';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useState, useRef } from 'react';
+import { getAllCategories } from '../../../../services/auth';
+import { useDispatch, useSelector } from 'react-redux';
 import Colors from '../../../../Theme/Colors';
 import MultiSelect from '../../../../component/common/MultiSelect/index';
 import CustomButton from '../../../../component/common/Button';
@@ -41,7 +41,7 @@ const CategoryScreen = props => {
   }, []);
 
   const getCategories = async () => {
-    const {data} = await getAllCategories();
+    const { data } = await getAllCategories();
     if (data.success) {
       setCategories(
         data.data.map(_ => ({
@@ -70,7 +70,7 @@ const CategoryScreen = props => {
         <ActivityIndicator
           size={'large'}
           color={'red'}
-          style={{alignSelf: 'center'}}
+          style={{ alignSelf: 'center' }}
         />
       </View>
     );
@@ -108,12 +108,12 @@ const CategoryScreen = props => {
             ))}
           {(categories || []).filter((_, i) => _.label.includes(inputValue))
             .length ? null : (
-            <Text style={{color: '#000'}}>No data found!!</Text>
+            <Text style={{ color: '#000' }}>No data found!!</Text>
           )}
         </ScrollView>
       );
     } else {
-      return <Text style={{color: '#000'}}>No data found!!</Text>;
+      return <Text style={{ color: '#000' }}>No data found!!</Text>;
     }
   };
 
@@ -146,9 +146,8 @@ const CategoryScreen = props => {
           {renderRight()}
           <View style={styles.bottomWrap}>
             <CustomButton
-              title={`SUBMIT (${
-                selectedCategories && selectedCategories.length
-              })`}
+              title={`SUBMIT (${selectedCategories && selectedCategories.length
+                })`}
               onPress={onSubmit}
               buttonColor={
                 selectedCategories.length
@@ -173,7 +172,7 @@ const CategoryScreen = props => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>{renderCategories()}</View>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>{renderCategories()}</View>
   );
 };
 
