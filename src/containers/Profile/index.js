@@ -7,6 +7,7 @@ import {
   Image,
   Linking,
   ActivityIndicator,
+  Dimensions
 } from 'react-native';
 import Header from '../../component/common/Header';
 import { useNavigation } from '@react-navigation/native';
@@ -225,11 +226,20 @@ const ProfileScreen = props => {
         showBell
       />
       {profileStatus == STATE_STATUS.FETCHING ? (
+        <View
+        style={{
+          flex: 1,
+          height: Dimensions.get('window').height,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 50,
+        }}>
         <ActivityIndicator
           style={{ alignSelf: 'center', margin: Dimension.margin12 }}
-          size={'small'}
+          size={'large'}
           color={Colors.BrandColor}
         />
+        </View>
       ) : (
         <ScrollView style={styles.ContainerCss}>
           <View style={styles.profileTopWrap}>

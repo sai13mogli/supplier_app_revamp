@@ -15,7 +15,7 @@ const AboutUsScreen = props => {
         showBack
         showBell={false}
       />
-      <ScrollView style={styles.ContainerCss}>
+      <ScrollView style={styles.ContainerCss} contentContainerStyle={{paddingBottom:80}}>
       <Text style={styles.nrmtxt}>
         Moglix Supplier Central App is designed for Suppliers currently doing
         business with Moglix as well as for interested manufacturers, traders
