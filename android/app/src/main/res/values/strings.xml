@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">supplier</string>
-     <string moduleConfig="true" name="CodePushDeploymentKey">xidcZqHkVT6AHI0uKUmEwqiGNItuelq2i2YBZ</string>
-     <!-- Production key - QZj8XbHW3NV7RcUNSXR8s6y4jrSIJbt1oJaPM -->
-     <!-- Staging key - xidcZqHkVT6AHI0uKUmEwqiGNItuelq2i2YBZ -->
-     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
+    <string name="app_name">Moglix-Supplier</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">xidcZqHkVT6AHI0uKUmEwqiGNItuelq2i2YBZ</string>
+    <!-- Production key - QZj8XbHW3NV7RcUNSXR8s6y4jrSIJbt1oJaPM -->
+    <!-- Staging key - xidcZqHkVT6AHI0uKUmEwqiGNItuelq2i2YBZ -->
+    <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
     <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
 </resources>
