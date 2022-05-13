@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -7,11 +7,11 @@ import {
   Image,
   Linking,
   ActivityIndicator,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import Header from '../../component/common/Header';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchBusinessDetails,
   fetchProfile,
@@ -20,26 +20,26 @@ import {
   fetchAddressDetails,
   setNavigation,
 } from '../../redux/actions/profile';
-import { fetchCategoriesBrands } from '../../redux/actions/categorybrand';
+import {fetchCategoriesBrands} from '../../redux/actions/categorybrand';
 
 import Progress from 'react-native-progress/Bar';
-import { PROFILE_TABS } from '../../constants';
+import {PROFILE_TABS} from '../../constants';
 import styles from './style';
 import CustomButton from '../../component/common/Button';
 import Colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
 import CustomeIcon from '../../component/common/CustomeIcon';
-import { STATE_STATUS } from '../../redux/constants';
-import { fetchNotifications } from '../../redux/actions/notifications';
-import { sendVerificationEmail } from '../../services/profile';
+import {STATE_STATUS} from '../../redux/constants';
+import {fetchNotifications} from '../../redux/actions/notifications';
+import {sendVerificationEmail} from '../../services/profile';
 import Toast from 'react-native-toast-message';
-import { openInbox } from 'react-native-email-link';
+import {openInbox} from 'react-native-email-link';
 
 const ProfileScreen = props => {
   const [initLoader, setInitLoader] = useState(true);
   const [openemailLoader, setOpenEmailLoader] = useState(false);
 
-  const { navigate } = useNavigation();
+  const {navigate} = useNavigation();
   const dispatch = useDispatch();
   const profileStatus = useSelector(
     state => (state.profileReducer || {}).status || STATE_STATUS.UNFETCHED,
@@ -103,7 +103,6 @@ const ProfileScreen = props => {
       dispatch(fetchNotifications(0));
       dispatch(fetchProfile());
     }
-
   }, []);
 
   useEffect(() => {
@@ -200,7 +199,7 @@ const ProfileScreen = props => {
   const sendVerificationMail = async () => {
     try {
       setOpenEmailLoader(true);
-      const { data } = await sendVerificationEmail();
+      const {data} = await sendVerificationEmail();
       if (data && data.success) {
         setOpenEmailLoader(false);
         openInbox();
@@ -218,7 +217,7 @@ const ProfileScreen = props => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Header
         showText={'My Profile'}
         navigation={props.navigation}
@@ -227,21 +226,21 @@ const ProfileScreen = props => {
       />
       {profileStatus == STATE_STATUS.FETCHING ? (
         <View
-        style={{
-          flex: 1,
-          height: Dimensions.get('window').height,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 50,
-        }}>
-        <ActivityIndicator
-          style={{ alignSelf: 'center', margin: Dimension.margin12 }}
-          size={'large'}
-          color={Colors.BrandColor}
-        />
+          style={{
+            flex: 1,
+            height: Dimensions.get('window').height,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 50,
+          }}>
+          <ActivityIndicator
+            style={{alignSelf: 'center', margin: Dimension.margin12}}
+            size={'large'}
+            color={Colors.BrandColor}
+          />
         </View>
       ) : (
-        <ScrollView style={styles.ContainerCss}>
+        <ScrollView bounces style={styles.ContainerCss}>
           <View style={styles.profileTopWrap}>
             <View style={styles.UserDetailWrap}>
               <View style={styles.userDetailLeft}>
@@ -279,7 +278,7 @@ const ProfileScreen = props => {
                     {(profileData.userInfo || {}).email}
                   </Text>
                 </View>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{flexDirection: 'row'}}>
                   <CustomeIcon
                     name={
                       profileData?.phoneVerified
@@ -296,7 +295,7 @@ const ProfileScreen = props => {
             </View>
             {profileData && profileData.isEmailVerified ? null : (
               <View style={styles.UserEmailVerfyWrap}>
-                <View style={{ flex: 6, marginRight: Dimension.margin10 }}>
+                <View style={{flex: 6, marginRight: Dimension.margin10}}>
                   <Text style={styles.UserEmailVerfyBoldTxt}>
                     A verification link has been sent on your email.
                   </Text>
@@ -305,7 +304,7 @@ const ProfileScreen = props => {
                   </Text>
                 </View>
 
-                <View style={{ flex: 3 }}>
+                <View style={{flex: 3}}>
                   <CustomButton
                     title={'VERIFY EMAIL'}
                     loading={openemailLoader}
@@ -347,7 +346,7 @@ const ProfileScreen = props => {
                 key={tabIndex}
                 onPress={() => isActive(tabIndex, tab.route, tab)}
                 style={styles.profileTabWrap}>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{flexDirection: 'row'}}>
                   <View
                     style={[
                       styles.IconWrap,
@@ -369,7 +368,7 @@ const ProfileScreen = props => {
                   <View>
                     <Text style={styles.tabTitle}>{tab.title}</Text>
 
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{flexDirection: 'row'}}>
                       {isCompleted(tab.progress) ? (
                         <>
                           <CustomeIcon

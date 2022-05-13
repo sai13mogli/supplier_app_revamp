@@ -1221,7 +1221,7 @@ const DocumentsScreen = props => {
         showText={'Documents'}
         rightIconName={'single-product-upload'}
       />
-      <ScrollView style={styles.ContainerCss}>
+      <ScrollView bounces style={styles.ContainerCss}>
         {Documents.map(_ => renderInputText(_))
           .toList()
           .toArray()}

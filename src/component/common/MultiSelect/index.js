@@ -205,6 +205,7 @@ const MultiSelect = props => {
       ) : null} */}
 
       <FlatList
+        bounces
         keyExtractor={(item, index) => index.toString()}
         extraData={props.extraData}
         data={customeList}

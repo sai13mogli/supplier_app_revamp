@@ -189,22 +189,31 @@ const RejectModal = props => {
             color={Colors.FontColor}
             onPress={() => setRejectModal(false)}></CustomeIcon>
         </View>
-        <View style={{paddingHorizontal: Dimension.padding15,marginBottom:Dimension.margin10}}>
+        <View
+          style={{
+            paddingHorizontal: Dimension.padding15,
+            marginBottom: Dimension.margin10,
+          }}>
           {renderOrderDetails()}
         </View>
-          <ScrollView
+        <ScrollView
+          bounces
+          style={{
+            height: 250,
+            paddingVertical: Dimension.padding10,
+          }}>
+          <DropDownModal
+            fromRejectModal={true}
+            label={'Select reason for rejecting'}
+            items={Reasons}
+            selectedValue={reason}
+            onSelect={text => setReason(text)}
+          />
+          <View
             style={{
-              height: 250,
-              paddingVertical: Dimension.padding10,
+              paddingHorizontal: Dimension.padding15,
+              marginBottom: Dimension.margin10,
             }}>
-            <DropDownModal
-              fromRejectModal={true}
-              label={'Select reason for rejecting'}
-              items={Reasons}
-              selectedValue={reason}
-              onSelect={text => setReason(text)}
-            />
-            <View style={{paddingHorizontal: Dimension.padding15,marginBottom:Dimension.margin10}}>
             {reason == 'Other' ? (
               <FloatingLabelInputField
                 title={'Specify a reason'}
@@ -214,9 +223,9 @@ const RejectModal = props => {
                 onChangeText={text => setReasonText(text)}
               />
             ) : null}
-            </View>
-          </ScrollView>
-        
+          </View>
+        </ScrollView>
+
         <View style={styles.btnWrap}>
           <TouchableOpacity
             style={styles.cancelBtn}

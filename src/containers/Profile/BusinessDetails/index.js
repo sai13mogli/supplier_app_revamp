@@ -233,7 +233,7 @@ const BusinessDetailsScreen = props => {
       disabled: !phoneEdit,
       extraView: () => getExtraView(),
       isfromLogin: true,
-      isfrmBD:true
+      isfrmBD: true,
     },
     email: {
       title: 'Email',
@@ -249,7 +249,7 @@ const BusinessDetailsScreen = props => {
       disabled: !emailEdit,
       extraView: () => getExtraViewEmail(),
       isfromLogin: true,
-      isfrmBD:true
+      isfrmBD: true,
     },
     tan: {
       title: 'TAN',
@@ -647,7 +647,7 @@ const BusinessDetailsScreen = props => {
         navigation={props.navigation}
         showText={'Business Details'}
         rightIconName={'business-details'}></Header>
-      <ScrollView style={styles.ContainerCss}>
+      <ScrollView bounces style={styles.ContainerCss}>
         {FORM_FIELDS.map((field, fieldKey) => (
           <field.component
             {...field}

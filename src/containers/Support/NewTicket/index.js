@@ -249,7 +249,7 @@ const NewTicket = props => {
         showBell
         // rightIconName={'category--brand'}
       />
-      <ScrollView style={styles.ContainerCss}>
+      <ScrollView bounces style={styles.ContainerCss}>
         {FORM_FIELDS.map((field, fieldKey) => (
           <field.component key={fieldKey} {...field} />
         )).toList()}
