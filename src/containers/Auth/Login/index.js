@@ -38,6 +38,7 @@ import {
   setRmData,
   setToken,
 } from '../../../redux/actions/profile';
+import analytics from '@react-native-firebase/analytics';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const phoneRegex = '^[1-9][0-9]{9}$';
@@ -270,6 +271,16 @@ const LoginScreen = props => {
     }
   };
 
+  const navigatetoSignUp = async () => {
+    let date = new Date();
+    await analytics().logEvent('SignUp', {
+      action: `click`,
+      label: `signInScreen`,
+      datetimestamp: `${date.getTime()}`,
+    });
+    props.navigation.navigate('SignUpStart');
+  };
+
   return (
     // <View style={{backgroundColor:"#fff",flex:1}}>
     //   <View style={{height:"30%",justifyContent:"center",}}>
@@ -370,7 +381,7 @@ const LoginScreen = props => {
           <CustomButton
             title={'Not a Moglix Supplier? SignUp now'}
             buttonColor={Colors.LightBrandColor}
-            onPress={() => props.navigation.navigate('SignUpStart')}
+            onPress={() => navigatetoSignUp()}
             TextColor={Colors.BrandColor}
             borderColor={Colors.LightBrandColor}
             TextFontSize={Dimension.font14}
