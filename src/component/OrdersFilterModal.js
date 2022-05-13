@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-native-modal';
 import {
   orderFiltersTypeData,
@@ -16,14 +16,14 @@ import {
 } from '../redux/constants/orders';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchPOs} from '../redux/actions/orders';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPOs } from '../redux/actions/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {STATE_STATUS} from '../redux/constants';
+import { STATE_STATUS } from '../redux/constants';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomeDatePicker from '../component/common/Datepicker/index';
 import CustomeIcon from './common/CustomeIcon';
-import {Tooltip} from 'react-native-elements';
+import { Tooltip } from 'react-native-elements';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -31,6 +31,7 @@ const deviceHeight = Dimensions.get('window').height;
 const OrdersFilterModal = props => {
   const dispatch = useDispatch();
   const [tooltip1, settooltip1] = useState(false);
+  const [poILoader, setPoILoader] = useState(false);
   const {
     ordersfiltersModal,
     setOrdersFiltersModal,
@@ -64,12 +65,14 @@ const OrdersFilterModal = props => {
   const profileData = useSelector(state => state.profileReducer.data || {});
 
   useEffect(() => {
+    // setPoILoader(true)
     if (activeFilter == 'orderRefs') {
       fetchPOIdsFunc();
     }
   }, [activeFilter]);
 
   const fetchPOIdsFunc = async () => {
+    // setPoILoader(false)
     dispatch(
       fetchPOs({
         onlineShipmentMode: profileData && profileData.onlineShipmentMode,
@@ -77,6 +80,7 @@ const OrdersFilterModal = props => {
         tabRef: selectedTab,
       }),
     );
+
   };
 
   const renderRight = () => {
@@ -92,57 +96,53 @@ const OrdersFilterModal = props => {
       });
 
       return (
-        //<View style={{}}>
-          <ScrollView contentContainerStyle={{paddingBottom:200}}>
-            {poIds.map((_, i) => (
-              <TouchableOpacity
-                onPress={() => selectFilter(_)}
-                style={styles.checkboxWrap}>
-                <CustomeIcon
-                  name={
-                    appliedFilter[initialFilter] &&
-                    appliedFilter[initialFilter].includes(_)
-                      ? 'checkbox-tick'
-                      : 'checkbox-blank'
-                  }
-                  color={
-                    appliedFilter[initialFilter] &&
-                    appliedFilter[initialFilter].includes(_)
-                      ? Colors.BrandColor
-                      : Colors.blackColor
-                  }
-                  size={Dimension.font22}></CustomeIcon>
+        <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
+          {/* {
 
-                {/* <MaterialCommunityIcon
-                  name={
-                    appliedFilter[initialFilter] &&
-                    appliedFilter[initialFilter].includes(_)
-                      ? 'checkbox-marked'
-                      : 'checkbox-blank-outline'
-                  }
-                  size={20}
-                  color={
-                    appliedFilter[initialFilter] &&
-                    appliedFilter[initialFilter].includes(_)
-                      ? 'blue'
-                      : '#000'
-                  }
-                /> */}
-                <Text style={styles.checkBoxTitle}>
-                  {_} (
-                  {poData.get(_) == '1'
-                    ? `${poData.get(_)} item`
-                    : `${poData.get(_)} items`}
-                  )
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-       // </View>
+            poILoader ? (
+              <ActivityIndicator
+                style={{ alignItems: 'center', }}
+                color={Colors.BrandColor}
+              />
+            ) : */}
+          <>
+            {
+              poIds.map((_, i) => (
+                <TouchableOpacity
+                  onPress={() => selectFilter(_)}
+                  style={styles.checkboxWrap}>
+                  <CustomeIcon
+                    name={
+                      appliedFilter[initialFilter] &&
+                        appliedFilter[initialFilter].includes(_)
+                        ? 'checkbox-tick'
+                        : 'checkbox-blank'
+                    }
+                    color={
+                      appliedFilter[initialFilter] &&
+                        appliedFilter[initialFilter].includes(_)
+                        ? Colors.BrandColor
+                        : Colors.blackColor
+                    }
+                    size={Dimension.font22}></CustomeIcon>
+                  <Text style={styles.checkBoxTitle}>
+                    {_} (
+                    {poData.get(_) == '1'
+                      ? `${poData.get(_)} item`
+                      : `${poData.get(_)} items`}
+                    )
+                  </Text>
+                </TouchableOpacity>
+              ))
+            }
+          </>
+
+        </ScrollView>
+        // </View>
       );
     } else {
       return (
-        <View style={{height: deviceHeight}}>
+        <View style={{ height: deviceHeight }}>
           <ScrollView>
             <>
               {orderfiltersData[activeFilter].map((_, i) => (
@@ -152,13 +152,13 @@ const OrdersFilterModal = props => {
                   <CustomeIcon
                     name={
                       appliedFilter[initialFilter] &&
-                      appliedFilter[initialFilter].includes(_.key)
+                        appliedFilter[initialFilter].includes(_.key)
                         ? 'checkbox-tick'
                         : 'checkbox-blank'
                     }
                     color={
                       appliedFilter[initialFilter] &&
-                      appliedFilter[initialFilter].includes(_.key)
+                        appliedFilter[initialFilter].includes(_.key)
                         ? Colors.BrandColor
                         : Colors.blackColor
                     }
@@ -194,11 +194,11 @@ const OrdersFilterModal = props => {
                       What is Delivery Type
                     </Text>
                     <TouchableOpacity
-                      style={{flex: 0.5, alignItems: 'flex-end'}}
+                      style={{ flex: 0.5, alignItems: 'flex-end' }}
                       onPress={() => settooltip1(!tooltip1)}>
                       <Image
                         source={require('../assets/images/tooltipIcon.png')}
-                        style={{width: 24, height: 24}}></Image>
+                        style={{ width: 24, height: 24 }}></Image>
                     </TouchableOpacity>
 
                     {/* <Tooltip
@@ -308,19 +308,6 @@ const OrdersFilterModal = props => {
     );
   };
 
-  /* 
-            {poData.map((_, i) => {
-              return (
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                    color: '#fff',
-                  }}></Text>
-              );
-            })} */
-  /* {_ == '1' ? `${_} item` : `${_} items`} */
-
   return (
     <Modal
       overlayPointerEvents={'auto'}
@@ -332,13 +319,13 @@ const OrdersFilterModal = props => {
         setOrdersFiltersModal(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 0, width: '100%', height: '100%'}}
+      style={{ padding: 0, margin: 0, width: '100%', height: '100%' }}
       deviceWidth={deviceWidth}
       deviceHeight={deviceHeight}
       hasBackdrop={true}
       onBackdropPress={() => setOrdersFiltersModal(false)}
       onBackButtonPress={() => setOrdersFiltersModal(false)}>
-      <View style={{height: deviceHeight, width: deviceWidth}}>
+      <View style={{ height: deviceHeight, width: deviceWidth }}>
         <View style={styles.headerWrap}>
           <CustomeIcon
             name={'arrow-back'}

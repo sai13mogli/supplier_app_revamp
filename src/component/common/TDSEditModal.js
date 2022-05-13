@@ -7,22 +7,17 @@ import colors from "../../Theme/Colors"
 import DotCheckbox from './Checkbox';
 import { useNavigation } from '@react-navigation/native'
 import CustomButton from '../common/Button';
-import { filtersTypeData, filtersData } from '../../redux/constants/support';
 import { EditTdsData } from '../../redux/constants/support';
 
 
 const TDSEditModal = props => {
-  const tdsInfoDetails = useSelector(state => state.profileReducer.tdsInfoDetails.data || []);
-  const tdsInfoData = tdsInfoDetails
   const [lastYearItr, setLastYearItr] = useState(undefined);
   const [lastToLastYearItr, setLastToLastYearItr] = useState("");
   const [lastYearTdsTcs, setLastYearTdsTcs] = useState("");
   const [lastToLastYearTdsTcs, setLastToLastYearTdsTcs] = useState("");
   const [financialYearTurnover, setFinancialYearTurnover] = useState("");
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
 
-  // let data = tdsInfoData.map((i) => (item))
 
   const getlastItr = (value) => {
     setLastYearItr(value)
@@ -50,7 +45,6 @@ const TDSEditModal = props => {
 
   const {
     onPress,
-    onClose,
     transparent,
   } = props;
 

@@ -28,22 +28,21 @@ const TdsDetails = (props) => {
       lastYearItr: null,
       lastYearTdsTcs: null,
       panNumber: "",
-      previousFinancialYear: getCurrentFinancialYear(),
+      previousFinancialYear: getCurrentFinancialYear(true),
     }],
   );
 
-  const getCurrentFinancialYear = () => {
-    var fiscalyear = "";
-    var today = new Date();
+  const getCurrentFinancialYear = (isLastYear) => {
+
+    let fiscalyear = "";
+    let today = new Date();
     if ((today.getMonth() + 1) <= 3) {
-      fiscalyear = (today.getFullYear() - 1) + "-" + today.getFullYear()
+      fiscalyear = isLastYear ? (today.getFullYear() - 2) + "-" + (today.getFullYear() - 1) : (today.getFullYear() - 1) + "-" + today.getFullYear()
     } else {
-      fiscalyear = today.getFullYear() + "-" + (today.getFullYear() + 1)
+      fiscalyear = isLastYear ? (today.getFullYear() - 1) + "-" + (today.getFullYear()) : today.getFullYear() + "-" + (today.getFullYear() + 1)
     }
     return fiscalyear
   }
-  // fiscalyear = (today.getFullYear() - 1) + "-" + today.getFullYear()
-  console.log("ok===>", tdsInfoDetails);
 
 
   const [tdsInfoList, setTdsInfoList] = useState([]);
@@ -58,8 +57,6 @@ const TdsDetails = (props) => {
   };
 
   const _renderHeader = (section, _, isActive) => {
-    global.year = section.financialyear
-
     const iconName = isActive ? 'chevron-up' : 'chevron-down';
     const showEdit = isActive ? true : false;
 
