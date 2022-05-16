@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   Dimensions,
   View,
@@ -8,10 +8,10 @@ import {
   Image,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { getImageUrl, getPackNow, getLbh } from '../services/orders';
+import {getImageUrl, getPackNow, getLbh} from '../services/orders';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
-import { OrderedMap } from 'immutable';
+import {OrderedMap} from 'immutable';
 import CustomButton from '../component/common/Button';
 import FloatingLabelInputField from './common/FloatingInput';
 import FloatingInputDropdown from './FloatingInputDropdown';
@@ -40,8 +40,7 @@ const options = [
     label: 'In',
     value: 'In',
   },
-
-]
+];
 const PackNowModal = props => {
   const [orderImage, setOrderImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -59,7 +58,6 @@ const PackNowModal = props => {
   const [lengthError, setLengthError] = useState(false);
   const [width, setWidth] = useState('');
   const [widthError, setWidthError] = useState(false);
-
 
   const onnoOfPacketsBlur = () => {
     if (noOfPackets && noOfPackets.length) {
@@ -103,36 +101,35 @@ const PackNowModal = props => {
 
   const unitWeightConversion = (weights, weightLabels) => {
     switch (weightLabels) {
-      case ("Kg"):
-        let kiloGram = weights * 1000
-        return kiloGram
-      case ("Lb"):
-        let pondWeight = weights * 0.0022046
-        return pondWeight
+      case 'Kg':
+        let kiloGram = weights * 1000;
+        return kiloGram;
+      case 'Lb':
+        let pondWeight = weights * 0.0022046;
+        return pondWeight;
       default:
         return weights;
     }
-  }
+  };
 
   const unitConversion = (heights, heightLabels) => {
-
     switch (heightLabels) {
-      case ("m"):
-        let meterValue = heights * 100
-        return meterValue
-      case ("Km"):
-        let kilometer = heights * 100000
-        return kilometer
-      case ("Ft"):
-        let feet = heights * 30.48
-        return feet
-      case ("In"):
-        let Inches = heights * 2.54
-        return Inches
+      case 'm':
+        let meterValue = heights * 100;
+        return meterValue;
+      case 'Km':
+        let kilometer = heights * 100000;
+        return kilometer;
+      case 'Ft':
+        let feet = heights * 30.48;
+        return feet;
+      case 'In':
+        let Inches = heights * 2.54;
+        return Inches;
       default:
         return heights;
     }
-  }
+  };
 
   const FORM_FIELDS = new OrderedMap({
     noOfPackets: {
@@ -172,11 +169,8 @@ const PackNowModal = props => {
           label: 'Lb',
           value: 'Lb',
         },
-
       ],
-      extraView: () => (
-        <View />
-      ),
+      extraView: () => <View />,
     },
     height: {
       title: 'Height',
@@ -192,9 +186,7 @@ const PackNowModal = props => {
       selectedValue: heightLabel,
       value: unitConversion(height, heightLabel),
       options: options,
-      extraView: () => (
-        <View />
-      ),
+      extraView: () => <View />,
     },
     length: {
       title: 'Length',
@@ -210,9 +202,7 @@ const PackNowModal = props => {
       selectedValue: lenghtLabel,
       value: length,
       options: options,
-      extraView: () => (
-        <View />
-      ),
+      extraView: () => <View />,
     },
     width: {
       title: 'Width',
@@ -228,23 +218,21 @@ const PackNowModal = props => {
       selectedValue: widthLabel,
       value: width,
       options: options,
-      extraView: () => (
-        <View />
-      ),
+      extraView: () => <View />,
     },
   });
 
   const setWeigthValue = (text, label) => {
-    setWeightLabel(label)
+    setWeightLabel(label);
   };
   const setHeightValue = (text, label) => {
-    setHeightLabel(label)
+    setHeightLabel(label);
   };
   const setLengthValue = (text, label) => {
-    setLenghtLabel(label)
+    setLenghtLabel(label);
   };
   const setWidthValue = (text, label) => {
-    setWidthLabel(label)
+    setWidthLabel(label);
   };
   const renderOrderDetails = () => {
     return (
@@ -301,7 +289,7 @@ const PackNowModal = props => {
         msn,
         qty: quantity,
       };
-      const { data } = await getLbh(payload);
+      const {data} = await getLbh(payload);
       if (data && data.success) {
         setHeight(data && data.data && data.data.height);
         setLength(data && data.data && data.data.length);
@@ -328,7 +316,7 @@ const PackNowModal = props => {
     ) {
       setLoading(true);
 
-      const { data } = await getPackNow({
+      const {data} = await getPackNow({
         length: unitConversion(length, lenghtLabel),
         width: unitConversion(width, weightLabel),
         height: unitConversion(height, heightLabel),
@@ -338,7 +326,7 @@ const PackNowModal = props => {
         itemId,
         supplierId,
       });
-      console.log("Order====>", data);
+      console.log('Order====>', data);
       if (data.success) {
         setModal(false);
         onPackNowSuccess();
@@ -348,7 +336,7 @@ const PackNowModal = props => {
   };
 
   const fetchImage = async () => {
-    const { data } = await getImageUrl(msn);
+    const {data} = await getImageUrl(msn);
     let imageUrl =
       'https://cdn.moglix.com/' +
       (data &&
@@ -375,7 +363,7 @@ const PackNowModal = props => {
         setModal(false);
       }}
       coverScreen={true}
-      style={{ padding: 0, margin: 'auto', width: '100%', height: '100%' }}
+      style={{padding: 0, margin: 'auto', width: '100%', height: '100%'}}
       deviceWidth={deviceWidth}
       deviceHeight={deviceHeight}
       //height={'80%'}
@@ -397,9 +385,9 @@ const PackNowModal = props => {
         <View style={styles.headerTxtWrap}>
           <Text style={styles.headerTxt}>Pack Order</Text>
         </View>
-        <ScrollView>
+        <ScrollView bounces>
           <>
-            <View style={{ paddingHorizontal: Dimension.padding15 }}>
+            <View style={{paddingHorizontal: Dimension.padding15}}>
               {renderOrderDetails()}
             </View>
           </>
@@ -411,7 +399,7 @@ const PackNowModal = props => {
           </View>
         </ScrollView>
         <View style={styles.bottomAction}>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <CustomButton
               title="RESET"
               buttonColor={Colors.WhiteColor}
@@ -432,7 +420,7 @@ const PackNowModal = props => {
               }}
             />
           </View>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <CustomButton
               title="PACK NOW"
               loading={loading}

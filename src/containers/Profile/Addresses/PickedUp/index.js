@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -8,14 +8,14 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import colors from '../../../../Theme/Colors';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchDeleteAddresses } from '../../../../redux/actions/profile';
+import {useSelector, useDispatch} from 'react-redux';
+import {fetchDeleteAddresses} from '../../../../redux/actions/profile';
 import Dimension from '../../../../Theme/Dimension';
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
-import { STATE_STATUS } from '../../../../redux/constants';
-import { saveAddressAction } from '../../../../redux/actions/profile';
+import {STATE_STATUS} from '../../../../redux/constants';
+import {saveAddressAction} from '../../../../redux/actions/profile';
 
 const PickedUp = props => {
   const profileData = useSelector(state => state.profileReducer.data || {});
@@ -47,13 +47,13 @@ const PickedUp = props => {
   };
 
   const onSubmit = () => {
-    props.navigation.navigate("Profile")
+    props.navigation.navigate('Profile');
 
-    dispatch(saveAddressAction())
-  }
+    dispatch(saveAddressAction());
+  };
 
-  const renderItems = ({ item }) => (
-    <View style={{ flex: 1 }}>
+  const renderItems = ({item}) => (
+    <View style={{flex: 1}}>
       <View style={styles.wrap}>
         <View style={styles.nameWrap}>
           <Text style={styles.UserNameCss}>
@@ -71,7 +71,7 @@ const PickedUp = props => {
         </Text>
         <View style={styles.buttonWrap}>
           {item.isDefault ? null : (
-            <View style={{ marginRight: 15, flex: 1 }}>
+            <View style={{marginRight: 15, flex: 1}}>
               <CustomButton
                 title={'REMOVE'}
                 onPress={() => removeAddresses(item)}
@@ -82,7 +82,7 @@ const PickedUp = props => {
             </View>
           )}
           {profileData && profileData.verificationStatus !== 15 ? (
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <CustomButton
                 title={'EDIT'}
                 buttonColor={colors.WhiteColor}
@@ -103,21 +103,21 @@ const PickedUp = props => {
   );
 
   return (
-    <View style={{ flex: 0.9 }}>
+    <View style={{flex: 0.9}}>
       {addressesDetailsStatus == STATE_STATUS.FETCHING ? (
-        <ActivityIndicator style={{ alignSelf: 'center', marginTop: 150 }} />
+        <ActivityIndicator style={{alignSelf: 'center', marginTop: 150}} />
       ) : (
-        <ScrollView style={styles.ContainerCss}>
+        <ScrollView bounces style={styles.ContainerCss}>
           <View style={styles.TopWrap}>
             <Text style={styles.Pageheading}>
               {PickupAddressData.length} Pickup Addresses
             </Text>
             <TouchableOpacity
               onPress={() =>
-                props.navigation.navigate('EditAddress', { tabState: pickedUp })
+                props.navigation.navigate('EditAddress', {tabState: pickedUp})
               }>
               {profileData && profileData.verificationStatus !== 15 ? (
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{flexDirection: 'row'}}>
                   <CustomeIcon
                     name={'add-circle'}
                     size={Dimension.font18}
@@ -130,6 +130,7 @@ const PickedUp = props => {
           </View>
 
           <FlatList
+            bounces
             data={PickupAddressData}
             renderItem={renderItems}
             keyExtractor={(item, index) => index.toString()}
@@ -145,12 +146,9 @@ const PickedUp = props => {
             TextFontSize={Dimension.font16}
             title={'Submit'}
             onPress={onSubmit}
-
           />
-
         </View>
       ) : null}
-
     </View>
   );
 };

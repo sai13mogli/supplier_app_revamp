@@ -286,6 +286,7 @@ const TicketsList = props => {
         </View>
 
         <FlatList
+          bounces
           data={ticketsList}
           renderItem={renderItem}
           keyExtractor={(item, index) => `${index}-item`}

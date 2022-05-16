@@ -136,7 +136,7 @@ const FAQS = props => {
             style={styles.seacrhIcon}></CustomeIcon>
         </View>
         <Text style={styles.headingTxt}>Topics</Text>
-        <ScrollView horizontal={true}>
+        <ScrollView bounces horizontal={true}>
           <View style={styles.tabContainer}>
             {TABS.map((tab, tabIndex) => (
               <TouchableOpacity
@@ -165,6 +165,7 @@ const FAQS = props => {
         />
       ) : (
         <FlatList
+          bounces
           renderItem={renderItem}
           data={data}
           contentContainerStyle={{paddingBottom: 280}}

@@ -86,7 +86,7 @@ const SelectCategoryScreen = props => {
   const renderRight = () => {
     if (categories && categories.length) {
       return (
-        <ScrollView>
+        <ScrollView bounces>
           {(categories || [])
             .filter((_, i) => _.label.includes(inputValue))
             .map((item, i) => (

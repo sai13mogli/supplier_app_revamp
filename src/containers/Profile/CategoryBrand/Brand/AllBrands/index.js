@@ -339,6 +339,7 @@ const AllBrandsScreen = props => {
           {showAlphabets ? (
             <View style={styles.AlphabetWrap}>
               <FlatList
+                bounces
                 data={ALPHABETS}
                 renderItem={renderAlphabet}
                 keyExtractor={(item, index) => `${index}-item`}

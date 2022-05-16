@@ -193,7 +193,7 @@ const SignUpEndScreen = props => {
         source={require('../../../assets/images/SignUpBg.png')}
         resizeMode="cover"
         style={{flex: 1}}>
-        <ScrollView style={styles.ContainerCss}>
+        <ScrollView bounces style={styles.ContainerCss}>
           <View style={styles.headerPart}>
             <CustomeIcon
               name={'arrow-back'}

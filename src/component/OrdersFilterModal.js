@@ -31,6 +31,7 @@ const deviceHeight = Dimensions.get('window').height;
 const OrdersFilterModal = props => {
   const dispatch = useDispatch();
   const [tooltip1, settooltip1] = useState(false);
+  const [poILoader, setPoILoader] = useState(false);
   const {
     ordersfiltersModal,
     setOrdersFiltersModal,
@@ -64,12 +65,14 @@ const OrdersFilterModal = props => {
   const profileData = useSelector(state => state.profileReducer.data || {});
 
   useEffect(() => {
+    // setPoILoader(true)
     if (activeFilter == 'orderRefs') {
       fetchPOIdsFunc();
     }
   }, [activeFilter]);
 
   const fetchPOIdsFunc = async () => {
+    // setPoILoader(false)
     dispatch(
       fetchPOs({
         onlineShipmentMode: profileData && profileData.onlineShipmentMode,
@@ -92,8 +95,16 @@ const OrdersFilterModal = props => {
       });
 
       return (
-        //<View style={{}}>
-          <ScrollView contentContainerStyle={{paddingBottom:200}}>
+        <ScrollView bounces contentContainerStyle={{paddingBottom: 200}}>
+          {/* {
+
+            poILoader ? (
+              <ActivityIndicator
+                style={{ alignItems: 'center', }}
+                color={Colors.BrandColor}
+              />
+            ) : */}
+          <>
             {poIds.map((_, i) => (
               <TouchableOpacity
                 onPress={() => selectFilter(_)}
@@ -112,22 +123,6 @@ const OrdersFilterModal = props => {
                       : Colors.blackColor
                   }
                   size={Dimension.font22}></CustomeIcon>
-
-                {/* <MaterialCommunityIcon
-                  name={
-                    appliedFilter[initialFilter] &&
-                    appliedFilter[initialFilter].includes(_)
-                      ? 'checkbox-marked'
-                      : 'checkbox-blank-outline'
-                  }
-                  size={20}
-                  color={
-                    appliedFilter[initialFilter] &&
-                    appliedFilter[initialFilter].includes(_)
-                      ? 'blue'
-                      : '#000'
-                  }
-                /> */}
                 <Text style={styles.checkBoxTitle}>
                   {_} (
                   {poData.get(_) == '1'
@@ -137,13 +132,14 @@ const OrdersFilterModal = props => {
                 </Text>
               </TouchableOpacity>
             ))}
-          </ScrollView>
-       // </View>
+          </>
+        </ScrollView>
+        // </View>
       );
     } else {
       return (
         <View style={{height: deviceHeight}}>
-          <ScrollView>
+          <ScrollView bounces>
             <>
               {orderfiltersData[activeFilter].map((_, i) => (
                 <TouchableOpacity
@@ -307,19 +303,6 @@ const OrdersFilterModal = props => {
       </View>
     );
   };
-
-  /* 
-            {poData.map((_, i) => {
-              return (
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                    color: '#fff',
-                  }}></Text>
-              );
-            })} */
-  /* {_ == '1' ? `${_} item` : `${_} items`} */
 
   return (
     <Modal

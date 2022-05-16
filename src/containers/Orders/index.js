@@ -583,6 +583,7 @@ const OrdersScreen = props => {
   const renderHeaderComponent = () => {
     return (
       <ScrollView
+        bounces
         horizontal={true}
         ref={scrollRef}
         style={styles.TopTabWrap}
@@ -893,6 +894,7 @@ const OrdersScreen = props => {
         <>
           {renderHeaderComponent()}
           <FlatList
+            bounces
             data={OrderData.toArray()}
             // stickyHeaderIndices={[0]}
             renderItem={renderItem}

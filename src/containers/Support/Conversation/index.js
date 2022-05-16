@@ -409,6 +409,7 @@ const Conversation = props => {
   const renderConversation = () => {
     return (
       <FlatList
+        bounces
         ref={flatlistRef}
         data={ticketConversation.conversation || []}
         renderItem={renderItem}

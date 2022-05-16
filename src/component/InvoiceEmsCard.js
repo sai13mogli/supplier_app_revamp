@@ -56,7 +56,7 @@ const InvoiceCard = props => {
       showError: hsnError,
       value: String(quantity),
       keyboardType: 'number-pad',
-      onChangeText: text => calculatePrice(text),
+      onChangeText: (text) => calculatePrice(text, itemId),
       component: FloatingLabelInputField,
       editable: (bulkItemIds || []).includes(itemId) ? true : false,
     },
@@ -64,7 +64,7 @@ const InvoiceCard = props => {
       title: 'HSN Tax%',
       isImp: false,
       errorMessage: 'Enter valid hsn',
-      onValueChange: (text, label) => calculateHsn(text, label),
+      onValueChange: (text, label) => calculateHsn(text, label, itemId),
       component: PickerMenu,
       fromUploadInvoive: true,
       enabled: true,
@@ -110,17 +110,17 @@ const InvoiceCard = props => {
 
 
 
-  const calculatePrice = text => {
+  const calculatePrice = (text, id) => {
     setQuantity(text);
     props.UpdatedQuntity(text)
     const { taxPercentage, transferPrice } = props;
     let Price = transferPrice * text;
     let percentage = (Price / 100) * taxPercentage + text * transferPrice;
     setAmount(percentage);
-    // props.UpdatedTotalPrice(percentage)
+    props.UpdatedTotalPrice(percentage, id)
   };
 
-  const calculateHsn = (text, label) => {
+  const calculateHsn = (text, label, id) => {
     props.selectedValue(text)
     setTaxPercentage(text)
     setTaxPercentageLabel(label)
@@ -128,7 +128,7 @@ const InvoiceCard = props => {
     let Price = transferPrice * quantity;
     let percentage = (Price / 100) * text + quantity * transferPrice;
     setAmount(percentage);
-    // props.UpdatedTotalPrice(percentage)
+    props.UpdatedTotalPrice(percentage, id)
   };
 
   const renderOrderDetails = () => {

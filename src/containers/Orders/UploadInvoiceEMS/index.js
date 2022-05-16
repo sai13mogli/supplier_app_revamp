@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, Image, ActivityIndicator } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Text, View, FlatList, Image, ActivityIndicator} from 'react-native';
 import Header from '../../../component/common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../../../component/common/Button';
-import { getInvoiceEMSDetails } from '../../../services/orders';
+import {getInvoiceEMSDetails} from '../../../services/orders';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import styles from './style';
@@ -16,8 +16,8 @@ const UploadInvoiceScreen = props => {
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPrice, setTotalPrice] = useState([]);
-  const [headerSum, setHeaderSum] = useState(0)
-  const [totalSum, setTotalSum] = useState(0)
+  const [headerSum, setHeaderSum] = useState(0);
+  const [totalSum, setTotalSum] = useState(0);
   const [hsn, sethsn] = useState(props?.route?.params?.hsn);
   const [taxPercentage, setTaxPercentage] = useState(
     props?.route?.params?.taxPercentage,
@@ -34,17 +34,17 @@ const UploadInvoiceScreen = props => {
   const [invoiceList, setInvoiceList] = useState([]);
 
   let EmsOmsFlag = actionCTA;
-  let tax = global.hsn
+  let tax = global.hsn;
 
   useEffect(() => {
-    setInvoiceLoader(true)
-    if (EmsOmsFlag.includes('MAP_INVOICE') || EmsOmsFlag.includes('REMAP_INVOICE')) {
+    setInvoiceLoader(true);
+    if (
+      EmsOmsFlag.includes('MAP_INVOICE') ||
+      EmsOmsFlag.includes('REMAP_INVOICE')
+    ) {
       fetchInvoiceEMSDetails();
     }
-
   }, []);
-
-
 
   const getTotalPrice = () => {
     let price = 0;
@@ -52,15 +52,12 @@ const UploadInvoiceScreen = props => {
     price = totalPrice.reduce(function (sum, tax) {
       return sum + tax.price;
     }, 0);
+    global.price = price;
     return price;
   };
 
-
   const selectItemId = (itemId, totalAmount) => {
-
-    console.log("TotalAmoaunr====>", totalAmount);
     let currentItemIds = [...bulkItemIds];
-
     if (currentItemIds.includes(itemId)) {
       currentItemIds = currentItemIds.filter(_ => _ != itemId);
     } else {
@@ -78,9 +75,6 @@ const UploadInvoiceScreen = props => {
       let priceList = [...totalPrice];
       priceList.splice(index, 1);
       setTotalPrice(priceList);
-      // setTotalSum(totalSum - totalAmount)
-      console.log("setHeaderSum====>", totalSum, totalAmount);
-      // setTotalAmount(getTotalPrice());
     } else {
       let row = {
         id: itemId,
@@ -89,10 +83,6 @@ const UploadInvoiceScreen = props => {
       let priceList = [...totalPrice];
       priceList.push(row);
       setTotalPrice(priceList);
-      // setTotalSum(totalSum + totalAmount)
-      // setTotalAmount(getTotalPrice());
-      console.log("setHeaderSum2====>", totalSum, totalAmount);
-
     }
   };
 
@@ -102,38 +92,34 @@ const UploadInvoiceScreen = props => {
         supplierId: await AsyncStorage.getItem('userId'),
         orderRef: orderRef,
       };
-      const { data } = await getInvoiceEMSDetails(payload);
+      const {data} = await getInvoiceEMSDetails(payload);
       if (data.success) {
         setInvoiceList(data?.data?.itemList);
         setLoading(false);
-        setInvoiceLoader(false)
+        setInvoiceLoader(false);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const calculateHeaderSum = (value) => {
-    let arrSum = totalPrice.length > 0 ? totalPrice.reduce(function (sum, tax) {
-      return sum + tax.price;
-    }, 0) : 0;
+  const calculateHeaderSum = (value, id) => {
+    setTotalAmount(value);
+    let updatedPrice = totalPrice.map(item => item.price);
+    let uppdatedSum = global.price + value;
+    setHeaderSum(getTotalPrice(uppdatedSum));
+  };
 
-    let totalSum = arrSum + value
-    console.log("totalSum===>", totalSum);
-    setHeaderSum(totalSum)
-    console.log("totalAmoubt", totalSum);
-  }
-
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     return (
       <InvoiceEmsCard
         msn={item.productMsn}
         orderRef={item.orderRef}
         productUom={item.productUom}
         quantity={item.quantity}
-        selectedValue={(value) => setTaxPercentage(value)}
-        UpdatedQuntity={(value) => setQuantity(value)}
-        UpdatedTotalPrice={(value) => (value)}
+        selectedValue={value => setTaxPercentage(value)}
+        UpdatedQuntity={value => setQuantity(value)}
+        UpdatedTotalPrice={(value, id) => calculateHeaderSum(value, id)}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
@@ -142,7 +128,6 @@ const UploadInvoiceScreen = props => {
         selectedTab={selectedTab}
         itemId={item.id}
         itemIndex={item}
-
         bulkItemIds={bulkItemIds}
         setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
@@ -156,7 +141,7 @@ const UploadInvoiceScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             // source={require('../../assets/images/emptyOrders.png')}
-            style={{ width: 300, height: 200 }}
+            style={{width: 300, height: 200}}
           />
           <Text style={styles.emptyTxt}>No Data Available</Text>
         </View>
@@ -165,20 +150,12 @@ const UploadInvoiceScreen = props => {
     return null;
   };
 
-
-
   const renderOrderHeaderDetail = () => {
     return (
       <>
         <View style={styles.headerView}>
-          <Text
-            style={[
-              styles.TitleBoldTxt,
-            ]}>
-            PO ID -{' '}
-            <Text style={styles.TitleBoldTxt}>
-              {orderRef}
-            </Text>
+          <Text style={[styles.TitleBoldTxt]}>
+            PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
           </Text>
           <Text
             style={[
@@ -189,7 +166,7 @@ const UploadInvoiceScreen = props => {
             ]}>
             Total Price -{' '}
             <Text style={styles.TitleBoldTxt}>
-              ₹{getTotalPrice(totalAmount)}
+              ₹{headerSum}
               {'   '} (Price Including Tax-
               <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
               <Text style={styles.TitleBoldTxt}> )</Text>
@@ -200,8 +177,6 @@ const UploadInvoiceScreen = props => {
     );
   };
 
-
-
   return (
     <View style={styles.outerView}>
       <Header
@@ -211,32 +186,29 @@ const UploadInvoiceScreen = props => {
         showBell
       />
       {renderOrderHeaderDetail()}
-      {
-        invoiceLoader ? (
-          <ActivityIndicator
-            style={{ alignSelf: 'center', padding: 12 }}
-            color={colors.BrandColor}
-          />
-        ) :
-          <FlatList
-            data={invoiceList}
-            renderItem={renderItem}
-            ListEmptyComponent={renderListEmptyComponent}
-            keyExtractor={(item, index) => `${index}-item`}
-            onEndReachedThreshold={0.9}
-            showsVerticalScrollIndicator={false}
-          />
-
-      }
+      {invoiceLoader ? (
+        <ActivityIndicator
+          style={{alignSelf: 'center', paddingVertical: Dimension.padding210}}
+          color={colors.BrandColor}
+        />
+      ) : (
+        <FlatList
+          bounces
+          data={invoiceList}
+          renderItem={renderItem}
+          ListEmptyComponent={renderListEmptyComponent}
+          keyExtractor={(item, index) => `${index}-item`}
+          onEndReachedThreshold={0.9}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
       <View>
         <View style={styles.titleWrap}>
           <Text style={styles.TitleLightTxt}>
             Please select the product to start filling invoice details
           </Text>
-
         </View>
-
       </View>
       <View style={styles.bottombtnWrap}>
         <CustomButton
@@ -266,10 +238,8 @@ const UploadInvoiceScreen = props => {
               totalAmount,
               tax,
               selectedTab,
-            })
-
-          }
-          }
+            });
+          }}
         />
       </View>
     </View>

@@ -722,7 +722,7 @@ const CategoryBrandScreen = props => {
         navigation={props.navigation}
         showText={'Category & Brand'}
         rightIconName={'category--brand'}></Header>
-      <ScrollView style={styles.ContainerCss}>
+      <ScrollView bounces style={styles.ContainerCss}>
         {categoriesBrandsStatus == STATE_STATUS.FETCHED ? (
           <View>
             {BRAND_CATEGORY.map(_ => renderInputText(_))
