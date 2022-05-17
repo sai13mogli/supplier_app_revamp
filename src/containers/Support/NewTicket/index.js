@@ -14,9 +14,13 @@ import {getCategories, getSubCategories} from '../../../services/support';
 import AppHeader from '../../../component/common/Header';
 import Toast from 'react-native-toast-message';
 import {fetchTickets} from '../../../redux/actions/support';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import analytics from '@react-native-firebase/analytics';
 
 const NewTicket = props => {
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
   const [loading, setLoading] = useState(false);
   const [category, setcategory] = useState('');
   const [subCategory, setsubCategory] = useState('');
@@ -170,6 +174,14 @@ const NewTicket = props => {
       validateBusinessType();
       validateExplainQuery();
     } else {
+      await analytics().logEvent('RaiseTicket', {
+        action: `submit`,
+        label: `${category}, ${subCategory}, ${businessType}, ${
+          docs.length ? 'Yes' : 'No'
+        }`,
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
       setLoading(true);
       setcategoryError(false);
       setsubCategoryError(false);

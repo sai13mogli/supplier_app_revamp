@@ -296,7 +296,7 @@ const LoginScreen = props => {
     await analytics().logEvent('SignUp', {
       action: `click`,
       label: `signInScreen`,
-      datetimestamp: `${date.getTime()}`,
+      datetimestamp: `${new Date().getTime()}`,
     });
     props.navigation.navigate('SignUpStart');
   };

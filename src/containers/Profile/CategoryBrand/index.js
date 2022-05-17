@@ -42,6 +42,7 @@ import {fetchProfile} from '../../../redux/actions/profile';
 import PickerDropDown from '../../../component/common/PickerDropDown';
 import PDFView from 'react-native-view-pdf';
 import PickerMenu from '../../../component/common/PickerMenu';
+import analytics from '@react-native-firebase/analytics';
 
 // import {uploadDocumentService} from '../../../services/documents';
 const deviceWidth = Dimensions.get('window').width;
@@ -72,6 +73,10 @@ const CategoryBrandScreen = props => {
   const supplierId = useSelector(
     state =>
       (((state.profileReducer || {}).data || {}).userInfo || {}).id || '',
+  );
+
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
   );
 
   const [categoryCode, setcategoryCode] = useState([]);
@@ -242,7 +247,17 @@ const CategoryBrandScreen = props => {
 
   useEffect(() => {
     dispatch(fetchCategoriesBrands());
+    logEvent();
   }, []);
+
+  const logEvent = async () => {
+    await analytics().logEvent('BrandCategoryDetails', {
+      action: `click`,
+      label: ``,
+      datetimestamp: `${new Date().getTime()}`,
+      supplierId: profileData.userId,
+    });
+  };
 
   useEffect(() => {
     if (

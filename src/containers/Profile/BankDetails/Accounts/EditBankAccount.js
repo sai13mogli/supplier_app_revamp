@@ -11,12 +11,16 @@ import colors from '../../../../Theme/Colors';
 import {getIfscCodeDetails} from '../../../../services/profile';
 import {STATE_STATUS} from '../../../../redux/constants';
 import {fetchUpdateBankDetails} from '../../../../redux/actions/profile';
+import analytics from '@react-native-firebase/analytics';
 
 const ifscCodeRegex = '^[A-Za-z]{4}[a-zA-Z0-9]{7}$';
 
 const EditBankAccount = props => {
   const bankDetails = useSelector(
     state => state.profileReducer.bankDetails.data || {},
+  );
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
   );
   const bankDetailsStatus = useSelector(
     state => state.profileReducer.bankDetails.status || STATE_STATUS.FETCHING,
@@ -201,7 +205,7 @@ const EditBankAccount = props => {
     }
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (
       accountHolderName &&
       accountHolderName.length &&
@@ -216,6 +220,12 @@ const EditBankAccount = props => {
       bankName &&
       bankName.length
     ) {
+      await analytics().logEvent('BankDetails', {
+        action: `submit`,
+        label: '',
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
       setLoading(true);
       if (editID) {
         const data = {
