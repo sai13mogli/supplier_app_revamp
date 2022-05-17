@@ -4,6 +4,8 @@ import colors from '../../Theme/Colors';
 import CustomeIcon from './CustomeIcon';
 import {Header, HeaderProps, Icon} from 'react-native-elements';
 import {useSelector} from 'react-redux';
+import analytics from '@react-native-firebase/analytics';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Dimension from '../../Theme/Dimension';
 const AppHeader = props => {
@@ -23,6 +25,17 @@ const AppHeader = props => {
     } else {
       return <></>;
     }
+  };
+
+  const navigateNotification = async () => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent('NotificationIcon', {
+      action: `click`,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
+    props.navigation.navigate('Notification');
   };
 
   return (
@@ -57,7 +70,7 @@ const AppHeader = props => {
               color={colors.FontColor}></CustomeIcon>
             {!props.fromnotification && (
               <TouchableOpacity
-                onPress={() => props.navigation.navigate('Notification')}
+                onPress={() => navigateNotification()}
                 style={{position: 'relative', paddingLeft: Dimension.padding8}}>
                 <CustomeIcon
                   name={'notification-3-line'}

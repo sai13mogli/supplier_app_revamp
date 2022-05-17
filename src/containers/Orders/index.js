@@ -32,6 +32,7 @@ import Colors from '../../Theme/Colors';
 import {requestUserPermission} from '../../utils/firebasepushnotification';
 import messaging from '@react-native-firebase/messaging';
 import * as RootNavigation from '../../generic/navigator';
+import analytics from '@react-native-firebase/analytics';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -833,6 +834,17 @@ const OrdersScreen = props => {
     }
   };
 
+  const navigateNotification = async () => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent('NotificationIcon', {
+      action: `click`,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
+    props.navigation.navigate('Notification');
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
       <View style={styles.topHeaderWrap}>
@@ -848,8 +860,9 @@ const OrdersScreen = props => {
           enabled={true}
           isFromOrders={true}
         />
+
         <TouchableOpacity
-          onPress={() => props.navigation.navigate('Notification')}
+          onPress={() => navigateNotification()}
           style={{
             //position: 'relative',
             paddingLeft: Dimension.padding8,
