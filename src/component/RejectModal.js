@@ -20,6 +20,7 @@ import CustomeIcon from './common/CustomeIcon';
 import Productcard from './Productcard';
 import DropDownModal from './DropDownModal';
 import FloatingLabelInputField from './common/FloatingInput';
+import analytics from '@react-native-firebase/analytics';
 
 const deviceWidth = Dimensions.get('window').width;
 const RejectModal = props => {
@@ -85,6 +86,17 @@ const RejectModal = props => {
     console.log(reason);
   });
 
+  const setRejectAnalytics = async () => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent(`AcceptancePendingPopup`, {
+      action: `click`,
+      label: `RejectOrder_${reason}`,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
+  };
+
   //rejectOrder
   const onReject = async () => {
     try {
@@ -95,8 +107,6 @@ const RejectModal = props => {
         remark:
           reason == 'Other' ? reasonText : reason || 'Material is not ready',
       };
-
-      console.log('reason', reason);
       const {data} = await rejectOrder(payload);
       if (data && data.success) {
         fetchOrdersFunc(0, '', selectedTab, shipmentType, {
@@ -117,6 +127,7 @@ const RejectModal = props => {
         fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
         setRejectLoader(false);
         setRejectModal(false);
+        setRejectAnalytics();
       } else {
         setRejectLoader(false);
         setRejectModal(false);
