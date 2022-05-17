@@ -21,7 +21,7 @@ import {
   setNavigation,
 } from '../../redux/actions/profile';
 import {fetchCategoriesBrands} from '../../redux/actions/categorybrand';
-
+import analytics from '@react-native-firebase/analytics';
 import Progress from 'react-native-progress/Bar';
 import {PROFILE_TABS} from '../../constants';
 import styles from './style';
@@ -198,6 +198,12 @@ const ProfileScreen = props => {
 
   const sendVerificationMail = async () => {
     try {
+      await analytics().logEvent('VerifyEmail', {
+        action: `click`,
+        label: ``,
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
       setOpenEmailLoader(true);
       const {data} = await sendVerificationEmail();
       if (data && data.success) {
@@ -309,7 +315,7 @@ const ProfileScreen = props => {
                     title={'VERIFY EMAIL'}
                     loading={openemailLoader}
                     loadingColor={Colors.WhiteColor}
-                    onPress={() => sendVerificationMail()}
+                    onPress={sendVerificationMail}
                     TextColor={Colors.WhiteColor}
                     buttonColor={Colors.FontColor}
                     borderColor={Colors.FontColor}

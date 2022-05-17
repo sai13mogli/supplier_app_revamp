@@ -15,7 +15,7 @@ import CustomButton from './common/Button';
 import CustomeIcon from './common/CustomeIcon';
 import FloatingInput from './common/FloatingInput';
 import Toast from 'react-native-toast-message';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {fetchBusinessDetails, fetchProfile} from '../redux/actions/profile';
 const phoneRegex = '^[1-9][0-9]{9}$';
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -47,6 +47,10 @@ const UpdateNumberAndEmailModal = props => {
   const [otpError, setOtpError] = useState(false);
   const [otpErrorMsg, setOtpErrorMsg] = useState('');
   const dispatch = useDispatch();
+
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
 
   const initializeCounter = type => {
     if (type == 6) {
@@ -189,6 +193,12 @@ const UpdateNumberAndEmailModal = props => {
 
   const onSubmit = async () => {
     try {
+      await analytics().logEvent('BusinessDetails', {
+        action: `edit`,
+        label: type == 6 ? 'mobile' : 'email',
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
       setLoading(true);
       if (type == 6) {
         let payloadObj = {

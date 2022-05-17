@@ -76,6 +76,26 @@ const EditAddress = props => {
     return false;
   };
 
+  useEffect(() => {
+    logEvent();
+  }, []);
+
+  const logEvent = async () => {
+    await analytics().logEvent('AddressDetails', {
+      action: `click`,
+      label:
+        !editID && tabState?.route?.params?.tabState == 'Billing'
+          ? 'AddNewBillingAddress'
+          : !editID && tabState?.route?.params?.tabState == 'PickedUp'
+          ? 'AddNewPickupAddress'
+          : editID && tabState?.route?.params?.tabState == 'Billing'
+          ? 'EditBillingAddress'
+          : 'EditPickupAddress',
+      datetimestamp: `${new Date().getTime()}`,
+      supplierId: profileData.userId,
+    });
+  };
+
   let BillingAddressData = addressesData.filter(filterById);
 
   const FORM_FIELDS = new OrderedMap({
@@ -255,7 +275,7 @@ const EditAddress = props => {
     }
   }, [pincode]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (
       phone &&
       phone.length &&
@@ -271,6 +291,15 @@ const EditAddress = props => {
       city.length
     ) {
       setLoading(true);
+      await analytics().logEvent('AddressDetails', {
+        action: `submit`,
+        label:
+          tabState?.route?.params?.tabState == 'Billing'
+            ? 'NewBillingAddress'
+            : 'NewPickupAddress',
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
       if (editID) {
         const data = {
           id: editID,

@@ -13,6 +13,7 @@ import {TOP_BRANDS_SCREENS} from '../../../../constants';
 import Tabs from '../../../../component/common/Tabs';
 import Header from '../../../../component/common/Header';
 import {addMultipleBrands} from '../../../../redux/actions/categorybrand';
+import analytics from '@react-native-firebase/analytics';
 const deviceWidth = Dimensions.get('window').width;
 
 const TABS = [
@@ -33,6 +34,10 @@ const TABS = [
 ];
 
 const BrandScreen = props => {
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
+
   const userBrands = useSelector(
     state => (state.categorybrandReducer || {}).userBrands || [],
   );
@@ -40,7 +45,7 @@ const BrandScreen = props => {
 
   const dispatch = useDispatch();
 
-  const onConfirm = () => {
+  const onConfirm = async () => {
     let currbrands = [...userBrands];
     currbrands = (currbrands || []).map(_ => ({
       ..._,
@@ -48,6 +53,12 @@ const BrandScreen = props => {
       confirmed: _.confirmed || false,
       localbrand: _.localbrand || false,
     }));
+    await analytics().logEvent('BrandCategoryDetails', {
+      action: `submit`,
+      label: currbrands.map(_ => _.brandName).join('/'),
+      datetimestamp: `${new Date().getTime()}`,
+      supplierId: profileData.userId,
+    });
     dispatch(addMultipleBrands(currbrands));
     props.navigation.navigate('CategoryBrand');
   };

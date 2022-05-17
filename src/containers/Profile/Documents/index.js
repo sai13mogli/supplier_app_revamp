@@ -30,6 +30,7 @@ import {fetchProfile} from '../../../redux/actions/profile';
 import Header from '../../../component/common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import analytics from '@react-native-firebase/analytics';
 import DocumentTermsConditionModal from '../../../component/DocumentTermsConditionModal';
 const deviceWidth = Dimensions.get('window').width;
 
@@ -384,6 +385,12 @@ const DocumentsScreen = props => {
 
   const fetchDocuments = async () => {
     try {
+      await analytics().logEvent('Documents', {
+        action: `click`,
+        label: '',
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
       let token = `Bearer ${await AsyncStorage.getItem('token')}`;
       const {data} = await getDocuments(token);
       setDocumentsData(data);
@@ -1135,6 +1142,23 @@ const DocumentsScreen = props => {
 
   const onSubmit = async () => {
     try {
+      await analytics().logEvent('Documents', {
+        action: `submit`,
+        label: [
+          pancard ? 'pancard' : '',
+          gstin ? 'gstin' : '',
+          cheque ? 'cheque' : '',
+          bankStatement ? 'bankStatement' : '',
+          corporateCertificate ? 'corporateCertificate' : '',
+          addressProof ? 'addressProof' : '',
+          pickupAddressProof ? 'pickupAddressProof' : '',
+          signature ? 'signature' : '',
+        ]
+          .filter(_ => _)
+          .join('/'),
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
       setSubmitLoader(true);
       let token = `Bearer ${await AsyncStorage.getItem('token')}`;
       const {data} = await submitProfile(token);

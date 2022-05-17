@@ -21,6 +21,7 @@ import UpdateNumberAndEmailModal from '../../../component/UpdateNumberAndEmailMo
 import PickerDropDown from '../../../component/common/PickerDropDown';
 import Toast from 'react-native-toast-message';
 import CustomeIcon from '../../../component/common/CustomeIcon';
+import analytics from '@react-native-firebase/analytics';
 
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
@@ -403,7 +404,7 @@ const BusinessDetailsScreen = props => {
     }
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (
       legalEntityName &&
       legalEntityName.length &&
@@ -427,6 +428,13 @@ const BusinessDetailsScreen = props => {
       // tan &&
       // tan.length
     ) {
+      await analytics().logEvent('BusinessDetails', {
+        action: `submit`,
+        label: ``,
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
+
       setLoading(true);
       const data = {
         tradeName: tradeName,

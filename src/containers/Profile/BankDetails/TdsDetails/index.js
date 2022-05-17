@@ -12,6 +12,7 @@ import CustomButton from '../../../../component/common/Button';
 import TDSEditModal from '../../../../component/common/TDSEditModal';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fetchUpdateBankDetails} from '../../../../redux/actions/profile';
+import analytics from '@react-native-firebase/analytics';
 
 const TdsDetails = props => {
   const profileData = useSelector(state => state.profileReducer.data || {});
@@ -186,13 +187,25 @@ const TdsDetails = props => {
     );
   };
 
-  const onPressNext = value => {
+  const onPressNext = async value => {
+    await analytics().logEvent('TDSDetails', {
+      action: `click`,
+      label: '',
+      datetimestamp: `${new Date().getTime()}`,
+      supplierId: profileData.userId,
+    });
     setModalVisible(false);
     dispatch(fetchUpdateTDSDetails(value));
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (bankDetails) {
+      await analytics().logEvent('TDSDetails', {
+        action: `submit`,
+        label: (tdsInfoDetails || []).map(_ => _.financialyear).join('/'),
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
       const data = {
         id: bankDetails?.id,
         accountHolderName: bankDetails.accountHolderName,

@@ -18,9 +18,13 @@ import CustomeIcon from '../../../component/common/CustomeIcon';
 import styles from '../style';
 import debounce from 'lodash.debounce';
 import Dimension from '../../../Theme/Dimension';
+import analytics from '@react-native-firebase/analytics';
 import colors from '../../../Theme/Colors';
 
 const TicketsList = props => {
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
   const ticketsList = useSelector(state => state.supportReducer.data || []);
   const fetchStatus = useSelector(
     state => state.supportReducer.success || false,
@@ -75,8 +79,14 @@ const TicketsList = props => {
   };
 
   //api hit for orderWay, orderBy, appliedFilter changes
-  const applyFilters = () => {
+  const applyFilters = async () => {
     if (!loader) {
+      await analytics().logEvent('TicketFilter', {
+        action: `submit`,
+        label: '',
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
       setLoader(true);
       setFiltersModal(false);
       fetchTicketListing(1, '');
@@ -105,7 +115,13 @@ const TicketsList = props => {
     // debouncedSave(text);
   };
 
-  const onSubmitSearch = () => {
+  const onSubmitSearch = async () => {
+    await analytics().logEvent('SupportSearch', {
+      action: `click`,
+      label: '',
+      datetimestamp: `${new Date().getTime()}`,
+      supplierId: profileData.userId,
+    });
     fetchTicketListing(1, inputValue);
   };
 
@@ -132,18 +148,26 @@ const TicketsList = props => {
     } ${modifieddate.getDate()}, ${modifieddate.getFullYear()} `;
   };
 
+  const navigateToTicket = async item => {
+    await analytics().logEvent('TicketCard', {
+      action: `click`,
+      label: item.ticketType,
+      datetimestamp: `${new Date().getTime()}`,
+      supplierId: profileData.userId,
+    });
+    props.navigation.navigate('Conversation', {
+      tickedId: item.id,
+      page: 1,
+      days: timeFilter,
+      openOnly: typeFilter,
+      search: '',
+    });
+  };
+
   const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
-        onPress={() =>
-          props.navigation.navigate('Conversation', {
-            tickedId: item.id,
-            page: 1,
-            days: timeFilter,
-            openOnly: typeFilter,
-            search: '',
-          })
-        }
+        onPress={() => navigateToTicket(item)}
         style={styles.TicketOuterWrap}>
         <View style={styles.TicketTopWrap}>
           <Text
@@ -244,6 +268,16 @@ const TicketsList = props => {
     return null;
   };
 
+  const openFilter = async () => {
+    await analytics().logEvent('TicketFilter', {
+      action: `click`,
+      label: '',
+      datetimestamp: `${new Date().getTime()}`,
+      supplierId: profileData.userId,
+    });
+    setFiltersModal(true);
+  };
+
   const ticketListing = () => {
     return (
       <View>
@@ -274,9 +308,7 @@ const TicketsList = props => {
         </View>
         <View style={styles.filterRowWrap}>
           <Text style={styles.ticketTxt}>Tickets</Text>
-          <TouchableOpacity
-            onPress={() => setFiltersModal(true)}
-            style={styles.filterBtn}>
+          <TouchableOpacity onPress={openFilter} style={styles.filterBtn}>
             <CustomeIcon
               name={'filter-fill'}
               size={Dimension.font20}

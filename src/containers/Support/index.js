@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import CustomButton from '../../component/common/Button';
 import Colors from '../../Theme/Colors';
@@ -8,8 +8,37 @@ import {SUPPORT_TAB_SCREENS} from '../../constants';
 import Tabs from '../../component/common/Tabs';
 import styles from './style';
 import CustomeIcon from '../../component/common/CustomeIcon';
+import analytics from '@react-native-firebase/analytics';
+import {useSelector} from 'react-redux';
 
 const SupportScreen = props => {
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
+
+  useEffect(() => {
+    logEvent();
+  }, []);
+
+  const logEvent = async () => {
+    await analytics().logEvent('TicketTab', {
+      action: `click`,
+      label: '',
+      datetimestamp: `${new Date().getTime()}`,
+      supplierId: profileData.userId,
+    });
+  };
+
+  const navigateToNewTicket = async () => {
+    await analytics().logEvent('RaiseTicket', {
+      action: `click`,
+      label: '',
+      datetimestamp: `${new Date().getTime()}`,
+      supplierId: profileData.userId,
+    });
+    props.navigation.navigate('NewTicket');
+  };
+
   return (
     <>
       <View style={{flex: 1}}>
@@ -24,7 +53,7 @@ const SupportScreen = props => {
       </View>
       <View style={styles.BottomWrap}>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate('NewTicket')}
+          onPress={navigateToNewTicket}
           style={styles.ticketBtn}>
           <CustomeIcon
             name={'add-circle-line'}
