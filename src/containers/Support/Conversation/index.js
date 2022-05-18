@@ -184,9 +184,9 @@ const Conversation = props => {
           marginTop: 50,
         }}>
         <ActivityIndicator
+          style={{alignSelf: 'center', margin: Dimension.margin12}}
           size={'large'}
-          color={'red'}
-          style={{alignSelf: 'center'}}
+          color={Colors.BrandColor}
         />
       </View>
     );

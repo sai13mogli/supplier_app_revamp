@@ -168,9 +168,9 @@ const MoreScreen = props => {
             <CustomeIcon
               name={'smartphone-line'}
               color={Colors.headerTxtColor}
-              size={Dimension.font18}></CustomeIcon>
+              size={Dimension.font30}></CustomeIcon>
 
-            <View style={{flexDirection: 'column'}}>
+            <View style={{flexDirection: 'column',marginLeft:Dimension.margin10}}>
               <Text style={[styles.versionText]}>
                 App Version{' '}
                 <Text style={[styles.AppversionNumber]}>
@@ -178,20 +178,17 @@ const MoreScreen = props => {
                   {VersionCheck.getCurrentVersion()}{' '}
                 </Text>
               </Text>
-              {/* <Text
-              style={[styles.versionText, {marginLeft: Dimension.margin10}]}>
+              <Text
+              style={[styles.updatedateTxt]}>
               Last updated on 12-02-19
-            </Text> */}
+            </Text>
             </View>
           </View>
-          {/* <Text
+          <Text
             numberOfLines={2}
-            style={[
-              styles.versionText,
-              { marginLeft: Dimension.margin70, width: 80, bottom: 5 },
-            ]}>
+            style={[styles.updatedateTxt,{maxWidth:50}]}>
             No Update Available
-          </Text> */}
+          </Text>
         </View>
       </ScrollView>
     </View>

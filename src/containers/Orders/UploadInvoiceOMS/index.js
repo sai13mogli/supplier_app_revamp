@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList,
   ActivityIndicator,
+  Dimensions
 } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -502,10 +503,20 @@ const UploadInvoiceOMSScreen = props => {
 
       <ScrollView bounces style={styles.ContainerCss}>
         {omsLoading ? (
-          <ActivityIndicator
-            style={{alignSelf: 'center', padding: 12}}
-            color={colors.BrandColor}
-          />
+           <View
+           style={{
+             flex: 1,
+             height: Dimensions.get('window').height,
+             alignItems: 'center',
+             justifyContent: 'center',
+             marginTop: 50,
+           }}>
+           <ActivityIndicator
+             style={{alignSelf: 'center', margin: Dimension.margin12}}
+             size={'large'}
+             color={colors.BrandColor}
+           />
+         </View>
         ) : (
           <FlatList
             bounces

@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   TextInput,
   Image,
+  Dimensions
 } from 'react-native';
 import styles from './style';
 import {searchFaqs} from '../../../services/support';
@@ -162,10 +163,20 @@ const FAQS = props => {
         </ScrollView>
       </View>
       {loader ? (
+        <View
+        style={{
+          flex: 1,
+          height: Dimensions.get('window').height,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 50,
+        }}>
         <ActivityIndicator
-          style={{alignSelf: 'center', padding: 12}}
+          style={{alignSelf: 'center', margin: Dimension.margin12}}
+          size={'large'}
           color={Colors.BrandColor}
         />
+      </View>
       ) : (
         <>
           <View style={styles.searchWrapper}>
