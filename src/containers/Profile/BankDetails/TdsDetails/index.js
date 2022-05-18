@@ -47,7 +47,6 @@ const TdsDetails = props => {
       ],
   );
 
-  console.log("tdsinfo====>", tdsInfoDetails);
 
 
 

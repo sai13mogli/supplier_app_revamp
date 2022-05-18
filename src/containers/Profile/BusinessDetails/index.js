@@ -423,7 +423,17 @@ const BusinessDetailsScreen = props => {
       phone &&
       phone.length &&
       email &&
-      email.length
+      email.length &&
+      !legalEntityNameError &&
+      !tradeNameError &&
+      !contactNameError &&
+      !gstinError &&
+      !countryError &&
+      !pincodeError &&
+      !stateError &&
+      !cityError &&
+      !phoneError &&
+      !emailError
       // &&
       // tan &&
       // tan.length

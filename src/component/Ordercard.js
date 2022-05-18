@@ -78,6 +78,7 @@ const Ordercard = props => {
     remark,
     source,
     statusText,
+    initialPickupDate,
   } = props;
   const [invoiceLoading, setInvoiceLoading] = useState(false);
   const [orderImage, setOrderImage] = useState(null);
@@ -833,8 +834,12 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-            {/* <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon> */}
-            <Text style={styles.rejectCtaTxt}> DOWNLOAD PO</Text>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{marginRight: Dimension.margin5}}></CustomeIcon>
+            <Text style={styles.rejectCtaTxt}>PO</Text>
             {poLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -1269,7 +1274,7 @@ const Ordercard = props => {
                     height: Dimension.height33,
                   },
                 ]}>
-                <Text style={styles.disabledBtntxt}>Pack Order</Text>
+                <Text style={styles.disabledBtntxt}>PACK ORDER</Text>
               </TouchableOpacity>
               <Text style={styles.shipmentLbelTxt}>
                 Shipment not created yet.
@@ -1291,11 +1296,14 @@ const Ordercard = props => {
                   height: Dimension.height33,
                 },
               ]}>
-              <Text style={styles.disabledBtntxt}>Pack Order Invoice</Text>
+              <Text style={styles.disabledBtntxt}>PACK ORDER</Text>
             </TouchableOpacity>
-            {/* <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
-              Shipment lable not created
-            </Text> */}
+            <Text numberOfLines={2} style={styles.shipmentLbelTxt}>
+              Invoice not created yet.
+            </Text>
+            <Text style={styles.shipmentLbelTxt}>
+              Please check this tab after some time.
+            </Text>
           </>
         ) : cta == 'CREATE_MANIFEST_DISABLED' ? (
           <>
@@ -1317,6 +1325,9 @@ const Ordercard = props => {
               </TouchableOpacity>
               <Text numberOfLines={2} style={styles.shipmentLbelTxt}>
                 Shipment lable not created
+              </Text>
+              <Text style={styles.shipmentLbelTxt}>
+                Please check this tab after some time.
               </Text>
             </View>
           </>
@@ -1363,7 +1374,7 @@ const Ordercard = props => {
               size={Dimension.font16}
               style={{ marginRight: Dimension.margin5 }}></CustomeIcon>
             <Text style={styles.rejectCtaTxt}>Shipment Label</Text>
-            {manifestLoader && (
+            {shipmentLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
                 style={{ alignSelf: 'center' }}
@@ -1385,6 +1396,11 @@ const Ordercard = props => {
               },
             ]}
             disabled={pickupchallanLoader}>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{marginRight: Dimension.margin5}}></CustomeIcon>
             <Text style={styles.rejectCtaTxt}>PICKUP CHALLAN</Text>
             {pickupchallanLoader && (
               <ActivityIndicator
@@ -1393,26 +1409,46 @@ const Ordercard = props => {
               />
             )}
           </TouchableOpacity>
-        ) : cta == 'VIEW_SHIPPED_DETAILS' ? (
-          <TouchableOpacity
-            // onPress={() => getManifestRecords(manifestId)}
-            style={[
-              styles.DownloadPoBtn,
-              {
-                flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
-              },
-            ]}
-            disabled={pickupchallanLoader}>
-            <Text style={styles.rejectCtaTxt}>MARKED SHIPPED</Text>
-            {/* {pickupchallanLoader && (
-              <ActivityIndicator
-                color={Colors.FontColor}
-                style={{alignSelf: 'center'}}
-              />
-            )} */}
-          </TouchableOpacity>
-        ) : null}
+        ) : // : cta == 'VIEW_SHIPPED_DETAILS' ? (
+        //   <TouchableOpacity
+        //     // onPress={() => getManifestRecords(manifestId)}
+        //     style={[
+        //       styles.DownloadPoBtn,
+        //       {
+        //         flex: ctaLength.length ? 5 : 1,
+        //         flexBasis: ctaLength.length ? '45%' : '100%',
+        //       },
+        //     ]}
+        //     disabled={pickupchallanLoader}>
+        //     <Text style={styles.rejectCtaTxt}>MARKED SHIPPED</Text>
+        //     {/* {pickupchallanLoader && (
+        //       <ActivityIndicator
+        //         color={Colors.FontColor}
+        //         style={{alignSelf: 'center'}}
+        //       />
+        //     )}
+        //   </TouchableOpacity>
+        // ) : // : cta == 'VIEW_SHIPPED_DETAILS' ? (
+        // //   <TouchableOpacity
+        // //     // onPress={() => getManifestRecords(manifestId)}
+        // //     style={[
+        // //       styles.DownloadPoBtn,
+        // //       {
+        // //         flex: ctaLength.length ? 5 : 1,
+        // //         flexBasis: ctaLength.length ? '45%' : '100%',
+        // //       },
+        // //     ]}
+        // //     disabled={pickupchallanLoader}>
+        // //     <Text style={styles.rejectCtaTxt}>MARKED SHIPPED</Text>
+        // //   </TouchableOpacity>
+        // //     {/* {pickupchallanLoader && (
+        // //       <ActivityIndicator
+        // //         color={Colors.FontColor}
+        // //         style={{alignSelf: 'center'}}
+        // //       />
+        // //     )} */}
+        // )
+        null}
       </>
     );
     // }
@@ -1864,6 +1900,7 @@ const Ordercard = props => {
           setDisplayCalendar={setDisplayCalendar}
           pickupDate={pickupDate}
           isOmsPickupDate={isOmsPickupDate}
+          initialPickupDate={initialPickupDate}
         />
       )}
       {addViewModal && (

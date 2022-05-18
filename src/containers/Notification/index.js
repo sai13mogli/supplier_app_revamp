@@ -7,6 +7,7 @@ import {
   SectionList,
   Image,
   ActivityIndicator,
+  Dimensions
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {useDispatch} from 'react-redux';
@@ -40,6 +41,9 @@ const NotificationScreen = props => {
 
   const notificationsPage = useSelector(
     state => state.notificationsReducer.page || 0,
+  );
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
   );
 
   const dispatch = useDispatch();
@@ -343,6 +347,22 @@ const NotificationScreen = props => {
     );
   };
 
+  const onNavigate = isText => {
+    if (isText) {
+      if (profileData.verificationStatus == 15) {
+        return 'Go to Orders';
+      } else if (profileData.verificationStatus <= 10) {
+        return 'Go to Profile';
+      }
+      return;
+    }
+    if (profileData.verificationStatus == 15) {
+      props.navigation.navigate('Orders');
+    } else if (profileData.verificationStatus <= 10) {
+      props.navigation.navigate('Profile');
+    }
+  };
+
   return (
     <>
       <View style={styles.ContainerCss}>
@@ -372,21 +392,19 @@ const NotificationScreen = props => {
           ListFooterComponent={
             notificationsStatus == STATE_STATUS.FETCHING ? (
               <View
-                style={{
-                  flex: 1,
-                  marginTop: 50,
-                  //backgroundColor:"#ccc",
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  height: '100%',
-                  padding: Dimension.padding20,
-                }}>
-                <ActivityIndicator
-                  //style={{alignSelf: 'center'}}
-                  color={Colors.BrandColor}
-                  size={'large'}
-                />
-              </View>
+              style={{
+                flex: 1,
+                height: Dimensions.get('window').height,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 50,
+              }}>
+              <ActivityIndicator
+                style={{alignSelf: 'center', margin: Dimension.margin12}}
+                size={'large'}
+                color={Colors.BrandColor}
+              />
+            </View>
             ) : null
           }
           ListEmptyComponent={
@@ -400,10 +418,10 @@ const NotificationScreen = props => {
                   }}
                 />
                 <Text style={styles.boldtxt}>No Notifications Yet</Text>
-                <TouchableOpacity style={styles.NewTicktbtn}>
-                  <Text style={styles.NewTicktbtnTxt}>
-                    Upload More Products
-                  </Text>
+                <TouchableOpacity
+                  onPress={onNavigate}
+                  style={styles.NewTicktbtn}>
+                  <Text style={styles.NewTicktbtnTxt}>{onNavigate(true)}</Text>
                 </TouchableOpacity>
               </View>
             ) : null

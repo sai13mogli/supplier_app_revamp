@@ -79,18 +79,19 @@ const SelectCategoryScreen = props => {
   const renderLoader = () => {
     return (
       <View
-        style={{
-          flex: 1,
-          height: Dimensions.get('window').height,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <ActivityIndicator
-          size={'large'}
-          color={'red'}
-          style={{alignSelf: 'center'}}
-        />
-      </View>
+              style={{
+                flex: 1,
+                height: Dimensions.get('window').height,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 50,
+              }}>
+              <ActivityIndicator
+                style={{alignSelf: 'center', margin: Dimension.margin12}}
+                size={'large'}
+                color={Colors.BrandColor}
+              />
+            </View>
     );
   };
 

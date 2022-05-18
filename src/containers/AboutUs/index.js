@@ -150,14 +150,15 @@ const styles = StyleSheet.create({
     // marginBottom:Dimension.margin8
   },
   headDesign: {
-    backgroundColor: Colors.grayShade11,
+   // backgroundColor: Colors.grayShade11,
     alignSelf: 'flex-start',
     marginVertical: Dimension.margin10,
   },
   textDesign: {
     fontSize: Dimension.font14,
-    fontStyle: 'italic',
+    //fontStyle: 'italic',
     color: 'black',
+    fontFamily:Dimension.CustomBoldFont
   },
   bullet: {
     height: Dimension.height5,

@@ -115,14 +115,14 @@ const TicketsList = props => {
     // debouncedSave(text);
   };
 
-  const onSubmitSearch = async () => {
+  const onSubmitSearch = async isStringEmpty => {
     await analytics().logEvent('SupportSearch', {
       action: `click`,
       label: '',
       datetimestamp: `${new Date().getTime()}`,
       supplierId: profileData.userId,
     });
-    fetchTicketListing(1, inputValue);
+    fetchTicketListing(1, isStringEmpty ? '' : inputValue);
   };
 
   const getDate = date => {
@@ -200,19 +200,19 @@ const TicketsList = props => {
   const renderLoader = () => {
     return (
       <View
-        style={{
-          flex: 1,
-          height: Dimensions.get('window').height,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 50,
-        }}>
-        <ActivityIndicator
-          size={'large'}
-          color={'red'}
-          style={{alignSelf: 'center'}}
-        />
-      </View>
+      style={{
+        flex: 1,
+        height: Dimensions.get('window').height,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 50,
+      }}>
+      <ActivityIndicator
+        style={{alignSelf: 'center', margin: Dimension.margin12}}
+        size={'large'}
+        color={colors.BrandColor}
+      />
+    </View>
     );
   };
 
@@ -297,6 +297,15 @@ const TicketsList = props => {
               }
             }}
           />
+          {inputValue ? (
+            <CustomeIcon
+              name={'close'}
+              style={styles.closeIcon}
+              onPress={() => {
+                setInputValue('');
+                onSubmitSearch(true);
+              }}></CustomeIcon>
+          ) : null}
           <CustomeIcon
             name={'search'}
             style={styles.seacrhIcon}
@@ -349,8 +358,8 @@ const TicketsList = props => {
         <View style={{padding: 100}}>
           <ActivityIndicator
             style={{alignSelf: 'center'}}
-            color="rgba(217, 35, 45, 1)"
             size={'large'}
+        color={colors.BrandColor}
           />
         </View>
       );
