@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   headerTxt: {
     fontSize: Dimension.font14,
     color: colors.headerTxtColor,
-    fontFamily: Dimension.CustomSemiBoldFont,
+    fontFamily: Dimension.CustomMediumFont,
     marginTop: Dimension.margin5,
     //marginLeft:Dimension.margin10
   },

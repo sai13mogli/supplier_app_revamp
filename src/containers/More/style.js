@@ -102,6 +102,11 @@ const styles = StyleSheet.create({
         color: Colors.headerTxtColor,
         fontFamily: Dimension.CustomBoldFont,
     },
+    updatedateTxt:{
+        fontSize: Dimension.font10,
+        color: Colors.headerTxtColor,
+        fontFamily: Dimension.CustomRegularFont,
+    },
 });
 
 export default styles;
