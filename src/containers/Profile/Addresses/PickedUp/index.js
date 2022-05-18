@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  Dimensions
 } from 'react-native';
 import colors from '../../../../Theme/Colors';
 import {useSelector, useDispatch} from 'react-redux';
@@ -105,7 +106,20 @@ const PickedUp = props => {
   return (
     <View style={{flex: 0.9}}>
       {addressesDetailsStatus == STATE_STATUS.FETCHING ? (
-        <ActivityIndicator style={{alignSelf: 'center', marginTop: 150}} />
+        <View
+        style={{
+          flex: 1,
+          height: Dimensions.get('window').height,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 50,
+        }}>
+        <ActivityIndicator
+          style={{alignSelf: 'center', margin: Dimension.margin12}}
+          size={'large'}
+          color={colors.BrandColor}
+        />
+      </View>
       ) : (
         <ScrollView bounces style={styles.ContainerCss}>
           <View style={styles.TopWrap}>

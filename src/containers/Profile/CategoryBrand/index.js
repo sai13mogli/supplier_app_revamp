@@ -916,19 +916,19 @@ const CategoryBrandScreen = props => {
           </View>
         ) : (
           <View
-            style={{
-              flex: 1,
-              height: Dimensions.get('window').height,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <ActivityIndicator
-              // animating={true}
-              size={'large'}
-              color={'red'}
-              style={{alignSelf: 'center'}}
-            />
-          </View>
+        style={{
+          flex: 1,
+          height: Dimensions.get('window').height,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 50,
+        }}>
+        <ActivityIndicator
+          style={{alignSelf: 'center', margin: Dimension.margin12}}
+          size={'large'}
+          color={colors.BrandColor}
+        />
+      </View>
         )}
       </ScrollView>
       <Modal

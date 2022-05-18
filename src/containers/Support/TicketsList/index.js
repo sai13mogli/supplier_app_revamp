@@ -200,19 +200,19 @@ const TicketsList = props => {
   const renderLoader = () => {
     return (
       <View
-        style={{
-          flex: 1,
-          height: Dimensions.get('window').height,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 50,
-        }}>
-        <ActivityIndicator
-          size={'large'}
-          color={'red'}
-          style={{alignSelf: 'center'}}
-        />
-      </View>
+      style={{
+        flex: 1,
+        height: Dimensions.get('window').height,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 50,
+      }}>
+      <ActivityIndicator
+        style={{alignSelf: 'center', margin: Dimension.margin12}}
+        size={'large'}
+        color={colors.BrandColor}
+      />
+    </View>
     );
   };
 
@@ -349,8 +349,8 @@ const TicketsList = props => {
         <View style={{padding: 100}}>
           <ActivityIndicator
             style={{alignSelf: 'center'}}
-            color="rgba(217, 35, 45, 1)"
             size={'large'}
+        color={colors.BrandColor}
           />
         </View>
       );

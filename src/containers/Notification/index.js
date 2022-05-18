@@ -7,6 +7,7 @@ import {
   SectionList,
   Image,
   ActivityIndicator,
+  Dimensions
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {useDispatch} from 'react-redux';
@@ -372,21 +373,19 @@ const NotificationScreen = props => {
           ListFooterComponent={
             notificationsStatus == STATE_STATUS.FETCHING ? (
               <View
-                style={{
-                  flex: 1,
-                  marginTop: 50,
-                  //backgroundColor:"#ccc",
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  height: '100%',
-                  padding: Dimension.padding20,
-                }}>
-                <ActivityIndicator
-                  //style={{alignSelf: 'center'}}
-                  color={Colors.BrandColor}
-                  size={'large'}
-                />
-              </View>
+              style={{
+                flex: 1,
+                height: Dimensions.get('window').height,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 50,
+              }}>
+              <ActivityIndicator
+                style={{alignSelf: 'center', margin: Dimension.margin12}}
+                size={'large'}
+                color={Colors.BrandColor}
+              />
+            </View>
             ) : null
           }
           ListEmptyComponent={

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, FlatList, Image, ActivityIndicator} from 'react-native';
+import {Text, View, FlatList, Image, ActivityIndicator,Dimensions} from 'react-native';
 import Header from '../../../component/common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../../../component/common/Button';
@@ -187,10 +187,20 @@ const UploadInvoiceScreen = props => {
       />
       {renderOrderHeaderDetail()}
       {invoiceLoader ? (
-        <ActivityIndicator
-          style={{alignSelf: 'center', paddingVertical: Dimension.padding210}}
-          color={colors.BrandColor}
-        />
+         <View
+         style={{
+           flex: 1,
+           height: Dimensions.get('window').height,
+           alignItems: 'center',
+           justifyContent: 'center',
+           marginTop: 50,
+         }}>
+         <ActivityIndicator
+           style={{alignSelf: 'center', margin: Dimension.margin12}}
+           size={'large'}
+           color={colors.BrandColor}
+         />
+       </View>
       ) : (
         <FlatList
           bounces
