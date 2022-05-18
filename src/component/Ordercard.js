@@ -834,8 +834,12 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}>
-            {/* <CustomeIcon name={'download'} color={Colors.FontColor} size={Dimension.font16} style={{marginRight:Dimension.margin5}}></CustomeIcon> */}
-            <Text style={styles.rejectCtaTxt}> DOWNLOAD PO</Text>
+            <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{marginRight: Dimension.margin5}}></CustomeIcon>
+            <Text style={styles.rejectCtaTxt}>PO</Text>
             {poLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
@@ -1389,6 +1393,11 @@ const Ordercard = props => {
               },
             ]}
             disabled={pickupchallanLoader}>
+               <CustomeIcon
+              name={'download'}
+              color={Colors.FontColor}
+              size={Dimension.font16}
+              style={{marginRight: Dimension.margin5}}></CustomeIcon>
             <Text style={styles.rejectCtaTxt}>PICKUP CHALLAN</Text>
             {pickupchallanLoader && (
               <ActivityIndicator
@@ -1397,26 +1406,46 @@ const Ordercard = props => {
               />
             )}
           </TouchableOpacity>
-        ) : cta == 'VIEW_SHIPPED_DETAILS' ? (
-          <TouchableOpacity
-            // onPress={() => getManifestRecords(manifestId)}
-            style={[
-              styles.DownloadPoBtn,
-              {
-                flex: ctaLength.length ? 5 : 1,
-                flexBasis: ctaLength.length ? '45%' : '100%',
-              },
-            ]}
-            disabled={pickupchallanLoader}>
-            <Text style={styles.rejectCtaTxt}>MARKED SHIPPED</Text>
-            {/* {pickupchallanLoader && (
-              <ActivityIndicator
-                color={Colors.FontColor}
-                style={{alignSelf: 'center'}}
-              />
-            )} */}
-          </TouchableOpacity>
-        ) : null}
+        ) : // : cta == 'VIEW_SHIPPED_DETAILS' ? (
+        //   <TouchableOpacity
+        //     // onPress={() => getManifestRecords(manifestId)}
+        //     style={[
+        //       styles.DownloadPoBtn,
+        //       {
+        //         flex: ctaLength.length ? 5 : 1,
+        //         flexBasis: ctaLength.length ? '45%' : '100%',
+        //       },
+        //     ]}
+        //     disabled={pickupchallanLoader}>
+        //     <Text style={styles.rejectCtaTxt}>MARKED SHIPPED</Text>
+        //     {/* {pickupchallanLoader && (
+        //       <ActivityIndicator
+        //         color={Colors.FontColor}
+        //         style={{alignSelf: 'center'}}
+        //       />
+        //     )}
+        //   </TouchableOpacity>
+        // ) : // : cta == 'VIEW_SHIPPED_DETAILS' ? (
+        // //   <TouchableOpacity
+        // //     // onPress={() => getManifestRecords(manifestId)}
+        // //     style={[
+        // //       styles.DownloadPoBtn,
+        // //       {
+        // //         flex: ctaLength.length ? 5 : 1,
+        // //         flexBasis: ctaLength.length ? '45%' : '100%',
+        // //       },
+        // //     ]}
+        // //     disabled={pickupchallanLoader}>
+        // //     <Text style={styles.rejectCtaTxt}>MARKED SHIPPED</Text>
+        // //   </TouchableOpacity>
+        // //     {/* {pickupchallanLoader && (
+        // //       <ActivityIndicator
+        // //         color={Colors.FontColor}
+        // //         style={{alignSelf: 'center'}}
+        // //       />
+        // //     )} */}
+        // )
+        null}
       </>
     );
     // }

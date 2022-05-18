@@ -178,19 +178,19 @@ const AllBrandsScreen = props => {
 
   const renderLoader = () => (
     <View
-      style={{
-        flex: 1,
-        height: Dimensions.get('window').height,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-      <ActivityIndicator
-        // animating={true}
-        size={'large'}
-        color={'red'}
-        style={{alignSelf: 'center'}}
-      />
-    </View>
+        style={{
+          flex: 1,
+          height: Dimensions.get('window').height,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 50,
+        }}>
+        <ActivityIndicator
+          style={{alignSelf: 'center', margin: Dimension.margin12}}
+          size={'large'}
+          color={Colors.BrandColor}
+        />
+      </View>
   );
 
   const renderFooter = () => {
@@ -199,8 +199,8 @@ const AllBrandsScreen = props => {
         <View style={{padding: 100}}>
           <ActivityIndicator
             style={{alignSelf: 'center'}}
-            color="rgba(217, 35, 45, 1)"
             size={'large'}
+            color={Colors.BrandColor}
           />
         </View>
       );

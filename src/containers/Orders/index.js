@@ -395,7 +395,6 @@ const OrdersScreen = props => {
         remark={item.remark}
         source={item.source}
         statusText={item.statusText}
-        
       />
     );
   };
@@ -715,6 +714,22 @@ const OrdersScreen = props => {
 
   const renderListEmptyComponent = () => {
     if (
+      profileStatus == STATE_STATUS.FETCHED &&
+      profileData.verificationStatus == 16
+    ) {
+      return (
+        <View style={styles.emptyWrap}>
+          <Image
+            source={require('../../assets/images/rejected.png')}
+            style={{width: 350, height: 300}}
+          />
+          <Text style={styles.profilependingTxt}>
+            Your profile is rejected, as it does not{'\n'}match to our
+            requirements
+          </Text>
+        </View>
+      );
+    } else if (
       profileStatus == STATE_STATUS.FETCHED &&
       profileData.verificationStatus < 10
     ) {
@@ -1074,53 +1089,59 @@ const OrdersScreen = props => {
           />
 
           <View style={styles.footerWrap}>
-            <View style={styles.footerSearchWrap}>
-              <View style={styles.searchWrapper}>
-                <TextInput
-                  placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
-                  returnKeyType={'search'}
-                  onChangeText={onSearchText}
-                  onFocus={() => console.log('onFocus!!')}
-                  value={inputValue}
-                  onSubmitEditing={event => {
-                    if (inputValue && inputValue.length > 1) {
-                      onSubmitSearch();
-                    }
-                  }}
-                  blurOnSubmit={true}
-                  ellipsizeMode="tail"
-                  placeholderTextColor={Colors.eyeIcon}
-                  numberOfLines={1}
-                  style={styles.SearchInputCss}></TextInput>
-                <CustomeIcon
-                  onPress={() => {
-                    if (inputValue && inputValue.length > 1) {
-                      onSubmitSearch();
-                    }
-                  }}
-                  name={'search'}
-                  style={styles.seacrhIcon}></CustomeIcon>
-              </View>
-              {!isKeyboardVisible ? (
-                <View style={styles.filterBtnWrap}>
-                  <TouchableOpacity
-                    style={styles.filterBtn}
-                    onPress={() => onPressFilters()}>
-                    <Text style={styles.filtertxt}>Filters</Text>
-                    {isFilterApplied ? (
-                      <View style={styles.filterApplied}></View>
-                    ) : null}
-                    <CustomeIcon
-                      name={'filter-line'}
-                      style={styles.filterIcon}></CustomeIcon>
-                    {/* <Image
-            source={require('../../assets/images/filterLine.png')}
-            style={{ width:Dimension.width16, height:Dimension.height16}}
-          /> */}
-                  </TouchableOpacity>
+            {profileStatus == STATE_STATUS.FETCHED &&
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 16, 17].includes(
+              profileData.verificationStatus,
+            ) ? null : (
+              <View style={styles.footerSearchWrap}>
+                <View style={styles.searchWrapper}>
+                  <TextInput
+                    placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
+                    returnKeyType={'search'}
+                    onChangeText={onSearchText}
+                    onFocus={() => console.log('onFocus!!')}
+                    value={inputValue}
+                    onSubmitEditing={event => {
+                      if (inputValue && inputValue.length > 1) {
+                        onSubmitSearch();
+                      }
+                    }}
+                    blurOnSubmit={true}
+                    ellipsizeMode="tail"
+                    placeholderTextColor={Colors.eyeIcon}
+                    numberOfLines={1}
+                    style={styles.SearchInputCss}></TextInput>
+                  <CustomeIcon
+                    onPress={() => {
+                      if (inputValue && inputValue.length > 1) {
+                        onSubmitSearch();
+                      }
+                    }}
+                    name={'search'}
+                    style={styles.seacrhIcon}></CustomeIcon>
                 </View>
-              ) : null}
-            </View>
+                {!isKeyboardVisible ? (
+                  <View style={styles.filterBtnWrap}>
+                    <TouchableOpacity
+                      style={styles.filterBtn}
+                      onPress={() => onPressFilters()}>
+                      <Text style={styles.filtertxt}>Filters</Text>
+                      {isFilterApplied ? (
+                        <View style={styles.filterApplied}></View>
+                      ) : null}
+                      <CustomeIcon
+                        name={'filter-line'}
+                        style={styles.filterIcon}></CustomeIcon>
+                      {/* <Image
+                      source={require('../../assets/images/filterLine.png')}
+                      style={{ width:Dimension.width16, height:Dimension.height16}}
+                    /> */}
+                    </TouchableOpacity>
+                  </View>
+                ) : null}
+              </View>
+            )}
+            {/* )} */}
             {ordersfiltersModal && (
               <OrdersFilterModal
                 shipmentType={shipmentType}

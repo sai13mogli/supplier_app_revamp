@@ -119,13 +119,6 @@ const ProfileScreen = props => {
   }, [profileStatus, profileStatus]);
 
   useEffect(() => {
-    console.log(
-      profileStatus == STATE_STATUS.FETCHED,
-      props.route,
-      props.route.params,
-      props.route.params.parentTab == 'BusinessDetails',
-      initLoader,
-    );
     if (
       profileStatus == STATE_STATUS.FETCHED &&
       businessStatus == STATE_STATUS.FETCHED &&
@@ -244,6 +237,17 @@ const ProfileScreen = props => {
             size={'large'}
             color={Colors.BrandColor}
           />
+        </View>
+      ) : profileData.verificationStatus == 16 ? (
+        <View style={styles.emptyWrap}>
+          <Image
+            source={require('../../assets/images/rejected.png')}
+            style={{width: 350, height: 300}}
+          />
+          <Text style={styles.profilependingTxt}>
+            Your profile is rejected, as it does not{'\n'}match to our
+            requirements
+          </Text>
         </View>
       ) : (
         <ScrollView bounces style={styles.ContainerCss}>

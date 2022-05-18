@@ -4,7 +4,8 @@ import Dimension from '../../../Theme/Dimension';
 
 export default styles = StyleSheet.create({
   searchWrapper: {
-    marginVertical: Dimension.margin12,
+    marginHorizontal: Dimension.margin12,
+    marginBottom: Dimension.margin12,
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
@@ -36,7 +37,7 @@ export default styles = StyleSheet.create({
   tabContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: Dimension.margin12,
+    marginTop: Dimension.margin12,
   },
   activeTab: {
     padding: Dimension.padding12,
@@ -60,7 +61,7 @@ export default styles = StyleSheet.create({
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomSemiBoldFont,
   },
-  headingTxt:{
+  headingTxt: {
     color: Colors.FontColor,
     fontSize: Dimension.font14,
     fontFamily: Dimension.CustomBoldFont,
@@ -72,7 +73,7 @@ export default styles = StyleSheet.create({
     padding: Dimension.padding10,
     borderRadius: Dimension.margin10,
   },
-  questionTxt:{
+  questionTxt: {
     color: Colors.FontColor,
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomSemiBoldFont,
@@ -89,7 +90,7 @@ export default styles = StyleSheet.create({
     backgroundColor: Colors.blackColor,
     borderRadius: 6,
   },
-  ansTxt:{
+  ansTxt: {
     color: Colors.FontColor,
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomRegularFont,
@@ -114,5 +115,4 @@ export default styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
   },
-
 });

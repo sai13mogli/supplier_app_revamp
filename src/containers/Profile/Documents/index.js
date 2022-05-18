@@ -1218,7 +1218,7 @@ const DocumentsScreen = props => {
   };
 
   const renderAgree = () => {
-    if (!uploadDisabled && profileData && profileData.verificationStatus < 10) {
+    if (!uploadDisabled) {
       return (
         <>
           <Checkbox
@@ -1249,13 +1249,12 @@ const DocumentsScreen = props => {
         {Documents.map(_ => renderInputText(_))
           .toList()
           .toArray()}
-        {!uploadDisabled && profileData && profileData.verificationStatus < 10
-          ? noteText()
-          : null}
+        {!uploadDisabled ? noteText() : null}
 
-        {profileData && profileData.verificationStatus !== 15
-          ? renderAgree()
-          : null}
+        {/* {profileData && profileData.verificationStatus !== 15
+          ?  */}
+        {renderAgree()}
+        {/* : null} */}
       </ScrollView>
       {showTermsCondition && (
         <DocumentTermsConditionModal
