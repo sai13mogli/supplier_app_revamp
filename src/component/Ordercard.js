@@ -1319,6 +1319,9 @@ const Ordercard = props => {
               <Text numberOfLines={2} style={styles.shipmentLbelTxt}>
                 Shipment lable not created
               </Text>
+              <Text style={styles.shipmentLbelTxt}>
+                Please check this tab after some time.
+              </Text>
             </View>
           </>
         ) : cta == 'CREATE_MANIFEST' ? (
