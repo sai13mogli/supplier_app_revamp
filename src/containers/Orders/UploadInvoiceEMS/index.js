@@ -46,13 +46,15 @@ const UploadInvoiceScreen = props => {
 
 
 
-  const getTotalPrice = () => {
+  const getTotalPrice = (value) => {
     let price = 0;
 
     price = totalPrice.reduce(function (sum, tax) {
       return sum + tax.price;
     }, 0);
-    global.price = price
+    let totalupdatedPrice = price + value
+    setHeaderSum(totalupdatedPrice)
+    // console.log("totalupdatedPrice", totalupdatedPrice);
     return price;
   };
 
@@ -105,7 +107,6 @@ const UploadInvoiceScreen = props => {
   };
 
   const calculateHeaderSum = (value, id) => {
-    setTotalAmount(value)
     let updatedPrice = totalPrice.map((item) => (item.price))
     let uppdatedSum = global.price + value
     setHeaderSum(getTotalPrice(uppdatedSum))
@@ -120,7 +121,7 @@ const UploadInvoiceScreen = props => {
         quantity={item.quantity}
         selectedValue={(value) => setTaxPercentage(value)}
         UpdatedQuntity={(value) => setQuantity(value)}
-        UpdatedTotalPrice={(value, id) => calculateHeaderSum(value, id)}
+        UpdatedTotalPrice={(value, id) => getTotalPrice(value, id)}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
