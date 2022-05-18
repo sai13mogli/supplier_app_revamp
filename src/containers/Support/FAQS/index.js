@@ -134,22 +134,7 @@ const FAQS = props => {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.headingTxt}>Have A Question ?</Text>
-        <View style={styles.searchWrapper}>
-          <TextInput
-            placeholderTextColor={Colors.eyeIcon}
-            onChangeText={onChangeText}
-            value={search}
-            // blurOnSubmit={blurOnSubmit}
-            placeholder={'Type your question here'}
-            style={styles.SearchInputCss}
-            onSubmitEditing={getFaqsData}
-          />
-          <CustomeIcon
-            onPress={getFaqsData}
-            name={'search'}
-            style={styles.seacrhIcon}></CustomeIcon>
-        </View>
+        {/* <Text style={styles.headingTxt}>Have A Question ?</Text> */}
         <Text style={styles.headingTxt}>Topics</Text>
         <ScrollView bounces horizontal={true}>
           <View style={styles.tabContainer}>
@@ -158,7 +143,10 @@ const FAQS = props => {
                 style={
                   tab.key == selectedTab ? styles.activeTab : styles.inactiveTab
                 }
-                onPress={() => setSelectedTab(tab.key)}
+                onPress={() => {
+                  setSelectedTab(tab.key);
+                  setSearch('');
+                }}
                 key={tabIndex}>
                 <Text
                   style={
@@ -179,23 +167,43 @@ const FAQS = props => {
           color={Colors.BrandColor}
         />
       ) : (
-        <FlatList
-          bounces
-          renderItem={renderItem}
-          data={data}
-          contentContainerStyle={{paddingBottom: 280}}
-          style={{marginHorizontal: Dimension.margin10}}
-          ListEmptyComponent={
-            <View style={styles.EmptyChatWrap}>
-              <Image
-                source={require('../../../assets/images/emptyOrders.png')}
-                style={{height: Dimension.height150, width: Dimension.width150}}
-              />
-              <Text style={styles.EmptyBoldTxt}>No FAQ's found</Text>
-            </View>
-          }
-          keyExtractor={(item, index) => `${index}-item`}
-        />
+        <>
+          <View style={styles.searchWrapper}>
+            <TextInput
+              placeholderTextColor={Colors.eyeIcon}
+              onChangeText={onChangeText}
+              value={search}
+              // blurOnSubmit={blurOnSubmit}
+              placeholder={'Type your question here'}
+              style={styles.SearchInputCss}
+              onSubmitEditing={getFaqsData}
+            />
+            <CustomeIcon
+              onPress={getFaqsData}
+              name={'search'}
+              style={styles.seacrhIcon}></CustomeIcon>
+          </View>
+          <FlatList
+            bounces
+            renderItem={renderItem}
+            data={data}
+            contentContainerStyle={{paddingBottom: 280}}
+            style={{marginHorizontal: Dimension.margin10}}
+            ListEmptyComponent={
+              <View style={styles.EmptyChatWrap}>
+                <Image
+                  source={require('../../../assets/images/emptyOrders.png')}
+                  style={{
+                    height: Dimension.height150,
+                    width: Dimension.width150,
+                  }}
+                />
+                <Text style={styles.EmptyBoldTxt}>No FAQ's found</Text>
+              </View>
+            }
+            keyExtractor={(item, index) => `${index}-item`}
+          />
+        </>
       )}
     </>
   );

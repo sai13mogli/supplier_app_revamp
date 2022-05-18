@@ -729,6 +729,32 @@ const CategoryBrandScreen = props => {
     }
   };
 
+  const getFoundBrands = foundBrands => {
+    let brands = {approved: [], pendingApproval: [], pending: []};
+    foundBrands.map(_ => {
+      if (_.isDeleted == '0') {
+        brands.approved.push(_);
+      } else if (_.isDeleted == '4' && _.localbrand) {
+        brands.pending.push(_);
+      } else {
+        brands.pendingApproval.push(_);
+      }
+    });
+    return [...brands.pending, ...brands.pendingApproval, ...brands.approved];
+  };
+
+  const getNewBrands = newBrands => {
+    let brands = {pendingApproval: [], pending: []};
+    newBrands.map(_ => {
+      if (_.isDeleted == '2' && _.localbrand) {
+        brands.pending.push(_);
+      } else {
+        brands.pendingApproval.push(_);
+      }
+    });
+    return [...brands.pending, ...brands.pendingApproval];
+  };
+
   return (
     <View style={{flex: 1}}>
       <Header
@@ -748,45 +774,46 @@ const CategoryBrandScreen = props => {
               _ => _.isDeleted == '0' || _.isDeleted == '4',
             ).length ? (
               <View>
-                {userBrands
-                  .sort((a, b) => {
-                    if (a.brandName < b.brandName) {
-                      return -1;
-                    }
-                    if (a.brandName > b.brandName) {
-                      return 1;
-                    }
-                    return 0;
-                  })
-                  .filter(it => it.isDeleted == '0' || it.isDeleted == '4')
-                  .map((_, i) => (
+                {getFoundBrands(
+                  userBrands
+                    .sort((a, b) => {
+                      if (a.brandName < b.brandName) {
+                        return -1;
+                      }
+                      if (a.brandName > b.brandName) {
+                        return 1;
+                      }
+                      return 0;
+                    })
+                    .filter(it => it.isDeleted == '0' || it.isDeleted == '4'),
+                ).map((_, i) => (
+                  <TouchableOpacity
+                    style={styles.BrandWrap}
+                    onPress={() => openModal(_)}>
+                    <View style={{flex: 1}}>
+                      <Text style={styles.brandTitleTxt}>Brand Name</Text>
+                      <Text style={styles.brandNameTxt}>{_.brandName}</Text>
+                    </View>
+
+                    <View style={{flex: 1}}>
+                      <Text style={styles.brandTitleTxt}>Status</Text>
+                      {_.isDeleted == '0' ? (
+                        <Text style={styles.ApprovedStatus}>Approved</Text>
+                      ) : (
+                        <Text style={styles.pendingStatus}>
+                          {_.isDeleted == '4' && _.localbrand
+                            ? 'Pending'
+                            : 'Approval Pending'}
+                        </Text>
+                      )}
+                    </View>
+
                     <TouchableOpacity
-                      style={styles.BrandWrap}
-                      onPress={() => openModal(_)}>
-                      <View style={{flex: 1}}>
-                        <Text style={styles.brandTitleTxt}>Brand Name</Text>
-                        <Text style={styles.brandNameTxt}>{_.brandName}</Text>
-                      </View>
-
-                      <View style={{flex: 1}}>
-                        <Text style={styles.brandTitleTxt}>Status</Text>
-                        {_.isDeleted == '0' ? (
-                          <Text style={styles.ApprovedStatus}>Approved</Text>
-                        ) : (
-                          <Text style={styles.pendingStatus}>
-                            {_.isDeleted == '4' && _.localbrand
-                              ? 'Pending'
-                              : 'Approval Pending'}
-                          </Text>
-                        )}
-                      </View>
-
-                      <TouchableOpacity
-                        onPress={() => {
-                          setCurrentBrand(_);
-                          setIsVisible(true);
-                        }}>
-                        {/* <Text
+                      onPress={() => {
+                        setCurrentBrand(_);
+                        setIsVisible(true);
+                      }}>
+                      {/* <Text
                           style={{
                             fontSize: 12,
                             fontWeight: 'bold',
@@ -794,34 +821,32 @@ const CategoryBrandScreen = props => {
                           }}>
                           Delete
                         </Text> */}
-                        <CustomeIcon
-                          name={'delete'}
-                          size={Dimension.font22}
-                          color={colors.FontColor}></CustomeIcon>
-                      </TouchableOpacity>
-
-                      <View style={{flex: 1}}>
-                        {_.isDeleted == '4' && _.localbrand ? (
-                          <TouchableOpacity
-                            onPress={() => openModal(_)}
-                            style={styles.fillBtn}>
-                            <Text style={styles.fillDetailtxt}>
-                              FILL DETAILS
-                            </Text>
-                          </TouchableOpacity>
-                        ) : (
-                          <TouchableOpacity
-                            style={styles.ArrowBtn}
-                            onPress={() => openModal(_)}>
-                            <CustomeIcon
-                              name={'arrow-right-s-line'}
-                              size={Dimension.font28}
-                              color={colors.FontColor}></CustomeIcon>
-                          </TouchableOpacity>
-                        )}
-                      </View>
+                      <CustomeIcon
+                        name={'delete'}
+                        size={Dimension.font22}
+                        color={colors.FontColor}></CustomeIcon>
                     </TouchableOpacity>
-                  ))}
+
+                    <View style={{flex: 1}}>
+                      {_.isDeleted == '4' && _.localbrand ? (
+                        <TouchableOpacity
+                          onPress={() => openModal(_)}
+                          style={styles.fillBtn}>
+                          <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          style={styles.ArrowBtn}
+                          onPress={() => openModal(_)}>
+                          <CustomeIcon
+                            name={'arrow-right-s-line'}
+                            size={Dimension.font28}
+                            color={colors.FontColor}></CustomeIcon>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                ))}
               </View>
             ) : (
               <View style={styles.NoBrandWrap}>
@@ -838,44 +863,45 @@ const CategoryBrandScreen = props => {
             ) : null}
             {userBrands.filter(item => item && item.isDeleted == 2).length ? (
               <View>
-                {userBrands
-                  .sort((a, b) => {
-                    if (a.brandName < b.brandName) {
-                      return -1;
-                    }
-                    if (a.brandName > b.brandName) {
-                      return 1;
-                    }
-                    return 0;
-                  })
-                  .filter(item => item && item.isDeleted == 2)
-                  .map((_, i) => (
+                {getNewBrands(
+                  userBrands
+                    .sort((a, b) => {
+                      if (a.brandName < b.brandName) {
+                        return -1;
+                      }
+                      if (a.brandName > b.brandName) {
+                        return 1;
+                      }
+                      return 0;
+                    })
+                    .filter(item => item && item.isDeleted == 2),
+                ).map((_, i) => (
+                  <TouchableOpacity
+                    style={styles.BrandWrap}
+                    onPress={() => openModal(_)}>
+                    <View style={{flex: 1}}>
+                      <Text style={styles.brandTitleTxt}>Brand Name</Text>
+                      <Text style={styles.brandNameTxt}>
+                        {_.name || _.brandName}
+                      </Text>
+                    </View>
+
+                    <View style={{flex: 1}}>
+                      <Text style={styles.brandTitleTxt}>Status</Text>
+
+                      <Text style={styles.pendingStatus}>
+                        {_.isDeleted == '2' && _.localbrand
+                          ? 'Pending'
+                          : 'Approval Pending'}
+                      </Text>
+                    </View>
+
                     <TouchableOpacity
-                      style={styles.BrandWrap}
-                      onPress={() => openModal(_)}>
-                      <View style={{flex: 1}}>
-                        <Text style={styles.brandTitleTxt}>Brand Name</Text>
-                        <Text style={styles.brandNameTxt}>
-                          {_.name || _.brandName}
-                        </Text>
-                      </View>
-
-                      <View style={{flex: 1}}>
-                        <Text style={styles.brandTitleTxt}>Status</Text>
-
-                        <Text style={styles.pendingStatus}>
-                          {_.isDeleted == '2' && _.localbrand
-                            ? 'Pending'
-                            : 'Approval Pending'}
-                        </Text>
-                      </View>
-
-                      <TouchableOpacity
-                        onPress={() => {
-                          setCurrentBrand(_);
-                          setIsVisible(true);
-                        }}>
-                        {/* <Text
+                      onPress={() => {
+                        setCurrentBrand(_);
+                        setIsVisible(true);
+                      }}>
+                      {/* <Text
                           style={{
                             fontSize: 12,
                             fontWeight: 'bold',
@@ -883,34 +909,32 @@ const CategoryBrandScreen = props => {
                           }}>
                           Delete
                         </Text> */}
-                        <CustomeIcon
-                          name={'delete'}
-                          size={Dimension.font22}
-                          color={colors.FontColor}></CustomeIcon>
-                      </TouchableOpacity>
-
-                      <View style={{flex: 1}}>
-                        {_.isDeleted == '2' &&
-                        _.isRaiseRequest == 'true' &&
-                        _.localbrand ? (
-                          <TouchableOpacity
-                            onPress={() => openModal(_)}
-                            style={styles.fillBtn}>
-                            <Text style={styles.fillDetailtxt}>
-                              FILL DETAILS
-                            </Text>
-                          </TouchableOpacity>
-                        ) : (
-                          <TouchableOpacity style={styles.ArrowBtn}>
-                            <CustomeIcon
-                              name={'arrow-right-line'}
-                              size={Dimension.font28}
-                              color={colors.FontColor}></CustomeIcon>
-                          </TouchableOpacity>
-                        )}
-                      </View>
+                      <CustomeIcon
+                        name={'delete'}
+                        size={Dimension.font22}
+                        color={colors.FontColor}></CustomeIcon>
                     </TouchableOpacity>
-                  ))}
+
+                    <View style={{flex: 1}}>
+                      {_.isDeleted == '2' &&
+                      _.isRaiseRequest == 'true' &&
+                      _.localbrand ? (
+                        <TouchableOpacity
+                          onPress={() => openModal(_)}
+                          style={styles.fillBtn}>
+                          <Text style={styles.fillDetailtxt}>FILL DETAILS</Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity style={styles.ArrowBtn}>
+                          <CustomeIcon
+                            name={'arrow-right-line'}
+                            size={Dimension.font28}
+                            color={colors.FontColor}></CustomeIcon>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                ))}
               </View>
             ) : null}
           </View>

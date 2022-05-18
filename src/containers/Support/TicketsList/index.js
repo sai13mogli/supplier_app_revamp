@@ -115,14 +115,14 @@ const TicketsList = props => {
     // debouncedSave(text);
   };
 
-  const onSubmitSearch = async () => {
+  const onSubmitSearch = async isStringEmpty => {
     await analytics().logEvent('SupportSearch', {
       action: `click`,
       label: '',
       datetimestamp: `${new Date().getTime()}`,
       supplierId: profileData.userId,
     });
-    fetchTicketListing(1, inputValue);
+    fetchTicketListing(1, isStringEmpty ? '' : inputValue);
   };
 
   const getDate = date => {
@@ -297,6 +297,15 @@ const TicketsList = props => {
               }
             }}
           />
+          {inputValue ? (
+            <CustomeIcon
+              name={'close'}
+              style={styles.closeIcon}
+              onPress={() => {
+                setInputValue('');
+                onSubmitSearch(true);
+              }}></CustomeIcon>
+          ) : null}
           <CustomeIcon
             name={'search'}
             style={styles.seacrhIcon}

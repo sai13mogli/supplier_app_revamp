@@ -41,6 +41,9 @@ const NotificationScreen = props => {
   const notificationsPage = useSelector(
     state => state.notificationsReducer.page || 0,
   );
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
 
   const dispatch = useDispatch();
   const [isModalVisible, setModalVisible] = useState(false);
@@ -343,6 +346,22 @@ const NotificationScreen = props => {
     );
   };
 
+  const onNavigate = isText => {
+    if (isText) {
+      if (profileData.verificationStatus == 15) {
+        return 'Go to Orders';
+      } else if (profileData.verificationStatus <= 10) {
+        return 'Go to Profile';
+      }
+      return;
+    }
+    if (profileData.verificationStatus == 15) {
+      props.navigation.navigate('Orders');
+    } else if (profileData.verificationStatus <= 10) {
+      props.navigation.navigate('Profile');
+    }
+  };
+
   return (
     <>
       <View style={styles.ContainerCss}>
@@ -400,10 +419,10 @@ const NotificationScreen = props => {
                   }}
                 />
                 <Text style={styles.boldtxt}>No Notifications Yet</Text>
-                <TouchableOpacity style={styles.NewTicktbtn}>
-                  <Text style={styles.NewTicktbtnTxt}>
-                    Upload More Products
-                  </Text>
+                <TouchableOpacity
+                  onPress={onNavigate}
+                  style={styles.NewTicktbtn}>
+                  <Text style={styles.NewTicktbtnTxt}>{onNavigate(true)}</Text>
                 </TouchableOpacity>
               </View>
             ) : null

@@ -117,6 +117,13 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font18,
     color: Colors.FontColor,
   },
+  closeIcon: {
+    position: 'absolute',
+    top: Dimension.padding12,
+    right: Dimension.padding40,
+    fontSize: Dimension.font18,
+    color: Colors.FontColor,
+  },
   searchWrapper: {
     marginBottom: Dimension.margin20,
     position: 'relative',

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Switch, Text, TouchableOpacity, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import AppHeader from '../../component/common/Header';
@@ -64,19 +64,23 @@ const SettingsScreen = props => {
             marginVertical: Dimension.margin10,
           }}>
           <Text style={styles.nrmtxt}>Order Related in app Notifications</Text>
-          <CustomeIcon
-            name={'toggle-line'}
-            color={Colors.headerTxtColor}
-            size={Dimension.font18}></CustomeIcon>
+          <Switch
+            trackColor={{false: '#ccc', true: '#ccc'}}
+            thumbColor={'#000'}
+            ios_backgroundColor="#ccc"
+            onValueChange={() => {}}
+            value={true}
+          />
         </View>
       </View>
       <View style={styles.logoutBtnWrap}>
         <TouchableOpacity onPress={onLogout} style={styles.logoutBtn}>
           <Text style={styles.logoutBtnTxt}>LOGOUT</Text>
           <CustomeIcon
+            onPress={onLogout}
             name={'shut-down'}
             color={Colors.FontColor}
-            size={Dimension.font16}></CustomeIcon>
+            size={Dimension.font20}></CustomeIcon>
         </TouchableOpacity>
       </View>
     </View>
