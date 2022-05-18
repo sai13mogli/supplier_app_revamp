@@ -78,6 +78,7 @@ const Ordercard = props => {
     remark,
     source,
     statusText,
+    initialPickupDate,
   } = props;
   const [invoiceLoading, setInvoiceLoading] = useState(false);
   const [orderImage, setOrderImage] = useState(null);
@@ -1274,7 +1275,7 @@ const Ordercard = props => {
                     height: Dimension.height33,
                   },
                 ]}>
-                <Text style={styles.disabledBtntxt}>Pack Order</Text>
+                <Text style={styles.disabledBtntxt}>PACK ORDER</Text>
               </TouchableOpacity>
               <Text style={styles.shipmentLbelTxt}>
                 Shipment not created yet.
@@ -1296,11 +1297,14 @@ const Ordercard = props => {
                   height: Dimension.height33,
                 },
               ]}>
-              <Text style={styles.disabledBtntxt}>Pack Order Invoice</Text>
+              <Text style={styles.disabledBtntxt}>PACK ORDER</Text>
             </TouchableOpacity>
-            {/* <Text style={{fontSize: 12, fontWeight: 'bold', color: 'blue'}}>
-              Shipment lable not created
-            </Text> */}
+            <Text numberOfLines={2} style={styles.shipmentLbelTxt}>
+              Invoice not created yet.
+            </Text>
+            <Text style={styles.shipmentLbelTxt}>
+              Please check this tab after some time.
+            </Text>
           </>
         ) : cta == 'CREATE_MANIFEST_DISABLED' ? (
           <>
@@ -1371,7 +1375,7 @@ const Ordercard = props => {
               size={Dimension.font16}
               style={{marginRight: Dimension.margin5}}></CustomeIcon>
             <Text style={styles.rejectCtaTxt}>Shipment Label</Text>
-            {manifestLoader && (
+            {shipmentLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
                 style={{alignSelf: 'center'}}
@@ -1393,7 +1397,7 @@ const Ordercard = props => {
               },
             ]}
             disabled={pickupchallanLoader}>
-               <CustomeIcon
+            <CustomeIcon
               name={'download'}
               color={Colors.FontColor}
               size={Dimension.font16}
@@ -1897,6 +1901,7 @@ const Ordercard = props => {
           setDisplayCalendar={setDisplayCalendar}
           pickupDate={pickupDate}
           isOmsPickupDate={isOmsPickupDate}
+          initialPickupDate={initialPickupDate}
         />
       )}
       {addViewModal && (

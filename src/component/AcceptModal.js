@@ -29,6 +29,7 @@ const AcceptModal = props => {
     setDisplayCalendar,
     pickupDate,
     isOmsPickupDate,
+    initialPickupDate,
   } = props;
   const [day, setDay] = useState({
     dateString: '',
@@ -38,15 +39,23 @@ const AcceptModal = props => {
     year: '',
   });
   const [acceptLoader, setAcceptLoader] = useState(false);
+  const [currDate, setCurrDate] = useState({
+    dateString: '',
+    day: '',
+    month: '',
+    timestamp: '',
+    year: '',
+  });
 
   useEffect(() => {
     setPickupDate();
   }, []);
 
   const setPickupDate = () => {
-    let minDate = getMinDate();
+    let minDate = mutatePickupDate();
     let [year, month, day] = minDate.split('-');
     let timestamp = new Date(minDate).getTime();
+    console.log(year, month, day, 'dates hai!!');
     setDay({
       dateString: minDate,
       day: day,
@@ -54,6 +63,51 @@ const AcceptModal = props => {
       timestamp: timestamp,
       year: year,
     });
+    getCurrentDate();
+  };
+
+  const getCurrentDate = () => {
+    let today = new Date();
+    let mutateMonth;
+
+    if (today.getMonth() + 1 < 10) {
+      mutateMonth = `0${today.getMonth() + 1}`;
+    } else {
+      mutateMonth = today.getMonth() + 1;
+    }
+
+    let currdate =
+      Number(today.getDate()) < 10
+        ? `0${Number(today.getDate())}`
+        : `${Number(today.getDate())}`;
+    let date = today.getFullYear() + '-' + mutateMonth + '-' + currdate;
+    let [year, month, day] = date.split('-');
+    let timestamp = new Date().getTime();
+    setCurrDate({
+      dateString: date,
+      day: day,
+      month: month,
+      timestamp: timestamp,
+      year: year,
+    });
+  };
+
+  const mutatePickupDate = () => {
+    let today = new Date(Number(pickupDate));
+    let mutateMonth;
+
+    if (today.getMonth() + 1 < 10) {
+      mutateMonth = `0${today.getMonth() + 1}`;
+    } else {
+      mutateMonth = today.getMonth() + 1;
+    }
+
+    let currdate =
+      Number(today.getDate()) < 10
+        ? `0${Number(today.getDate())}`
+        : `${Number(today.getDate())}`;
+    let date = today.getFullYear() + '-' + mutateMonth + '-' + currdate;
+    return date;
   };
 
   const setAcceptAnalytics = async () => {
@@ -162,11 +216,9 @@ const AcceptModal = props => {
 
   const markedDay = {
     [day.dateString]: {
-      selected: true,
-      marked: true,
       customStyles: {
         container: {
-          backgroundColor: 'red',
+          backgroundColor: Colors.BrandColor,
         },
         text: {
           color: 'black',
@@ -174,23 +226,59 @@ const AcceptModal = props => {
         },
       },
     },
+    [currDate.dateString]: {
+      customStyles: {
+        text: {
+          color:
+            day.dateString != currDate.dateString ? Colors.BrandColor : 'black',
+          fontWeight: 'bold',
+        },
+        container: {
+          backgroundColor:
+            day.dateString == currDate.dateString ? Colors.BrandColor : '',
+        },
+      },
+    },
   };
   const getMinDate = () => {
-    let today = new Date();
-    let mutateMonth;
+    if (isOmsPickupDate) {
+      let initialOmsPickupdate = new Date(Number(initialPickupDate));
+      let initialOmsPickupMonth;
+      if (initialOmsPickupdate.getMonth() + 1 < 10) {
+        initialOmsPickupMonth = `0${initialOmsPickupdate.getMonth() + 1}`;
+      } else {
+        initialOmsPickupMonth = initialOmsPickupdate.getMonth() + 1;
+      }
 
-    if (today.getMonth() + 1 < 10) {
-      mutateMonth = `0${today.getMonth() + 1}`;
+      let Omscurrdate =
+        Number(initialOmsPickupdate.getDate()) < 10
+          ? `0${Number(initialOmsPickupdate.getDate())}`
+          : `${Number(initialOmsPickupdate.getDate())}`;
+      let minOmsdate =
+        initialOmsPickupdate.getFullYear() +
+        '-' +
+        initialOmsPickupMonth +
+        '-' +
+        Omscurrdate;
+      console.log(`minOmsdate`, minOmsdate);
+      return minOmsdate;
     } else {
-      mutateMonth = today.getMonth() + 1;
-    }
+      let today = new Date();
+      let mutateMonth;
 
-    let currdate =
-      Number(today.getDate()) < 10
-        ? `0${Number(today.getDate())}`
-        : `${Number(today.getDate())}`;
-    let date = today.getFullYear() + '-' + mutateMonth + '-' + currdate;
-    return date;
+      if (today.getMonth() + 1 < 10) {
+        mutateMonth = `0${today.getMonth() + 1}`;
+      } else {
+        mutateMonth = today.getMonth() + 1;
+      }
+
+      let currdate =
+        Number(today.getDate()) < 10
+          ? `0${Number(today.getDate())}`
+          : `${Number(today.getDate())}`;
+      let date = today.getFullYear() + '-' + mutateMonth + '-' + currdate;
+      return date;
+    }
   };
 
   const getMaxDate = () => {
@@ -199,7 +287,8 @@ const AcceptModal = props => {
       daysCount = 5;
     }
     let mutatedate = new Date(
-      Number(pickupDate) + daysCount * 24 * 60 * 60 * 1000,
+      Number(isOmsPickupDate ? initialPickupDate : pickupDate) +
+        daysCount * 24 * 60 * 60 * 1000,
     );
     let mutateMonth;
 

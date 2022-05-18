@@ -395,6 +395,7 @@ const OrdersScreen = props => {
         remark={item.remark}
         source={item.source}
         statusText={item.statusText}
+        initialPickupDate={item.initialPickupDate}
       />
     );
   };

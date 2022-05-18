@@ -242,23 +242,23 @@ const BulkActionsModal = props => {
     // myrequest.setRequestHeader('Authorization', token);
     // myrequest.send(JSON.stringify([...currbulkItems]));
   };
+  // overlayPointerEvents={'auto'}
+  // isVisible={bulkActionsModal}
+  // onTouchOutside={() => {
+  //   setBulkActionsModal(false);
+  // }}
+  // onDismiss={() => {
+  //   setBulkActionsModal(false);
+  // }}
+  // coverScreen={true}
+  // style={{padding: 0, margin: 0}}
+  // deviceWidth={deviceWidth}
+  // hasBackdrop={true}
+  // onBackdropPress={() => setBulkActionsModal(false)}
+  // onBackButtonPress={() => setBulkActionsModal(false)}
 
   return (
-    <Modal
-      overlayPointerEvents={'auto'}
-      isVisible={bulkActionsModal}
-      onTouchOutside={() => {
-        setBulkActionsModal(false);
-      }}
-      onDismiss={() => {
-        setBulkActionsModal(false);
-      }}
-      coverScreen={true}
-      style={{padding: 0, margin: 0}}
-      deviceWidth={deviceWidth}
-      hasBackdrop={true}
-      onBackdropPress={() => setBulkActionsModal(false)}
-      onBackButtonPress={() => setBulkActionsModal(false)}>
+    <View>
       <View style={styles.modalContainer}>
         <View style={styles.topbdr}></View>
         <View style={styles.closeIconWrap}>
@@ -278,7 +278,7 @@ const BulkActionsModal = props => {
           <TouchableOpacity onPress={() => downloadFile('Invoice')}>
             <View style={styles.iconWrapper}>
               <CustomeIcon
-                name={'pencil-line'}
+                name={'download'}
                 color={Colors.blackColor}
                 size={Dimension.font20}></CustomeIcon>
             </View>
@@ -294,7 +294,7 @@ const BulkActionsModal = props => {
           <TouchableOpacity onPress={() => downloadFile('shipment')}>
             <View style={styles.iconWrapper}>
               <CustomeIcon
-                name={'pencil-line'}
+                name={'download'}
                 color={Colors.blackColor}
                 size={Dimension.font20}></CustomeIcon>
             </View>
@@ -334,7 +334,7 @@ const BulkActionsModal = props => {
           onLoad={downloadZip}
         />
       )}
-    </Modal>
+    </View>
     // <WebView
     //   ref={webview}
     //   originWhitelist={['*']}
