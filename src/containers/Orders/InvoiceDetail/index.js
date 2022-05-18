@@ -114,64 +114,62 @@ const InvoiceDetailScreen = props => {
         <View style={styles.row}>
           <Text style={styles.numberWrap}>01</Text>
           <Text style={styles.modalText}>
-            Company name should be Mogli Labs (India) Pvt Ltd.
+          Company name should be Mogli Labs (India) Pvt Ltd. India must be in braces.
           </Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.numberWrap}>02</Text>
           <Text style={styles.modalText}>
-            Ensure that Moglix GSTIN is properly mentioned on the invoice.
+          Ensure that Moglix GSTIN is properly mentioned on the invoice as per Supplier PO.
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>03</Text>
           <Text style={styles.modalText}>
-            Mogli labs PAN on invoice is mandatory where “Total invoice amount”
-            (incl. tax) is more than or equal to Rs. 2 Lacs
+          Mogli labs PAN & supplier PAN on invoice is mandatory where “Total invoice amount” (incl. tax) is more than or equal to Rs. 2 Lacs
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>04</Text>
           <Text style={styles.modalText}>
-            Each Tax Invoice is signed & stamped properly by the supplier.
+          Each Tax Invoice should have heading “Tax Invoice” and duly signed & stamped properly by the supplier either digital or manual. If vendor turnover is more than 20 crore, E-invoicing is compulsory.
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>05</Text>
           <Text style={styles.modalText}>
-            GST type is verified with the GSTIN (If seller & Moglix have same
-            Business place -CGST & SGST otherwise IGST)
+          GST type is verified with the GSTIN (If seller & Moglix have same Business state -CGST & SGST otherwise IGST). In Bill to Ship to cases (Dropship), supplier have to raise bill as per supplier PO, not ship to location
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>06</Text>
           <Text style={styles.modalText}>
-            Clear Invoice copy is uploaded on SCM ensuring that no data is
-            getting cropped.
+          Clear Invoice copy is uploaded on Supplier Central ensuring that no data is getting cropped.
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>07</Text>
           <Text style={styles.modalText}>
-            Invoicing amount in SCM & Supplier Tax Invoice amount should be
-            exactly the same. Note: (We do not accept invoice with TCS charged
-            by vendor)
+          Invoicing amount in Supplier Central & Supplier Tax Invoice amount should be exactly the same. Note: (We do not accept invoices with TCS charged by vendor)
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>08</Text>
           <Text style={styles.modalText}>
-            The Invoice Number mentioned on the Tax Invoice & Invoice Number
-            uploaded on SCM should be exactly the same. Also, invoice number
-            should not exceed 16 characters, containing alphabets or numerals or
-            special characters.
+          The Invoice Number mentioned on the Tax Invoice & Invoice Number uploaded on Supplier Central & GST portal should be exactly the same. Also, invoice number should not exceed 16 characters, containing alphabets or numerals or special characters.
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>09</Text>
           <Text style={styles.modalText}>
-            The Invoice date & financial year should be correct
+          The Invoice date & financial year should be correct.
+          </Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.numberWrap}>10</Text>
+          <Text style={styles.modalText}>
+          Moglix address in supplier invoice under heading “bill to” should match as per Moglix PO.
           </Text>
         </View>
         <Checkbox
