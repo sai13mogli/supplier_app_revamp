@@ -88,7 +88,7 @@ const AppHeader = props => {
 const styles = StyleSheet.create({
   headerWrap: {},
   headerTxt: {
-    fontSize: Dimension.font12,
+    fontSize: Dimension.font14,
     color: colors.headerTxtColor,
     fontFamily: Dimension.CustomSemiBoldFont,
     marginTop: Dimension.margin5,
