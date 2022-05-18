@@ -20,6 +20,7 @@ import CustomeIcon from './common/CustomeIcon';
 import Productcard from './Productcard';
 import DropDownModal from './DropDownModal';
 import FloatingLabelInputField from './common/FloatingInput';
+import analytics from '@react-native-firebase/analytics';
 
 const deviceWidth = Dimensions.get('window').width;
 const RejectModal = props => {
@@ -85,6 +86,17 @@ const RejectModal = props => {
     console.log(reason);
   });
 
+  const setRejectAnalytics = async () => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent(`AcceptancePendingPopup`, {
+      action: `click`,
+      label: `RejectOrder_${reason}`,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
+  };
+
   //rejectOrder
   const onReject = async () => {
     try {
@@ -95,8 +107,6 @@ const RejectModal = props => {
         remark:
           reason == 'Other' ? reasonText : reason || 'Material is not ready',
       };
-
-      console.log('reason', reason);
       const {data} = await rejectOrder(payload);
       if (data && data.success) {
         fetchOrdersFunc(0, '', selectedTab, shipmentType, {
@@ -117,6 +127,7 @@ const RejectModal = props => {
         fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
         setRejectLoader(false);
         setRejectModal(false);
+        setRejectAnalytics();
       } else {
         setRejectLoader(false);
         setRejectModal(false);
@@ -189,22 +200,31 @@ const RejectModal = props => {
             color={Colors.FontColor}
             onPress={() => setRejectModal(false)}></CustomeIcon>
         </View>
-        <View style={{paddingHorizontal: Dimension.padding15,marginBottom:Dimension.margin10}}>
+        <View
+          style={{
+            paddingHorizontal: Dimension.padding15,
+            marginBottom: Dimension.margin10,
+          }}>
           {renderOrderDetails()}
         </View>
-          <ScrollView
+        <ScrollView
+          bounces
+          style={{
+            height: 250,
+            paddingVertical: Dimension.padding10,
+          }}>
+          <DropDownModal
+            fromRejectModal={true}
+            label={'Select reason for rejecting'}
+            items={Reasons}
+            selectedValue={reason}
+            onSelect={text => setReason(text)}
+          />
+          <View
             style={{
-              height: 250,
-              paddingVertical: Dimension.padding10,
+              paddingHorizontal: Dimension.padding15,
+              marginBottom: Dimension.margin10,
             }}>
-            <DropDownModal
-              fromRejectModal={true}
-              label={'Select reason for rejecting'}
-              items={Reasons}
-              selectedValue={reason}
-              onSelect={text => setReason(text)}
-            />
-            <View style={{paddingHorizontal: Dimension.padding15,marginBottom:Dimension.margin10}}>
             {reason == 'Other' ? (
               <FloatingLabelInputField
                 title={'Specify a reason'}
@@ -214,9 +234,9 @@ const RejectModal = props => {
                 onChangeText={text => setReasonText(text)}
               />
             ) : null}
-            </View>
-          </ScrollView>
-        
+          </View>
+        </ScrollView>
+
         <View style={styles.btnWrap}>
           <TouchableOpacity
             style={styles.cancelBtn}

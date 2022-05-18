@@ -16,6 +16,7 @@ import {
 } from '../../../redux/actions/profile';
 import { getPincodeDetails } from '../../../services/profile';
 import Toast from 'react-native-toast-message';
+import analytics from '@react-native-firebase/analytics';
 
 const EditAddress = props => {
   const businessDetails = useSelector(
@@ -69,12 +70,31 @@ const EditAddress = props => {
 
   const addressesData = addressesResponse?.data;
 
-
   const filterById = obj => {
     if (obj.type == 3) {
       return true;
     }
     return false;
+  };
+
+  useEffect(() => {
+    logEvent();
+  }, []);
+
+  const logEvent = async () => {
+    await analytics().logEvent('AddressDetails', {
+      action: `click`,
+      label:
+        !editID && tabState?.route?.params?.tabState == 'Billing'
+          ? 'AddNewBillingAddress'
+          : !editID && tabState?.route?.params?.tabState == 'PickedUp'
+            ? 'AddNewPickupAddress'
+            : editID && tabState?.route?.params?.tabState == 'Billing'
+              ? 'EditBillingAddress'
+              : 'EditPickupAddress',
+      datetimestamp: `${new Date().getTime()}`,
+      supplierId: profileData.userId,
+    });
   };
 
   let BillingAddressData = addressesData.filter(filterById);
@@ -186,7 +206,7 @@ const EditAddress = props => {
     if (pincode && pincode.length == 6) {
       const { data } = await getPincodeDetails(pincode);
       if (data.data && data.data.length) {
-        console.log("Data===>", data);
+        console.log('Data===>', data);
         setpincodeError(false);
         setStates([{ value: data.data[0].state, label: data.data[0].state }]);
         setCities(data.data.map(_ => ({ label: _.city, value: _.city })));
@@ -209,8 +229,6 @@ const EditAddress = props => {
       addressesDetailsStatus == STATE_STATUS.FAILED_UPDATE
     ) {
       setLoading(false);
-      console.log("ssg", addressesDetailsError);
-      // alert(addressesDetailsError.state);
       Toast.show({
         type: 'error',
         text2: addressesDetailsError && addressesDetailsError.state,
@@ -220,14 +238,14 @@ const EditAddress = props => {
     }
   }, [addressesDetailsStatus]);
 
-  const callbillingAddress = (BillingAddressData) => {
-    setSameAsbilling(!sameAsbilling)
-    setPhone((BillingAddressData?.[0] || {})?.phone)
-    setaddress1((BillingAddressData?.[0] || {})?.address1)
-    setaddress2((BillingAddressData?.[0] || {})?.address2)
-    setpincode((BillingAddressData?.[0] || {})?.pincode)
-    setSelection((BillingAddressData?.[0] || {})?.default)
-  }
+  const callbillingAddress = BillingAddressData => {
+    setSameAsbilling(!sameAsbilling);
+    setPhone((BillingAddressData?.[0] || {})?.phone);
+    setaddress1((BillingAddressData?.[0] || {})?.address1);
+    setaddress2((BillingAddressData?.[0] || {})?.address2);
+    setpincode((BillingAddressData?.[0] || {})?.pincode);
+    // setSelection((BillingAddressData?.[0] || {})?.default);
+  };
 
   const onPhoneBlur = () => {
     if (phone && phone.length == 10) {
@@ -256,7 +274,7 @@ const EditAddress = props => {
     }
   }, [pincode]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (
       phone &&
       phone.length &&
@@ -272,6 +290,15 @@ const EditAddress = props => {
       city.length
     ) {
       setLoading(true);
+      await analytics().logEvent('AddressDetails', {
+        action: `submit`,
+        label:
+          tabState?.route?.params?.tabState == 'Billing'
+            ? 'NewBillingAddress'
+            : 'NewPickupAddress',
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
       if (editID) {
         const data = {
           id: editID,
@@ -321,20 +348,19 @@ const EditAddress = props => {
         showText={editID ? 'Edit Address' : 'Add Address'}
         rightIconName={'business-details'}></Header>
       <View style={{ flex: 1 }}>
-        <ScrollView style={styles.ContainerCss}>
+        <ScrollView bounces style={styles.ContainerCss}>
           {FORM_FIELDS.map((field, fieldKey) => (
             <field.component {...field} key={fieldKey} />
           )).toList()}
         </ScrollView>
       </View>
-      {
-        tabState?.route?.params?.tabState == 'PickedUp' ?
-          (<Checkbox
-            checked={sameAsbilling}
-            onPress={() => callbillingAddress(BillingAddressData)}
-            title={'Same as billing address'}
-          />) : (null)
-      }
+      {tabState?.route?.params?.tabState == 'PickedUp' ? (
+        <Checkbox
+          checked={sameAsbilling}
+          onPress={() => callbillingAddress(BillingAddressData)}
+          title={'Same as billing address'}
+        />
+      ) : null}
 
       <Checkbox
         checked={isSelected}

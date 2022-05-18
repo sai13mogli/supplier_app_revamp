@@ -25,6 +25,8 @@ import CustomeIcon from '../../component/common/CustomeIcon';
 import Dimension from '../../Theme/Dimension';
 import Colors from '../../Theme/Colors';
 import styles from './style';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import analytics from '@react-native-firebase/analytics';
 const NotificationScreen = props => {
   const notifications = useSelector(
     state => state.notificationsReducer.data || [],
@@ -175,6 +177,32 @@ const NotificationScreen = props => {
     );
   };
 
+  const markAllReadNotification = async () => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent('Notification', {
+      action: `click`,
+      label: `readAll`,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
+    dispatch(markBulkRead());
+    setModalVisible(false);
+  };
+
+  const deleteAllNotification = async () => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent('Notification', {
+      action: `click`,
+      label: `deleteAll`,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
+    dispatch(deleteBulk());
+    setModalVisible(false);
+  };
+
   const renderBulkActions = () => {
     return (
       <Modal
@@ -204,8 +232,7 @@ const NotificationScreen = props => {
             }}>
             <TouchableOpacity
               onPress={() => {
-                dispatch(markBulkRead());
-                setModalVisible(false);
+                markAllReadNotification();
               }}
               style={styles.modalBtn}>
               <CustomeIcon
@@ -216,8 +243,7 @@ const NotificationScreen = props => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                dispatch(deleteBulk());
-                setModalVisible(false);
+                deleteAllNotification();
               }}
               style={styles.modalBtn}>
               <CustomeIcon
@@ -231,6 +257,32 @@ const NotificationScreen = props => {
         </View>
       </Modal>
     );
+  };
+
+  const readNotification = async () => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent('Notification', {
+      action: `click`,
+      label: `read`,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
+    dispatch(markRead(selectedOrder.id));
+    setsingleNotificationAction(false);
+  };
+
+  const deleteCurrNotification = async () => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent('Notification', {
+      action: `click`,
+      label: `delete`,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
+    dispatch(deleteNotification(selectedOrder.id));
+    setsingleNotificationAction(false);
   };
 
   const renderIndividualAction = () => {
@@ -263,8 +315,7 @@ const NotificationScreen = props => {
             {!selectedOrder.readStatus ? (
               <TouchableOpacity
                 onPress={() => {
-                  dispatch(markRead(selectedOrder.id));
-                  setsingleNotificationAction(false);
+                  readNotification();
                 }}
                 style={styles.modalBtn}>
                 <CustomeIcon
@@ -276,8 +327,7 @@ const NotificationScreen = props => {
             ) : null}
             <TouchableOpacity
               onPress={() => {
-                dispatch(deleteNotification(selectedOrder.id));
-                setsingleNotificationAction(false);
+                deleteCurrNotification();
               }}
               style={styles.modalBtn}>
               <CustomeIcon

@@ -56,7 +56,9 @@ const InvoiceEMSFormDetailScreen = props => {
   const [baseAmount, setBaseAmount] = useState('');
   const [baseAmountError, setBaseAmountError] = useState(false);
   const [hsnError, sethsnError] = useState(false);
-  const [taxPercentage, setTaxPercentage] = useState(props?.route?.params?.taxPercentage);
+  const [taxPercentage, setTaxPercentage] = useState(
+    props?.route?.params?.taxPercentage,
+  );
   const [taxError, setTaxError] = useState(false);
   const [total, setTotal] = useState('');
   const [commentError, setCommentError] = useState(false);
@@ -320,8 +322,6 @@ const InvoiceEMSFormDetailScreen = props => {
     },
   });
 
-
-
   const onUploadInvoiceBlur = () => {
     if (uploadInvoice && uploadInvoice.name) {
       setuploadInvoiceError(false);
@@ -529,17 +529,19 @@ const InvoiceEMSFormDetailScreen = props => {
       invoiceAmount &&
       invoiceAmount.length &&
       uploadInvoice
-      && uploadEwayBill
-      && uploadEwayBill.name
+      // &&
+      // uploadEwayBill &&
+      // uploadEwayBill.name
     ) {
       try {
         // setLoading(true);
+
         let payload = {
           supplierId: await AsyncStorage.getItem('userId'),
           invoiceNumber: invoiceNumber,
           invoiceDate: getMinDate(invoiceDate),
           source: 0,
-          ewayDate: ewayBillNumber ? getMinDate(ewayDate) : "",
+          ewayDate: ewayBillNumber ? getMinDate(ewayDate) : '',
           ewayNumber: ewayBillNumber,
           warehouseId: warehouseId,
           orderRef: orderRef,
@@ -589,24 +591,28 @@ const InvoiceEMSFormDetailScreen = props => {
           },
           invoiceTotal: invoiceAmount,
         };
-        console.log('Payload====>', payload);
         let invoiceFile = {
           name: 'invoiceFile',
           filename: uploadInvoice.name,
           type: uploadInvoice.type,
           data: RNFetchBlob.wrap(uploadInvoice.uri),
-        }
-        let ewayFile = {
+        };
+        let ewayFile = ewayBillNumber ? {
           name: 'ewayBillFile',
           filename: uploadEwayBill.name,
           type: uploadEwayBill.type,
           data: RNFetchBlob.wrap(uploadEwayBill.uri),
-        }
-
-        props.navigation.navigate('InvoiceDetail', { data: payload, invoiceFileData: invoiceFile, ewayFileData: ewayFile })
-      }
-      catch (err) {
-        console.log("Erreor", err);
+        } : {};
+        console.log("response====>", payload, invoiceFile,);
+        props.navigation.navigate('InvoiceDetail', {
+          data: payload,
+          invoiceFileData: invoiceFile,
+          ewayFileData: ewayFile,
+        });
+      } catch (err) {
+        console.log('Error', err);
+        onUploadEwayBlur();
+        onEwayDateDateBlur();
         setLoading(false);
       }
     } else {
@@ -615,7 +621,7 @@ const InvoiceEMSFormDetailScreen = props => {
       onInvoiceDateBlur();
       onInvoiceAmountBlur();
       onUploadInvoiceBlur();
-      // onEwayBillNumberBlur();
+      onEwayBillNumberBlur();
       if (ewayBillNumber) {
         onUploadEwayBlur();
         onEwayDateDateBlur();
@@ -639,7 +645,7 @@ const InvoiceEMSFormDetailScreen = props => {
         navigation={props.navigation}
         showText={'Upload Invoice'}
         rightIconName={'business-details'}></Header>
-      <ScrollView style={styles.ContainerCss}>
+      <ScrollView bounces style={styles.ContainerCss}>
         {FORM_FIELDS.map((field, fieldKey) => (
           <View>
             {fieldKey == 'loadingBaseAmount' ? (

@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { OrderedMap } from 'immutable';
-import { View, Text, TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dimension from '../../../Theme/Dimension';
@@ -20,7 +27,6 @@ import RNFetchBlob from 'rn-fetch-blob';
 import Toast from 'react-native-toast-message';
 import { fetchOrders, fetchTabCount } from '../../../redux/actions/orders';
 
-
 const UploadInvoiceOMSScreen = props => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -34,7 +40,8 @@ const UploadInvoiceOMSScreen = props => {
   const [uploadInvoice, setUploadInvoice] = useState({});
   const [uploadInvoiceError, setuploadInvoiceError] = useState(false);
   const [supplierInvoiceTotal, setSupplierInvoiceTotal] = useState('');
-  const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] = useState(false);
+  const [supplierInvoiceTotalError, setSupplierInvoiceTotalError] =
+    useState(false);
   const [poTotal, setPoTotal] = useState(0);
   const [poTotalError, setpoTotalError] = useState(false);
   const [uploadDisabled, setUploadDisabled] = useState(false);
@@ -130,7 +137,7 @@ const UploadInvoiceOMSScreen = props => {
   let EmsOmsFlag = actionCTA;
 
   useEffect(() => {
-    setOmsLoading(true)
+    setOmsLoading(true);
     if (EmsOmsFlag.includes('MAP_PO_TO_INVOICE')) {
       fetchInvoiceOMSDetails();
     }
@@ -190,7 +197,6 @@ const UploadInvoiceOMSScreen = props => {
       setFormState(res[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        console.log('Canceled from single doc picker');
       } else {
         console.log('error', err);
         throw err;
@@ -252,7 +258,7 @@ const UploadInvoiceOMSScreen = props => {
       const { data } = await getInvoiceOMSDetails(payload);
       if (data.success) {
         setOmsUploadList(data?.data);
-        setOmsLoading(false)
+        setOmsLoading(false);
         setLoading(false);
       }
     } catch (error) {
@@ -264,7 +270,7 @@ const UploadInvoiceOMSScreen = props => {
     let currentItemIds = [...bulkItemIds];
     let currentPrice = [...poTotalPrice];
     let currentKeys = [...totalKeys];
-    setPodId(podId)
+    setPodId(podId);
     if (currentItemIds.includes(podId)) {
       currentItemIds = currentItemIds.filter(_ => _ != podId);
     } else {
@@ -287,10 +293,10 @@ const UploadInvoiceOMSScreen = props => {
       priceList.splice(index, 1);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
-      var arr = [...podIdList]
+      var arr = [...podIdList];
       const podindex = arr.findIndex(x => x == podId);
       arr.splice(podindex, 1);
-      setPodIdList(arr)
+      setPodIdList(arr);
     } else {
       let row = {
         id: podId,
@@ -301,9 +307,9 @@ const UploadInvoiceOMSScreen = props => {
       priceList.push(row);
       setPoTotalPrice(priceList);
       setPoTotal(getTotalPrice());
-      var arr = [...podIdList]
-      arr.push(podId)
-      setPodIdList(arr)
+      var arr = [...podIdList];
+      arr.push(podId);
+      setPodIdList(arr);
     }
   };
 
@@ -377,35 +383,34 @@ const UploadInvoiceOMSScreen = props => {
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
         const url = `${BASE_URL}api/order/oms/mapInvoice`;
         const userId = await AsyncStorage.getItem('userId');
-        console.log("Paylod====>",
-          [
-            {
-              name: 'invoiceNumber',
-              data: String(invoiceNumber),
-            },
-            {
-              name: 'supplierId',
-              data: String(userId),
-            },
-            {
-              name: 'itemLists',
-              data: podIdList.length > 1 ? podIdList : String(podId)
-            },
-            {
-              name: 'invoiceTotal',
-              data: String(supplierInvoiceTotal),
-            },
-            {
-              name: 'invoiceDate',
-              data: getMinDate(invoiceDate),
-            },
-            {
-              name: 'file',
-              filename: uploadInvoice.name,
-              type: uploadInvoice.type,
-              data: RNFetchBlob.wrap(uploadInvoice.uri),
-            },
-          ]);
+        console.log('Paylod====>', [
+          {
+            name: 'invoiceNumber',
+            data: String(invoiceNumber),
+          },
+          {
+            name: 'supplierId',
+            data: String(userId),
+          },
+          {
+            name: 'itemLists',
+            data: podIdList.length > 1 ? podIdList : String(podId),
+          },
+          {
+            name: 'invoiceTotal',
+            data: String(supplierInvoiceTotal),
+          },
+          {
+            name: 'invoiceDate',
+            data: getMinDate(invoiceDate),
+          },
+          {
+            name: 'file',
+            filename: uploadInvoice.name,
+            type: uploadInvoice.type,
+            data: RNFetchBlob.wrap(uploadInvoice.uri),
+          },
+        ]);
         const response = await RNFetchBlob.fetch(
           'POST',
           url,
@@ -425,7 +430,7 @@ const UploadInvoiceOMSScreen = props => {
             },
             {
               name: 'itemLists',
-              data: podIdList.length > 1 ? podIdList.join(',') : String(podId)
+              data: podIdList.length > 1 ? podIdList.join(',') : String(podId),
             },
             {
               name: 'invoiceTotal',
@@ -494,23 +499,23 @@ const UploadInvoiceOMSScreen = props => {
         showText={'Upload Invoice'}
       />
 
-      <ScrollView style={styles.ContainerCss}>
-        {
-          omsLoading ? (
-            <ActivityIndicator
-              style={{ alignSelf: 'center', padding: 12 }}
-              color={colors.BrandColor}
-            />
-          ) :
-            <FlatList
-              data={OmsUploadList.records}
-              renderItem={renderItem}
-              ListEmptyComponent={renderListEmptyComponent}
-              keyExtractor={(item, index) => `${index}-item`}
-              onEndReachedThreshold={0.9}
-              showsVerticalScrollIndicator={false}
-            />
-        }
+      <ScrollView bounces style={styles.ContainerCss}>
+        {omsLoading ? (
+          <ActivityIndicator
+            style={{ alignSelf: 'center', padding: 12 }}
+            color={colors.BrandColor}
+          />
+        ) : (
+          <FlatList
+            bounces
+            data={OmsUploadList.records}
+            renderItem={renderItem}
+            ListEmptyComponent={renderListEmptyComponent}
+            keyExtractor={(item, index) => `${index}-item`}
+            onEndReachedThreshold={0.9}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
         <View style={{ marginTop: Dimension.margin30 }}>
           {FORM_FIELDS.map((field, fieldKey) => (
             <field.component

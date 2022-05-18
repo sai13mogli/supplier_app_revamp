@@ -106,7 +106,7 @@ const LoginScreen = props => {
     });
   }, []);
 
-  const onLogin = async logindata => {
+  const onLogin = async (logindata, loginMethod) => {
     setOtpModal(false);
     dispatch(setToken(logindata.data.token));
     await AsyncStorage.setItem('token', logindata.data.token);
@@ -124,6 +124,7 @@ const LoginScreen = props => {
     }
     dispatch(setShipmentType(logindata.data.onlineShipmentMode));
     dispatch(setMasterAction(props.route.params.setIsLoggedIn));
+    signInAnalytics(loginMethod);
     props.route.params.setIsLoggedIn(true);
   };
 
@@ -151,6 +152,17 @@ const LoginScreen = props => {
     }
   };
 
+  const signInAnalytics = async methodKey => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent(`SignIn`, {
+      action: `click`,
+      label: `${methodKey}`,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
+  };
+
   const onSubmit = async () => {
     if (
       email &&
@@ -173,7 +185,7 @@ const LoginScreen = props => {
         });
         if (data.success) {
           setLoading(false);
-          onLogin(data);
+          onLogin(data, `email`);
         } else {
           setLoading(false);
           setError(data.message);
@@ -187,12 +199,20 @@ const LoginScreen = props => {
     }
   };
 
+  const sendOtpAnalytics = async () => {
+    await analytics().logEvent(`sendOTP`, {
+      action: `click`,
+      label: `${email}`,
+    });
+  };
+
   const onSendOtp = async () => {
     if (
       email &&
       email.length &&
       (email.match(phoneRegex) || email.length == 10)
     ) {
+      sendOtpAnalytics();
       const {data} = await sendOtpForLogin(email);
       if (!data.success) {
         Toast.show({
@@ -245,7 +265,7 @@ const LoginScreen = props => {
     };
     const {data} = await loginWithGoogle(request);
     if (data.success) {
-      onLogin(data);
+      onLogin(data, `gmail`);
     } else {
       props.navigation.navigate('Error', {
         email: googleemail,
@@ -276,9 +296,15 @@ const LoginScreen = props => {
     await analytics().logEvent('SignUp', {
       action: `click`,
       label: `signInScreen`,
-      datetimestamp: `${date.getTime()}`,
+      datetimestamp: `${new Date().getTime()}`,
     });
     props.navigation.navigate('SignUpStart');
+  };
+
+  const forgotPasswordAnalytics = async () => {
+    await analytics().logEvent('ForgotPassword', {
+      action: `click`,
+    });
   };
 
   return (
@@ -310,7 +336,10 @@ const LoginScreen = props => {
         {error ? <Text style={styles.errorTxt}>{error}</Text> : null}
         <TouchableOpacity
           style={styles.fotgotTxt}
-          onPress={() => setShowForgotPass(true)}>
+          onPress={() => {
+            forgotPasswordAnalytics();
+            setShowForgotPass(true);
+          }}>
           <Text style={styles.fotgotTxt}>Forgot Password</Text>
         </TouchableOpacity>
         <View style={styles.buttonWrap}>
@@ -353,7 +382,7 @@ const LoginScreen = props => {
         {otpModal && (
           <LoginOtpModal
             visible={otpModal}
-            onLogin={onLogin}
+            onLogin={currdata => onLogin(currdata, `OTP`)}
             onClose={() => setOtpModal(false)}
             email={email}
           />

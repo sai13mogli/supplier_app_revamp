@@ -47,10 +47,10 @@ const PickedUp = props => {
   };
 
   const onSubmit = () => {
-    props.navigation.navigate("Profile")
+    props.navigation.navigate('Profile');
 
-    dispatch(saveAddressAction())
-  }
+    dispatch(saveAddressAction());
+  };
 
   const renderItems = ({ item }) => (
     <View style={{ flex: 1 }}>
@@ -107,7 +107,7 @@ const PickedUp = props => {
       {addressesDetailsStatus == STATE_STATUS.FETCHING ? (
         <ActivityIndicator style={{ alignSelf: 'center', marginTop: 150 }} />
       ) : (
-        <ScrollView style={styles.ContainerCss}>
+        <ScrollView bounces style={styles.ContainerCss}>
           <View style={styles.TopWrap}>
             <Text style={styles.Pageheading}>
               {PickupAddressData.length} Pickup Addresses
@@ -130,6 +130,7 @@ const PickedUp = props => {
           </View>
 
           <FlatList
+            bounces
             data={PickupAddressData}
             renderItem={renderItems}
             keyExtractor={(item, index) => index.toString()}
@@ -145,12 +146,9 @@ const PickedUp = props => {
             TextFontSize={Dimension.font16}
             title={'Submit'}
             onPress={onSubmit}
-
           />
-
         </View>
       ) : null}
-
     </View>
   );
 };

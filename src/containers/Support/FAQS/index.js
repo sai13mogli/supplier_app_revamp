@@ -15,10 +15,15 @@ import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import CustomeIcon from '../../../component/common/CustomeIcon';
 import RenderHtml, {defaultSystemFonts} from 'react-native-render-html';
+import {useSelector} from 'react-redux';
+import analytics from '@react-native-firebase/analytics';
 //import ULElement from 'react-native-render-html/lib/typescript/elements/ULElement';
 const systemFonts = [...defaultSystemFonts, 'Poppins-Regular'];
 
 const FAQS = props => {
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
   const [search, setSearch] = useState('');
   const [selectedTab, setSelectedTab] = useState('Popular Queries');
   const [data, setData] = useState([]);
@@ -53,7 +58,17 @@ const FAQS = props => {
 
   useEffect(() => {
     getFaqsData();
+    logEvent();
   }, []);
+
+  const logEvent = async () => {
+    await analytics().logEvent('FAQTab', {
+      action: `click`,
+      label: '',
+      datetimestamp: `${new Date().getTime()}`,
+      supplierId: profileData.userId,
+    });
+  };
 
   useEffect(() => {
     getFaqsData();
@@ -136,7 +151,7 @@ const FAQS = props => {
             style={styles.seacrhIcon}></CustomeIcon>
         </View>
         <Text style={styles.headingTxt}>Topics</Text>
-        <ScrollView horizontal={true}>
+        <ScrollView bounces horizontal={true}>
           <View style={styles.tabContainer}>
             {TABS.map((tab, tabIndex) => (
               <TouchableOpacity
@@ -165,6 +180,7 @@ const FAQS = props => {
         />
       ) : (
         <FlatList
+          bounces
           renderItem={renderItem}
           data={data}
           contentContainerStyle={{paddingBottom: 280}}

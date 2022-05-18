@@ -9,6 +9,7 @@ import CustomeIcon from './CustomeIcon';
 import FloatingLabelInputField from './FloatingInput';
 import {setUserPassword} from '../../services/auth';
 import Progress from 'react-native-progress/Bar';
+import analytics from '@react-native-firebase/analytics';
 const deviceWidth = Dimensions.get('window').width;
 
 const CreatePasswordModal = props => {
@@ -50,6 +51,15 @@ const CreatePasswordModal = props => {
     }
   };
 
+  const createPasswordAnalytics = async () => {
+    let date = new Date();
+    await analytics().logEvent(`CreatePassword`, {
+      action: `submit`,
+      label: `CreatePassword`,
+      datetimestamp: `${date.getTime()}`,
+    });
+  };
+
   const onSubmit = async () => {
     if (
       password &&
@@ -62,6 +72,7 @@ const CreatePasswordModal = props => {
         const {data} = await setUserPassword(password);
         if (data.success) {
           setLoader(false);
+          createPasswordAnalytics();
           onSuccess();
         }
       } catch (e) {

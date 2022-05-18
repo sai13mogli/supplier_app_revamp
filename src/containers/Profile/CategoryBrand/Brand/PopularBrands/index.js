@@ -120,7 +120,7 @@ const PopularBrandsScreen = props => {
   const renderRight = () => {
     if (brands && brands[activeId] && brands[activeId].length) {
       return (
-        <ScrollView style={{marginBottom: 100}}>
+        <ScrollView bounces style={{marginBottom: 100}}>
           {((brands && brands[activeId]) || [])
             .filter((_, i) => _.name.includes(inputValue))
             .map((item, i) => (
@@ -171,7 +171,9 @@ const PopularBrandsScreen = props => {
       return (
         <>
           <View style={styles.Wrapper}>
-            <ScrollView style={styles.leftPart}>{renderLeft()}</ScrollView>
+            <ScrollView bounces style={styles.leftPart}>
+              {renderLeft()}
+            </ScrollView>
             <View style={styles.rightPart}>
               <View style={styles.searchWrapper}>
                 <TextInput

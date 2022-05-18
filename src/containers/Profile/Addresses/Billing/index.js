@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -8,13 +8,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import colors from '../../../../Theme/Colors';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Dimension from '../../../../Theme/Dimension';
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
-import { fetchDeleteAddresses } from '../../../../redux/actions/profile';
+import {fetchDeleteAddresses} from '../../../../redux/actions/profile';
 import styles from './styles';
-import { STATE_STATUS } from '../../../../redux/constants';
+import {STATE_STATUS} from '../../../../redux/constants';
 
 const Billing = props => {
   const [billing, setBilling] = useState('Billing');
@@ -45,8 +45,8 @@ const Billing = props => {
     };
     dispatch(fetchDeleteAddresses(data));
   };
-  const renderItems = ({ item }) => (
-    <View style={{ flex: 1 }}>
+  const renderItems = ({item}) => (
+    <View style={{flex: 1}}>
       <View style={styles.wrap}>
         <View style={styles.nameWrap}>
           <Text style={styles.UserNameCss}>
@@ -64,7 +64,7 @@ const Billing = props => {
         </Text>
         <View style={styles.buttonWrap}>
           {item.isDefault ? null : (
-            <View style={{ marginRight: 15, flex: 1 }}>
+            <View style={{marginRight: 15, flex: 1}}>
               <CustomButton
                 title={'REMOVE'}
                 buttonColor={colors.WhiteColor}
@@ -76,7 +76,7 @@ const Billing = props => {
           )}
 
           {profileData && profileData.verificationStatus !== 15 ? (
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <CustomButton
                 title={'EDIT'}
                 buttonColor={colors.WhiteColor}
@@ -98,21 +98,21 @@ const Billing = props => {
   );
 
   return (
-    <View style={{ flex: 0.9 }}>
+    <View style={{flex: 0.9}}>
       {addressesDetailsStatus == STATE_STATUS.FETCHING ? (
-        <ActivityIndicator style={{ alignSelf: 'center', marginTop: 150 }} />
+        <ActivityIndicator style={{alignSelf: 'center', marginTop: 150}} />
       ) : (
-        <ScrollView style={styles.ContainerCss}>
+        <ScrollView bounces style={styles.ContainerCss}>
           <View style={styles.TopWrap}>
             <Text style={styles.Pageheading}>
               {BillingAddressData.length} Billing Address
             </Text>
             <TouchableOpacity
               onPress={() =>
-                props.navigation.navigate('EditAddress', { tabState: billing })
+                props.navigation.navigate('EditAddress', {tabState: billing})
               }>
               {profileData && profileData.verificationStatus !== 15 ? (
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{flexDirection: 'row'}}>
                   <CustomeIcon
                     name={'add-circle'}
                     size={Dimension.font18}
@@ -124,6 +124,7 @@ const Billing = props => {
             </TouchableOpacity>
           </View>
           <FlatList
+            bounces
             data={BillingAddressData}
             renderItem={renderItems}
             keyExtractor={(item, index) => index.toString()}

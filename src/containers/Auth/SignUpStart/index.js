@@ -22,6 +22,7 @@ import Colors from '../../../Theme/Colors';
 import styles from './style';
 import Dimension from '../../../Theme/Dimension';
 import Toast from 'react-native-toast-message';
+import analytics from '@react-native-firebase/analytics';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -205,6 +206,15 @@ const SignUpStartScreen = props => {
     },
   });
 
+  const signupStepAnalytics = async () => {
+    let date = new Date();
+    await analytics().logEvent(`SignUp`, {
+      action: `submit`,
+      label: `Step1`,
+      datetimestamp: `${date.getTime()}`,
+    });
+  };
+
   const onNext = async () => {
     // props.navigation.navigate('SignUpEnd', {
     //   phone,
@@ -236,6 +246,7 @@ const SignUpStartScreen = props => {
       };
       const {data} = await validateEmailPhone(payload);
       if (data.success) {
+        signupStepAnalytics();
         props.navigation.navigate('SignUpEnd', {
           phone,
           email,
@@ -245,7 +256,12 @@ const SignUpStartScreen = props => {
           country: '110',
         });
       } else {
-        alert(data.message);
+        Toast.show({
+          type: 'error',
+          text2: data.message,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
       }
     } else {
       if (!tAndCAccepted) {
@@ -269,7 +285,7 @@ const SignUpStartScreen = props => {
         source={require('../../../assets/images/SignUpBg.png')}
         resizeMode="cover"
         style={{flex: 1}}>
-        <ScrollView style={styles.ContainerCss}>
+        <ScrollView bounces style={styles.ContainerCss}>
           <View style={styles.headerPart}>
             <CustomeIcon
               name={'arrow-back'}

@@ -1,5 +1,5 @@
-import {STATE_STATUS} from '../constants/index';
-import {PROFILE_ACTIONS} from '../constants/profile';
+import { STATE_STATUS } from '../constants/index';
+import { PROFILE_ACTIONS } from '../constants/profile';
 
 const initialState = {
   status: STATE_STATUS.UNFETCHED,
@@ -34,7 +34,7 @@ const initialState = {
 };
 
 export const profileReducer = (state = initialState, action) => {
-  const {type, payload, error} = action;
+  const { type, payload, error } = action;
   switch (type) {
     case PROFILE_ACTIONS.FETCH_PROFILE:
       return {
@@ -64,7 +64,7 @@ export const profileReducer = (state = initialState, action) => {
     case PROFILE_ACTIONS.SET_RM_DATA:
       return {
         ...state,
-        data: {...state.data, ...payload.data},
+        data: { ...state.data, ...payload.data },
       };
 
     case PROFILE_ACTIONS.SET_NAVIGATION:
@@ -143,7 +143,6 @@ export const profileReducer = (state = initialState, action) => {
         tdsInfoDetails: {
           ...state.tdsInfoDetails,
           status: STATE_STATUS.UPDATED,
-          // data: payload.data,
         },
       };
     case PROFILE_ACTIONS.FAILED_FETCH_UPDATE_TDS_DETAILS:

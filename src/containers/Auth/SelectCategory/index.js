@@ -17,8 +17,13 @@ import Checkbox from '../../../component/common/Checkbox/index';
 import CustomeIcon from '../../../component/common/CustomeIcon';
 import Header from '../../../component/common/Header';
 import styles from './style';
+import analytics from '@react-native-firebase/analytics';
+import {useSelector} from 'react-redux';
 
 const SelectCategoryScreen = props => {
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
   const [inputValue, setInputValue] = useState('');
   const [categories, setCategories] = useState(
     props.route.params.categories || [],
@@ -48,7 +53,13 @@ const SelectCategoryScreen = props => {
     }
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    await analytics().logEvent('BrandCategoryDetails', {
+      action: `submit`,
+      label: (selectedValues || []).map(_ => _.label).join('/'),
+      datetimestamp: `${new Date().getTime()}`,
+      supplierId: profileData.userId,
+    });
     props.route.params.setcategoryCode(selectedValues);
     props.navigation.goBack();
   };
@@ -86,7 +97,7 @@ const SelectCategoryScreen = props => {
   const renderRight = () => {
     if (categories && categories.length) {
       return (
-        <ScrollView>
+        <ScrollView bounces>
           {(categories || [])
             .filter((_, i) => _.label.includes(inputValue))
             .map((item, i) => (

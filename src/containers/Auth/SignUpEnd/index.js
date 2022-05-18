@@ -18,6 +18,7 @@ import {setShipmentType} from '../../../redux/actions/orders';
 import {setMasterAction} from '../../../redux/actions/master';
 import Toast from 'react-native-toast-message';
 import {fetchedProfile, setRmData} from '../../../redux/actions/profile';
+import analytics from '@react-native-firebase/analytics';
 
 const gstinRegex =
   '^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$';
@@ -179,7 +180,19 @@ const SignUpEndScreen = props => {
       dispatch(setRmData(data.data));
     }
     dispatch(setMasterAction(props.route.params.setIsLoggedIn));
+    signupAnalytics();
     setShowCreatePass(true);
+  };
+
+  const signupAnalytics = async () => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent(`SignUp`, {
+      action: `submit`,
+      label: `Step2`,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
   };
 
   const onSuccess = () => {
@@ -193,7 +206,7 @@ const SignUpEndScreen = props => {
         source={require('../../../assets/images/SignUpBg.png')}
         resizeMode="cover"
         style={{flex: 1}}>
-        <ScrollView style={styles.ContainerCss}>
+        <ScrollView bounces style={styles.ContainerCss}>
           <View style={styles.headerPart}>
             <CustomeIcon
               name={'arrow-back'}

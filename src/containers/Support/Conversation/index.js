@@ -22,8 +22,12 @@ import {fetchTickets} from '../../../redux/actions/support';
 import Dimension from '../../../Theme/Dimension';
 import CustomeIcon from '../../../component/common/CustomeIcon';
 import Toast from 'react-native-toast-message';
+import analytics from '@react-native-firebase/analytics';
 
 const Conversation = props => {
+  const profileData = useSelector(
+    state => (state.profileReducer || {}).data || {},
+  );
   const flatlistRef = useRef();
   const [ticketId, setTicketId] = useState(props.route.params.tickedId || '');
   const [page, setPage] = useState(props.route.params.page || 1);
@@ -409,6 +413,7 @@ const Conversation = props => {
   const renderConversation = () => {
     return (
       <FlatList
+        bounces
         ref={flatlistRef}
         data={ticketConversation.conversation || []}
         renderItem={renderItem}
@@ -421,6 +426,12 @@ const Conversation = props => {
 
   const closeOpenedTicket = async () => {
     try {
+      await analytics().logEvent('TicketCard', {
+        action: `click`,
+        label: 'closed',
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
       setTicketConversation({});
       const {data} = await closeTicket(ticketId);
       if (data && data.success) {
@@ -440,6 +451,12 @@ const Conversation = props => {
 
   const reopenTicket = async () => {
     try {
+      await analytics().logEvent('TicketCard', {
+        action: `click`,
+        label: 'reopen',
+        datetimestamp: `${new Date().getTime()}`,
+        supplierId: profileData.userId,
+      });
       setTicketConversation({});
       const {data} = await reOpen(ticketId);
       if (data && data.success) {

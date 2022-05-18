@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -15,10 +15,10 @@ import {
 } from 'react-native';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
-import { STATE_STATUS } from '../../redux/constants';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrders, fetchTabCount } from '../../redux/actions/orders';
-import { getImageUrl, acceptBulk } from '../../services/orders';
+import {STATE_STATUS} from '../../redux/constants';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchOrders, fetchTabCount} from '../../redux/actions/orders';
+import {getImageUrl, acceptBulk} from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
@@ -27,11 +27,12 @@ import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
 import Toast from 'react-native-toast-message';
 import BulkActionsModal from '../../component/BulkActionsModal';
-import { fetchProfile, setNavigation } from '../../redux/actions/profile';
+import {fetchProfile, setNavigation} from '../../redux/actions/profile';
 import Colors from '../../Theme/Colors';
-import { requestUserPermission } from '../../utils/firebasepushnotification';
+import {requestUserPermission} from '../../utils/firebasepushnotification';
 import messaging from '@react-native-firebase/messaging';
 import * as RootNavigation from '../../generic/navigator';
+import analytics from '@react-native-firebase/analytics';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -104,7 +105,7 @@ const OrdersScreen = props => {
   const [isFilterApplied, setIsFilterApplied] = useState(false);
 
   const COMMON_OPTIONS = [
-    { label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders' },
+    {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
     {
       label: 'Fulfilled Orders',
       key: 'Fulfilled_Orders',
@@ -123,7 +124,7 @@ const OrdersScreen = props => {
   ];
 
   const ONLINE_OPTIONS = [
-    { label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders' },
+    {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
     {
       label: 'Fulfilled Orders',
       key: 'Fulfilled_Orders',
@@ -138,19 +139,19 @@ const OrdersScreen = props => {
 
   const TABS = {
     Open_Orders: [
-      { label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE' },
-      { label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP' },
-      { label: 'Pickup', key: 'PICKUP' },
-      { label: 'Upload Invoice', key: 'UPLOAD_INVOICE' },
-      { label: 'Packed', key: 'PACKED' },
-      { label: 'Shipment', key: 'SHIPMENT' },
-      { label: 'Mark Shipped/Delivered', key: 'MARK_SHIPPED' },
+      {label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE'},
+      {label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP'},
+      {label: 'Pickup', key: 'PICKUP'},
+      {label: 'Upload Invoice', key: 'UPLOAD_INVOICE'},
+      {label: 'Packed', key: 'PACKED'},
+      {label: 'Shipment', key: 'SHIPMENT'},
+      {label: 'Mark Shipped/Delivered', key: 'MARK_SHIPPED'},
     ],
-    Fulfilled_Orders: [{ label: 'Fulfilled', key: 'FULFILLED' }],
-    Cancelled: [{ label: 'Cancelled', key: 'CANCELLED' }],
+    Fulfilled_Orders: [{label: 'Fulfilled', key: 'FULFILLED'}],
+    Cancelled: [{label: 'Cancelled', key: 'CANCELLED'}],
     Returned: [
-      { label: 'Return Pending', key: 'RETURN_PENDING' },
-      { label: 'Return Done', key: 'RETURN_DONE' },
+      {label: 'Return Pending', key: 'RETURN_PENDING'},
+      {label: 'Return Done', key: 'RETURN_DONE'},
     ],
   };
 
@@ -216,7 +217,7 @@ const OrdersScreen = props => {
       let deepLinkData = await AsyncStorage.getItem('@deepLinkUrl');
       deepLinkData = JSON.parse(deepLinkData);
       if (deepLinkData) {
-        const { screen, obj } = deepLinkData;
+        const {screen, obj} = deepLinkData;
         if (screen) {
           handleOpenUrl(obj, false, screen);
         }
@@ -283,7 +284,7 @@ const OrdersScreen = props => {
           fetchTabCountFunc(obj.childTab, shipmentType);
         }
       } else {
-        props.navigation.push(deepLinkScreen, { ...obj });
+        props.navigation.push(deepLinkScreen, {...obj});
       }
       await AsyncStorage.removeItem('@deepLinkUrl');
     }
@@ -354,7 +355,7 @@ const OrdersScreen = props => {
     );
   };
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     return (
       <Ordercard
         key={index}
@@ -394,6 +395,7 @@ const OrdersScreen = props => {
         remark={item.remark}
         source={item.source}
         statusText={item.statusText}
+        
       />
     );
   };
@@ -415,11 +417,90 @@ const OrdersScreen = props => {
     setLoadingTabs(true);
     setSelectAll(false);
     resetFilters(true);
+    setTabsAnalytics(val);
+  };
+
+  const setTabsAnalytics = async tab => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    let currTab = mutateTabName(tab);
+    console.log(currTab, 'currTab');
+    if (currTab) {
+      await analytics().logEvent(`${currTab}`, {
+        action: `click`,
+        label: getLabel(),
+        supplierID: `${supplierId}`,
+        datetimestamp: `${date.getTime()}`,
+      });
+    }
+  };
+
+  const setOrdersAnalytics = async currText => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    let currOrderType = mutateOrderType(currText);
+    console.log(currOrderType, 'curr orderType');
+    if (currOrderType) {
+      await analytics().logEvent(`${currOrderType}`, {
+        action: `click`,
+        supplierID: `${supplierId}`,
+        datetimestamp: `${date.getTime()}`,
+      });
+    }
+    setSelectedType(currText);
+  };
+
+  const mutateTabName = tabKey => {
+    switch (tabKey && tabKey.key) {
+      case 'PENDING_ACCEPTANCE':
+        return `AcceptancePendingTab`;
+      case 'SCHEDULED_PICKUP':
+        return `ScheduledPickupTab`;
+      case 'PICKUP':
+        return `PickupTab`;
+      case 'UPLOAD_INVOICE':
+        return `UploadInvoiceTab`;
+      case 'MARK_SHIPPED':
+        return `MarkedShippedTab`;
+      case 'RETURN_PENDING':
+        return `ReturnPendingTab`;
+      case 'RETURN_DONE':
+        return `ReturnCompleteTab`;
+      default:
+        return ``;
+    }
+  };
+
+  const getLabel = () => {
+    if (profileData && profileData.enterpriseFlag && profileData.onlineFlag) {
+      return `supplier type_both`;
+    } else if (
+      profileData &&
+      profileData.enterpriseFlag &&
+      !profileData.onlineFlag
+    ) {
+      return `supplier type_enterprise`;
+    } else {
+      return `supplier type_online`;
+    }
+  };
+
+  const mutateOrderType = paramOrderType => {
+    switch (paramOrderType) {
+      case 'Fulfilled_Orders':
+        return `FulfilledOrderTab`;
+      case 'Cancelled':
+        return `CancelledOrderTab`;
+      case 'Returned':
+        return `ReturnedOrderTab`;
+      default:
+        return ``;
+    }
   };
 
   //selectedFilter
   const selectFilter = term => {
-    let currentFilters = { ...appliedFilter };
+    let currentFilters = {...appliedFilter};
     if (
       currentFilters[initialFilter] &&
       currentFilters[initialFilter].includes(term)
@@ -503,8 +584,6 @@ const OrdersScreen = props => {
     }
   }, [bulkItemIds]);
 
-
-
   const upButtonHandler = tabIndex => {
     scrollRef.current.scrollTo({
       x: tabIndex == 1 ? 0 : tabIndex * 60,
@@ -584,10 +663,11 @@ const OrdersScreen = props => {
   const renderHeaderComponent = () => {
     return (
       <ScrollView
+        bounces
         horizontal={true}
         ref={scrollRef}
         style={styles.TopTabWrap}
-        contentContainerStyle={{ paddingBottom: Dimension.padding30 }}>
+        contentContainerStyle={{paddingBottom: Dimension.padding30}}>
         {TABS[selectedType].map((tab, tabIndex) =>
           getTabs(tab, tabIndex, selectedType) ? (
             <TouchableOpacity
@@ -642,7 +722,7 @@ const OrdersScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             source={require('../../assets/images/profilePending.png')}
-            style={{ width: 350, height: 300 }}
+            style={{width: 350, height: 300}}
           />
           <Text style={styles.profilependingTxt}>
             Your profile is incomplete, please complete your profile, To get
@@ -658,7 +738,7 @@ const OrdersScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             source={require('../../assets/images/pending_approval.png')}
-            style={{ width: 300, height: 200 }}
+            style={{width: 300, height: 200}}
           />
           <Text style={styles.profilependingTxt}>
             Your profile is currently in approval pending stage Once approved
@@ -675,7 +755,7 @@ const OrdersScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             source={require('../../assets/images/emptyOrders.png')}
-            style={{ width: 300, height: 200 }}
+            style={{width: 300, height: 200}}
           />
           <Text style={styles.emptyTxt}>No Data Available</Text>
         </View>
@@ -707,6 +787,7 @@ const OrdersScreen = props => {
   };
 
   const onSubmitSearch = () => {
+    openOrdersSearchAnalytics();
     fetchOrdersFunc(0, inputValue, selectedTab, shipmentType, {
       pickupFromDate: '',
       pickupToDate: '',
@@ -718,11 +799,28 @@ const OrdersScreen = props => {
     });
   };
 
+  const openOrdersSearchAnalytics = async () => {
+    if (selectedType == 'Open_Orders') {
+      let date = new Date();
+      let supplierId = await AsyncStorage.getItem('userId');
+      let currTab = mutateTabName(selectedTab);
+      await analytics().logEvent('SearchOpenOrders', {
+        action: `click`,
+        label: `${inputValue}/Tabname_${currTab}`,
+        supplierID: `${supplierId}`,
+        datetimestamp: `${date.getTime()}`,
+      });
+    }
+  };
+
   //applied filters api hit
   const applyFilters = () => {
     setOrdersFiltersModal(false);
     checkFilters();
-
+    setOrderFiltersAnalytics();
+    if (selectedType == 'Open_Orders') {
+      setOrderFiltersAnlyticsOpenOrders();
+    }
     fetchOrdersFunc(0, inputValue, selectedTab, shipmentType, {
       pickupFromDate: pickupFromDate,
       pickupToDate: pickupToDate,
@@ -731,6 +829,37 @@ const OrdersScreen = props => {
       orderType: appliedFilter['orderType'] || [],
       deliveryType: appliedFilter['deliveryType'] || [],
       orderRefs: appliedFilter['orderRefs'] || [],
+    });
+  };
+
+  const setOrderFiltersAnlyticsOpenOrders = async () => {
+    await analytics().logEvent('ApplyOpenOrderFilter', {
+      action: `submit`,
+      label: `${selectedTab}`,
+    });
+  };
+
+  const setOrderFiltersAnalytics = async () => {
+    let filterSelected = [];
+    for (let filter in appliedFilter) {
+      if (filter && appliedFilter[filter]) {
+        if (filter == 'orderRefs') {
+          filterSelected.push(`poId`);
+        } else {
+          filterSelected.push(filter);
+        }
+      }
+    }
+    if (pickupFromDate && pickupToDate) {
+      filterSelected.push(`pickupDate`);
+    }
+    if (poFromDate && poToDate) {
+      filterSelected.push(`poDate`);
+    }
+    let filters = filterSelected.join(',');
+    await analytics().logEvent('OrdersFilter', {
+      action: `submit`,
+      label: `filter type selected- ${filters}`,
     });
   };
 
@@ -757,10 +886,22 @@ const OrdersScreen = props => {
     setOrdersFiltersModal(false);
   };
 
+  const ctaAnalyticsBulkAccept = async label => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent(`AcceptancePendingCTA`, {
+      action: `click`,
+      label: label,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
+  };
+
   const onBulkAccept = async () => {
     try {
+      ctaAnalyticsBulkAccept(`BulkAccept`);
       setBulkAcceptLoader(true);
-      const { data } = await acceptBulk({
+      const {data} = await acceptBulk({
         supplierId: await AsyncStorage.getItem('userId'),
         itemIds: bulkItemIds,
       });
@@ -834,23 +975,44 @@ const OrdersScreen = props => {
     }
   };
 
+  const navigateNotification = async () => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent('NotificationIcon', {
+      action: `click`,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
+    props.navigation.navigate('Notification');
+  };
+
+  const onPressFilters = async () => {
+    await analytics().logEvent(`OrdersFilter`, {
+      action: `click`,
+      label: getLabel(),
+    });
+    setOrdersFiltersModal(true);
+  };
+
   return (
-    <View style={{ flex: 1, backgroundColor: colors.grayShade7 }}>
+    <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
       <View style={styles.topHeaderWrap}>
         <DropDown
           title={'Orders'}
           // label={'Orders'}
           selectedValue={selectedType}
           onValueChange={text => {
-            setSelectedType(text);
+            setOrdersAnalytics(text);
+            // setSelectedType(text);
             changeTab(TABS[text][0]);
           }}
           items={getOptions()}
           enabled={true}
           isFromOrders={true}
         />
+
         <TouchableOpacity
-          onPress={() => props.navigation.navigate('Notification')}
+          onPress={() => navigateNotification()}
           style={{
             //position: 'relative',
             paddingLeft: Dimension.padding8,
@@ -874,7 +1036,7 @@ const OrdersScreen = props => {
           }}>
           <ActivityIndicator
             color={colors.BrandColor}
-            style={{ alignSelf: 'center', margin: 12 }}
+            style={{alignSelf: 'center', margin: 12}}
             size={'large'}
           />
         </View>
@@ -882,6 +1044,7 @@ const OrdersScreen = props => {
         <>
           {renderHeaderComponent()}
           <FlatList
+            bounces
             data={OrderData.toArray()}
             // stickyHeaderIndices={[0]}
             renderItem={renderItem}
@@ -890,14 +1053,14 @@ const OrdersScreen = props => {
             // ListHeaderComponent={renderHeaderComponent}
             ListFooterComponent={renderFooterComponent}
             onEndReachedThreshold={0.9}
-            style={{ paddingBottom: 380 }}
+            style={{paddingBottom: 380}}
             contentContainerStyle={{
               paddingBottom: 380,
               backgroundColor: colors.grayShade1,
             }}
             removeClippedSubviews={true}
             maxToRenderPerBatch={5}
-            onEndReached={({ distanceFromEnd }) => {
+            onEndReached={({distanceFromEnd}) => {
               if (!onEndReachedCalledDuringMomentum.current) {
                 endReachedFetchListing();
                 onEndReachedCalledDuringMomentum.current = true;
@@ -938,12 +1101,11 @@ const OrdersScreen = props => {
                   name={'search'}
                   style={styles.seacrhIcon}></CustomeIcon>
               </View>
-
               {!isKeyboardVisible ? (
                 <View style={styles.filterBtnWrap}>
                   <TouchableOpacity
                     style={styles.filterBtn}
-                    onPress={() => setOrdersFiltersModal(true)}>
+                    onPress={() => onPressFilters()}>
                     <Text style={styles.filtertxt}>Filters</Text>
                     {isFilterApplied ? (
                       <View style={styles.filterApplied}></View>
@@ -1032,7 +1194,7 @@ const OrdersScreen = props => {
                     <ActivityIndicator
                       size={'small'}
                       color={'white'}
-                      style={{ marginRight: 4 }}
+                      style={{marginRight: 4}}
                     />
                   )}
                 </TouchableOpacity>
@@ -1040,9 +1202,9 @@ const OrdersScreen = props => {
             ) : null}
 
             {selectedTab == 'SHIPMENT' &&
-              bulkItemIds &&
-              bulkItemIds.length &&
-              bulkActionsModal ? (
+            bulkItemIds &&
+            bulkItemIds.length &&
+            bulkActionsModal ? (
               <BulkActionsModal
                 bulkActionsModal={bulkActionsModal}
                 setBulkActionsModal={setBulkActionsModal}

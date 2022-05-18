@@ -16,8 +16,8 @@ const UploadInvoiceScreen = props => {
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPrice, setTotalPrice] = useState([]);
-  const [headerSum, setHeaderSum] = useState(0)
-  const [totalSum, setTotalSum] = useState(0)
+  const [headerSum, setHeaderSum] = useState(0);
+  const [totalSum, setTotalSum] = useState(0);
   const [hsn, sethsn] = useState(props?.route?.params?.hsn);
   const [taxPercentage, setTaxPercentage] = useState(
     props?.route?.params?.taxPercentage,
@@ -34,30 +34,27 @@ const UploadInvoiceScreen = props => {
   const [invoiceList, setInvoiceList] = useState([]);
 
   let EmsOmsFlag = actionCTA;
-  let tax = global.hsn
+  let tax = global.hsn;
 
   useEffect(() => {
-    setInvoiceLoader(true)
-    if (EmsOmsFlag.includes('MAP_INVOICE') || EmsOmsFlag.includes('REMAP_INVOICE')) {
+    setInvoiceLoader(true);
+    if (
+      EmsOmsFlag.includes('MAP_INVOICE') ||
+      EmsOmsFlag.includes('REMAP_INVOICE')
+    ) {
       fetchInvoiceEMSDetails();
     }
-
   }, []);
 
-
-
-  const getTotalPrice = (value) => {
+  const getTotalPrice = () => {
     let price = 0;
 
     price = totalPrice.reduce(function (sum, tax) {
       return sum + tax.price;
     }, 0);
-    let totalupdatedPrice = price + value
-    setHeaderSum(totalupdatedPrice)
-    // console.log("totalupdatedPrice", totalupdatedPrice);
+    global.price = price;
     return price;
   };
-
 
   const selectItemId = (itemId, totalAmount) => {
     let currentItemIds = [...bulkItemIds];
@@ -99,7 +96,7 @@ const UploadInvoiceScreen = props => {
       if (data.success) {
         setInvoiceList(data?.data?.itemList);
         setLoading(false);
-        setInvoiceLoader(false)
+        setInvoiceLoader(false);
       }
     } catch (error) {
       console.log(error);
@@ -107,10 +104,11 @@ const UploadInvoiceScreen = props => {
   };
 
   const calculateHeaderSum = (value, id) => {
-    let updatedPrice = totalPrice.map((item) => (item.price))
-    let uppdatedSum = global.price + value
-    setHeaderSum(getTotalPrice(uppdatedSum))
-  }
+    setTotalAmount(value);
+    let updatedPrice = totalPrice.map(item => item.price);
+    let uppdatedSum = global.price + value;
+
+  };
 
   const renderItem = ({ item }) => {
     return (
@@ -119,9 +117,9 @@ const UploadInvoiceScreen = props => {
         orderRef={item.orderRef}
         productUom={item.productUom}
         quantity={item.quantity}
-        selectedValue={(value) => setTaxPercentage(value)}
-        UpdatedQuntity={(value) => setQuantity(value)}
-        UpdatedTotalPrice={(value, id) => getTotalPrice(value, id)}
+        selectedValue={value => setTaxPercentage(value)}
+        UpdatedQuntity={value => setQuantity(value)}
+        UpdatedTotalPrice={(value) => (value)}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
@@ -152,20 +150,12 @@ const UploadInvoiceScreen = props => {
     return null;
   };
 
-
-
   const renderOrderHeaderDetail = () => {
     return (
       <>
         <View style={styles.headerView}>
-          <Text
-            style={[
-              styles.TitleBoldTxt,
-            ]}>
-            PO ID -{' '}
-            <Text style={styles.TitleBoldTxt}>
-              {orderRef}
-            </Text>
+          <Text style={[styles.TitleBoldTxt]}>
+            PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
           </Text>
           <Text
             style={[
@@ -176,7 +166,7 @@ const UploadInvoiceScreen = props => {
             ]}>
             Total Price -{' '}
             <Text style={styles.TitleBoldTxt}>
-              ₹{headerSum}
+              ₹{getTotalPrice(totalAmount)}
               {'   '} (Price Including Tax-
               <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
               <Text style={styles.TitleBoldTxt}> )</Text>
@@ -187,8 +177,6 @@ const UploadInvoiceScreen = props => {
     );
   };
 
-
-
   return (
     <View style={styles.outerView}>
       <Header
@@ -198,32 +186,29 @@ const UploadInvoiceScreen = props => {
         showBell
       />
       {renderOrderHeaderDetail()}
-      {
-        invoiceLoader ? (
-          <ActivityIndicator
-            style={{ alignSelf: 'center', paddingVertical: Dimension.padding210 }}
-            color={colors.BrandColor}
-          />
-        ) :
-          <FlatList
-            data={invoiceList}
-            renderItem={renderItem}
-            ListEmptyComponent={renderListEmptyComponent}
-            keyExtractor={(item, index) => `${index}-item`}
-            onEndReachedThreshold={0.9}
-            showsVerticalScrollIndicator={false}
-          />
-
-      }
+      {invoiceLoader ? (
+        <ActivityIndicator
+          style={{ alignSelf: 'center', paddingVertical: Dimension.padding210 }}
+          color={colors.BrandColor}
+        />
+      ) : (
+        <FlatList
+          bounces
+          data={invoiceList}
+          renderItem={renderItem}
+          ListEmptyComponent={renderListEmptyComponent}
+          keyExtractor={(item, index) => `${index}-item`}
+          onEndReachedThreshold={0.9}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
       <View>
         <View style={styles.titleWrap}>
           <Text style={styles.TitleLightTxt}>
             Please select the product to start filling invoice details
           </Text>
-
         </View>
-
       </View>
       <View style={styles.bottombtnWrap}>
         <CustomButton
@@ -253,10 +238,8 @@ const UploadInvoiceScreen = props => {
               totalAmount,
               tax,
               selectedTab,
-            })
-
-          }
-          }
+            });
+          }}
         />
       </View>
     </View>

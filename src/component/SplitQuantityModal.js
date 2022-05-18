@@ -205,7 +205,7 @@ const SplitQuantityModal = props => {
         <View style={styles.headerTxtWrap}>
           <Text style={styles.headerTxt}>Split Quantity</Text>
         </View>
-        <ScrollView>
+        <ScrollView bounces>
           <View style={{paddingHorizontal: Dimension.padding15}}>
             {renderOrderDetails()}
           </View>
