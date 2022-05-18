@@ -3,6 +3,10 @@ import axios from 'axios';
 import {BASE_URL} from '../redux/constants/index';
 
 const AUTH = 'https://supplierapiqa.moglilabs.com/';
+const APP_INFO = 'https://suppliercentralqa.moglilabs.com/';
+
+export const getAppInfo = () =>
+  axios.get(`${APP_INFO}registration/loadconfig?key=3dbd9ad8253e`);
 
 export const loginWithPass = data => axios.post(`${AUTH}auth/login`, data);
 
