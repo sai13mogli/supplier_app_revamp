@@ -33,6 +33,8 @@ import {requestUserPermission} from '../../utils/firebasepushnotification';
 import messaging from '@react-native-firebase/messaging';
 import * as RootNavigation from '../../generic/navigator';
 import analytics from '@react-native-firebase/analytics';
+import {getAppInfo} from '../../services/auth';
+import {setVersion} from '../../redux/actions/homepage';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -181,6 +183,19 @@ const OrdersScreen = props => {
   }, [profileStatus]);
 
   const getNotif = async () => {
+    const {data} = await getAppInfo();
+    if (data) {
+      if (data && data.list && data.list.find(_ => _.name == 'APP_VERSION')) {
+        dispatch(
+          setVersion(
+            data.list
+              .find(_ => _.name == 'APP_VERSION')
+              .value.split('.')
+              .join(''),
+          ),
+        );
+      }
+    }
     await requestUserPermission();
     await messaging()
       .hasPermission()

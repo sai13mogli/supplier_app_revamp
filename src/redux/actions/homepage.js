@@ -21,3 +21,12 @@ export const failedFetchHomepage = error => {
     error,
   };
 };
+
+export const setVersion = version => {
+  return {
+    type: HOMEPAGE_ACTIONS.SET_VERSION,
+    payload: {
+      version,
+    },
+  };
+};

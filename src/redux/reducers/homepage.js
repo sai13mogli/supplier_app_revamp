@@ -5,11 +5,17 @@ import {PROFILE_ACTIONS} from '../constants/profile';
 const initialState = {
   status: STATE_STATUS.UNFETCHED,
   data: [],
+  version: '',
 };
 
 export const homepageReducer = (state = initialState, action) => {
   const {type, payload, error} = action;
   switch (type) {
+    case HOMEPAGE_ACTIONS.SET_VERSION:
+      return {
+        ...state,
+        version: payload.version,
+      };
     case HOMEPAGE_ACTIONS.FETCH_PRODUCTS:
       return {
         ...state,
