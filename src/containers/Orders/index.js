@@ -416,6 +416,85 @@ const OrdersScreen = props => {
     setLoadingTabs(true);
     setSelectAll(false);
     resetFilters(true);
+    setTabsAnalytics(val);
+  };
+
+  const setTabsAnalytics = async tab => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    let currTab = mutateTabName(tab);
+    console.log(currTab, 'currTab');
+    if (currTab) {
+      await analytics().logEvent(`${currTab}`, {
+        action: `click`,
+        label: getLabel(),
+        supplierID: `${supplierId}`,
+        datetimestamp: `${date.getTime()}`,
+      });
+    }
+  };
+
+  const setOrdersAnalytics = async currText => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    let currOrderType = mutateOrderType(currText);
+    console.log(currOrderType, 'curr orderType');
+    if (currOrderType) {
+      await analytics().logEvent(`${currOrderType}`, {
+        action: `click`,
+        supplierID: `${supplierId}`,
+        datetimestamp: `${date.getTime()}`,
+      });
+    }
+    setSelectedType(currText);
+  };
+
+  const mutateTabName = tabKey => {
+    switch (tabKey && tabKey.key) {
+      case 'PENDING_ACCEPTANCE':
+        return `AcceptancePendingTab`;
+      case 'SCHEDULED_PICKUP':
+        return `ScheduledPickupTab`;
+      case 'PICKUP':
+        return `PickupTab`;
+      case 'UPLOAD_INVOICE':
+        return `UploadInvoiceTab`;
+      case 'MARK_SHIPPED':
+        return `MarkedShippedTab`;
+      case 'RETURN_PENDING':
+        return `ReturnPendingTab`;
+      case 'RETURN_DONE':
+        return `ReturnCompleteTab`;
+      default:
+        return ``;
+    }
+  };
+
+  const getLabel = () => {
+    if (profileData && profileData.enterpriseFlag && profileData.onlineFlag) {
+      return `supplier type_both`;
+    } else if (
+      profileData &&
+      profileData.enterpriseFlag &&
+      !profileData.onlineFlag
+    ) {
+      return `supplier type_enterprise`;
+    } else {
+      return `supplier type_online`;
+    }
+  };
+
+  const mutateOrderType = paramOrderType => {
+    switch (paramOrderType) {
+      case 'Fulfilled_Orders':
+        return `FulfilledOrderTab`;
+      case 'Cancelled':
+        return `CancelledOrderTab`;
+      case 'Returned':
+        return `ReturnedOrderTab`;
+      default:
+        return ``;
+    }
   };
 
   //selectedFilter
@@ -723,6 +802,7 @@ const OrdersScreen = props => {
   };
 
   const onSubmitSearch = () => {
+    openOrdersSearchAnalytics();
     fetchOrdersFunc(0, inputValue, selectedTab, shipmentType, {
       pickupFromDate: '',
       pickupToDate: '',
@@ -734,11 +814,28 @@ const OrdersScreen = props => {
     });
   };
 
+  const openOrdersSearchAnalytics = async () => {
+    if (selectedType == 'Open_Orders') {
+      let date = new Date();
+      let supplierId = await AsyncStorage.getItem('userId');
+      let currTab = mutateTabName(selectedTab);
+      await analytics().logEvent('SearchOpenOrders', {
+        action: `click`,
+        label: `${inputValue}/Tabname_${currTab}`,
+        supplierID: `${supplierId}`,
+        datetimestamp: `${date.getTime()}`,
+      });
+    }
+  };
+
   //applied filters api hit
   const applyFilters = () => {
     setOrdersFiltersModal(false);
     checkFilters();
-
+    setOrderFiltersAnalytics();
+    if (selectedType == 'Open_Orders') {
+      setOrderFiltersAnlyticsOpenOrders();
+    }
     fetchOrdersFunc(0, inputValue, selectedTab, shipmentType, {
       pickupFromDate: pickupFromDate,
       pickupToDate: pickupToDate,
@@ -747,6 +844,37 @@ const OrdersScreen = props => {
       orderType: appliedFilter['orderType'] || [],
       deliveryType: appliedFilter['deliveryType'] || [],
       orderRefs: appliedFilter['orderRefs'] || [],
+    });
+  };
+
+  const setOrderFiltersAnlyticsOpenOrders = async () => {
+    await analytics().logEvent('ApplyOpenOrderFilter', {
+      action: `submit`,
+      label: `${selectedTab}`,
+    });
+  };
+
+  const setOrderFiltersAnalytics = async () => {
+    let filterSelected = [];
+    for (let filter in appliedFilter) {
+      if (filter && appliedFilter[filter]) {
+        if (filter == 'orderRefs') {
+          filterSelected.push(`poId`);
+        } else {
+          filterSelected.push(filter);
+        }
+      }
+    }
+    if (pickupFromDate && pickupToDate) {
+      filterSelected.push(`pickupDate`);
+    }
+    if (poFromDate && poToDate) {
+      filterSelected.push(`poDate`);
+    }
+    let filters = filterSelected.join(',');
+    await analytics().logEvent('OrdersFilter', {
+      action: `submit`,
+      label: `filter type selected- ${filters}`,
     });
   };
 
@@ -773,8 +901,20 @@ const OrdersScreen = props => {
     setOrdersFiltersModal(false);
   };
 
+  const ctaAnalyticsBulkAccept = async label => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent(`AcceptancePendingCTA`, {
+      action: `click`,
+      label: label,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
+  };
+
   const onBulkAccept = async () => {
     try {
+      ctaAnalyticsBulkAccept(`BulkAccept`);
       setBulkAcceptLoader(true);
       const {data} = await acceptBulk({
         supplierId: await AsyncStorage.getItem('userId'),
@@ -861,6 +1001,14 @@ const OrdersScreen = props => {
     props.navigation.navigate('Notification');
   };
 
+  const onPressFilters = async () => {
+    await analytics().logEvent(`OrdersFilter`, {
+      action: `click`,
+      label: getLabel(),
+    });
+    setOrdersFiltersModal(true);
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
       <View style={styles.topHeaderWrap}>
@@ -869,7 +1017,8 @@ const OrdersScreen = props => {
           // label={'Orders'}
           selectedValue={selectedType}
           onValueChange={text => {
-            setSelectedType(text);
+            setOrdersAnalytics(text);
+            // setSelectedType(text);
             changeTab(TABS[text][0]);
           }}
           items={getOptions()}
@@ -971,12 +1120,11 @@ const OrdersScreen = props => {
                     name={'search'}
                     style={styles.seacrhIcon}></CustomeIcon>
                 </View>
-
                 {!isKeyboardVisible ? (
                   <View style={styles.filterBtnWrap}>
                     <TouchableOpacity
                       style={styles.filterBtn}
-                      onPress={() => setOrdersFiltersModal(true)}>
+                      onPress={() => onPressFilters()}>
                       <Text style={styles.filtertxt}>Filters</Text>
                       {isFilterApplied ? (
                         <View style={styles.filterApplied}></View>
@@ -993,6 +1141,7 @@ const OrdersScreen = props => {
                 ) : null}
               </View>
             )}
+            {/* )} */}
             {ordersfiltersModal && (
               <OrdersFilterModal
                 shipmentType={shipmentType}

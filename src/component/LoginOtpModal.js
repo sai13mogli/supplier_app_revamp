@@ -102,7 +102,6 @@ const LoginOtpModal = props => {
           otp: otp,
         };
         const {data} = await updatePhone(payload);
-        let suc = true;
         if (data.success) {
           setLoading(false);
           setIsVisible(false);
@@ -124,7 +123,6 @@ const LoginOtpModal = props => {
           otp: otp,
         };
         const {data} = await updateEmail(payload);
-        let suc = true;
         if (data.success) {
           setLoading(false);
           setIsVisible(false);

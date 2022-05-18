@@ -36,6 +36,7 @@ import AcceptModal from './AcceptModal';
 import AddView from './AddView';
 import SplitQuantityModal from './SplitQuantityModal';
 import {useNavigation} from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -113,6 +114,8 @@ const Ordercard = props => {
       setShowMoreCTA(true);
     }
   }, []);
+
+  console.log('selectedTab', selectedTab, shipmentMode, shipmentModeString);
 
   const fetchImage = async () => {
     const {data} = await getImageUrl(msn);
@@ -675,6 +678,62 @@ const Ordercard = props => {
     }
   };
 
+  const ctaAnalytics = async label => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    let currTabName = mutateTabName(selectedTab);
+    console.log(currTabName);
+    if (
+      currTabName == 'ScheduledPickupCTA' ||
+      currTabName == 'PickupCTA' ||
+      currTabName == 'MarkedShippedCTA' ||
+      currTabName == 'FulfilledOrderCTA'
+    ) {
+      let shipType =
+        shipmentMode == 2
+          ? 'Dropship'
+          : shipmentMode == 3
+          ? 'Door Delivery'
+          : 'Oneship';
+      await analytics().logEvent(`${currTabName}`, {
+        action: `click`,
+        label: `${label}/ShipmentType_${shipType}/${shipmentModeString}`,
+        supplierID: `${supplierId}`,
+        datetimestamp: `${date.getTime()}`,
+      });
+    } else {
+      await analytics().logEvent(`${currTabName}`, {
+        action: `click`,
+        label: label,
+        supplierID: `${supplierId}`,
+        datetimestamp: `${date.getTime()}`,
+      });
+    }
+  };
+
+  const mutateTabName = tabName => {
+    switch (tabName) {
+      case 'PENDING_ACCEPTANCE':
+        return `AcceptancePendingCTA`;
+      case 'SCHEDULED_PICKUP':
+        return `ScheduledPickupCTA`;
+      case 'PICKUP':
+        return `PickupCTA`;
+      case 'UPLOAD_INVOICE':
+        return `UploadInvoiceCTA`;
+      case 'MARK_SHIPPED':
+        return `UploadInvoiceCTA`;
+      case 'RETURN_PENDING':
+        return `ReturnPendingCTA`;
+      case 'RETURN_DONE':
+        return `ReturnDoneCTA`;
+      case 'FULFILLED':
+        return `FulfilledOrderCTA`;
+      default:
+        return ``;
+    }
+  };
+
   const renderCTAs = (cta, url, fromCTA, fromPartial, podcopy) => {
     const ctaLength = actionCTA.filter(number => number % 2 !== 0);
     return (
@@ -683,6 +742,7 @@ const Ordercard = props => {
           <TouchableOpacity
             disabled={rejectLoader}
             onPress={() => {
+              ctaAnalytics(`RejectOrder`);
               setIsOrderVisible(false);
               setRejectModal(true);
             }}
@@ -696,6 +756,7 @@ const Ordercard = props => {
           <TouchableOpacity
             // disabled={acceptLoader}
             onPress={() => {
+              ctaAnalytics(`AcceptOrder`);
               setIsOrderVisible(false);
               setDisplayCalendar(true);
             }}
@@ -706,6 +767,7 @@ const Ordercard = props => {
           <TouchableOpacity
             // disabled={acceptLoader}
             onPress={() => {
+              ctaAnalytics(`ChoosePickupDate`);
               setIsOmsPickupDate(true);
               setDisplayCalendar(true);
             }}
@@ -728,7 +790,10 @@ const Ordercard = props => {
         ) : cta == 'DOWNLOAD_INVOICE' ? (
           <TouchableOpacity
             disabled={invoiceLoading}
-            onPress={() => getPOInvoice(false, url, true)}
+            onPress={() => {
+              ctaAnalytics(`Download Invoice`);
+              getPOInvoice(false, url, true);
+            }}
             style={[
               styles.DownloadPoBtn,
               {
@@ -755,7 +820,10 @@ const Ordercard = props => {
         ) : cta == 'DOWNLOAD_PO_EMS' ? (
           <TouchableOpacity
             disabled={poLoader}
-            onPress={() => getPOInvoice(true, '')}
+            onPress={() => {
+              ctaAnalytics(`DownloadPO`);
+              getPOInvoice(true, '');
+            }}
             style={[
               styles.DownloadPoBtn,
               {
@@ -779,7 +847,8 @@ const Ordercard = props => {
           <View style={{flexDirection: 'column', flex: 0, flexBasis: '50%'}}>
             <TouchableOpacity
               disabled={poLoader}
-              onPress={() =>
+              onPress={() => {
+                ctaAnalytics(`ReuploadInvoice`);
                 navigation.navigate('UploadInvoiceEMS', {
                   orderRef,
                   actionCTA,
@@ -790,8 +859,8 @@ const Ordercard = props => {
                   totalAmount,
                   taxPercentage,
                   selectedTab,
-                })
-              }
+                });
+              }}
               style={styles.DownloadPoBtn}>
               <Text style={styles.rejectCtaTxt}>REUPLOAD INVOICE</Text>
               {poLoader && (
@@ -824,13 +893,14 @@ const Ordercard = props => {
         ) : cta == 'MAP_PO_TO_INVOICE' ? (
           <TouchableOpacity
             disabled={poLoader}
-            onPress={() =>
+            onPress={() => {
+              ctaAnalytics(`UploadInvoice`);
               navigation.navigate('UploadInvoiceOMS', {
                 orderRef,
                 actionCTA,
                 itemRef,
-              })
-            }
+              });
+            }}
             style={[
               styles.DownloadPoBtn,
               {
@@ -850,7 +920,10 @@ const Ordercard = props => {
         ) : cta == 'DOWNLOAD_PO_OMS' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            onPress={() => getPOInvoice(false, url)}
+            onPress={() => {
+              ctaAnalytics(`Download PO`);
+              getPOInvoice(false, url);
+            }}
             style={[
               styles.DownloadPoBtn,
               {
@@ -904,7 +977,10 @@ const Ordercard = props => {
         ) : cta == 'DOWNLOAD_DEBIT_NOTE' ? (
           <TouchableOpacity
             disabled={debitLoader}
-            onPress={() => getDebitNoteUrl()}
+            onPress={() => {
+              ctaAnalytics(`Download Debit Note`);
+              getDebitNoteUrl();
+            }}
             style={[
               styles.DownloadPoBtn,
               {
@@ -932,7 +1008,8 @@ const Ordercard = props => {
         ) : cta == 'MAP_INVOICE' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            onPress={() =>
+            onPress={() => {
+              ctaAnalytics(`UploadInvoice`);
               navigation.navigate('UploadInvoiceEMS', {
                 orderRef,
                 actionCTA,
@@ -943,8 +1020,8 @@ const Ordercard = props => {
                 totalAmount,
                 taxPercentage,
                 selectedTab,
-              })
-            }
+              });
+            }}
             style={[
               styles.DownloadPoBtn,
               {
@@ -966,7 +1043,10 @@ const Ordercard = props => {
           </TouchableOpacity>
         ) : cta == 'RAISE_TICKET' ? (
           <TouchableOpacity
-            onPress={() => navigation.navigate('NewTicket')}
+            onPress={() => {
+              ctaAnalytics('Raise Ticket');
+              navigation.navigate('NewTicket');
+            }}
             style={[
               styles.DownloadPoBtn,
               {
@@ -983,7 +1063,10 @@ const Ordercard = props => {
         ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            onPress={() => setMarkForDelivery(true)}
+            onPress={() => {
+              ctaAnalytics('/MarkOutForDelivery');
+              setMarkForDelivery(true);
+            }}
             style={[
               styles.DownloadPoBtn,
               {
@@ -1003,7 +1086,10 @@ const Ordercard = props => {
         ) : cta == 'VIEW_TREE_MODAL' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            onPress={() => setViewSplitHistory(true)}
+            onPress={() => {
+              ctaAnalytics('ViewSplitHistory');
+              setViewSplitHistory(true);
+            }}
             style={[
               styles.DownloadPoBtn,
               {
@@ -1101,13 +1187,19 @@ const Ordercard = props => {
                 // flexBasis: ctaLength.length ? '45%' : '100%',
               },
             ]}
-            onPress={() => setSplitQuantityModal(true)}>
+            onPress={() => {
+              ctaAnalytics(`SplitQuantity`);
+              setSplitQuantityModal(true);
+            }}>
             <Text style={styles.rejectCtaTxt}>SPLIT QUANTITY</Text>
           </TouchableOpacity>
         ) : cta == 'MARK_OUT_FOR_DOOR_DELIVERY_WITH_POD' ? (
           <TouchableOpacity
             disabled={invoiceLoader}
-            onPress={() => setProofOfDelivery(true)}
+            onPress={() => {
+              ctaAnalytics(`UploadPOD`);
+              setProofOfDelivery(true);
+            }}
             style={[
               styles.DownloadPoBtn,
               {
@@ -1281,7 +1373,10 @@ const Ordercard = props => {
           </TouchableOpacity>
         ) : cta == 'DOWNLOAD_MANIFEST' ? (
           <TouchableOpacity
-            onPress={() => getManifestRecords(manifestId)}
+            onPress={() => {
+              ctaAnalytics(`DownloadChallan`);
+              DownloadChallan;
+            }}
             style={[
               styles.DownloadPoBtn,
               {
@@ -1311,13 +1406,32 @@ const Ordercard = props => {
         //     ]}
         //     disabled={pickupchallanLoader}>
         //     <Text style={styles.rejectCtaTxt}>MARKED SHIPPED</Text>
-        //   </TouchableOpacity>
         //     {/* {pickupchallanLoader && (
         //       <ActivityIndicator
         //         color={Colors.FontColor}
         //         style={{alignSelf: 'center'}}
         //       />
-        //     )} */}
+        //     )}
+        //   </TouchableOpacity>
+        // ) : // : cta == 'VIEW_SHIPPED_DETAILS' ? (
+        // //   <TouchableOpacity
+        // //     // onPress={() => getManifestRecords(manifestId)}
+        // //     style={[
+        // //       styles.DownloadPoBtn,
+        // //       {
+        // //         flex: ctaLength.length ? 5 : 1,
+        // //         flexBasis: ctaLength.length ? '45%' : '100%',
+        // //       },
+        // //     ]}
+        // //     disabled={pickupchallanLoader}>
+        // //     <Text style={styles.rejectCtaTxt}>MARKED SHIPPED</Text>
+        // //   </TouchableOpacity>
+        // //     {/* {pickupchallanLoader && (
+        // //       <ActivityIndicator
+        // //         color={Colors.FontColor}
+        // //         style={{alignSelf: 'center'}}
+        // //       />
+        // //     )} */}
         // )
         null}
       </>
@@ -1345,7 +1459,15 @@ const Ordercard = props => {
     setShowMoreCTA(!showMoreCTA);
   };
 
-  const toggleOrder = () => {
+  const toggleOrder = async () => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent(`OrderCard`, {
+      action: `click`,
+      label: selectedTab,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
+    });
     setIsOrderVisible(!isOrderVisible);
   };
 

@@ -16,7 +16,7 @@ import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 const deviceWidth = Dimensions.get('window').width;
 import CustomeIcon from './common/CustomeIcon';
-import moment from 'moment';
+import analytics from '@react-native-firebase/analytics';
 
 const AcceptModal = props => {
   const {
@@ -53,6 +53,17 @@ const AcceptModal = props => {
       month: month,
       timestamp: timestamp,
       year: year,
+    });
+  };
+
+  const setAcceptAnalytics = async () => {
+    let date = new Date();
+    let supplierId = await AsyncStorage.getItem('userId');
+    await analytics().logEvent(`AcceptancePendingPopup`, {
+      action: `click`,
+      label: `AcceptOrder`,
+      supplierID: `${supplierId}`,
+      datetimestamp: `${date.getTime()}`,
     });
   };
 
@@ -124,6 +135,7 @@ const AcceptModal = props => {
             visibilityTime: 2000,
             autoHide: true,
           });
+          setAcceptAnalytics();
         } else {
           setAcceptLoader(false);
           setDisplayCalendar(false);
