@@ -108,7 +108,9 @@ const MultiSelect = props => {
               let brandObj = {
                 ...customeListNow[item],
                 supplierId: await AsyncStorage.getItem('userId'),
-                businessNature: businessNature,
+                tentativebusinessNature: businessNature,
+                // businessNature: businessNature,
+                businessNature: ``,
                 isDocumentRequired: customeListNow[item].isDocumentRequired,
                 confirmed: props.fromAllBrands && props.notSure ? true : false,
                 isDeleted: '4',
@@ -131,7 +133,9 @@ const MultiSelect = props => {
               let brandObj = {
                 ...customeListNow[item],
                 supplierId: await AsyncStorage.getItem('userId'),
-                businessNature: businessNature,
+                tentativebusinessNature: businessNature,
+                // businessNature: businessNature,
+                businessNature: ``,
                 isDocumentRequired: customeListNow[item].isDocumentRequired,
                 isDeleted: '4',
                 localbrand: true,

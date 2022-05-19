@@ -22,7 +22,7 @@ import Checkbox from '../../../../../component/common/Checkbox/index';
 import CustomeIcon from '../../../../../component/common/CustomeIcon';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dimension from '../../../../../Theme/Dimension';
-import { colors } from 'react-native-elements';
+import {colors} from 'react-native-elements';
 
 const PopularBrandsScreen = props => {
   const brands = useSelector(
@@ -103,7 +103,8 @@ const PopularBrandsScreen = props => {
     let currbrand = {
       ...item,
       supplierId: await AsyncStorage.getItem('userId'),
-      businessNature: businessNature,
+      businessNature: ``,
+      tentativebusinessNature: businessNature,
       isDocumentRequired: item.isDocumentRequired,
       confirmed: true,
       isDeleted: '4',
