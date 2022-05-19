@@ -16,8 +16,6 @@ const UploadInvoiceScreen = props => {
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPrice, setTotalPrice] = useState([]);
-  const [headerSum, setHeaderSum] = useState(0);
-  const [totalSum, setTotalSum] = useState(0);
   const [hsn, sethsn] = useState(props?.route?.params?.hsn);
   const [taxPercentage, setTaxPercentage] = useState(
     props?.route?.params?.taxPercentage,
@@ -121,7 +119,7 @@ const UploadInvoiceScreen = props => {
         productUom={item.productUom}
         quantity={item.quantity}
         selectedValue={value => setTaxPercentage(value)}
-        UpdatedQuntity={value => setQuantity(value)}
+        UpdatedQuntity={(value, id) => calculateHeaderSum(value, id)}
         UpdatedTotalPrice={(value, id) => calculateHeaderSum(value, id)}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
