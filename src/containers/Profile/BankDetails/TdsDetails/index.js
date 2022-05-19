@@ -13,7 +13,7 @@ import TDSEditModal from '../../../../component/common/TDSEditModal';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fetchUpdateBankDetails} from '../../../../redux/actions/profile';
 import analytics from '@react-native-firebase/analytics';
-
+import {STATE_STATUS} from '../../../../redux/constants';
 const TdsDetails = props => {
   const profileData = useSelector(state => state.profileReducer.data || {});
   const bankDetails = useSelector(
@@ -110,7 +110,9 @@ const TdsDetails = props => {
   //   }
   //   return fiscalyear;
   // };
-
+  const tdsInfoDetailsStatus = useSelector(
+    state => state.profileReducer.tdsInfoDetails.status,
+  );
   const tdsInfoDetails = useSelector(
     state =>
       state.profileReducer.tdsInfoDetails.data || [
@@ -321,7 +323,9 @@ const TdsDetails = props => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 80, position: 'relative'}}
           sections={
-            tdsInfoDetails && tdsInfoDetails.length
+            tdsInfoDetailsStatus === STATE_STATUS.FETCHING
+              ? []
+              : tdsInfoDetails && tdsInfoDetails.length
               ? tdsInfoDetails
               : [
                   {
