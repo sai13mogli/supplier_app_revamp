@@ -111,36 +111,33 @@ const TdsDetails = props => {
   //   return fiscalyear;
   // };
 
-  const tdsInfoDetails =
-    //  useSelector(
-    // state =>
-    //   state.profileReducer.tdsInfoDetails.data ||
-    [
-      {
-        financialYearTurnover: null,
-        financialyear: getCurrentFY(true),
-        id: '',
-        lastToLastYearItr: null,
-        lastToLastYearTdsTcs: null,
-        lastYearItr: null,
-        lastYearTdsTcs: null,
-        panNumber: '',
-        previousFinancialYear: getCurrentFY(false, true),
-      },
-      {
-        financialYearTurnover: null,
-        financialyear: getCurrentFY(false, true),
-        id: '',
-        lastToLastYearItr: null,
-        lastToLastYearTdsTcs: null,
-        lastYearItr: null,
-        lastYearTdsTcs: null,
-        panNumber: '',
-        previousFinancialYear: getCurrentFY(),
-      },
-    ];
-  //     ,
-  // );
+  const tdsInfoDetails = useSelector(
+    state =>
+      state.profileReducer.tdsInfoDetails.data || [
+        {
+          financialYearTurnover: null,
+          financialyear: getCurrentFY(true),
+          id: '',
+          lastToLastYearItr: null,
+          lastToLastYearTdsTcs: null,
+          lastYearItr: null,
+          lastYearTdsTcs: null,
+          panNumber: '',
+          previousFinancialYear: getCurrentFY(false, true),
+        },
+        {
+          financialYearTurnover: null,
+          financialyear: getCurrentFY(false, true),
+          id: '',
+          lastToLastYearItr: null,
+          lastToLastYearTdsTcs: null,
+          lastYearItr: null,
+          lastYearTdsTcs: null,
+          panNumber: '',
+          previousFinancialYear: getCurrentFY(),
+        },
+      ],
+  );
   const [tdsInfoList, setTdsInfoList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [section, setSectionList] = useState([]);
