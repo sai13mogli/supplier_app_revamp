@@ -104,6 +104,11 @@ const BulkActionsModal = props => {
   };
 
   const downloadFile = async downloadType => {
+    if (downloadType == 'Invoice') {
+      setInvoiceLoader(true);
+    } else {
+      setShipmentLoader(true);
+    }
     const {config, fs} = RNFetchBlob;
     let currbulkItems = [...bulkDownloadItems];
     currbulkItems = (currbulkItems || []).map(_ => ({
@@ -145,13 +150,19 @@ const BulkActionsModal = props => {
             });
         }),
       );
+      if (downloadType == 'Invoice') {
+        setInvoiceLoader(false);
+      } else {
+        setShipmentLoader(false);
+      }
+
       Toast.show({
         type: 'success',
         text2: 'Files downloaded successfully!',
         visibilityTime: 2000,
         autoHide: true,
       });
-      setBulkActionsModal(false);
+      // setBulkActionsModal(false);
     }
     // RNFetchBlob.fetch(
     //   'POST',
@@ -261,7 +272,7 @@ const BulkActionsModal = props => {
     <View>
       <View style={styles.modalContainer}>
         <View style={styles.topbdr}></View>
-        
+
         <View style={styles.headerTxtWrap}>
           <Text style={styles.headerTxt}>Bulk Actions</Text>
           <CustomeIcon
@@ -274,53 +285,62 @@ const BulkActionsModal = props => {
           />
         </View>
         <View style={styles.midWrapper}>
-          <TouchableOpacity onPress={() => downloadFile('Invoice')} style={styles.ActionWrap}>
+          <TouchableOpacity
+            onPress={() => downloadFile('Invoice')}
+            style={styles.ActionWrap}>
             <View style={styles.iconWrapper}>
-              <CustomeIcon
-                name={'download'}
-                color={Colors.blackColor}
-                size={Dimension.font20}></CustomeIcon>
+              {invoiceLoader ? (
+                <ActivityIndicator
+                  color={Colors.BrandColor}
+                  style={{alignSelf: 'center'}}
+                />
+              ) : (
+                <CustomeIcon
+                  name={'download'}
+                  color={Colors.blackColor}
+                  size={Dimension.font20}></CustomeIcon>
+              )}
             </View>
 
             <Text style={styles.btnTxt}>Invoice</Text>
-            {bulkActionsLoader && (
-              <ActivityIndicator
-                color={Colors.BrandColor}
-                style={{alignSelf: 'center'}}
-              />
-            )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => downloadFile('shipment')} style={styles.ActionWrap}>
+          <TouchableOpacity
+            onPress={() => downloadFile('shipment')}
+            style={styles.ActionWrap}>
             <View style={styles.iconWrapper}>
-              <CustomeIcon
-                name={'download'}
-                color={Colors.blackColor}
-                size={Dimension.font20}></CustomeIcon>
+              {shipmentLoader ? (
+                <ActivityIndicator
+                  color={Colors.BrandColor}
+                  style={{alignSelf: 'center'}}
+                />
+              ) : (
+                <CustomeIcon
+                  name={'download'}
+                  color={Colors.blackColor}
+                  size={Dimension.font20}></CustomeIcon>
+              )}
             </View>
 
             <Text style={styles.btnTxt}>Shipment Label</Text>
-            {bulkActionsLoader && (
-              <ActivityIndicator
-                color={Colors.BrandColor}
-                style={{alignSelf: 'center'}}
-              />
-            )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={bulkCreateManifest} style={styles.ActionWrap}>
+          <TouchableOpacity
+            onPress={bulkCreateManifest}
+            style={styles.ActionWrap}>
             <View style={styles.iconWrapper}>
-              <CustomeIcon
-                name={'pencil-line'}
-                color={Colors.blackColor}
-                size={Dimension.font20}></CustomeIcon>
+              {bulkActionsLoader ? (
+                <ActivityIndicator
+                  color={Colors.BrandColor}
+                  style={{alignSelf: 'center'}}
+                />
+              ) : (
+                <CustomeIcon
+                  name={'pencil-line'}
+                  color={Colors.blackColor}
+                  size={Dimension.font20}></CustomeIcon>
+              )}
             </View>
 
             <Text style={styles.btnTxt}>Create Manifest</Text>
-            {bulkActionsLoader && (
-              <ActivityIndicator
-                color={Colors.BrandColor}
-                style={{alignSelf: 'center'}}
-              />
-            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -353,18 +373,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     paddingTop: Dimension.padding10,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    
+
     elevation: 5,
   },
-  ActionWrap:{
-    flex:1
+  ActionWrap: {
+    flex: 1,
   },
   iconWrapper: {
     backgroundColor: Colors.grayShade1,
@@ -379,8 +399,8 @@ const styles = StyleSheet.create({
   headerTxtWrap: {
     paddingHorizontal: Dimension.padding15,
     marginVertical: Dimension.margin10,
-    flexDirection:"row",
-    justifyContent:"space-between"
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 
   headerTxt: {
@@ -398,10 +418,10 @@ const styles = StyleSheet.create({
   },
   midWrapper: {
     marginVertical: Dimension.margin10,
-    flexDirection:"row",
-    
-    marginHorizontal:Dimension.margin12,
-    justifyContent:"center"
+    flexDirection: 'row',
+
+    marginHorizontal: Dimension.margin12,
+    justifyContent: 'center',
   },
   btnTxt: {
     fontSize: Dimension.font12,
