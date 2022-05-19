@@ -261,7 +261,9 @@ const BulkActionsModal = props => {
     <View>
       <View style={styles.modalContainer}>
         <View style={styles.topbdr}></View>
-        <View style={styles.closeIconWrap}>
+        
+        <View style={styles.headerTxtWrap}>
+          <Text style={styles.headerTxt}>Bulk Actions</Text>
           <CustomeIcon
             name={'close'}
             size={Dimension.font22}
@@ -271,11 +273,8 @@ const BulkActionsModal = props => {
             }}
           />
         </View>
-        <View style={styles.headerTxtWrap}>
-          <Text style={styles.headerTxt}>Bulk Actions</Text>
-        </View>
         <View style={styles.midWrapper}>
-          <TouchableOpacity onPress={() => downloadFile('Invoice')}>
+          <TouchableOpacity onPress={() => downloadFile('Invoice')} style={styles.ActionWrap}>
             <View style={styles.iconWrapper}>
               <CustomeIcon
                 name={'download'}
@@ -291,7 +290,7 @@ const BulkActionsModal = props => {
               />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => downloadFile('shipment')}>
+          <TouchableOpacity onPress={() => downloadFile('shipment')} style={styles.ActionWrap}>
             <View style={styles.iconWrapper}>
               <CustomeIcon
                 name={'download'}
@@ -307,7 +306,7 @@ const BulkActionsModal = props => {
               />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={bulkCreateManifest}>
+          <TouchableOpacity onPress={bulkCreateManifest} style={styles.ActionWrap}>
             <View style={styles.iconWrapper}>
               <CustomeIcon
                 name={'pencil-line'}
@@ -354,6 +353,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     paddingTop: Dimension.padding10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    
+    elevation: 5,
+  },
+  ActionWrap:{
+    flex:1
   },
   iconWrapper: {
     backgroundColor: Colors.grayShade1,
@@ -367,7 +378,9 @@ const styles = StyleSheet.create({
   },
   headerTxtWrap: {
     paddingHorizontal: Dimension.padding15,
-    marginBottom: Dimension.margin20,
+    marginVertical: Dimension.margin10,
+    flexDirection:"row",
+    justifyContent:"space-between"
   },
 
   headerTxt: {
@@ -384,7 +397,11 @@ const styles = StyleSheet.create({
     width: Dimension.width70,
   },
   midWrapper: {
-    marginVertical: Dimension.margin30,
+    marginVertical: Dimension.margin10,
+    flexDirection:"row",
+    
+    marginHorizontal:Dimension.margin12,
+    justifyContent:"center"
   },
   btnTxt: {
     fontSize: Dimension.font12,
