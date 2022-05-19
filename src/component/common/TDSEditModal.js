@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,14 +8,14 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import CustomeIcon from '../../component/common/CustomeIcon';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 import DotCheckbox from './Checkbox';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import CustomButton from '../common/Button';
-import { EditTdsData } from '../../redux/constants/support';
+import {EditTdsData} from '../../redux/constants/support';
 
 const TDSEditModal = props => {
   const [lastYearItr, setLastYearItr] = useState(undefined);
@@ -49,7 +49,21 @@ const TDSEditModal = props => {
     setFinancialYearTurnover(props.financialYearTurnover);
   }, []);
 
-  const { onPress, transparent } = props;
+  const {onPress, transparent} = props;
+
+  const getYearsForYears = (year, isLast) => {
+    if (isLast) {
+      return year
+        .split('-')
+        .map(_ => String(Number(_) - 1))
+        .join('-');
+    } else {
+      return year
+        .split('-')
+        .map(_ => String(Number(_) - 2))
+        .join('-');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -78,9 +92,9 @@ const TDSEditModal = props => {
               <View style={styles.sectionView}>
                 <View style={styles.verticalWrapper}>
                   <Text style={styles.radioText}>
-                    TDS filed for AY {props.header}
+                    ITR filed for AY {getYearsForYears(props.header, true)}
                   </Text>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{flexDirection: 'row'}}>
                     <DotCheckbox
                       data={EditTdsData && EditTdsData.type}
                       onCheck={getlastItr}
@@ -90,9 +104,9 @@ const TDSEditModal = props => {
                 </View>
                 <View style={styles.verticalWrapper}>
                   <Text style={styles.radioText}>
-                    ITR filed for AV {props.header}
+                    ITR filed for AY {getYearsForYears(props.header)}
                   </Text>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{flexDirection: 'row'}}>
                     <DotCheckbox
                       data={EditTdsData && EditTdsData.type}
                       onCheck={getlastToLastYearItr}
@@ -103,9 +117,9 @@ const TDSEditModal = props => {
                 <View style={styles.verticalWrapper}>
                   <Text style={styles.radioText}>
                     Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
-                    {props.header}
+                    {getYearsForYears(props.header, true)}
                   </Text>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{flexDirection: 'row'}}>
                     <DotCheckbox
                       data={EditTdsData && EditTdsData.type}
                       onCheck={getlastYearTds}
@@ -116,9 +130,9 @@ const TDSEditModal = props => {
                 <View style={styles.verticalWrapper}>
                   <Text numberOfLines={2} style={styles.radioText}>
                     Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
-                    {props.header}
+                    {getYearsForYears(props.header)}
                   </Text>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{flexDirection: 'row'}}>
                     <DotCheckbox
                       data={EditTdsData && EditTdsData.type}
                       onCheck={getlastToLastYearTdsTcs}
@@ -126,12 +140,13 @@ const TDSEditModal = props => {
                     />
                   </View>
                 </View>
-                <View style={[styles.verticalWrapper, { borderBottomWidth: 0 }]}>
+                <View style={[styles.verticalWrapper, {borderBottomWidth: 0}]}>
                   <Text style={styles.radioText}>
-                    Turnover in financial year {props.header} was exceeding 10
+                    Turnover in financial year{' '}
+                    {getYearsForYears(props.header, true)} was exceeding 10
                     crores
                   </Text>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{flexDirection: 'row'}}>
                     <DotCheckbox
                       data={EditTdsData && EditTdsData.type}
                       onCheck={getFinancialYearTurnover}

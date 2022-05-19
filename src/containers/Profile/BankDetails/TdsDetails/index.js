@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import colors from '../../../../Theme/Colors';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Accordion from 'react-native-collapsible/Accordion';
 import Dimension from '../../../../Theme/Dimension';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
-import { fetchUpdateTDSDetails } from '../../../../redux/actions/profile';
+import {fetchUpdateTDSDetails} from '../../../../redux/actions/profile';
 import styles from './styles';
 import CustomButton from '../../../../component/common/Button';
 import TDSEditModal from '../../../../component/common/TDSEditModal';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { fetchUpdateBankDetails } from '../../../../redux/actions/profile';
+import {fetchUpdateBankDetails} from '../../../../redux/actions/profile';
 import analytics from '@react-native-firebase/analytics';
 
 const TdsDetails = props => {
@@ -20,75 +20,128 @@ const TdsDetails = props => {
     state => state.profileReducer.bankDetails.data || {},
   );
 
-  const getCurrentFinancialYear = isLastYear => {
-    let fiscalyear = '';
-    let today = new Date();
-    if (today.getMonth() + 1 <= 3) {
-      fiscalyear = isLastYear
-        ? today.getFullYear() - 2 + '-' + (today.getFullYear() - 1)
-        : today.getFullYear() - 1 + '-' + today.getFullYear();
+  const getYearsForYears = (year, isLast) => {
+    if (isLast) {
+      return year
+        .split('-')
+        .map(_ => String(Number(_) - 1))
+        .join('-');
     } else {
-      fiscalyear = isLastYear
-        ? today.getFullYear() - 1 + '-' + today.getFullYear()
-        : today.getFullYear() + '-' + (today.getFullYear() + 1);
+      return year
+        .split('-')
+        .map(_ => String(Number(_) - 2))
+        .join('-');
     }
-    return fiscalyear;
   };
 
-  const lastFinancialYear = isLastYear => {
-    let fiscalyear = '';
+  const getCurrentFY = (isCurrent, isLast) => {
     let today = new Date();
-    if (today.getMonth() + 1 <= 3) {
-      fiscalyear = isLastYear
-        ? today.getFullYear() - 3 + '-' + (today.getFullYear() - 2)
-        : today.getFullYear() - 2 + '-' + (today.getFullYear() - 1);
+    if (isCurrent) {
+      if (today.getMonth() + 1 <= 3) {
+        return (
+          today.getFullYear() -
+          1 +
+          '-' +
+          String(today.getFullYear() - 2).slice(2)
+        );
+      } else {
+        return (
+          today.getFullYear() + '-' + String(today.getFullYear() + 1).slice(2)
+        );
+      }
+    } else if (isLast) {
+      if (today.getMonth() + 1 <= 3) {
+        return (
+          today.getFullYear() -
+          2 +
+          '-' +
+          String(today.getFullYear() - 2).slice(2)
+        );
+      } else {
+        return (
+          today.getFullYear() - 1 + '-' + String(today.getFullYear()).slice(2)
+        );
+      }
     } else {
-      fiscalyear = isLastYear
-        ? today.getFullYear() - 2 + '-' + (today.getFullYear() - 1)
-        : (today.getFullYear() - 1) + '-' + (today.getFullYear());
+      if (today.getMonth() + 1 <= 3) {
+        return (
+          today.getFullYear() -
+          3 +
+          '-' +
+          String(today.getFullYear() - 4).slice(2)
+        );
+      } else {
+        return (
+          today.getFullYear() -
+          2 +
+          '-' +
+          String(today.getFullYear() - 1).slice(2)
+        );
+      }
     }
-    return fiscalyear;
   };
 
-  const tdsInfoDetails =
-    useSelector(
-      state =>
-        state.profileReducer.tdsInfoDetails.data ||
-        [
-          {
-            financialYearTurnover: null,
-            financialyear: getCurrentFinancialYear(),
-            id: '',
-            lastToLastYearItr: null,
-            lastToLastYearTdsTcs: null,
-            lastYearItr: null,
-            lastYearTdsTcs: null,
-            panNumber: '',
-            previousFinancialYear: getCurrentFinancialYear(true),
-          },
-          {
-            financialYearTurnover: null,
-            financialyear: lastFinancialYear(),
-            id: '',
-            lastToLastYearItr: null,
-            lastToLastYearTdsTcs: null,
-            lastYearItr: null,
-            lastYearTdsTcs: null,
-            panNumber: '',
-            previousFinancialYear: lastFinancialYear(true),
-          },
-        ]
-    );
+  // const getCurrentFinancialYear = isLastYear => {
+  //   let fiscalyear = '';
+  //   let today = new Date();
+  //   if (today.getMonth() + 1 <= 3) {
+  //     fiscalyear = isLastYear
+  //       ? today.getFullYear() - 2 + '-' + (today.getFullYear() - 1)
+  //       : today.getFullYear() - 1 + '-' + today.getFullYear();
+  //   } else {
+  //     fiscalyear = isLastYear
+  //       ? today.getFullYear() - 1 + '-' + today.getFullYear()
+  //       : today.getFullYear() + '-' + (today.getFullYear() + 1);
+  //   }
+  //   return fiscalyear;
+  // };
 
+  // const lastFinancialYear = isLastYear => {
+  //   let fiscalyear = '';
+  //   let today = new Date();
+  //   if (today.getMonth() + 1 <= 3) {
+  //     fiscalyear = isLastYear
+  //       ? today.getFullYear() - 3 + '-' + (today.getFullYear() - 2)
+  //       : today.getFullYear() - 2 + '-' + (today.getFullYear() - 1);
+  //   } else {
+  //     fiscalyear = isLastYear
+  //       ? today.getFullYear() - 2 + '-' + (today.getFullYear() - 1)
+  //       : today.getFullYear() - 1 + '-' + today.getFullYear();
+  //   }
+  //   return fiscalyear;
+  // };
 
-
-
-
-
+  const tdsInfoDetails = useSelector(
+    state =>
+      state.profileReducer.tdsInfoDetails.data || [
+        {
+          financialYearTurnover: null,
+          financialyear: getCurrentFY(true),
+          id: '',
+          lastToLastYearItr: null,
+          lastToLastYearTdsTcs: null,
+          lastYearItr: null,
+          lastYearTdsTcs: null,
+          panNumber: '',
+          previousFinancialYear: getCurrentFY(false, true),
+        },
+        {
+          financialYearTurnover: null,
+          financialyear: getCurrentFY(false, true),
+          id: '',
+          lastToLastYearItr: null,
+          lastToLastYearTdsTcs: null,
+          lastYearItr: null,
+          lastYearTdsTcs: null,
+          panNumber: '',
+          previousFinancialYear: getCurrentFY(),
+        },
+      ],
+  );
   const [tdsInfoList, setTdsInfoList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [section, setSectionList] = useState([]);
-  const { navigate } = useNavigation();
+  const {navigate} = useNavigation();
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -145,75 +198,76 @@ const TdsDetails = props => {
         <View style={styles.sectionView}>
           <View style={styles.wrap}>
             <Text style={styles.HeadinngInnerTxt}>
-              ITR filed for AY {lastFinancialYear()}
+              ITR filed for AY {getYearsForYears(section.financialyear, true)}
             </Text>
             <Text style={styles.yesNotxt}>
               {section.lastYearItr == 1
                 ? 'Yes'
                 : section.lastYearItr == 0
-                  ? 'No'
-                  : section.lastYearItr == 2
-                    ? '-'
-                    : null}
+                ? 'No'
+                : section.lastYearItr == 2
+                ? '-'
+                : null}
             </Text>
           </View>
           <View style={styles.wrap}>
             <Text style={styles.HeadinngInnerTxt}>
-              ITR filed for AY {lastFinancialYear(true)}
+              ITR filed for AY {getYearsForYears(section.financialyear)}
             </Text>
             <Text style={styles.yesNotxt}>
               {section.lastToLastYearItr == 1
                 ? 'Yes'
                 : section.lastToLastYearItr == 0
-                  ? 'No'
-                  : section.lastToLastYearItr == 2
-                    ? '-'
-                    : null}
+                ? 'No'
+                : section.lastToLastYearItr == 2
+                ? '-'
+                : null}
             </Text>
           </View>
           <View style={styles.wrap}>
             <Text style={styles.HeadinngInnerTxt}>
               Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
-              {lastFinancialYear()}
+              {getYearsForYears(section.financialyear, true)}
             </Text>
             <Text style={styles.yesNotxt}>
               {section.lastYearTdsTcs == 1
                 ? 'Yes'
                 : section.lastYearTdsTcs == 0
-                  ? 'No'
-                  : section.lastYearTdsTcs == 2
-                    ? '-'
-                    : null}
+                ? 'No'
+                : section.lastYearTdsTcs == 2
+                ? '-'
+                : null}
             </Text>
           </View>
           <View style={styles.wrap}>
             <Text style={styles.HeadinngInnerTxt}>
               Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
-              {lastFinancialYear(true)}
+              {getYearsForYears(section.financialyear)}
             </Text>
             <Text style={styles.yesNotxt}>
               {section.lastToLastYearTdsTcs == 1
                 ? 'Yes'
                 : section.lastToLastYearTdsTcs == 0
-                  ? 'No'
-                  : section.lastToLastYearTdsTcs == 2
-                    ? '-'
-                    : null}
+                ? 'No'
+                : section.lastToLastYearTdsTcs == 2
+                ? '-'
+                : null}
             </Text>
           </View>
-          <View style={[styles.wrap, { borderBottomWidth: 0 }]}>
+          <View style={[styles.wrap, {borderBottomWidth: 0}]}>
             <Text style={styles.HeadinngInnerTxt}>
-              Turnover in financial year {lastFinancialYear()} was exceeding
-              10 crores
+              Turnover in financial year{' '}
+              {getYearsForYears(section.financialyear, true)} was exceeding 10
+              crores
             </Text>
             <Text style={styles.yesNotxt}>
               {section.financialYearTurnover == 1
                 ? 'Yes'
                 : section.financialYearTurnover == 0
-                  ? 'No'
-                  : section.financialYearTurnover == 2
-                    ? '-'
-                    : null}
+                ? 'No'
+                : section.financialYearTurnover == 2
+                ? '-'
+                : null}
             </Text>
           </View>
         </View>
@@ -261,38 +315,38 @@ const TdsDetails = props => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <ScrollView bounces indicatorStyle="white" style={styles.ContainerCss}>
         <Accordion
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 80, position: 'relative' }}
+          contentContainerStyle={{paddingBottom: 80, position: 'relative'}}
           sections={
             tdsInfoDetails && tdsInfoDetails.length
               ? tdsInfoDetails
               : [
-                {
-                  financialYearTurnover: null,
-                  financialyear: getCurrentFinancialYear(),
-                  id: '',
-                  lastToLastYearItr: null,
-                  lastToLastYearTdsTcs: null,
-                  lastYearItr: null,
-                  lastYearTdsTcs: null,
-                  panNumber: '',
-                  previousFinancialYear: getCurrentFinancialYear(),
-                },
-                {
-                  financialYearTurnover: null,
-                  financialyear: getCurrentFinancialYear(),
-                  id: '',
-                  lastToLastYearItr: null,
-                  lastToLastYearTdsTcs: null,
-                  lastYearItr: null,
-                  lastYearTdsTcs: null,
-                  panNumber: '',
-                  previousFinancialYear: getCurrentFinancialYear(),
-                },
-              ]
+                  {
+                    financialYearTurnover: null,
+                    financialyear: getCurrentFY(true),
+                    id: '',
+                    lastToLastYearItr: null,
+                    lastToLastYearTdsTcs: null,
+                    lastYearItr: null,
+                    lastYearTdsTcs: null,
+                    panNumber: '',
+                    previousFinancialYear: getCurrentFY(false, true),
+                  },
+                  {
+                    financialYearTurnover: null,
+                    financialyear: getCurrentFY(false, true),
+                    id: '',
+                    lastToLastYearItr: null,
+                    lastToLastYearTdsTcs: null,
+                    lastYearItr: null,
+                    lastYearTdsTcs: null,
+                    panNumber: '',
+                    previousFinancialYear: getCurrentFY(),
+                  },
+                ]
           }
           activeSections={tdsInfoList}
           renderHeader={_renderHeader}
