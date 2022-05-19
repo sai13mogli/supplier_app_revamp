@@ -101,7 +101,7 @@ const PopularBrandsScreen = props => {
 
   const updatePopularBrand = async item => {
     let currbrand = {
-      ...item,
+      ...(item || {}),
       supplierId: await AsyncStorage.getItem('userId'),
       businessNature: ``,
       tentativebusinessNature: businessNature,

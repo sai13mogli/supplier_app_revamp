@@ -136,7 +136,7 @@ export const categorybrandReducer = (state = initialState, action) => {
       };
 
     case CATEGORY_BRAND_ACTIONS.ADD_BRAND:
-      let currbrand = {...payload.obj};
+      let currbrand = {...(payload.obj || {})};
       currbrand = {
         supplierId: payload.obj.supplierId,
         brandCode: payload.obj.code || payload.obj.brandCode,
@@ -158,7 +158,7 @@ export const categorybrandReducer = (state = initialState, action) => {
       };
       return {
         ...state,
-        userBrands: [...state.userBrands, currbrand],
+        userBrands: [...(state.userBrands || []), currbrand],
       };
 
     case CATEGORY_BRAND_ACTIONS.REMOVE_BRAND:
