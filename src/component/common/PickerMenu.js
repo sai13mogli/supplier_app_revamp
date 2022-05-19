@@ -12,6 +12,8 @@ const PickerMenu = props => {
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
 
+  console.log(placeholder, selectedValue);
+
   return (
     <>
       <View style={{flexDirection: 'row'}}>
@@ -22,7 +24,12 @@ const PickerMenu = props => {
         visible={visible}
         anchor={
           <TouchableOpacity onPress={showMenu} style={styles.dropDownBtn}>
-            <Text style={styles.qtVal}>{selectedValue || placeholder}</Text>
+            {selectedValue ? (
+              <Text style={styles.qtVal}>{selectedValue}</Text>
+            ) : (
+              <Text style={styles.placeholderCss}>{placeholder}</Text>
+            )}
+            {/* <Text style={styles.qtVal}>{selectedValue || placeholder}</Text> */}
             <CustomeIcon
               name="arrow-drop-down-line"
               size={24}
@@ -115,6 +122,11 @@ const styles = StyleSheet.create({
   },
   dropDowninnerWrap: {
     width: '100%',
+  },
+  placeholderCss: {
+    fontSize: Dimension.font14,
+    color: colors.placeholderColor,
+    fontFamily: Dimension.CustomMediumFont,
   },
 });
 
