@@ -1222,8 +1222,12 @@ const DocumentsScreen = props => {
       return (
         <>
           <Checkbox
-            checked={isSelected}
-            onPress={() => setSelection(!isSelected)}
+            checked={isSelected || profileData.verificationStatus >= 10}
+            onPress={() =>
+              profileData.verificationStatus >= 10
+                ? {}
+                : setSelection(!isSelected)
+            }
             title={'By registering you agree to our'}
           />
           <TouchableOpacity onPress={() => setShowTermsCondition(true)}>
