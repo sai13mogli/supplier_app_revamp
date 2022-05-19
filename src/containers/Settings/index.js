@@ -24,7 +24,7 @@ const SettingsScreen = props => {
     await AsyncStorage.removeItem('fcmToken');
     await AsyncStorage.removeItem('onlineFlag');
     await AsyncStorage.removeItem('enterpriseFlag');
-    await AsyncStorage.removeItem('notification');
+    await AsyncStorage.setItem('notification', 'true');
     await messaging().deleteToken();
 
     const isSignedIn = await GoogleSignin.isSignedIn();
@@ -55,7 +55,7 @@ const SettingsScreen = props => {
           setNotifStatus(false);
         }
       } else {
-        setNotifStatus(false);
+        setNotifStatus(true);
       }
     } catch (e) {}
   };
