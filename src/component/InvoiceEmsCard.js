@@ -67,7 +67,8 @@ const InvoiceCard = props => {
       onValueChange: (text, label) => calculateHsn(text, label, itemId),
       component: PickerMenu,
       fromUploadInvoive: true,
-      enabled: true,
+      enabled: false,
+      disabled: !(bulkItemIds || []).includes(itemId) ? true : false,
       selectedValue: taxPercentageLabel,
       value: taxPercentage,
       options: [
@@ -166,14 +167,14 @@ const InvoiceCard = props => {
                   Total Price -{' '}
                   <Text style={styles.TitleBoldTxt}>
                     {(bulkItemIds || []).includes(itemId)
-                      ? amount
-                      : totalAmount}
+                      ? (amount || 0).toFixed(2)
+                      : (totalAmount || 0).toFixed(2)}
                   </Text>
                 </Text>
                 <Text style={styles.TitleLightTxt}>
                   TP/Unit -{' '}
                   <Text style={styles.TitleBoldTxt}>
-                    ₹{Math.floor(transferPrice)}
+                    ₹{Math.floor(transferPrice).toFixed(2)}
                   </Text>
                 </Text>
               </View>

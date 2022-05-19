@@ -52,8 +52,8 @@ const UploadInvoiceScreen = props => {
     price = totalPrice.reduce(function (sum, tax) {
       return sum + tax.price;
     }, 0);
-    global.price = price;
-    return price;
+
+    return price.toFixed(2);
   };
 
   const selectItemId = (itemId, totalAmount) => {
@@ -103,14 +103,17 @@ const UploadInvoiceScreen = props => {
     }
   };
 
-  const calculateHeaderSum = (value) => {
-    let data = (totalPrice.map(item => item.price));
-    let updatedPrice = (value + totalPrice.map(item => item.price));
+  const calculateHeaderSum = (value, id) => {
+    let data = [...totalPrice].map((item) => ({
+      ...item,
+      price: item.id == id ? value : item.price
 
+    }))
+    setTotalPrice([...data])
   };
 
   const renderItem = ({ item }) => {
-    console.log("Okkk====>", totalAmount);
+
     return (
       <InvoiceEmsCard
         msn={item.productMsn}
@@ -119,7 +122,7 @@ const UploadInvoiceScreen = props => {
         quantity={item.quantity}
         selectedValue={value => setTaxPercentage(value)}
         UpdatedQuntity={value => setQuantity(value)}
-        UpdatedTotalPrice={(value) => calculateHeaderSum(value)}
+        UpdatedTotalPrice={(value, id) => calculateHeaderSum(value, id)}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
@@ -166,7 +169,7 @@ const UploadInvoiceScreen = props => {
             ]}>
             Total Price -{' '}
             <Text style={styles.TitleBoldTxt}>
-              ₹{totalAmount}
+              ₹{getTotalPrice()}
               {'   '} (Price Including Tax-
               <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
               <Text style={styles.TitleBoldTxt}> )</Text>
