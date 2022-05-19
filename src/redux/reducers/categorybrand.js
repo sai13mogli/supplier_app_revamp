@@ -142,6 +142,9 @@ export const categorybrandReducer = (state = initialState, action) => {
         brandCode: payload.obj.code || payload.obj.brandCode,
         fileKey: payload.obj.fileKey || '',
         businessNature: `${payload.obj.businessNature}`,
+        tentativebusinessNature: `${
+          payload.obj.tentativebusinessNature || payload.obj.businessNature
+        }`,
         expiryDate: payload.obj.expiryDate ? `${payload.obj.expiryDate}` : '',
         isDeleted: payload.obj.isDeleted ? `${payload.obj.isDeleted}` : '0',
         isRaiseRequest: payload.obj.isRaiseRequest
@@ -166,6 +169,9 @@ export const categorybrandReducer = (state = initialState, action) => {
           brandCode: payload.obj.code || payload.obj.brandCode,
           fileKey: payload.obj.fileKey || '',
           businessNature: `${payload.obj.businessNature}`,
+          tentativebusinessNature: `${
+            payload.obj.tentativebusinessNature || payload.obj.businessNature
+          }`,
           expiryDate: payload.obj.expiryDate || '',
           isDeleted: `${payload.obj.isDeleted}` || '0',
           isRaiseRequest: `${payload.obj.isRaiseRequest}` || 'false',
@@ -185,11 +191,15 @@ export const categorybrandReducer = (state = initialState, action) => {
 
     case CATEGORY_BRAND_ACTIONS.ADD_MULTIPLE_BRANDS:
       let currbrands = [...payload.data];
+      console.log('reducer curr brands', currbrands);
       currbrands = (currbrands || []).map((_, i) => ({
         supplierId: `${_.supplierId}`,
         brandCode: `${_.brandCode}`,
         fileKey: _.fileKey ? `${_.fileKey}` : '',
         businessNature: `${_.businessNature}`,
+        tentativebusinessNature: `${
+          _.tentativebusinessNature || _.businessNature
+        }`,
         expiryDate: _.expiryDate ? `${_.expiryDate}` : '',
         isDeleted: `${_.isDeleted}` || '0',
         isRaiseRequest: `${_.isRaiseRequest}` || 'false',

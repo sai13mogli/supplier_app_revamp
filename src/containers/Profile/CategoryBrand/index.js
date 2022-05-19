@@ -82,8 +82,10 @@ const CategoryBrandScreen = props => {
   const [categoryCode, setcategoryCode] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [brandName, setBrandName] = useState('');
-  const [natureOfBusiness, setnatureOfBusiness] = useState(1);
-  const [natureofBusinessLabel, setNatureofBusinessLabel] = useState('Trader');
+  const [natureOfBusiness, setnatureOfBusiness] = useState(0);
+  const [natureofBusinessLabel, setNatureofBusinessLabel] = useState(
+    'Select Nature of Business',
+  );
   const [brandCertificate, setBrandCertificate] = useState({
     title: '',
     value: '',
@@ -161,6 +163,7 @@ const CategoryBrandScreen = props => {
       title: 'Nature of Business',
       isImp: true,
       errorMessage: 'Enter valid nature of business',
+      placeholder: 'Select Business Nature',
       selectedValue: natureofBusinessLabel,
       onValueChange: (text, label) => setTextBusinessNature(text, label),
       component: PickerMenu,
@@ -484,16 +487,18 @@ const CategoryBrandScreen = props => {
 
   const setTextBusinessNature = (text, label) => {
     if (text !== 0) {
+      console.log('text', text, label);
       setnatureOfBusiness(text);
       setNatureofBusinessLabel(label);
     }
   };
-
-  console.log(
-    natureOfBusiness,
-    natureofBusinessLabel,
-    'nature of business hai boss!!',
-  );
+  useEffect(() => {
+    console.log(
+      natureOfBusiness,
+      natureofBusinessLabel,
+      'nature of business hai boss!!',
+    );
+  });
 
   const onSubmit = raiseRequest => {
     let currBrand = (userBrands || []).find(_ => _.brandCode == brand.code);
@@ -531,12 +536,13 @@ const CategoryBrandScreen = props => {
   };
 
   const openModal = brand => {
+    console.log('brand hai dost', brand);
     setBrand({
       name: brand.brandName,
       code: brand.brandCode,
     });
     setBrandName(brand.brandName);
-    setnatureOfBusiness(parseInt(brand.businessNature) || 1);
+    setnatureOfBusiness(parseInt(brand.businessNature) || 0);
     setBrandCertificate({
       title: brand.fileKey || '',
       value: brand.fileKey || '',
@@ -550,25 +556,30 @@ const CategoryBrandScreen = props => {
     setBrandUrl(brand.brandListingUrl);
     setIsRaiseRequest(brand.isRaiseRequest);
     setIsDeletedKey(brand.isDeleted);
-    getNatureOfBusiness(parseInt(brand.businessNature) || 1);
+    getNatureOfBusiness(parseInt(brand.businessNature) || 0);
     setModalVisible(true);
   };
 
   const getNatureOfBusiness = nb => {
+    console.log('nb', nb);
     switch (nb) {
       case 1:
         setNatureofBusinessLabel('Trader');
         break;
       case 2:
         setNatureofBusinessLabel('Manufacturer');
+        break;
       case 3:
         setNatureofBusinessLabel('Authorised Dealer');
+        break;
       case 4:
         setNatureofBusinessLabel('Service');
+        break;
       case 5:
         setNatureofBusinessLabel('Export');
-
+        break;
       default:
+        setNatureofBusinessLabel('Select Nature of Business');
         break;
     }
   };
@@ -650,7 +661,7 @@ const CategoryBrandScreen = props => {
           supplierId: _.supplierId,
           brandCode: _.brandCode,
           fileKey: _.fileKey || '',
-          businessNature: _.businessNature || '1',
+          businessNature: _.businessNature || _.tentativebusinessNature,
           expiryDate: _.expiryDate || '',
           isDeleted: _.isDeleted || '0',
           isRaiseRequest: _.isRaiseRequest || 'false',
@@ -710,7 +721,8 @@ const CategoryBrandScreen = props => {
     try {
       let payloadObj = {
         brandCode: currentBrand.brandCode,
-        businessNature: currentBrand.businessNature,
+        businessNature:
+          currentBrand.businessNature || currentBrand.tentativebusinessNature,
         expiryDate: currentBrand.expiryDate,
         fileKey: currentBrand.fileKey,
         supplierId: currentBrand.supplierId,
@@ -790,12 +802,12 @@ const CategoryBrandScreen = props => {
                   <TouchableOpacity
                     style={styles.BrandWrap}
                     onPress={() => openModal(_)}>
-                    <View style={{flex: 1}}>
+                    <View style={{flex: 1,marginRight:Dimension.margin5}}>
                       <Text style={styles.brandTitleTxt}>Brand Name</Text>
                       <Text style={styles.brandNameTxt}>{_.brandName}</Text>
                     </View>
 
-                    <View style={{flex: 1}}>
+                    <View style={{flex: 1,marginRight:Dimension.margin5}}>
                       <Text style={styles.brandTitleTxt}>Status</Text>
                       {_.isDeleted == '0' ? (
                         <Text style={styles.ApprovedStatus}>Approved</Text>
@@ -808,26 +820,22 @@ const CategoryBrandScreen = props => {
                       )}
                     </View>
 
+                    
+
+                    <View style={{flex: 1,flexDirection:"row",justifyContent:'flex-end'}}>
                     <TouchableOpacity
                       onPress={() => {
                         setCurrentBrand(_);
                         setIsVisible(true);
-                      }}>
-                      {/* <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: 'bold',
-                            color: '#000',
-                          }}>
-                          Delete
-                        </Text> */}
+                      }}
+                      style={{marginRight:Dimension.margin10}}
+                      >
+                      
                       <CustomeIcon
                         name={'delete'}
-                        size={Dimension.font22}
+                        size={Dimension.font20}
                         color={colors.FontColor}></CustomeIcon>
                     </TouchableOpacity>
-
-                    <View style={{flex: 1}}>
                       {_.isDeleted == '4' && _.localbrand ? (
                         <TouchableOpacity
                           onPress={() => openModal(_)}
@@ -840,7 +848,7 @@ const CategoryBrandScreen = props => {
                           onPress={() => openModal(_)}>
                           <CustomeIcon
                             name={'arrow-right-s-line'}
-                            size={Dimension.font28}
+                            size={Dimension.font24}
                             color={colors.FontColor}></CustomeIcon>
                         </TouchableOpacity>
                       )}
@@ -896,26 +904,22 @@ const CategoryBrandScreen = props => {
                       </Text>
                     </View>
 
+                    
+
+                    <View style={{flex: 1,justifyContent:"flex-end",flexDirection:"row"}}>
                     <TouchableOpacity
                       onPress={() => {
                         setCurrentBrand(_);
                         setIsVisible(true);
-                      }}>
-                      {/* <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: 'bold',
-                            color: '#000',
-                          }}>
-                          Delete
-                        </Text> */}
+                      }}
+                      style={{marginRight:Dimension.margin10}}
+                      >
+                    
                       <CustomeIcon
                         name={'delete'}
-                        size={Dimension.font22}
+                        size={Dimension.font20}
                         color={colors.FontColor}></CustomeIcon>
                     </TouchableOpacity>
-
-                    <View style={{flex: 1}}>
                       {_.isDeleted == '2' &&
                       _.isRaiseRequest == 'true' &&
                       _.localbrand ? (
@@ -928,7 +932,7 @@ const CategoryBrandScreen = props => {
                         <TouchableOpacity style={styles.ArrowBtn}>
                           <CustomeIcon
                             name={'arrow-right-line'}
-                            size={Dimension.font28}
+                            size={Dimension.font24}
                             color={colors.FontColor}></CustomeIcon>
                         </TouchableOpacity>
                       )}
@@ -940,224 +944,227 @@ const CategoryBrandScreen = props => {
           </View>
         ) : (
           <View
-        style={{
-          flex: 1,
-          height: Dimensions.get('window').height,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 50,
-        }}>
-        <ActivityIndicator
-          style={{alignSelf: 'center', margin: Dimension.margin12}}
-          size={'large'}
-          color={colors.BrandColor}
-        />
-      </View>
+            style={{
+              flex: 1,
+              height: Dimensions.get('window').height,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 50,
+            }}>
+            <ActivityIndicator
+              style={{alignSelf: 'center', margin: Dimension.margin12}}
+              size={'large'}
+              color={colors.BrandColor}
+            />
+          </View>
         )}
       </ScrollView>
-      <Modal
-        overlayPointerEvents={'auto'}
-        isVisible={modalVisible}
-        onTouchOutside={() => {
-          setModalVisible(false);
-        }}
-        onDismiss={() => {
-          setModalVisible(false);
-        }}
-        coverScreen={true}
-        deviceWidth={deviceWidth}
-        onBackButtonPress={() => {
-          setModalVisible(false);
-        }}
-        onBackdropPress={() => {
-          setModalVisible(false);
-        }}
-        style={{padding: 0, margin: 0}}>
-        <View style={styles.modalContainer}>
-          <View style={styles.TopWrap}>
-            <View style={styles.topbdr}></View>
-            <View style={styles.ModalheadingWrapper}>
-              <Text style={styles.ModalHeading}>{brand && brand.name}</Text>
-              <CustomeIcon
-                name={'close'}
-                size={Dimension.font22}
-                color={colors.FontColor}
-                onPress={() => setModalVisible(false)}></CustomeIcon>
+      {modalVisible && (
+        <Modal
+          overlayPointerEvents={'auto'}
+          isVisible={modalVisible}
+          onTouchOutside={() => {
+            setModalVisible(false);
+          }}
+          onDismiss={() => {
+            setModalVisible(false);
+          }}
+          coverScreen={true}
+          deviceWidth={deviceWidth}
+          onBackButtonPress={() => {
+            setModalVisible(false);
+          }}
+          onBackdropPress={() => {
+            setModalVisible(false);
+          }}
+          style={{padding: 0, margin: 0}}>
+          <View style={styles.modalContainer}>
+            <View style={styles.TopWrap}>
+              <View style={styles.topbdr}></View>
+              <View style={styles.ModalheadingWrapper}>
+                <Text style={styles.ModalHeading}>{brand && brand.name}</Text>
+                <CustomeIcon
+                  name={'close'}
+                  size={Dimension.font22}
+                  color={colors.FontColor}
+                  onPress={() => setModalVisible(false)}></CustomeIcon>
+              </View>
+              <View style={styles.ModalFormWrap}>
+                {FORM_FIELDS.map((field, fieldKey) => (
+                  <field.component
+                    fileUpload={natureOfBusiness}
+                    {...field}
+                    key={fieldKey}
+                    fromCategoryBrand={true}
+                  />
+                )).toList()}
+              </View>
             </View>
-            <View style={styles.ModalFormWrap}>
-              {FORM_FIELDS.map((field, fieldKey) => (
-                <field.component
-                  fileUpload={natureOfBusiness}
-                  {...field}
-                  key={fieldKey}
-                  fromCategoryBrand={true}
+            {isRaiseRequest == 'false' && isDeletedKey !== '2' ? (
+              <View style={styles.ModalBottomBtnWrap}>
+                <CustomButton
+                  buttonColor={
+                    getButtonColor()
+                      ? colors.BrandColor
+                      : colors.DisableStateColor
+                  }
+                  borderColor={
+                    getButtonColor()
+                      ? colors.BrandColor
+                      : colors.DisableStateColor
+                  }
+                  TextColor={
+                    getButtonColor() ? colors.WhiteColor : colors.FontColor
+                  }
+                  TextFontSize={Dimension.font16}
+                  title={'SUBMIT'}
+                  disabled={
+                    natureOfBusiness == 3
+                      ? !checkCommonValidation()
+                      : natureOfBusiness == 2
+                      ? !checkBusinessNatureValidation()
+                      : !checkValidation()
+                  }
+                  onPress={() => onSubmit(false)}
                 />
-              )).toList()}
-            </View>
-          </View>
-          {isRaiseRequest == 'false' && isDeletedKey !== '2' ? (
-            <View style={styles.ModalBottomBtnWrap}>
-              <CustomButton
-                buttonColor={
-                  getButtonColor()
-                    ? colors.BrandColor
-                    : colors.DisableStateColor
-                }
-                borderColor={
-                  getButtonColor()
-                    ? colors.BrandColor
-                    : colors.DisableStateColor
-                }
-                TextColor={
-                  getButtonColor() ? colors.WhiteColor : colors.FontColor
-                }
-                TextFontSize={Dimension.font16}
-                title={'SUBMIT'}
-                disabled={
-                  natureOfBusiness == 3
-                    ? !checkCommonValidation()
-                    : natureOfBusiness == 2
-                    ? !checkBusinessNatureValidation()
-                    : !checkValidation()
-                }
-                onPress={() => onSubmit(false)}
-              />
-            </View>
-          ) : (
-            <View style={styles.ModalBottomBtnWrap}>
-              <CustomButton
-                buttonColor={
-                  getButtonColorReqBrand()
-                    ? colors.BrandColor
-                    : colors.DisableStateColor
-                }
-                borderColor={
-                  getButtonColorReqBrand()
-                    ? colors.BrandColor
-                    : colors.DisableStateColor
-                }
-                TextColor={
-                  getButtonColorReqBrand()
-                    ? colors.WhiteColor
-                    : colors.FontColor
-                }
-                TextFontSize={Dimension.font16}
-                title={'SUBMIT'}
-                disabled={
-                  natureOfBusiness == 3
-                    ? !checkCommonValidationReqBrand()
-                    : natureOfBusiness == 2
-                    ? !checkBusinessNatureReqBrandValidation()
-                    : !checkValidationReqBrand()
-                }
-                onPress={() => onSubmit(true)}
-              />
-            </View>
-          )}
-        </View>
-      </Modal>
-
-      <Modal
-        overlayPointerEvents={'auto'}
-        isVisible={modalVisible}
-        onTouchOutside={() => {
-          setModalVisible(false);
-        }}
-        onDismiss={() => {
-          setModalVisible(false);
-        }}
-        coverScreen={true}
-        deviceWidth={deviceWidth}
-        onBackButtonPress={() => {
-          setModalVisible(false);
-        }}
-        onBackdropPress={() => {
-          setModalVisible(false);
-        }}
-        style={{padding: 0, margin: 0}}>
-        <View style={styles.modalContainer}>
-          <View style={styles.TopWrap}>
-            <View style={styles.topbdr}></View>
-            <View style={styles.ModalheadingWrapper}>
-              <Text style={styles.ModalHeading}>{brand && brand.name}</Text>
-              <CustomeIcon
-                name={'close'}
-                size={Dimension.font22}
-                color={colors.FontColor}
-                onPress={() => setModalVisible(false)}></CustomeIcon>
-            </View>
-            <View style={styles.ModalFormWrap}>
-              {FORM_FIELDS.map((field, fieldKey) => (
-                <field.component
-                  fileUpload={natureOfBusiness}
-                  {...field}
-                  key={fieldKey}
-                  fromCategoryBrand={true}
+              </View>
+            ) : (
+              <View style={styles.ModalBottomBtnWrap}>
+                <CustomButton
+                  buttonColor={
+                    getButtonColorReqBrand()
+                      ? colors.BrandColor
+                      : colors.DisableStateColor
+                  }
+                  borderColor={
+                    getButtonColorReqBrand()
+                      ? colors.BrandColor
+                      : colors.DisableStateColor
+                  }
+                  TextColor={
+                    getButtonColorReqBrand()
+                      ? colors.WhiteColor
+                      : colors.FontColor
+                  }
+                  TextFontSize={Dimension.font16}
+                  title={'SUBMIT'}
+                  disabled={
+                    natureOfBusiness == 3
+                      ? !checkCommonValidationReqBrand()
+                      : natureOfBusiness == 2
+                      ? !checkBusinessNatureReqBrandValidation()
+                      : !checkValidationReqBrand()
+                  }
+                  onPress={() => onSubmit(true)}
                 />
-              )).toList()}
-            </View>
+              </View>
+            )}
           </View>
-          {isRaiseRequest == 'false' && isDeletedKey !== '2' ? (
-            <View style={styles.ModalBottomBtnWrap}>
-              <CustomButton
-                buttonColor={
-                  getButtonColor()
-                    ? colors.BrandColor
-                    : colors.DisableStateColor
-                }
-                borderColor={
-                  getButtonColor()
-                    ? colors.BrandColor
-                    : colors.DisableStateColor
-                }
-                TextColor={
-                  getButtonColor() ? colors.WhiteColor : colors.FontColor
-                }
-                TextFontSize={Dimension.font16}
-                title={'SUBMIT'}
-                disabled={
-                  natureOfBusiness == 3
-                    ? !checkCommonValidation()
-                    : natureOfBusiness == 2
-                    ? !checkBusinessNatureValidation()
-                    : !checkValidation()
-                }
-                onPress={() => onSubmit(false)}
-              />
+        </Modal>
+      )}
+      {modalVisible && (
+        <Modal
+          overlayPointerEvents={'auto'}
+          isVisible={modalVisible}
+          onTouchOutside={() => {
+            setModalVisible(false);
+          }}
+          onDismiss={() => {
+            setModalVisible(false);
+          }}
+          coverScreen={true}
+          deviceWidth={deviceWidth}
+          onBackButtonPress={() => {
+            setModalVisible(false);
+          }}
+          onBackdropPress={() => {
+            setModalVisible(false);
+          }}
+          style={{padding: 0, margin: 0}}>
+          <View style={styles.modalContainer}>
+            <View style={styles.TopWrap}>
+              <View style={styles.topbdr}></View>
+              <View style={styles.ModalheadingWrapper}>
+                <Text style={styles.ModalHeading}>{brand && brand.name}</Text>
+                <CustomeIcon
+                  name={'close'}
+                  size={Dimension.font22}
+                  color={colors.FontColor}
+                  onPress={() => setModalVisible(false)}></CustomeIcon>
+              </View>
+              <View style={styles.ModalFormWrap}>
+                {FORM_FIELDS.map((field, fieldKey) => (
+                  <field.component
+                    fileUpload={natureOfBusiness}
+                    {...field}
+                    key={fieldKey}
+                    fromCategoryBrand={true}
+                  />
+                )).toList()}
+              </View>
             </View>
-          ) : (
-            <View style={styles.ModalBottomBtnWrap}>
-              <CustomButton
-                buttonColor={
-                  getButtonColorReqBrand()
-                    ? colors.BrandColor
-                    : colors.DisableStateColor
-                }
-                borderColor={
-                  getButtonColorReqBrand()
-                    ? colors.BrandColor
-                    : colors.DisableStateColor
-                }
-                TextColor={
-                  getButtonColorReqBrand()
-                    ? colors.WhiteColor
-                    : colors.FontColor
-                }
-                TextFontSize={Dimension.font16}
-                title={'SUBMIT'}
-                disabled={
-                  natureOfBusiness == 3
-                    ? !checkCommonValidationReqBrand()
-                    : natureOfBusiness == 2
-                    ? !checkBusinessNatureReqBrandValidation()
-                    : !checkValidationReqBrand()
-                }
-                onPress={() => onSubmit(true)}
-              />
-            </View>
-          )}
-        </View>
-      </Modal>
+            {isRaiseRequest == 'false' && isDeletedKey !== '2' ? (
+              <View style={styles.ModalBottomBtnWrap}>
+                <CustomButton
+                  buttonColor={
+                    getButtonColor()
+                      ? colors.BrandColor
+                      : colors.DisableStateColor
+                  }
+                  borderColor={
+                    getButtonColor()
+                      ? colors.BrandColor
+                      : colors.DisableStateColor
+                  }
+                  TextColor={
+                    getButtonColor() ? colors.WhiteColor : colors.FontColor
+                  }
+                  TextFontSize={Dimension.font16}
+                  title={'SUBMIT'}
+                  disabled={
+                    natureOfBusiness == 3
+                      ? !checkCommonValidation()
+                      : natureOfBusiness == 2
+                      ? !checkBusinessNatureValidation()
+                      : !checkValidation()
+                  }
+                  onPress={() => onSubmit(false)}
+                />
+              </View>
+            ) : (
+              <View style={styles.ModalBottomBtnWrap}>
+                <CustomButton
+                  buttonColor={
+                    getButtonColorReqBrand()
+                      ? colors.BrandColor
+                      : colors.DisableStateColor
+                  }
+                  borderColor={
+                    getButtonColorReqBrand()
+                      ? colors.BrandColor
+                      : colors.DisableStateColor
+                  }
+                  TextColor={
+                    getButtonColorReqBrand()
+                      ? colors.WhiteColor
+                      : colors.FontColor
+                  }
+                  TextFontSize={Dimension.font16}
+                  title={'SUBMIT'}
+                  disabled={
+                    natureOfBusiness == 3
+                      ? !checkCommonValidationReqBrand()
+                      : natureOfBusiness == 2
+                      ? !checkBusinessNatureReqBrandValidation()
+                      : !checkValidationReqBrand()
+                  }
+                  onPress={() => onSubmit(true)}
+                />
+              </View>
+            )}
+          </View>
+        </Modal>
+      )}
 
       <Modal
         overlayPointerEvents={'auto'}

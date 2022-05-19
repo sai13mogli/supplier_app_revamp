@@ -1,5 +1,6 @@
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {replaceToken} from '../services/auth';
 
 export const requestUserPermission = async () => {
   const authStatus = await messaging().requestPermission();
@@ -21,10 +22,29 @@ const getFcmToken = async () => {
       if (newFcmToken) {
         console.log(newFcmToken, 'the new generated fcm token!!');
         await AsyncStorage.setItem('fcmToken', newFcmToken);
+        replaceFcmToken(newFcmToken);
       }
     } catch (error) {
       console.log(error, 'error in fcm');
     }
+  } else {
+    replaceFcmToken(fcmToken);
+  }
+};
+
+const replaceFcmToken = async ftoken => {
+  try {
+    let payload = {
+      supplierId: await AsyncStorage.getItem('userId'),
+      deviceOldToken: '',
+      deviceNewToken: `${ftoken}`,
+    };
+    const {data} = await replaceToken(payload);
+    if (data && data.success) {
+      console.log('success hai dost!!');
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 

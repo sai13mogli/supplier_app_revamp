@@ -178,19 +178,19 @@ const AllBrandsScreen = props => {
 
   const renderLoader = () => (
     <View
-        style={{
-          flex: 1,
-          height: Dimensions.get('window').height,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 50,
-        }}>
-        <ActivityIndicator
-          style={{alignSelf: 'center', margin: Dimension.margin12}}
-          size={'large'}
-          color={Colors.BrandColor}
-        />
-      </View>
+      style={{
+        flex: 1,
+        height: Dimensions.get('window').height,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 50,
+      }}>
+      <ActivityIndicator
+        style={{alignSelf: 'center', margin: Dimension.margin12}}
+        size={'large'}
+        color={Colors.BrandColor}
+      />
+    </View>
   );
 
   const renderFooter = () => {
@@ -223,7 +223,8 @@ const AllBrandsScreen = props => {
           supplierId: supplierId,
           brandCode: inputValue,
           fileKey: '',
-          businessNature: 1,
+          businessNature: ``,
+          tentativebusinessNature: businessNature,
           expiryDate: '',
           isDeleted: '2',
           isRaiseRequest: 'true',
