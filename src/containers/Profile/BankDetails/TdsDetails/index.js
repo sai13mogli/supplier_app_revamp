@@ -19,36 +19,6 @@ const TdsDetails = props => {
   const bankDetails = useSelector(
     state => state.profileReducer.bankDetails.data || {},
   );
-  const tdsInfoDetails = useSelector(
-    state =>
-      state.profileReducer.tdsInfoDetails.data || [
-        {
-          financialYearTurnover: null,
-          financialyear: getCurrentFinancialYear(),
-          id: '',
-          lastToLastYearItr: null,
-          lastToLastYearTdsTcs: null,
-          lastYearItr: null,
-          lastYearTdsTcs: null,
-          panNumber: '',
-          previousFinancialYear: getCurrentFinancialYear(true),
-        },
-        {
-          financialYearTurnover: null,
-          financialyear: getCurrentFinancialYear(),
-          id: '',
-          lastToLastYearItr: null,
-          lastToLastYearTdsTcs: null,
-          lastYearItr: null,
-          lastYearTdsTcs: null,
-          panNumber: '',
-          previousFinancialYear: getCurrentFinancialYear(true),
-        },
-      ],
-  );
-
-
-
 
   const getCurrentFinancialYear = isLastYear => {
     let fiscalyear = '';
@@ -64,6 +34,56 @@ const TdsDetails = props => {
     }
     return fiscalyear;
   };
+
+  const lastFinancialYear = isLastYear => {
+    let fiscalyear = '';
+    let today = new Date();
+    if (today.getMonth() + 1 <= 3) {
+      fiscalyear = isLastYear
+        ? today.getFullYear() - 3 + '-' + (today.getFullYear() - 2)
+        : today.getFullYear() - 2 + '-' + (today.getFullYear() - 1);
+    } else {
+      fiscalyear = isLastYear
+        ? today.getFullYear() - 2 + '-' + (today.getFullYear() - 1)
+        : (today.getFullYear() - 1) + '-' + (today.getFullYear());
+    }
+    return fiscalyear;
+  };
+
+  const tdsInfoDetails =
+    useSelector(
+      state =>
+        state.profileReducer.tdsInfoDetails.data ||
+        [
+          {
+            financialYearTurnover: null,
+            financialyear: getCurrentFinancialYear(),
+            id: '',
+            lastToLastYearItr: null,
+            lastToLastYearTdsTcs: null,
+            lastYearItr: null,
+            lastYearTdsTcs: null,
+            panNumber: '',
+            previousFinancialYear: getCurrentFinancialYear(true),
+          },
+          {
+            financialYearTurnover: null,
+            financialyear: lastFinancialYear(),
+            id: '',
+            lastToLastYearItr: null,
+            lastToLastYearTdsTcs: null,
+            lastYearItr: null,
+            lastYearTdsTcs: null,
+            panNumber: '',
+            previousFinancialYear: lastFinancialYear(true),
+          },
+        ]
+    );
+
+
+
+
+
 
   const [tdsInfoList, setTdsInfoList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -125,7 +145,7 @@ const TdsDetails = props => {
         <View style={styles.sectionView}>
           <View style={styles.wrap}>
             <Text style={styles.HeadinngInnerTxt}>
-              TDS filed for AY {section.financialyear}
+              ITR filed for AY {lastFinancialYear()}
             </Text>
             <Text style={styles.yesNotxt}>
               {section.lastYearItr == 1
@@ -139,7 +159,7 @@ const TdsDetails = props => {
           </View>
           <View style={styles.wrap}>
             <Text style={styles.HeadinngInnerTxt}>
-              ITR filed for AV {section.financialyear}
+              ITR filed for AY {lastFinancialYear(true)}
             </Text>
             <Text style={styles.yesNotxt}>
               {section.lastToLastYearItr == 1
@@ -154,7 +174,7 @@ const TdsDetails = props => {
           <View style={styles.wrap}>
             <Text style={styles.HeadinngInnerTxt}>
               Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
-              {section.financialyear}
+              {lastFinancialYear()}
             </Text>
             <Text style={styles.yesNotxt}>
               {section.lastYearTdsTcs == 1
@@ -169,7 +189,7 @@ const TdsDetails = props => {
           <View style={styles.wrap}>
             <Text style={styles.HeadinngInnerTxt}>
               Some of TDS $ TCS as per 26AS is more than Rs. 50,000 in AY{' '}
-              {section.financialyear}
+              {lastFinancialYear(true)}
             </Text>
             <Text style={styles.yesNotxt}>
               {section.lastToLastYearTdsTcs == 1
@@ -183,7 +203,7 @@ const TdsDetails = props => {
           </View>
           <View style={[styles.wrap, { borderBottomWidth: 0 }]}>
             <Text style={styles.HeadinngInnerTxt}>
-              Turnover in financial year {section.financialyear} was exceeding
+              Turnover in financial year {lastFinancialYear()} was exceeding
               10 crores
             </Text>
             <Text style={styles.yesNotxt}>
