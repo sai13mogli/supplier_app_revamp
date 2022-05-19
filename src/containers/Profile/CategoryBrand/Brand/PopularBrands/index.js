@@ -22,7 +22,7 @@ import Checkbox from '../../../../../component/common/Checkbox/index';
 import CustomeIcon from '../../../../../component/common/CustomeIcon';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dimension from '../../../../../Theme/Dimension';
-import {colors} from 'react-native-elements';
+import Colors from '../../../../../Theme/Colors';
 
 const PopularBrandsScreen = props => {
   const brands = useSelector(
@@ -150,6 +150,7 @@ const PopularBrandsScreen = props => {
     }
   };
   const renderLoader = () => {
+    console.log('loader hai!!');
     return (
       <View
         style={{
@@ -162,7 +163,7 @@ const PopularBrandsScreen = props => {
         <ActivityIndicator
           style={{alignSelf: 'center', margin: Dimension.margin12}}
           size={'large'}
-          color={colors.BrandColor}
+          color={Colors.BrandColor}
         />
       </View>
     );

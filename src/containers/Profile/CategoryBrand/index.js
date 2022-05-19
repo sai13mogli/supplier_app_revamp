@@ -536,7 +536,6 @@ const CategoryBrandScreen = props => {
   };
 
   const openModal = brand => {
-    console.log('brand hai dost', brand);
     setBrand({
       name: brand.brandName,
       code: brand.brandCode,
@@ -561,7 +560,6 @@ const CategoryBrandScreen = props => {
   };
 
   const getNatureOfBusiness = nb => {
-    console.log('nb', nb);
     switch (nb) {
       case 1:
         setNatureofBusinessLabel('Trader');
@@ -579,7 +577,7 @@ const CategoryBrandScreen = props => {
         setNatureofBusinessLabel('Export');
         break;
       default:
-        setNatureofBusinessLabel('Select Nature of Business');
+        setNatureofBusinessLabel('');
         break;
     }
   };
@@ -802,12 +800,12 @@ const CategoryBrandScreen = props => {
                   <TouchableOpacity
                     style={styles.BrandWrap}
                     onPress={() => openModal(_)}>
-                    <View style={{flex: 1,marginRight:Dimension.margin5}}>
+                    <View style={{flex: 1, marginRight: Dimension.margin5}}>
                       <Text style={styles.brandTitleTxt}>Brand Name</Text>
                       <Text style={styles.brandNameTxt}>{_.brandName}</Text>
                     </View>
 
-                    <View style={{flex: 1,marginRight:Dimension.margin5}}>
+                    <View style={{flex: 1, marginRight: Dimension.margin5}}>
                       <Text style={styles.brandTitleTxt}>Status</Text>
                       {_.isDeleted == '0' ? (
                         <Text style={styles.ApprovedStatus}>Approved</Text>
@@ -820,22 +818,23 @@ const CategoryBrandScreen = props => {
                       )}
                     </View>
 
-                    
-
-                    <View style={{flex: 1,flexDirection:"row",justifyContent:'flex-end'}}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setCurrentBrand(_);
-                        setIsVisible(true);
-                      }}
-                      style={{marginRight:Dimension.margin10}}
-                      >
-                      
-                      <CustomeIcon
-                        name={'delete'}
-                        size={Dimension.font20}
-                        color={colors.FontColor}></CustomeIcon>
-                    </TouchableOpacity>
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'flex-end',
+                      }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setCurrentBrand(_);
+                          setIsVisible(true);
+                        }}
+                        style={{marginRight: Dimension.margin10}}>
+                        <CustomeIcon
+                          name={'delete'}
+                          size={Dimension.font20}
+                          color={colors.FontColor}></CustomeIcon>
+                      </TouchableOpacity>
                       {_.isDeleted == '4' && _.localbrand ? (
                         <TouchableOpacity
                           onPress={() => openModal(_)}
@@ -904,22 +903,23 @@ const CategoryBrandScreen = props => {
                       </Text>
                     </View>
 
-                    
-
-                    <View style={{flex: 1,justifyContent:"flex-end",flexDirection:"row"}}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setCurrentBrand(_);
-                        setIsVisible(true);
-                      }}
-                      style={{marginRight:Dimension.margin10}}
-                      >
-                    
-                      <CustomeIcon
-                        name={'delete'}
-                        size={Dimension.font20}
-                        color={colors.FontColor}></CustomeIcon>
-                    </TouchableOpacity>
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: 'flex-end',
+                        flexDirection: 'row',
+                      }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setCurrentBrand(_);
+                          setIsVisible(true);
+                        }}
+                        style={{marginRight: Dimension.margin10}}>
+                        <CustomeIcon
+                          name={'delete'}
+                          size={Dimension.font20}
+                          color={colors.FontColor}></CustomeIcon>
+                      </TouchableOpacity>
                       {_.isDeleted == '2' &&
                       _.isRaiseRequest == 'true' &&
                       _.localbrand ? (

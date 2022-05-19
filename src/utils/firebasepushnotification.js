@@ -40,9 +40,9 @@ const replaceFcmToken = async ftoken => {
       deviceNewToken: `${ftoken}`,
     };
     const {data} = await replaceToken(payload);
-    if (data && data.success) {
-      console.log('success hai dost!!');
-    }
+    // if (data && data.success) {
+    //   console.log('success hai dost!!');
+    // }
   } catch (error) {
     console.log(error);
   }
