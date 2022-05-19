@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import Colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 
@@ -64,7 +64,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.modalBorder,
     marginBottom: Dimension.margin8,
-    padding: Dimension.padding20,
+    paddingHorizontal: Dimension.padding12,
+    paddingVertical:Dimension.padding20
   },
   brandTitleTxt: {
     fontSize: Dimension.font12,
@@ -72,17 +73,17 @@ const styles = StyleSheet.create({
     color: Colors.FontColor,
   },
   brandNameTxt: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     fontFamily: Dimension.CustomSemiBoldFont,
     color: Colors.FontColor,
   },
   ApprovedStatus: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     fontFamily: Dimension.CustomSemiBoldFont,
     color: Colors.ApproveStateColor,
   },
   pendingStatus: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     fontFamily: Dimension.CustomSemiBoldFont,
     color: Colors.PendineStateColor,
   },
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   fillDetailtxt: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     fontFamily: Dimension.CustomMediumFont,
     color: Colors.BrandColor,
   },

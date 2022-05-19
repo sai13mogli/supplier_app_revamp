@@ -10,11 +10,13 @@ import CustomeIcon from '../../component/common/CustomeIcon';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import CustomButton from '../../component/common/Button';
 import Modal from 'react-native-modal';
+import messaging from '@react-native-firebase/messaging';
+
 const SettingsScreen = props => {
   const [showLogoutModal, setshowLogoutModal] = useState(false);
+  const [notifStatus, setNotifStatus] = useState(true);
   const token = useSelector(state => (state.profileReducer || {}).token || '');
   const dispatch = useDispatch();
-  console.log(' logout', showLogoutModal);
   const onLogout = async () => {
     await AsyncStorage.removeItem('onlineShipmentMode');
     await AsyncStorage.removeItem('token');
@@ -32,8 +34,40 @@ const SettingsScreen = props => {
   };
 
   useEffect(() => {
+    getNotifFunc();
     GoogleSignin.configure({});
   }, []);
+
+  useEffect(() => {
+    setNotifFunc();
+  }, [notifStatus]);
+
+  const getNotifFunc = async () => {
+    try {
+      const status = await AsyncStorage.getItem('notification');
+      if (status) {
+        if (status == 'true') {
+          setNotifStatus(true);
+        } else {
+          setNotifStatus(false);
+        }
+      } else {
+        setNotifStatus(false);
+      }
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    console.log(notifStatus);
+  });
+
+  const setNotifFunc = async () => {
+    await AsyncStorage.setItem('notification', notifStatus ? 'true' : 'false');
+    if (!notifStatus) {
+      await AsyncStorage.removeItem('fcmToken');
+      await messaging().deleteToken();
+    }
+  };
 
   return (
     <>
@@ -75,6 +109,21 @@ const SettingsScreen = props => {
               ios_backgroundColor="#ccc"
               onValueChange={() => {}}
               value={true}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginVertical: Dimension.margin10,
+            }}>
+            <Text style={styles.nrmtxt}>Push Notifications</Text>
+            <Switch
+              trackColor={{false: '#ccc', true: '#ccc'}}
+              thumbColor={'#000'}
+              ios_backgroundColor="#ccc"
+              onValueChange={() => setNotifStatus(!notifStatus)}
+              value={notifStatus}
             />
           </View>
         </View>

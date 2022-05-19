@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {OrderedMap} from 'immutable';
+import React, { useState, useEffect } from 'react';
+import { OrderedMap } from 'immutable';
 import {
   View,
   Text,
@@ -13,20 +13,20 @@ import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import FileUpload from '../../../component/common/FileUpload';
-import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
+import ActionSheet, { SheetManager } from 'react-native-actions-sheet';
 import Header from '../../../component/common/Header';
 import CustomeDatePicker from '../../../component/common/Datepicker';
-import {getInvoiceOMSDetails} from '../../../services/orders';
+import { getInvoiceOMSDetails } from '../../../services/orders';
 import styles from './style';
 import InvoiceOmsCard from '../../../component/InvoiceOmsCard';
-import {BASE_URL} from '../../../redux/constants';
+import { BASE_URL } from '../../../redux/constants';
 import RNFetchBlob from 'rn-fetch-blob';
 import Toast from 'react-native-toast-message';
-import {fetchOrders, fetchTabCount} from '../../../redux/actions/orders';
+import { fetchOrders, fetchTabCount } from '../../../redux/actions/orders';
 
 const UploadInvoiceOMSScreen = props => {
   const dispatch = useDispatch();
@@ -198,7 +198,6 @@ const UploadInvoiceOMSScreen = props => {
       setFormState(res[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        console.log('Canceled from single doc picker');
       } else {
         console.log('error', err);
         throw err;
@@ -257,7 +256,7 @@ const UploadInvoiceOMSScreen = props => {
       let payload = {
         supplierId: await AsyncStorage.getItem('userId'),
       };
-      const {data} = await getInvoiceOMSDetails(payload);
+      const { data } = await getInvoiceOMSDetails(payload);
       if (data.success) {
         setOmsUploadList(data?.data);
         setOmsLoading(false);
@@ -315,7 +314,7 @@ const UploadInvoiceOMSScreen = props => {
     }
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     let list = Object.values(item)?.[0];
     let keys = Object.keys(item)?.[0];
 
@@ -343,7 +342,7 @@ const UploadInvoiceOMSScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             // source={require('../../assets/images/emptyOrders.png')}
-            style={{width: 300, height: 200}}
+            style={{ width: 300, height: 200 }}
           />
           <Text style={styles.emptyTxt}>No Data Available</Text>
         </View>
@@ -494,7 +493,7 @@ const UploadInvoiceOMSScreen = props => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Header
         showBack
         navigation={props.navigation}
@@ -503,20 +502,20 @@ const UploadInvoiceOMSScreen = props => {
 
       <ScrollView bounces style={styles.ContainerCss}>
         {omsLoading ? (
-           <View
-           style={{
-             flex: 1,
-             height: Dimensions.get('window').height,
-             alignItems: 'center',
-             justifyContent: 'center',
-             marginTop: 50,
-           }}>
-           <ActivityIndicator
-             style={{alignSelf: 'center', margin: Dimension.margin12}}
-             size={'large'}
-             color={colors.BrandColor}
-           />
-         </View>
+          <View
+            style={{
+              flex: 1,
+              height: Dimensions.get('window').height,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 50,
+            }}>
+            <ActivityIndicator
+              style={{ alignSelf: 'center', margin: Dimension.margin12 }}
+              size={'large'}
+              color={colors.BrandColor}
+            />
+          </View>
         ) : (
           <FlatList
             bounces
@@ -528,7 +527,7 @@ const UploadInvoiceOMSScreen = props => {
             showsVerticalScrollIndicator={false}
           />
         )}
-        <View style={{marginTop: Dimension.margin30}}>
+        <View style={{ marginTop: Dimension.margin30 }}>
           {FORM_FIELDS.map((field, fieldKey) => (
             <field.component
               {...field}
@@ -555,8 +554,8 @@ const UploadInvoiceOMSScreen = props => {
           </View>
         </ActionSheet>
       </ScrollView>
-      <View style={[styles.bottombtnWrap, {flexDirection: 'row'}]}>
-        <View style={{marginRight: 15, flex: 1}}>
+      <View style={[styles.bottombtnWrap, { flexDirection: 'row' }]}>
+        <View style={{ marginRight: 15, flex: 1 }}>
           <CustomButton
             buttonColor={colors.WhiteColor}
             borderColor={colors.transparent}
@@ -566,7 +565,7 @@ const UploadInvoiceOMSScreen = props => {
             onPress={onCancel}
           />
         </View>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <CustomButton
             buttonColor={colors.BrandColor}
             borderColor={colors.BrandColor}

@@ -1,19 +1,21 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import RNFetchBlob from 'rn-fetch-blob';
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
 import CustomButton from '../../../component/common/Button';
 import Checkbox from '../../../component/common/Checkbox/index';
 import Header from '../../../component/common/Header';
-import {BASE_URL} from '../../../redux/constants';
+import { BASE_URL } from '../../../redux/constants';
 import Toast from 'react-native-toast-message';
 
 const InvoiceDetailScreen = props => {
   const [loading, setLoading] = useState(false);
   const [isSelected, setSelection] = useState(false);
   const scrollRef = useRef();
+
+
 
   const moveToBottom = () => {
     scrollRef.current?.scrollTo({
@@ -38,31 +40,32 @@ const InvoiceDetailScreen = props => {
           },
           props?.route?.params?.data?.ewayNumber
             ? [
-                {
-                  name: 'dropshipInvoiceRequest',
-                  data: JSON.stringify(props?.route?.params?.data),
-                  type: 'application/json',
-                },
-                props?.route?.params?.invoiceFileData,
-                props?.route?.params?.ewayFileData,
-              ]
+              {
+                name: 'dropshipInvoiceRequest',
+                data: JSON.stringify(props?.route?.params?.data),
+                type: 'application/json',
+              },
+              props?.route?.params?.invoiceFileData,
+              props?.route?.params?.ewayFileData,
+            ]
             : [
-                {
-                  name: 'dropshipInvoiceRequest',
-                  data: JSON.stringify(props?.route?.params?.data),
-                  type: 'application/json',
-                },
-                props?.route?.params?.invoiceFileData,
-              ],
+              {
+                name: 'dropshipInvoiceRequest',
+                data: JSON.stringify(props?.route?.params?.data),
+                type: 'application/json',
+              },
+              props?.route?.params?.invoiceFileData,
+            ],
         );
         const res = await response.json();
         console.log('Respose===>', response, res);
         if (res.success) {
           setLoading(false);
+
           Toast.show({
             type: 'success',
             text2: res.message,
-            visibilityTime: 4000,
+            visibilityTime: 5000,
             autoHide: true,
           });
           props.navigation.navigate('Orders', {
@@ -182,9 +185,9 @@ const InvoiceDetailScreen = props => {
       <View
         style={[
           styles.bottombtnWrap,
-          {flexDirection: 'row', marginTop: Dimension.margin5},
+          { flexDirection: 'row', marginTop: Dimension.margin5 },
         ]}>
-        <View style={{marginRight: 15, flex: 1}}>
+        <View style={{ marginRight: 15, flex: 1 }}>
           <CustomButton
             buttonColor={colors.WhiteColor}
             borderColor={colors.transparent}
@@ -194,7 +197,7 @@ const InvoiceDetailScreen = props => {
             onPress={onCancel}
           />
         </View>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <CustomButton
             buttonColor={colors.BrandColor}
             borderColor={colors.BrandColor}
@@ -235,7 +238,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WhiteColor,
   },
 
-  row: {flexDirection: 'row', marginBottom: Dimension.margin10, width: '92%'},
+  row: { flexDirection: 'row', marginBottom: Dimension.margin10, width: '92%' },
   numberWrap: {
     width: Dimension.width20,
     fontSize: Dimension.font12,

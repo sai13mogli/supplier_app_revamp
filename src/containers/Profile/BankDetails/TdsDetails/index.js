@@ -1,17 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import colors from '../../../../Theme/Colors';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Accordion from 'react-native-collapsible/Accordion';
 import Dimension from '../../../../Theme/Dimension';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
-import {fetchUpdateTDSDetails} from '../../../../redux/actions/profile';
+import { fetchUpdateTDSDetails } from '../../../../redux/actions/profile';
 import styles from './styles';
 import CustomButton from '../../../../component/common/Button';
 import TDSEditModal from '../../../../component/common/TDSEditModal';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {fetchUpdateBankDetails} from '../../../../redux/actions/profile';
+import { fetchUpdateBankDetails } from '../../../../redux/actions/profile';
 import analytics from '@react-native-firebase/analytics';
 
 const TdsDetails = props => {
@@ -33,8 +33,22 @@ const TdsDetails = props => {
           panNumber: '',
           previousFinancialYear: getCurrentFinancialYear(true),
         },
+        {
+          financialYearTurnover: null,
+          financialyear: getCurrentFinancialYear(),
+          id: '',
+          lastToLastYearItr: null,
+          lastToLastYearTdsTcs: null,
+          lastYearItr: null,
+          lastYearTdsTcs: null,
+          panNumber: '',
+          previousFinancialYear: getCurrentFinancialYear(true),
+        },
       ],
   );
+
+
+
 
   const getCurrentFinancialYear = isLastYear => {
     let fiscalyear = '';
@@ -54,7 +68,7 @@ const TdsDetails = props => {
   const [tdsInfoList, setTdsInfoList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [section, setSectionList] = useState([]);
-  const {navigate} = useNavigation();
+  const { navigate } = useNavigation();
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -117,10 +131,10 @@ const TdsDetails = props => {
               {section.lastYearItr == 1
                 ? 'Yes'
                 : section.lastYearItr == 0
-                ? 'No'
-                : section.lastYearItr == 2
-                ? '-'
-                : null}
+                  ? 'No'
+                  : section.lastYearItr == 2
+                    ? '-'
+                    : null}
             </Text>
           </View>
           <View style={styles.wrap}>
@@ -131,10 +145,10 @@ const TdsDetails = props => {
               {section.lastToLastYearItr == 1
                 ? 'Yes'
                 : section.lastToLastYearItr == 0
-                ? 'No'
-                : section.lastToLastYearItr == 2
-                ? '-'
-                : null}
+                  ? 'No'
+                  : section.lastToLastYearItr == 2
+                    ? '-'
+                    : null}
             </Text>
           </View>
           <View style={styles.wrap}>
@@ -146,10 +160,10 @@ const TdsDetails = props => {
               {section.lastYearTdsTcs == 1
                 ? 'Yes'
                 : section.lastYearTdsTcs == 0
-                ? 'No'
-                : section.lastYearTdsTcs == 2
-                ? '-'
-                : null}
+                  ? 'No'
+                  : section.lastYearTdsTcs == 2
+                    ? '-'
+                    : null}
             </Text>
           </View>
           <View style={styles.wrap}>
@@ -161,13 +175,13 @@ const TdsDetails = props => {
               {section.lastToLastYearTdsTcs == 1
                 ? 'Yes'
                 : section.lastToLastYearTdsTcs == 0
-                ? 'No'
-                : section.lastToLastYearTdsTcs == 2
-                ? '-'
-                : null}
+                  ? 'No'
+                  : section.lastToLastYearTdsTcs == 2
+                    ? '-'
+                    : null}
             </Text>
           </View>
-          <View style={[styles.wrap, {borderBottomWidth: 0}]}>
+          <View style={[styles.wrap, { borderBottomWidth: 0 }]}>
             <Text style={styles.HeadinngInnerTxt}>
               Turnover in financial year {section.financialyear} was exceeding
               10 crores
@@ -176,10 +190,10 @@ const TdsDetails = props => {
               {section.financialYearTurnover == 1
                 ? 'Yes'
                 : section.financialYearTurnover == 0
-                ? 'No'
-                : section.financialYearTurnover == 2
-                ? '-'
-                : null}
+                  ? 'No'
+                  : section.financialYearTurnover == 2
+                    ? '-'
+                    : null}
             </Text>
           </View>
         </View>
@@ -227,27 +241,38 @@ const TdsDetails = props => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <ScrollView bounces indicatorStyle="white" style={styles.ContainerCss}>
         <Accordion
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingBottom: 80, position: 'relative'}}
+          contentContainerStyle={{ paddingBottom: 80, position: 'relative' }}
           sections={
             tdsInfoDetails && tdsInfoDetails.length
               ? tdsInfoDetails
               : [
-                  {
-                    financialYearTurnover: null,
-                    financialyear: getCurrentFinancialYear(),
-                    id: '',
-                    lastToLastYearItr: null,
-                    lastToLastYearTdsTcs: null,
-                    lastYearItr: null,
-                    lastYearTdsTcs: null,
-                    panNumber: '',
-                    previousFinancialYear: getCurrentFinancialYear(),
-                  },
-                ]
+                {
+                  financialYearTurnover: null,
+                  financialyear: getCurrentFinancialYear(),
+                  id: '',
+                  lastToLastYearItr: null,
+                  lastToLastYearTdsTcs: null,
+                  lastYearItr: null,
+                  lastYearTdsTcs: null,
+                  panNumber: '',
+                  previousFinancialYear: getCurrentFinancialYear(),
+                },
+                {
+                  financialYearTurnover: null,
+                  financialyear: getCurrentFinancialYear(),
+                  id: '',
+                  lastToLastYearItr: null,
+                  lastToLastYearTdsTcs: null,
+                  lastYearItr: null,
+                  lastYearTdsTcs: null,
+                  panNumber: '',
+                  previousFinancialYear: getCurrentFinancialYear(),
+                },
+              ]
           }
           activeSections={tdsInfoList}
           renderHeader={_renderHeader}

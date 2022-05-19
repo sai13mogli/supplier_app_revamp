@@ -196,37 +196,40 @@ const OrdersScreen = props => {
         );
       }
     }
-    await requestUserPermission();
-    await messaging()
-      .hasPermission()
-      .then(async enabled => {
-        if (enabled) {
-          messaging().setBackgroundMessageHandler(async remoteMessage => {
-            showToastNotification(remoteMessage);
-          });
-          //app is running in background
-          messaging().onNotificationOpenedApp(remoteMessage => {
-            handleOpenUrl(remoteMessage, true, '');
-            // navigation.navigate(remoteMessage.data.type);
-          });
-
-          // app is in foreground
-          messaging().onMessage(async remoteMessage => {
-            showToastNotification(remoteMessage);
-
-            // handleOpenUrl(remoteMessage, true, '');
-          });
-
-          //app is in quit state
-          messaging()
-            .getInitialNotification()
-            .then(remoteMessage => {
-              if (remoteMessage) {
-                handleOpenUrl(remoteMessage, true, '');
-              }
+    const status = await AsyncStorage.getItem('notification');
+    if (status == 'true' || !status) {
+      await requestUserPermission();
+      await messaging()
+        .hasPermission()
+        .then(async enabled => {
+          if (enabled) {
+            messaging().setBackgroundMessageHandler(async remoteMessage => {
+              showToastNotification(remoteMessage);
             });
-        }
-      });
+            //app is running in background
+            messaging().onNotificationOpenedApp(remoteMessage => {
+              handleOpenUrl(remoteMessage, true, '');
+              // navigation.navigate(remoteMessage.data.type);
+            });
+
+            // app is in foreground
+            messaging().onMessage(async remoteMessage => {
+              showToastNotification(remoteMessage);
+
+              // handleOpenUrl(remoteMessage, true, '');
+            });
+
+            //app is in quit state
+            messaging()
+              .getInitialNotification()
+              .then(remoteMessage => {
+                if (remoteMessage) {
+                  handleOpenUrl(remoteMessage, true, '');
+                }
+              });
+          }
+        });
+    }
 
     try {
       let deepLinkData = await AsyncStorage.getItem('@deepLinkUrl');

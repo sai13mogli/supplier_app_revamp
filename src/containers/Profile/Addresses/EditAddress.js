@@ -1,21 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import {OrderedMap} from 'immutable';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { OrderedMap } from 'immutable';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import Header from '../../../component/common/Header';
 import DropDown from '../../../component/common/DropDown';
 import CustomButton from '../../../component/common/Button';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Checkbox from '../../../component/common/Checkbox/index';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
-import {STATE_STATUS} from '../../../redux/constants';
+import { STATE_STATUS } from '../../../redux/constants';
 import {
   fetchUpdateBillingAddress,
   fetchAddressDetails,
 } from '../../../redux/actions/profile';
-import {getPincodeDetails} from '../../../services/profile';
+import { getPincodeDetails } from '../../../services/profile';
 import Toast from 'react-native-toast-message';
+import analytics from '@react-native-firebase/analytics';
 
 const EditAddress = props => {
   const businessDetails = useSelector(
@@ -87,10 +88,10 @@ const EditAddress = props => {
         !editID && tabState?.route?.params?.tabState == 'Billing'
           ? 'AddNewBillingAddress'
           : !editID && tabState?.route?.params?.tabState == 'PickedUp'
-          ? 'AddNewPickupAddress'
-          : editID && tabState?.route?.params?.tabState == 'Billing'
-          ? 'EditBillingAddress'
-          : 'EditPickupAddress',
+            ? 'AddNewPickupAddress'
+            : editID && tabState?.route?.params?.tabState == 'Billing'
+              ? 'EditBillingAddress'
+              : 'EditPickupAddress',
       datetimestamp: `${new Date().getTime()}`,
       supplierId: profileData.userId,
     });
@@ -203,12 +204,12 @@ const EditAddress = props => {
 
   const onPincodeBlur = async () => {
     if (pincode && pincode.length == 6) {
-      const {data} = await getPincodeDetails(pincode);
+      const { data } = await getPincodeDetails(pincode);
       if (data.data && data.data.length) {
         console.log('Data===>', data);
         setpincodeError(false);
-        setStates([{value: data.data[0].state, label: data.data[0].state}]);
-        setCities(data.data.map(_ => ({label: _.city, value: _.city})));
+        setStates([{ value: data.data[0].state, label: data.data[0].state }]);
+        setCities(data.data.map(_ => ({ label: _.city, value: _.city })));
         setstate(data.data[0].state);
         if (data.data.length) {
           setcity(data.data[0].city);
@@ -228,8 +229,6 @@ const EditAddress = props => {
       addressesDetailsStatus == STATE_STATUS.FAILED_UPDATE
     ) {
       setLoading(false);
-      console.log('ssg', addressesDetailsError);
-      // alert(addressesDetailsError.state);
       Toast.show({
         type: 'error',
         text2: addressesDetailsError && addressesDetailsError.state,
@@ -245,7 +244,7 @@ const EditAddress = props => {
     setaddress1((BillingAddressData?.[0] || {})?.address1);
     setaddress2((BillingAddressData?.[0] || {})?.address2);
     setpincode((BillingAddressData?.[0] || {})?.pincode);
-    setSelection((BillingAddressData?.[0] || {})?.default);
+    // setSelection((BillingAddressData?.[0] || {})?.default);
   };
 
   const onPhoneBlur = () => {
@@ -348,7 +347,7 @@ const EditAddress = props => {
         navigation={props.navigation}
         showText={editID ? 'Edit Address' : 'Add Address'}
         rightIconName={'business-details'}></Header>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <ScrollView bounces style={styles.ContainerCss}>
           {FORM_FIELDS.map((field, fieldKey) => (
             <field.component {...field} key={fieldKey} />

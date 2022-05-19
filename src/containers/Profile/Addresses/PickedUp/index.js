@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -9,14 +9,14 @@ import {
   Dimensions
 } from 'react-native';
 import colors from '../../../../Theme/Colors';
-import {useSelector, useDispatch} from 'react-redux';
-import {fetchDeleteAddresses} from '../../../../redux/actions/profile';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchDeleteAddresses } from '../../../../redux/actions/profile';
 import Dimension from '../../../../Theme/Dimension';
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
-import {STATE_STATUS} from '../../../../redux/constants';
-import {saveAddressAction} from '../../../../redux/actions/profile';
+import { STATE_STATUS } from '../../../../redux/constants';
+import { saveAddressAction } from '../../../../redux/actions/profile';
 
 const PickedUp = props => {
   const profileData = useSelector(state => state.profileReducer.data || {});
@@ -53,8 +53,8 @@ const PickedUp = props => {
     dispatch(saveAddressAction());
   };
 
-  const renderItems = ({item}) => (
-    <View style={{flex: 1}}>
+  const renderItems = ({ item }) => (
+    <View style={{ flex: 1 }}>
       <View style={styles.wrap}>
         <View style={styles.nameWrap}>
           <Text style={styles.UserNameCss}>
@@ -72,7 +72,7 @@ const PickedUp = props => {
         </Text>
         <View style={styles.buttonWrap}>
           {item.isDefault ? null : (
-            <View style={{marginRight: 15, flex: 1}}>
+            <View style={{ marginRight: 15, flex: 1 }}>
               <CustomButton
                 title={'REMOVE'}
                 onPress={() => removeAddresses(item)}
@@ -83,7 +83,7 @@ const PickedUp = props => {
             </View>
           )}
           {profileData && profileData.verificationStatus !== 15 ? (
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <CustomButton
                 title={'EDIT'}
                 buttonColor={colors.WhiteColor}
@@ -104,22 +104,22 @@ const PickedUp = props => {
   );
 
   return (
-    <View style={{flex: 0.9}}>
+    <View style={{ flex: 0.9 }}>
       {addressesDetailsStatus == STATE_STATUS.FETCHING ? (
         <View
-        style={{
-          flex: 1,
-          height: Dimensions.get('window').height,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 50,
-        }}>
-        <ActivityIndicator
-          style={{alignSelf: 'center', margin: Dimension.margin12}}
-          size={'large'}
-          color={colors.BrandColor}
-        />
-      </View>
+          style={{
+            flex: 1,
+            height: Dimensions.get('window').height,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 50,
+          }}>
+          <ActivityIndicator
+            style={{ alignSelf: 'center', margin: Dimension.margin12 }}
+            size={'large'}
+            color={colors.BrandColor}
+          />
+        </View>
       ) : (
         <ScrollView bounces style={styles.ContainerCss}>
           <View style={styles.TopWrap}>
@@ -128,10 +128,10 @@ const PickedUp = props => {
             </Text>
             <TouchableOpacity
               onPress={() =>
-                props.navigation.navigate('EditAddress', {tabState: pickedUp})
+                props.navigation.navigate('EditAddress', { tabState: pickedUp })
               }>
               {profileData && profileData.verificationStatus !== 15 ? (
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <CustomeIcon
                     name={'add-circle'}
                     size={Dimension.font18}

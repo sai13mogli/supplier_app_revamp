@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {Text, View, FlatList, Image, ActivityIndicator,Dimensions} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, FlatList, Image, ActivityIndicator, Dimensions } from 'react-native';
 import Header from '../../../component/common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../../../component/common/Button';
-import {getInvoiceEMSDetails} from '../../../services/orders';
+import { getInvoiceEMSDetails } from '../../../services/orders';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import styles from './style';
@@ -92,7 +92,7 @@ const UploadInvoiceScreen = props => {
         supplierId: await AsyncStorage.getItem('userId'),
         orderRef: orderRef,
       };
-      const {data} = await getInvoiceEMSDetails(payload);
+      const { data } = await getInvoiceEMSDetails(payload);
       if (data.success) {
         setInvoiceList(data?.data?.itemList);
         setLoading(false);
@@ -107,10 +107,10 @@ const UploadInvoiceScreen = props => {
     setTotalAmount(value);
     let updatedPrice = totalPrice.map(item => item.price);
     let uppdatedSum = global.price + value;
-    setHeaderSum(getTotalPrice(uppdatedSum));
+
   };
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <InvoiceEmsCard
         msn={item.productMsn}
@@ -119,7 +119,7 @@ const UploadInvoiceScreen = props => {
         quantity={item.quantity}
         selectedValue={value => setTaxPercentage(value)}
         UpdatedQuntity={value => setQuantity(value)}
-        UpdatedTotalPrice={(value, id) => calculateHeaderSum(value, id)}
+        UpdatedTotalPrice={(value) => (value)}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
@@ -141,7 +141,7 @@ const UploadInvoiceScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             // source={require('../../assets/images/emptyOrders.png')}
-            style={{width: 300, height: 200}}
+            style={{ width: 300, height: 200 }}
           />
           <Text style={styles.emptyTxt}>No Data Available</Text>
         </View>
@@ -166,7 +166,7 @@ const UploadInvoiceScreen = props => {
             ]}>
             Total Price -{' '}
             <Text style={styles.TitleBoldTxt}>
-              ₹{headerSum}
+              ₹{getTotalPrice(totalAmount)}
               {'   '} (Price Including Tax-
               <Text style={styles.sectionText}>Excluding TDS-TCS</Text>
               <Text style={styles.TitleBoldTxt}> )</Text>
@@ -187,20 +187,20 @@ const UploadInvoiceScreen = props => {
       />
       {renderOrderHeaderDetail()}
       {invoiceLoader ? (
-         <View
-         style={{
-           flex: 1,
-           height: Dimensions.get('window').height,
-           alignItems: 'center',
-           justifyContent: 'center',
-           marginTop: 50,
-         }}>
-         <ActivityIndicator
-           style={{alignSelf: 'center', margin: Dimension.margin12}}
-           size={'large'}
-           color={colors.BrandColor}
-         />
-       </View>
+        <View
+          style={{
+            flex: 1,
+            height: Dimensions.get('window').height,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 50,
+          }}>
+          <ActivityIndicator
+            style={{ alignSelf: 'center', margin: Dimension.margin12 }}
+            size={'large'}
+            color={colors.BrandColor}
+          />
+        </View>
       ) : (
         <FlatList
           bounces
