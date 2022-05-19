@@ -24,6 +24,9 @@ const SettingsScreen = props => {
     await AsyncStorage.removeItem('fcmToken');
     await AsyncStorage.removeItem('onlineFlag');
     await AsyncStorage.removeItem('enterpriseFlag');
+    await AsyncStorage.removeItem('notification');
+    await messaging().deleteToken();
+
     const isSignedIn = await GoogleSignin.isSignedIn();
     if (isSignedIn) {
       await GoogleSignin.revokeAccess();

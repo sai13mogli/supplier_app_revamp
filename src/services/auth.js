@@ -46,3 +46,10 @@ export const setUserPassword = async password =>
   );
 
 export const rmLogin = data => axios.post(`${AUTH}auth/rmLogin`, data);
+
+export const replaceToken = async payloadObj =>
+  axios.post(`${BASE_URL}api/device/replaceToken`, payloadObj, {
+    headers: {
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+  });

@@ -336,12 +336,14 @@ const OrdersScreen = props => {
       fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
       setLoadingTabs(true);
     }
-
+  
     return () => {
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
     };
   }, []);
+
+ 
 
   const getOptions = () => {
     if (!profileData.enterpriseFlag) {
