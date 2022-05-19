@@ -790,12 +790,12 @@ const CategoryBrandScreen = props => {
                   <TouchableOpacity
                     style={styles.BrandWrap}
                     onPress={() => openModal(_)}>
-                    <View style={{flex: 1}}>
+                    <View style={{flex: 1,marginRight:Dimension.margin5}}>
                       <Text style={styles.brandTitleTxt}>Brand Name</Text>
                       <Text style={styles.brandNameTxt}>{_.brandName}</Text>
                     </View>
 
-                    <View style={{flex: 1}}>
+                    <View style={{flex: 1,marginRight:Dimension.margin5}}>
                       <Text style={styles.brandTitleTxt}>Status</Text>
                       {_.isDeleted == '0' ? (
                         <Text style={styles.ApprovedStatus}>Approved</Text>
@@ -808,26 +808,22 @@ const CategoryBrandScreen = props => {
                       )}
                     </View>
 
+                    
+
+                    <View style={{flex: 1,flexDirection:"row",justifyContent:'flex-end'}}>
                     <TouchableOpacity
                       onPress={() => {
                         setCurrentBrand(_);
                         setIsVisible(true);
-                      }}>
-                      {/* <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: 'bold',
-                            color: '#000',
-                          }}>
-                          Delete
-                        </Text> */}
+                      }}
+                      style={{marginRight:Dimension.margin10}}
+                      >
+                      
                       <CustomeIcon
                         name={'delete'}
-                        size={Dimension.font22}
+                        size={Dimension.font20}
                         color={colors.FontColor}></CustomeIcon>
                     </TouchableOpacity>
-
-                    <View style={{flex: 1}}>
                       {_.isDeleted == '4' && _.localbrand ? (
                         <TouchableOpacity
                           onPress={() => openModal(_)}
@@ -840,7 +836,7 @@ const CategoryBrandScreen = props => {
                           onPress={() => openModal(_)}>
                           <CustomeIcon
                             name={'arrow-right-s-line'}
-                            size={Dimension.font28}
+                            size={Dimension.font24}
                             color={colors.FontColor}></CustomeIcon>
                         </TouchableOpacity>
                       )}
@@ -896,26 +892,22 @@ const CategoryBrandScreen = props => {
                       </Text>
                     </View>
 
+                    
+
+                    <View style={{flex: 1,justifyContent:"flex-end",flexDirection:"row"}}>
                     <TouchableOpacity
                       onPress={() => {
                         setCurrentBrand(_);
                         setIsVisible(true);
-                      }}>
-                      {/* <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: 'bold',
-                            color: '#000',
-                          }}>
-                          Delete
-                        </Text> */}
+                      }}
+                      style={{marginRight:Dimension.margin10}}
+                      >
+                    
                       <CustomeIcon
                         name={'delete'}
-                        size={Dimension.font22}
+                        size={Dimension.font20}
                         color={colors.FontColor}></CustomeIcon>
                     </TouchableOpacity>
-
-                    <View style={{flex: 1}}>
                       {_.isDeleted == '2' &&
                       _.isRaiseRequest == 'true' &&
                       _.localbrand ? (
@@ -928,7 +920,7 @@ const CategoryBrandScreen = props => {
                         <TouchableOpacity style={styles.ArrowBtn}>
                           <CustomeIcon
                             name={'arrow-right-line'}
-                            size={Dimension.font28}
+                            size={Dimension.font24}
                             color={colors.FontColor}></CustomeIcon>
                         </TouchableOpacity>
                       )}
