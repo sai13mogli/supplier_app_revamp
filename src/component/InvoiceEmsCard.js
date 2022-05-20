@@ -22,6 +22,7 @@ const InvoiceCard = props => {
     productName,
     itemId,
     bulkItemIds,
+    keys
   } = props;
 
   const [taxPercentageLabel, setTaxPercentageLabel] = useState(props?.taxPercentage);
@@ -148,7 +149,7 @@ const InvoiceCard = props => {
                 : Colors.FontColor
             }
             size={Dimension.font20}
-            onPress={() => selectItemId(itemId, props.totalAmount)}
+            onPress={() => selectItemId(itemId, props.totalAmount, keys, quantity, hsn, taxPercentage)}
             style={styles.checkboxDesign}></CustomeIcon>
           <View style={styles.rightPart}>
             <Text style={styles.productName}>{productName}</Text>

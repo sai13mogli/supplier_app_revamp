@@ -395,7 +395,7 @@ const UploadInvoiceOMSScreen = props => {
           },
           {
             name: 'itemLists',
-            data: podIdList.length > 1 ? podIdList : String(podId),
+            data: podIdList.length > 1 ? podIdList.join(',') : String(podId),
           },
           {
             name: 'invoiceTotal',
