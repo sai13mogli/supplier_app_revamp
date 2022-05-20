@@ -43,6 +43,7 @@ import PickerDropDown from '../../../component/common/PickerDropDown';
 import PDFView from 'react-native-view-pdf';
 import PickerMenu from '../../../component/common/PickerMenu';
 import analytics from '@react-native-firebase/analytics';
+import Toast from 'react-native-toast-message';
 
 // import {uploadDocumentService} from '../../../services/documents';
 const deviceWidth = Dimensions.get('window').width;
@@ -515,7 +516,7 @@ const CategoryBrandScreen = props => {
         brandName: brand && brand.name,
         isDocumentRequired: currBrand.isDocumentRequired,
         confirmed: currBrand.confirmed,
-        localbrand: currBrand.localbrand,
+        localbrand: true,
       };
       let currbrands = ([...userBrands] || []).filter(
         _ => _.brandCode !== brand.code,
@@ -529,7 +530,7 @@ const CategoryBrandScreen = props => {
         }
         return 0;
       });
-      console.log(currbrands, currBrandObj);
+      console.log(currbrands, currBrandObj, 'hehehheheh');
       dispatch(updateBrandData(currbrands));
     }
     setModalVisible(false);
@@ -653,31 +654,47 @@ const CategoryBrandScreen = props => {
   const onNext = async () => {
     setNextLoader(true);
     try {
-      let mutatebrands = (userBrands || [])
-        .filter((item, idx) => item.localbrand)
-        .map((_, i) => ({
-          supplierId: _.supplierId,
-          brandCode: _.brandCode,
-          fileKey: _.fileKey || '',
-          businessNature: _.businessNature || _.tentativebusinessNature,
-          expiryDate: _.expiryDate || '',
-          isDeleted: _.isDeleted || '0',
-          isRaiseRequest: _.isRaiseRequest || 'false',
-          brandListingUrl: _.brandListingUrl || '',
-        }));
+      let isEmptyDetails = (userBrands || []).filter(
+        _ => _.businessNature == '',
+      );
 
-      let categoryIds = ([...selectedCategories] || []).map((_, i) => _.id);
-      let payloadObj = {
-        categoryCode: [...categoryIds],
-        brandList: [...mutatebrands],
-      };
-      const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
-      if (data && data.success) {
+      if (isEmptyDetails && isEmptyDetails.length) {
+        Toast.show({
+          type: 'error',
+          text2: `Please fill ${
+            isEmptyDetails[0] && isEmptyDetails[0].brandName
+          } brand details`,
+          visibilityTime: 2000,
+          autoHide: true,
+        });
         setNextLoader(false);
-        dispatch(fetchProfile());
-        props.navigation.goBack();
       } else {
-        setNextLoader(false);
+        let mutatebrands = (userBrands || [])
+          .filter((item, idx) => item.localbrand)
+          .map((_, i) => ({
+            supplierId: _.supplierId,
+            brandCode: _.brandCode,
+            fileKey: _.fileKey || '',
+            businessNature: _.businessNature || _.tentativebusinessNature,
+            expiryDate: _.expiryDate || '',
+            isDeleted: _.isDeleted || '0',
+            isRaiseRequest: _.isRaiseRequest || 'false',
+            brandListingUrl: _.brandListingUrl || '',
+          }));
+
+        let categoryIds = ([...selectedCategories] || []).map((_, i) => _.id);
+        let payloadObj = {
+          categoryCode: [...categoryIds],
+          brandList: [...mutatebrands],
+        };
+        const {data} = await addOrUpdateCategoryAndBrand(payloadObj);
+        if (data && data.success) {
+          setNextLoader(false);
+          dispatch(fetchProfile());
+          props.navigation.goBack();
+        } else {
+          setNextLoader(false);
+        }
       }
     } catch (error) {
       setNextLoader(false);

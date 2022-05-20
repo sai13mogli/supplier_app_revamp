@@ -30,6 +30,7 @@ const FileUpload = props => {
     uploadDocument,
     errorState,
     errorText,
+    disabled,
   } = props;
 
   if (fileUpload == 2 || fileUpload == 3) {
@@ -49,6 +50,7 @@ const FileUpload = props => {
               </Text>
               {closeDoc ? (
                 <TouchableOpacity
+                  disabled={disabled}
                   onPress={() => {
                     console.log('doc id', id);
                     onRemove(id);
@@ -77,7 +79,7 @@ const FileUpload = props => {
               />
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity onPress={uploadDocument}>
+            <TouchableOpacity disabled={disabled} onPress={uploadDocument}>
               <CustomeIcon
                 name={'upload'}
                 size={Dimension.font20}
