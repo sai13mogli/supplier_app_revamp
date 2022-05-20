@@ -80,7 +80,7 @@ const BulkActionsModal = props => {
           visibilityTime: 2000,
           autoHide: true,
         });
-        setBulkActionsModal(false);
+        // setBulkActionsModal(false);
       } else {
         setBulkAcceptLoader(false);
         Toast.show({
@@ -89,7 +89,7 @@ const BulkActionsModal = props => {
           visibilityTime: 2000,
           autoHide: true,
         });
-        setBulkActionsModal(false);
+        // setBulkActionsModal(false);
       }
     } catch (error) {
       setBulkAcceptLoader(false);
@@ -99,7 +99,7 @@ const BulkActionsModal = props => {
         visibilityTime: 2000,
         autoHide: true,
       });
-      setBulkActionsModal(false);
+      // setBulkActionsModal(false);
     }
   };
 
