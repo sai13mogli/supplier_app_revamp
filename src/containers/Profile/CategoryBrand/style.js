@@ -93,7 +93,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding8,
-    alignItems: 'center',
+    //alignItems: 'center',
+    maxHeight:Dimension.height40,
+    alignSelf:'center'
   },
   fillDetailtxt: {
     fontSize: Dimension.font12,
