@@ -179,28 +179,30 @@ const SettingsScreen = props => {
             </View>
           </View>
           <View style={styles.bottombtnWrap}>
-            <View style={{flex: 1}}>
+          <View style={{flex: 1}}>
               <CustomButton
-                buttonColor={Colors.WhiteColor}
-                borderColor={Colors.WhiteColor}
-                TextColor={Colors.FontColor}
-                TextFontSize={Dimension.font16}
-                title={'CONFIRM'}
-                // loading={loading}
-                onPress={onLogout}
-              />
-            </View>
-            <View style={{flex: 1}}>
-              <CustomButton
-                buttonColor={Colors.BrandColor}
-                borderColor={Colors.BrandColor}
-                TextColor={Colors.WhiteColor}
+               buttonColor={Colors.WhiteColor}
+               borderColor={Colors.WhiteColor}
+               TextColor={Colors.FontColor}
                 TextFontSize={Dimension.font16}
                 title={'CANCEL'}
                 // loading={loading}
                 onPress={() => setshowLogoutModal(false)}
               />
             </View>
+            <View style={{flex: 1}}>
+              <CustomButton
+                
+                buttonColor={Colors.BrandColor}
+                borderColor={Colors.BrandColor}
+                TextColor={Colors.WhiteColor}
+                TextFontSize={Dimension.font16}
+                title={'LOGOUT'}
+                // loading={loading}
+                onPress={onLogout}
+              />
+            </View>
+            
           </View>
         </View>
       </Modal>
