@@ -244,7 +244,14 @@ const ProfileScreen = props => {
             source={require('../../assets/images/rejected.png')}
             style={{width: 350, height: 300}}
           />
-          <Text style={styles.profilependingTxt}>
+          <Text
+            style={{
+              fontSize: Dimension.font12,
+              fontFamily: Dimension.CustomMediumFont,
+              color: Colors.FontColor,
+              alignSelf: 'center',
+              paddingVertical: Dimension.padding30,
+            }}>
             Your profile is rejected, as it does not{'\n'}match to our
             requirements
           </Text>

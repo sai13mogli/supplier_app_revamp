@@ -336,14 +336,12 @@ const OrdersScreen = props => {
       fetchTabCountFunc('SCHEDULED_PICKUP', shipmentType);
       setLoadingTabs(true);
     }
-  
+
     return () => {
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
     };
   }, []);
-
- 
 
   const getOptions = () => {
     if (!profileData.enterpriseFlag) {
@@ -542,22 +540,24 @@ const OrdersScreen = props => {
   //select Item Id
   const selectItemId = itemId => {
     let currentItemIds = [...bulkItemIds];
+    console.log(currentItemIds.includes(itemId), itemId);
     if (currentItemIds.includes(itemId)) {
       currentItemIds = currentItemIds.filter(_ => _ != itemId);
     } else {
-      if (currentItemIds) {
+      if (currentItemIds && currentItemIds.length) {
         currentItemIds.push(itemId);
       } else {
         currentItemIds = [];
         currentItemIds.push(itemId);
       }
     }
-    if (currentItemIds.length == OrderData.toArray().length) {
+    if (currentItemIds && currentItemIds.length == OrderData.toArray().length) {
       setSelectAll(true);
     } else {
       setSelectAll(false);
     }
-    setBulkItemIds(currentItemIds);
+    console.log(currentItemIds);
+    setBulkItemIds([...currentItemIds]);
   };
 
   //select Item Data
@@ -594,7 +594,7 @@ const OrdersScreen = props => {
       currentItemIds = ([...OrderData] || []).map((_, i) => _.itemId);
       setBulkItemIds([...currentItemIds]);
     } else {
-      setBulkItemIds([]);
+      // setBulkItemIds([]);
     }
   }, [selectAll]);
 
