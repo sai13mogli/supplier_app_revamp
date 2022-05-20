@@ -584,8 +584,8 @@ const OrdersScreen = props => {
     } else {
       setSelectAll(false);
     }
-    setBulkDownloadItems(currentBulkDownloadItems);
-    setBulkItemIds(currItemIds);
+    setBulkDownloadItems([...currentBulkDownloadItems]);
+    setBulkItemIds([...currItemIds]);
   };
 
   useEffect(() => {
