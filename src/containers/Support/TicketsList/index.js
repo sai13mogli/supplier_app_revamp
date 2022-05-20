@@ -200,19 +200,19 @@ const TicketsList = props => {
   const renderLoader = () => {
     return (
       <View
-      style={{
-        flex: 1,
-        height: Dimensions.get('window').height,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 50,
-      }}>
-      <ActivityIndicator
-        style={{alignSelf: 'center', margin: Dimension.margin12}}
-        size={'large'}
-        color={colors.BrandColor}
-      />
-    </View>
+        style={{
+          flex: 1,
+          height: Dimensions.get('window').height,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 50,
+        }}>
+        <ActivityIndicator
+          style={{alignSelf: 'center', margin: Dimension.margin12}}
+          size={'large'}
+          color={colors.BrandColor}
+        />
+      </View>
     );
   };
 
@@ -294,6 +294,8 @@ const TicketsList = props => {
             onSubmitEditing={event => {
               if (inputValue && inputValue.length > 1) {
                 onSubmitSearch();
+              } else if (!inputValue) {
+                onSubmitSearch();
               }
             }}
           />
@@ -359,7 +361,7 @@ const TicketsList = props => {
           <ActivityIndicator
             style={{alignSelf: 'center'}}
             size={'large'}
-        color={colors.BrandColor}
+            color={colors.BrandColor}
           />
         </View>
       );
