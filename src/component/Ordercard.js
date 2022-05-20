@@ -866,12 +866,12 @@ const Ordercard = props => {
               }}
               style={styles.DownloadPoBtn}>
               <Text style={styles.rejectCtaTxt}>REUPLOAD INVOICE</Text>
-              {poLoader && (
+              {/* {poLoader && (
                 <ActivityIndicator
                   color={Colors.FontColor}
                   style={{alignSelf: 'center'}}
                 />
-              )}
+              )} */}
             </TouchableOpacity>
             <View
               style={{flexDirection: 'row', flexBasis: '50%', marginTop: 5}}>

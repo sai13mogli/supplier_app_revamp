@@ -150,7 +150,7 @@ const DocumentsScreen = props => {
       title: 'ID Proof(PAN Card)',
       state: pancard,
       errorState: pancardError,
-      disabled: false,
+      disabled: profileData.verificationStatus >= 10,
       documents: {
         title: pancard && pancard.title,
         doc: pancard && pancard.value,
@@ -169,7 +169,7 @@ const DocumentsScreen = props => {
       title: 'GSTIN Document',
       state: gstin,
       errorState: gstinError,
-      disabled: false,
+      disabled: profileData.verificationStatus >= 10,
       documents: {
         title: gstin && gstin.title,
         doc: gstin && gstin.value,
@@ -188,7 +188,7 @@ const DocumentsScreen = props => {
       title: 'Cancelled Cheque',
       state: cheque,
       errorState: chequeError,
-      disabled: false,
+      disabled: profileData.verificationStatus >= 10,
       documents: {
         title: cheque && cheque.title,
         doc: cheque && cheque.value,
@@ -207,7 +207,7 @@ const DocumentsScreen = props => {
       title: 'Bank Statement Copy',
       state: bankStatement,
       errorState: bankStatementError,
-      disabled: false,
+      disabled: profileData.verificationStatus >= 10,
       documents: {
         title: bankStatement && bankStatement.title,
         doc: bankStatement && bankStatement.value,
@@ -226,7 +226,7 @@ const DocumentsScreen = props => {
       title: 'Certificate of Corporation',
       state: corporateCertificate,
       errorState: corpCertificateError,
-      disabled: false,
+      disabled: profileData.verificationStatus >= 10,
       documents: {
         title: corporateCertificate && corporateCertificate.title,
         doc: corporateCertificate && corporateCertificate.value,
@@ -245,7 +245,7 @@ const DocumentsScreen = props => {
       title: 'Business Address Proof',
       state: addressProof,
       errorState: addressProofError,
-      disabled: false,
+      disabled: profileData.verificationStatus >= 10,
       documents: {
         title: addressProof && addressProof.title,
         doc: addressProof && addressProof.value,
@@ -264,7 +264,7 @@ const DocumentsScreen = props => {
       title: 'Pickup Address Proof',
       state: pickupAddressProof,
       errorState: pickupAddressProofError,
-      disabled: false,
+      disabled: profileData.verificationStatus >= 10,
       documents: {
         title: pickupAddressProof && pickupAddressProof.title,
         doc: pickupAddressProof && pickupAddressProof.value,
@@ -283,7 +283,7 @@ const DocumentsScreen = props => {
       title: 'Signature',
       state: signature,
       errorState: signatureError,
-      disabled: false,
+      disabled: profileData.verificationStatus >= 10,
       documents: {
         title: signature && signature.title,
         doc: signature && signature.value,
@@ -1041,7 +1041,9 @@ const DocumentsScreen = props => {
   };
 
   const onPress = id => {
-    SheetManager.show('action_sheet', id);
+    if (profileData && profileData.verificationStatus < 10) {
+      SheetManager.show('action_sheet', id);
+    }
   };
 
   //render each doc
