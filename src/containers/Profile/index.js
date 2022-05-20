@@ -34,6 +34,7 @@ import {fetchNotifications} from '../../redux/actions/notifications';
 import {sendVerificationEmail} from '../../services/profile';
 import Toast from 'react-native-toast-message';
 import {openInbox} from 'react-native-email-link';
+import AppUpdateBanner from '../../component/common/AppUpdateBanner';
 
 const ProfileScreen = props => {
   const [initLoader, setInitLoader] = useState(true);
@@ -223,6 +224,7 @@ const ProfileScreen = props => {
         showBack
         showBell
       />
+      <AppUpdateBanner />
       {profileStatus == STATE_STATUS.FETCHING ? (
         <View
           style={{
@@ -244,7 +246,14 @@ const ProfileScreen = props => {
             source={require('../../assets/images/rejected.png')}
             style={{width: 350, height: 300}}
           />
-          <Text style={styles.profilependingTxt}>
+          <Text
+            style={{
+              fontSize: Dimension.font12,
+              fontFamily: Dimension.CustomMediumFont,
+              color: Colors.FontColor,
+              alignSelf: 'center',
+              paddingVertical: Dimension.padding30,
+            }}>
             Your profile is rejected, as it does not{'\n'}match to our
             requirements
           </Text>

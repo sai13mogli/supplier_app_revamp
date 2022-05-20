@@ -107,8 +107,8 @@ const SettingsScreen = props => {
               Order Related in app Notifications
             </Text>
             <Switch
-              trackColor={{false: '#ccc', true: '#ccc'}}
-              thumbColor={'#000'}
+              trackColor={{false: '#f2dad3', true: '#f2dad3'}}
+              thumbColor={Colors.BrandColor}
               ios_backgroundColor="#ccc"
               onValueChange={() => {}}
               value={true}
@@ -122,8 +122,8 @@ const SettingsScreen = props => {
             }}>
             <Text style={styles.nrmtxt}>Push Notifications</Text>
             <Switch
-              trackColor={{false: '#ccc', true: '#ccc'}}
-              thumbColor={'#000'}
+              trackColor={{false: '#f2dad3', true: '#f2dad3'}}
+              thumbColor={Colors.BrandColor}
               ios_backgroundColor="#ccc"
               onValueChange={() => setNotifStatus(!notifStatus)}
               value={notifStatus}
@@ -185,9 +185,9 @@ const SettingsScreen = props => {
                 borderColor={Colors.WhiteColor}
                 TextColor={Colors.FontColor}
                 TextFontSize={Dimension.font16}
-                title={'CONFIRM'}
+                title={'CANCEL'}
                 // loading={loading}
-                onPress={onLogout}
+                onPress={() => setshowLogoutModal(false)}
               />
             </View>
             <View style={{flex: 1}}>
@@ -196,9 +196,9 @@ const SettingsScreen = props => {
                 borderColor={Colors.BrandColor}
                 TextColor={Colors.WhiteColor}
                 TextFontSize={Dimension.font16}
-                title={'CANCEL'}
+                title={'LOGOUT'}
                 // loading={loading}
-                onPress={() => setshowLogoutModal(false)}
+                onPress={onLogout}
               />
             </View>
           </View>

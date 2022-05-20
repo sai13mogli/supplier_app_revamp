@@ -35,6 +35,7 @@ import * as RootNavigation from '../../generic/navigator';
 import analytics from '@react-native-firebase/analytics';
 import { getAppInfo } from '../../services/auth';
 import { setVersion } from '../../redux/actions/homepage';
+import AppUpdateBanner from '../../component/common/AppUpdateBanner';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -343,8 +344,6 @@ const OrdersScreen = props => {
     };
   }, []);
 
-
-
   const getOptions = () => {
     if (!profileData.enterpriseFlag) {
       return ONLINE_OPTIONS;
@@ -540,22 +539,24 @@ const OrdersScreen = props => {
   //select Item Id
   const selectItemId = itemId => {
     let currentItemIds = [...bulkItemIds];
+    console.log(currentItemIds.includes(itemId), itemId);
     if (currentItemIds.includes(itemId)) {
       currentItemIds = currentItemIds.filter(_ => _ != itemId);
     } else {
-      if (currentItemIds) {
+      if (currentItemIds && currentItemIds.length) {
         currentItemIds.push(itemId);
       } else {
         currentItemIds = [];
         currentItemIds.push(itemId);
       }
     }
-    if (currentItemIds.length == OrderData.toArray().length) {
+    if (currentItemIds && currentItemIds.length == OrderData.toArray().length) {
       setSelectAll(true);
     } else {
       setSelectAll(false);
     }
-    setBulkItemIds(currentItemIds);
+    console.log(currentItemIds);
+    setBulkItemIds([...currentItemIds]);
   };
 
   //select Item Data
@@ -582,8 +583,8 @@ const OrdersScreen = props => {
     } else {
       setSelectAll(false);
     }
-    setBulkDownloadItems(currentBulkDownloadItems);
-    setBulkItemIds(currItemIds);
+    setBulkDownloadItems([...currentBulkDownloadItems]);
+    setBulkItemIds([...currItemIds]);
   };
 
   useEffect(() => {
@@ -592,7 +593,7 @@ const OrdersScreen = props => {
       currentItemIds = ([...OrderData] || []).map((_, i) => _.itemId);
       setBulkItemIds([...currentItemIds]);
     } else {
-      setBulkItemIds([]);
+      // setBulkItemIds([]);
     }
   }, [selectAll]);
 
@@ -1056,6 +1057,7 @@ const OrdersScreen = props => {
           {renderUnreadIcon()}
         </TouchableOpacity>
       </View>
+      <AppUpdateBanner />
       {tabStatus == STATE_STATUS.FETCHING ? (
         <View
           style={{
@@ -1189,6 +1191,9 @@ const OrdersScreen = props => {
               <TouchableOpacity
                 onPress={() => {
                   setSelectAll(!selectAll);
+                  if (selectAll) {
+                    setBulkItemIds([]);
+                  }
                 }}
                 style={styles.selectAllBtn}>
                 <Text style={styles.selectBtnTxt}>
@@ -1200,6 +1205,9 @@ const OrdersScreen = props => {
                   size={Dimension.font18}
                   onPress={() => {
                     setSelectAll(!selectAll);
+                    if (selectAll) {
+                      setBulkItemIds([]);
+                    }
                     // bulkSelect();
                   }}></CustomeIcon>
                 {/* <MaterialCommunityIcon
