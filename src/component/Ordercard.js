@@ -598,7 +598,7 @@ const Ordercard = props => {
         let manObj = (data?.data?.records || []).find(
           _ => _.manifestId == `${manId}`,
         );
-        if (manObj.manifestUrl != null) {
+        if (manObj && manObj.manifestUrl != null) {
           downloadPickupChallan(manObj.manifestUrl);
         } else {
           setPickupchallanLoader(false);
@@ -1124,12 +1124,12 @@ const Ordercard = props => {
               },
             ]}>
             <Text style={styles.rejectCtaTxt}>VIEW LSP DETAILS</Text>
-            {invoiceLoader && (
+            {/* {invoiceLoader && (
               <ActivityIndicator
                 color={Colors.FontColor}
                 style={{alignSelf: 'center'}}
               />
-            )}
+            )} */}
           </TouchableOpacity>
         ) : cta == 'PACK_ORDER' ? (
           <TouchableOpacity
