@@ -35,6 +35,7 @@ import * as RootNavigation from '../../generic/navigator';
 import analytics from '@react-native-firebase/analytics';
 import {getAppInfo} from '../../services/auth';
 import {setVersion} from '../../redux/actions/homepage';
+import AppUpdateBanner from '../../component/common/AppUpdateBanner';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -1061,6 +1062,7 @@ const OrdersScreen = props => {
           {renderUnreadIcon()}
         </TouchableOpacity>
       </View>
+      <AppUpdateBanner />
       {tabStatus == STATE_STATUS.FETCHING ? (
         <View
           style={{

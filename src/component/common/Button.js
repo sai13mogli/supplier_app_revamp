@@ -21,6 +21,7 @@ const CustomButton = props => {
     borderColor,
     CustomeButtonStyle,
     TextFontSize,
+    size,
   } = props;
 
   return (
@@ -32,6 +33,7 @@ const CustomButton = props => {
         size: 'small',
         color: loadingColor,
       }}
+      size={size || 'md'}
       icon={icon}
       disabled={disabled || loading}
       iconRight={showIcon}

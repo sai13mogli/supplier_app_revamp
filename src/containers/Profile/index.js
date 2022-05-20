@@ -34,6 +34,7 @@ import {fetchNotifications} from '../../redux/actions/notifications';
 import {sendVerificationEmail} from '../../services/profile';
 import Toast from 'react-native-toast-message';
 import {openInbox} from 'react-native-email-link';
+import AppUpdateBanner from '../../component/common/AppUpdateBanner';
 
 const ProfileScreen = props => {
   const [initLoader, setInitLoader] = useState(true);
@@ -223,6 +224,7 @@ const ProfileScreen = props => {
         showBack
         showBell
       />
+      <AppUpdateBanner />
       {profileStatus == STATE_STATUS.FETCHING ? (
         <View
           style={{
