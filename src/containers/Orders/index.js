@@ -1194,6 +1194,9 @@ const OrdersScreen = props => {
               <TouchableOpacity
                 onPress={() => {
                   setSelectAll(!selectAll);
+                  if (selectAll) {
+                    setBulkItemIds([]);
+                  }
                 }}
                 style={styles.selectAllBtn}>
                 <Text style={styles.selectBtnTxt}>
@@ -1205,6 +1208,9 @@ const OrdersScreen = props => {
                   size={Dimension.font18}
                   onPress={() => {
                     setSelectAll(!selectAll);
+                    if (selectAll) {
+                      setBulkItemIds([]);
+                    }
                     // bulkSelect();
                   }}></CustomeIcon>
                 {/* <MaterialCommunityIcon
