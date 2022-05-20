@@ -107,8 +107,8 @@ const SettingsScreen = props => {
               Order Related in app Notifications
             </Text>
             <Switch
-              trackColor={{false: '#ccc', true: '#ccc'}}
-              thumbColor={'#000'}
+              trackColor={{false: '#f2dad3', true: '#f2dad3'}}
+              thumbColor={Colors.BrandColor}
               ios_backgroundColor="#ccc"
               onValueChange={() => {}}
               value={true}
@@ -122,8 +122,8 @@ const SettingsScreen = props => {
             }}>
             <Text style={styles.nrmtxt}>Push Notifications</Text>
             <Switch
-              trackColor={{false: '#ccc', true: '#ccc'}}
-              thumbColor={'#000'}
+              trackColor={{false: '#f2dad3', true: '#f2dad3'}}
+              thumbColor={Colors.BrandColor}
               ios_backgroundColor="#ccc"
               onValueChange={() => setNotifStatus(!notifStatus)}
               value={notifStatus}
@@ -179,11 +179,11 @@ const SettingsScreen = props => {
             </View>
           </View>
           <View style={styles.bottombtnWrap}>
-          <View style={{flex: 1}}>
+            <View style={{flex: 1}}>
               <CustomButton
-               buttonColor={Colors.WhiteColor}
-               borderColor={Colors.WhiteColor}
-               TextColor={Colors.FontColor}
+                buttonColor={Colors.WhiteColor}
+                borderColor={Colors.WhiteColor}
+                TextColor={Colors.FontColor}
                 TextFontSize={Dimension.font16}
                 title={'CANCEL'}
                 // loading={loading}
@@ -192,7 +192,6 @@ const SettingsScreen = props => {
             </View>
             <View style={{flex: 1}}>
               <CustomButton
-                
                 buttonColor={Colors.BrandColor}
                 borderColor={Colors.BrandColor}
                 TextColor={Colors.WhiteColor}
@@ -202,7 +201,6 @@ const SettingsScreen = props => {
                 onPress={onLogout}
               />
             </View>
-            
           </View>
         </View>
       </Modal>
