@@ -8,6 +8,7 @@ import {
   Image,
   StatusBar,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
@@ -327,7 +328,7 @@ const LoginScreen = props => {
       </ImageBackground>
 
       {/* // </View> */}
-      <View style={styles.ContainerCss}>
+      <ScrollView style={styles.ContainerCss}>
         <Text style={styles.headingTxt}>Sign In</Text>
         {/* <Text>Login Screen</Text> */}
         {FORM_FIELDS.map((field, fieldKey) => (
@@ -427,7 +428,7 @@ const LoginScreen = props => {
         <Text style={styles.allrighttxt}>
           All rights reserved. Mogli labs Pvt Ltd.
         </Text>
-      </View>
+      </ScrollView>
       {/* // </View>  */}
     </View>
   );

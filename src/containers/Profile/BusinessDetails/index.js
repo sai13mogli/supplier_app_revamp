@@ -404,6 +404,12 @@ const BusinessDetailsScreen = props => {
     }
   };
 
+  useEffect(() => {
+    if (gstin.length && gstin.length > 14) {
+      onGstinBlur();
+    }
+  }, [gstin]);
+
   const onSubmit = async () => {
     if (
       legalEntityName &&
