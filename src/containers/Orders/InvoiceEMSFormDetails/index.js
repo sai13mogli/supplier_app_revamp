@@ -35,7 +35,7 @@ const InvoiceEMSFormDetailScreen = props => {
     props?.route?.params?.warehouseId,
   );
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
-  // const [itemRefs, setitemRef] = useState(props?.route?.params?.itemRefs);
+  const [itemRefs, setitemRef] = useState(props?.route?.params?.itemRefs);
   const [podIdList, setPodIdList] = useState(props?.route?.params?.podIdList);
   const [quantity, setQuantity] = useState(props?.route?.params?.quantity);
   const [hsn, setHsn] = useState(props?.route?.params?.hsn);
@@ -70,7 +70,6 @@ const InvoiceEMSFormDetailScreen = props => {
   const [misTotal, setMisTotal] = useState('');
   const [fId, setFId] = useState(null);
 
-  console.log("YanahaPa r====>", podIdList);
 
   const UploadInvoice = new OrderedMap({
     upload_invoice: {
