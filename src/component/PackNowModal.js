@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Dimensions,
   View,
@@ -8,10 +8,10 @@ import {
   Image,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import {getImageUrl, getPackNow, getLbh} from '../services/orders';
+import { getImageUrl, getPackNow, getLbh } from '../services/orders';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
-import {OrderedMap} from 'immutable';
+import { OrderedMap } from 'immutable';
 import CustomButton from '../component/common/Button';
 import FloatingLabelInputField from './common/FloatingInput';
 import FloatingInputDropdown from './FloatingInputDropdown';
@@ -289,7 +289,7 @@ const PackNowModal = props => {
         msn,
         qty: quantity,
       };
-      const {data} = await getLbh(payload);
+      const { data } = await getLbh(payload);
       if (data && data.success) {
         setHeight(data && data.data && data.data.height);
         setLength(data && data.data && data.data.length);
@@ -316,7 +316,7 @@ const PackNowModal = props => {
     ) {
       setLoading(true);
 
-      const {data} = await getPackNow({
+      const { data } = await getPackNow({
         length: unitConversion(length, lenghtLabel),
         width: unitConversion(width, weightLabel),
         height: unitConversion(height, heightLabel),
@@ -326,7 +326,6 @@ const PackNowModal = props => {
         itemId,
         supplierId,
       });
-      console.log('Order====>', data);
       if (data.success) {
         setModal(false);
         onPackNowSuccess();
@@ -336,7 +335,7 @@ const PackNowModal = props => {
   };
 
   const fetchImage = async () => {
-    const {data} = await getImageUrl(msn);
+    const { data } = await getImageUrl(msn);
     let imageUrl =
       'https://cdn.moglix.com/' +
       (data &&
@@ -363,7 +362,7 @@ const PackNowModal = props => {
         setModal(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 'auto', width: '100%', height: '100%'}}
+      style={{ padding: 0, margin: 'auto', width: '100%', height: '100%' }}
       deviceWidth={deviceWidth}
       deviceHeight={deviceHeight}
       //height={'80%'}
@@ -387,7 +386,7 @@ const PackNowModal = props => {
         </View>
         <ScrollView bounces>
           <>
-            <View style={{paddingHorizontal: Dimension.padding15}}>
+            <View style={{ paddingHorizontal: Dimension.padding15 }}>
               {renderOrderDetails()}
             </View>
           </>
@@ -399,7 +398,7 @@ const PackNowModal = props => {
           </View>
         </ScrollView>
         <View style={styles.bottomAction}>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <CustomButton
               title="RESET"
               buttonColor={Colors.WhiteColor}
@@ -420,7 +419,7 @@ const PackNowModal = props => {
               }}
             />
           </View>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <CustomButton
               title="PACK NOW"
               loading={loading}
