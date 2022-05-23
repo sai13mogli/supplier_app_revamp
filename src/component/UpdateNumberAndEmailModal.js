@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -7,16 +7,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import {sendOtpForVerification} from '../services/profile';
-import {updateEmail, updatePhone} from '../services/profile';
+import { sendOtpForVerification } from '../services/profile';
+import { updateEmail, updatePhone } from '../services/profile';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import CustomButton from './common/Button';
 import CustomeIcon from './common/CustomeIcon';
 import FloatingInput from './common/FloatingInput';
 import Toast from 'react-native-toast-message';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchBusinessDetails, fetchProfile} from '../redux/actions/profile';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchBusinessDetails, fetchProfile } from '../redux/actions/profile';
+import analytics from '@react-native-firebase/analytics';
+
 const phoneRegex = '^[1-9][0-9]{9}$';
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -179,7 +181,7 @@ const UpdateNumberAndEmailModal = props => {
 
   const onSendOtp = async () => {
     initializeCounter(type);
-    const {data} = await sendOtpForVerification(type);
+    const { data } = await sendOtpForVerification(type);
     if (data && !data.success) {
       if (type == 6) {
         setPhoneError(true);
@@ -206,7 +208,7 @@ const UpdateNumberAndEmailModal = props => {
           otp: phoneOtp,
         };
 
-        const {data} = await updatePhone(payloadObj);
+        const { data } = await updatePhone(payloadObj);
         if (data && data.success) {
           setLoading(false);
           setUpdatePhoneOtpModal(false);
@@ -226,6 +228,10 @@ const UpdateNumberAndEmailModal = props => {
             setOtpErrorMsg(data.message);
           } else {
             setPhoneError(true);
+            setTimer(0);
+            setResendOtp(false);
+            setTimerEmail(0);
+            setResendOtpEmail(false);
             setPhoneErrorMsg(data.message);
           }
         }
@@ -234,7 +240,7 @@ const UpdateNumberAndEmailModal = props => {
           email,
           otp: emailOtp,
         };
-        const {data} = await updateEmail(payloadObj);
+        const { data } = await updateEmail(payloadObj);
         if (data && data.success) {
           setLoading(false);
           setUpdatePhoneOtpModal(false);
@@ -254,6 +260,10 @@ const UpdateNumberAndEmailModal = props => {
             setOtpErrorMsg(data.message);
           } else {
             setEmailError(true);
+            setTimer(0);
+            setResendOtp(false);
+            setTimerEmail(0);
+            setResendOtpEmail(false);
             setEmailErrorMsg(data.message);
           }
         }
@@ -292,7 +302,7 @@ const UpdateNumberAndEmailModal = props => {
       coverScreen={true}
       backdropOpacity={0.9}
       onRequestClose={() => setUpdatePhoneOtpModal(false)}
-      style={{padding: 0, margin: 0}}
+      style={{ padding: 0, margin: 0 }}
       overlayPointerEvents={'auto'}
       onTouchOutside={() => setUpdatePhoneOtpModal(false)}
       onDismiss={() => setUpdatePhoneOtpModal(false)}

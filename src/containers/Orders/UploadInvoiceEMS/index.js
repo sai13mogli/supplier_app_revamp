@@ -56,10 +56,12 @@ const UploadInvoiceScreen = props => {
     return price.toFixed(2);
   };
 
+  console.log("okkk====>", podIdList);
 
   const selectItemId = (itemId, totalAmount, keys, quantity, hsn, taxPercentage) => {
     let currentItemIds = [...bulkItemIds];
     let currentKeys = [...totalKeys];
+    // currentKeys = [];
 
     setitemRef(itemId);
     if (currentItemIds.includes(itemId)) {
@@ -95,14 +97,15 @@ const UploadInvoiceScreen = props => {
       let priceList = [...totalPrice];
       priceList.splice(index, 1);
       setTotalPrice(priceList);
-      var obj = {
+      let obj = {
         quantity: quantity,
         hsn: hsn,
         hsnPercentage: taxPercentage,
         itemRef: keys
       }
-      var arr = [...podIdList];
+      let arr = [...podIdList];
       const podindex = arr.findIndex(x => x == keys);
+      // console.log("PodIndex===>",podindex,);
       arr.splice(podindex, 1);
       setPodIdList(obj);
     } else {
@@ -112,16 +115,14 @@ const UploadInvoiceScreen = props => {
       };
       let priceList = [...totalPrice];
       priceList.push(row);
-      var obj = {
+      setTotalPrice(priceList);
+      let obj = {
         quantity: quantity,
         hsn: hsn,
         hsnPercentage: taxPercentage,
         itemRef: keys
       }
-      console.log("Object===>", obj);
-      setTotalPrice(priceList);
-      var arr = [...podIdList];
-      // arr.push(keys);
+      let arr = [...podIdList];
       arr.push(obj)
       setPodIdList(arr);
     }
@@ -181,20 +182,19 @@ const UploadInvoiceScreen = props => {
     );
   };
 
-  const renderListEmptyComponent = () => {
-    if (global.List == 0) {
-      return (
-        <View style={styles.emptyWrap}>
-          <Image
-            // source={require('../../assets/images/emptyOrders.png')}
-            style={{ width: 300, height: 200 }}
-          />
-          <Text style={styles.emptyTxt}>No Data Available</Text>
-        </View>
-      );
-    }
-    return null;
-  };
+  // const renderListEmptyComponent = () => {
+  //   if (global.List == 0) {
+  //     return (
+  //       <View style={styles.emptyWrap}>
+  //         <Image
+  //           style={{ width: 300, height: 200 }}
+  //         />
+  //         <Text style={styles.emptyTxt}>No Data Available</Text>
+  //       </View>
+  //     );
+  //   }
+  //   return null;
+  // };
 
   const renderOrderHeaderDetail = () => {
     return (
@@ -252,7 +252,7 @@ const UploadInvoiceScreen = props => {
           bounces
           data={invoiceList}
           renderItem={renderItem}
-          ListEmptyComponent={renderListEmptyComponent}
+          // ListEmptyComponent={renderListEmptyComponent}
           keyExtractor={(item, index) => `${index}-item`}
           onEndReachedThreshold={0.9}
           showsVerticalScrollIndicator={false}
