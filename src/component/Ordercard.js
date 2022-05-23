@@ -79,6 +79,7 @@ const Ordercard = props => {
     source,
     statusText,
     initialPickupDate,
+    poUrl,
   } = props;
   const [invoiceLoading, setInvoiceLoading] = useState(false);
   const [orderImage, setOrderImage] = useState(null);
@@ -223,6 +224,7 @@ const Ordercard = props => {
 
   const downloadPDF = async (isPO, pdfUrl, isInvoice) => {
     let date = new Date();
+    console.log(isPO, pdfUrl);
 
     try {
       let image_URL = '';
@@ -247,6 +249,8 @@ const Ordercard = props => {
       }
       //Getting the extention of the file
       let ext = getExtention(image_URL);
+      console.log('imageUrl', image_URL, ext);
+      // ext = `.${ext && ext[0]}`;
       ext = '.' + ext[0];
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
@@ -312,6 +316,7 @@ const Ordercard = props => {
       image_URL = url;
       //Getting the extention of the file
       let ext = getExtention(image_URL);
+      // ext = `.${ext && ext[0]}`;
       ext = '.' + ext[0];
       //Get config and fs from RNFetchBlob
       //config: To pass the downloading related options
@@ -737,6 +742,7 @@ const Ordercard = props => {
   };
 
   const renderCTAs = (cta, url, fromCTA, fromPartial, podcopy) => {
+    console.log('url hai bc', url);
     const ctaLength = actionCTA.filter(number => number % 2 !== 0);
     return (
       <>
@@ -1742,9 +1748,9 @@ const Ordercard = props => {
           {/* {renderOrdersStageCTAs(invoiceUrl, fromCTA, podUrl)} */}
           {OrderStage !== 'CANCELLED' ? (
             <View style={{flex: 9, flexDirection: 'row', flexWrap: 'wrap'}}>
-              {renderPartialCTAs(invoiceUrl, fromCTA, podUrl)}
+              {renderPartialCTAs(invoiceUrl || poUrl, fromCTA, podUrl)}
               {!showMoreCTA
-                ? renderFurtherCTAs(invoiceUrl, fromCTA, podUrl)
+                ? renderFurtherCTAs(invoiceUrl || poUrl, fromCTA, podUrl)
                 : null}
             </View>
           ) : (
