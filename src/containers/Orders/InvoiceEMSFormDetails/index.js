@@ -35,7 +35,8 @@ const InvoiceEMSFormDetailScreen = props => {
     props?.route?.params?.warehouseId,
   );
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
-  const [itemRef, setitemRef] = useState(props?.route?.params?.itemRef);
+  const [itemRefs, setitemRef] = useState(props?.route?.params?.itemRefs);
+  const [podIdList, setPodIdList] = useState(props?.route?.params?.podIdList);
   const [quantity, setQuantity] = useState(props?.route?.params?.quantity);
   const [hsn, setHsn] = useState(props?.route?.params?.hsn);
   const [invoiceNumber, setInvoiceNumber] = useState();
@@ -68,6 +69,7 @@ const InvoiceEMSFormDetailScreen = props => {
   const [misBaseAmount, setMisBaseAmount] = useState('');
   const [misTotal, setMisTotal] = useState('');
   const [fId, setFId] = useState(null);
+
 
   const UploadInvoice = new OrderedMap({
     upload_invoice: {
@@ -545,14 +547,7 @@ const InvoiceEMSFormDetailScreen = props => {
           ewayNumber: ewayBillNumber,
           warehouseId: warehouseId,
           orderRef: orderRef,
-          itemLists: [
-            {
-              quantity: String(quantity),
-              hsnPercentage: String(taxPercentage),
-              itemRef: itemRef,
-              hsn: hsn,
-            },
-          ],
+          itemLists: podIdList,
           igstApplicable: true,
           countryCode: 356,
           frieght: {

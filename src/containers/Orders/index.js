@@ -402,7 +402,7 @@ const OrdersScreen = props => {
         fetchTabCountFunc={fetchTabCountFunc}
         setLoadingTabs={setLoadingTabs}
         itemId={item.itemId}
-        invoiceUrl={item.invoiceUrl}
+        invoiceUrl={item.invoiceUrl || item.poUrl}
         manifestId={item.manifestId}
         bulkItemIds={bulkItemIds}
         setBulkItemIds={setBulkItemIds}
@@ -444,7 +444,6 @@ const OrdersScreen = props => {
     let date = new Date();
     let supplierId = await AsyncStorage.getItem('userId');
     let currTab = mutateTabName(tab);
-    console.log(currTab, 'currTab');
     if (currTab) {
       await analytics().logEvent(`${currTab}`, {
         action: `click`,
@@ -459,7 +458,6 @@ const OrdersScreen = props => {
     let date = new Date();
     let supplierId = await AsyncStorage.getItem('userId');
     let currOrderType = mutateOrderType(currText);
-    console.log(currOrderType, 'curr orderType');
     if (currOrderType) {
       await analytics().logEvent(`${currOrderType}`, {
         action: `click`,
@@ -972,10 +970,6 @@ const OrdersScreen = props => {
     }
   };
 
-  // const handleKeyDown = e => {
-  //   console.log(e, e && e.nativeEvent && e.nativeEvent.key);
-  // };
-
   const getAppliedFilter = obj => {
     for (let property in obj) {
       if (obj[property] && obj[property].length) {
@@ -1123,7 +1117,7 @@ const OrdersScreen = props => {
                     placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
                     returnKeyType={'search'}
                     onChangeText={onSearchText}
-                    onFocus={() => console.log('onFocus!!')}
+                    // onFocus={() => console.log('onFocus!!')}
                     value={inputValue}
                     onSubmitEditing={event => {
                       if (inputValue && inputValue.length > 1) {

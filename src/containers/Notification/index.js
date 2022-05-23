@@ -7,7 +7,7 @@ import {
   SectionList,
   Image,
   ActivityIndicator,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {useDispatch} from 'react-redux';
@@ -392,19 +392,19 @@ const NotificationScreen = props => {
           ListFooterComponent={
             notificationsStatus == STATE_STATUS.FETCHING ? (
               <View
-              style={{
-                flex: 1,
-                height: Dimensions.get('window').height,
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: 50,
-              }}>
-              <ActivityIndicator
-                style={{alignSelf: 'center', margin: Dimension.margin12}}
-                size={'large'}
-                color={Colors.BrandColor}
-              />
-            </View>
+                style={{
+                  flex: 1,
+                  height: Dimensions.get('window').height,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginTop: 50,
+                }}>
+                <ActivityIndicator
+                  style={{alignSelf: 'center', margin: Dimension.margin12}}
+                  size={'large'}
+                  color={Colors.BrandColor}
+                />
+              </View>
             ) : null
           }
           ListEmptyComponent={
@@ -418,11 +418,15 @@ const NotificationScreen = props => {
                   }}
                 />
                 <Text style={styles.boldtxt}>No Notifications Yet</Text>
-                <TouchableOpacity
-                  onPress={onNavigate}
-                  style={styles.NewTicktbtn}>
-                  <Text style={styles.NewTicktbtnTxt}>{onNavigate(true)}</Text>
-                </TouchableOpacity>
+                {profileData.verificationStatus == 16 ? null : (
+                  <TouchableOpacity
+                    onPress={onNavigate}
+                    style={styles.NewTicktbtn}>
+                    <Text style={styles.NewTicktbtnTxt}>
+                      {onNavigate(true)}
+                    </Text>
+                  </TouchableOpacity>
+                )}
               </View>
             ) : null
           }

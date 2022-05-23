@@ -218,6 +218,10 @@ const Ordercard = props => {
     }
   };
 
+  useEffect(() => {
+    console.log(invoiceUrl, msn, itemId);
+  }, []);
+
   const downloadPDF = async (isPO, pdfUrl, isInvoice) => {
     let date = new Date();
     console.log(isPO, pdfUrl);
@@ -234,7 +238,7 @@ const Ordercard = props => {
         const {data} = await getpoChallan(supplierId, orderRef);
         if (data && data.success) {
           //Image URL which we want to download
-          image_URL = data.data;
+          image_URL = data.data || pdfUrl;
         }
       } else {
         //Image URL which we want to download
@@ -686,7 +690,6 @@ const Ordercard = props => {
     let date = new Date();
     let supplierId = await AsyncStorage.getItem('userId');
     let currTabName = mutateTabName(selectedTab);
-    console.log(currTabName);
     if (
       currTabName == 'ScheduledPickupCTA' ||
       currTabName == 'PickupCTA' ||

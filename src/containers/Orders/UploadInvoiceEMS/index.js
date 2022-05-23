@@ -16,6 +16,8 @@ const UploadInvoiceScreen = props => {
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPrice, setTotalPrice] = useState([]);
+  const [totalKeys, setTotalKeys] = useState([]);
+  const [podIdList, setPodIdList] = useState([]);
   const [hsn, sethsn] = useState(props?.route?.params?.hsn);
   const [taxPercentage, setTaxPercentage] = useState(
     props?.route?.params?.taxPercentage,
@@ -27,7 +29,7 @@ const UploadInvoiceScreen = props => {
   const [warehouseId, setwarehouseId] = useState(
     props?.route?.params?.warehouseId,
   );
-  const [itemRef, setitemRef] = useState(props?.route?.params?.itemRef);
+  const [itemRefs, setitemRef] = useState(props?.route?.params?.itemRef);
   const [actionCTA, setaAtionCTA] = useState(props?.route?.params?.actionCTA);
   const [invoiceList, setInvoiceList] = useState([]);
 
@@ -54,25 +56,58 @@ const UploadInvoiceScreen = props => {
     return price.toFixed(2);
   };
 
-  const selectItemId = (itemId, totalAmount) => {
+  console.log("okkk====>", podIdList);
+
+  const selectItemId = (itemId, totalAmount, keys, quantity, hsn, taxPercentage) => {
     let currentItemIds = [...bulkItemIds];
+    let currentKeys = [...totalKeys];
+    // currentKeys = [];
+
+    setitemRef(itemId);
     if (currentItemIds.includes(itemId)) {
       currentItemIds = currentItemIds.filter(_ => _ != itemId);
     } else {
       if (currentItemIds) {
+        var obj = {
+          quantity: quantity,
+          hsn: hsn,
+          hsnPercentage: taxPercentage,
+          itemRef: keys
+        }
         currentItemIds.push(itemId);
+        currentKeys.push(obj);
       } else {
         currentItemIds = [];
+        currentKeys = [];
+        var obj = {
+          quantity: quantity,
+          hsn: hsn,
+          hsnPercentage: taxPercentage,
+          itemRef: keys
+        }
         currentItemIds.push(itemId);
+        currentKeys.push(obj);
       }
     }
     setBulkItemIds(currentItemIds);
+    setTotalKeys(currentKeys);
     let filterData = totalPrice.filter(item => item.id == itemId);
     if (filterData.length > 0) {
       const index = totalPrice.findIndex(x => x.id === filterData[0].id);
       let priceList = [...totalPrice];
       priceList.splice(index, 1);
       setTotalPrice(priceList);
+      let obj = {
+        quantity: quantity,
+        hsn: hsn,
+        hsnPercentage: taxPercentage,
+        itemRef: keys
+      }
+      let arr = [...podIdList];
+      const podindex = arr.findIndex(x => x == keys);
+      // console.log("PodIndex===>",podindex,);
+      arr.splice(podindex, 1);
+      setPodIdList(obj);
     } else {
       let row = {
         id: itemId,
@@ -81,6 +116,15 @@ const UploadInvoiceScreen = props => {
       let priceList = [...totalPrice];
       priceList.push(row);
       setTotalPrice(priceList);
+      let obj = {
+        quantity: quantity,
+        hsn: hsn,
+        hsnPercentage: taxPercentage,
+        itemRef: keys
+      }
+      let arr = [...podIdList];
+      arr.push(obj)
+      setPodIdList(arr);
     }
   };
 
@@ -111,6 +155,7 @@ const UploadInvoiceScreen = props => {
   };
 
   const renderItem = ({ item }) => {
+    let keys = item?.itemRef
 
     return (
       <InvoiceEmsCard
@@ -128,6 +173,7 @@ const UploadInvoiceScreen = props => {
         taxPercentage={item.taxPercentage}
         selectedTab={selectedTab}
         itemId={item.id}
+        keys={keys}
         itemIndex={item}
         bulkItemIds={bulkItemIds}
         setBulkItemIds={setBulkItemIds}
@@ -136,20 +182,19 @@ const UploadInvoiceScreen = props => {
     );
   };
 
-  const renderListEmptyComponent = () => {
-    if (global.List == 0) {
-      return (
-        <View style={styles.emptyWrap}>
-          <Image
-            // source={require('../../assets/images/emptyOrders.png')}
-            style={{ width: 300, height: 200 }}
-          />
-          <Text style={styles.emptyTxt}>No Data Available</Text>
-        </View>
-      );
-    }
-    return null;
-  };
+  // const renderListEmptyComponent = () => {
+  //   if (global.List == 0) {
+  //     return (
+  //       <View style={styles.emptyWrap}>
+  //         <Image
+  //           style={{ width: 300, height: 200 }}
+  //         />
+  //         <Text style={styles.emptyTxt}>No Data Available</Text>
+  //       </View>
+  //     );
+  //   }
+  //   return null;
+  // };
 
   const renderOrderHeaderDetail = () => {
     return (
@@ -207,7 +252,7 @@ const UploadInvoiceScreen = props => {
           bounces
           data={invoiceList}
           renderItem={renderItem}
-          ListEmptyComponent={renderListEmptyComponent}
+          // ListEmptyComponent={renderListEmptyComponent}
           keyExtractor={(item, index) => `${index}-item`}
           onEndReachedThreshold={0.9}
           showsVerticalScrollIndicator={false}
@@ -241,7 +286,7 @@ const UploadInvoiceScreen = props => {
           onPress={() => {
             props.navigation.navigate('InvoiceEMSFormDetails', {
               orderRef,
-              itemRef,
+              podIdList,
               warehouseId,
               quantity,
               hsn,
