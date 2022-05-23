@@ -88,7 +88,6 @@ const Routes = props => {
           headerShown: false,
           tabBarIcon: ({focused, color}) =>
             tabBarIcon(focused, color, route, rest),
-          lazy: false,
           safeAreaInsets: {bottom: 0},
           tabBarStyle: {
             paddingTop: Dimension.padding10,
@@ -106,7 +105,6 @@ const Routes = props => {
         {BOTTOM_TAB_SCREENS.map((screen, key) => (
           <Tab.Screen
             key={key}
-            lazy={false}
             params={{setIsLoggedIn}}
             initialParams={{
               setIsLoggedIn,
@@ -265,7 +263,6 @@ const tabBarOptions = {
   activeTintColor: '#D9232D',
   inactiveTintColor: '#C4C4C4',
   showLabel: false,
-  lazy: false,
   style: styles.tabBar,
   safeAreaInsets: {bottom: 0},
 };

@@ -81,10 +81,26 @@ const OrdersScreen = props => {
     state.ordersReducer.getIn(['orders', 'filters']),
   );
 
+  const RETAIN_TABS = {
+    PENDING_ACCEPTANCE: 'Open_Orders',
+    SCHEDULED_PICKUP: 'Open_Orders',
+    PICKUP: 'Open_Orders',
+    UPLOAD_INVOICE: 'Open_Orders',
+    PACKED: 'Open_Orders',
+    SHIPMENT: 'Open_Orders',
+    MARK_SHIPPED: 'Open_Orders',
+    FULFILLED: 'Fulfilled_Orders',
+    CANCELLED: 'Cancelled',
+    RETURN_PENDING: 'Returned',
+    RETURN_DONE: 'Returned',
+  };
+
   const [loadingTabs, setLoadingTabs] = useState(true);
-  const [selectedType, setSelectedType] = useState('Open_Orders');
+  const [selectedType, setSelectedType] = useState(
+    RETAIN_TABS[OrderStage] || 'Open_Orders',
+  );
   const [selectedTab, setSelectedTab] = useState(
-    props.route.params.selectedTab || 'PENDING_ACCEPTANCE',
+    props.route.params.selectedTab || OrderStage || 'PENDING_ACCEPTANCE',
   );
   const onEndReachedCalledDuringMomentum = useRef(true);
   const [inputValue, setInputValue] = useState('');
