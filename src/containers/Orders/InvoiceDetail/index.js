@@ -74,7 +74,6 @@ const InvoiceDetailScreen = props => {
           });
         } else if (res.success == false) {
           setLoading(false);
-          console.log("Error====>", res.message);
           Toast.show({
             type: 'error',
             text2: res.message,

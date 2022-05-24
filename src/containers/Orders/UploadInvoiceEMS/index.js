@@ -83,7 +83,7 @@ const UploadInvoiceScreen = props => {
         setInvoiceLoader(false);
         setLoading(false);
         Toast.show({
-          type: 'success',
+          type: 'error',
           text2: data?.message,
           visibilityTime: 5000,
           autoHide: true,
