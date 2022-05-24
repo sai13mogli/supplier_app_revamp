@@ -39,7 +39,7 @@ import {useNavigation} from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 
 const deviceWidth = Dimensions.get('window').width;
-
+const DeviceHeight = Dimensions.get('window').height;
 const Ordercard = props => {
   const {
     msn,
@@ -1581,15 +1581,25 @@ const Ordercard = props => {
                 }
                 style={
                   fromModal
-                    ? {
-                        width: 262,
-                        height: 262,
-                        padding: 2,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        alignSelf: 'center',
-                        marginBottom: Dimension.margin10,
-                      }
+                    ? DeviceHeight < 720
+                      ? {
+                          width: 170,
+                          height: 170,
+                          padding: 2,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          alignSelf: 'center',
+                          marginBottom: Dimension.margin10,
+                        }
+                      : {
+                          width: 262,
+                          height: 262,
+                          padding: 2,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          alignSelf: 'center',
+                          marginBottom: Dimension.margin10,
+                        }
                     : {width: 62, height: 62, padding: 2}
                 }>
                 <Image
@@ -1606,15 +1616,25 @@ const Ordercard = props => {
                 }
                 style={
                   fromModal
-                    ? {
-                        width: 262,
-                        height: 262,
-                        padding: 2,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        alignSelf: 'center',
-                        marginBottom: Dimension.margin10,
-                      }
+                    ? DeviceHeight < 720
+                      ? {
+                          width: 170,
+                          height: 170,
+                          padding: 2,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          alignSelf: 'center',
+                          marginBottom: Dimension.margin10,
+                        }
+                      : {
+                          width: 262,
+                          height: 262,
+                          padding: 2,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          alignSelf: 'center',
+                          marginBottom: Dimension.margin10,
+                        }
                     : {width: 62, height: 62, padding: 2}
                 }>
                 <Image

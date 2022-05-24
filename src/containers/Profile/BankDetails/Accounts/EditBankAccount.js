@@ -42,8 +42,9 @@ const EditBankAccount = props => {
   const [accountNumberError, setaccountNumberError] = useState(false);
   const [ifscCodeError, setifscCodeError] = useState(false);
   const [branchError, setbranchError] = useState(false);
-  const [accountTypeError, setaccountTypeError] = useState(false);
+  const [accountTypeError, setAccountTypeError] = useState(false);
   const [bankNameError, setbankNameError] = useState(false);
+  const [init, setInit] = useState(true);
 
   const dispatch = useDispatch();
   const FORM_FIELDS = new OrderedMap({
@@ -139,6 +140,10 @@ const EditBankAccount = props => {
   });
 
   useEffect(() => {
+    setInit(false);
+  }, []);
+
+  useEffect(() => {
     if (loading && bankDetailsStatus == STATE_STATUS.UPDATED) {
       setLoading(false);
       props.navigation.goBack();
@@ -205,6 +210,24 @@ const EditBankAccount = props => {
     }
   };
 
+  const onAccountTypeBlur = () => {
+    if (accountType) {
+      setAccountTypeError(false);
+    } else {
+      setAccountTypeError(true);
+    }
+  };
+
+  useEffect(() => {
+    if (!init) {
+      if (accountType) {
+        setAccountTypeError(false);
+      } else {
+        setAccountTypeError(true);
+      }
+    }
+  }, [accountType]);
+
   const onSubmit = async () => {
     if (
       accountHolderName &&
@@ -264,6 +287,7 @@ const EditBankAccount = props => {
       onIfscCodeBlur();
       onBranchBlur();
       onBankNameBlur();
+      onAccountTypeBlur();
     }
   };
 

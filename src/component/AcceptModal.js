@@ -31,6 +31,7 @@ const AcceptModal = props => {
     isOmsPickupDate,
     initialPickupDate,
   } = props;
+
   const [day, setDay] = useState({
     dateString: '',
     day: '',
@@ -230,12 +231,16 @@ const AcceptModal = props => {
       customStyles: {
         text: {
           color:
-            day.dateString != currDate.dateString ? Colors.BrandColor : 'black',
+            day.dateString !== currDate.dateString
+              ? Colors.BrandColor
+              : 'black',
           fontWeight: 'bold',
         },
         container: {
           backgroundColor:
-            day.dateString == currDate.dateString ? Colors.BrandColor : '',
+            day.dateString === currDate.dateString
+              ? Colors.BrandColor
+              : 'transparent',
         },
       },
     },
