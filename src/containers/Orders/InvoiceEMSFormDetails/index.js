@@ -543,7 +543,12 @@ const InvoiceEMSFormDetailScreen = props => {
           ewayNumber: ewayBillNumber,
           warehouseId: warehouseId,
           orderRef: orderRef,
-          itemLists: podIdList,
+          itemLists: props?.route?.params?.itemLists.map((_) => ({
+            hsn: _.hsn,
+            hsnPercentage: _.hsnPercentage,
+            itemRef: _.itemRef,
+            quantity: _.quantity,
+          })),
           igstApplicable: true,
           countryCode: 356,
           frieght: {
@@ -621,7 +626,6 @@ const InvoiceEMSFormDetailScreen = props => {
 
   const onCancel = () => {
     props.navigation.goBack();
-    //props.navigation.navigate('InvoiceDetail')
   };
 
   return (

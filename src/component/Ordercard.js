@@ -742,7 +742,6 @@ const Ordercard = props => {
   };
 
   const renderCTAs = (cta, url, fromCTA, fromPartial, podcopy) => {
-    console.log('url hai bc', url);
     const ctaLength = actionCTA.filter(number => number % 2 !== 0);
     return (
       <>

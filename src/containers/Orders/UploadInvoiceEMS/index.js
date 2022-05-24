@@ -18,9 +18,10 @@ const UploadInvoiceScreen = props => {
   const [totalPrice, setTotalPrice] = useState([]);
   const [totalKeys, setTotalKeys] = useState([]);
   const [podIdList, setPodIdList] = useState([]);
+  const [data, setData] = useState('');
   const [hsn, sethsn] = useState(props?.route?.params?.hsn);
   const [taxPercentage, setTaxPercentage] = useState(
-    props?.route?.params?.taxPercentage,
+    props?.route?.params?.taxPercentage
   );
   const [selectedTab, setSelectedTab] = useState(
     props.route.params.selectedTab || 'PENDING_ACCEPTANCE',
@@ -35,8 +36,10 @@ const UploadInvoiceScreen = props => {
 
   let EmsOmsFlag = actionCTA;
   let tax = global.hsn;
+
   useEffect(() => {
     setInvoiceLoader(true);
+
 
     if (
       EmsOmsFlag.includes('MAP_INVOICE') ||
@@ -46,85 +49,103 @@ const UploadInvoiceScreen = props => {
     }
   }, []);
 
+
+
+
   const getTotalPrice = () => {
     let price = 0;
 
     price = totalPrice.reduce(function (sum, tax) {
       return sum + tax.price;
     }, 0);
+    console.log("Priceq====>", price, totalPrice);
 
     return price.toFixed(2);
   };
 
 
 
-  const selectItemId = (itemId, totalAmount, keys, quantity, hsn,) => {
+  // console.log("Okk===>", taxPercentage, hsn, quantity, podIdList);
 
-    let currentItemIds = [...bulkItemIds];
-    let currentKeys = [...totalKeys];
-    try {
-      setitemRef(itemId);
-      if (currentItemIds.includes(itemId)) {
-        currentItemIds = currentItemIds.filter(_ => _ != itemId);
-      } else {
-        if (currentItemIds) {
-          var obj = {
-            quantity: quantity,
-            hsn: hsn,
-            taxPercentage: taxPercentage,
-            itemRef: keys
-          }
-          currentItemIds.push(itemId);
-          currentKeys.push(obj);
-        } else {
-          currentItemIds = [];
-          currentKeys = [];
-          var obj = {
-            quantity: quantity,
-            hsn: hsn,
-            hsnPercentage: taxPercentage,
-            itemRef: keys
-          }
-          currentItemIds.push(itemId);
-          currentKeys.push(obj);
-        }
-      }
-      setBulkItemIds(currentItemIds);
-      setTotalKeys(currentKeys);
-      let filterData = totalPrice.filter(item => item.id == itemId);
-      if (filterData.length > 0) {
-        const index = totalPrice.findIndex(x => x.id === filterData[0].id);
-        let priceList = [...totalPrice];
-        priceList.splice(index, 1);
-        setTotalPrice(priceList);
-        let arr = [...podIdList];
-        const podindex = arr.findIndex(x => x == keys);
-        arr.splice(podindex, 1);
-        setPodIdList(arr);
-      } else {
-        let row = {
-          id: itemId,
-          price: totalAmount,
-        };
-        let priceList = [...totalPrice];
-        priceList.push(row);
-        setTotalPrice(priceList);
-        let obj = {
-          quantity: quantity,
-          hsn: hsn,
-          hsnPercentage: taxPercentage,
-          itemRef: keys
-        }
-        let arr = [...podIdList];
-        arr.push(obj)
-        setPodIdList(arr);
-      }
-    }
-    catch (error) {
-      console.log("Error", error);
-    }
+  const selectItemId = (itemId, totalAmount, keys,) => {
+    let updatedTotalPrice = [...totalPrice]
+    updatedTotalPrice = updatedTotalPrice.map((_) => ({
+      ..._,
+      checked: _.id == itemId ? !_.checked : _.checked
 
-
+    }))
+    setTotalPrice([...updatedTotalPrice])
+    // console.log("okk====>", quantity, taxPercentage);
+    // let currentItemIds = [...bulkItemIds];
+    // let currentKeys = [...totalKeys];
+    // try {
+    //   setitemRef(itemId);
+    //   if (currentItemIds.includes(itemId)) {
+    //     currentItemIds = currentItemIds.filter(_ => _ != itemId);
+    //   } else {
+    //     if (currentItemIds) {
+    //       var obj = {
+    //         quantity: quantity,
+    //         hsn: hsn,
+    //         hsnPercentage: taxPercentage,
+    //         itemRef: keys,
+    //         id: itemId,
+    //       }
+    //       currentItemIds.push(itemId);
+    //       currentKeys.push(obj);
+    //     } else {
+    //       currentItemIds = [];
+    //       currentKeys = [];
+    //       var obj = {
+    //         quantity: quantity,
+    //         hsn: hsn,
+    //         hsnPercentage: taxPercentage,
+    //         itemRef: keys,
+    //         id: itemId,
+    //       }
+    //       currentItemIds.push(itemId);
+    //       currentKeys.push(obj);
+    //     }
+    //   }
+    //   setBulkItemIds(currentItemIds);
+    //   setTotalKeys(currentKeys);
+    //   let filterData = totalPrice.filter(item => item.id == itemId);
+    //   if (filterData.length > 0) {
+    //     const index = totalPrice.findIndex(x => x.id === filterData[0].id);
+    //     let priceList = [...totalPrice];
+    //     priceList.splice(index, 1);
+    //     setTotalPrice(priceList);
+    //     // let arr = [...podIdList];
+    //     // const podindex = arr.findIndex(x => x == keys);
+    //     // arr.splice(podindex, 1);
+    //     // setPodIdList(arr);
+    //   } else {
+    //     let row = {
+    //       id: itemId,
+    //       price: totalAmount,
+    //       quantity: quantity,
+    //       hsn: hsn,
+    //       hsnPercentage: taxPercentage,
+    //       itemRef: keys,
+    //     };
+    //     let priceList = [...totalPrice];
+    //     priceList.push(row);
+    //     setTotalPrice(priceList);
+    //     // let obj = {
+    //     //   quantity: quantity,
+    //     //   hsn: hsn,
+    //     //   hsnPercentage: taxPercentage,
+    //     //   itemRef: keys,
+    //     //   id: itemId,
+    //     // }
+    //     // let arr = [...podIdList];
+    //     // arr.push(obj)
+    //     // setPodIdList(arr);
+    //   }
+    // }
+    // catch (error) {
+    //   console.log("Error", error);
+    // }
   };
 
   const fetchInvoiceEMSDetails = async () => {
@@ -136,26 +157,72 @@ const UploadInvoiceScreen = props => {
       const { data } = await getInvoiceEMSDetails(payload);
       if (data.success) {
         setInvoiceList(data?.data?.itemList);
+        setTotalPrice(data?.data?.itemList.map((_) => ({
+          quantity: _.quantity,
+          hsn: _.productHsn,
+          hsnPercentage: _.taxPercentage,
+          itemRef: _.itemRef,
+          id: _.id,
+          price: _.itemTotal,
+          checked: false,
+        })))
         setLoading(false);
         setInvoiceLoader(false);
       }
     } catch (error) {
       console.log(error);
+      setInvoiceLoader(false);
     }
   };
 
-  const calculateHeaderSum = (value, id) => {
-    setQuantity(value)
-    setTaxPercentage(value)
+  const calculateHeaderSum = (id, price, valueType, value) => {
     let data = [...totalPrice].map((item) => ({
       ...item,
-      price: item.id == id ? value : item.price
+      quantity: valueType == "quantity" ? item.id == id ? value : item.quantity : item.quantity,
+      hsnPercentage: valueType == "hsnPercentage" ? item.id == id ? value : item.hsnPercentage : item.hsnPercentage,
+      price: item.id == id ? price : item.price,
     }))
     setTotalPrice([...data])
-
-
-
   };
+
+  // const updatedHsn = (value, id) => {
+  //   let data = [...totalPrice].map((item) => ({
+  //     ...item,
+  //     hsn: item.id == id ? value : item.hsn
+  //   }))
+  //   setTotalPrice([...data])
+
+  // }
+
+  // const updateQty = (value, id) => {
+  //   console.log("ValuesQnty", value, id);
+  //   let data = [...totalPrice].map((item) => ({
+  //     ...item,
+  //     quantity: item.id == id ? value : item.quantity
+  //   }))
+  //   setTotalPrice([...data])
+
+  // }
+
+  const onUpdateArr = () => {
+    let updated = [...podIdList]
+
+
+    props.navigation.navigate('InvoiceEMSFormDetails', {
+      orderRef,
+      updated,
+      warehouseId,
+      itemLists: totalPrice.filter((_) => _.checked),
+      // quantity,
+      // hsn,
+      // taxPercentage,
+      totalAmount,
+      tax,
+      selectedTab,
+    });
+  }
+
+
 
   const renderItem = ({ item }) => {
     let keys = item?.itemRef
@@ -166,9 +233,9 @@ const UploadInvoiceScreen = props => {
         orderRef={item.orderRef}
         productUom={item.productUom}
         quantity={item.quantity}
-        UpdatedHsn={(value) => setTaxPercentage(value)}
-        UpdatedQuntity={(value) => setQuantity(value)}
-        UpdatedTotalPrice={(value, id) => calculateHeaderSum(value, id)}
+        UpdatedHsn={(value, id) => updatedHsn(value, id)}
+        UpdatedQuntity={(value, id) => updateQty(value, id)}
+        UpdatedTotalPrice={(id, price, valueType, value) => calculateHeaderSum(id, price, valueType, value)}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
@@ -178,8 +245,9 @@ const UploadInvoiceScreen = props => {
         itemId={item.id}
         keys={keys}
         itemIndex={item}
-        bulkItemIds={bulkItemIds}
-        setBulkItemIds={setBulkItemIds}
+        checked={(totalPrice.find(_ => _.id == item.id) || {}).checked || false}
+        // bulkItemIds={bulkItemIds}
+        // setBulkItemIds={setBulkItemIds}
         selectItemId={selectItemId}
       />
     );
@@ -271,34 +339,22 @@ const UploadInvoiceScreen = props => {
       </View>
       <View style={styles.bottombtnWrap}>
         <CustomButton
-          disabled={bulkItemIds && bulkItemIds.length ? false : true}
+          disabled={!totalPrice.filter((_) => _.checked).length}
           buttonColor={
-            bulkItemIds && bulkItemIds.length
+            totalPrice.filter((_) => _.checked).length
               ? colors.BrandColor
               : colors.grayShade8
           }
           borderColor={colors.transparent}
           TextColor={
-            bulkItemIds && bulkItemIds.length
+            totalPrice.filter((_) => _.checked).length
               ? colors.WhiteColor
               : colors.blackColor
           }
           TextFontSize={Dimension.font16}
           title={'CONTINUE'}
           loading={loading}
-          onPress={() => {
-            props.navigation.navigate('InvoiceEMSFormDetails', {
-              orderRef,
-              podIdList,
-              warehouseId,
-              // quantity,
-              // hsn,
-              // taxPercentage,
-              totalAmount,
-              tax,
-              selectedTab,
-            });
-          }}
+          onPress={onUpdateArr}
         />
       </View>
     </View>
