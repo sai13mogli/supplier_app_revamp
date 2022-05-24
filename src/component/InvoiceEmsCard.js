@@ -75,7 +75,7 @@ const InvoiceCard = props => {
       options: [
         {
           label: '0.00',
-          value: 0.00,
+          value: 0,
         },
         {
           label: '0.10',

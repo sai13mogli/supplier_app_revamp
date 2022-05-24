@@ -27,7 +27,7 @@ const PickerMenu = props => {
             {selectedValue ? (
               <Text style={styles.qtVal}>{selectedValue}</Text>
             ) : (
-              <Text style={styles.placeholderCss}>{placeholder}</Text>
+              <Text style={styles.placeholderCss}>{placeholder || selectedValue}</Text>
             )}
             {/* <Text style={styles.qtVal}>{selectedValue || placeholder}</Text> */}
             <CustomeIcon

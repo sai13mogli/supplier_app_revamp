@@ -42,7 +42,7 @@ const UploadInvoiceScreen = props => {
 
   const getTotalPrice = () => {
     let price = 0;
-    price = totalPrice.reduce(function (sum, tax) {
+    price = totalPrice.filter(_ => _.checked).reduce(function (sum, tax) {
       return sum + tax.price;
     }, 0);
     return price.toFixed(2);
@@ -121,7 +121,7 @@ const UploadInvoiceScreen = props => {
 
   const renderItem = ({ item }) => {
     let keys = item?.itemRef
-
+    console.log("okkk===>", item);
     return (
       <InvoiceEmsCard
         msn={item.productMsn}
@@ -135,7 +135,7 @@ const UploadInvoiceScreen = props => {
         hsn={item.productHsn}
         productName={item.productName}
         totalAmount={item.itemTotal}
-        taxPercentage={item.taxPercentage}
+        taxPercentage={(totalPrice.find(_ => _.id == item.id) || {}).hsnPercentage || item.taxPercentage}
         selectedTab={selectedTab}
         itemId={item.id}
         keys={keys}
