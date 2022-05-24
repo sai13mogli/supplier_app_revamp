@@ -28,16 +28,10 @@ import { useDispatch, useSelector } from 'react-redux';
 const InvoiceEMSFormDetailScreen = props => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  // const [totalAmount, setTotalAmount] = useState(
-  //   props?.route?.params?.totalAmount,
-  // );
   const [warehouseId, setwarehouseId] = useState(
     props?.route?.params?.warehouseId,
   );
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
-  // const [itemRefs, setitemRef] = useState(props?.route?.params?.itemRefs);
-  const [podIdList, setPodIdList] = useState(props?.route?.params?.podIdList);
-  // const [quantity, setQuantity] = useState(props?.route?.params?.quantity);
   const [hsn, setHsn] = useState(props?.route?.params?.hsn);
   const [invoiceNumber, setInvoiceNumber] = useState();
   const [invoiceNumberError, setInvoiceNumberError] = useState(false);
