@@ -324,7 +324,6 @@ const InvoiceEMSFormDetailScreen = props => {
     },
   });
 
-  console.log("EMSFormProps===", props);
 
   const onUploadInvoiceBlur = () => {
     if (uploadInvoice && uploadInvoice.name) {
@@ -599,7 +598,6 @@ const InvoiceEMSFormDetailScreen = props => {
           type: uploadEwayBill.type,
           data: RNFetchBlob.wrap(uploadEwayBill.uri),
         } : {};
-        console.log("response====>", payload, invoiceFile,);
         props.navigation.navigate('InvoiceDetail', {
           data: payload,
           invoiceFileData: invoiceFile,
