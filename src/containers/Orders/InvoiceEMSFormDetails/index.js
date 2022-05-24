@@ -28,16 +28,10 @@ import { useDispatch, useSelector } from 'react-redux';
 const InvoiceEMSFormDetailScreen = props => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  // const [totalAmount, setTotalAmount] = useState(
-  //   props?.route?.params?.totalAmount,
-  // );
   const [warehouseId, setwarehouseId] = useState(
     props?.route?.params?.warehouseId,
   );
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
-  // const [itemRefs, setitemRef] = useState(props?.route?.params?.itemRefs);
-  const [podIdList, setPodIdList] = useState(props?.route?.params?.podIdList);
-  // const [quantity, setQuantity] = useState(props?.route?.params?.quantity);
   const [hsn, setHsn] = useState(props?.route?.params?.hsn);
   const [invoiceNumber, setInvoiceNumber] = useState();
   const [invoiceNumberError, setInvoiceNumberError] = useState(false);
@@ -324,7 +318,6 @@ const InvoiceEMSFormDetailScreen = props => {
     },
   });
 
-  console.log("EMSFormProps===", props);
 
   const onUploadInvoiceBlur = () => {
     if (uploadInvoice && uploadInvoice.name) {
@@ -543,7 +536,12 @@ const InvoiceEMSFormDetailScreen = props => {
           ewayNumber: ewayBillNumber,
           warehouseId: warehouseId,
           orderRef: orderRef,
-          itemLists: podIdList,
+          itemLists: props?.route?.params?.itemLists.map((_) => ({
+            hsn: _.hsn,
+            hsnPercentage: _.hsnPercentage,
+            itemRef: _.itemRef,
+            quantity: _.quantity,
+          })),
           igstApplicable: true,
           countryCode: 356,
           frieght: {
@@ -594,7 +592,6 @@ const InvoiceEMSFormDetailScreen = props => {
           type: uploadEwayBill.type,
           data: RNFetchBlob.wrap(uploadEwayBill.uri),
         } : {};
-        console.log("response====>", payload, invoiceFile,);
         props.navigation.navigate('InvoiceDetail', {
           data: payload,
           invoiceFileData: invoiceFile,
@@ -621,7 +618,6 @@ const InvoiceEMSFormDetailScreen = props => {
 
   const onCancel = () => {
     props.navigation.goBack();
-    //props.navigation.navigate('InvoiceDetail')
   };
 
   return (

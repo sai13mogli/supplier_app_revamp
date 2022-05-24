@@ -5,7 +5,7 @@ import {
   Dimensions,
   TextInput,
 } from 'react-native';
-import React, { useState, } from 'react';
+import React, { useEffect, useState, } from 'react';
 import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
@@ -46,7 +46,7 @@ const InvoiceCard = props => {
       keyboardType: 'number-pad',
       onChangeText: text => setHsn(text),
       component: FloatingLabelInputField,
-      editable: (bulkItemIds || []).includes(itemId) ? true : false,
+      editable: (_) => _.checked,
     },
     qnty: {
       title: 'Qty',
@@ -59,7 +59,7 @@ const InvoiceCard = props => {
       keyboardType: 'number-pad',
       onChangeText: (text) => calculateQuantity(text, itemId),
       component: FloatingLabelInputField,
-      editable: (bulkItemIds || []).includes(itemId) ? true : false,
+      editable: (_) => _.checked,
     },
     hsn_tax: {
       title: 'HSN Tax%',
@@ -69,13 +69,13 @@ const InvoiceCard = props => {
       component: PickerMenu,
       fromUploadInvoive: true,
       enabled: false,
-      disabled: !(bulkItemIds || []).includes(itemId) ? true : false,
+      disabled: (_) => !_.checked,
       selectedValue: taxPercentageLabel,
       value: taxPercentage,
       options: [
         {
           label: '0.00',
-          value: 0.00,
+          value: 0,
         },
         {
           label: '0.10',
@@ -110,16 +110,22 @@ const InvoiceCard = props => {
 
   });
 
+  useEffect(() => {
+    console.log('====================================');
+    console.log("pros", props);
+    console.log('====================================');
+  })
+
 
 
   const calculateQuantity = (text, id) => {
     setQuantity(text);
-    props.UpdatedQuntity(text, id)
+    // props.UpdatedQuntity(text, id)
     const { taxPercentage, transferPrice } = props;
     let Price = transferPrice * text;
     let percentage = (Price / 100) * taxPercentage + text * transferPrice;
     setAmount(percentage);
-    props.UpdatedTotalPrice(percentage, id)
+    props.UpdatedTotalPrice(id, percentage, "quantity", text)
   };
 
   const calculateHsn = (text, label, id) => {
@@ -129,9 +135,13 @@ const InvoiceCard = props => {
     let Price = transferPrice * quantity;
     let percentage = (Price / 100) * text + quantity * transferPrice;
     setAmount(percentage);
-    props.UpdatedTotalPrice(percentage, id)
-    props.UpdatedHsn(text, id)
+    props.UpdatedTotalPrice(id, percentage, "hsnPercentage", text)
+    // props.UpdatedTotalPrice(percentage, id)
+    // props.UpdatedHsn(text, id)
+
   };
+
+
 
   const renderOrderDetails = () => {
     return (
@@ -139,17 +149,19 @@ const InvoiceCard = props => {
         <View style={[styles.orderCardwrapInner]}>
           <CustomeIcon
             name={
-              (bulkItemIds || []).includes(itemId)
+              props.checked
                 ? 'checkbox-tick'
                 : 'checkbox-blank'
             }
             color={
-              (bulkItemIds || []).includes(itemId)
+              props.checked
                 ? Colors.BrandColor
                 : Colors.FontColor
             }
             size={Dimension.font20}
-            onPress={() => selectItemId(itemId, props.totalAmount, keys, quantity, hsn, taxPercentage)}
+            onPress={() =>
+              selectItemId(itemId, props.totalAmount, keys, quantity, hsn, taxPercentage)
+            }
             style={styles.checkboxDesign}></CustomeIcon>
           <View style={styles.rightPart}>
             <Text style={styles.productName}>{productName}</Text>
@@ -167,7 +179,7 @@ const InvoiceCard = props => {
                 <Text style={styles.TitleLightTxt}>
                   Total Price -{' '}
                   <Text style={styles.TitleBoldTxt}>
-                    {(bulkItemIds || []).includes(itemId)
+                    {props.checked
                       ? (amount || 0).toFixed(2)
                       : (totalAmount || 0).toFixed(2)}
                   </Text>
@@ -190,7 +202,8 @@ const InvoiceCard = props => {
                   <field.component
                     {...field}
                     key={fieldKey}
-                    disabled={field.disabled}
+                    disabled={!props.checked}
+                    editable={props.checked}
                   />
                 </View>
               )).toList()}

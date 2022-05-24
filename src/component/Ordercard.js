@@ -1581,28 +1581,25 @@ const Ordercard = props => {
                 }
                 style={
                   fromModal
-                    ? DeviceHeight < 720 
-                    ?{
-                      width: 170,
-                      height: 170,
-                      padding: 2,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
-                      marginBottom: Dimension.margin10,
-                      
-                    }
-                    :{
-                      width: 262,
-                      height: 262,
-                      padding: 2,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
-                      marginBottom: Dimension.margin10,
-                    }
-                    
-                    
+                    ? DeviceHeight < 720
+                      ? {
+                        width: 170,
+                        height: 170,
+                        padding: 2,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignSelf: 'center',
+                        marginBottom: Dimension.margin10,
+                      }
+                      : {
+                        width: 262,
+                        height: 262,
+                        padding: 2,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignSelf: 'center',
+                        marginBottom: Dimension.margin10,
+                      }
                     : { width: 62, height: 62, padding: 2 }
                 }>
                 <Image
@@ -1619,26 +1616,25 @@ const Ordercard = props => {
                 }
                 style={
                   fromModal
-                  ? DeviceHeight < 720 
-                  ?{
-                    width: 170,
-                    height: 170,
-                    padding: 2,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignSelf: 'center',
-                    marginBottom: Dimension.margin10,
-                   
-                  }
-                  :{
-                    width: 262,
-                    height: 262,
-                    padding: 2,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignSelf: 'center',
-                    marginBottom: Dimension.margin10,
-                  }
+                    ? DeviceHeight < 720
+                      ? {
+                        width: 170,
+                        height: 170,
+                        padding: 2,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignSelf: 'center',
+                        marginBottom: Dimension.margin10,
+                      }
+                      : {
+                        width: 262,
+                        height: 262,
+                        padding: 2,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignSelf: 'center',
+                        marginBottom: Dimension.margin10,
+                      }
                     : { width: 62, height: 62, padding: 2 }
                 }>
                 <Image
@@ -1730,7 +1726,7 @@ const Ordercard = props => {
                 <Text style={styles.TitleLightTxt}>
                   Date -{' '}
                   <Text style={styles.TitleBoldTxt}>
-                    {getTime(pickupDate, false)}
+                    {pickupDate ? getTime(pickupDate, false) : '--'}
                   </Text>
                 </Text>
               </View>
