@@ -1,6 +1,6 @@
-import {STATE_STATUS} from '../constants/index';
-import {CATEGORY_BRAND_ACTIONS} from '../constants/categorybrand';
-import {PROFILE_ACTIONS} from '../constants/profile';
+import { STATE_STATUS } from '../constants/index';
+import { CATEGORY_BRAND_ACTIONS } from '../constants/categorybrand';
+import { PROFILE_ACTIONS } from '../constants/profile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
@@ -21,7 +21,7 @@ const initialState = {
 };
 
 export const categorybrandReducer = (state = initialState, action) => {
-  const {type, payload, error} = action;
+  const { type, payload, error } = action;
   switch (type) {
     case CATEGORY_BRAND_ACTIONS.FETCH_BRANDS_BY_CATEGORY:
       return {
@@ -136,15 +136,14 @@ export const categorybrandReducer = (state = initialState, action) => {
       };
 
     case CATEGORY_BRAND_ACTIONS.ADD_BRAND:
-      let currbrand = {...(payload.obj || {})};
+      let currbrand = { ...(payload.obj || {}) };
       currbrand = {
         supplierId: payload.obj.supplierId,
         brandCode: payload.obj.code || payload.obj.brandCode,
         fileKey: payload.obj.fileKey || '',
         businessNature: `${payload.obj.businessNature}`,
-        tentativebusinessNature: `${
-          payload.obj.tentativebusinessNature || payload.obj.businessNature
-        }`,
+        tentativebusinessNature: `${payload.obj.tentativebusinessNature || payload.obj.businessNature
+          }`,
         expiryDate: payload.obj.expiryDate ? `${payload.obj.expiryDate}` : '',
         isDeleted: payload.obj.isDeleted ? `${payload.obj.isDeleted}` : '0',
         isRaiseRequest: payload.obj.isRaiseRequest
@@ -163,15 +162,14 @@ export const categorybrandReducer = (state = initialState, action) => {
 
     case CATEGORY_BRAND_ACTIONS.REMOVE_BRAND:
       if (state && state.userBrands) {
-        let currbrand = {...payload.obj};
+        let currbrand = { ...payload.obj };
         currbrand = {
           supplierId: payload.obj.supplierId,
           brandCode: payload.obj.code || payload.obj.brandCode,
           fileKey: payload.obj.fileKey || '',
           businessNature: `${payload.obj.businessNature}`,
-          tentativebusinessNature: `${
-            payload.obj.tentativebusinessNature || payload.obj.businessNature
-          }`,
+          tentativebusinessNature: `${payload.obj.tentativebusinessNature || payload.obj.businessNature
+            }`,
           expiryDate: payload.obj.expiryDate || '',
           isDeleted: `${payload.obj.isDeleted}` || '0',
           isRaiseRequest: `${payload.obj.isRaiseRequest}` || 'false',
@@ -191,15 +189,13 @@ export const categorybrandReducer = (state = initialState, action) => {
 
     case CATEGORY_BRAND_ACTIONS.ADD_MULTIPLE_BRANDS:
       let currbrands = [...payload.data];
-      console.log('reducer curr brands', currbrands);
       currbrands = (currbrands || []).map((_, i) => ({
         supplierId: `${_.supplierId}`,
         brandCode: `${_.brandCode}`,
         fileKey: _.fileKey ? `${_.fileKey}` : '',
         businessNature: `${_.businessNature}`,
-        tentativebusinessNature: `${
-          _.tentativebusinessNature || _.businessNature
-        }`,
+        tentativebusinessNature: `${_.tentativebusinessNature || _.businessNature
+          }`,
         expiryDate: _.expiryDate ? `${_.expiryDate}` : '',
         isDeleted: `${_.isDeleted}` || '0',
         isRaiseRequest: `${_.isRaiseRequest}` || 'false',
@@ -216,7 +212,7 @@ export const categorybrandReducer = (state = initialState, action) => {
 
     case CATEGORY_BRAND_ACTIONS.DELETE_BRAND:
       if (state && state.userBrands) {
-        let currbrand = {...payload.obj};
+        let currbrand = { ...payload.obj };
         return {
           ...state,
           userBrands: [

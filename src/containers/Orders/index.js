@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback, useRef} from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -15,10 +15,10 @@ import {
 } from 'react-native';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
-import {STATE_STATUS} from '../../redux/constants';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchOrders, fetchTabCount} from '../../redux/actions/orders';
-import {getImageUrl, acceptBulk} from '../../services/orders';
+import { STATE_STATUS } from '../../redux/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOrders, fetchTabCount } from '../../redux/actions/orders';
+import { getImageUrl, acceptBulk } from '../../services/orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDown from '../../component/common/DropDown';
 import Ordercard from '../../component/Ordercard';
@@ -27,14 +27,14 @@ import CustomeIcon from '../../component/common/CustomeIcon';
 import OrdersFilterModal from '../../component/OrdersFilterModal';
 import Toast from 'react-native-toast-message';
 import BulkActionsModal from '../../component/BulkActionsModal';
-import {fetchProfile, setNavigation} from '../../redux/actions/profile';
+import { fetchProfile, setNavigation } from '../../redux/actions/profile';
 import Colors from '../../Theme/Colors';
-import {requestUserPermission} from '../../utils/firebasepushnotification';
+import { requestUserPermission } from '../../utils/firebasepushnotification';
 import messaging from '@react-native-firebase/messaging';
 import * as RootNavigation from '../../generic/navigator';
 import analytics from '@react-native-firebase/analytics';
-import {getAppInfo} from '../../services/auth';
-import {setVersion} from '../../redux/actions/homepage';
+import { getAppInfo } from '../../services/auth';
+import { setVersion } from '../../redux/actions/homepage';
 import AppUpdateBanner from '../../component/common/AppUpdateBanner';
 
 const OrdersScreen = props => {
@@ -81,10 +81,26 @@ const OrdersScreen = props => {
     state.ordersReducer.getIn(['orders', 'filters']),
   );
 
+  const RETAIN_TABS = {
+    PENDING_ACCEPTANCE: 'Open_Orders',
+    SCHEDULED_PICKUP: 'Open_Orders',
+    PICKUP: 'Open_Orders',
+    UPLOAD_INVOICE: 'Open_Orders',
+    PACKED: 'Open_Orders',
+    SHIPMENT: 'Open_Orders',
+    MARK_SHIPPED: 'Open_Orders',
+    FULFILLED: 'Fulfilled_Orders',
+    CANCELLED: 'Cancelled',
+    RETURN_PENDING: 'Returned',
+    RETURN_DONE: 'Returned',
+  };
+
   const [loadingTabs, setLoadingTabs] = useState(true);
-  const [selectedType, setSelectedType] = useState('Open_Orders');
+  const [selectedType, setSelectedType] = useState(
+    RETAIN_TABS[OrderStage] || 'Open_Orders',
+  );
   const [selectedTab, setSelectedTab] = useState(
-    props.route.params.selectedTab || 'PENDING_ACCEPTANCE',
+    props.route.params.selectedTab || OrderStage || 'PENDING_ACCEPTANCE',
   );
   const onEndReachedCalledDuringMomentum = useRef(true);
   const [inputValue, setInputValue] = useState('');
@@ -108,7 +124,7 @@ const OrdersScreen = props => {
   const [isFilterApplied, setIsFilterApplied] = useState(false);
 
   const COMMON_OPTIONS = [
-    {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
+    { label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders' },
     {
       label: 'Fulfilled Orders',
       key: 'Fulfilled_Orders',
@@ -127,7 +143,7 @@ const OrdersScreen = props => {
   ];
 
   const ONLINE_OPTIONS = [
-    {label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders'},
+    { label: 'Open Orders', key: 'Open_Orders', value: 'Open_Orders' },
     {
       label: 'Fulfilled Orders',
       key: 'Fulfilled_Orders',
@@ -142,19 +158,19 @@ const OrdersScreen = props => {
 
   const TABS = {
     Open_Orders: [
-      {label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE'},
-      {label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP'},
-      {label: 'Pickup', key: 'PICKUP'},
-      {label: 'Upload Invoice', key: 'UPLOAD_INVOICE'},
-      {label: 'Packed', key: 'PACKED'},
-      {label: 'Shipment', key: 'SHIPMENT'},
-      {label: 'Mark Shipped/Delivered', key: 'MARK_SHIPPED'},
+      { label: 'Pending Acceptance', key: 'PENDING_ACCEPTANCE' },
+      { label: 'Scheduled Pickup', key: 'SCHEDULED_PICKUP' },
+      { label: 'Pickup', key: 'PICKUP' },
+      { label: 'Upload Invoice', key: 'UPLOAD_INVOICE' },
+      { label: 'Packed', key: 'PACKED' },
+      { label: 'Shipment', key: 'SHIPMENT' },
+      { label: 'Mark Shipped/Delivered', key: 'MARK_SHIPPED' },
     ],
-    Fulfilled_Orders: [{label: 'Fulfilled', key: 'FULFILLED'}],
-    Cancelled: [{label: 'Cancelled', key: 'CANCELLED'}],
+    Fulfilled_Orders: [{ label: 'Fulfilled', key: 'FULFILLED' }],
+    Cancelled: [{ label: 'Cancelled', key: 'CANCELLED' }],
     Returned: [
-      {label: 'Return Pending', key: 'RETURN_PENDING'},
-      {label: 'Return Done', key: 'RETURN_DONE'},
+      { label: 'Return Pending', key: 'RETURN_PENDING' },
+      { label: 'Return Done', key: 'RETURN_DONE' },
     ],
   };
 
@@ -184,7 +200,7 @@ const OrdersScreen = props => {
   }, [profileStatus]);
 
   const getNotif = async () => {
-    const {data} = await getAppInfo();
+    const { data } = await getAppInfo();
     if (data) {
       if (data && data.list && data.list.find(_ => _.name == 'APP_VERSION')) {
         dispatch(
@@ -236,7 +252,7 @@ const OrdersScreen = props => {
       let deepLinkData = await AsyncStorage.getItem('@deepLinkUrl');
       deepLinkData = JSON.parse(deepLinkData);
       if (deepLinkData) {
-        const {screen, obj} = deepLinkData;
+        const { screen, obj } = deepLinkData;
         if (screen) {
           handleOpenUrl(obj, false, screen);
         }
@@ -303,7 +319,7 @@ const OrdersScreen = props => {
           fetchTabCountFunc(obj.childTab, shipmentType);
         }
       } else {
-        props.navigation.push(deepLinkScreen, {...obj});
+        props.navigation.push(deepLinkScreen, { ...obj });
       }
       await AsyncStorage.removeItem('@deepLinkUrl');
     }
@@ -374,7 +390,7 @@ const OrdersScreen = props => {
     );
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <Ordercard
         key={index}
@@ -518,7 +534,7 @@ const OrdersScreen = props => {
 
   //selectedFilter
   const selectFilter = term => {
-    let currentFilters = {...appliedFilter};
+    let currentFilters = { ...appliedFilter };
     if (
       currentFilters[initialFilter] &&
       currentFilters[initialFilter].includes(term)
@@ -540,7 +556,6 @@ const OrdersScreen = props => {
   //select Item Id
   const selectItemId = itemId => {
     let currentItemIds = [...bulkItemIds];
-    console.log(currentItemIds.includes(itemId), itemId);
     if (currentItemIds.includes(itemId)) {
       currentItemIds = currentItemIds.filter(_ => _ != itemId);
     } else {
@@ -556,7 +571,6 @@ const OrdersScreen = props => {
     } else {
       setSelectAll(false);
     }
-    console.log(currentItemIds);
     setBulkItemIds([...currentItemIds]);
   };
 
@@ -687,7 +701,7 @@ const OrdersScreen = props => {
         horizontal={true}
         ref={scrollRef}
         style={styles.TopTabWrap}
-        contentContainerStyle={{paddingBottom: Dimension.padding30}}>
+        contentContainerStyle={{ paddingBottom: Dimension.padding30 }}>
         {TABS[selectedType].map((tab, tabIndex) =>
           getTabs(tab, tabIndex, selectedType) ? (
             <TouchableOpacity
@@ -742,7 +756,7 @@ const OrdersScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             source={require('../../assets/images/rejected.png')}
-            style={{width: 350, height: 300}}
+            style={{ width: 350, height: 300 }}
           />
           <Text style={styles.profilependingTxt}>
             Your profile is rejected, as it does not{'\n'}match to our
@@ -758,7 +772,7 @@ const OrdersScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             source={require('../../assets/images/profilePending.png')}
-            style={{width: 350, height: 300}}
+            style={{ width: 350, height: 300 }}
           />
           <Text style={styles.profilependingTxt}>
             Your profile is incomplete, please complete your profile, To get
@@ -774,7 +788,7 @@ const OrdersScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             source={require('../../assets/images/pending_approval.png')}
-            style={{width: 300, height: 200}}
+            style={{ width: 300, height: 200 }}
           />
           <Text style={styles.profilependingTxt}>
             Your profile is currently in approval pending stage Once approved
@@ -791,7 +805,7 @@ const OrdersScreen = props => {
         <View style={styles.emptyWrap}>
           <Image
             source={require('../../assets/images/emptyOrders.png')}
-            style={{width: 300, height: 200}}
+            style={{ width: 300, height: 200 }}
           />
           <Text style={styles.emptyTxt}>No Data Available</Text>
         </View>
@@ -937,7 +951,7 @@ const OrdersScreen = props => {
     try {
       ctaAnalyticsBulkAccept(`BulkAccept`);
       setBulkAcceptLoader(true);
-      const {data} = await acceptBulk({
+      const { data } = await acceptBulk({
         supplierId: await AsyncStorage.getItem('userId'),
         itemIds: bulkItemIds,
       });
@@ -1027,7 +1041,7 @@ const OrdersScreen = props => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: colors.grayShade7}}>
+    <View style={{ flex: 1, backgroundColor: colors.grayShade7 }}>
       <View style={styles.topHeaderWrap}>
         <DropDown
           title={'Orders'}
@@ -1069,7 +1083,7 @@ const OrdersScreen = props => {
           }}>
           <ActivityIndicator
             color={colors.BrandColor}
-            style={{alignSelf: 'center', margin: 12}}
+            style={{ alignSelf: 'center', margin: 12 }}
             size={'large'}
           />
         </View>
@@ -1086,14 +1100,14 @@ const OrdersScreen = props => {
             // ListHeaderComponent={renderHeaderComponent}
             ListFooterComponent={renderFooterComponent}
             onEndReachedThreshold={0.9}
-            style={{paddingBottom: 380}}
+            style={{ paddingBottom: 380 }}
             contentContainerStyle={{
               paddingBottom: 380,
               backgroundColor: colors.grayShade1,
             }}
             removeClippedSubviews={true}
             maxToRenderPerBatch={5}
-            onEndReached={({distanceFromEnd}) => {
+            onEndReached={({ distanceFromEnd }) => {
               if (!onEndReachedCalledDuringMomentum.current) {
                 endReachedFetchListing();
                 onEndReachedCalledDuringMomentum.current = true;
@@ -1108,16 +1122,15 @@ const OrdersScreen = props => {
 
           <View style={styles.footerWrap}>
             {profileStatus == STATE_STATUS.FETCHED &&
-            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 16, 17].includes(
-              profileData.verificationStatus,
-            ) ? null : (
+              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 16, 17].includes(
+                profileData.verificationStatus,
+              ) ? null : (
               <View style={styles.footerSearchWrap}>
                 <View style={styles.searchWrapper}>
                   <TextInput
                     placeholder={'Search MSN/Product Name/PO Id/PO Item Id'}
                     returnKeyType={'search'}
                     onChangeText={onSearchText}
-                    // onFocus={() => console.log('onFocus!!')}
                     value={inputValue}
                     onSubmitEditing={event => {
                       if (inputValue && inputValue.length > 1) {
@@ -1239,7 +1252,7 @@ const OrdersScreen = props => {
                     <ActivityIndicator
                       size={'small'}
                       color={'white'}
-                      style={{marginRight: 4}}
+                      style={{ marginRight: 4 }}
                     />
                   )}
                 </TouchableOpacity>
@@ -1247,9 +1260,9 @@ const OrdersScreen = props => {
             ) : null}
 
             {selectedTab == 'SHIPMENT' &&
-            bulkItemIds &&
-            bulkItemIds.length &&
-            bulkActionsModal ? (
+              bulkItemIds &&
+              bulkItemIds.length &&
+              bulkActionsModal ? (
               <BulkActionsModal
                 bulkActionsModal={bulkActionsModal}
                 setBulkActionsModal={setBulkActionsModal}

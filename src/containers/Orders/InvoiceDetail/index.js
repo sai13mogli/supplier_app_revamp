@@ -13,6 +13,7 @@ import Toast from 'react-native-toast-message';
 const InvoiceDetailScreen = props => {
   const [loading, setLoading] = useState(false);
   const [isSelected, setSelection] = useState(false);
+
   const scrollRef = useRef();
 
   console.log("payload=====>", props);
@@ -81,7 +82,7 @@ const InvoiceDetailScreen = props => {
           });
         }
       } catch (err) {
-        console.log('Erreor', err);
+        console.log('Error', err);
         setLoading(false);
       }
     } else {

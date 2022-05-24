@@ -7,7 +7,13 @@ const styles = StyleSheet.create({
   ContainerCss: {
     backgroundColor: Colors.WhiteColor,
     paddingHorizontal: Dimension.padding15,
-    marginTop: Dimension.margin50
+    marginTop: Dimension.margin30
+  },
+  smallDeviceCss:{
+    height: Dimension.height30, width:Dimension.width120, marginTop: Dimension.margin30, alignSelf: 'center'
+  },
+  lagreDeviceCss:{
+    height: Dimension.height40, width:Dimension.width160, marginTop: Dimension.margin50, alignSelf: 'center'
   },
   headingTxt: {
     fontSize: Dimension.font18,

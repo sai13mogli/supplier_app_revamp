@@ -90,8 +90,8 @@ const SettingsScreen = props => {
               marginVertical: Dimension.margin10,
             }}>
             <Text style={styles.nrmtxt}>
-              Orders related SMS cannot be disabled as the are Critical to
-              provide Services
+              Orders related SMS cannot be disabled as the are critical to
+              provide services
             </Text>
           </View>
         </View>
