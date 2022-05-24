@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     borderRadius: Dimension.width5,
     backgroundColor: Colors.blackColor,
     marginRight: Dimension.margin8,
-    justifyContent:"center",
+    justifyContent:"flex-start",
     alignSelf:"center"
   },
   rowCss:{
