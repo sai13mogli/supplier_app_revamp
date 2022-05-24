@@ -384,34 +384,6 @@ const UploadInvoiceOMSScreen = props => {
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
         const url = `${BASE_URL}api/order/oms/mapInvoice`;
         const userId = await AsyncStorage.getItem('userId');
-        console.log('Paylod====>', [
-          {
-            name: 'invoiceNumber',
-            data: String(invoiceNumber),
-          },
-          {
-            name: 'supplierId',
-            data: String(userId),
-          },
-          {
-            name: 'itemLists',
-            data: podIdList.length > 1 ? podIdList.join(',') : String(podId),
-          },
-          {
-            name: 'invoiceTotal',
-            data: String(supplierInvoiceTotal),
-          },
-          {
-            name: 'invoiceDate',
-            data: getMinDate(invoiceDate),
-          },
-          {
-            name: 'file',
-            filename: uploadInvoice.name,
-            type: uploadInvoice.type,
-            data: RNFetchBlob.wrap(uploadInvoice.uri),
-          },
-        ]);
         const response = await RNFetchBlob.fetch(
           'POST',
           url,

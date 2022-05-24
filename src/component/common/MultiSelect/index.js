@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   TextInput,
@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 //import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 //import styles from './styles';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
 import CustomeIcon from '../CustomeIcon';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   addBrand,
   removeBrand,
@@ -28,7 +28,7 @@ const MultiSelect = props => {
   const [choosedList, setChoosedList] = useState([]);
   const [dataList, setDataList] = useState(props.data);
   const [customeList, setCustomeList] = useState([]);
-  const {navigate} = useNavigation();
+  const { navigate } = useNavigation();
   const navigation = useNavigation();
   const [search, setSearch] = useState([]);
   const businessNature = useSelector(
@@ -116,7 +116,6 @@ const MultiSelect = props => {
                 isDeleted: '4',
                 localbrand: true,
               };
-              console.log(brandObj);
               dispatch(addBrand(brandObj));
             }
             if (props.fromCategory) {
@@ -178,7 +177,7 @@ const MultiSelect = props => {
     props.onChangeDataChoosed(choosedList);
   }, [choosedList]);
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <View>
         <TouchableOpacity

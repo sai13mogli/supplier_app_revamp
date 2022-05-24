@@ -35,9 +35,9 @@ const UploadInvoiceScreen = props => {
 
   let EmsOmsFlag = actionCTA;
   let tax = global.hsn;
-
   useEffect(() => {
     setInvoiceLoader(true);
+
     if (
       EmsOmsFlag.includes('MAP_INVOICE') ||
       EmsOmsFlag.includes('REMAP_INVOICE')
@@ -56,76 +56,75 @@ const UploadInvoiceScreen = props => {
     return price.toFixed(2);
   };
 
-  console.log("okkk====>", podIdList);
 
-  const selectItemId = (itemId, totalAmount, keys, quantity, hsn, taxPercentage) => {
+
+  const selectItemId = (itemId, totalAmount, keys, quantity, hsn,) => {
+
     let currentItemIds = [...bulkItemIds];
     let currentKeys = [...totalKeys];
-    // currentKeys = [];
-
-    setitemRef(itemId);
-    if (currentItemIds.includes(itemId)) {
-      currentItemIds = currentItemIds.filter(_ => _ != itemId);
-    } else {
-      if (currentItemIds) {
-        var obj = {
-          quantity: quantity,
-          hsn: hsn,
-          hsnPercentage: taxPercentage,
-          itemRef: keys
-        }
-        currentItemIds.push(itemId);
-        currentKeys.push(obj);
+    try {
+      setitemRef(itemId);
+      if (currentItemIds.includes(itemId)) {
+        currentItemIds = currentItemIds.filter(_ => _ != itemId);
       } else {
-        currentItemIds = [];
-        currentKeys = [];
-        var obj = {
+        if (currentItemIds) {
+          var obj = {
+            quantity: quantity,
+            hsn: hsn,
+            taxPercentage: taxPercentage,
+            itemRef: keys
+          }
+          currentItemIds.push(itemId);
+          currentKeys.push(obj);
+        } else {
+          currentItemIds = [];
+          currentKeys = [];
+          var obj = {
+            quantity: quantity,
+            hsn: hsn,
+            hsnPercentage: taxPercentage,
+            itemRef: keys
+          }
+          currentItemIds.push(itemId);
+          currentKeys.push(obj);
+        }
+      }
+      setBulkItemIds(currentItemIds);
+      setTotalKeys(currentKeys);
+      let filterData = totalPrice.filter(item => item.id == itemId);
+      if (filterData.length > 0) {
+        const index = totalPrice.findIndex(x => x.id === filterData[0].id);
+        let priceList = [...totalPrice];
+        priceList.splice(index, 1);
+        setTotalPrice(priceList);
+        let arr = [...podIdList];
+        const podindex = arr.findIndex(x => x == keys);
+        arr.splice(podindex, 1);
+        setPodIdList(arr);
+      } else {
+        let row = {
+          id: itemId,
+          price: totalAmount,
+        };
+        let priceList = [...totalPrice];
+        priceList.push(row);
+        setTotalPrice(priceList);
+        let obj = {
           quantity: quantity,
           hsn: hsn,
           hsnPercentage: taxPercentage,
           itemRef: keys
         }
-        currentItemIds.push(itemId);
-        currentKeys.push(obj);
+        let arr = [...podIdList];
+        arr.push(obj)
+        setPodIdList(arr);
       }
     }
-    setBulkItemIds(currentItemIds);
-    setTotalKeys(currentKeys);
-    let filterData = totalPrice.filter(item => item.id == itemId);
-    if (filterData.length > 0) {
-      const index = totalPrice.findIndex(x => x.id === filterData[0].id);
-      let priceList = [...totalPrice];
-      priceList.splice(index, 1);
-      setTotalPrice(priceList);
-      let obj = {
-        quantity: quantity,
-        hsn: hsn,
-        hsnPercentage: taxPercentage,
-        itemRef: keys
-      }
-      let arr = [...podIdList];
-      const podindex = arr.findIndex(x => x == keys);
-      // console.log("PodIndex===>",podindex,);
-      arr.splice(podindex, 1);
-      setPodIdList(obj);
-    } else {
-      let row = {
-        id: itemId,
-        price: totalAmount,
-      };
-      let priceList = [...totalPrice];
-      priceList.push(row);
-      setTotalPrice(priceList);
-      let obj = {
-        quantity: quantity,
-        hsn: hsn,
-        hsnPercentage: taxPercentage,
-        itemRef: keys
-      }
-      let arr = [...podIdList];
-      arr.push(obj)
-      setPodIdList(arr);
+    catch (error) {
+      console.log("Error", error);
     }
+
+
   };
 
   const fetchInvoiceEMSDetails = async () => {
@@ -146,12 +145,16 @@ const UploadInvoiceScreen = props => {
   };
 
   const calculateHeaderSum = (value, id) => {
+    setQuantity(value)
+    setTaxPercentage(value)
     let data = [...totalPrice].map((item) => ({
       ...item,
       price: item.id == id ? value : item.price
-
     }))
     setTotalPrice([...data])
+
+
+
   };
 
   const renderItem = ({ item }) => {
@@ -163,8 +166,8 @@ const UploadInvoiceScreen = props => {
         orderRef={item.orderRef}
         productUom={item.productUom}
         quantity={item.quantity}
-        selectedValue={value => setTaxPercentage(value)}
-        UpdatedQuntity={(value, id) => calculateHeaderSum(value, id)}
+        UpdatedHsn={(value) => setTaxPercentage(value)}
+        UpdatedQuntity={(value) => setQuantity(value)}
         UpdatedTotalPrice={(value, id) => calculateHeaderSum(value, id)}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
@@ -288,9 +291,9 @@ const UploadInvoiceScreen = props => {
               orderRef,
               podIdList,
               warehouseId,
-              quantity,
-              hsn,
-              taxPercentage,
+              // quantity,
+              // hsn,
+              // taxPercentage,
               totalAmount,
               tax,
               selectedTab,

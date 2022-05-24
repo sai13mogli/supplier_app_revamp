@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   LogBox,
   ScrollView,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Routes from './src/routes';
 import store from './src/redux/store';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import codePush from 'react-native-code-push';
 import Toast from 'react-native-toast-message';
 import Modal from 'react-native-modal';
@@ -52,7 +52,7 @@ class App extends React.Component {
     Linking.getInitialURL()
       .then(url => {
         if (url) {
-          this.handleOpenUrl({url: url}, false);
+          this.handleOpenUrl({ url: url }, false);
         }
       })
       .catch(err => {
@@ -73,7 +73,6 @@ class App extends React.Component {
   }
 
   handleOpenUrl(event, fromNotification) {
-    console.log('handle hora hai!!');
     let obj = {};
     let screen = '';
     if (!fromNotification) {

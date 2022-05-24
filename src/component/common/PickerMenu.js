@@ -12,7 +12,6 @@ const PickerMenu = props => {
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
 
-  console.log(placeholder, selectedValue);
 
   return (
     <>
