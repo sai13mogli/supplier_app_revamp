@@ -63,10 +63,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding5,
     paddingVertical: Dimension.padding10,
     borderRadius: 4,
-    //width: Dimension.width60,
     justifyContent: 'space-between',
-
-    //marginTop: Dimension.margin5,
     marginBottom: Dimension.margin15,
     height: Dimension.height40,
   },
