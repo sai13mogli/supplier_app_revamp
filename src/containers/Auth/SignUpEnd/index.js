@@ -34,6 +34,7 @@ const SignUpEndScreen = props => {
   const [categoryCodeError, setcategoryCodeError] = useState(false);
   const [gstinError, setgstinError] = useState(false);
   const [nextLoader, setNextLoader] = useState(false);
+  const [init, setInit] = useState(true);
 
   const FORM_FIELDS = new OrderedMap({
     natureOfBusiness: {
@@ -85,10 +86,18 @@ const SignUpEndScreen = props => {
   });
 
   useEffect(() => {
-    if (natureOfBusiness) {
-      setnatureOfBusinessError(false);
-    } else {
-      setnatureOfBusinessError(true);
+    if (init) {
+      setInit(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!init) {
+      if (natureOfBusiness) {
+        setnatureOfBusinessError(false);
+      } else {
+        setnatureOfBusinessError(true);
+      }
     }
   }, [natureOfBusiness]);
 
