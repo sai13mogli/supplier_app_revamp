@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
+    width:"75%"
   },
   TicketDate: {
     fontSize: Dimension.font12,

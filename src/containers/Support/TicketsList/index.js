@@ -55,9 +55,9 @@ const TicketsList = props => {
 
     //fetch tickets commented!!!
     setInitLoader(false);
-    if (ticketsStatus !== STATE_STATUS.FETCHED) {
-      fetchTicketListing(1, '');
-    }
+    // if (ticketsStatus !== STATE_STATUS.FETCHED) {
+    fetchTicketListing(1, '');
+    // }
   }, []);
   // && !initLoader
 

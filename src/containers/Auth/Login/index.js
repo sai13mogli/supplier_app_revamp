@@ -9,6 +9,7 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
+  Dimensions
 } from 'react-native';
 import CustomButton from '../../../component/common/Button';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
@@ -45,8 +46,9 @@ const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const phoneRegex = '^[1-9][0-9]{9}$';
 //partsbigboss@gmail.com
 //default123
-
+const DeviceHeight = Dimensions.get('window').height;
 const LoginScreen = props => {
+  //alert(DeviceHeight);
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
@@ -309,6 +311,7 @@ const LoginScreen = props => {
   };
 
   return (
+    
     // <View style={{backgroundColor:"#fff",flex:1}}>
     //   <View style={{height:"30%",justifyContent:"center",}}>
     <View style={{backgroundColor: '#fff', flex: 1}}>
@@ -323,7 +326,8 @@ const LoginScreen = props => {
       >
         <Image
           source={require('../../../assets/images/logo.png')}
-          style={{height: 44, width: 180, marginTop: 80, alignSelf: 'center'}}
+          style={DeviceHeight<700 ?styles.smallDeviceCss :styles.lagreDeviceCss}
+            
         />
       </ImageBackground>
 
@@ -407,7 +411,7 @@ const LoginScreen = props => {
           onPress={googleSignIn}
           disabled={loading}
         />
-        <View style={{marginTop: 30}}>
+        <View style={{marginTop: Dimension.margin20}}>
           <CustomButton
             title={'Not a Moglix Supplier? SignUp now'}
             buttonColor={Colors.LightBrandColor}
