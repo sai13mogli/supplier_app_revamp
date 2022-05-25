@@ -16,7 +16,10 @@ const AppUpdateBanner = props => {
     );
   };
 
-  if (Number(version) <= Number(VersionCheck.getCurrentVersion())) {
+  if (
+    Number(version.split('.').join('')) <=
+    Number(VersionCheck.getCurrentVersion().split('.').join(''))
+  ) {
     return null;
   } else {
     return (

@@ -125,7 +125,7 @@ export const changeOmsPickupDate = async body =>
   );
 
 export const getpoChallan = async (supplierId, orderRef) =>
-  axios.get(`https://apigatewayqa.moglix.com/api/order/downloadPoChallan`, {
+  axios.get(`https://apigateway.moglix.com/api/order/downloadPoChallan`, {
     params: {supplierId: supplierId, orderRef: orderRef},
     headers: {
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
@@ -304,7 +304,7 @@ export const createManifestApi = async payload =>
 
 export const bulkDownloadApi = async payload =>
   axios.post(
-    `http://apigatewayqa.moglix.com/api/order/oms/bulkDownload`,
+    `https://apigateway.moglix.com/api/order/oms/bulkDownload`,
     [...payload],
 
     {

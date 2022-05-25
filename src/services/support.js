@@ -2,7 +2,7 @@ import axios from 'axios';
 import {BASE_URL} from '../redux/constants/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SUPPLIER = 'https://supplierapiqa.moglilabs.com/';
+const SUPPLIER = 'https://supplierapi.moglix.com/';
 
 export const getTickets = async ({page, days, openOnly, search}) =>
   axios.post(

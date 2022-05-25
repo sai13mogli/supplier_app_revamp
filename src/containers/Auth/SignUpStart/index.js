@@ -335,7 +335,7 @@ const SignUpStartScreen = props => {
                     }}
                     onPress={() =>
                       Linking.openURL(
-                        'https://suppliercentralqa.moglilabs.com/files/termsofuse.pdf',
+                        'https://supplierapi.moglix.com/files/termsofuse.pdf',
                       )
                     }>
                     Terms and Conditions

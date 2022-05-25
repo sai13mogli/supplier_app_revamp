@@ -107,16 +107,16 @@ export const setSaveBankDetail = async data =>
   });
 
 export const getPincodeDetails = async pin =>
-  axios.get(`https://supplierapiqa.moglilabs.com/util/getStateCity?pin=${pin}`);
+  axios.get(`https://supplierapi.moglix.com/util/getStateCity?pin=${pin}`);
 
 export const getIfscCodeDetails = async ifscCode =>
   axios.get(
-    `https://supplierapiqa.moglilabs.com/util/bankDetails?ifsc=${ifscCode}`,
+    `https://supplierapi.moglix.com/util/bankDetails?ifsc=${ifscCode}`,
   );
 
 export const getGstDetails = async gstin =>
   axios.get(
-    `https://supplierapiqa.moglilabs.com/util/validateGstin?gstin=${gstin}`,
+    `https://supplierapi.moglix.com/util/validateGstin?gstin=${gstin}`,
   );
 
 export const getCategoriesBrands = async () =>

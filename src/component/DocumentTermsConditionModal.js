@@ -52,10 +52,11 @@ const DocumentTermsConditionModal = props => {
                             />
                         </TouchableOpacity>
                     </View>
+               
                     <View style={styles.wrapView}>
                         <Text style={styles.enterPrice}>for ENTERPRISE(OFFLINE)</Text>
                         <TouchableOpacity
-                            onPress={() => Linking.openURL('https://suppliercentralqa.moglilabs.com/files/enterprise-supplier-aggrement.pdf')}
+                            onPress={() => Linking.openURL('https://supplier.moglix.com/files/enterprise-supplier-aggrement.pdf')}
                         ><Text style={styles.terms}>Terms & Condition</Text>
                         </TouchableOpacity>
 
@@ -63,14 +64,14 @@ const DocumentTermsConditionModal = props => {
                     <View style={styles.wrapView}>
                         <Text style={styles.enterPrice}>for ONLINE(RETAIL)</Text>
                         <TouchableOpacity
-                            onPress={() => Linking.openURL('https://suppliercentralqa.moglilabs.com/files/supplier-aggrement.pdf')}
+                            onPress={() => Linking.openURL('https://supplier.moglix.com/files/supplier-aggrement.pdf')}
                         ><Text style={styles.terms}>Terms & Condition</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.wrapView}>
                         <Text style={styles.enterPrice}>for ABFRL</Text>
                         <TouchableOpacity
-                            onPress={() => Linking.openURL('https://suppliercentralqa.moglilabs.com/files/abg-supplier-aggrement.pdf')}
+                            onPress={() => Linking.openURL('https://supplier.moglix.com/files/abg-supplier-aggrement.pdf')}
                         ><Text style={styles.terms}>Terms & Condition</Text>
                         </TouchableOpacity>
 

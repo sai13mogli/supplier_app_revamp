@@ -2,8 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {BASE_URL} from '../redux/constants/index';
 
-const AUTH = 'https://supplierapiqa.moglilabs.com/';
-const APP_INFO = 'https://suppliercentralqa.moglilabs.com/';
+const AUTH = 'https://supplierapi.moglix.com/';
+const APP_INFO = 'https://supplier.moglix.com/';
 
 export const getAppInfo = () =>
   axios.get(`${APP_INFO}registration/loadconfig?key=3dbd9ad8253e`);

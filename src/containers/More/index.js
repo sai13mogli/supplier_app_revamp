@@ -79,7 +79,10 @@ const MoreScreen = props => {
   };
 
   const getUpdateText = () => {
-    if (Number(version) <= Number(VersionCheck.getCurrentVersion())) {
+    if (
+      Number(version.split('.').join('')) <=
+      Number(VersionCheck.getCurrentVersion().split('.').join(''))
+    ) {
       return 'No Update Available';
     } else {
       return 'Update Available';

@@ -1,5 +1,5 @@
-import React, { createRef } from 'react';
-import { Linking } from 'react-native';
+import React, {createRef} from 'react';
+import {Linking} from 'react-native';
 import HomeScreen from '../containers/Home';
 import ProfileScreen from '../containers/Profile';
 import OrdersScreen from '../containers/Orders';
@@ -22,7 +22,7 @@ import NotificationScreen from '../containers/Notification';
 import TicketsList from '../containers/Support/TicketsList';
 import FAQS from '../containers/Support/FAQS';
 import BrandScreen from '../containers/Profile/CategoryBrand/Brand/index';
-import { OrderedMap } from 'immutable';
+import {OrderedMap} from 'immutable';
 import Accounts from '../containers/Profile/BankDetails/Accounts';
 import TdsDetails from '../containers/Profile/BankDetails/TdsDetails';
 import PickedUp from '../containers/Profile/Addresses/PickedUp';
@@ -304,7 +304,7 @@ export const MORE_TABS = [
   {
     route: '',
     onPress: () => {
-      Linking.openURL('https://suppliercentralqa.moglilabs.com/#faq');
+      Linking.openURL('https://supplier.moglix.com/#faq');
     },
     title: 'FAQs',
     icon: 'questionnaire-line',
@@ -331,7 +331,7 @@ export const PRIVACY_TABS = [
   {
     route: '',
     onPress: () => {
-      Linking.openURL('https://suppliercentralqa.moglilabs.com/');
+      Linking.openURL('https://supplier.moglix.com/');
     },
     title: 'Contact Us',
     icon: 'customer-service-line',
