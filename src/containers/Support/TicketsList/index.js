@@ -281,7 +281,7 @@ const TicketsList = props => {
   const ticketListing = () => {
     return (
       <View>
-        <Text style={styles.SearchTicketTxt}>Search Tickets</Text>
+        {/* <Text style={styles.SearchTicketTxt}>Search Tickets</Text> */}
         <View style={styles.searchWrapper}>
           <TextInput
             placeholder="Search by ticket number"
