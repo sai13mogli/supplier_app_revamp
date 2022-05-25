@@ -613,6 +613,8 @@ const InvoiceEMSFormDetailScreen = props => {
             }
           : {
               name: 'ewayBillFile',
+              filename: '',
+              data: '',
             };
         console.log('Payload====>', payload, ewayFile, invoiceFile);
         props.navigation.navigate('InvoiceDetail', {
