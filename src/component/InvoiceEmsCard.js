@@ -116,7 +116,7 @@ const InvoiceCard = props => {
 
   const calculateQuantity = (text, id) => {
     setQuantity(text);
-    props.UpdatedQuntity(text, id)
+    // props.UpdatedQuntity(text, id)
     const { taxPercentage, transferPrice } = props;
     let Price = transferPrice * text;
     let percentage = (Price / 100) * taxPercentage + text * transferPrice;

@@ -601,7 +601,6 @@ const InvoiceEMSFormDetailScreen = props => {
           ewayFileData: ewayFile,
         });
       }
-
       catch (err) {
         console.log('Error', err);
         setLoading(false);
