@@ -46,8 +46,6 @@ const styles = StyleSheet.create({
     maxWidth: Dimension.width100,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
     minHeight: Dimension.height50,
   },
   selectedTabCss: {
@@ -59,8 +57,6 @@ const styles = StyleSheet.create({
     maxWidth: Dimension.width100,
     marginRight: Dimension.margin10,
     justifyContent: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
     minHeight: Dimension.height50,
   },
   selectedTabTxt: {

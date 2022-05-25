@@ -720,15 +720,7 @@ const OrdersScreen = props => {
                     ? styles.selectedTabTxt
                     : styles.UnselectedtabTxt
                 }>
-                {textRenderer(tab.label)}
-              </Text>
-              <Text
-                style={
-                  selectedTab == tab.key
-                    ? styles.selectedTabTxt
-                    : styles.UnselectedtabTxt
-                }>
-                ({tabData.get(tab.key)})
+                {textRenderer(tab.label)} ({tabData.get(tab.key)})
               </Text>
             </TouchableOpacity>
           ) : null,
