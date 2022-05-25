@@ -30,7 +30,12 @@ const InvoiceEMSFormDetailScreen = props => {
     props?.route?.params?.warehouseId,
   );
   const [orderRef, setOrderRef] = useState(props?.route?.params?.orderRef);
-  const [hsn, setHsn] = useState(props?.route?.params?.hsn);
+  const [hsn, setHsn] = useState(props?.route?.params?.itemLists.find(_ => _.hsnPercentage == Math.max(...(props &&
+    props.route &&
+    props.route.params &&
+    props.route.params.itemLists.map((_) => _.hsnPercentage
+    ) || [])))
+    .hsn);
   const [invoiceNumber, setInvoiceNumber] = useState();
   const [invoiceNumberError, setInvoiceNumberError] = useState(false);
   const [invoiceDate, setInvoiceDate] = useState('');
@@ -50,7 +55,11 @@ const InvoiceEMSFormDetailScreen = props => {
   const [baseAmountError, setBaseAmountError] = useState(false);
   const [hsnError, sethsnError] = useState(false);
   const [taxPercentage, setTaxPercentage] = useState(
-    props?.route?.params?.taxPercentage,
+    Math.max(...(props &&
+      props.route &&
+      props.route.params &&
+      props.route.params.itemLists.map((_) => _.hsnPercentage
+      ) || []))
   );
   const [taxError, setTaxError] = useState(false);
   const [total, setTotal] = useState('');
@@ -62,6 +71,7 @@ const InvoiceEMSFormDetailScreen = props => {
   const [misTotal, setMisTotal] = useState('');
   const [fId, setFId] = useState(null);
 
+  console.log("Logger=====>", props?.route?.params?.taxPercentage);
 
   const UploadInvoice = new OrderedMap({
     upload_invoice: {
@@ -144,10 +154,10 @@ const InvoiceEMSFormDetailScreen = props => {
       isImp: false,
       label: 'E-way Bill Number',
       placeholder: 'E-way Bill Number',
-      errorMessage: 'Enter valid e-way Bill number *(12) digit',
+      errorMessage: 'Enter valid 12 digit e-way bill number',
       value: ewayBillNumber,
       showError: ewayBillNumberError,
-      // onBlur: () => onEwayBillNumberBlur(),
+      onBlur: () => onEwayBillNumberBlur(),
       onChangeText: text => setEwayBillNumber(text),
       component: FloatingLabelInputField,
     },
@@ -316,6 +326,46 @@ const InvoiceEMSFormDetailScreen = props => {
     },
   });
 
+  console.log("Okk=====>", props);
+
+  const calculateTotalFreight = () => {
+    setTaxPercentage(
+      Math.max(...(props &&
+        props.route &&
+        props.route.params &&
+        props.route.params.itemLists.map((_) => _.hsnPercentage
+        ) || []))
+    );
+    let total = Number(baseAmount) + Number((taxPercentage * baseAmount) / 100);
+    setTotal(`${total}`);
+  };
+
+  const calculateLoadingCharges = text => {
+    setTaxPercentage(
+      Math.max(...(props &&
+        props.route &&
+        props.route.params &&
+        props.route.params.itemLists.map((_) => _.hsnPercentage
+        ) || []))
+    );
+    let total =
+      Number(loadingBaseAmount) +
+      Number((taxPercentage * loadingBaseAmount) / 100);
+    setloadingTotal(`${total}`);
+  };
+
+  const calculateMiscCharges = () => {
+    setTaxPercentage(
+      Math.max(...(props &&
+        props.route &&
+        props.route.params &&
+        props.route.params.itemLists.map((_) => _.hsnPercentage
+        ) || []))
+    );
+    let total =
+      Number(misBaseAmount) + Number((taxPercentage * misBaseAmount) / 100);
+    setMisTotal(`${total}`);
+  };
 
   const onUploadInvoiceBlur = () => {
     if (uploadInvoice && uploadInvoice.name) {
@@ -333,50 +383,6 @@ const InvoiceEMSFormDetailScreen = props => {
     }
   };
 
-  const calculateTotalFreight = () => {
-    setHsn(
-      props && props.route && props.route.params && props.route.params.hsn,
-    );
-    setTaxPercentage(
-      props &&
-      props.route &&
-      props.route.params &&
-      props.route.params.taxPercentage,
-    );
-    let total = Number(baseAmount) + Number((taxPercentage * baseAmount) / 100);
-    setTotal(`${total}`);
-  };
-
-  const calculateLoadingCharges = text => {
-    setHsn(
-      props && props.route && props.route.params && props.route.params.hsn,
-    );
-    setTaxPercentage(
-      props &&
-      props.route &&
-      props.route.params &&
-      props.route.params.taxPercentage,
-    );
-    let total =
-      Number(loadingBaseAmount) +
-      Number((taxPercentage * loadingBaseAmount) / 100);
-    setloadingTotal(`${total}`);
-  };
-
-  const calculateMiscCharges = () => {
-    setHsn(
-      props && props.route && props.route.params && props.route.params.hsn,
-    );
-    setTaxPercentage(
-      props &&
-      props.route &&
-      props.route.params &&
-      props.route.params.taxPercentage,
-    );
-    let total =
-      Number(misBaseAmount) + Number((taxPercentage * misBaseAmount) / 100);
-    setMisTotal(`${total}`);
-  };
 
   const onInvoiceNumberBlur = () => {
     if (invoiceNumber && invoiceNumber.length) {
@@ -401,17 +407,17 @@ const InvoiceEMSFormDetailScreen = props => {
     }
   };
 
-  // const onEwayBillNumberBlur = () => {
-  //   if (
-  //     ewayBillNumber &&
-  //     ewayBillNumber.length &&
-  //     ewayBillNumber.length == 12
-  //   ) {
-  //     setEwayBillNumberError(false);
-  //   } else {
-  //     setEwayBillNumberError(true);
-  //   }
-  // };
+  const onEwayBillNumberBlur = () => {
+    if (
+      ewayBillNumber &&
+      ewayBillNumber.length &&
+      ewayBillNumber.length == 12
+    ) {
+      setEwayBillNumberError(false);
+    } else {
+      setEwayBillNumberError(true);
+    }
+  };
 
   const onInvoiceAmountBlur = () => {
     if (invoiceAmount && invoiceAmount.length) {
@@ -427,7 +433,6 @@ const InvoiceEMSFormDetailScreen = props => {
         await SheetManager.hide('action_sheet');
         uploadFromFileExp();
         break;
-
       default:
         await SheetManager.hide('action_sheet');
         break;
@@ -455,7 +460,6 @@ const InvoiceEMSFormDetailScreen = props => {
         break;
       case 'uploadEwayBill':
         setUploadEwayBill(data);
-
         break;
       default:
         break;
@@ -522,7 +526,7 @@ const InvoiceEMSFormDetailScreen = props => {
       invoiceDate &&
       invoiceAmount &&
       invoiceAmount.length &&
-      uploadInvoice
+      uploadInvoice && uploadInvoice.name
     ) {
       try {
         let payload = {
@@ -541,15 +545,15 @@ const InvoiceEMSFormDetailScreen = props => {
             quantity: _.quantity,
           })),
           igstApplicable: true,
-          countryCode: 356,
+          countryCode: "356",
           frieght: {
             charge: baseAmount,
             hsn: baseAmount ? hsn : '',
             tax: baseAmount ? taxPercentage : '',
-            totalAmount: total,
+            totalAmount: baseAmount ? Number(total) : '',
             remarks: addComment,
-            countryCode: 356,
-            igst: null,
+            countryCode: "356",
+            igst: 0,
             cgst: 0,
             sgst: 0,
             vatAmount: 0,
@@ -558,9 +562,9 @@ const InvoiceEMSFormDetailScreen = props => {
             charge: loadingBaseAmount,
             hsn: loadingBaseAmount ? hsn : '',
             tax: loadingBaseAmount ? taxPercentage : '',
-            totalAmount: loadingBaseAmount ? loadingTotal : '',
-            countryCode: 356,
-            igst: null,
+            totalAmount: loadingBaseAmount ? Number(loadingTotal) : '',
+            countryCode: "356",
+            igst: 0,
             cgst: 0,
             sgst: 0,
             vatAmount: 0,
@@ -568,10 +572,10 @@ const InvoiceEMSFormDetailScreen = props => {
           misc: {
             charge: misBaseAmount,
             hsn: misBaseAmount ? hsn : '',
-            tax: misBaseAmount ? taxPercentage : '',
-            totalAmount: misBaseAmount ? misTotal : '',
-            countryCode: 356,
-            igst: null,
+            tax: misBaseAmount ? String(taxPercentage) : '',
+            totalAmount: misBaseAmount ? Number(misTotal) : '',
+            countryCode: "356",
+            igst: 0,
             cgst: 0,
             sgst: 0,
             vatAmount: 0,
@@ -590,29 +594,52 @@ const InvoiceEMSFormDetailScreen = props => {
           type: uploadEwayBill.type,
           data: RNFetchBlob.wrap(uploadEwayBill.uri),
         } : {};
+        console.log("Payload====>", payload, ewayFile, invoiceFile);
         props.navigation.navigate('InvoiceDetail', {
           data: payload,
           invoiceFileData: invoiceFile,
           ewayFileData: ewayFile,
         });
-      } catch (err) {
+      }
+
+      catch (err) {
         console.log('Error', err);
-        if (ewayBillNumber && ewayBillNumber.length) {
-          onUploadEwayBlur();
-          onEwayDateDateBlur();
-        }
-        // onEwayDateDateBlur();
         setLoading(false);
       }
     } else {
+
       onInvoiceNumberBlur();
       onInvoiceDateBlur();
       onInvoiceAmountBlur();
       onUploadInvoiceBlur();
-
-
     }
   };
+
+  const checkewayvalidation = () => {
+    if (ewayBillNumber && ewayBillNumber.length && ewayDate && ewayDate.length && uploadEwayBill) {
+      onsubmit()
+      setUploadEwayBillError(false);
+      setEwayDateError(false);
+      setEwayBillNumberError(false)
+    }
+    else if (!ewayBillNumber && !ewayDate && !uploadEwayBill) {
+      onsubmit()
+      setUploadEwayBillError(false);
+      setEwayDateError(false);
+      setEwayBillNumberError(false)
+    }
+    else if (ewayBillNumber && ewayBillNumber.length || ewayDate && ewayDate.length || "uri" in uploadEwayBill) {
+      onUploadEwayBlur();
+      onEwayDateDateBlur();
+      onEwayBillNumberBlur();
+    } else {
+      onsubmit()
+      setUploadEwayBillError(false);
+      setEwayDateError(false);
+      setEwayBillNumberError(false)
+    }
+
+  }
 
   const onCancel = () => {
     props.navigation.goBack();
@@ -697,7 +724,7 @@ const InvoiceEMSFormDetailScreen = props => {
             TextFontSize={Dimension.font16}
             title={'CONTINUE'}
             loading={loading}
-            onPress={onsubmit}
+            onPress={checkewayvalidation}
           />
         </View>
       </View>
