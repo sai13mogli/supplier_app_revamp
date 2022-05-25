@@ -1001,7 +1001,7 @@ const DocumentsScreen = props => {
     };
     myrequest.open(
       'GET',
-      `https://apigatewayqa.moglix.com/profile/file?download=0&key=${fileKey}`,
+      `https://apigateway.moglix.com/profile/file?download=0&key=${fileKey}`,
     );
     let token = `Bearer ${await AsyncStorage.getItem('token')}`;
     myrequest.setRequestHeader('Authorization', token);
