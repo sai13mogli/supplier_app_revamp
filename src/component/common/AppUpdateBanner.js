@@ -33,7 +33,7 @@ const AppUpdateBanner = props => {
 const styles = StyleSheet.create({
   updateContainer: {
     flexDirection: 'row',
-    marginVertical: Dimension.margin8,
+    marginVertical: Dimension.margin5,
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: Dimension.padding12,

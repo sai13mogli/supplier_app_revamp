@@ -102,6 +102,8 @@ const BusinessDetailsScreen = props => {
   const [updateError, setUpdateError] = useState(false);
   const [phoneEdit, setPhoneEdit] = useState(false);
   const [emailEdit, setEmailEdit] = useState(false);
+  const [init, setInit] = useState(true);
+  const [gstinLoading, setGstinLoading] = useState(false);
 
   const FORM_FIELDS = new OrderedMap({
     legalEntityName: {
@@ -128,7 +130,8 @@ const BusinessDetailsScreen = props => {
       onBlur: () => onTradeNameBlur(),
       onChangeText: text => settradeName(text),
       component: FloatingLabelInputField,
-      disabled: props.route.params && props.route.params.disabled,
+      disabled: false,
+      // props.route.params && props.route.params.disabled,
     },
     contactName: {
       title: 'Contact Name',
@@ -154,7 +157,8 @@ const BusinessDetailsScreen = props => {
       onChangeText: text => setgstin(text),
       component: FloatingLabelInputField,
       onBlur: () => onGstinBlur(),
-      disabled: props.route.params && props.route.params.disabled,
+      disabled: false,
+      // props.route.params && props.route.params.disabled,
     },
     country: {
       title: 'Country',
@@ -333,6 +337,7 @@ const BusinessDetailsScreen = props => {
   }, [businessDetailsStatus]);
 
   useEffect(() => {
+    setInit(false);
     console.log(businessDetails, 'businessdetails');
     if (props.route.params && props.route.params.disabled) {
       setPhoneEdit(false);
@@ -391,8 +396,10 @@ const BusinessDetailsScreen = props => {
   };
 
   const onGstinBlur = async () => {
+    setGstinLoading(true);
     if (gstin && gstin.length >= 15 && gstin.match(gstinRegex)) {
       const {data} = await getGstDetails(gstin);
+      setGstinLoading(false);
       if (!data.success) {
         setgstinError(true);
       } else {
@@ -400,18 +407,22 @@ const BusinessDetailsScreen = props => {
         setgstinError(false);
       }
     } else {
+      setGstinLoading(false);
       setgstinError(true);
     }
   };
 
   useEffect(() => {
-    if (gstin.length && gstin.length > 14) {
-      onGstinBlur();
+    if (!init) {
+      if (gstin.length && gstin.length > 14) {
+        onGstinBlur();
+      }
     }
   }, [gstin]);
 
   const onSubmit = async () => {
     if (
+      !gstinLoading &&
       legalEntityName &&
       legalEntityName.length &&
       tradeName &&
