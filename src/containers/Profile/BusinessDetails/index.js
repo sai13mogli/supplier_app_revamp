@@ -130,8 +130,7 @@ const BusinessDetailsScreen = props => {
       onBlur: () => onTradeNameBlur(),
       onChangeText: text => settradeName(text),
       component: FloatingLabelInputField,
-      disabled: false,
-      // props.route.params && props.route.params.disabled,
+      disabled: props.route.params && props.route.params.disabled,
     },
     contactName: {
       title: 'Contact Name',
@@ -157,8 +156,7 @@ const BusinessDetailsScreen = props => {
       onChangeText: text => setgstin(text),
       component: FloatingLabelInputField,
       onBlur: () => onGstinBlur(),
-      disabled: false,
-      // props.route.params && props.route.params.disabled,
+      disabled: props.route.params && props.route.params.disabled,
     },
     country: {
       title: 'Country',

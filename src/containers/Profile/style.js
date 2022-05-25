@@ -5,10 +5,12 @@ import Dimension from '../../Theme/Dimension';
 
 const styles = StyleSheet.create({
   UserDetailWrap: {
-    backgroundColor: Colors.BrandColor,
+   // backgroundColor: Colors.BrandColor,
     padding: Dimension.padding15,
     borderRadius: 8,
-    flexDirection: "row"
+    flexDirection: "row",
+
+    backgroundColor: '#E2E2E2',
   },
   userDetailLeft: {
     marginRight: Dimension.margin15
@@ -20,20 +22,21 @@ const styles = StyleSheet.create({
   },
   UserName: {
     fontSize: Dimension.font14,
-    color: Colors.WhiteColor,
+    //color: Colors.WhiteColor,
     fontFamily: Dimension.CustomSemiBoldFont,
+    color:Colors.FontColor,
 
   },
   UserEmail: {
     fontSize: Dimension.font12,
-    color: Colors.WhiteColor,
+    color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
     marginLeft: Dimension.margin6,
 
   },
   UserContact: {
     fontSize: Dimension.font12,
-    color: Colors.WhiteColor,
+    color: Colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
     marginLeft: Dimension.margin6,
   },
@@ -71,7 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WhiteColor,
     borderBottomWidth: 1,
     borderBottomColor: Colors.grayShade10,
-    paddingBottom: Dimension.padding10,
+    paddingVertical: Dimension.padding10,
 
     paddingHorizontal: Dimension.padding15
 
