@@ -662,6 +662,7 @@ const Ordercard = props => {
       //Image URL which we want to download
       image_URL = url;
       //Getting the extention of the file
+      image_URL = image_URL.replace('http://', 'https://');
       let ext = getExtention(image_URL);
       ext = '.' + ext[0];
       //Get config and fs from RNFetchBlob
@@ -698,6 +699,12 @@ const Ordercard = props => {
         })
         .catch(e => {
           setPickupchallanLoader(false);
+          Toast.show({
+            type: 'success',
+            text2: 'Something went wrong',
+            visibilityTime: 2000,
+            autoHide: true,
+          });
         });
     } catch (error) {
       setPickupchallanLoader(false);

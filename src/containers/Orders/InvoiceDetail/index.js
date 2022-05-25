@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import RNFetchBlob from 'rn-fetch-blob';
-import { View, StyleSheet, Text, ScrollView } from 'react-native';
+import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
 import CustomButton from '../../../component/common/Button';
 import Checkbox from '../../../component/common/Checkbox/index';
 import Header from '../../../component/common/Header';
-import { BASE_URL } from '../../../redux/constants';
+import {BASE_URL} from '../../../redux/constants';
 import Toast from 'react-native-toast-message';
 
 const InvoiceDetailScreen = props => {
@@ -23,8 +23,7 @@ const InvoiceDetailScreen = props => {
     });
   };
 
-
-  console.log("DetialProps====>", props);
+  console.log('DetialProps====>', props);
 
   const onsubmit = async () => {
     if (isSelected) {
@@ -40,26 +39,26 @@ const InvoiceDetailScreen = props => {
             Authorization: `${token}`,
           },
           props?.route?.params?.data?.ewayNumber
-
-            ? [{
-              name: 'dropshipInvoiceRequest',
-              data: JSON.stringify(props?.route?.params?.data),
-              type: 'application/json',
-            },
-            props?.route?.params?.invoiceFileData,
-            props?.route?.params?.ewayFileData,
-            ]
+            ? [
+                {
+                  name: 'dropshipInvoiceRequest',
+                  data: JSON.stringify(props?.route?.params?.data),
+                  type: 'application/json',
+                },
+                props?.route?.params?.invoiceFileData,
+                props?.route?.params?.ewayFileData,
+              ]
             : [
-              {
-                name: 'dropshipInvoiceRequest',
-                data: JSON.stringify(props?.route?.params?.data),
-                type: 'application/json',
-              },
-              props?.route?.params?.invoiceFileData,
-            ],
+                {
+                  name: 'dropshipInvoiceRequest',
+                  data: JSON.stringify(props?.route?.params?.data),
+                  type: 'application/json',
+                },
+                props?.route?.params?.invoiceFileData,
+              ],
         );
         const res = await response.json();
-        console.log("Response=====>", res);
+        console.log('Response=====>', res);
         if (res.success) {
           setLoading(false);
           Toast.show({
@@ -72,6 +71,14 @@ const InvoiceDetailScreen = props => {
             selectedTab: 'UPLOAD_INVOICE',
           });
         } else if (res.success == false) {
+          setLoading(false);
+          Toast.show({
+            type: 'error',
+            text2: res.message,
+            visibilityTime: 5000,
+            autoHide: true,
+          });
+        } else {
           setLoading(false);
           Toast.show({
             type: 'error',
@@ -117,50 +124,64 @@ const InvoiceDetailScreen = props => {
         <View style={styles.row}>
           <Text style={styles.numberWrap}>01</Text>
           <Text style={styles.modalText}>
-            Company name should be Mogli Labs (India) Pvt Ltd. India must be in braces.
+            Company name should be Mogli Labs (India) Pvt Ltd. India must be in
+            braces.
           </Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.numberWrap}>02</Text>
           <Text style={styles.modalText}>
-            Ensure that Moglix GSTIN is properly mentioned on the invoice as per Supplier PO.
+            Ensure that Moglix GSTIN is properly mentioned on the invoice as per
+            Supplier PO.
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>03</Text>
           <Text style={styles.modalText}>
-            Mogli labs PAN & supplier PAN on invoice is mandatory where “Total invoice amount” (incl. tax) is more than or equal to Rs. 2 Lacs
+            Mogli labs PAN & supplier PAN on invoice is mandatory where “Total
+            invoice amount” (incl. tax) is more than or equal to Rs. 2 Lacs
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>04</Text>
           <Text style={styles.modalText}>
-            Each Tax Invoice should have heading “Tax Invoice” and duly signed & stamped properly by the supplier either digital or manual. If vendor turnover is more than 20 crore, E-invoicing is compulsory.
+            Each Tax Invoice should have heading “Tax Invoice” and duly signed &
+            stamped properly by the supplier either digital or manual. If vendor
+            turnover is more than 20 crore, E-invoicing is compulsory.
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>05</Text>
           <Text style={styles.modalText}>
-            GST type is verified with the GSTIN (If seller & Moglix have same Business state -CGST & SGST otherwise IGST). In Bill to Ship to cases (Dropship), supplier have to raise bill as per supplier PO, not ship to location
+            GST type is verified with the GSTIN (If seller & Moglix have same
+            Business state -CGST & SGST otherwise IGST). In Bill to Ship to
+            cases (Dropship), supplier have to raise bill as per supplier PO,
+            not ship to location
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>06</Text>
           <Text style={styles.modalText}>
-            Clear Invoice copy is uploaded on Supplier Central ensuring that no data is getting cropped.
+            Clear Invoice copy is uploaded on Supplier Central ensuring that no
+            data is getting cropped.
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>07</Text>
           <Text style={styles.modalText}>
-            Invoicing amount in Supplier Central & Supplier Tax Invoice amount should be exactly the same. Note: (We do not accept invoices with TCS charged by vendor)
+            Invoicing amount in Supplier Central & Supplier Tax Invoice amount
+            should be exactly the same. Note: (We do not accept invoices with
+            TCS charged by vendor)
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.numberWrap}>08</Text>
           <Text style={styles.modalText}>
-            The Invoice Number mentioned on the Tax Invoice & Invoice Number uploaded on Supplier Central & GST portal should be exactly the same. Also, invoice number should not exceed 16 characters, containing alphabets or numerals or special characters.
+            The Invoice Number mentioned on the Tax Invoice & Invoice Number
+            uploaded on Supplier Central & GST portal should be exactly the
+            same. Also, invoice number should not exceed 16 characters,
+            containing alphabets or numerals or special characters.
           </Text>
         </View>
         <View style={styles.row}>
@@ -172,7 +193,8 @@ const InvoiceDetailScreen = props => {
         <View style={styles.row}>
           <Text style={styles.numberWrap}>10</Text>
           <Text style={styles.modalText}>
-            Moglix address in supplier invoice under heading “bill to” should match as per Moglix PO.
+            Moglix address in supplier invoice under heading “bill to” should
+            match as per Moglix PO.
           </Text>
         </View>
         <Checkbox
@@ -185,9 +207,9 @@ const InvoiceDetailScreen = props => {
       <View
         style={[
           styles.bottombtnWrap,
-          { flexDirection: 'row', marginTop: Dimension.margin5 },
+          {flexDirection: 'row', marginTop: Dimension.margin5},
         ]}>
-        <View style={{ marginRight: 15, flex: 1 }}>
+        <View style={{marginRight: 15, flex: 1}}>
           <CustomButton
             buttonColor={colors.WhiteColor}
             borderColor={colors.transparent}
@@ -197,7 +219,7 @@ const InvoiceDetailScreen = props => {
             onPress={onCancel}
           />
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <CustomButton
             buttonColor={colors.BrandColor}
             borderColor={colors.BrandColor}
@@ -238,7 +260,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WhiteColor,
   },
 
-  row: { flexDirection: 'row', marginBottom: Dimension.margin10, width: '92%' },
+  row: {flexDirection: 'row', marginBottom: Dimension.margin10, width: '92%'},
   numberWrap: {
     width: Dimension.width20,
     fontSize: Dimension.font12,
