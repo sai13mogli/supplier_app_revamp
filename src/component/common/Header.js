@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font14,
     color: colors.headerTxtColor,
     fontFamily: Dimension.CustomMediumFont,
-    marginTop: Dimension.margin5,
+    //marginTop: Dimension.margin5,
     //marginLeft:Dimension.margin10
   },
   leftSection: {flexDirection: 'row'},

@@ -103,9 +103,9 @@ const styles = StyleSheet.create({
         fontFamily: Dimension.CustomBoldFont,
     },
     updatedateTxt:{
-        fontSize: Dimension.font10,
+        fontSize: Dimension.font14,
         color: Colors.headerTxtColor,
-        fontFamily: Dimension.CustomRegularFont,
+        fontFamily: Dimension.CustomSemiBoldFont,
     },
 });
 

@@ -221,7 +221,7 @@ const ProfileScreen = props => {
       <Header
         showText={'My Profile'}
         navigation={props.navigation}
-        showBack
+       showBack
         showBell
       />
       <AppUpdateBanner />
@@ -291,7 +291,7 @@ const ProfileScreen = props => {
                         ? 'right-tick-line'
                         : 'information-line'
                     }
-                    color={Colors.WhiteColor}
+                    color={Colors.FontColor}
                     size={Dimension.font12}></CustomeIcon>
                   <Text style={styles.UserEmail}>
                     {(profileData.userInfo || {}).email}
@@ -304,7 +304,7 @@ const ProfileScreen = props => {
                         ? 'right-tick-line'
                         : 'information-line'
                     }
-                    color={Colors.WhiteColor}
+                    color={Colors.FontColor}
                     size={Dimension.font12}></CustomeIcon>
                   <Text style={styles.UserContact}>
                     {(profileData.userInfo || {}).phone}

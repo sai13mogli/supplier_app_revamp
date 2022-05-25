@@ -114,6 +114,7 @@ const MoreScreen = props => {
         </ImageBackground>
 
         <View style={styles.profileTabWrapper}>
+          <>
           {MORE_TABS.map((tab, tabIndex) => (
             <View>
               <TouchableOpacity
@@ -142,9 +143,9 @@ const MoreScreen = props => {
               </TouchableOpacity>
             </View>
           ))}
-        </View>
+        </>
 
-        <View style={styles.profileTabWrapper}>
+        <>
           {PRIVACY_TABS.map((tab, tabIndex) => (
             <View>
               <TouchableOpacity
@@ -173,8 +174,8 @@ const MoreScreen = props => {
               </TouchableOpacity>
             </View>
           ))}
-        </View>
-
+        </>
+      </View>
         <View style={styles.varsionWrap}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <CustomeIcon
@@ -199,7 +200,7 @@ const MoreScreen = props => {
           </View>
           <Text
             numberOfLines={2}
-            style={[styles.updatedateTxt, {maxWidth: 50}]}>
+            style={[styles.updatedateTxt, {maxWidth: 100}]}>
             {getUpdateText()}
           </Text>
         </View>
