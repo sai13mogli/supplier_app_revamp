@@ -695,6 +695,15 @@ const Ordercard = props => {
             visibilityTime: 2000,
             autoHide: true,
           });
+        })
+        .catch(e => {
+          setPickupchallanLoader(false);
+          Toast.show({
+            type: 'success',
+            text2: 'Something went wrong',
+            visibilityTime: 2000,
+            autoHide: true,
+          });
         });
     } catch (error) {
       setPickupchallanLoader(false);
