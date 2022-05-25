@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: Dimension.padding15,
-    paddingVertical: Dimension.padding20,
+    paddingVertical: Dimension.padding15,
     backgroundColor: Colors.grayShade12,
   },
   reddot: {
