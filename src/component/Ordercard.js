@@ -695,6 +695,9 @@ const Ordercard = props => {
             visibilityTime: 2000,
             autoHide: true,
           });
+        })
+        .catch(e => {
+          setPickupchallanLoader(false);
         });
     } catch (error) {
       setPickupchallanLoader(false);
