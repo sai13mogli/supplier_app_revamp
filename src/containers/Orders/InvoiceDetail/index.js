@@ -15,9 +15,6 @@ const InvoiceDetailScreen = props => {
   const [isSelected, setSelection] = useState(false);
 
   const scrollRef = useRef();
-
-  console.log("payload=====>", props?.route?.params?.data);
-
   const moveToBottom = () => {
     scrollRef.current?.scrollTo({
       y: 20,
@@ -25,6 +22,9 @@ const InvoiceDetailScreen = props => {
       animated: true,
     });
   };
+
+
+  console.log("DetialProps====>", props);
 
   const onsubmit = async () => {
     if (isSelected) {
@@ -41,14 +41,13 @@ const InvoiceDetailScreen = props => {
           },
           props?.route?.params?.data?.ewayNumber
 
-            ? [
-              {
-                name: 'dropshipInvoiceRequest',
-                data: JSON.stringify(props?.route?.params?.data),
-                type: 'application/json',
-              },
-              props?.route?.params?.invoiceFileData,
-              props?.route?.params?.ewayFileData,
+            ? [{
+              name: 'dropshipInvoiceRequest',
+              data: JSON.stringify(props?.route?.params?.data),
+              type: 'application/json',
+            },
+            props?.route?.params?.invoiceFileData,
+            props?.route?.params?.ewayFileData,
             ]
             : [
               {
@@ -60,7 +59,7 @@ const InvoiceDetailScreen = props => {
             ],
         );
         const res = await response.json();
-
+        console.log("Response=====>", res);
         if (res.success) {
           setLoading(false);
           Toast.show({

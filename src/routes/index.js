@@ -88,6 +88,7 @@ const Routes = props => {
           headerShown: false,
           tabBarIcon: ({focused, color}) =>
             tabBarIcon(focused, color, route, rest),
+          lazy: false,
           safeAreaInsets: {bottom: 0},
           tabBarStyle: {
             paddingTop: Dimension.padding10,
@@ -110,6 +111,7 @@ const Routes = props => {
               setIsLoggedIn,
             }}
             name={screen.name}
+            lazy={false}
             component={prop => (
               <screen.component
                 key={key}
@@ -265,6 +267,7 @@ const tabBarOptions = {
   showLabel: false,
   style: styles.tabBar,
   safeAreaInsets: {bottom: 0},
+  lazy: false,
 };
 
 export default Routes;

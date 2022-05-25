@@ -128,8 +128,8 @@ const UploadInvoiceScreen = props => {
         orderRef={item.orderRef}
         productUom={item.productUom}
         quantity={item.quantity}
-        UpdatedHsn={(value, id) => updatedHsn(value, id)}
-        UpdatedQuntity={(value, id) => updateQty(value, id)}
+        // UpdatedHsn={(value, id) => updatedHsn(value, id)}
+        // UpdatedQuntity={(value, id) => updateQty(value, id)}
         UpdatedTotalPrice={(id, price, valueType, value) => calculateHeaderSum(id, price, valueType, value)}
         transferPrice={item.transferPrice}
         hsn={item.productHsn}

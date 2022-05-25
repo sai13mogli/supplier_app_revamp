@@ -110,11 +110,7 @@ const InvoiceCard = props => {
 
   });
 
-  useEffect(() => {
-    console.log('====================================');
-    console.log("pros", props);
-    console.log('====================================');
-  })
+
 
 
 
@@ -136,7 +132,6 @@ const InvoiceCard = props => {
     let percentage = (Price / 100) * text + quantity * transferPrice;
     setAmount(percentage);
     props.UpdatedTotalPrice(id, percentage, "hsnPercentage", text)
-    // props.UpdatedTotalPrice(percentage, id)
     // props.UpdatedHsn(text, id)
 
   };
