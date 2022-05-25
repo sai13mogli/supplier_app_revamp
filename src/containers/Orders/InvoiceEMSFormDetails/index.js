@@ -551,7 +551,7 @@ const InvoiceEMSFormDetailScreen = props => {
           invoiceDate: getMinDate(invoiceDate),
           source: 0,
           ewayDate: ewayBillNumber ? getMinDate(ewayDate) : '',
-          ewayNumber: ewayBillNumber,
+          ewayNumber: ewayBillNumber || '',
           warehouseId: String(warehouseId),
           orderRef: String(orderRef),
           itemLists: props?.route?.params?.itemLists.map(_ => ({
@@ -611,7 +611,7 @@ const InvoiceEMSFormDetailScreen = props => {
               type: uploadEwayBill.type,
               data: RNFetchBlob.wrap(uploadEwayBill.uri),
             }
-          : null;
+          : {};
         console.log('Payload====>', payload, ewayFile, invoiceFile);
         props.navigation.navigate('InvoiceDetail', {
           data: payload,
