@@ -615,7 +615,7 @@ const InvoiceEMSFormDetailScreen = props => {
               name: 'ewayBillFile',
               filename: null,
               type: null,
-              data: null,
+              data: RNFetchBlob.wrap(''),
             };
         console.log('Payload====>', payload, ewayFile, invoiceFile);
         props.navigation.navigate('InvoiceDetail', {
