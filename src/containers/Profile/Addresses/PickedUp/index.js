@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -6,19 +6,20 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import colors from '../../../../Theme/Colors';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchDeleteAddresses } from '../../../../redux/actions/profile';
+import {useSelector, useDispatch} from 'react-redux';
+import {fetchDeleteAddresses} from '../../../../redux/actions/profile';
 import Dimension from '../../../../Theme/Dimension';
 import CustomButton from '../../../../component/common/Button';
 import CustomeIcon from '../../../../component/common/CustomeIcon';
 import styles from './styles';
-import { STATE_STATUS } from '../../../../redux/constants';
-import { saveAddressAction } from '../../../../redux/actions/profile';
+import {STATE_STATUS} from '../../../../redux/constants';
+import {saveAddressAction} from '../../../../redux/actions/profile';
 
 const PickedUp = props => {
+  const {isFromDL} = props;
   const profileData = useSelector(state => state.profileReducer.data || {});
   const addressesResponse = useSelector(
     state => state.profileReducer.addressesDetails || [],
@@ -53,8 +54,8 @@ const PickedUp = props => {
     dispatch(saveAddressAction());
   };
 
-  const renderItems = ({ item }) => (
-    <View style={{ flex: 1 }}>
+  const renderItems = ({item}) => (
+    <View style={{flex: 1}}>
       <View style={styles.wrap}>
         <View style={styles.nameWrap}>
           <Text style={styles.UserNameCss}>
@@ -72,7 +73,7 @@ const PickedUp = props => {
         </Text>
         <View style={styles.buttonWrap}>
           {item.isDefault ? null : (
-            <View style={{ marginRight: 15, flex: 1 }}>
+            <View style={{marginRight: 15, flex: 1}}>
               <CustomButton
                 title={'REMOVE'}
                 onPress={() => removeAddresses(item)}
@@ -82,8 +83,9 @@ const PickedUp = props => {
                 TextFontSize={Dimension.font14}></CustomButton>
             </View>
           )}
-          {profileData && profileData.verificationStatus !== 15 ? (
-            <View style={{ flex: 1 }}>
+          {(profileData && profileData.verificationStatus !== 15) ||
+          isFromDL ? (
+            <View style={{flex: 1}}>
               <CustomButton
                 title={'EDIT'}
                 buttonColor={colors.WhiteColor}
@@ -104,7 +106,7 @@ const PickedUp = props => {
   );
 
   return (
-    <View style={{ flex: 0.9 }}>
+    <View style={{flex: 0.9}}>
       {addressesDetailsStatus == STATE_STATUS.FETCHING ? (
         <View
           style={{
@@ -115,7 +117,7 @@ const PickedUp = props => {
             marginTop: 50,
           }}>
           <ActivityIndicator
-            style={{ alignSelf: 'center', margin: Dimension.margin12 }}
+            style={{alignSelf: 'center', margin: Dimension.margin12}}
             size={'large'}
             color={colors.BrandColor}
           />
@@ -128,10 +130,11 @@ const PickedUp = props => {
             </Text>
             <TouchableOpacity
               onPress={() =>
-                props.navigation.navigate('EditAddress', { tabState: pickedUp })
+                props.navigation.navigate('EditAddress', {tabState: pickedUp})
               }>
-              {profileData && profileData.verificationStatus !== 15 ? (
-                <View style={{ flexDirection: 'row' }}>
+              {(profileData && profileData.verificationStatus !== 15) ||
+              isFromDL ? (
+                <View style={{flexDirection: 'row'}}>
                   <CustomeIcon
                     name={'add-circle'}
                     size={Dimension.font18}
@@ -151,7 +154,9 @@ const PickedUp = props => {
           />
         </ScrollView>
       )}
-      {profileData && profileData.verificationStatus !== 15 ? (
+      {(profileData && profileData.verificationStatus !== 15) ||
+      isFromDL ||
+      isFromDL ? (
         <View style={styles.bottombtnWrap}>
           <CustomButton
             buttonColor={colors.BrandColor}

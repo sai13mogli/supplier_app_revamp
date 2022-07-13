@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {BASE_URL} from '../redux/constants/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Platform} from 'react-native';
+import VersionCheck from 'react-native-version-check';
 
 export const getBusinessDetails = async () =>
   axios.get(`${BASE_URL}profile/businessInfo`, {
@@ -15,6 +17,11 @@ export const setBusinessDetails = async data =>
     headers: {
       userId: await AsyncStorage.getItem('userId'),
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+    params: {
+      Platform: 'App',
+      OS: Platform.OS,
+      Version: VersionCheck.getCurrentVersion(),
     },
   });
 
@@ -72,6 +79,11 @@ export const setBankDetails = async data =>
       userId: await AsyncStorage.getItem('userId'),
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
+    params: {
+      Platform: 'App',
+      OS: Platform.OS,
+      Version: VersionCheck.getCurrentVersion(),
+    },
   });
 
 export const setDeleteAddress = async data =>
@@ -96,6 +108,11 @@ export const setSaveAddress = async () =>
       userId: await AsyncStorage.getItem('userId'),
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
+    params: {
+      Platform: 'App',
+      OS: Platform.OS,
+      Version: VersionCheck.getCurrentVersion(),
+    },
   });
 
 export const setSaveBankDetail = async data =>
@@ -104,20 +121,21 @@ export const setSaveBankDetail = async data =>
       userId: await AsyncStorage.getItem('userId'),
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
+    params: {
+      Platform: 'App',
+      OS: Platform.OS,
+      Version: VersionCheck.getCurrentVersion(),
+    },
   });
 
 export const getPincodeDetails = async pin =>
   axios.get(`https://supplierapi.moglix.com/util/getStateCity?pin=${pin}`);
 
 export const getIfscCodeDetails = async ifscCode =>
-  axios.get(
-    `https://supplierapi.moglix.com/util/bankDetails?ifsc=${ifscCode}`,
-  );
+  axios.get(`https://supplierapi.moglix.com/util/bankDetails?ifsc=${ifscCode}`);
 
 export const getGstDetails = async gstin =>
-  axios.get(
-    `https://supplierapi.moglix.com/util/validateGstin?gstin=${gstin}`,
-  );
+  axios.get(`https://supplierapi.moglix.com/util/validateGstin?gstin=${gstin}`);
 
 export const getCategoriesBrands = async () =>
   axios.get(`${BASE_URL}profile/fetchCataegoriesAndBrands`, {
@@ -140,12 +158,22 @@ export const updatePhone = async data =>
     headers: {
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
     },
+    params: {
+      Platform: 'App',
+      OS: Platform.OS,
+      Version: VersionCheck.getCurrentVersion(),
+    },
   });
 
 export const updateEmail = async data =>
   axios.post(`${BASE_URL}profile/updateEmail`, data, {
     headers: {
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    },
+    params: {
+      Platform: 'App',
+      OS: Platform.OS,
+      Version: VersionCheck.getCurrentVersion(),
     },
   });
 

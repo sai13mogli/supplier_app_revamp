@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {BASE_URL, SUPPLIER_CENTRAL_API} from '../redux/constants/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Platform} from 'react-native';
+import VersionCheck from 'react-native-version-check';
 
 export const getOrders = async (
   page,
@@ -77,6 +79,11 @@ export const uploadOMSInvoice = async body =>
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
       },
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
+      },
     },
   );
 
@@ -108,6 +115,11 @@ export const acceptOrder = async body =>
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
       },
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
+      },
     },
   );
 
@@ -120,6 +132,11 @@ export const changeOmsPickupDate = async body =>
     {
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
       },
     },
   );
@@ -150,6 +167,12 @@ export const rejectOrder = async body =>
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
       },
+
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
+      },
     },
   );
 
@@ -163,6 +186,11 @@ export const markOutForOrderApi = async (supplierId, itemId) =>
     {
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
       },
     },
   );
@@ -220,6 +248,11 @@ export const acceptBulk = async payload =>
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
       },
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
+      },
     },
   );
 
@@ -260,6 +293,12 @@ export const addSerialNumber = async payload =>
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
       },
+
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
+      },
     },
   );
 
@@ -272,6 +311,11 @@ export const getPackNow = async data =>
     {
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
       },
     },
   );
@@ -286,6 +330,12 @@ export const splitItem = async payload =>
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
       },
+
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
+      },
     },
   );
 
@@ -299,6 +349,11 @@ export const createManifestApi = async payload =>
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
       },
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
+      },
     },
   );
 
@@ -310,6 +365,12 @@ export const bulkDownloadApi = async payload =>
     {
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      },
+
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
       },
     },
   );

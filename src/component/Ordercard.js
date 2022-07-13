@@ -37,6 +37,7 @@ import AddView from './AddView';
 import SplitQuantityModal from './SplitQuantityModal';
 import {useNavigation} from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
+import UploadEWayBill from './UploadEWayBill';
 
 const deviceWidth = Dimensions.get('window').width;
 const DeviceHeight = Dimensions.get('window').height;
@@ -95,6 +96,7 @@ const Ordercard = props => {
   const [showMoreCTA, setShowMoreCTA] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
   const [proofOfDelivery, setProofOfDelivery] = useState(false);
+  const [eWayBill, setEWayBill] = useState(false);
   const [displayCalendar, setDisplayCalendar] = useState(false);
   const [packNow, setPackNow] = useState(false);
   const [addViewModal, setAddViewModal] = useState(false);
@@ -1447,6 +1449,19 @@ const Ordercard = props => {
               />
             )}
           </TouchableOpacity>
+        ) : cta == 'UPLOAD_EWAY_BILL' ? (
+          <TouchableOpacity
+            onPress={() => setEWayBill(true)}
+            style={[
+              styles.DownloadPoBtn,
+              {
+                flex: ctaLength.length ? 5 : 1,
+                flexBasis: ctaLength.length ? '48%' : '100%',
+                height: Dimension.height33,
+              },
+            ]}>
+            <Text style={styles.rejectCtaTxt}>UPLOAD E-WAY BILL</Text>
+          </TouchableOpacity>
         ) : // : cta == 'VIEW_SHIPPED_DETAILS' ? (
         //   <TouchableOpacity
         //     // onPress={() => getManifestRecords(manifestId)}
@@ -1561,6 +1576,20 @@ const Ordercard = props => {
       return {readMore: true, text: descriptionText.slice(0, 60)};
     } else {
       return {readMore: false, text: descriptionText};
+    }
+  };
+
+  const fixPrice = (price, fromIcon) => {
+    let pricearr = String(price).split('.');
+    let isTwoDigit = String(pricearr[1]).length <= 2;
+    if (fromIcon) {
+      return !isTwoDigit;
+    } else {
+      if (isTwoDigit) {
+        return price;
+      } else {
+        return `${pricearr[0]}.${String(pricearr[1]).slice(0, 2)}`;
+      }
     }
   };
 
@@ -1727,7 +1756,7 @@ const Ordercard = props => {
                 <Text style={styles.taxpercentageTxt}>{taxPercentage}%</Text>
               </View>
             ) : null}
-            <View style={{flexDirection: 'row'}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View style={{marginRight: Dimension.margin20}}>
                 <Text style={styles.TitleLightTxt}>
                   PO ID - <Text style={styles.TitleBoldTxt}>{orderRef}</Text>
@@ -1742,14 +1771,58 @@ const Ordercard = props => {
                   PO Item ID -{' '}
                   <Text style={styles.TitleBoldTxt}>{itemRef}</Text>
                 </Text>
+                <Text style={styles.TitleLightTxt}>
+                  Total Price -{' '}
+                  <Text style={styles.TitleBoldTxt}>
+                    ₹
+                    {fromModal
+                      ? totalAmount
+                      : String(totalAmount).includes('.')
+                      ? fixPrice(totalAmount)
+                      : totalAmount}
+                    {/* {console.log(
+                      transferPrice,
+                      String(transferPrice).includes('.') ? 'icon' : 'normal',
+                      'dwewefwijwinniw',
+                    )} */}
+                  </Text>
+                  {fixPrice(totalAmount, true) &&
+                  !fromModal &&
+                  String(totalAmount).includes('.') ? (
+                    <Icon
+                      name={'information'}
+                      color={'#000'}
+                      size={Dimension.font12}
+                    />
+                  ) : null}
+                </Text>
               </View>
 
               <View>
                 <Text style={styles.TitleLightTxt}>
                   TP/Unit -{' '}
                   <Text style={styles.TitleBoldTxt}>
-                    ₹{Math.floor(transferPrice)}
+                    ₹
+                    {fromModal
+                      ? transferPrice
+                      : String(transferPrice).includes('.')
+                      ? fixPrice(transferPrice)
+                      : transferPrice}
+                    {/* {console.log(
+                      transferPrice,
+                      String(transferPrice).includes('.') ? 'icon' : 'normal',
+                      'dwewefwijwinniw',
+                    )} */}
                   </Text>
+                  {fixPrice(transferPrice, true) &&
+                  !fromModal &&
+                  String(transferPrice).includes('.') ? (
+                    <Icon
+                      name={'information'}
+                      color={'#000'}
+                      size={Dimension.font12}
+                    />
+                  ) : null}
                 </Text>
                 <Text style={styles.TitleLightTxt}>
                   Product HSN - <Text style={styles.TitleBoldTxt}>{hsn}</Text>
@@ -1896,6 +1969,14 @@ const Ordercard = props => {
             setModal={setProofOfDelivery}
             onProofOfDeliveryDone={onProofOfDeliveryDone}
             isVisible={proofOfDelivery}
+          />
+        )}
+        {eWayBill && (
+          <UploadEWayBill
+            {...props}
+            onProofOfDeliveryDone={onProofOfDeliveryDone}
+            setModal={setEWayBill}
+            isVisible={eWayBill}
           />
         )}
         {showLspDetails && (

@@ -1,21 +1,37 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import {Platform} from 'react-native';
+import VersionCheck from 'react-native-version-check';
 import {BASE_URL} from '../redux/constants/index';
 
-const AUTH = 'https://supplierapi.moglix.com/';
+const AUTH = 'https://supplierapiqa.moglilabs.com/'; //'https://supplierapi.moglix.com/';
 const APP_INFO = 'https://supplier.moglix.com/';
 
 export const getAppInfo = () =>
   axios.get(`${APP_INFO}registration/loadconfig?key=3dbd9ad8253e`);
 
-export const loginWithPass = data => axios.post(`${AUTH}auth/login`, data);
+export const loginWithPass = data =>
+  axios.post(`${AUTH}auth/login`, data, {
+    params: {
+      Platform: 'App',
+      OS: Platform.OS,
+      Version: VersionCheck.getCurrentVersion(),
+    },
+  });
 
 export const sendOtpForLogin = phone =>
   axios.get(`${AUTH}auth/sendOtp?phone=${phone}`);
 
 export const sendOtpForSignUp = data => axios.post(`${AUTH}util/sendOtp`, data);
 
-export const loginWithOtp = data => axios.post(`${AUTH}auth/otpLogin`, data);
+export const loginWithOtp = data =>
+  axios.post(`${AUTH}auth/otpLogin`, data, {
+    params: {
+      Platform: 'App',
+      OS: Platform.OS,
+      Version: VersionCheck.getCurrentVersion(),
+    },
+  });
 
 export const verifyOtp = data => axios.post(`${AUTH}util/verifyOtp`, data);
 
@@ -27,11 +43,26 @@ export const loginWithGoogle = data =>
 
 export const getAllCategories = () => axios.get(`${AUTH}util/categoryList`);
 
-export const signUp = data => axios.post(`${AUTH}auth/newSignup`, data);
+export const signUp = data =>
+  axios.post(`${AUTH}auth/newSignup`, data, {
+    params: {
+      Platform: 'App',
+      OS: Platform.OS,
+      Version: VersionCheck.getCurrentVersion(),
+    },
+  });
 
 export const validateEmailPhone = data =>
   axios.post(
     `${AUTH}auth/validateEmailPhone?email=${data.email}&phone=${data.phone}`,
+    {},
+    {
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
+      },
+    },
   );
 
 export const setUserPassword = async password =>

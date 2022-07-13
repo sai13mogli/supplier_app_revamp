@@ -70,6 +70,9 @@ const BusinessDetailsScreen = props => {
   const [city, setcity] = useState((businessDetails.address || {}).city);
   const [phone, setphone] = useState((businessDetails.profile || {}).phone);
   const [email, setemail] = useState((businessDetails.profile || {}).email);
+  const [businessEntityType, setBusinessEntityType] = useState(
+    businessDetails.businessEntityType || '',
+  );
   const [tan, settan] = useState(businessDetails.tanNo);
 
   const [states, setStates] = useState([]);
@@ -80,6 +83,7 @@ const BusinessDetailsScreen = props => {
   const [contactNameError, setcontactNameError] = useState(false);
   const [gstinError, setgstinError] = useState(false);
   const [countryError, setcountryError] = useState(false);
+  const [businessEntityTypeError, setBusinessEntityTypeError] = useState(false);
   const [pincodeError, setpincodeError] = useState(false);
   const [stateError, setstateError] = useState(false);
   const [cityError, setcityError] = useState(false);
@@ -265,6 +269,24 @@ const BusinessDetailsScreen = props => {
       onBlur: () => onTanBlur(),
       onChangeText: text => settan(text),
       component: FloatingLabelInputField,
+      disabled: props.route.params && props.route.params.disabled,
+    },
+    businessEntityType: {
+      title: 'Business Entity Type',
+      isImp: false,
+      // label: 'City',
+      // placeholder: 'City',
+      errorMessage: 'Select Business Entity Type',
+      showError: setBusinessEntityTypeError,
+      value: businessEntityType,
+      onValueChange: text => setBusinessEntityType(text),
+      component: PickerDropDown,
+      items: [
+        {value: 1, label: 'Private Limited'},
+        {value: 2, label: 'Proprietorship'},
+        {value: 3, label: 'Partnership'},
+      ],
+      // enabled: true,
       disabled: props.route.params && props.route.params.disabled,
     },
   });
@@ -479,6 +501,7 @@ const BusinessDetailsScreen = props => {
         isBrand: '',
         source: 1,
         businessType: [],
+        businessEntityType,
         profile: {
           entityName: legalEntityName,
           contactName: contactName,
@@ -722,7 +745,8 @@ const BusinessDetailsScreen = props => {
           />
         )}
       </ScrollView>
-      {verificationStatus !== 15 ? (
+      {verificationStatus !== 15 ||
+      businessDetails.businessEntityType != businessEntityType ? (
         <View style={styles.bottombtnWrap}>
           <CustomButton
             buttonColor={colors.BrandColor}

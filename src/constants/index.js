@@ -39,6 +39,8 @@ import UploadInvoiceScreen from '../containers/Orders/UploadInvoiceEMS';
 import UploadInvoiceOMSScreen from '../containers/Orders/UploadInvoiceOMS';
 import InvoiceDetailScreen from '../containers/Orders/InvoiceDetail';
 import InvoiceEMSFormDetailScreen from '../containers/Orders/InvoiceEMSFormDetails';
+import AllDocuments from '../containers/Profile/AllDocuments';
+import PromoterDocuments from '../containers/Profile/PromoterDocuments';
 
 export const BOTTOM_TAB_SCREENS = [
   {
@@ -125,6 +127,23 @@ export const ADDRESSES_TAB_SCREENS = [
     name: 'Pickup',
     key: 'pickup',
     component: PickedUp,
+    ref: createRef(),
+    idx: 1,
+  },
+];
+
+export const DOCUMENTS_TAB_SCREENS = [
+  {
+    name: 'Business Documents',
+    key: 'businessDocuments',
+    component: AllDocuments,
+    ref: createRef(),
+    idx: 0,
+  },
+  {
+    name: 'Add Promoters',
+    key: 'addPromoters',
+    component: PromoterDocuments,
     ref: createRef(),
     idx: 1,
   },

@@ -1,17 +1,11 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  TextInput,
-} from 'react-native';
-import React, { useEffect, useState, } from 'react';
+import {View, Text, StyleSheet, Dimensions, TextInput} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Dimension from '../Theme/Dimension';
 import Colors from '../Theme/Colors';
 import CustomeIcon from './common/CustomeIcon';
 import PickerDropDown from '../component/common/PickerDropDown';
 import PickerMenu from '../component/common/PickerMenu';
-import { OrderedMap } from 'immutable';
+import {OrderedMap} from 'immutable';
 import FloatingLabelInputField from '../component/common/FloatingInput';
 
 const InvoiceCard = props => {
@@ -22,10 +16,12 @@ const InvoiceCard = props => {
     productName,
     itemId,
     bulkItemIds,
-    keys
+    keys,
   } = props;
 
-  const [taxPercentageLabel, setTaxPercentageLabel] = useState(props?.taxPercentage);
+  const [taxPercentageLabel, setTaxPercentageLabel] = useState(
+    props?.taxPercentage,
+  );
   const [taxPercentage, setTaxPercentage] = useState(props?.taxPercentage);
   const [hsnError, setHsnError] = useState(false);
   const [hsn, setHsn] = useState(props?.hsn);
@@ -34,7 +30,6 @@ const InvoiceCard = props => {
   const [amount, setAmount] = useState(props.totalAmount);
 
   const FORM_FIELDS = new OrderedMap({
-
     HSN: {
       title: 'HSN',
       isImp: true,
@@ -46,7 +41,7 @@ const InvoiceCard = props => {
       keyboardType: 'number-pad',
       onChangeText: text => setHsn(text),
       component: FloatingLabelInputField,
-      editable: (_) => _.checked,
+      editable: _ => _.checked,
     },
     qnty: {
       title: 'Qty',
@@ -57,9 +52,9 @@ const InvoiceCard = props => {
       showError: hsnError,
       value: String(quantity),
       keyboardType: 'number-pad',
-      onChangeText: (text) => calculateQuantity(text, itemId),
+      onChangeText: text => calculateQuantity(text, itemId),
       component: FloatingLabelInputField,
-      editable: (_) => _.checked,
+      editable: _ => _.checked,
     },
     hsn_tax: {
       title: 'HSN Tax%',
@@ -69,7 +64,7 @@ const InvoiceCard = props => {
       component: PickerMenu,
       fromUploadInvoive: true,
       enabled: false,
-      disabled: (_) => !_.checked,
+      disabled: _ => !_.checked,
       selectedValue: taxPercentageLabel,
       value: taxPercentage,
       options: [
@@ -79,7 +74,7 @@ const InvoiceCard = props => {
         },
         {
           label: '0.10',
-          value: 0.10,
+          value: 0.1,
         },
         {
           label: '0.25',
@@ -87,80 +82,71 @@ const InvoiceCard = props => {
         },
         {
           label: '3.00',
-          value: 3.00,
+          value: 3.0,
         },
         {
           label: '5.00',
-          value: 5.00,
+          value: 5.0,
         },
         {
           label: '12.00',
-          value: 12.00,
+          value: 12.0,
         },
         {
           label: '18.00',
-          value: 18.00,
+          value: 18.0,
         },
         {
           label: '28.00',
-          value: 28.00,
+          value: 28.0,
         },
       ],
     },
-
   });
-
-
-
-
 
   const calculateQuantity = (text, id) => {
     setQuantity(text);
     // props.UpdatedQuntity(text, id)
-    const { taxPercentage, transferPrice } = props;
+    const {taxPercentage, transferPrice} = props;
     let Price = transferPrice * text;
     let percentage = (Price / 100) * taxPercentage + text * transferPrice;
     setAmount(percentage);
-    props.UpdatedTotalPrice(id, percentage, "quantity", text)
+    props.UpdatedTotalPrice(id, percentage, 'quantity', text);
   };
 
   const calculateHsn = (text, label, id) => {
-    setTaxPercentage(text)
-    setTaxPercentageLabel(label)
-    const { transferPrice } = props;
+    setTaxPercentage(text);
+    setTaxPercentageLabel(label);
+    const {transferPrice} = props;
     let Price = transferPrice * quantity;
     let percentage = (Price / 100) * text + quantity * transferPrice;
     setAmount(percentage);
-    props.UpdatedTotalPrice(id, percentage, "hsnPercentage", text)
+    props.UpdatedTotalPrice(id, percentage, 'hsnPercentage', text);
     // props.UpdatedHsn(text, id)
-
   };
-
-
 
   const renderOrderDetails = () => {
     return (
       <>
         <View style={[styles.orderCardwrapInner]}>
           <CustomeIcon
-            name={
-              props.checked
-                ? 'checkbox-tick'
-                : 'checkbox-blank'
-            }
-            color={
-              props.checked
-                ? Colors.BrandColor
-                : Colors.FontColor
-            }
+            name={props.checked ? 'checkbox-tick' : 'checkbox-blank'}
+            color={props.checked ? Colors.BrandColor : Colors.FontColor}
             size={Dimension.font20}
             onPress={() =>
-              selectItemId(itemId, props.totalAmount, keys, quantity, hsn, taxPercentage)
+              selectItemId(
+                itemId,
+                props.totalAmount,
+                keys,
+                quantity,
+                hsn,
+                taxPercentage,
+              )
             }
             style={styles.checkboxDesign}></CustomeIcon>
           <View style={styles.rightPart}>
             <Text style={styles.productName}>{productName}</Text>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{flexDirection: 'row'}}>
               <View style={{}}>
                 <Text style={styles.TitleLightTxt}>
                   Moglix HSN- <Text style={styles.TitleBoldTxt}>{hsn}</Text>
@@ -170,30 +156,31 @@ const InvoiceCard = props => {
                 </Text>
               </View>
 
-              <View style={{ marginLeft: Dimension.margin30 }}>
+              <View style={{marginLeft: Dimension.margin30}}>
                 <Text style={styles.TitleLightTxt}>
                   Total Price -{' '}
                   <Text style={styles.TitleBoldTxt}>
-                    {props.checked
-                      ? (amount || 0).toFixed(2)
-                      : (totalAmount || 0).toFixed(2)}
+                    {props.checked ? amount || 0 : totalAmount || 0}
                   </Text>
                 </Text>
                 <Text style={styles.TitleLightTxt}>
                   TP/Unit -{' '}
-                  <Text style={styles.TitleBoldTxt}>
-                    ₹{Math.floor(transferPrice).toFixed(2)}
-                  </Text>
+                  <Text style={styles.TitleBoldTxt}>₹{transferPrice}</Text>
                 </Text>
               </View>
             </View>
-            <View style={{
-              flexDirection: 'row',
-              flex: 1,
-
-            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+              }}>
               {FORM_FIELDS.map((field, fieldKey) => (
-                <View style={[fieldKey == "hsn_tax" ? { flex: 0.4, marginRight: Dimension.margin10 } : { flex: 0.4, marginRight: Dimension.margin8, }]}>
+                <View
+                  style={[
+                    fieldKey == 'hsn_tax'
+                      ? {flex: 0.4, marginRight: Dimension.margin10}
+                      : {flex: 0.4, marginRight: Dimension.margin8},
+                  ]}>
                   <field.component
                     {...field}
                     key={fieldKey}
@@ -202,7 +189,6 @@ const InvoiceCard = props => {
                   />
                 </View>
               )).toList()}
-
             </View>
           </View>
         </View>
@@ -210,10 +196,9 @@ const InvoiceCard = props => {
     );
   };
 
-
   return (
     <>
-      <View style={[styles.orderCardwrap, { marginTop: Dimension.margin10 }]}>
+      <View style={[styles.orderCardwrap, {marginTop: Dimension.margin10}]}>
         {renderOrderDetails()}
       </View>
     </>
@@ -242,7 +227,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginHorizontal: Dimension.margin10,
     paddingHorizontal: Dimension.padding10,
-    paddingVertical: Dimension.padding8
+    paddingVertical: Dimension.padding8,
   },
   sectionText: {
     fontSize: Dimension.font10,
@@ -270,10 +255,10 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomMediumFont,
     color: Colors.FontColor,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     paddingTop: 0,
     paddingBottom: 0,
-    paddingHorizontal: Dimension.padding10
+    paddingHorizontal: Dimension.padding10,
   },
 
   productName: {
@@ -282,7 +267,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomRegularFont,
     marginBottom: Dimension.margin8,
     marginTop: Dimension.margin5,
-    width: "90%"
+    width: '90%',
   },
   textMeasure: {
     fontSize: Dimension.font12,
@@ -309,6 +294,5 @@ const styles = StyleSheet.create({
   rightPart: {
     flex: 1,
   },
-
 });
 export default InvoiceCard;

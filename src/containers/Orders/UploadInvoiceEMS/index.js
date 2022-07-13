@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, Image, ActivityIndicator, Dimensions, Alert } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  Text,
+  View,
+  FlatList,
+  Image,
+  ActivityIndicator,
+  Dimensions,
+  Alert,
+} from 'react-native';
 import Header from '../../../component/common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../../../component/common/Button';
-import { getInvoiceEMSDetails } from '../../../services/orders';
+import {getInvoiceEMSDetails} from '../../../services/orders';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import styles from './style';
@@ -42,20 +50,21 @@ const UploadInvoiceScreen = props => {
 
   const getTotalPrice = () => {
     let price = 0;
-    price = totalPrice.filter(_ => _.checked).reduce(function (sum, tax) {
-      return sum + tax.price;
-    }, 0);
-    return price.toFixed(2);
+    price = totalPrice
+      .filter(_ => _.checked)
+      .reduce(function (sum, tax) {
+        return sum + tax.price;
+      }, 0);
+    return price;
   };
 
-  const selectItemId = (itemId, totalAmount, keys,) => {
-    let updatedTotalPrice = [...totalPrice]
-    updatedTotalPrice = updatedTotalPrice.map((_) => ({
+  const selectItemId = (itemId, totalAmount, keys) => {
+    let updatedTotalPrice = [...totalPrice];
+    updatedTotalPrice = updatedTotalPrice.map(_ => ({
       ..._,
-      checked: _.id == itemId ? !_.checked : _.checked
-
-    }))
-    setTotalPrice([...updatedTotalPrice])
+      checked: _.id == itemId ? !_.checked : _.checked,
+    }));
+    setTotalPrice([...updatedTotalPrice]);
   };
 
   const fetchInvoiceEMSDetails = async () => {
@@ -64,19 +73,21 @@ const UploadInvoiceScreen = props => {
         supplierId: await AsyncStorage.getItem('userId'),
         orderRef: orderRef,
       };
-      const { data, } = await getInvoiceEMSDetails(payload);
-      console.log("await", data?.message);
+      const {data} = await getInvoiceEMSDetails(payload);
+      console.log('await', data?.message);
       if (data.success) {
         setInvoiceList(data?.data?.itemList);
-        setTotalPrice(data?.data?.itemList.map((_) => ({
-          quantity: _.quantity,
-          hsn: _.productHsn,
-          hsnPercentage: _.taxPercentage,
-          itemRef: _.itemRef,
-          id: _.id,
-          price: _.itemTotal,
-          checked: false,
-        })))
+        setTotalPrice(
+          data?.data?.itemList.map(_ => ({
+            quantity: _.quantity,
+            hsn: _.productHsn,
+            hsnPercentage: _.taxPercentage,
+            itemRef: _.itemRef,
+            id: _.id,
+            price: _.itemTotal,
+            checked: false,
+          })),
+        );
         setLoading(false);
         setInvoiceLoader(false);
       } else if (data.success == false) {
@@ -97,31 +108,40 @@ const UploadInvoiceScreen = props => {
   };
 
   const calculateHeaderSum = (id, price, valueType, value) => {
-    let data = [...totalPrice].map((item) => ({
+    let data = [...totalPrice].map(item => ({
       ...item,
-      quantity: valueType == "quantity" ? item.id == id ? value : item.quantity : item.quantity,
-      hsnPercentage: valueType == "hsnPercentage" ? item.id == id ? value : item.hsnPercentage : item.hsnPercentage,
+      quantity:
+        valueType == 'quantity'
+          ? item.id == id
+            ? value
+            : item.quantity
+          : item.quantity,
+      hsnPercentage:
+        valueType == 'hsnPercentage'
+          ? item.id == id
+            ? value
+            : item.hsnPercentage
+          : item.hsnPercentage,
       price: item.id == id ? price : item.price,
-    }))
-    setTotalPrice([...data])
+    }));
+    setTotalPrice([...data]);
   };
 
   const onUpdateArr = () => {
-    let updated = [...podIdList]
+    let updated = [...podIdList];
     props.navigation.navigate('InvoiceEMSFormDetails', {
       orderRef,
       updated,
       warehouseId,
-      itemLists: totalPrice.filter((_) => _.checked),
+      itemLists: totalPrice.filter(_ => _.checked),
       totalAmount,
       tax,
       selectedTab,
     });
-  }
+  };
 
-  const renderItem = ({ item }) => {
-    let keys = item?.itemRef
-    console.log("okkk===>", item);
+  const renderItem = ({item}) => {
+    let keys = item?.itemRef;
     return (
       <InvoiceEmsCard
         msn={item.productMsn}
@@ -130,12 +150,17 @@ const UploadInvoiceScreen = props => {
         quantity={item.quantity}
         // UpdatedHsn={(value, id) => updatedHsn(value, id)}
         // UpdatedQuntity={(value, id) => updateQty(value, id)}
-        UpdatedTotalPrice={(id, price, valueType, value) => calculateHeaderSum(id, price, valueType, value)}
+        UpdatedTotalPrice={(id, price, valueType, value) =>
+          calculateHeaderSum(id, price, valueType, value)
+        }
         transferPrice={item.transferPrice}
         hsn={item.productHsn}
         productName={item.productName}
         totalAmount={item.itemTotal}
-        taxPercentage={(totalPrice.find(_ => _.id == item.id) || {}).hsnPercentage || item.taxPercentage}
+        taxPercentage={
+          (totalPrice.find(_ => _.id == item.id) || {}).hsnPercentage ||
+          item.taxPercentage
+        }
         selectedTab={selectedTab}
         itemId={item.id}
         keys={keys}
@@ -192,7 +217,7 @@ const UploadInvoiceScreen = props => {
             marginTop: 50,
           }}>
           <ActivityIndicator
-            style={{ alignSelf: 'center', margin: Dimension.margin12 }}
+            style={{alignSelf: 'center', margin: Dimension.margin12}}
             size={'large'}
             color={colors.BrandColor}
           />
@@ -217,15 +242,15 @@ const UploadInvoiceScreen = props => {
       </View>
       <View style={styles.bottombtnWrap}>
         <CustomButton
-          disabled={!totalPrice.filter((_) => _.checked).length}
+          disabled={!totalPrice.filter(_ => _.checked).length}
           buttonColor={
-            totalPrice.filter((_) => _.checked).length
+            totalPrice.filter(_ => _.checked).length
               ? colors.BrandColor
               : colors.grayShade8
           }
           borderColor={colors.transparent}
           TextColor={
-            totalPrice.filter((_) => _.checked).length
+            totalPrice.filter(_ => _.checked).length
               ? colors.WhiteColor
               : colors.blackColor
           }

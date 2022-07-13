@@ -143,7 +143,10 @@ const ProfileScreen = props => {
       initLoader
     ) {
       setInitLoader(false);
-      props.navigation.navigate(props.route.params.parentTab);
+      props.navigation.navigate(props.route.params.parentTab, {
+        childTab: props.route.params.childTab,
+        parentTab: props.route.params.parentTab,
+      });
     }
   }, [addressesStatus, profileStatus]);
 
@@ -221,7 +224,7 @@ const ProfileScreen = props => {
       <Header
         showText={'My Profile'}
         navigation={props.navigation}
-       showBack
+        showBack
         showBell
       />
       <AppUpdateBanner />
