@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, ActivityIndicator, Image, Dimensions, ScrollView,TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  Image,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FileUpload from '../../../component/common/FileUpload';
 import styles from '../Documents/style';
@@ -34,6 +42,7 @@ const PromoterDocuments = props => {
       panCardKey: {},
     },
   ]);
+  const [isSelected, setSelection] = useState(false);
   const [submitLoader, setSubmitLoader] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [confirmModal, setConfirmModal] = useState(false);
@@ -344,105 +353,109 @@ const PromoterDocuments = props => {
   };
 
   return (
-    <View style={{flex: 1,position:"relative",marginTop:Dimension.margin30}}>
-      <ScrollView style={styles.ContainerCss} contentContainerStyle={{paddingBottom:180}}>
-      {promoters.map((promoter, promoterKey) => (
-        <View key={promoterKey} style={promoterStyle.promoterWrap}>
-          <View
-            style={promoterStyle.promoterheaderWrap}>
-            <Text style={promoterStyle.headingTxt}>
-              Promoter{' '}
-              {String(promoterKey).length > 1
-                ? promoterKey + 1
-                : `0${promoterKey + 1}`}
-            </Text>
-            {promoters.length == 1 ||
-            (profileData && profileData.verificationStatus >= 10) ? null : (
-              <Icon
-                onPress={() => removePromoter(promoter.id)}
-                name={'trash-can'}
-                size={20}
-                color={colors.FontColor}
-                style={{marginTop:3}}
-              />
-            )}
+    <View
+      style={{flex: 1, position: 'relative', marginTop: Dimension.margin30}}>
+      <ScrollView
+        style={styles.ContainerCss}
+        contentContainerStyle={{paddingBottom: 180}}>
+        {promoters.map((promoter, promoterKey) => (
+          <View key={promoterKey} style={promoterStyle.promoterWrap}>
+            <View style={promoterStyle.promoterheaderWrap}>
+              <Text style={promoterStyle.headingTxt}>
+                Promoter{' '}
+                {String(promoterKey).length > 1
+                  ? promoterKey + 1
+                  : `0${promoterKey + 1}`}
+              </Text>
+              {promoters.length == 1 ||
+              (profileData && profileData.verificationStatus >= 10) ? null : (
+                <Icon
+                  onPress={() => removePromoter(promoter.id)}
+                  name={'trash-can'}
+                  size={20}
+                  color={colors.FontColor}
+                  style={{marginTop: 3}}
+                />
+              )}
+            </View>
+            <FileUpload
+              label={'Adhaar Card'}
+              isImp={true}
+              value={
+                promoter &&
+                promoter.aadharCardKey &&
+                promoter.aadharCardKey.title
+                  ? 'adhaar'
+                  : ''
+              }
+              documents={promoter.aadharCardKey}
+              loading={
+                promoter &&
+                promoter.aadharCardKey &&
+                promoter.aadharCardKey.loading
+              }
+              onRemove={removePromoter}
+              // id={id}
+              // fId={fId}
+              // closeDoc={closeDoc}
+              // openDoc={openDoc}
+              openDoc={() => openDocView(promoter.aadharCardKey.uri)}
+              fileUpload={2}
+              showDoc={
+                promoter &&
+                promoter.aadharCardKey &&
+                promoter.aadharCardKey.title
+              }
+              // errorState={errorState}
+              // errorText={errorText}
+              // onPress={() => (setUpload ? onPress(id) : openDoc(id))}
+              // disabled={uploadDisabled}
+              uploadDocument={() => selectDoc(promoter.id, 'aadharCardKey')}
+              setUpload={true}
+            />
+            <FileUpload
+              label={'PAN Card'}
+              isImp={true}
+              value={
+                promoter && promoter.panCardKey && promoter.panCardKey.title
+                  ? 'pan'
+                  : ''
+              }
+              documents={promoter.panCardKey}
+              loading={
+                promoter && promoter.panCardKey && promoter.panCardKey.loading
+              }
+              onRemove={removePromoter}
+              // id={id}
+              // fId={fId}
+              // closeDoc={closeDoc}
+              openDoc={() => openDocView(promoter.panCardKey.uri)}
+              fileUpload={2}
+              showDoc={
+                promoter && promoter.panCardKey && promoter.panCardKey.title
+              }
+              // errorState={errorState}
+              // errorText={errorText}
+              // onPress={() => (setUpload ? onPress(id) : openDoc(id))}
+              // disabled={uploadDisabled}
+              uploadDocument={() => selectDoc(promoter.id, 'panCardKey')}
+              setUpload={true}
+            />
           </View>
-          <FileUpload
-            label={'Adhaar Card'}
-            isImp={true}
-            value={
-              promoter && promoter.aadharCardKey && promoter.aadharCardKey.title
-                ? 'adhaar'
-                : ''
-            }
-            documents={promoter.aadharCardKey}
-            loading={
-              promoter &&
-              promoter.aadharCardKey &&
-              promoter.aadharCardKey.loading
-            }
-            onRemove={removePromoter}
-            // id={id}
-            // fId={fId}
-            // closeDoc={closeDoc}
-            // openDoc={openDoc}
-            openDoc={() => openDocView(promoter.aadharCardKey.uri)}
-            fileUpload={2}
-            showDoc={
-              promoter && promoter.aadharCardKey && promoter.aadharCardKey.title
-            }
-            // errorState={errorState}
-            // errorText={errorText}
-            // onPress={() => (setUpload ? onPress(id) : openDoc(id))}
-            // disabled={uploadDisabled}
-            uploadDocument={() => selectDoc(promoter.id, 'aadharCardKey')}
-            setUpload={true}
-          />
-          <FileUpload
-            label={'PAN Card'}
-            isImp={true}
-            value={
-              promoter && promoter.panCardKey && promoter.panCardKey.title
-                ? 'pan'
-                : ''
-            }
-            documents={promoter.panCardKey}
-            loading={
-              promoter && promoter.panCardKey && promoter.panCardKey.loading
-            }
-            onRemove={removePromoter}
-            // id={id}
-            // fId={fId}
-            // closeDoc={closeDoc}
-            openDoc={() => openDocView(promoter.panCardKey.uri)}
-            fileUpload={2}
-            showDoc={
-              promoter && promoter.panCardKey && promoter.panCardKey.title
-            }
-            // errorState={errorState}
-            // errorText={errorText}
-            // onPress={() => (setUpload ? onPress(id) : openDoc(id))}
-            // disabled={uploadDisabled}
-            uploadDocument={() => selectDoc(promoter.id, 'panCardKey')}
-            setUpload={true}
-          />
-        </View>
-     
-      ))}
-      <View>
-      <Text style={styles.Notetxt}>NOTE :</Text>
-      <View style={styles.rowCss}>
+        ))}
+        <View>
+          <Text style={styles.Notetxt}>NOTE :</Text>
+          <View style={styles.rowCss}>
             <View style={styles.bullet}></View>
             <Text style={styles.NoteData}>
-            Each document file size should not exceed more then 2 MB.
+              Each document file size should not exceed more then 2 MB.
             </Text>
           </View>
-      </View>
-      
-         </ScrollView>
+        </View>
+      </ScrollView>
       {/* {profileData && profileData.verificationStatus < 10 ? ( */}
       <View style={promoterStyle.BtnWrap}>
-        <View style={{flex: 1,marginRight:Dimension.margin10}}>
+        <View style={{flex: 1, marginRight: Dimension.margin10}}>
           <CustomButton
             title="ADD MORE"
             buttonColor={colors.blackColor}
@@ -452,7 +465,7 @@ const PromoterDocuments = props => {
             TextFontSize={Dimension.font16}
             onPress={addPromoter}></CustomButton>
         </View>
-        <View style={{flex: 1,marginLeft:Dimension.margin10}}>
+        <View style={{flex: 1, marginLeft: Dimension.margin10}}>
           <CustomButton
             title={isSave ? 'SUBMIT' : 'SAVE & SUBMIT'}
             buttonColor={colors.BrandColor}
@@ -530,32 +543,36 @@ const PromoterDocuments = props => {
           setConfirmModal(false);
         }}
         style={styles.ModalCss}>
-         
         <View style={promoterStyle.modalContainer}>
           <View style={promoterStyle.modalTopWrap}>
-        <View style={promoterStyle.topbdr}></View>
-          <Text style={promoterStyle.ModalHeading}>Confirm Submission</Text>
-          <Text style={styles.Modaltext}>
-            By confirming the submission of all the details you agree that all
-            the details are true and no false details are provided. Once
-            validated you'll receive an email regarding the status of your
-            profile
-          </Text>
-          <View style={{marginLeft:-Dimension.margin10}}>
-          <Checkbox
-            checked={true}
-            title={'By registering you agree to our'}
-          />
-          <TouchableOpacity>
-            <Text style={promoterStyle.termsText}>Terms & Condition</Text>
-          </TouchableOpacity>
-        </View>
-          
-          {/* <TouchableOpacity onPress={() => setConfirmModal(false)}>
+            <View style={promoterStyle.topbdr}></View>
+            <Text style={promoterStyle.ModalHeading}>Confirm Submission</Text>
+            <Text style={styles.Modaltext}>
+              By confirming the submission of all the details you agree that all
+              the details are true and no false details are provided. Once
+              validated you'll receive an email regarding the status of your
+              profile
+            </Text>
+            {/* <View style={{marginLeft: -Dimension.margin10}}>
+              <Checkbox
+                checked={isSelected || profileData.verificationStatus >= 10}
+                onPress={() =>
+                  profileData.verificationStatus >= 10
+                    ? {}
+                    : setSelection(!isSelected)
+                }
+                title={'By registering you agree to our'}
+              />
+              <TouchableOpacity>
+                <Text style={promoterStyle.termsText}>Terms & Condition</Text>
+              </TouchableOpacity>
+            </View> */}
+
+            {/* <TouchableOpacity onPress={() => setConfirmModal(false)}>
             <Text style={{color: '#000'}}>CANCEL</Text>
           </TouchableOpacity> */}
-        </View>
-        <View style={promoterStyle.ModalBtnWrap}>
+          </View>
+          <View style={promoterStyle.ModalBtnWrap}>
             <View style={{flex: 1}}>
               <CustomButton
                 title="CANCEL"
@@ -579,7 +596,7 @@ const PromoterDocuments = props => {
               />
             </View>
           </View>
-          </View>
+        </View>
       </Modal>
     </View>
   );
