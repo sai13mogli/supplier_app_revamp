@@ -1406,6 +1406,7 @@ const AllDocuments = props => {
     // if (!uploadDisabled) {
     return (
       <View style={styles.bottombtnWrap}>
+        <View style={{flex:1}}>
         <CustomButton
           title="SUBMIT"
           buttonColor={
@@ -1421,6 +1422,7 @@ const AllDocuments = props => {
           TextFontSize={Dimension.font16}
           onPress={() => props.onItemPress(1)}
         />
+        </View>
       </View>
     );
     // } else {
@@ -1460,7 +1462,7 @@ const AllDocuments = props => {
         showText={'Documents'}
         rightIconName={'single-product-upload'}
       /> */}
-      <ScrollView bounces style={styles.ContainerCss}>
+      <ScrollView bounces style={styles.ContainerCss} contentContainerStyle={{paddingBottom:180}}>
         {Documents.map(_ => renderInputText(_))
           .toList()
           .toArray()}

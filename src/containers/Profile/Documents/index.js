@@ -12,8 +12,8 @@ const Addresses = props => {
         showBack
         showBell
         navigation={props.navigation}
-        showText={'Addresses'}
-        rightIconName={'business-details'}></Header>
+        showText={'Documents'}
+        rightIconName={'single-product-upload'}></Header>
       <Tabs
         data={DOCUMENTS_TAB_SCREENS.map(_ => ({..._}))}
         // navigation={props.navigation}

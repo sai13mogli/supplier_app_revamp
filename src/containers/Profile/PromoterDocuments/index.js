@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, ActivityIndicator, Image, Dimensions} from 'react-native';
+import {View, Text, ActivityIndicator, Image, Dimensions, ScrollView,TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FileUpload from '../../../component/common/FileUpload';
 import styles from '../Documents/style';
+import promoterStyle from './style';
 import CustomButton from '../../../component/common/Button';
+import Checkbox from '../../../component/common/Checkbox/index';
 import colors from '../../../Theme/Colors';
 import Dimension from '../../../Theme/Dimension';
 import DocumentPicker from 'react-native-document-picker';
@@ -16,6 +18,7 @@ import {submitDocuments, submitProfile} from '../../../services/documents';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchProfile} from '../../../redux/actions/profile';
+//import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -341,16 +344,13 @@ const PromoterDocuments = props => {
   };
 
   return (
-    <View style={{flex: 1, marginTop: 40}}>
+    <View style={{flex: 1,position:"relative",marginTop:Dimension.margin30}}>
+      <ScrollView style={styles.ContainerCss} contentContainerStyle={{paddingBottom:180}}>
       {promoters.map((promoter, promoterKey) => (
-        <View key={promoterKey}>
+        <View key={promoterKey} style={promoterStyle.promoterWrap}>
           <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text>
+            style={promoterStyle.promoterheaderWrap}>
+            <Text style={promoterStyle.headingTxt}>
               Promoter{' '}
               {String(promoterKey).length > 1
                 ? promoterKey + 1
@@ -362,7 +362,8 @@ const PromoterDocuments = props => {
                 onPress={() => removePromoter(promoter.id)}
                 name={'trash-can'}
                 size={20}
-                color={'#000'}
+                color={colors.FontColor}
+                style={{marginTop:3}}
               />
             )}
           </View>
@@ -426,20 +427,32 @@ const PromoterDocuments = props => {
             setUpload={true}
           />
         </View>
+     
       ))}
+      <View>
+      <Text style={styles.Notetxt}>NOTE :</Text>
+      <View style={styles.rowCss}>
+            <View style={styles.bullet}></View>
+            <Text style={styles.NoteData}>
+            Each document file size should not exceed more then 2 MB.
+            </Text>
+          </View>
+      </View>
+      
+         </ScrollView>
       {/* {profileData && profileData.verificationStatus < 10 ? ( */}
-      <View style={styles.ModalBtnWrap}>
-        <View style={{flex: 1}}>
+      <View style={promoterStyle.BtnWrap}>
+        <View style={{flex: 1,marginRight:Dimension.margin10}}>
           <CustomButton
             title="ADD MORE"
-            buttonColor={colors.WhiteColor}
+            buttonColor={colors.blackColor}
             disabled={submitLoader}
-            borderColor={colors.WhiteColor}
-            TextColor={colors.FontColor}
+            borderColor={colors.blackColor}
+            TextColor={colors.WhiteColor}
             TextFontSize={Dimension.font16}
             onPress={addPromoter}></CustomButton>
         </View>
-        <View style={{flex: 1}}>
+        <View style={{flex: 1,marginLeft:Dimension.margin10}}>
           <CustomButton
             title={isSave ? 'SUBMIT' : 'SAVE & SUBMIT'}
             buttonColor={colors.BrandColor}
@@ -517,15 +530,32 @@ const PromoterDocuments = props => {
           setConfirmModal(false);
         }}
         style={styles.ModalCss}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.ModalHeading}>Confirm Submission</Text>
+         
+        <View style={promoterStyle.modalContainer}>
+          <View style={promoterStyle.modalTopWrap}>
+        <View style={promoterStyle.topbdr}></View>
+          <Text style={promoterStyle.ModalHeading}>Confirm Submission</Text>
           <Text style={styles.Modaltext}>
             By confirming the submission of all the details you agree that all
             the details are true and no false details are provided. Once
             validated you'll receive an email regarding the status of your
             profile
           </Text>
-          <View style={styles.ModalBtnWrap}>
+          <View style={{marginLeft:-Dimension.margin10}}>
+          <Checkbox
+            checked={true}
+            title={'By registering you agree to our'}
+          />
+          <TouchableOpacity>
+            <Text style={promoterStyle.termsText}>Terms & Condition</Text>
+          </TouchableOpacity>
+        </View>
+          
+          {/* <TouchableOpacity onPress={() => setConfirmModal(false)}>
+            <Text style={{color: '#000'}}>CANCEL</Text>
+          </TouchableOpacity> */}
+        </View>
+        <View style={promoterStyle.ModalBtnWrap}>
             <View style={{flex: 1}}>
               <CustomButton
                 title="CANCEL"
@@ -549,10 +579,7 @@ const PromoterDocuments = props => {
               />
             </View>
           </View>
-          {/* <TouchableOpacity onPress={() => setConfirmModal(false)}>
-            <Text style={{color: '#000'}}>CANCEL</Text>
-          </TouchableOpacity> */}
-        </View>
+          </View>
       </Modal>
     </View>
   );

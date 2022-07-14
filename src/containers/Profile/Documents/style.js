@@ -52,13 +52,26 @@ const styles = StyleSheet.create({
   },
   bottombtnWrap: {
     padding: Dimension.padding15,
+    padding: Dimension.padding15,
     borderTopColor: Colors.grayShade2,
     borderTopWidth: 1,
-    backgroundColor: Colors.WhiteColor,
+    backgroundColor: "#fff",
+    position:"absolute",
+    bottom:Dimension.height65,
+    left:0,
+    flexDirection:"row",
+    flex:1,
+    width:"100%"
   },
 
   //Modal Css
-
+  topbdr: {
+    alignSelf: 'center',
+    height: 3,
+    backgroundColor: Colors.modalBorder,
+    borderRadius: 2,
+    width: Dimension.width70,
+  },
   modalContainer: {
     backgroundColor: Colors.WhiteColor,
     borderTopLeftRadius: 20,
@@ -80,7 +93,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomRegularFont,
     marginVertical: Dimension.margin15,
   },
-  ModalBtnWrap: {flex: 1, flexDirection: 'row', marginTop: Dimension.margin20},
+  ModalBtnWrap: {flex: 1, flexDirection: 'row', marginTop: Dimension.margin20,},
   ModalCss: {padding: 0, margin: 0},
 });
 
