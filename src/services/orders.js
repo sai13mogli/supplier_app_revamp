@@ -385,6 +385,11 @@ export const manifestList = async payload =>
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
       },
+      params: {
+        Platform: 'App',
+        OS: Platform.OS,
+        Version: VersionCheck.getCurrentVersion(),
+      },
     },
   );
 

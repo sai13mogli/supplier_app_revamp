@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {Platform, ScrollView, StyleSheet, View} from 'react-native';
 import {OrderedMap} from 'immutable';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
 import DropDown from '../../../component/common/DropDown';
@@ -16,6 +16,7 @@ import Toast from 'react-native-toast-message';
 import {fetchTickets} from '../../../redux/actions/support';
 import {useDispatch, useSelector} from 'react-redux';
 import analytics from '@react-native-firebase/analytics';
+import VersionCheck from 'react-native-version-check';
 
 const NewTicket = props => {
   const profileData = useSelector(
@@ -188,7 +189,9 @@ const NewTicket = props => {
       setbusinessTypeError(false);
       setexplainQueryError(false);
       let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-      const url = `${BASE_URL}api/ticket/create`;
+      const url = `${BASE_URL}api/ticket/create?Platform=App&OS=${
+        Platform.OS
+      }&Version=${VersionCheck.getCurrentVersion()}`;
       const response = await RNFetchBlob.fetch(
         'POST',
         url,

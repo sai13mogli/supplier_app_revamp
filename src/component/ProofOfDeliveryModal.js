@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {getImageUrl, getSplitHistory} from '../services/orders';
@@ -22,6 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../redux/constants';
 import Productcard from './Productcard';
 import CustomeIcon from './common/CustomeIcon';
+import VersionCheck from 'react-native-version-check';
 const deviceWidth = Dimensions.get('window').width;
 
 const ProofOfDeliveryModal = props => {
@@ -182,7 +184,9 @@ const ProofOfDeliveryModal = props => {
       try {
         setLoading(true);
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-        const url = `${BASE_URL}api/order/deliveryDone`;
+        const url = `${BASE_URL}api/order/deliveryDone?Platform=App&OS=${
+          Platform.OS
+        }&Version=${VersionCheck.getCurrentVersion()}`;
         const response = await RNFetchBlob.fetch(
           'POST',
           url,

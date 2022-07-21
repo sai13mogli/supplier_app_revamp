@@ -6,6 +6,7 @@ import {
   Dimensions,
   ActivityIndicator,
   Image,
+  Platform,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import FloatingLabelInputField from '../../../component/common/FloatingInput';
@@ -44,6 +45,7 @@ import PDFView from 'react-native-view-pdf';
 import PickerMenu from '../../../component/common/PickerMenu';
 import analytics from '@react-native-firebase/analytics';
 import Toast from 'react-native-toast-message';
+import VersionCheck from 'react-native-version-check';
 
 // import {uploadDocumentService} from '../../../services/documents';
 const deviceWidth = Dimensions.get('window').width;
@@ -311,7 +313,9 @@ const CategoryBrandScreen = props => {
   };
 
   const uploadDocumentService = async data => {
-    const url = `${BASE_URL}profile/file/upload`;
+    const url = `${BASE_URL}profile/file/upload?Platform=App&OS=${
+      Platform.OS
+    }&Version=${VersionCheck.getCurrentVersion()}`;
     let token = `Bearer ${await AsyncStorage.getItem('token')}`;
     const response = await RNFetchBlob.fetch(
       'POST',

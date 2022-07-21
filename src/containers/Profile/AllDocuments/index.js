@@ -8,6 +8,7 @@ import {
   Image,
   Dimensions,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import {OrderedMap, setIn} from 'immutable';
 import CustomeIcon from '../../../component/common/CustomeIcon';
@@ -32,6 +33,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import analytics from '@react-native-firebase/analytics';
 import DocumentTermsConditionModal from '../../../component/DocumentTermsConditionModal';
+import VersionCheck from 'react-native-version-check';
 const deviceWidth = Dimensions.get('window').width;
 
 const AllDocuments = props => {
@@ -367,7 +369,7 @@ const AllDocuments = props => {
   });
 
   const noteArr = [
-    {id: '0', note: 'Each document file should not exceed more than 2MB'},
+    {id: '0', note: 'Each document file should not exceed more\n than 2MB'},
     {
       id: '1',
       note: 'Please ensure the Image of a signature is on a white background',
@@ -846,7 +848,9 @@ const AllDocuments = props => {
     try {
       console.log('Uploading......');
       let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-      const url = `${BASE_URL}profile/file/upload`;
+      const url = `${BASE_URL}profile/file/upload?Platform=App&OS=${
+        Platform.OS
+      }&Version=${VersionCheck.getCurrentVersion()}`;
       const response = await RNFetchBlob.fetch(
         'POST',
         url,
@@ -1300,16 +1304,15 @@ const AllDocuments = props => {
           <View style={styles.rowCss}>
             <View style={styles.bullet}></View>
             <Text style={styles.NoteData}>
-              Please ensure that the image of the signature is of an authorised
-              signatory (as endorsed by the tax authorities).
+              Each document file size should not exceed more{'\n'} then 2MB
             </Text>
           </View>
-          <View style={styles.rowCss}>
+          {/* <View style={styles.rowCss}>
             <View style={styles.bullet}></View>
             <Text style={styles.NoteData}>
               Sign on a white background,scan the signature and upload.
             </Text>
-          </View>
+          </View> */}
         </>
       ) : (
         noteArr.map((_, i) => (
@@ -1406,22 +1409,22 @@ const AllDocuments = props => {
     // if (!uploadDisabled) {
     return (
       <View style={styles.bottombtnWrap}>
-        <View style={{flex:1}}>
-        <CustomButton
-          title="SUBMIT"
-          buttonColor={
-            !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
-          }
-          disabled={!checkCommonValidation()}
-          borderColor={
-            !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
-          }
-          TextColor={
-            !checkCommonValidation() ? colors.FontColor : colors.WhiteColor
-          }
-          TextFontSize={Dimension.font16}
-          onPress={() => props.onItemPress(1)}
-        />
+        <View style={{flex: 1}}>
+          <CustomButton
+            title="SAVE"
+            buttonColor={
+              !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
+            }
+            disabled={!checkCommonValidation()}
+            borderColor={
+              !checkCommonValidation() ? colors.grayShade1 : colors.BrandColor
+            }
+            TextColor={
+              !checkCommonValidation() ? colors.FontColor : colors.WhiteColor
+            }
+            TextFontSize={Dimension.font16}
+            onPress={() => props.onItemPress(1)}
+          />
         </View>
       </View>
     );
@@ -1462,7 +1465,10 @@ const AllDocuments = props => {
         showText={'Documents'}
         rightIconName={'single-product-upload'}
       /> */}
-      <ScrollView bounces style={styles.ContainerCss} contentContainerStyle={{paddingBottom:180}}>
+      <ScrollView
+        bounces
+        style={styles.ContainerCss}
+        contentContainerStyle={{paddingBottom: 180}}>
         {Documents.map(_ => renderInputText(_))
           .toList()
           .toArray()}

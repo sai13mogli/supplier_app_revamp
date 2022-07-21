@@ -41,6 +41,7 @@ import InvoiceDetailScreen from '../containers/Orders/InvoiceDetail';
 import InvoiceEMSFormDetailScreen from '../containers/Orders/InvoiceEMSFormDetails';
 import AllDocuments from '../containers/Profile/AllDocuments';
 import PromoterDocuments from '../containers/Profile/PromoterDocuments';
+import TermsAndConditions from '../component/Terms&Conditions';
 
 export const BOTTOM_TAB_SCREENS = [
   {
@@ -208,6 +209,10 @@ export const APP_STACK_SCREENS = [
   {
     name: 'Addresses',
     component: Addresses,
+  },
+  {
+    name: 'TermsAndConditions',
+    component: TermsAndConditions,
   },
   {
     name: 'EditAddress',

@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 import Modal from 'react-native-modal';
 import {getImageUrl, getSplitHistory} from '../services/orders';
 import Colors from '../Theme/Colors';
@@ -55,10 +56,19 @@ const UploadEWayBillModal = props => {
     //Opening Document Picker for selection of one file
     try {
       const res = await DocumentPicker.pick({
-        // type: [DocumentPicker],
+        type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
       });
-      setEWayBillFile(res[0]);
-      setEWayBillFileError(false);
+      console.log(res[0]);
+      if (
+        ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(
+          res[0].type,
+        )
+      ) {
+        setEWayBillFile(res[0]);
+        setEWayBillFileError(false);
+      } else {
+        setEWayBillFileError(true);
+      }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         console.log('Canceled from single doc picker');
@@ -78,7 +88,6 @@ const UploadEWayBillModal = props => {
       errorMessage: 'Enter valid Eway Bill Number',
       showError: eWayBillNumberError,
       value: eWayBillNumber,
-      keyboardType: 'number-pad',
       onChangeText: text => setEWayBillNumber(text),
       component: FloatingLabelInputField,
     },
@@ -106,7 +115,8 @@ const UploadEWayBillModal = props => {
       //showDoc: true,
       fileUpload: 2,
       errorState: eWayBillFile.name ? null : eWayBillFileError,
-      errorText: 'Please upload POD File',
+      errorText:
+        'Please upload E-way bill file (formats allowed pdf/jpeg/jpg/png)',
       onPress: onPress,
       disabled: false,
       uploadDocument: d => {

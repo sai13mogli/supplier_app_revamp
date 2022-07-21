@@ -7,6 +7,7 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FileUpload from '../../../component/common/FileUpload';
@@ -22,10 +23,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import Modal from 'react-native-modal';
 import PDFView from 'react-native-view-pdf';
-import {submitDocuments, submitProfile} from '../../../services/documents';
+import {
+  submitDocuments,
+  submitProfile,
+  getDocuments,
+} from '../../../services/documents';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchProfile} from '../../../redux/actions/profile';
+import VersionCheck from 'react-native-version-check';
+import DeletePromoter from '../../../component/DeletePromoter';
 //import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -50,6 +57,9 @@ const PromoterDocuments = props => {
   const [isSave, setIsSave] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [uploadDisabled, setUploadDisabled] = useState(false);
+  const [isDeletePromoter, setIsDeletePromoter] = useState(false);
+  const [promoterId, setPromoterId] = useState('');
 
   useEffect(() => {
     if ((profileData?.documents?.promotersDetails || []).length) {
@@ -75,6 +85,15 @@ const PromoterDocuments = props => {
   const addPromoter = () => {
     let promoter =
       promoters.find(_ => !_.aadharCardKey.uri || !_.panCardKey.uri) || {};
+    if (promoters.length == 10) {
+      Toast.show({
+        type: 'error',
+        text2: 'You can add upto 10 promoters',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+      return;
+    }
     if (!promoter.aadharCardKey) {
       setPromoters([
         ...promoters,
@@ -96,34 +115,56 @@ const PromoterDocuments = props => {
 
   const onSubmit = async () => {
     try {
+      let promoter =
+        promoters.find(_ => !_.aadharCardKey.uri || !_.panCardKey.uri) || {};
+      console.log(
+        promoters,
+        promoter,
+        promoter.aadharCardKey,
+        promoters.length == 1 &&
+          !(promoter.aadharCardKey || {}).uri &&
+          !(promoter.panCardKey || {}).uri,
+      );
       if (isSave) {
         setConfirmModal(true);
       } else {
-        let promoter =
-          promoters.find(_ => !_.aadharCardKey.uri || !_.panCardKey.uri) || {};
-        if (promoter.aadharCardKey) {
-          Toast.show({
-            type: 'error',
-            text2: 'Please upload all required documents',
-            visibilityTime: 2000,
-            autoHide: true,
-          });
-        } else {
-          setSubmitLoader(true);
-          let body = promoters.map(_ => ({
-            id: _.id,
-            aadharCardKey: _.aadharCardKey.uri,
-            panCardKey: _.panCardKey.uri,
-          }));
-          const {data} = await submitDocuments(body, profileData.userId);
+        if (
+          promoters.length == 1 &&
+          !(promoters[0].aadharCardKey || {}).uri &&
+          !(promoters[0].panCardKey || {}).uri
+        ) {
           setIsSave(true);
-          if (data.success) {
-            setConfirmModal(true);
-          }
+          // if (data.success) {
+          setConfirmModal(true);
+          // }
           setSubmitLoader(false);
+        } else {
+          if (promoter.aadharCardKey) {
+            Toast.show({
+              type: 'error',
+              text2: 'Please upload all required documents',
+              visibilityTime: 2000,
+              autoHide: true,
+            });
+          } else {
+            setSubmitLoader(true);
+            let body = promoters.map(_ => ({
+              id: _.id,
+              aadharCardKey: _.aadharCardKey.uri,
+              panCardKey: _.panCardKey.uri,
+            }));
+            const {data} = await submitDocuments(body, profileData.userId);
+            dispatch(fetchProfile());
+            setIsSave(true);
+            if (data.success) {
+              setConfirmModal(true);
+            }
+            setSubmitLoader(false);
+          }
         }
       }
     } catch (e) {
+      console.log(e);
       setSubmitLoader(false);
     }
   };
@@ -163,9 +204,11 @@ const PromoterDocuments = props => {
   };
 
   const removePromoter = id => {
-    setIsSave(false);
-    if (promoters.length > 1) {
+    if (promoters.length >= 1) {
+      setIsSave(false);
       setPromoters([...promoters].filter(_ => _.id !== id));
+      setIsDeletePromoter(false);
+      setPromoterId(false);
     }
   };
 
@@ -174,6 +217,7 @@ const PromoterDocuments = props => {
       // type: [DocumentPicker],
     });
     if (res && res[0]) {
+      setUploadDisabled(true);
       const response = await uploadDocument(res[0], id, type);
       if (response && response.fileData && response.resp) {
         let promotersData = [...promoters];
@@ -203,6 +247,7 @@ const PromoterDocuments = props => {
         });
         setPromoters([...promotersData]);
       }
+      setUploadDisabled(false);
     }
   };
 
@@ -235,7 +280,9 @@ const PromoterDocuments = props => {
       setPromoters([...promotersData]);
       console.log('Uploading......');
       let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-      const url = `${BASE_URL}profile/file/upload`;
+      const url = `${BASE_URL}profile/file/upload?Platform=App&OS=${
+        Platform.OS
+      }&Version=${VersionCheck.getCurrentVersion()}`;
       const response = await RNFetchBlob.fetch(
         'POST',
         url,
@@ -298,58 +345,63 @@ const PromoterDocuments = props => {
   };
 
   const openDocView = async fileKey => {
-    setLoader(true);
-    setModalVisible(true);
-    var myrequest = new XMLHttpRequest();
-    myrequest.onreadystatechange = e => {
-      if (myrequest.readyState !== 4) {
-        return;
-      }
+    try {
+      setLoader(true);
+      setModalVisible(true);
+      var myrequest = new XMLHttpRequest();
+      myrequest.onreadystatechange = e => {
+        if (myrequest.readyState !== 4) {
+          return;
+        }
 
-      if (myrequest.status === 200) {
-      } else {
-        console.warn('error');
-      }
-    };
-    myrequest.open(
-      'GET',
-      `http://apigatewayqa.moglix.com/profile/file?download=0&key=${fileKey}`, //`https://apigateway.moglix.com/profile/file?download=0&key=${fileKey}`,
-    );
-    let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-    myrequest.setRequestHeader('Authorization', token);
-    myrequest.responseType = 'blob';
-    myrequest.send();
-    myrequest.onload = e => {
-      var response = myrequest.response;
-      var mimetype = myrequest.getResponseHeader('Content-Type');
-      var fields = mimetype.split(';');
-      var name = fields[0];
-      var isPdf = false;
-      if (name == 'application/pdf') {
-        isPdf = true;
-      }
-      if (response) {
-        setLoader(false);
-        // alert('success', JSON.stringify(response));
-        const fileReaderInstance = new FileReader();
-        fileReaderInstance.readAsDataURL(response);
-        fileReaderInstance.onload = () => {
-          var fileUrl = fileReaderInstance.result;
+        if (myrequest.status === 200) {
+        } else {
+          console.warn('error');
+        }
+      };
+      myrequest.open(
+        'GET',
+        `http://apigatewayqa.moglix.com/profile/file?download=0&key=${fileKey}`, //`https://apigateway.moglix.com/profile/file?download=0&key=${fileKey}`,
+      );
+      let token = `Bearer ${await AsyncStorage.getItem('token')}`;
+      myrequest.setRequestHeader('Authorization', token);
+      myrequest.responseType = 'blob';
+      myrequest.send();
+      myrequest.onload = e => {
+        var response = myrequest.response;
+        var mimetype = myrequest.getResponseHeader('Content-Type');
+        var fields = mimetype.split(';');
+        var name = fields[0];
+        var isPdf = false;
+        if (name == 'application/pdf') {
+          isPdf = true;
+        }
+        if (response) {
+          setLoader(false);
+          // alert('success', JSON.stringify(response));
+          console.log(response, isPdf);
+          const fileReaderInstance = new FileReader();
+          fileReaderInstance.readAsDataURL(response);
+          fileReaderInstance.onload = () => {
+            var fileUrl = fileReaderInstance.result;
+            console.log(fileUrl);
+            setImageUrl(fileUrl);
+            setIsPDF(false);
 
-          setImageUrl(fileUrl);
-          setIsPDF(false);
-
-          // this.setState(imageUrl);
-          var fields = fileUrl.slice(37);
-          if (isPdf) {
-            setIsPDF(true);
-            setImageUrl(fields);
-          }
-        };
-      } else {
-        alert('error', JSON.stringify(response));
-      }
-    };
+            // this.setState(imageUrl);
+            var fields = fileUrl.slice(37);
+            if (isPdf) {
+              setIsPDF(true);
+              setImageUrl(fields);
+            }
+          };
+        } else {
+          alert('error', JSON.stringify(response));
+        }
+      };
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -367,10 +419,12 @@ const PromoterDocuments = props => {
                   ? promoterKey + 1
                   : `0${promoterKey + 1}`}
               </Text>
-              {promoters.length == 1 ||
-              (profileData && profileData.verificationStatus >= 10) ? null : (
+              {profileData && profileData.verificationStatus >= 10 ? null : (
                 <Icon
-                  onPress={() => removePromoter(promoter.id)}
+                  onPress={() => {
+                    setPromoterId(promoter.id);
+                    setIsDeletePromoter(true);
+                  }}
                   name={'trash-can'}
                   size={20}
                   color={colors.FontColor}
@@ -409,9 +463,16 @@ const PromoterDocuments = props => {
               // errorState={errorState}
               // errorText={errorText}
               // onPress={() => (setUpload ? onPress(id) : openDoc(id))}
-              // disabled={uploadDisabled}
+              disabled={uploadDisabled}
               uploadDocument={() => selectDoc(promoter.id, 'aadharCardKey')}
               setUpload={true}
+              onPress={() =>
+                promoter &&
+                promoter.aadharCardKey &&
+                promoter.aadharCardKey.title
+                  ? openDocView(promoter.aadharCardKey.uri)
+                  : selectDoc(promoter.id, 'aadharCardKey')
+              }
             />
             <FileUpload
               label={'PAN Card'}
@@ -436,8 +497,12 @@ const PromoterDocuments = props => {
               }
               // errorState={errorState}
               // errorText={errorText}
-              // onPress={() => (setUpload ? onPress(id) : openDoc(id))}
-              // disabled={uploadDisabled}
+              onPress={() =>
+                promoter && promoter.panCardKey && promoter.panCardKey.title
+                  ? openDocView(promoter.panCardKey.uri)
+                  : selectDoc(promoter.id, 'panCardKey')
+              }
+              disabled={uploadDisabled}
               uploadDocument={() => selectDoc(promoter.id, 'panCardKey')}
               setUpload={true}
             />
@@ -448,38 +513,38 @@ const PromoterDocuments = props => {
           <View style={styles.rowCss}>
             <View style={styles.bullet}></View>
             <Text style={styles.NoteData}>
-              Each document file size should not exceed more then 2 MB.
+              Each document file size should not exceed more{'\n'} then 2 MB.
             </Text>
           </View>
         </View>
       </ScrollView>
-      {/* {profileData && profileData.verificationStatus < 10 ? ( */}
-      <View style={promoterStyle.BtnWrap}>
-        <View style={{flex: 1, marginRight: Dimension.margin10}}>
-          <CustomButton
-            title="ADD MORE"
-            buttonColor={colors.blackColor}
-            disabled={submitLoader}
-            borderColor={colors.blackColor}
-            TextColor={colors.WhiteColor}
-            TextFontSize={Dimension.font16}
-            onPress={addPromoter}></CustomButton>
+      {profileData && profileData.verificationStatus < 10 ? (
+        <View style={promoterStyle.BtnWrap}>
+          <View style={{flex: 1, marginRight: Dimension.margin10}}>
+            <CustomButton
+              title="ADD MORE"
+              buttonColor={colors.blackColor}
+              disabled={submitLoader}
+              borderColor={colors.blackColor}
+              TextColor={colors.WhiteColor}
+              TextFontSize={Dimension.font16}
+              onPress={addPromoter}></CustomButton>
+          </View>
+          <View style={{flex: 1, marginLeft: Dimension.margin10}}>
+            <CustomButton
+              title={isSave ? 'SUBMIT' : 'SAVE & SUBMIT'}
+              buttonColor={colors.BrandColor}
+              disabled={submitLoader}
+              borderColor={colors.BrandColor}
+              TextColor={colors.WhiteColor}
+              TextFontSize={Dimension.font16}
+              onPress={onSubmit}
+              loading={submitLoader}
+              loadingColor={'#fff'}
+            />
+          </View>
         </View>
-        <View style={{flex: 1, marginLeft: Dimension.margin10}}>
-          <CustomButton
-            title={isSave ? 'SUBMIT' : 'SAVE & SUBMIT'}
-            buttonColor={colors.BrandColor}
-            disabled={submitLoader}
-            borderColor={colors.BrandColor}
-            TextColor={colors.WhiteColor}
-            TextFontSize={Dimension.font16}
-            onPress={onSubmit}
-            loading={submitLoader}
-            loadingColor={'#fff'}
-          />
-        </View>
-      </View>
-      {/* ) : null} */}
+      ) : null}
       <Modal
         overlayPointerEvents={'auto'}
         isVisible={modalVisible}
@@ -519,11 +584,20 @@ const PromoterDocuments = props => {
           //   No Image Found!!
           // </Text>
           <Image
-            source={{uri: imageUrl}}
+            source={
+              imageUrl
+                ? {uri: imageUrl}
+                : require('../../../assets/images/bigRectngle.png')
+            }
             style={{height: '100%', width: '100%', flex: 1}}
           />
         )}
       </Modal>
+      <DeletePromoter
+        isVisible={isDeletePromoter}
+        setModal={() => setIsDeletePromoter(false)}
+        onDelete={() => removePromoter(promoterId)}
+      />
       <Modal
         overlayPointerEvents={'auto'}
         isVisible={confirmModal}
@@ -553,7 +627,7 @@ const PromoterDocuments = props => {
               validated you'll receive an email regarding the status of your
               profile
             </Text>
-            {/* <View style={{marginLeft: -Dimension.margin10}}>
+            <View style={{marginLeft: -Dimension.margin10}}>
               <Checkbox
                 checked={isSelected || profileData.verificationStatus >= 10}
                 onPress={() =>
@@ -563,10 +637,16 @@ const PromoterDocuments = props => {
                 }
                 title={'By registering you agree to our'}
               />
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setConfirmModal(false);
+                  props.navigation.navigate('TermsAndConditions', {
+                    setConfirmModal: () => setConfirmModal(true),
+                  });
+                }}>
                 <Text style={promoterStyle.termsText}>Terms & Condition</Text>
               </TouchableOpacity>
-            </View> */}
+            </View>
 
             {/* <TouchableOpacity onPress={() => setConfirmModal(false)}>
             <Text style={{color: '#000'}}>CANCEL</Text>

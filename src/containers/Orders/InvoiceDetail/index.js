@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import RNFetchBlob from 'rn-fetch-blob';
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import {View, StyleSheet, Text, ScrollView, Platform} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dimension from '../../../Theme/Dimension';
 import colors from '../../../Theme/Colors';
@@ -9,6 +9,7 @@ import Checkbox from '../../../component/common/Checkbox/index';
 import Header from '../../../component/common/Header';
 import {BASE_URL} from '../../../redux/constants';
 import Toast from 'react-native-toast-message';
+import VersionCheck from 'react-native-version-check';
 
 const InvoiceDetailScreen = props => {
   const [loading, setLoading] = useState(false);
@@ -30,7 +31,9 @@ const InvoiceDetailScreen = props => {
       try {
         setLoading(true);
         let token = `Bearer ${await AsyncStorage.getItem('token')}`;
-        const url = `${BASE_URL}api/order/mapDropshipInvoice`;
+        const url = `${BASE_URL}api/order/mapDropshipInvoice?Platform=App&OS=${
+          Platform.OS
+        }&Version=${VersionCheck.getCurrentVersion()}`;
         const response = await RNFetchBlob.fetch(
           'POST',
           url,
